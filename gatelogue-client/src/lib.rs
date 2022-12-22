@@ -138,31 +138,39 @@
     clippy::wildcard_dependencies
 )]
 
+use common::types::AirportCode;
 use seed::{prelude::*, *};
 
 fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
-    Model { counter: 0 }
+    Model { airport: None }
 }
 
 struct Model {
-    counter: i32,
+    airport: Option<AirportCode>,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
+#[non_exhaustive]
 enum Msg {
-    Increment,
+    NewAirportCode(Option<AirportCode>),
 }
 
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
-        Msg::Increment => model.counter += 1,
+        Msg::NewAirportCode(ac) => model.airport = ac,
     }
 }
 fn view(model: &Model) -> Node<Msg> {
     div![
-        "This is a counter: ",
-        C!["counter"],
-        button![model.counter, ev(Ev::Click, |_| Msg::Increment),],
+        style! {
+            St::FontFamily => "sans-serif",
+            St::TextAlign => "center",
+        },
+        if let Some(airport) = &model.airport {
+            span![airport]
+        } else {
+            span!["aaaaa"]
+        }
     ]
 }
 
