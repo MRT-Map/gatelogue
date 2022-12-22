@@ -1,0 +1,18 @@
+[package]
+name = "gatelogue-data-updater"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+common = { path = "../gatelogue-common", package = "gatelogue-common" }
+
+tokio = { version = "1.23.0", features = ["full"] }
+reqwest = { version = "0.11.13", features = ["json"] }
+rmp-serde = "1.1.1"
+color-eyre = "0.6.2"
+serde_json = "1.0.91"
+regex = "1.7.0"
+mediawiki = "0.2.8"
+petgraph = "0.6.1"
