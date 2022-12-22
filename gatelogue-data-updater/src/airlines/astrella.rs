@@ -7,7 +7,6 @@ use crate::utils::wikitext;
 
 pub async fn astrella(graph: &mut Graph) -> Result<()> {
     let wikitext = wikitext("Astrella").await?;
-    println!("{wikitext}");
     let flights = Regex::new(r"\{\{AstrellaFlight\|code = ([^$]*?)\|airport1 = (.*?)\|gate1 = (.*?)\|airport2 = (.*?)\|gate2 = (.*?)\|size = (.*?)\|status = active}}")?
         .captures_iter(&wikitext)
         .filter_map(|a| Some((

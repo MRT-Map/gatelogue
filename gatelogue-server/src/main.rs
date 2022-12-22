@@ -138,8 +138,10 @@
     clippy::wildcard_dependencies
 )]
 
+mod get_graph;
+
 use color_eyre::Result;
-use common::AirFacility;
+use common::types::Gate;
 use rocket::{
     fairing::{Fairing, Info, Kind},
     http::Header,
@@ -149,9 +151,19 @@ use rocket::{
 };
 use tracing_subscriber::EnvFilter;
 
-#[rocket::get("/")]
-fn air_facilities() -> Json<Vec<AirFacility>> {
-    Json(vec![])
+use crate::get_graph::get_graph;
+
+#[rocket::get("/gates/<airport>")]
+async fn gates(airport: &str) -> Json<Vec<Gate>> {
+    Json(
+        get_graph()
+            .await
+            .unwrap()
+            .node_weights()
+            .filter(|a| &*a.airport == airport)
+            .cloned()
+            .collect(),
+    )
 }
 
 // https://stackoverflow.com/questions/62412361/how-to-set-up-cors-or-options-for-rocket-rs
@@ -185,7 +197,7 @@ async fn main() -> Result<()> {
         .init();
 
     let r = rocket::build()
-        .mount("/", routes![air_facilities])
+        .mount("/", routes![gates])
         .attach(CORS)
         .ignite()
         .await?;
