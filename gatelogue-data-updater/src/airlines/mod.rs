@@ -32,7 +32,13 @@ async fn extract(airline_name: &str, regex: Regex) -> Result<Vec<(Gate, Gate, St
 }
 
 pub async fn airlines(graph: &mut Graph) -> Result<()> {
-    let flights = extractors::astrella().await?;
+    let handles = vec![extractors::astrella()]
+        .into_iter()
+        .map(|a| tokio::spawn(a));
+    let mut flights = Vec::<(Gate, Gate, String)>::new();
+    for handle in handles {
+        flights.extend(handle.await??)
+    }
 
     for (gate1, gate2, flight) in flights {
         let index1 = if let Some((index1, _)) = graph.node_references().find(|(_, g)| **g == gate1)

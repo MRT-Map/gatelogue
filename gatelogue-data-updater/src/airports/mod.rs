@@ -22,7 +22,11 @@ async fn extractor(page: &str, code: &str, regex: Regex) -> Result<Vec<Gate>> {
 }
 
 pub async fn airports(graph: &mut Graph) -> Result<()> {
-    let gates = extractors::pce().await?;
+    let handles = vec![extractors::pce()].into_iter().map(|a| tokio::spawn(a));
+    let mut gates = Vec::<Gate>::new();
+    for handle in handles {
+        gates.extend(handle.await??)
+    }
 
     for gate in gates {
         graph.add_node(gate);
