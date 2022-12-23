@@ -13,7 +13,7 @@ pub type Graph = UnGraph<Gate, Flight>;
 pub struct Gate {
     pub airport: AirportCode,
     pub gate_code: GateCode,
-    pub recorded_airline: Option<SmolStr>,
+    pub airline: Option<SmolStr>,
     pub size: Option<SmolStr>,
 }
 impl PartialEq for Gate {
@@ -25,5 +25,4 @@ impl PartialEq for Gate {
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Flight {
     pub flight_no: FlightNo,
-    pub airline: SmolStr,
 }

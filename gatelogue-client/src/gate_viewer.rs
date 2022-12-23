@@ -40,12 +40,12 @@ pub fn SingleGate(props: &SingleGateProps) -> Html {
         font-size: 1.5em;
         color: ${fg};
         ",
-        bg = if props.gate.recorded_airline.is_some() {
+        bg = if props.gate.airline.is_some() {
             COL_B
         } else {
             ACC_C
         },
-        fg = if props.gate.recorded_airline.is_some() {
+        fg = if props.gate.airline.is_some() {
             "#fff"
         } else {
             "#111"
@@ -60,11 +60,7 @@ pub fn SingleGate(props: &SingleGateProps) -> Html {
     ",
         bg = COL_B
     );
-    let airline = props
-        .gate
-        .recorded_airline
-        .as_deref()
-        .unwrap_or("No recorded owner");
+    let airline = props.gate.airline.as_deref().unwrap_or("No recorded owner");
     let size = props.gate.size.as_deref().unwrap_or("?");
     let flights = props.flights.iter().map(move |(f, a)| {
         let flights_css = css!(
