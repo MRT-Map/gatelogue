@@ -9,7 +9,7 @@ pub type GateCode = SmolStr;
 
 pub type Graph = UnGraph<Gate, Flight>;
 
-#[derive(Clone, Debug, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Gate {
     pub airport: AirportCode,
     pub gate_code: GateCode,
@@ -18,6 +18,9 @@ pub struct Gate {
 }
 impl PartialEq for Gate {
     fn eq(&self, other: &Self) -> bool {
+        if self.gate_code.trim() == "?" || other.gate_code.trim() == "?" {
+            return false;
+        }
         self.airport == other.airport && self.gate_code == other.gate_code
     }
 }
