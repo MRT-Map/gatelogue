@@ -1,20 +1,20 @@
+mod consts;
+mod airport_selector;
+
 use yew::prelude::*;
+use crate::airport_selector::AirportSelector;
+use stylist::yew::styled_component;
+use crate::consts::COL_A;
 
-#[function_component]
+#[styled_component]
 fn App() -> Html {
-    let counter = use_state(|| 0);
-    let onclick = {
-        let counter = counter.clone();
-        move |_| {
-            let value = *counter + 1;
-            counter.set(value);
-        }
-    };
-
+    let css = css!(r"
+        background-color: ${COL_A};
+        height: 100vh;
+    ", COL_A = COL_A);
     html! {
-        <div>
-            <button {onclick}>{ "+1" }</button>
-            <p>{ *counter }</p>
+        <div class={css}>
+            <AirportSelector />
         </div>
     }
 }
