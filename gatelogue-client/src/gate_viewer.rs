@@ -83,7 +83,7 @@ pub fn SingleGate(props: &SingleGateProps) -> Html {
             <td class={size_css}>{size}</td>
             <td class={airline_css}>{airline}</td>
             { for flights }
-            <td class={closing_css} colspan={(7 - props.flights.len()).to_string()}>{"   "}</td>
+            <td class={closing_css} colspan={(7usize.saturating_sub(props.flights.len())).to_string()}>{"   "}</td>
         </tr>
     }
 }
