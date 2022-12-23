@@ -13,7 +13,7 @@ fn App() -> Html {
         r"
         background-color: ${COL_A};
         height: 100vh;
-        font-family: sans-serif;
+        font-family: 'Hanken Grotesk', sans-serif;
     ",
         COL_A = COL_A
     );
