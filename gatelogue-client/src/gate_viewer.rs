@@ -4,7 +4,7 @@ use petgraph::visit::IntoNodeReferences;
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
-use crate::consts::{ACC_A, COL_B, COL_C, GRAPH};
+use crate::consts::{ACC_A, ACC_C, COL_B, COL_C, GRAPH};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct SingleGateProps {
@@ -43,7 +43,7 @@ pub fn SingleGate(props: &SingleGateProps) -> Html {
         bg = if props.gate.recorded_airline.is_some() {
             COL_B
         } else {
-            "#8c0"
+            ACC_C
         },
         fg = if props.gate.recorded_airline.is_some() {
             "#fff"

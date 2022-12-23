@@ -8,6 +8,7 @@ pub const COL_D: &str = "#888";
 pub const COL_E: &str = "#aaa";
 pub const ACC_A: &str = "#f40";
 pub const ACC_B: &str = "#f84";
+pub const ACC_C: &str = "#8c0";
 
 pub static GRAPH: Lazy<Graph> =
     Lazy::new(|| rmp_serde::from_slice(include_bytes!("../../graph.msgpack")).unwrap());
