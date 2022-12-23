@@ -1,11 +1,13 @@
-use yew::prelude::*;
+use itertools::Itertools;
 use stylist::yew::styled_component;
-use crate::consts::{COL_A, COL_B, COL_C, COL_D, COL_E};
+use yew::prelude::*;
+
+use crate::consts::{ACC_A, ACC_B, COL_A, COL_B, COL_D, COL_E, GRAPH};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct AirportButtonProps {
     pub code: &'static str,
-    pub state: UseStateHandle<Option<String>>
+    pub state: UseStateHandle<Option<String>>,
 }
 
 #[styled_component]
@@ -14,13 +16,10 @@ fn AirportButton(props: &AirportButtonProps) -> Html {
         let props = props.clone();
         Callback::from(move |_| props.state.set(Some(props.code.to_owned())))
     };
-    let bg = if *props.state == Some(props.code.to_owned()) {
-        "#f00"
-    } else {
-        COL_A
-    };
+    let selected = *props.state == Some(props.code.to_owned());
 
-    let css = css!(r"
+    let css = css!(
+        r"
         border-radius: 1em;
         background-color: ${bg};
         margin: 0.5em;
@@ -36,9 +35,9 @@ fn AirportButton(props: &AirportButtonProps) -> Html {
         transition: all 0.1s ease;
 
         &:hover {
-            background-color: ${COL_D};
+            background-color: ${hov};
             color: #111;
-            box-shadow: ${COL_D}8 0px 4px;
+            box-shadow: ${hov}8 0px 4px;
             transform: translateY(-1px);
             cursor: pointer;
         }
@@ -49,8 +48,8 @@ fn AirportButton(props: &AirportButtonProps) -> Html {
             transform: translateY(3px);
             color: #111;
         }",
-        bg = bg,
-        COL_D = COL_D,
+        bg = if selected { ACC_A } else { COL_A },
+        hov = if selected { ACC_B } else { COL_D },
         COL_E = COL_E
     );
     html! {
@@ -60,20 +59,34 @@ fn AirportButton(props: &AirportButtonProps) -> Html {
     }
 }
 
+#[derive(Properties, Clone, PartialEq)]
+pub struct AirportSelectorProps {
+    pub state: UseStateHandle<Option<String>>,
+}
+
 #[styled_component]
-pub fn AirportSelector() -> Html {
-    let state = use_state_eq(|| None);
-    let css = css!(r"
+pub fn AirportSelector(props: &AirportSelectorProps) -> Html {
+    let css = css!(
+        r"
         background-color: ${COL_B};
-        height: 100%;
+        height: calc( 100vh - 1em );
         width: 10%;
         float: left;
         padding: 1em;
-    ", COL_B = COL_B);
+        padding-bottom: 0;
+        overflow-y: auto;
+    ",
+        COL_B = COL_B
+    );
+    let airports = GRAPH
+        .node_weights()
+        .map(|a| &a.airport)
+        .sorted()
+        .dedup()
+        .map(|a| html! { <AirportButton code={a.as_str()} state={props.state.clone()} /> });
     html! {
         <div class={css}>
-            <AirportButton code="SEG" state={state.clone()}/>
-            <AirportButton code="PCE" {state}/>
+            {for airports}
         </div>
     }
 }

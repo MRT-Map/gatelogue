@@ -11,6 +11,9 @@ yew = { version = "0.20.0", features = ["csr"] }
 stylist = { version = "0.11.0", features = ["yew_integration"] }
 once_cell = "1.16.0"
 rmp-serde = "1.1.1"
+itertools = "0.10.5"
+alphanumeric-sort = "1.4.4"
+petgraph = "0.6.1"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ['-Os']

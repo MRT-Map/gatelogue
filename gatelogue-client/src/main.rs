@@ -1,20 +1,27 @@
-mod consts;
 mod airport_selector;
+mod consts;
+mod gate_viewer;
 
-use yew::prelude::*;
-use crate::airport_selector::AirportSelector;
 use stylist::yew::styled_component;
-use crate::consts::COL_A;
+use yew::prelude::*;
+
+use crate::{airport_selector::AirportSelector, consts::COL_A, gate_viewer::GateViewer};
 
 #[styled_component]
 fn App() -> Html {
-    let css = css!(r"
+    let css = css!(
+        r"
         background-color: ${COL_A};
         height: 100vh;
-    ", COL_A = COL_A);
+        font-family: sans-serif;
+    ",
+        COL_A = COL_A
+    );
+    let state = use_state_eq(|| None);
     html! {
         <div class={css}>
-            <AirportSelector />
+            <AirportSelector state={state.clone()} />
+            <GateViewer state={state.clone()}/>
         </div>
     }
 }
