@@ -20,7 +20,7 @@ jobs:
       - name: Install trunk
         run: cargo +nightly install trunk
       - name: Build
-        run: trunk build --release
+        run: trunk build --release --public-url /gatelogue
       - run: cd dist; echo > .nojekyll; cd ..
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
