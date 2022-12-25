@@ -45,6 +45,8 @@ pub async fn airlines(graph: &mut Graph) -> Result<()> {
         tokio::spawn(extractors::blu_air()),
         tokio::spawn(extractors::fli_high()),
         tokio::spawn(extractors::ola()),
+        tokio::spawn(extractors::air()),
+        tokio::spawn(extractors::air_mesa()),
     ];
     let mut flights = Vec::<(Gate, Gate, String)>::new();
     for handle in handles.into_iter().progress() {
