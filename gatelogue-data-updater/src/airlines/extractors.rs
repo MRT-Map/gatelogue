@@ -57,3 +57,21 @@ pub async fn ola() -> Result<Vec<(Gate, Gate, String)>> {
         Regex::new(r"'''(?P<code>.*?)'''.*?\n.*?'''(?P<a1>.*?)'''.*?\n.*?\n.*?'''(?P<a2>.*?)'''.*?\n.*?\n.*?Active")?
     ).await
 }
+
+pub async fn air_mesa() -> Result<Vec<(Gate, Gate, String)>> {
+    extract(
+        "AirMesa",
+        "AirMesa",
+        "",
+        Regex::new(r"\{\{BA\|(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|..}}")?
+    ).await
+}
+
+pub async fn air() -> Result<Vec<(Gate, Gate, String)>> {
+    extract(
+        "Air",
+        "Template:Air",
+        "",
+        Regex::new(r"\{\{BA\|(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|..}}")?
+    ).await
+}
