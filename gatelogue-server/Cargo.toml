@@ -8,11 +8,11 @@ edition = "2021"
 [dependencies]
 common = { path = "../gatelogue-common", package = "gatelogue-common" }
 
-tokio = { version = "1.23.0", features = ["full"] }
-reqwest = { version = "0.11.13", features = ["json"] }
-rocket = { version = "0.5.0-rc.2", features = ["json"] }
-cached = "0.41.0"
+tokio = { version = "1.28.0", features = ["full"] }
+reqwest = { version = "0.11.17", features = ["json"] }
+rocket = { version = "0.5.0-rc.3", features = ["json"] }
+cached = "0.43.0"
 tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 color-eyre = "0.6.2"
 rmp-serde = "1.1.1"
