@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import NewType, Generator, Callable, ClassVar, TypedDict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-import msgspec
 
 from gatelogue_aggregator.types.base import BaseObject, Sourced
 

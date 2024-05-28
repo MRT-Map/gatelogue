@@ -1,9 +1,6 @@
-from typing import Generator
 
-import msgspec
 
 from gatelogue_aggregator.types.air import Flight, Airport, Gate, Airline
-from gatelogue_aggregator.types.base import Sourced
 
 
 class AirContext:
@@ -59,6 +56,7 @@ class AirContext:
             o.update()
         for o in self.airline:
             o.update()
+
 
 class Context(AirContext):
     pass
