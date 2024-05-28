@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "click",
   "msgspec",
+  "pandas",
 ]
 
 [project.urls]
