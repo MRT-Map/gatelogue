@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Self, TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Self
 
 import msgspec
 
@@ -14,6 +14,7 @@ class ID(msgspec.Struct, kw_only=True):
 
     def __str__(self):
         return self.id.hex
+
 
 class BaseObject(msgspec.Struct, kw_only=True):
     id: ID = msgspec.field(default_factory=ID)
@@ -38,12 +39,8 @@ class Sourced[T](msgspec.Struct):
             return self
         raise NotImplementedError
 
-
     def dict(self) -> dict[str, Any]:
-        return {
-            'v': str(self.v.id) if isinstance(self.v, BaseObject) else self.v.dict(),
-            'sources': self.s
-        }
+        return {"v": str(self.v.id) if isinstance(self.v, BaseObject) else self.v.dict(), "sources": self.s}
 
 
 class Source:

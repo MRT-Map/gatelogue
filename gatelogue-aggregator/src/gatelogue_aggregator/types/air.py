@@ -28,11 +28,7 @@ class Flight(BaseObject, kw_only=True):
             self.airline.v.flights.append(Sourced(self).source(self.airline))
 
     def dict(self) -> dict[str, Any]:
-        return {
-            'codes': self.codes,
-            'gates': [o.dict() for o in self.gates],
-            'airline': self.airline.dict()
-        }
+        return {"codes": self.codes, "gates": [o.dict() for o in self.gates], "airline": self.airline.dict()}
 
 
 class Airport(BaseObject, kw_only=True):
@@ -51,9 +47,9 @@ class Airport(BaseObject, kw_only=True):
 
     def dict(self) -> dict[str, Any]:
         return {
-            'code': self.code,
-            'coordinates': self.coordinates.dict() if self.coordinates is not None else None,
-            'gates': [o.dict() for o in self.gates],
+            "code": self.code,
+            "coordinates": self.coordinates.dict() if self.coordinates is not None else None,
+            "gates": [o.dict() for o in self.gates],
         }
 
 
@@ -77,10 +73,10 @@ class Gate(BaseObject, kw_only=True):
 
     def dict(self) -> dict[str, Any]:
         return {
-            'code': self.code,
-            'flights': [o.dict() for o in self.flights],
-            'airport': self.airport.dict(),
-            'size': self.size.dict() if self.size is not None else None
+            "code": self.code,
+            "flights": [o.dict() for o in self.flights],
+            "airport": self.airport.dict(),
+            "size": self.size.dict() if self.size is not None else None,
         }
 
 
@@ -98,7 +94,4 @@ class Airline(BaseObject, kw_only=True):
             flight.v.airline = Sourced(self).source(flight)
 
     def dict(self) -> dict[str, Any]:
-        return {
-            'name': self.name,
-            'flights': [o.dict() for o in self.flights]
-        }
+        return {"name": self.name, "flights": [o.dict() for o in self.flights]}

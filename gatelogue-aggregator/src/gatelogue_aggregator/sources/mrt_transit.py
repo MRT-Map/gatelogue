@@ -2,12 +2,13 @@ import pandas as pd
 import rich.progress
 import rich.status
 
-from gatelogue_aggregator.types.base import Sourced, Source
+from gatelogue_aggregator.types.base import Source, Sourced
 from gatelogue_aggregator.types.context import AirContext
 
 
 class MRTTransit(AirContext, Source):
     name = "MRT Transit"
+
     def __init__(self):
         super().__init__()
         status = rich.status.Status("Downloading CSV")
