@@ -1,11 +1,19 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any, Self
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+import rich
+import rich.progress
 
 from gatelogue_aggregator.types.air import Airline, Airport, Flight, Gate
+from gatelogue_aggregator.types.base import MergeableObject, Source
 
 
 class AirContext:
+    __slots__ = ("flight", "airport", "gate", "airline")
     flight: list[Flight]
     airport: list[Airport]
     gate: list[Gate]
@@ -61,12 +69,28 @@ class AirContext:
 
     def dict(self) -> dict[str, dict[str, Any]]:
         return {
-            'flight': {str(o.id): o.dict() for o in self.flight},
-            'airport': {str(o.id): o.dict() for o in self.airport},
-            'gate': {str(o.id): o.dict() for o in self.gate},
-            'airline': {str(o.id): o.dict() for o in self.airline},
+            "flight": {str(o.id): o.dict() for o in self.flight},
+            "airport": {str(o.id): o.dict() for o in self.airport},
+            "gate": {str(o.id): o.dict() for o in self.gate},
+            "airline": {str(o.id): o.dict() for o in self.airline},
         }
 
 
 class Context(AirContext):
-    pass
+    @classmethod
+    def from_sources(cls, sources: Iterable[Source]) -> Self:
+        self = cls()
+        rich.print("[yellow] Merging sources")
+        for source in rich.progress.track(sources, f"[yellow] Merging sources: {', '.join(s.name for s in sources)}"):
+            if isinstance(source, AirContext):
+                MergeableObject.merge_lists(self.flight, source.flight)
+                MergeableObject.merge_lists(self.airport, source.airport)
+                MergeableObject.merge_lists(self.gate, source.gate)
+                MergeableObject.merge_lists(self.airline, source.airline)
+        return self
+
+    def update(self):
+        AirContext.update(self)
+
+    def dict(self) -> dict[str, dict[str, Any]]:
+        return AirContext.dict(self)

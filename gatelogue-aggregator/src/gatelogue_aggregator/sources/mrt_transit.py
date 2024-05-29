@@ -2,7 +2,7 @@ import pandas as pd
 import rich.progress
 import rich.status
 
-from gatelogue_aggregator.types.base import Source, Sourced
+from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.context import AirContext
 
 
@@ -10,7 +10,9 @@ class MRTTransit(AirContext, Source):
     name = "MRT Transit"
 
     def __init__(self):
-        super().__init__()
+        AirContext.__init__(self)
+        Source.__init__(self)
+
         status = rich.status.Status("Downloading CSV")
         status.start()
         df = pd.read_csv(
@@ -32,14 +34,14 @@ class MRTTransit(AirContext, Source):
         df.drop(df.tail(6).index, inplace=True)
 
         for airline_name in rich.progress.track(df.columns[4:], "Extracting data from CSV...", transient=True):
-            airline = Sourced(self.get_airline(name=airline_name)).source(self)
+            airline = self.get_airline(name=airline_name).source(self)
             for airport_code, flights in zip(df["Code"], df[airline_name]):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = Sourced(self.get_airport(code=airport_code)).source(self)
-                gate = Sourced(self.get_gate(code=None, airport=airport)).source(self)
+                airport = self.get_airport(code=airport_code).source(self)
+                gate = self.get_gate(code=None, airport=airport).source(self)
                 for flight_code in str(flights).split(", "):
-                    flight = self.get_flight(codes=[flight_code], airline=airline)
+                    flight = self.get_flight(codes={flight_code}, airline=airline)
                     flight.airline = airline
                     flight.gates.append(gate)
         rich.print("[green]Extracted")
