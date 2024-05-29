@@ -27,14 +27,14 @@ class BaseObject(msgspec.Struct, kw_only=True):
 
 class Sourced[T](msgspec.Struct):
     v: T
-    sources: set[str] = msgspec.field(default_factory=set)
+    s: set[str] = msgspec.field(default_factory=set)
 
     def source(self, source: Sourced | Source) -> Self:
         if isinstance(source, Sourced):
-            self.sources = self.sources.union(source.sources)
+            self.s = self.s.union(source.s)
             return self
         if isinstance(source, Source):
-            self.sources.add(source.name)
+            self.s.add(source.name)
             return self
         raise NotImplementedError
 
@@ -42,7 +42,7 @@ class Sourced[T](msgspec.Struct):
     def dict(self) -> dict[str, Any]:
         return {
             'v': str(self.v.id) if isinstance(self.v, BaseObject) else self.v.dict(),
-            'sources': self.sources
+            'sources': self.s
         }
 
 
