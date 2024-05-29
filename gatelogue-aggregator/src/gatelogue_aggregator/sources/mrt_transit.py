@@ -1,7 +1,7 @@
-from gatelogue_aggregator.types.context import AirContext
 import pandas as pd
 
 from gatelogue_aggregator.types.base import Sourced
+from gatelogue_aggregator.types.context import AirContext
 
 
 class MRTTransit(AirContext):
@@ -35,4 +35,3 @@ class MRTTransit(AirContext):
                     flight.gates.append(gate)
 
         self.update()
-        print({a.name: len(a.flights) for a in self.airline})

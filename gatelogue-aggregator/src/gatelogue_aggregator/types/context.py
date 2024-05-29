@@ -1,6 +1,6 @@
+from __future__ import annotations
 
-
-from gatelogue_aggregator.types.air import Flight, Airport, Gate, Airline
+from gatelogue_aggregator.types.air import Airline, Airport, Flight, Gate
 
 
 class AirContext:

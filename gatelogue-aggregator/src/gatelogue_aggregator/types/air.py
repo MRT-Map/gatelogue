@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import msgspec
 
 from gatelogue_aggregator.types.base import BaseObject, Sourced
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 class Flight(BaseObject, kw_only=True):
     codes: list[str]
-    gates: list[Sourced[Gate]] = []
+    gates: list[Sourced[Gate]] = msgspec.field(default_factory=list)
     airline: Sourced[Airline]
 
     def ctx(self, ctx: AirContext):
@@ -28,7 +29,7 @@ class Flight(BaseObject, kw_only=True):
 class Airport(BaseObject, kw_only=True):
     code: str
     coordinates: Sourced[tuple[int, int]] | None = None
-    gates: list[Sourced[Gate]] = []
+    gates: list[Sourced[Gate]] = msgspec.field(default_factory=list)
 
     def ctx(self, ctx: AirContext):
         ctx.airport.append(self)
@@ -40,7 +41,7 @@ class Airport(BaseObject, kw_only=True):
 
 class Gate(BaseObject, kw_only=True):
     code: str | None
-    flights: list[Sourced[Flight]] = []
+    flights: list[Sourced[Flight]] = msgspec.field(default_factory=list)
     airport: Sourced[Airport]
     size: Sourced[str] | None = None
 
@@ -57,7 +58,7 @@ class Gate(BaseObject, kw_only=True):
 
 class Airline(BaseObject, kw_only=True):
     name: str
-    flights: list[Sourced[Flight]] = []
+    flights: list[Sourced[Flight]] = msgspec.field(default_factory=list)
 
     def ctx(self, ctx: AirContext):
         ctx.airline.append(self)
