@@ -45,4 +45,3 @@ class MRTTransit(AirContext, Source):
         rich.print("[green]Extracted")
 
         self.update()
-        rich.print([a.dict() for a in self.airline])

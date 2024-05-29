@@ -1,6 +1,7 @@
 import click
 
 from gatelogue_aggregator.__about__ import __version__
+from gatelogue_aggregator.sources.dynmap_airports import DynmapAirports
 from gatelogue_aggregator.sources.mrt_transit import MRTTransit
 
 
@@ -11,4 +12,4 @@ from gatelogue_aggregator.sources.mrt_transit import MRTTransit
 @click.version_option(version=__version__, prog_name="gatelogue-aggregator")
 def gatelogue_aggregator():
     click.echo("Hello world!")
-    MRTTransit()
+    DynmapAirports()

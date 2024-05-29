@@ -29,6 +29,7 @@ dependencies = [
   "msgspec",
   "pandas",
   "rich",
+  "requests",
 ]
 
 [project.urls]

@@ -40,7 +40,7 @@ class Sourced[T](msgspec.Struct):
         raise NotImplementedError
 
     def dict(self) -> dict[str, Any]:
-        return {"v": str(self.v.id) if isinstance(self.v, BaseObject) else self.v.dict(), "sources": self.s}
+        return {"v": str(self.v.id) if isinstance(self.v, BaseObject) else self.v.dict() if hasattr(self.v, "dict") else self.v, "sources": self.s}
 
 
 class Source:

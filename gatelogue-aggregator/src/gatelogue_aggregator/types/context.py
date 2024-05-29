@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from gatelogue_aggregator.types.air import Airline, Airport, Flight, Gate
 
 
@@ -56,6 +58,14 @@ class AirContext:
             o.update()
         for o in self.airline:
             o.update()
+
+    def dict(self) -> dict[str, dict[str, Any]]:
+        return {
+            'flight': {str(o.id): o.dict() for o in self.flight},
+            'airport': {str(o.id): o.dict() for o in self.airport},
+            'gate': {str(o.id): o.dict() for o in self.gate},
+            'airline': {str(o.id): o.dict() for o in self.airline},
+        }
 
 
 class Context(AirContext):
