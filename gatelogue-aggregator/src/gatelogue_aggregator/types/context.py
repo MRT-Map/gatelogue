@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Any, Self, override
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -9,10 +9,10 @@ import rich
 import rich.progress
 
 from gatelogue_aggregator.types.air import AirContext
-from gatelogue_aggregator.types.base import MergeableObject, Source
+from gatelogue_aggregator.types.base import MergeableObject, Source, ToSerializable
 
 
-class Context(AirContext):
+class Context(AirContext, ToSerializable):
     @classmethod
     def from_sources(cls, sources: Iterable[Source]) -> Self:
         self = cls()
@@ -27,5 +27,16 @@ class Context(AirContext):
     def update(self):
         AirContext.update(self)
 
-    def dict(self) -> dict[str, dict[str, Any]]:
-        return AirContext.dict(self)
+    @override
+    class SerializableClass(AirContext.SerializableClass):
+        pass
+
+    @override
+    def ser(self) -> SerializableClass:
+        air = AirContext.ser(self)
+        return self.SerializableClass(
+            flight=air.flight,
+            airport=air.airport,
+            gate=air.gate,
+            airline=air.airline,
+        )

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import abc
 import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Self
+from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
 import msgspec
 import rich
@@ -22,6 +23,13 @@ class ID(msgspec.Struct, kw_only=True):
         if isinstance(other, ID):
             return str(self) == str(other)
         return False
+
+
+class ToSerializable:
+    SerializableClass: ClassVar[type]
+
+    def ser(self) -> SerializableClass:
+        pass
 
 
 class MergeableObject:
@@ -60,9 +68,21 @@ class IdObject(msgspec.Struct, MergeableObject, kw_only=True):
         return Sourced(self).source(source)
 
 
-class Sourced[T](msgspec.Struct, MergeableObject):
+class Sourced[T](msgspec.Struct, MergeableObject, ToSerializable):
     v: T
     s: set[str] = msgspec.field(default_factory=set)
+
+    @override
+    class SerializableClass(msgspec.Struct):
+        v: Any
+        s: set[str]
+
+    @override
+    def ser(self) -> SerializableClass:
+        return self.SerializableClass(
+            v=str(self.v.id) if isinstance(self.v, IdObject) else self.v.ser() if hasattr(self.v, "ser") else self.v,
+            s=self.s,
+        )
 
     def source(self, source: Sourced | Source) -> Self:
         if isinstance(source, Sourced):
@@ -80,16 +100,6 @@ class Sourced[T](msgspec.Struct, MergeableObject):
         if isinstance(self.v, MergeableObject):
             self.v.merge(other.v)
         self.s.update(other.s)
-
-    def dict(self) -> dict[str, Any]:
-        return {
-            "v": str(self.v.id)
-            if isinstance(self.v, IdObject)
-            else self.v.dict()
-            if hasattr(self.v, "dict")
-            else self.v,
-            "s": self.s,
-        }
 
 
 class Source:
