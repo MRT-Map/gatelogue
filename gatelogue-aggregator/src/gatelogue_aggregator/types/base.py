@@ -18,6 +18,12 @@ class ID(msgspec.Struct, kw_only=True):
             return str(self.id)
         return self.id.hex
 
+    def __eq__(self, other):
+        if isinstance(other, ID):
+            return str(self) == str(other)
+        else:
+            return False
+
 
 class MergeableObject:
     def equivalent(self, other: Self) -> bool:

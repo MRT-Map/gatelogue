@@ -13,7 +13,7 @@ class MRTTransit(AirContext, Source):
     name = "MRT Transit"
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "mrt-transit.txt"
+        cache = cache_dir / "mrt-transit"
         AirContext.__init__(self)
         Source.__init__(self)
 

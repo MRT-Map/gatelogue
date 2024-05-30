@@ -31,7 +31,10 @@ class Flight(IdObject, kw_only=True):
         return len(self.codes.intersection(other.codes)) != 0 and self.airline.equivalent(other.airline)
 
     def merge(self, other: Self):
-        other.id.id = self.id
+        if other.id != self.id:
+            other.id.id = self.id
+        else:
+            return
         self.codes.update(other.codes)
         MergeableObject.merge_lists(self.gates, other.gates)
         self.airline.merge(other.airline)
@@ -58,7 +61,10 @@ class Airport(IdObject, kw_only=True):
         return self.code == other.code
 
     def merge(self, other: Self):
-        other.id.id = self.id
+        if other.id != self.id:
+            other.id.id = self.id
+        else:
+            return
         self.coordinates = self.coordinates or other.coordinates
         MergeableObject.merge_lists(self.gates, other.gates)
 
@@ -92,7 +98,10 @@ class Gate(IdObject, kw_only=True):
         return self.code == other.code and self.airport.equivalent(other.airport)
 
     def merge(self, other: Self):
-        other.id.id = self.id
+        if other.id != self.id:
+            other.id.id = self.id
+        else:
+            return
         self.size = self.size or other.size
         MergeableObject.merge_lists(self.flights, other.flights)
         self.airport.merge(other.airport)
@@ -123,7 +132,10 @@ class Airline(IdObject, kw_only=True):
         return self.name == other.name
 
     def merge(self, other: Self):
-        other.id.id = self.id
+        if other.id != self.id:
+            other.id.id = self.id
+        else:
+            return
         MergeableObject.merge_lists(self.flights, other.flights)
 
     def dict(self) -> dict[str, Any]:

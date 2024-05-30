@@ -11,7 +11,7 @@ class DynmapAirports(AirContext, Source):
     name = "MRT Dynmap"
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "dynmap-markers.txt"
+        cache = cache_dir / "dynmap-markers"
         AirContext.__init__(self)
         Source.__init__(self)
 
