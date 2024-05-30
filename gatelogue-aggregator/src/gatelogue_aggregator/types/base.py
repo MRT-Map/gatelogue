@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import abc
 import uuid
 from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
@@ -28,7 +27,7 @@ class ID(msgspec.Struct, kw_only=True):
 class ToSerializable:
     SerializableClass: ClassVar[type]
 
-    def ser(self) -> SerializableClass:
+    def ser(self) -> SerializableClass:  # noqa: F821
         pass
 
 

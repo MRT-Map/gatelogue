@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Self, override
+from typing import Literal, Self, override
 
 import msgspec
 
@@ -59,20 +59,29 @@ class Flight(IdObject, ToSerializable, kw_only=True):
 
 class Airport(IdObject, ToSerializable, kw_only=True):
     code: str
+    name: Sourced[str] | None = None
+    world: Sourced[Literal["old", "new"]] | None = None
     coordinates: Sourced[tuple[int, int]] | None = None
+    link: Sourced[str] | None = None
     gates: list[Sourced[Gate]] = msgspec.field(default_factory=list)
 
     @override
     class SerializableClass(msgspec.Struct):
         code: str
+        name: Sourced.SerializableClass | None
+        world: Sourced.SerializableClass | None
         coordinates: Sourced.SerializableClass | None
+        link: Sourced.SerializableClass | None
         gates: list[Sourced.SerializableClass]
 
     @override
     def ser(self) -> SerializableClass:
         return self.SerializableClass(
             code=self.code,
+            name=self.name.ser() if self.name is not None else None,
+            world=self.world.ser() if self.world is not None else None,
             coordinates=self.coordinates.ser() if self.coordinates is not None else None,
+            link=self.link.ser() if self.link is not None else None,
             gates=[o.ser() for o in self.gates],
         )
 
@@ -93,7 +102,10 @@ class Airport(IdObject, ToSerializable, kw_only=True):
             other.id.id = self.id
         else:
             return
+        self.name = self.name or other.name
+        self.world = self.world or other.world
         self.coordinates = self.coordinates or other.coordinates
+        self.link = self.link or other.link
         MergeableObject.merge_lists(self.gates, other.gates)
 
 
@@ -105,7 +117,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
 
     @override
     class SerializableClass(msgspec.Struct):
-        code: str
+        code: str | None
         flights: list[Sourced.SerializableClass]
         airport: Sourced.SerializableClass
         size: Sourced.SerializableClass | None
@@ -147,15 +159,21 @@ class Gate(IdObject, ToSerializable, kw_only=True):
 class Airline(IdObject, ToSerializable, kw_only=True):
     name: str
     flights: list[Sourced[Flight]] = msgspec.field(default_factory=list)
+    link: Sourced[str] | None = None
 
     @override
     class SerializableClass(msgspec.Struct):
         name: str
         flights: list[Sourced.SerializableClass]
+        link: Sourced.SerializableClass | None
 
     @override
     def ser(self) -> SerializableClass:
-        return self.SerializableClass(name=self.name, flights=[o.ser() for o in self.flights])
+        return self.SerializableClass(
+            name=self.name,
+            flights=[o.ser() for o in self.flights],
+            link=self.link.ser() if self.link is not None else None,
+        )
 
     @override
     def ctx(self, ctx: AirContext):
@@ -175,6 +193,7 @@ class Airline(IdObject, ToSerializable, kw_only=True):
         else:
             return
         MergeableObject.merge_lists(self.flights, other.flights)
+        self.link = self.link or other.link
 
 
 class AirContext(ToSerializable):

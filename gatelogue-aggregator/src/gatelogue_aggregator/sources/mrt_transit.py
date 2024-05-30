@@ -6,7 +6,7 @@ import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.air import AirContext
-from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.base import Source, Sourced
 
 
 class MRTTransit(AirContext, Source):
@@ -26,7 +26,7 @@ class MRTTransit(AirContext, Source):
 
         df.rename(
             columns={
-                "Unnamed: 0": "Airport Name",
+                "Unnamed: 0": "Name",
                 "Unnamed: 1": "Code",
                 "Unnamed: 2": "World",
                 "Unnamed: 3": "Operator",
@@ -37,10 +37,18 @@ class MRTTransit(AirContext, Source):
 
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):
             airline = self.get_airline(name=airline_name).source(self)
-            for airport_code, flights in zip(df["Code"], df[airline_name]):
+            for airport_name, airport_code, airport_world, flights in zip(
+                df["Name"], df["Code"], df["World"], df[airline_name]
+            ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
                 airport = self.get_airport(code=airport_code).source(self)
+
+                if airport_name != "":
+                    airport.v.name = Sourced(airport_name).source(self)
+                if airport_world != "":
+                    airport.v.world = Sourced(airport_world).source(self)
+
                 gate = self.get_gate(code=None, airport=airport).source(self)
                 for flight_code in str(flights).split(", "):
                     flight = self.get_flight(codes={flight_code}, airline=airline)

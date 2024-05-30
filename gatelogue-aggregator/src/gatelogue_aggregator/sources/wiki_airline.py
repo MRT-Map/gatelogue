@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, Callable
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.sources.wiki_base import get_wikitext
+from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.air import AirContext, Airline
 from gatelogue_aggregator.types.base import Source, Sourced
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-_EXTRACTORS: list[Callable[[WikiAirline, Path, int], ...]] = []
+_EXTRACTORS: list[Callable[[WikiAirline, Path, int], None]] = []
 
 
 @_EXTRACTORS.append
@@ -129,9 +129,9 @@ class WikiAirline(AirContext, Source):
         cache_dir: Path = DEFAULT_CACHE_DIR,
         timeout: int = DEFAULT_TIMEOUT,
     ) -> Airline:
-        wikitext = get_wikitext(page_name, cache_dir, timeout)
+        wikitext = get_wiki_text(page_name, cache_dir, timeout)
         pos = 0
-        airline = self.get_airline(name=airline_name)
+        airline = self.get_airline(name=airline_name, link=Sourced(get_wiki_link(page_name)).source(self))
         while (match := regex.search(wikitext, pos)) is not None:
             pos = match.start() + 1
             captures = match.groupdict()
