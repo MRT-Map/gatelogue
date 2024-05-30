@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - 0 0 * * 0
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gatelogue-aggregator
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pypa/hatch@install
+      - run: hatch run gatelogue-aggregator run -o "dist.json"
+      - run: hatch run gatelogue-aggregator schema -o "schema.json"
+      - run: cd ..
+      - run: git checkout --orphan dist
+      - run: git reset --hard
+      - run: git add dist.json schema.json
+      - run: git commit -am "-"
+      - run: git push
