@@ -15,11 +15,13 @@ class DynmapAirports(AirContext, Source):
         AirContext.__init__(self)
         Source.__init__(self)
 
-        json = msgspec.json.decode(
-            get_url(
-                "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json", cache, timeout=timeout
-            )
-        )["sets"]["airports"]["markers"]
+        response = get_url(
+            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json", cache, timeout=timeout
+        )
+        try:
+            json = msgspec.json.decode(response)["sets"]["airports"]["markers"]
+        except Exception as e:
+            raise ValueError(response[:100]) from e
 
         for k, v in json.items():
             self.get_airport(code=k.upper(), coordinates=Sourced((v["x"], v["z"])).source(self))
