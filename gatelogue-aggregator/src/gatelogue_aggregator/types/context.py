@@ -80,8 +80,7 @@ class Context(AirContext):
     @classmethod
     def from_sources(cls, sources: Iterable[Source]) -> Self:
         self = cls()
-        rich.print("[yellow] Merging sources")
-        for source in rich.progress.track(sources, f"[yellow] Merging sources: {', '.join(s.name for s in sources)}"):
+        for source in rich.progress.track(sources, f"[yellow]Merging sources: {', '.join(s.name for s in sources)}"):
             if isinstance(source, AirContext):
                 MergeableObject.merge_lists(self.flight, source.flight)
                 MergeableObject.merge_lists(self.airport, source.airport)
