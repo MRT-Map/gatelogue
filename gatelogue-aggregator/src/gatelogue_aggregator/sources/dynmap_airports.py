@@ -22,6 +22,6 @@ class DynmapAirports(AirContext, Source):
         )["sets"]["airports"]["markers"]
 
         for k, v in json.items():
-            self.get_airport(code=k, coordinates=Sourced((v["x"], v["z"])).source(self))
+            self.get_airport(code=k.upper(), coordinates=Sourced((v["x"], v["z"])).source(self))
 
         self.update()
