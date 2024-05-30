@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import Any, Self, override
 
 import msgspec
 
 from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced
-
-if TYPE_CHECKING:
-    from gatelogue_aggregator.types.context import AirContext
 
 
 class Flight(IdObject, kw_only=True):
@@ -36,8 +33,18 @@ class Flight(IdObject, kw_only=True):
         else:
             return
         self.codes.update(other.codes)
-        MergeableObject.merge_lists(self.gates, other.gates)
         self.airline.merge(other.airline)
+
+        MergeableObject.merge_lists(self.gates, other.gates)
+        new_gates = []
+        for g in self.gates:
+            code_filled = [a for a in other.gates if a.v.code is not None and a.v.airport.equivalent(g.v.airport)]
+            if g.v.code is None and len(code_filled) != 0:
+                new_gates.append(code_filled[0])
+                g.v.flights = [a for a in g.v.flights if a.v != self]
+            else:
+                new_gates.append(g)
+        self.gates = new_gates
 
     def dict(self) -> dict[str, Any]:
         return {"codes": self.codes, "gates": [o.dict() for o in self.gates], "airline": self.airline.dict()}
@@ -140,3 +147,67 @@ class Airline(IdObject, kw_only=True):
 
     def dict(self) -> dict[str, Any]:
         return {"name": self.name, "flights": [o.dict() for o in self.flights]}
+
+
+class AirContext:
+    __slots__ = ("flight", "airport", "gate", "airline")
+    flight: list[Flight]
+    airport: list[Airport]
+    gate: list[Gate]
+    airline: list[Airline]
+
+    def __init__(self):
+        self.flight = []
+        self.airport = []
+        self.gate = []
+        self.airline = []
+
+    def get_flight(self, **query) -> Flight:
+        for o in self.flight:
+            if all(v == getattr(o, k) for k, v in query.items()):
+                return o
+        o = Flight(**query)
+        o.ctx(self)
+        return o
+
+    def get_airport(self, **query) -> Airport:
+        for o in self.airport:
+            if all(v == getattr(o, k) for k, v in query.items()):
+                return o
+        o = Airport(**query)
+        o.ctx(self)
+        return o
+
+    def get_gate(self, **query) -> Gate:
+        for o in self.gate:
+            if all(v == getattr(o, k) for k, v in query.items()):
+                return o
+        o = Gate(**query)
+        o.ctx(self)
+        return o
+
+    def get_airline(self, **query) -> Airline:
+        for o in self.airline:
+            if all(v == getattr(o, k) for k, v in query.items()):
+                return o
+        o = Airline(**query)
+        o.ctx(self)
+        return o
+
+    def update(self):
+        for o in self.flight:
+            o.update()
+        for o in self.airport:
+            o.update()
+        for o in self.gate:
+            o.update()
+        for o in self.airline:
+            o.update()
+
+    def dict(self) -> dict[str, dict[str, Any]]:
+        return {
+            "flight": {str(o.id): o.dict() for o in self.flight},
+            "airport": {str(o.id): o.dict() for o in self.airport},
+            "gate": {str(o.id): o.dict() for o in self.gate},
+            "airline": {str(o.id): o.dict() for o in self.airline},
+        }

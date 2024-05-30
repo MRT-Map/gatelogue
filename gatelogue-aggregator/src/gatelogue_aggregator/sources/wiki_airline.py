@@ -1,17 +1,18 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from re import Pattern
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wikitext
-from gatelogue_aggregator.types.air import Airline
+from gatelogue_aggregator.types.air import AirContext, Airline
 from gatelogue_aggregator.types.base import Source, Sourced
-from gatelogue_aggregator.types.context import AirContext
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 _EXTRACTORS: list[Callable[[WikiAirline, Path, int], ...]] = []
 

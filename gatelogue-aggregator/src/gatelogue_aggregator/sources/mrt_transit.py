@@ -5,8 +5,8 @@ import rich.progress
 import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.types.air import AirContext
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.context import AirContext
 
 
 class MRTTransit(AirContext, Source):

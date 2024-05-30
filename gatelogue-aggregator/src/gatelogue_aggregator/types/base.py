@@ -21,8 +21,7 @@ class ID(msgspec.Struct, kw_only=True):
     def __eq__(self, other):
         if isinstance(other, ID):
             return str(self) == str(other)
-        else:
-            return False
+        return False
 
 
 class MergeableObject:
