@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import Loading from "./views/Loading.vue";
-import { RouterView } from "vue-router";
+import { routeLocationKey, RouterView, useRoute } from "vue-router";
 import Sidebar from "./components/Sidebar.vue";
 import { gatelogueData } from "./stores/data";
+const route = useRoute();
 </script>
 
 <template>
@@ -10,7 +11,11 @@ import { gatelogueData } from "./stores/data";
     <div v-if="gatelogueData == null"><Loading /></div>
     <div v-else>
       <Sidebar />
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <Transition mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </Transition>
+      </RouterView>
     </div>
   </Transition>
 </template>
@@ -50,7 +55,7 @@ a:active {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.25s ease;
+  transition: all 0.15s ease;
 }
 .v-enter-from,
 .v-leave-to {

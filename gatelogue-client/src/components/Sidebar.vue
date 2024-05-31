@@ -37,6 +37,8 @@ const sortedObjects = computed(() =>
 
 <template>
   <nav>
+    <RouterLink to="/"><img src="/gat2-light.png" /></RouterLink>
+    <hr />
     <template v-for="p in panels" :key="p.cat">
       <div
         class="button"
@@ -75,6 +77,19 @@ nav {
   padding: 1em;
   padding-bottom: 0;
   overflow-y: auto;
+}
+img {
+  width: 100%;
+  transition: all 0.1s ease;
+}
+img:hover {
+  filter: drop-shadow(0 2px 0 var(--col-a));
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+img:active {
+  filter: opacity(0.5) drop-shadow(0 0 0 var(--col-b));
+  transform: translateY(0px);
 }
 button {
   all: unset;
