@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/Home.vue";
-import AirlineView from "../views/Airline.vue";
-import AirportView from "../views/Airport.vue";
+import HomeView from "@/views/Home.vue";
+import AirlineView from "@/views/Airline.vue";
+import AirportView from "@/views/Airport.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

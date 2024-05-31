@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-  gatelogueData,
-  type Gate,
-  type GatelogueData,
-} from "../../stores/data";
+import { gatelogueData, type Gate } from "@/stores/data";
 import Flight from "./Flight.vue";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";

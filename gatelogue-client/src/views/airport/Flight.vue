@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-  gatelogueData,
-  type Airport,
-  type Gate,
-  type GatelogueData,
-} from "../../stores/data";
+import { gatelogueData, type Airport, type Gate } from "@/stores/data";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
 let props = defineProps<{

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import {
-  gatelogueData,
-  type Category,
-  type GatelogueData,
-} from "../stores/data";
+import { gatelogueData, type Category } from "@/stores/data";
 import { useRoute } from "vue-router";
 
 const route = useRoute();

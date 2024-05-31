@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import { gatelogueData } from "./stores/data";
 import Sidebar from "./components/Sidebar.vue";
 </script>
