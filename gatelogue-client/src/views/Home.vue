@@ -23,7 +23,7 @@ main {
   width: calc(100vw - 10em);
 }
 div {
-  padding: 30vh 0;
+  padding: 25vh 0;
 }
 img {
   width: 40vw;

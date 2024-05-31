@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import Loading from "./views/Loading.vue";
 import { RouterView } from "vue-router";
 import Sidebar from "./components/Sidebar.vue";
 import { gatelogueData } from "./stores/data";
 </script>
 
 <template>
-  <div v-if="gatelogueData == null">Loading...</div>
-  <div v-else>
-    <Sidebar />
-    <RouterView />
-  </div>
+  <Transition mode="out-in">
+    <div v-if="gatelogueData == null"><Loading /></div>
+    <div v-else>
+      <Sidebar />
+      <RouterView />
+    </div>
+  </Transition>
 </template>
 
 <style>
@@ -42,5 +45,15 @@ a:hover {
 }
 a:active {
   color: var(--acc-b);
+}
+</style>
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.25s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
