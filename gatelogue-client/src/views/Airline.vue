@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { type Flight as FlightT, gatelogueData } from "@/stores/data";
+import { useRoute, useRouter } from "vue-router";
 import Flight from "./airline/Flight.vue";
 import { computed } from "vue";
-import { useRoute } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const airline = computed(
   () => gatelogueData.value!.airline[route.params.id as string]!,
 );
+if (airline.value === undefined) {
+  router.push("/").then(() => router.go(0));
+}
 const flights = computed(() =>
   airline.value.flights
     .map((f) => [f.v, gatelogueData.value!.flight[f.v]!] as [string, FlightT])

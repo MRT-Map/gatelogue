@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { type Gate as GateT, gatelogueData } from "@/stores/data";
+import { useRoute, useRouter } from "vue-router";
 import Gate from "./airport/Gate.vue";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
-import { useRoute } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const airport = computed(
   () => gatelogueData.value?.airport[route.params.id as string]!,
 );
+if (airport.value === undefined) {
+  router.push("/").then(() => router.go(0));
+}
 const gates = computed(() =>
   airport.value.gates
     .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])
