@@ -13,16 +13,17 @@ class MRTTransit(AirContext, Source):
     name = "MRT Transit"
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "mrt-transit"
+        cache1 = cache_dir / "mrt-transit1"
+        cache2 = cache_dir / "mrt-transit2"
         AirContext.__init__(self)
         Source.__init__(self)
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
-            cache,
+            cache1,
             timeout=timeout,
         )
-        df = pd.read_csv(cache, header=1)
+        df = pd.read_csv(cache1, header=1)
 
         df.rename(
             columns={
@@ -34,6 +35,25 @@ class MRTTransit(AirContext, Source):
             inplace=True,
         )
         df.drop(df.tail(6).index, inplace=True)
+
+        get_url(
+            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
+            cache2,
+            timeout=timeout,
+        )
+        df2 = pd.read_csv(cache2, header=1)
+
+        df2.rename(
+            columns={
+                "Unnamed: 0": "Name",
+                "Unnamed: 1": "Code",
+                "Unnamed: 2": "Operator",
+            },
+            inplace=True,
+        )
+        df.drop(df.tail(5).index, inplace=True)
+        df["World"] = "New"
+        df = pd.concat((df, df2))
 
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):
             airline = self.get_airline(name=airline_name).source(self)

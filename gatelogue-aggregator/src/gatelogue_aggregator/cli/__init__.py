@@ -40,7 +40,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
     j = msgspec.json.encode(ctx.ser())
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")
-        output.write_text(msgspec.json.format(j.decode()))
+        output.write_text(msgspec.json.format(j.decode("utf-8")))
     else:
         rich.print(f"[yellow]Outputting to {output} (unformatted)")
         output.write_bytes(j)
@@ -53,7 +53,7 @@ def schema(*, output: Path, fmt: bool):
     s = msgspec.json.encode(msgspec.json.schema(Context.SerializableClass))
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")
-        output.write_text(msgspec.json.format(s.decode()))
+        output.write_text(msgspec.json.format(s.decode("utf-8")))
     else:
         rich.print(f"[yellow]Outputting to {output} (unformatted)")
         output.write_bytes(s)

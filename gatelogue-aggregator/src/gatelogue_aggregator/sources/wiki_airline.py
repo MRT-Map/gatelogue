@@ -49,7 +49,7 @@ def blu_air(ctx: WikiAirline, cache_dir, timeout):
         "BluAir",
         "List of BluAir flights",
         re.compile(
-            r"\{\{BA\|BU(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|.}}"
+            r"\{\{BA\|BU(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|.}}"
         ),
         cache_dir,
         timeout,
@@ -62,7 +62,7 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
         "IntraAir",
         "IntraAir/Flight List",
         re.compile(
-            r"Flight (?P<code>.*?)}}.*?\n.*?'''(?P<a1>.*?)'''.*?\n.*?'''(?P<a2>.*?)'''.*?\n.*?\n.*?\n.*?open.*?\n.*?\n.*?\n.*?'''(?P<g1>[^']*?)'''\n.*?'''(?P<g2>[^']*?)'''\n"
+            r"Flight (?P<code>.{,4}?)}}(?:(?!Flight).)*?'''(?P<a1>[^']*?)''' - (?:(?!Flight).)*?'''(?P<a2>[^']*?)''' - (?:(?!Flight).)*?Rsz open(?:(?!Flight).)*?Gate '''(?P<g1>[^']*?)'''.*?Gate '''(?P<g2>[^']*?)'''"
         ),
         cache_dir,
         timeout,
@@ -75,7 +75,7 @@ def fli_high(ctx: WikiAirline, cache_dir, timeout):
         "FliHigh",
         "FliHigh Airlines",
         re.compile(
-            r"\{\{FHList\|FH(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|FH}}"
+            r"\{\{FHList\|FH(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?:\[\[SDZ\|CHECK WIKI]]|(?P<g1>[^|]*?))\|(?P<g2>[^|]*?)\|a\|[^|]*?\|FH}}"
         ),
         cache_dir,
         timeout,
@@ -88,7 +88,7 @@ def air_mesa(ctx: WikiAirline, cache_dir, timeout):
         "AirMesa",
         "AirMesa",
         re.compile(
-            r"\{\{BA\|AM(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|..}}"
+            r"\{\{BA\|AM(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
         cache_dir,
         timeout,
@@ -101,7 +101,7 @@ def air(ctx: WikiAirline, cache_dir, timeout):
         "air",
         "Template:Air",
         re.compile(
-            r"\{\{BA\|↑↑(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|..}}"
+            r"\{\{BA\|↑↑(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
         cache_dir,
         timeout,
