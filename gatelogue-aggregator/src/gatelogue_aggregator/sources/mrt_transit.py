@@ -51,7 +51,7 @@ class MRTTransit(AirContext, Source):
             },
             inplace=True,
         )
-        df2.drop(df2.tail(5).index, inplace=True)
+        df2.drop(df2.tail(66).index, inplace=True)
         df2["World"] = "New"
         df = pd.concat((df, df2))
 
