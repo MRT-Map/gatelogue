@@ -36,7 +36,7 @@ const panels: {
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() => {
   return Object.entries(objects[selPanel.value.cat]).sort(([_, a], [__, b]) =>
-    a[selPanel.value.objDisplay].localeCompare(a[selPanel.value.objDisplay]),
+    a[selPanel.value.objDisplay].localeCompare(b[selPanel.value.objDisplay]),
   );
 });
 </script>

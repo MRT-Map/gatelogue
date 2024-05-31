@@ -7,6 +7,7 @@ import {
 } from "../../stores/data";
 import Flight from "./Flight.vue";
 import AirlineLink from "@/components/AirlineLink.vue";
+import Sourced from "@/components/Sourced.vue";
 
 let props = defineProps<{
   gate?: Gate;
@@ -17,24 +18,28 @@ let gate = computed(
 );
 let airline = computed(() =>
   gate.value.code && gate.value.code !== "?" && gate.value.flights.length > 0
-    ? gatelogueData.value!.flight[gate.value.flights[0].v]!.airline.v ?? ""
-    : "",
+    ? gatelogueData.value!.flight[gate.value.flights[0].v]!.airline
+    : undefined,
 );
 </script>
 
 <template>
   <td class="gate-code">{{ gate.code }}</td>
-  <td class="gate-size">{{ gate.size?.v ?? "?" }}</td>
+  <td class="gate-size">
+    <Sourced :sourced="gate.size">
+      {{ gate.size?.v ?? "?" }}
+    </Sourced>
+  </td>
   <td class="gate-airline">
-    <template v-if="airline !== ''"
-      ><AirlineLink :airlineId="airline"
-    /></template>
+    <Sourced v-if="airline" :sourced="airline"
+      ><AirlineLink :airlineId="airline.v"
+    /></Sourced>
   </td>
   <template v-for="flight in gate.flights">
     <Flight
       :gateId="gateId"
       :flightId="flight.v"
-      :includeAirline="airline === ''"
+      :includeAirline="airline === undefined"
     />
   </template>
   <td class="closing" :colspan="Math.max(0, 7 - gate.flights.length)">

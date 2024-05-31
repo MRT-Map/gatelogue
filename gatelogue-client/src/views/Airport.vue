@@ -7,6 +7,7 @@ import {
 } from "../stores/data";
 import { useRoute } from "vue-router";
 import Gate from "./airport/Gate.vue";
+import Sourced from "@/components/Sourced.vue";
 
 const route = useRoute();
 let airport = computed(
@@ -24,13 +25,17 @@ let gates = computed(() =>
     <b class="code">{{ airport.code }}</b
     ><br />
     <a :href="airport.link?.v">
-      <b class="name">{{ airport.name?.v ?? "" }}</b> </a
+      <Sourced :sourced="airport.name">
+        <b class="name">{{ airport.name?.v ?? "" }}</b>
+      </Sourced> </a
     ><br />
     <b>
-      <template v-if="airport.world"> {{ airport.world?.v }} World </template>
-      <template v-if="airport.coordinates">
+      <Sourced v-if="airport.world" :sourced="airport.world">
+        {{ airport.world?.v }} World
+      </Sourced>
+      <Sourced v-if="airport.coordinates" :sourced="airport.coordinates">
         @ {{ airport.coordinates.v.join(", ") }}
-      </template>
+      </Sourced>
     </b>
     <br /><br />
     <table>
