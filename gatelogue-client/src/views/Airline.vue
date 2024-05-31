@@ -14,6 +14,9 @@ let flights = computed(() =>
     //.sort(([_, a], [__, b]) => a.codes[0]!.localeCompare(b.codes[0]!)),
     .sort(([_, a], [__, b]) => parseInt(a.codes[0]) - parseInt(b.codes[0])),
 );
+let maxFlightGatesLength = computed(() =>
+  Math.max(...flights.value.map(([_, f]) => f.gates.length)),
+);
 </script>
 
 <template>
@@ -23,7 +26,11 @@ let flights = computed(() =>
     ><br />
     <table>
       <tr v-for="[flightId, flight] in flights">
-        <Flight :flightId="flightId" :flight="flight"></Flight>
+        <Flight
+          :flightId="flightId"
+          :flight="flight"
+          :maxFlightGatesLength="maxFlightGatesLength"
+        ></Flight>
       </tr>
     </table>
   </main>

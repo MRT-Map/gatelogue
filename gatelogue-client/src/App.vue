@@ -24,7 +24,7 @@ body {
 }
 main {
   height: calc(100vh - 1em);
-  width: calc(100vw - 14em);
+  width: calc(100vw - 15em);
   float: right;
   padding: 1em;
   padding-bottom: 0;

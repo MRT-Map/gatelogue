@@ -14,6 +14,9 @@ let gates = computed(() =>
     .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])
     .sort(([_, a], [__, b]) => a.code!.localeCompare(b.code!)),
 );
+let maxGateFlightsLength = computed(() =>
+  Math.max(...gates.value.map(([_, g]) => g.flights.length)),
+);
 </script>
 
 <template>
@@ -36,7 +39,11 @@ let gates = computed(() =>
     <br /><br />
     <table>
       <tr v-for="[gateId, gate] in gates">
-        <Gate :gateId="gateId" :gate="gate" />
+        <Gate
+          :gateId="gateId"
+          :gate="gate"
+          :maxGateFlightsLength="maxGateFlightsLength"
+        />
       </tr>
     </table>
   </main>

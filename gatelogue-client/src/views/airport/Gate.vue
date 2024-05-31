@@ -8,6 +8,7 @@ import Flight from "./Flight.vue";
 let props = defineProps<{
   gate?: Gate;
   gateId: string;
+  maxGateFlightsLength?: number;
 }>();
 let gate = computed(
   () => props.gate ?? gatelogueData.value!.gate[props.gateId]!,
@@ -22,9 +23,7 @@ let airline = computed(() =>
 <template>
   <td class="gate-code">{{ gate.code }}</td>
   <td class="gate-size">
-    <Sourced :sourced="gate.size">
-      {{ gate.size?.v ?? "?" }}
-    </Sourced>
+    <Sourced :sourced="gate.size" />
   </td>
   <td class="gate-airline">
     <Sourced v-if="airline" :sourced="airline"
@@ -38,7 +37,12 @@ let airline = computed(() =>
       :includeAirline="airline === undefined"
     />
   </template>
-  <td class="closing" :colspan="Math.max(0, 7 - gate.flights.length)">
+  <td
+    class="closing"
+    :colspan="
+      Math.max(0, (maxGateFlightsLength ?? 6) + 1 - gate.flights.length)
+    "
+  >
     &nbsp;&nbsp;&nbsp;
   </td>
 </template>
