@@ -36,6 +36,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
             WikiAirport(cache_dir, timeout),
         ]
     )
+    ctx.update()
     j = msgspec.json.encode(ctx.ser())
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")

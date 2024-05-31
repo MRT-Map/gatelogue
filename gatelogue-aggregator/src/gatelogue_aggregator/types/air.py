@@ -4,7 +4,7 @@ from typing import Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable, ID
 
 
 class Flight(IdObject, ToSerializable, kw_only=True):
@@ -15,8 +15,8 @@ class Flight(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         codes: set[str]
-        gates: list[Sourced.SerializableClass]
-        airline: Sourced.SerializableClass
+        gates: list[Sourced.SerializableClass[ID]]
+        airline: Sourced.SerializableClass[ID]
 
     @override
     def ser(self) -> SerializableClass:
@@ -34,6 +34,22 @@ class Flight(IdObject, ToSerializable, kw_only=True):
         if self not in (o.v for o in self.airline.v.flights):
             self.airline.v.flights.append(self.source(self.airline))
 
+        new_gates = []
+        for gate in self.gates:
+            try:
+                existing_gate = next(a for a in new_gates if gate.v.airport == a.v.airport)
+            except StopIteration:
+                new_gates.append(gate)
+                continue
+            if existing_gate.v.code is None and gate.v.code is not None:
+                new_gates.remove(existing_gate)
+                existing_gate.v.flights = [a for a in existing_gate.v.flights if a.v != self]
+                new_gates.append(gate)
+            elif existing_gate.v.code is not None and gate.v.code is None:
+                gate.v.flights = [a for a in gate.v.flights if a.v != self]
+
+        self.gates = [v for _, v in {str(a.v.id): a for a in self.gates}.items()]
+
     def equivalent(self, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.airline.equivalent(other.airline)
 
@@ -44,23 +60,13 @@ class Flight(IdObject, ToSerializable, kw_only=True):
             return
         self.codes.update(other.codes)
         self.airline.merge(other.airline)
-
         MergeableObject.merge_lists(self.gates, other.gates)
-        new_gates = []
-        for g in self.gates:
-            code_filled = [a for a in other.gates if a.v.code is not None and a.v.airport.equivalent(g.v.airport)]
-            if g.v.code is None and len(code_filled) != 0:
-                new_gates.append(code_filled[0])
-                g.v.flights = [a for a in g.v.flights if a.v != self]
-            else:
-                new_gates.append(g)
-        self.gates = new_gates
 
 
 class Airport(IdObject, ToSerializable, kw_only=True):
     code: str
     name: Sourced[str] | None = None
-    world: Sourced[Literal["old", "new"]] | None = None
+    world: Sourced[Literal["Old", "New"]] | None = None
     coordinates: Sourced[tuple[int, int]] | None = None
     link: Sourced[str] | None = None
     gates: list[Sourced[Gate]] = msgspec.field(default_factory=list)
@@ -68,11 +74,11 @@ class Airport(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         code: str
-        name: Sourced.SerializableClass | None
-        world: Sourced.SerializableClass | None
-        coordinates: Sourced.SerializableClass | None
-        link: Sourced.SerializableClass | None
-        gates: list[Sourced.SerializableClass]
+        name: Sourced.SerializableClass[str] | None
+        world: Sourced.SerializableClass[str] | None
+        coordinates: Sourced.SerializableClass[tuple[int, int]] | None
+        link: Sourced.SerializableClass[str] | None
+        gates: list[Sourced.SerializableClass[ID]]
 
     @override
     def ser(self) -> SerializableClass:
@@ -93,6 +99,7 @@ class Airport(IdObject, ToSerializable, kw_only=True):
     def update(self):
         for gate in self.gates:
             gate.v.airport = self.source(gate)
+        self.gates = [v for _, v in {str(a.v.id): a for a in self.gates}.items()]
 
     def equivalent(self, other: Self) -> bool:
         return self.code == other.code
@@ -118,9 +125,9 @@ class Gate(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         code: str | None
-        flights: list[Sourced.SerializableClass]
-        airport: Sourced.SerializableClass
-        size: Sourced.SerializableClass | None
+        flights: list[Sourced.SerializableClass[ID]]
+        airport: Sourced.SerializableClass[ID]
+        size: Sourced.SerializableClass[str] | None
 
     @override
     def ser(self) -> SerializableClass:
@@ -142,6 +149,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
                 flight.v.gates.append(self.source(flight))
         if self not in (o.v for o in self.airport.v.gates):
             self.airport.v.gates.append(self.source(self.airport))
+        self.flights = [v for _, v in {str(a.v.id): a for a in self.flights}.items()]
 
     def equivalent(self, other: Self) -> bool:
         return self.code == other.code and self.airport.equivalent(other.airport)
@@ -164,8 +172,8 @@ class Airline(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         name: str
-        flights: list[Sourced.SerializableClass]
-        link: Sourced.SerializableClass | None
+        flights: list[Sourced.SerializableClass[ID]]
+        link: Sourced.SerializableClass[str] | None
 
     @override
     def ser(self) -> SerializableClass:
@@ -183,6 +191,7 @@ class Airline(IdObject, ToSerializable, kw_only=True):
     def update(self):
         for flight in self.flights:
             flight.v.airline = self.source(flight)
+        self.flights = [v for _, v in {str(a.v.id): a for a in self.flights}.items()]
 
     def equivalent(self, other: Self) -> bool:
         return self.name == other.name

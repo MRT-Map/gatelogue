@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Self, override
+from typing import TYPE_CHECKING, Any, ClassVar, Self, override, TypeVar, Generic
 
 import msgspec
 import rich
@@ -67,13 +67,16 @@ class IdObject(msgspec.Struct, MergeableObject, kw_only=True):
         return Sourced(self).source(source)
 
 
+_T = TypeVar("_T")
+
+
 class Sourced[T](msgspec.Struct, MergeableObject, ToSerializable):
     v: T
     s: set[str] = msgspec.field(default_factory=set)
 
     @override
-    class SerializableClass(msgspec.Struct):
-        v: Any
+    class SerializableClass(msgspec.Struct, Generic[_T]):
+        v: _T
         s: set[str]
 
     @override
