@@ -7,7 +7,6 @@ import pluginVue from "eslint-plugin-vue";
 import vueParser from "vue-eslint-parser";
 import prettierConfig from "eslint-config-prettier";
 
-
 export default tseslint.config(
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
@@ -15,18 +14,18 @@ export default tseslint.config(
   ...pluginVue.configs["flat/essential"],
   {
     plugins: {
-      'typescript-eslint': tseslint.plugin,
+      "typescript-eslint": tseslint.plugin,
     },
     languageOptions: {
       globals: globals.browser,
       parser: vueParser,
       parserOptions: {
-      parser: tseslint.parser,
-      //project: "./tsconfig.app.json",
-      //extraFileExtensions: ['.vue'],
-      sourceType: 'module'
-      }
+        parser: tseslint.parser,
+        //project: "./tsconfig.app.json",
+        //extraFileExtensions: ['.vue'],
+        sourceType: "module",
+      },
     },
   },
-  prettierConfig
+  prettierConfig,
 );

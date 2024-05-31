@@ -10,7 +10,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint --fix src/",
-    "format": "prettier --write src/"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "vue": "^3.4.27",
