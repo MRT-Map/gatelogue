@@ -27,6 +27,7 @@ main {
   width: calc(100vw - 15em);
   float: right;
   padding: 1em;
+  margin: 0;
   padding-bottom: 0;
   overflow-y: auto;
   text-align: center;

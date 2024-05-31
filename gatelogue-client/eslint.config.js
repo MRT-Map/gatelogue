@@ -12,6 +12,7 @@ export default tseslint.config(
   ...tseslint.configs.strict,
   //@ts-expect-error
   ...pluginVue.configs["flat/essential"],
+  ...pluginVue.configs["flat/recommended"],
   {
     languageOptions: {
       globals: globals.browser,

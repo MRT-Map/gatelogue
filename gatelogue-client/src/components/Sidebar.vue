@@ -40,8 +40,8 @@ const sortedObjects = computed(() =>
     <template v-for="p in panels" :key="p.cat">
       <div
         class="button"
-        @click="selPanel = p"
         :class="selPanel.cat === p.cat ? 'sel' : ''"
+        @click="selPanel = p"
       >
         <button>
           <b>{{ p.catDisplay }}</b>

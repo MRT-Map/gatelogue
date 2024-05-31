@@ -35,7 +35,7 @@ const size = computed(
   <td class="flight-size">
     <Sourced :sourced="size" />
   </td>
-  <td class="flight-gates" v-for="gate in gates" :key="gate.v[1].code">
+  <td v-for="gate in gates" :key="gate.v[1].code" class="flight-gates">
     <Sourced :sourced="gate">
       <RouterLink :to="`/airport/${gate.v[0].airport.v}`">
         {{ gate.v[1].code }}-{{ gate.v[0].code ?? "?" }}

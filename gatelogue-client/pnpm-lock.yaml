@@ -34,7 +34,7 @@ importers:
         specifier: ^0.5.1
         version: 0.5.1
       eslint:
-        specifier: ~9.3.0
+        specifier: ^9.3.0
         version: 9.3.0
       eslint-config-prettier:
         specifier: ^9.1.0
@@ -650,8 +650,8 @@ packages:
   '@vue/compiler-ssr@3.4.27':
     resolution: {integrity: sha512-CVRzSJIltzMG5FcidsW0jKNQnNRYC8bT21VegyMMtHmhW3UOI7knmUehzswXLrExDLE6lQCZdrhD4ogI7c+vuw==}
 
-  '@vue/devtools-api@6.6.1':
-    resolution: {integrity: sha512-LgPscpE3Vs0x96PzSSB4IGVSZXZBZHpfxs+ZA1d+VEPwHdOXowy/Y2CsvCAIFrf+ssVU1pD1jidj505EpUnfbA==}
+  '@vue/devtools-api@6.6.2':
+    resolution: {integrity: sha512-134clD8u7cBBXdmBbXI282gHGF7T/eAbD/G7mAK2llQF62IbI4ny28IVamZVMoJSvfImC2Xxnj732hXkJvUj6g==}
 
   '@vue/devtools-core@7.2.1':
     resolution: {integrity: sha512-OyWl455UnJIVgZ6lo5WQ79WbDMoXtSRwyNKp9WzCZ0HhuQywIk4qv59KtLRe75uVmtGBde4hXNaSyRm+x9bY6g==}
@@ -809,8 +809,8 @@ packages:
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
 
-  debug@4.3.4:
-    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
+  debug@4.3.5:
+    resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -1597,7 +1597,7 @@ snapshots:
       '@babel/traverse': 7.24.6
       '@babel/types': 7.24.6
       convert-source-map: 2.0.0
-      debug: 4.3.4
+      debug: 4.3.5
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -1775,7 +1775,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.24.6
       '@babel/parser': 7.24.6
       '@babel/types': 7.24.6
-      debug: 4.3.4
+      debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -1865,7 +1865,7 @@ snapshots:
   '@eslint/eslintrc@3.1.0':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.5
       espree: 10.0.1
       globals: 14.0.0
       ignore: 5.3.1
@@ -1881,7 +1881,7 @@ snapshots:
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.4
+      debug: 4.3.5
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -2013,7 +2013,7 @@ snapshots:
       '@typescript-eslint/types': 8.0.0-alpha.24
       '@typescript-eslint/typescript-estree': 8.0.0-alpha.24(typescript@5.4.5)
       '@typescript-eslint/visitor-keys': 8.0.0-alpha.24
-      debug: 4.3.4
+      debug: 4.3.5
       eslint: 9.3.0
     optionalDependencies:
       typescript: 5.4.5
@@ -2029,7 +2029,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.0.0-alpha.24(typescript@5.4.5)
       '@typescript-eslint/utils': 8.0.0-alpha.24(eslint@9.3.0)(typescript@5.4.5)
-      debug: 4.3.4
+      debug: 4.3.5
       ts-api-utils: 1.3.0(typescript@5.4.5)
     optionalDependencies:
       typescript: 5.4.5
@@ -2043,7 +2043,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.0.0-alpha.24
       '@typescript-eslint/visitor-keys': 8.0.0-alpha.24
-      debug: 4.3.4
+      debug: 4.3.5
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
@@ -2147,7 +2147,7 @@ snapshots:
       '@vue/compiler-dom': 3.4.27
       '@vue/shared': 3.4.27
 
-  '@vue/devtools-api@6.6.1': {}
+  '@vue/devtools-api@6.6.2': {}
 
   '@vue/devtools-core@7.2.1(vite@5.2.12(@types/node@20.12.13))(vue@3.4.27(typescript@5.4.5))':
     dependencies:
@@ -2315,7 +2315,7 @@ snapshots:
 
   de-indent@1.0.2: {}
 
-  debug@4.3.4:
+  debug@4.3.5:
     dependencies:
       ms: 2.1.2
 
@@ -2417,7 +2417,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4
+      debug: 4.3.5
       escape-string-regexp: 4.0.0
       eslint-scope: 8.0.1
       eslint-visitor-keys: 4.0.0
@@ -2938,7 +2938,7 @@ snapshots:
     dependencies:
       '@antfu/utils': 0.7.8
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
-      debug: 4.3.4
+      debug: 4.3.5
       error-stack-parser-es: 0.1.4
       fs-extra: 11.2.0
       open: 10.1.0
@@ -2992,7 +2992,7 @@ snapshots:
 
   vue-eslint-parser@9.4.2(eslint@9.3.0):
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
       eslint: 9.3.0
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
@@ -3005,7 +3005,7 @@ snapshots:
 
   vue-router@4.3.2(vue@3.4.27(typescript@5.4.5)):
     dependencies:
-      '@vue/devtools-api': 6.6.1
+      '@vue/devtools-api': 6.6.2
       vue: 3.4.27(typescript@5.4.5)
 
   vue-template-compiler@2.7.16:

@@ -37,7 +37,7 @@ const airline = computed(() => flight.value.airline);
   <td class="gate-flights">
     <b
       ><Sourced v-if="includeAirline" :sourced="airline"
-        ><AirlineLink :airlineId="airline.v"
+        ><AirlineLink :airline-id="airline.v"
       /></Sourced>
       {{ flight.codes[0] }}</b
     >

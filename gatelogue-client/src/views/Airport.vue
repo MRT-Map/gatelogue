@@ -42,9 +42,9 @@ const maxGateFlightsLength = computed(() =>
     <table>
       <tr v-for="[gateId, gate] in gates" :key="gateId">
         <Gate
-          :gateId="gateId"
+          :gate-id="gateId"
           :gate="gate"
-          :maxGateFlightsLength="maxGateFlightsLength"
+          :max-gate-flights-length="maxGateFlightsLength"
         />
       </tr>
     </table>

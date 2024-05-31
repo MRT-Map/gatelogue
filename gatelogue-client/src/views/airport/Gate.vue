@@ -27,14 +27,14 @@ const airline = computed(() =>
   </td>
   <td class="gate-airline">
     <Sourced v-if="airline" :sourced="airline"
-      ><AirlineLink :airlineId="airline.v"
+      ><AirlineLink :airline-id="airline.v"
     /></Sourced>
   </td>
   <template v-for="flight in gate.flights" :key="flight.v">
     <Flight
-      :gateId="gateId"
-      :flightId="flight.v"
-      :includeAirline="airline === undefined"
+      :gate-id="gateId"
+      :flight-id="flight.v"
+      :include-airline="airline === undefined"
     />
   </template>
   <td
