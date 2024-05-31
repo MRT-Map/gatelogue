@@ -4,7 +4,7 @@ from typing import Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable, ID
+from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable
 
 
 class Flight(IdObject, ToSerializable, kw_only=True):
@@ -15,8 +15,8 @@ class Flight(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         codes: set[str]
-        gates: list[Sourced.SerializableClass[ID]]
-        airline: Sourced.SerializableClass[ID]
+        gates: list[Sourced.SerializableClass[str]]
+        airline: Sourced.SerializableClass[str]
 
     @override
     def ser(self) -> SerializableClass:
@@ -78,7 +78,7 @@ class Airport(IdObject, ToSerializable, kw_only=True):
         world: Sourced.SerializableClass[str] | None
         coordinates: Sourced.SerializableClass[tuple[int, int]] | None
         link: Sourced.SerializableClass[str] | None
-        gates: list[Sourced.SerializableClass[ID]]
+        gates: list[Sourced.SerializableClass[str]]
 
     @override
     def ser(self) -> SerializableClass:
@@ -125,8 +125,8 @@ class Gate(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         code: str | None
-        flights: list[Sourced.SerializableClass[ID]]
-        airport: Sourced.SerializableClass[ID]
+        flights: list[Sourced.SerializableClass[str]]
+        airport: Sourced.SerializableClass[str]
         size: Sourced.SerializableClass[str] | None
 
     @override
@@ -172,7 +172,7 @@ class Airline(IdObject, ToSerializable, kw_only=True):
     @override
     class SerializableClass(msgspec.Struct):
         name: str
-        flights: list[Sourced.SerializableClass[ID]]
+        flights: list[Sourced.SerializableClass[str]]
         link: Sourced.SerializableClass[str] | None
 
     @override
