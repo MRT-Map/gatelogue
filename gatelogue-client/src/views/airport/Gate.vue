@@ -43,7 +43,7 @@ let airline = computed(() =>
   </td>
 </template>
 
-<style>
+<style scoped>
 .gate-code {
   font-size: 2em;
   border-radius: 0.5em 0 0 0.5em;
