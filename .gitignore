@@ -827,3 +827,4 @@ cython_debug/
 
 ### Other
 out.json
+.vite
