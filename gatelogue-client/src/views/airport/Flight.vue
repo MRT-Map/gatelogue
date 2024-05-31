@@ -7,15 +7,15 @@ let props = defineProps<{
   gateId: string;
   includeAirline: boolean;
 }>();
-let flight = computed(() => gatelogueData.value?.flight[props.flightId]!);
+let flight = computed(() => gatelogueData.value!.flight[props.flightId]!);
 let otherGates = computed(() => {
   return flight.value.gates
     .filter((g) => g.v !== props.gateId)
-    .map((g) => gatelogueData.value?.gate[g.v as string]!)
-    .map((g) => [g, gatelogueData.value?.airport[g.airport.v as string]!])
+    .map((g) => gatelogueData.value!.gate[g.v]!)
+    .map((g) => [g, gatelogueData.value!.airport[g.airport.v]!])
     .map(([g, a]) => `${a.code}${g.code ? "-" + g.code : ""}`);
 });
-let airline = computed(() => flight.value.airline.v as string);
+let airline = computed(() => flight.value.airline.v);
 </script>
 
 <template>

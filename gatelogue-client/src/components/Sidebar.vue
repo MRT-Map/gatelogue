@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { gatelogueData } from "../stores/data";
+import {
+  gatelogueData,
+  type Category,
+  type GatelogueData,
+} from "../stores/data";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -12,7 +16,11 @@ let sel = computed(() => {
 });
 let objects = gatelogueData.value!;
 
-const panels = [
+const panels: {
+  cat: Category;
+  catDisplay: string;
+  objDisplay: string;
+}[] = [
   {
     cat: "airport",
     catDisplay: "Airport",
@@ -23,16 +31,12 @@ const panels = [
     catDisplay: "Airline",
     objDisplay: "name",
   },
-];
+] as const;
 
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() => {
-  console.warn(selPanel.value, objects[selPanel.value.cat]);
-  return Object.entries(objects[selPanel.value.cat] as any).sort(
-    ([_, a], [__, b]) =>
-      (a as any)[selPanel.value.objDisplay].localeCompare(
-        (b as any)[selPanel.value.objDisplay],
-      ),
+  return Object.entries(objects[selPanel.value.cat]).sort(([_, a], [__, b]) =>
+    a[selPanel.value.objDisplay].localeCompare(a[selPanel.value.objDisplay]),
   );
 });
 </script>
@@ -61,7 +65,7 @@ const sortedObjects = computed(() => {
           class="button"
           :class="sel.cat === selPanel.cat && sel.id === id ? 'sel' : ''"
         >
-          {{ (o as any)[selPanel.objDisplay] }}
+          {{ o[selPanel.objDisplay] }}
         </div>
       </RouterLink>
     </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { gatelogueData, type GatelogueData } from "@/stores/data";
+import { gatelogueData, type Airline, type GatelogueData } from "@/stores/data";
 import { computed } from "vue";
 
 let props = defineProps<{
-  airline?: GatelogueData["airline"][string];
+  airline?: Airline;
   airlineId: string;
 }>();
 

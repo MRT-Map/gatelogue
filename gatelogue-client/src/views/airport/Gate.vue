@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { gatelogueData, type GatelogueData } from "../../stores/data";
+import {
+  gatelogueData,
+  type Gate,
+  type GatelogueData,
+} from "../../stores/data";
 import Flight from "./Flight.vue";
 import AirlineLink from "@/components/AirlineLink.vue";
 
 let props = defineProps<{
-  gate: GatelogueData["gate"][string];
+  gate?: Gate;
+  gateId: string;
 }>();
+let gate = computed(
+  () => props.gate ?? gatelogueData.value!.gate[props.gateId]!,
+);
 let airline = computed(() =>
-  props.gate.code && props.gate.code !== "?" && props.gate.flights.length > 0
-    ? (gatelogueData.value?.flight[props.gate.flights[0].v as string]?.airline
-        .v as string) ?? ""
+  gate.value.code && gate.value.code !== "?" && gate.value.flights.length > 0
+    ? gatelogueData.value!.flight[gate.value.flights[0].v]!.airline.v ?? ""
     : "",
 );
 </script>
@@ -25,8 +32,8 @@ let airline = computed(() =>
   </td>
   <template v-for="flight in gate.flights">
     <Flight
-      :gateId="gate.id as string"
-      :flightId="flight.v as string"
+      :gateId="gateId"
+      :flightId="flight.v"
       :includeAirline="airline === ''"
     />
   </template>

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { gatelogueData } from "../stores/data";
+import {
+  gatelogueData,
+  type Gate as GateT,
+  type GatelogueData,
+} from "../stores/data";
 import { useRoute } from "vue-router";
 import Gate from "./airport/Gate.vue";
 
@@ -10,8 +14,8 @@ let airport = computed(
 );
 let gates = computed(() =>
   airport.value.gates
-    .map((g) => gatelogueData.value?.gate[g.v as string]!)
-    .sort((a, b) => a.code!.localeCompare(b.code!)),
+    .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])
+    .sort(([_, a], [__, b]) => a.code!.localeCompare(b.code!)),
 );
 </script>
 
@@ -19,19 +23,19 @@ let gates = computed(() =>
   <main>
     <b class="code">{{ airport.code }}</b
     ><br />
-    <a :href="airport.link?.v as string">
+    <a :href="airport.link?.v">
       <b class="name">{{ airport.name?.v ?? "" }}</b> </a
     ><br />
     <b>
       <template v-if="airport.world"> {{ airport.world?.v }} World </template>
       <template v-if="airport.coordinates">
-        @ {{ airport.coordinates.v[0] }}, {{ airport.coordinates.v[1] }}
+        @ {{ airport.coordinates.v.join(", ") }}
       </template>
     </b>
     <br /><br />
     <table>
-      <tr v-for="gate in gates">
-        <Gate :gate="gate" />
+      <tr v-for="[gateId, gate] in gates">
+        <Gate :gateId="gateId" :gate="gate" />
       </tr>
     </table>
   </main>

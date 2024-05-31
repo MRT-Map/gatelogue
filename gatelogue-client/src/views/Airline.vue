@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 let airline = computed(
-  () => gatelogueData.value?.airline[route.params.id as string],
+  () => gatelogueData.value!.airline[route.params.id as string]!,
 );
 </script>
 
