@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
 import { gatelogueData, type Category } from "@/stores/data";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -70,7 +70,7 @@ const sortedObjects = computed(() => {
 
 <style scoped>
 nav {
-  background-color: #333;
+  background-color: var(--col-b);
   height: calc(100vh - 1em);
   width: 10em;
   float: left;
@@ -86,36 +86,36 @@ a:hover {
 }
 .button {
   border-radius: 1em;
-  background-color: #111;
+  background-color: var(--col-a);
   margin: 0.5em;
   padding: 0.5em;
   text-align: center;
   user-select: none;
-  box-shadow: #1118 0px 3px;
+  box-shadow: var(--col-at) 0px 3px;
   transition: all 0.1s ease;
   color: white;
   text-overflow: ellipsis;
 }
 .button.sel {
-  background-color: #f40;
-  box-shadow: #f408 0px 3px;
+  background-color: var(--acc-a);
+  box-shadow: var(--acc-at) 0px 3px;
 }
 .button:hover {
-  background-color: #888;
-  color: #111;
-  box-shadow: #8888 0px 4px;
+  background-color: var(--col-d);
+  color: var(--col-a);
+  box-shadow: var(--col-dt) 0px 4px;
   transform: translateY(-1px);
   cursor: pointer;
 }
 .button.sel:hover {
-  background-color: #f84;
-  box-shadow: #f848 0px 4px;
+  background-color: var(--acc-b);
+  box-shadow: var(--acc-bt) 0px 4px;
 }
 
 .button:active {
-  background-color: #aaa !important;
-  box-shadow: #aaa8 0px 0px !important;
+  background-color: var(--col-e) !important;
+  box-shadow: var(--col-et) 0px 0px !important;
   transform: translateY(3px);
-  color: #111;
+  color: var(--col-a);
 }
 </style>

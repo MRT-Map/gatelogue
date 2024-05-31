@@ -31,6 +31,6 @@ a:hover {
   text-decoration: underline;
 }
 a:active {
-  color: #f84;
+  color: var(--acc-b);
 }
 </style>

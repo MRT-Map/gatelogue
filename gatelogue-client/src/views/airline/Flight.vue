@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import Sourced from "@/components/Sourced.vue";
 import {
   gatelogueData,
   type Airport,
   type Flight,
   type Gate,
 } from "@/stores/data";
-import Sourced from "@/components/Sourced.vue";
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
 let props = defineProps<{
   flightId: string;
@@ -45,13 +45,13 @@ let gates = computed(() => {
 .flight-code {
   font-size: 2em;
   border-radius: 0.5em 0 0 0.5em;
-  background-color: #f40;
+  background-color: var(--acc-a);
   padding: 0.25em;
   font-weight: bold;
   width: 2em;
 }
 .flight-gates {
-  background-color: #555;
+  background-color: var(--col-c);
   padding: 0.25em;
   width: 5em;
   min-width: 5em;
@@ -60,7 +60,7 @@ let gates = computed(() => {
 .closing {
   font-size: 2em;
   border-radius: 0 0.5em 0.5em 0;
-  background-color: #333;
+  background-color: var(--col-b);
   padding: 0.25em;
 }
 </style>

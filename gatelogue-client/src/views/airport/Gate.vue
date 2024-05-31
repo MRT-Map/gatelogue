@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { gatelogueData, type Gate } from "@/stores/data";
-import Flight from "./Flight.vue";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
+import { gatelogueData, type Gate } from "@/stores/data";
+import { computed } from "vue";
+import Flight from "./Flight.vue";
 
 let props = defineProps<{
   gate?: Gate;
@@ -47,20 +47,20 @@ let airline = computed(() =>
 .gate-code {
   font-size: 2em;
   border-radius: 0.5em 0 0 0.5em;
-  background-color: #f40;
+  background-color: var(--acc-a);
   padding: 0.25em;
   font-weight: bold;
   width: 2em;
 }
 .gate-size {
-  background-color: #555;
+  background-color: var(--col-c);
   padding: 0.25em;
   font-size: 1.5em;
   font-weight: bold;
   width: 2em;
 }
 .gate-airline {
-  background-color: #333;
+  background-color: var(--col-b);
   padding: 0.25em;
   font-size: 1.5em;
   color: #fff;
@@ -69,7 +69,7 @@ let airline = computed(() =>
 .closing {
   font-size: 2em;
   border-radius: 0 0.5em 0.5em 0;
-  background-color: #333;
+  background-color: var(--col-b);
   padding: 0.25em;
 }
 </style>

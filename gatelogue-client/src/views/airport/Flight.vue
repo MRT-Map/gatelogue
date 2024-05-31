@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { gatelogueData, type Airport, type Gate } from "@/stores/data";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
+import { gatelogueData, type Airport, type Gate } from "@/stores/data";
+import { computed } from "vue";
+
 let props = defineProps<{
   flightId: string;
   gateId: string;
@@ -49,7 +50,7 @@ let airline = computed(() => flight.value.airline);
 
 <style>
 .gate-flights {
-  background-color: #555;
+  background-color: var(--col-c);
   padding: 0.25em;
   width: 5em;
   min-width: 5em;
