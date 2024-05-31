@@ -2,7 +2,7 @@ import { ref, type Ref } from "vue";
 import { type FromSchema } from "json-schema-to-ts";
 import type schema from "./schema";
 
-type GatelogueData = FromSchema<typeof schema>
+export type GatelogueData = FromSchema<typeof schema>
 
 export const gatelogueData: Ref<GatelogueData | null> = ref(null)
 

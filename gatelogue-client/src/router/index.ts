@@ -2,8 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/Home.vue'
 import AirlineView from '../views/Airline.vue'
 import AirportView from '../views/Airport.vue'
-import FlightView from '../views/Flight.vue'
-import GateView from '../views/Gate.vue'
 
 
 const router = createRouter({
@@ -24,16 +22,6 @@ const router = createRouter({
       name: 'airport',
       component: AirportView,
     },
-    {
-      path: '/flight/:id',
-      name: 'flight',
-      component: FlightView,
-    },
-    {
-      path: '/gate/:id',
-      name: 'gate',
-      component: GateView,
-    }
   ]
 })
 

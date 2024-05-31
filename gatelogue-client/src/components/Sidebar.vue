@@ -56,8 +56,11 @@
     padding-bottom: 0;
     overflow-y: auto;
   }
-  a, button {
+  button {
     all: unset;
+  }
+  a:hover {
+    text-decoration: unset
   }
   .button {
     border-radius: 1em;

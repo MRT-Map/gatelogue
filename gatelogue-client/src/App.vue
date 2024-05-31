@@ -25,4 +25,15 @@ import Sidebar from "./components/Sidebar.vue"
     padding: 0;
     color-scheme: dark;
   }
+  a {
+    color: unset;
+    text-decoration: none;
+  }
+  a:hover {
+    color: unset;
+    text-decoration: underline;
+  }
+  a:active {
+    color: #f84;
+  }
 </style>
