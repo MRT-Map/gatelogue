@@ -22,6 +22,15 @@ body {
   padding: 0;
   color-scheme: dark;
 }
+main {
+  height: calc(100vh - 1em);
+  width: calc(100vw - 14em);
+  float: right;
+  padding: 1em;
+  padding-bottom: 0;
+  overflow-y: auto;
+  text-align: center;
+}
 a {
   color: unset;
   text-decoration: none;

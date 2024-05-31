@@ -30,19 +30,10 @@ let flights = computed(() =>
 </template>
 
 <style scoped>
-main {
-  height: calc(100vh - 1em);
-  width: calc(90vw - 9em);
-  float: right;
-  padding: 1em;
-  padding-bottom: 0;
-  overflow-y: auto;
-  text-align: center;
-}
 .name {
   font-size: 5em;
 }
 table {
-  width: 90%;
+  width: 100%;
 }
 </style>
