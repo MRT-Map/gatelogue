@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   $ref: "#/$defs/gatelogue_aggregator.types.context.Context.SerializableClass",
   $defs: {

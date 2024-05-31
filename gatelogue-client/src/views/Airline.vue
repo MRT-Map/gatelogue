@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { gatelogueData, type Flight as FlightT } from "@/stores/data";
-import { useRoute } from "vue-router";
+import { type Flight as FlightT, gatelogueData } from "@/stores/data";
 import Flight from "./airline/Flight.vue";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
-let airline = computed(
+const airline = computed(
   () => gatelogueData.value!.airline[route.params.id as string]!,
 );
-let flights = computed(() =>
+const flights = computed(() =>
   airline.value.flights
     .map((f) => [f.v, gatelogueData.value!.flight[f.v]!] as [string, FlightT])
     //.sort(([_, a], [__, b]) => a.codes[0]!.localeCompare(b.codes[0]!)),
-    .sort(([_, a], [__, b]) => parseInt(a.codes[0]) - parseInt(b.codes[0])),
+    .sort(([, a], [, b]) => parseInt(a.codes[0]) - parseInt(b.codes[0])),
 );
-let maxFlightGatesLength = computed(() =>
-  Math.max(...flights.value.map(([_, f]) => f.gates.length)),
+const maxFlightGatesLength = computed(() =>
+  Math.max(...flights.value.map(([, f]) => f.gates.length)),
 );
 </script>
 
@@ -25,7 +25,7 @@ let maxFlightGatesLength = computed(() =>
       <b class="name">{{ airline.name }}</b> </a
     ><br />
     <table>
-      <tr v-for="[flightId, flight] in flights">
+      <tr v-for="[flightId, flight] in flights" :key="flightId">
         <Flight
           :flightId="flightId"
           :flight="flight"

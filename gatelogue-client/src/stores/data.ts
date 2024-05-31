@@ -1,4 +1,4 @@
-import { ref, type Ref } from "vue";
+import { type Ref, ref } from "vue";
 import { type FromSchema } from "json-schema-to-ts";
 import type schema from "./schema";
 

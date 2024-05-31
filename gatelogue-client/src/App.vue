@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { gatelogueData } from "./stores/data";
 import Sidebar from "./components/Sidebar.vue";
+import { gatelogueData } from "./stores/data";
 </script>
 
 <template>

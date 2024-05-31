@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { gatelogueData, type Gate as GateT } from "@/stores/data";
-import { useRoute } from "vue-router";
+import { type Gate as GateT, gatelogueData } from "@/stores/data";
 import Gate from "./airport/Gate.vue";
 import Sourced from "@/components/Sourced.vue";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
-let airport = computed(
+const airport = computed(
   () => gatelogueData.value?.airport[route.params.id as string]!,
 );
-let gates = computed(() =>
+const gates = computed(() =>
   airport.value.gates
     .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])
-    .sort(([_, a], [__, b]) => a.code!.localeCompare(b.code!)),
+    .sort(([, a], [, b]) => a.code!.localeCompare(b.code!)),
 );
-let maxGateFlightsLength = computed(() =>
-  Math.max(...gates.value.map(([_, g]) => g.flights.length)),
+const maxGateFlightsLength = computed(() =>
+  Math.max(...gates.value.map(([, g]) => g.flights.length)),
 );
 </script>
 
@@ -38,7 +38,7 @@ let maxGateFlightsLength = computed(() =>
     </b>
     <br /><br />
     <table>
-      <tr v-for="[gateId, gate] in gates">
+      <tr v-for="[gateId, gate] in gates" :key="gateId">
         <Gate
           :gateId="gateId"
           :gate="gate"

@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { gatelogueData, type Category } from "@/stores/data";
+import { type Category, gatelogueData } from "@/stores/data";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-let sel = computed(() => {
-  return {
-    cat: route.path.split("/")[1],
-    id: route.path.split("/")[2],
-  };
-});
-let objects = gatelogueData.value!;
+const sel = computed(() => ({
+  cat: route.path.split("/")[1],
+  id: route.path.split("/")[2],
+}));
+const objects = gatelogueData.value!;
 
 const panels: {
   cat: Category;
@@ -30,11 +28,11 @@ const panels: {
 ] as const;
 
 const selPanel = ref(panels[0]);
-const sortedObjects = computed(() => {
-  return Object.entries(objects[selPanel.value.cat]).sort(([_, a], [__, b]) =>
+const sortedObjects = computed(() =>
+  Object.entries(objects[selPanel.value.cat]).sort(([, a], [, b]) =>
     a[selPanel.value.objDisplay].localeCompare(b[selPanel.value.objDisplay]),
-  );
-});
+  ),
+);
 </script>
 
 <template>
@@ -51,12 +49,12 @@ const sortedObjects = computed(() => {
       </div>
     </template>
     <hr />
-    <template
-      v-if="selPanel !== undefined"
-      v-for="[id, o] in sortedObjects"
-      :key="id"
-    >
-      <RouterLink :to="`/${selPanel.cat}/${id}`">
+    <template v-if="selPanel !== undefined">
+      <RouterLink
+        v-for="[id, o] in sortedObjects"
+        :key="id"
+        :to="`/${selPanel.cat}/${id}`"
+      >
         <div
           class="button"
           :class="sel.cat === selPanel.cat && sel.id === id ? 'sel' : ''"

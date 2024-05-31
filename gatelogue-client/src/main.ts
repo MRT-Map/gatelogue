@@ -1,7 +1,6 @@
-import { createApp } from "vue";
 import "./colors.css";
-
 import App from "./App.vue";
+import { createApp } from "vue";
 import router from "./router";
 import { tippy } from "vue-tippy";
 

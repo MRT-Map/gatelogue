@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import { type Airport, type Gate, gatelogueData } from "@/stores/data";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
-import { gatelogueData, type Airport, type Gate } from "@/stores/data";
 import { computed } from "vue";
 
-let props = defineProps<{
+const props = defineProps<{
   flightId: string;
   gateId: string;
   includeAirline: boolean;
 }>();
-let flight = computed(() => gatelogueData.value!.flight[props.flightId]!);
-let otherGates = computed(() => {
-  return flight.value.gates
+const flight = computed(() => gatelogueData.value!.flight[props.flightId]!);
+const otherGates = computed(() =>
+  flight.value.gates
     .filter((g) => g.v !== props.gateId)
     .map((g) => [g.s, gatelogueData.value!.gate[g.v]!] as [string[], Gate])
     .map(
@@ -22,14 +22,12 @@ let otherGates = computed(() => {
           gatelogueData.value!.airport[g.airport.v]!,
         ] as [string[], Gate, Airport],
     )
-    .map(([s, g, a]) => {
-      return {
-        v: `${a.code}${g.code ? "-" + g.code : ""}`,
-        s,
-      };
-    });
-});
-let airline = computed(() => flight.value.airline);
+    .map(([s, g, a]) => ({
+      v: `${a.code}${g.code ? `-${g.code}` : ""}`,
+      s,
+    })),
+);
+const airline = computed(() => flight.value.airline);
 </script>
 
 <template>
@@ -41,7 +39,7 @@ let airline = computed(() => flight.value.airline);
       {{ flight.codes[0] }}</b
     >
     <br />
-    <Sourced v-for="gate in otherGates" :sourced="gate">
+    <Sourced v-for="gate in otherGates" :key="gate.v" :sourced="gate">
       {{ gate.v }}
       <br />
     </Sourced>

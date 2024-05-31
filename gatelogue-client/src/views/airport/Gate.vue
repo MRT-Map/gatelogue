@@ -1,19 +1,19 @@
 <script setup lang="ts">
+import { type Gate, gatelogueData } from "@/stores/data";
 import AirlineLink from "@/components/AirlineLink.vue";
-import Sourced from "@/components/Sourced.vue";
-import { gatelogueData, type Gate } from "@/stores/data";
-import { computed } from "vue";
 import Flight from "./Flight.vue";
+import Sourced from "@/components/Sourced.vue";
+import { computed } from "vue";
 
-let props = defineProps<{
+const props = defineProps<{
   gate?: Gate;
   gateId: string;
   maxGateFlightsLength?: number;
 }>();
-let gate = computed(
+const gate = computed(
   () => props.gate ?? gatelogueData.value!.gate[props.gateId]!,
 );
-let airline = computed(() =>
+const airline = computed(() =>
   gate.value.code && gate.value.code !== "?" && gate.value.flights.length > 0
     ? gatelogueData.value!.flight[gate.value.flights[0].v]!.airline
     : undefined,
@@ -30,7 +30,7 @@ let airline = computed(() =>
       ><AirlineLink :airlineId="airline.v"
     /></Sourced>
   </td>
-  <template v-for="flight in gate.flights">
+  <template v-for="flight in gate.flights" :key="flight.v">
     <Flight
       :gateId="gateId"
       :flightId="flight.v"

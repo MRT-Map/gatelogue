@@ -1,34 +1,33 @@
 <script setup lang="ts">
-import Sourced from "@/components/Sourced.vue";
 import {
-  gatelogueData,
   type Airport,
   type Flight,
   type Gate,
+  gatelogueData,
 } from "@/stores/data";
-import { computed } from "vue";
 import { RouterLink } from "vue-router";
-let props = defineProps<{
+import Sourced from "@/components/Sourced.vue";
+import { computed } from "vue";
+
+const props = defineProps<{
   flightId: string;
   flight?: Flight;
   maxFlightGatesLength?: number;
 }>();
-let flight = computed(
+const flight = computed(
   () => props.flight ?? gatelogueData.value!.flight[props.flightId]!,
 );
-let gates = computed(() => {
-  return flight.value.gates
+const gates = computed(() =>
+  flight.value.gates
     .map((g) => [g.s, gatelogueData.value!.gate[g.v]] as [string[], Gate])
-    .map(([s, g]) => {
-      return {
-        v: [g, gatelogueData.value!.airport[g.airport.v]] as [Gate, Airport],
-        s: s.concat(g.airport.s),
-      };
-    });
-});
-let size = computed(() => {
-  return gates.value.map((g) => g.v[0].size).filter((s) => s?.v)[0];
-});
+    .map(([s, g]) => ({
+      v: [g, gatelogueData.value!.airport[g.airport.v]] as [Gate, Airport],
+      s: s.concat(g.airport.s),
+    })),
+);
+const size = computed(
+  () => gates.value.map((g) => g.v[0].size).filter((s) => s?.v)[0],
+);
 </script>
 
 <template>
@@ -36,7 +35,7 @@ let size = computed(() => {
   <td class="flight-size">
     <Sourced :sourced="size" />
   </td>
-  <td class="flight-gates" v-for="gate in gates">
+  <td class="flight-gates" v-for="gate in gates" :key="gate.v[1].code">
     <Sourced :sourced="gate">
       <RouterLink :to="`/airport/${gate.v[0].airport.v}`">
         {{ gate.v[1].code }}-{{ gate.v[0].code ?? "?" }}

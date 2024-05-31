@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { gatelogueData, type Airline, type GatelogueData } from "@/stores/data";
+import { type Airline, gatelogueData } from "@/stores/data";
 import { computed } from "vue";
 
-let props = defineProps<{
+const props = defineProps<{
   airline?: Airline;
   airlineId: string;
 }>();
 
-let airline = computed(
+const airline = computed(
   () => props.airline ?? gatelogueData.value?.airline[props.airlineId]!,
 );
 </script>
