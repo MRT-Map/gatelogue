@@ -72,7 +72,7 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
 @_EXTRACTORS.append
 def fli_high(ctx: WikiAirline, cache_dir, timeout):
     ctx.extract_airline(
-        "FliHigh",
+        "FliHigh Airlines",
         "FliHigh Airlines",
         re.compile(
             r"\{\{FHList\|FH(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?:\[\[SDZ\|CHECK WIKI]]|(?P<g1>[^|]*?))\|(?P<g2>[^|]*?)\|a\|[^|]*?\|FH}}"

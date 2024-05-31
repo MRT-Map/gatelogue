@@ -51,8 +51,8 @@ class MRTTransit(AirContext, Source):
             },
             inplace=True,
         )
-        df.drop(df.tail(5).index, inplace=True)
-        df["World"] = "New"
+        df2.drop(df2.tail(5).index, inplace=True)
+        df2["World"] = "New"
         df = pd.concat((df, df2))
 
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):

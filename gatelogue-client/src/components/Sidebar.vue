@@ -29,9 +29,13 @@ const panels: {
 
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() =>
-  Object.entries(objects[selPanel.value.cat]).sort(([, a], [, b]) =>
-    a[selPanel.value.objDisplay].localeCompare(b[selPanel.value.objDisplay]),
-  ),
+  Object.entries(objects[selPanel.value.cat]).sort(([, a], [, b]) => {
+    if (a[selPanel.value.objDisplay] === null) return 100;
+    if (b[selPanel.value.objDisplay] === null) return -100;
+    return a[selPanel.value.objDisplay].localeCompare(
+      b[selPanel.value.objDisplay],
+    );
+  }),
 );
 </script>
 

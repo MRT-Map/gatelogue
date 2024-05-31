@@ -10,3 +10,12 @@ updates:
     schedule:
       interval: "weekly"
     target-branch: "rewrite"
+  - package-ecosystem: "npm"
+    directory: "/gatelogue-client"
+    schedule:
+      interval: "weekly"
+    target-branch: "rewrite"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

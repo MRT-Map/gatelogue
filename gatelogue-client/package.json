@@ -1,7 +1,8 @@
 {
   "name": "gatelogue-client",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "private": true,
+  "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,7 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
-    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/node22": "^22.0.0",
     "@types/node": "^20.12.13",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/tsconfig": "^0.5.1",
