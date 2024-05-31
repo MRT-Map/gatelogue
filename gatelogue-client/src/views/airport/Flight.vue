@@ -23,7 +23,10 @@ const otherGates = computed(() =>
         ] as [string[], Gate, Airport],
     )
     .map(([s, g, a]) => ({
-      v: `${a.code}${g.code ? `-${g.code}` : ""}`,
+      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v] as [
+        string,
+        string,
+      ],
       s,
     })),
 );
@@ -38,10 +41,9 @@ const airline = computed(() => flight.value.airline);
       /></Sourced>
       {{ flight.codes[0] }}</b
     >
-    <br />
-    <Sourced v-for="gate in otherGates" :key="gate.v" :sourced="gate">
-      {{ gate.v }}
+    <Sourced v-for="gate in otherGates" :key="gate.v[0]" :sourced="gate">
       <br />
+      <RouterLink :to="`/airport/${gate.v[1]}`">{{ gate.v[0] }}</RouterLink>
     </Sourced>
   </td>
 </template>

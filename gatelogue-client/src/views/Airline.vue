@@ -11,8 +11,9 @@ const airline = computed(
 const flights = computed(() =>
   airline.value.flights
     .map((f) => [f.v, gatelogueData.value!.flight[f.v]!] as [string, FlightT])
-    //.sort(([_, a], [__, b]) => a.codes[0]!.localeCompare(b.codes[0]!)),
-    .sort(([, a], [, b]) => parseInt(a.codes[0]) - parseInt(b.codes[0])),
+    .sort(([, a], [, b]) =>
+      a.codes[0]!.localeCompare(b.codes[0]!, "en", { numeric: true }),
+    ),
 );
 const maxFlightGatesLength = computed(() =>
   Math.max(...flights.value.map(([, f]) => f.gates.length)),
