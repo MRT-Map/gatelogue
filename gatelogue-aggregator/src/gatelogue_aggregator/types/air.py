@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import copy
 from typing import Literal, Self, override
 
 import msgspec
+import rich
 
 from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable
 
@@ -28,16 +30,10 @@ class Flight(IdObject, ToSerializable, kw_only=True):
 
     @override
     def update(self):
-        for gate in self.gates:
-            if self not in (o.v for o in gate.v.flights):
-                gate.v.flights.append(self.source(gate))
-        if self not in (o.v for o in self.airline.v.flights):
-            self.airline.v.flights.append(self.source(self.airline))
-
         new_gates = []
         for gate in self.gates:
             try:
-                existing_gate = next(a for a in new_gates if gate.v.airport == a.v.airport)
+                existing_gate = next(a for a in new_gates if gate.v.airport.equivalent(gate.v.airport))
             except StopIteration:
                 new_gates.append(gate)
                 continue
@@ -47,8 +43,12 @@ class Flight(IdObject, ToSerializable, kw_only=True):
                 new_gates.append(gate)
             elif existing_gate.v.code is not None and gate.v.code is None:
                 gate.v.flights = [a for a in gate.v.flights if a.v != self]
-
-        self.gates = [v for _, v in {str(a.v.id): a for a in self.gates}.items()]
+        self.gates = [v for _, v in {str(a.v.id): a for a in new_gates}.items()]
+        for gate in self.gates:
+            if self not in (o.v for o in gate.v.flights):
+                gate.v.flights.append(self.source(gate))
+        if self not in (o.v for o in self.airline.v.flights):
+            self.airline.v.flights.append(self.source(self.airline))
 
     def equivalent(self, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.airline.equivalent(other.airline)

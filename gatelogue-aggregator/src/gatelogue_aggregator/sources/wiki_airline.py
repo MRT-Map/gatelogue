@@ -98,7 +98,7 @@ def air_mesa(ctx: WikiAirline, cache_dir, timeout):
 @_EXTRACTORS.append
 def air(ctx: WikiAirline, cache_dir, timeout):
     ctx.extract_airline(
-        "Air",
+        "air",
         "Template:Air",
         re.compile(
             r"\{\{BA\|↑↑(?P<code>.*?)\|(?P<a1>.*?)\|(?P<a2>.*?)\|.*?\|.*?\|(?P<g1>.*?)\|(?P<g2>.*?)\|a\|.*?\|..}}"
