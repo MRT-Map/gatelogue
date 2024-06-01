@@ -1,2 +1,2 @@
 # gatelogue
-Catalogue of airport gates from the MRT
+Database of air, ~~rail, sea, bus~~ routes on the MRT
