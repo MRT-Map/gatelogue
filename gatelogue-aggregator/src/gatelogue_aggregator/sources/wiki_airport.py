@@ -1,211 +1,18 @@
 from __future__ import annotations
 
-import re
 from re import Pattern
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
-from gatelogue_aggregator.types.air import AirContext, Airport
+from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
+from gatelogue_aggregator.types.air import AirContext, Airport, Gate
 from gatelogue_aggregator.types.base import Source, Sourced
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-_EXTRACTORS: list[Callable[[WikiAirport, Path, int], None]] = []
-
-
-@_EXTRACTORS.append
-def pce(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Peacopolis International Airport",
-        "PCE",
-        re.compile(r"\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|.*Service"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def mwt(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Miu Wan Tseng Tsz Leng International Airport",
-        "MWT",
-        re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|\n)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def kek(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Kazeshima Eumi Konaejima Airport",
-        "KEK",
-        re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)\|\|"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def lar(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Larkspur Lilyflower International Airport",
-        "LAR",
-        re.compile(r"(?s)'''(?P<code>[^|]*?)'''\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)\|\|.*?status"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def abg(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Antioch-Bay Point Garvey International Airport",
-        "ABG",
-        re.compile(
-            r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)(?:\|\||\n)",
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def opa(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Oparia LeTourneau International Airport",
-        "OPA",
-        re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)",
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def chb(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Chan Bay Municipal Airport",
-        "CHB",
-        re.compile(
-            r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)",
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def cbz(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Chan Bay Zeta Airport",
-        "CBZ",
-        re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def cbi(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Chan Bay International Airport",
-        "CBI",
-        re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def dje(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Deadbush Johnston-Euphorial Airport",
-        "DJE",
-        re.compile(r"\|(?P<code>\d+?)\n\| (?:(?P<airline>[^\n<]*)|[^|]*?)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def vda(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Deadbush Valletta Desert Airport",
-        "VDA",
-        re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def wmi(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "West Mesa International Airport",
-        "WMI",
-        re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def dfm(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Deadbush Foxfoe Memorial Airport",
-        "DFM",
-        re.compile(
-            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def gsm(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Gemstride Melodia Airfield",
-        "GSM",
-        re.compile(
-            r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def vfw(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "Venceslo-Fifth Ward International Airport",
-        "VFW",
-        re.compile(
-            r"\|-\n\|(?P<code>\w\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def sdz(ctx: WikiAirport, cache_dir, timeout):
-    ctx.extract_airport(
-        "San Dzobiak International Airport",
-        "SDZ",
-        re.compile(
-            r"\|-\n\|(?P<code>\w\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)",
-            re.MULTILINE,
-        ),
-        cache_dir,
-        timeout,
-    )
 
 
 class WikiAirport(AirContext, Source):
@@ -221,7 +28,7 @@ class WikiAirport(AirContext, Source):
 
         self.update()
 
-    def extract_airport(
+    def regex_extract_airport(
         self,
         page_name: str,
         airport_code: str,
@@ -231,15 +38,21 @@ class WikiAirport(AirContext, Source):
     ) -> Airport:
         wikitext = get_wiki_text(page_name, cache_dir, timeout)
         pos = 0
-        airport = self.get_airport(code=airport_code, link=Sourced(get_wiki_link(page_name)).source(self))
+        airport = self.extract_get_airport(airport_code, page_name)
         while (match := regex.search(wikitext, pos)) is not None:
             pos = match.start() + 1
             captures = match.groupdict()
-            self.get_gate(
-                code=captures["code"],
-                airport=airport.source(self),
-                size=Sourced(captures["size"]).source(self) if "size" in captures else None,
-            )
+            self.extract_get_gate(airport, **captures)
         if pos == 0:
             rich.print(f"[red]Extraction for {airport_code} yielded no results")
         return airport
+
+    def extract_get_airport(self, airport_code: str, page_name: str):
+        return self.get_airport(code=airport_code, link=Sourced(get_wiki_link(page_name)).source(self))
+
+    def extract_get_gate(self, airport: Airport, code: str, size: str | None = None, **_) -> Gate:
+        return self.get_gate(
+            code=str(code),
+            airport=airport.source(self),
+            size=Sourced(str(size)).source(self) if size is not None else None,
+        )

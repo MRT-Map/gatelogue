@@ -26,6 +26,7 @@ dependencies = [
   "pandas",
   "rich",
   "requests",
+  "BeautifulSoup4"
 ]
 
 [project.urls]
