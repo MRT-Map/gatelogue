@@ -9,7 +9,7 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.types.air import AirContext, Airport, Gate
-from gatelogue_aggregator.types.base import Source, Sourced
+from gatelogue_aggregator.types.base import Source, Sourced, search_all, process_code, process_airport_code
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -37,22 +37,23 @@ class WikiAirport(AirContext, Source):
         timeout: int = DEFAULT_TIMEOUT,
     ) -> Airport:
         wikitext = get_wiki_text(page_name, cache_dir, timeout)
-        pos = 0
         airport = self.extract_get_airport(airport_code, page_name)
-        while (match := regex.search(wikitext, pos)) is not None:
-            pos = match.start() + 1
-            captures = match.groupdict()
-            self.extract_get_gate(airport, **captures)
-        if pos == 0:
+        result = False
+        for match in search_all(regex, wikitext):
+            self.extract_get_gate(airport, **match.groupdict())
+            result = True
+        if not result:
             rich.print(f"[red]Extraction for {airport_code} yielded no results")
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):
-        return self.get_airport(code=airport_code, link=Sourced(get_wiki_link(page_name)).source(self))
+        return self.get_airport(
+            code=process_airport_code(airport_code), link=Sourced(get_wiki_link(page_name)).source(self)
+        )
 
     def extract_get_gate(self, airport: Airport, code: str, size: str | None = None, **_) -> Gate:
         return self.get_gate(
-            code=str(code),
+            code=process_code(str(code)),
             airport=airport.source(self),
             size=Sourced(str(size)).source(self) if size is not None else None,
         )

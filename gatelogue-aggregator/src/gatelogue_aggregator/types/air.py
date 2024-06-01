@@ -121,6 +121,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
     code: str | None
     flights: list[Sourced[Flight]] = msgspec.field(default_factory=list)
     airport: Sourced[Airport]
+    airline: Sourced[Airline] | None = None
     size: Sourced[str] | None = None
 
     @override
@@ -128,6 +129,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
         code: str | None
         flights: list[Sourced.SerializableClass[str]]
         airport: Sourced.SerializableClass[str]
+        airline: Sourced.SerializableClass[str] | None
         size: Sourced.SerializableClass[str] | None
 
     @override
@@ -136,6 +138,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
             code=self.code,
             flights=[o.ser() for o in self.flights],
             airport=self.airport.ser(),
+            airline=self.airline.ser(),
             size=self.size.ser() if self.size is not None else None,
         )
 
@@ -161,6 +164,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
         else:
             return
         self.size = self.size or other.size
+        self.airline = self.airline or other.airline
         MergeableObject.merge_lists(self.flights, other.flights)
         self.airport.merge(other.airport)
 

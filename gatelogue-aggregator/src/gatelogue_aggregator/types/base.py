@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import dataclasses
+import re
 import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Self, override, TypeVar, Generic
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Any, ClassVar, Self, override, TypeVar, Generic, AnyStr
 
 import msgspec
 import rich
@@ -109,3 +112,38 @@ class Source:
 
     def __init__(self):
         rich.print(f"[yellow]Retrieving from {self.name}")
+
+
+def search_all(regex: re.Pattern[str], text: str) -> Generator[re.Match[str], None, None]:
+    pos = 0
+    while (match := regex.search(text, pos)) is not None:
+        pos = match.end()
+        yield match
+
+
+def process_code(s: str) -> str:
+    res = ""
+    hyphen = False
+    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), s.strip()):
+        t = match.group(0)
+        if len(t) == 0:
+            continue
+        if (hyphen and t[0].isdigit()) or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit()):
+            res += "-"
+        if hyphen:
+            hyphen = False
+        if t.isdigit():
+            res += t.lstrip("0") or "0"
+        elif t.isalpha():
+            res += t.upper()
+        elif t == "-" and (len(res) == 0 or res[-1].isalpha()):
+            hyphen = True
+
+    return res
+
+
+def process_airport_code(s: str) -> str:
+    s = s.upper()
+    if len(s) == 4 and s[3] == "T":
+        return s[:3]
+    return s

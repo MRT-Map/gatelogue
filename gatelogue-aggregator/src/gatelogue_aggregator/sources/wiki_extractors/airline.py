@@ -67,7 +67,7 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
             g2 = tr2("td")[1].b.string
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
-            ctx.extract_get_flight(airline, code, a1, g1, a2, g2)
+            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
 
 
 @_EXTRACTORS.append
@@ -89,7 +89,7 @@ def fli_high(ctx: WikiAirline, cache_dir, timeout):
                 g1 = None
             if "idk" in g2 or "CHECK WIKI" in g2:
                 g2 = None
-            ctx.extract_get_flight(airline, code, a1, g1, a2, g2)
+            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
 
 
 @_EXTRACTORS.append
