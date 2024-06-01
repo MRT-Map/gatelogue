@@ -15,7 +15,7 @@ def pce(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Peacopolis International Airport",
         "PCE",
-        re.compile(r"\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|.*Service_Good"),
+        re.compile(r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|.*Service"),
         cache_dir,
         timeout,
     )
@@ -48,7 +48,7 @@ def lar(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Larkspur Lilyflower International Airport",
         "LAR",
-        re.compile(r"(?s)'''(?P<code>[^|]*?)'''\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)\|\|.*?status"),
+        re.compile(r"(?s)'''(?P<code>[^|]*?)'''\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^\n]*?)]]|[^|]*?)\|\|.*?status"),
         cache_dir,
         timeout,
     )
@@ -180,7 +180,7 @@ def vfw(ctx: WikiAirport, cache_dir, timeout):
         "Venceslo-Fifth Ward International Airport",
         "VFW",
         re.compile(
-            r"\|-\n\|(?P<code>\w\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
+            r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
         ),
         cache_dir,
         timeout,
@@ -193,8 +193,7 @@ def sdz(ctx: WikiAirport, cache_dir, timeout):
         "San Dzobiak International Airport",
         "SDZ",
         re.compile(
-            r"\|-\n\|(?P<code>\w\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)",
-            re.MULTILINE,
+            r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
         ),
         cache_dir,
         timeout,
