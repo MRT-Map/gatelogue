@@ -15,7 +15,9 @@ def pce(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Peacopolis International Airport",
         "PCE",
-        re.compile(r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|.*Service"),
+        re.compile(
+            r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|(?:(?!Service).)*Service"
+        ),
         cache_dir,
         timeout,
     )
