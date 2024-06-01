@@ -38,12 +38,14 @@ class WikiAirport(AirContext, Source):
     ) -> Airport:
         wikitext = get_wiki_text(page_name, cache_dir, timeout)
         airport = self.extract_get_airport(airport_code, page_name)
-        result = False
+        result = 0
         for match in search_all(regex, wikitext):
             self.extract_get_gate(airport, **match.groupdict())
-            result = True
+            result += 1
         if not result:
-            rich.print(f"[red]Extraction for {airport_code} yielded no results")
+            rich.print(f"[red]  Extraction for {airport_code} yielded no results")
+        else:
+            rich.print(f"[green]  {airport_code} has {result} gates")
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):

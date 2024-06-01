@@ -38,12 +38,14 @@ class WikiAirline(AirContext, Source):
     ) -> Airline:
         wikitext = get_wiki_text(page_name, cache_dir, timeout)
         airline = self.extract_get_airline(airline_name, page_name)
-        result = False
+        result = 0
         for match in search_all(regex, wikitext):
             self.extract_get_flight(airline, **match.groupdict())
-            result = True
+            result += 1
         if not result:
-            rich.print(f"[red]Extraction for {airline_name} yielded no results")
+            rich.print(f"[red]  Extraction for {airline_name} yielded no results")
+        else:
+            rich.print(f"[green]  {airline_name} has {result} flights")
         return airline
 
     def extract_get_airline(self, airline_name: str, page_name: str) -> Airline:
