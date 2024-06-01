@@ -9,12 +9,12 @@ updates:
     directory: "/gatelogue-aggregator" # Location of package manifests
     schedule:
       interval: "weekly"
-    target-branch: "rewrite"
+    target-branch: "main"
   - package-ecosystem: "npm"
     directory: "/gatelogue-client"
     schedule:
       interval: "weekly"
-    target-branch: "rewrite"
+    target-branch: "main"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
