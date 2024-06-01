@@ -61,17 +61,17 @@ class WikiAirline(AirContext, Source):
         **_,
     ) -> Flight:
         return self.get_flight(
-            codes={process_code(str(code))},
+            codes={process_code(code)},
             gates=[
                 self.get_gate(
-                    code=process_code(str(g1)),
+                    code=process_code(g1),
                     size=Sourced(str(s)).source(self) if s is not None else None,
-                    airport=self.get_airport(code=process_airport_code(str(a1))).source(self),
+                    airport=self.get_airport(code=process_airport_code(a1)).source(self),
                 ).source(self),
                 self.get_gate(
-                    code=process_code(str(g2)),
+                    code=process_code(g2),
                     size=Sourced(str(s)).source(self) if s is not None else None,
-                    airport=self.get_airport(code=process_airport_code(str(a2))).source(self),
+                    airport=self.get_airport(code=process_airport_code(a2)).source(self),
                 ).source(self),
             ],
             airline=airline.source(self),

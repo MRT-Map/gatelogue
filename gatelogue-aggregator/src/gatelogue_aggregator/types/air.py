@@ -46,7 +46,7 @@ class Flight(IdObject, ToSerializable, kw_only=True):
         self.gates = [v for _, v in {str(a.v.id): a for a in new_gates}.items()]
 
         for gate in self.gates:
-            if self not in (o.v for o in gate.v.flights):
+            if len([o for o in gate.v.flights if o.v is self]) == 0:
                 gate.v.flights.append(self.source(gate))
         if self not in (o.v for o in self.airline.v.flights):
             self.airline.v.flights.append(self.source(self.airline))
@@ -138,7 +138,7 @@ class Gate(IdObject, ToSerializable, kw_only=True):
             code=self.code,
             flights=[o.ser() for o in self.flights],
             airport=self.airport.ser(),
-            airline=self.airline.ser(),
+            airline=self.airline.ser() if self.airline is not None else None,
             size=self.size.ser() if self.size is not None else None,
         )
 

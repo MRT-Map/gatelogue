@@ -53,7 +53,7 @@ class WikiAirport(AirContext, Source):
 
     def extract_get_gate(self, airport: Airport, code: str, size: str | None = None, **_) -> Gate:
         return self.get_gate(
-            code=process_code(str(code)),
+            code=process_code(code),
             airport=airport.source(self),
             size=Sourced(str(size)).source(self) if size is not None else None,
         )

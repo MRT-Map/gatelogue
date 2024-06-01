@@ -124,7 +124,7 @@ def search_all(regex: re.Pattern[str], text: str) -> Generator[re.Match[str], No
 def process_code(s: str) -> str:
     res = ""
     hyphen = False
-    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), s.strip()):
+    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
         t = match.group(0)
         if len(t) == 0:
             continue
@@ -143,7 +143,7 @@ def process_code(s: str) -> str:
 
 
 def process_airport_code(s: str) -> str:
-    s = s.upper()
+    s = str(s).upper()
     if len(s) == 4 and s[3] == "T":
         return s[:3]
     return s

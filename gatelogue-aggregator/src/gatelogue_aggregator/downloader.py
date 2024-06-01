@@ -17,7 +17,7 @@ def get_url(url: str, cache: Path, timeout: int = 60) -> str:
     status.start()
     response = requests.get(url, timeout=timeout).text
     status.stop()
-    cache.parent.mkdir(exist_ok=True)
+    cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
     cache.write_text(response)
     rich.print(f"[green]  Downloaded {url} to {cache}")
