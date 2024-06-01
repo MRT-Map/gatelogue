@@ -62,7 +62,8 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
         "IntraAir",
         "IntraAir/Flight List",
         re.compile(
-            r"Flight (?P<code>.{,4}?)}}(?:(?!Flight).)*?'''(?P<a1>[^']*?)''' - (?:(?!Flight).)*?'''(?P<a2>[^']*?)''' - (?:(?!Flight).)*?Rsz open(?:(?!Flight).)*?Gate '''(?P<g1>[^']*?)'''.*?Gate '''(?P<g2>[^']*?)'''"
+            r"Flight (?P<code>.{,4}?)}}(?:(?!Flight).)*?'''(?P<a1>[^']*?)''' - (?:(?!Flight).)*?'''(?P<a2>[^']*?)''' - (?:(?!Flight).)*?Rsz open(?:(?!Flight).)*?Gate '''(?P<g1>[^']*?)'''.*?Gate '''(?P<g2>[^']*?)'''",
+            re.MULTILINE,
         ),
         cache_dir,
         timeout,
@@ -151,4 +152,6 @@ class WikiAirline(AirContext, Source):
                 ],
                 airline=airline.source(self),
             )
+        if pos == 0:
+            rich.print(f"[red]Extraction for {airline_name} yielded no results")
         return airline

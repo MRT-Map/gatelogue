@@ -6,11 +6,21 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, 
 
 
 def get_wiki_text(page: str, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT) -> str:
-    cache = cache_dir / "wiki" / page
+    cache = cache_dir / "wiki-text" / page
     url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page={page}"
     response = get_url(url, cache, timeout)
     try:
-        return msgspec.json.decode(response)["parse"]["wikitext"].replace("\\n", "\n")
+        return msgspec.json.decode(response)["parse"]["wikitext"]
+    except Exception as e:
+        raise ValueError(response[:100]) from e
+
+
+def get_wiki_html(page: str, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT) -> str:
+    cache = cache_dir / "wiki-html" / page
+    url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
+    response = get_url(url, cache, timeout)
+    try:
+        return msgspec.json.decode(response)["parse"]["text"]
     except Exception as e:
         raise ValueError(response[:100]) from e
 

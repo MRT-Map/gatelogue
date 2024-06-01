@@ -200,7 +200,8 @@ def sdz(ctx: WikiAirport, cache_dir, timeout):
         "San Dzobiak International Airport",
         "SDZ",
         re.compile(
-            r"\|-\n\|(?P<code>\w\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
+            r"\|-\n\|(?P<code>\w\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)",
+            re.MULTILINE,
         ),
         cache_dir,
         timeout,
@@ -239,4 +240,6 @@ class WikiAirport(AirContext, Source):
                 airport=airport.source(self),
                 size=Sourced(captures["size"]).source(self) if "size" in captures else None,
             )
+        if pos == 0:
+            rich.print(f"[red]Extraction for {airport_code} yielded no results")
         return airport

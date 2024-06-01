@@ -41,6 +41,8 @@ class Flight(IdObject, ToSerializable, kw_only=True):
                 new_gates.append(gate)
             elif existing_gate.v.code is not None and gate.v.code is None:
                 gate.v.flights = [a for a in gate.v.flights if a.v != self]
+            elif existing_gate.v.code == gate.v.code:
+                existing_gate.merge(gate)
         self.gates = [v for _, v in {str(a.v.id): a for a in new_gates}.items()]
 
         for gate in self.gates:
