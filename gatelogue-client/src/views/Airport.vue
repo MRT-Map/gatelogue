@@ -17,9 +17,9 @@ const airport = computed(
 );
 watchEffect(() => {
   if (airport.value === undefined) {
-    router.push("/").then(() => router.go(0));
+    router.replace("/").then(() => router.go(0));
   } else if (airport.value.code) {
-    router.push(`/airport/${airport.value.code}`);
+    router.replace(`/airport/${airport.value.code}`);
   }
 });
 

@@ -15,9 +15,9 @@ const airline = computed(
 );
 watchEffect(() => {
   if (airline.value === undefined) {
-    router.push("/").then(() => router.go(0));
+    router.replace("/").then(() => router.go(0));
   } else if (airline.value.name) {
-    router.push(`/airline/${airline.value.name}`);
+    router.replace(`/airline/${airline.value.name}`);
   }
 });
 
