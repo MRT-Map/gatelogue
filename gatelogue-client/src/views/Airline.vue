@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import { type Flight as FlightT, gatelogueData } from "@/stores/data";
+import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Flight from "./airline/Flight.vue";
-import { computed } from "vue";
 
 const route = useRoute();
 const router = useRouter();
 const airline = computed(
-  () => gatelogueData.value!.airline[route.params.id as string]!,
+  () =>
+    gatelogueData.value!.airline[route.params.id as string] ??
+    Object.values(gatelogueData.value!.airline).find(
+      (a) => a.name === route.params.id,
+    )!,
 );
-if (airline.value === undefined) {
-  router.push("/").then(() => router.go(0));
-}
+watchEffect(() => {
+  if (airline.value === undefined) {
+    router.push("/").then(() => router.go(0));
+  } else if (airline.value.name) {
+    router.push(`/airline/${airline.value.name}`);
+  }
+});
+
 const flights = computed(() =>
   airline.value.flights
     .map((f) => [f.v, gatelogueData.value!.flight[f.v]!] as [string, FlightT])

@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import { type Gate as GateT, gatelogueData } from "@/stores/data";
+import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Gate from "./airport/Gate.vue";
 import Sourced from "@/components/Sourced.vue";
-import { computed } from "vue";
 
 const route = useRoute();
 const router = useRouter();
 const airport = computed(
-  () => gatelogueData.value?.airport[route.params.id as string]!,
+  () =>
+    gatelogueData.value?.airport[route.params.id as string] ??
+    Object.values(gatelogueData.value!.airport).find(
+      (a) =>
+        a.code !== null && a.code === (route.params.id as string).toUpperCase(),
+    )!,
 );
-if (airport.value === undefined) {
-  router.push("/").then(() => router.go(0));
-}
+watchEffect(() => {
+  if (airport.value === undefined) {
+    router.push("/").then(() => router.go(0));
+  } else if (airport.value.code) {
+    router.push(`/airport/${airport.value.code}`);
+  }
+});
+
 const gates = computed(() =>
   airport.value.gates
     .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])

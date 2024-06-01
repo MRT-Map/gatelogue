@@ -10,6 +10,7 @@ import vueParser from "vue-eslint-parser";
 export default tseslint.config(
   pluginJs.configs.all,
   ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
   //@ts-expect-error
   ...pluginVue.configs["flat/essential"],
   ...pluginVue.configs["flat/recommended"],
@@ -19,8 +20,6 @@ export default tseslint.config(
       parser: vueParser,
       parserOptions: {
         parser: tseslint.parser,
-        //project: "./tsconfig.app.json",
-        //extraFileExtensions: ['.vue'],
         sourceType: "module",
       },
     },

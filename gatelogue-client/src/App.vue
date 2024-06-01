@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { RouterView, useRoute } from "vue-router";
 import Loading from "./views/Loading.vue";
-import { routeLocationKey, RouterView, useRoute } from "vue-router";
 import Sidebar from "./components/Sidebar.vue";
 import { gatelogueData } from "./stores/data";
 const route = useRoute();
