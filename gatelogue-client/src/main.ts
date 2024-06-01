@@ -1,4 +1,5 @@
 import "./colors.css";
+import "vue-json-pretty/lib/styles.css";
 import App from "./App.vue";
 import { createApp } from "vue";
 import router from "./router";

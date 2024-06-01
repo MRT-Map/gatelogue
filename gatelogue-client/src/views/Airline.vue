@@ -3,6 +3,7 @@ import { type Flight as FlightT, gatelogueData } from "@/stores/data";
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Flight from "./airline/Flight.vue";
+import VueJsonPretty from "vue-json-pretty";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,6 +50,11 @@ const maxFlightGatesLength = computed(() =>
         ></Flight>
       </tr>
     </table>
+    <details>
+      <summary>Json</summary>
+      <VueJsonPretty :data="airline" :deep="1" />
+    </details>
+    <br />
   </main>
 </template>
 
