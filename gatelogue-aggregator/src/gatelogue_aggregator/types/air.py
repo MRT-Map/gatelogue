@@ -132,6 +132,7 @@ class Airport(IdObject, ToSerializable, kw_only=True):
             if len(possible_gates) == 1:
                 flight.s.update(possible_gates[0].s)
                 flight.v.gates = [a for a in flight.v.gates if a.v != none_gate]
+                flight.v.gates.append(possible_gates[0])
                 possible_gates[0].v.flights.append(flight)
             else:
                 new_flights.append(flight)
