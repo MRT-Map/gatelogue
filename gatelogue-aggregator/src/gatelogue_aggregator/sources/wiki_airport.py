@@ -7,8 +7,8 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airport, Gate
-from gatelogue_aggregator.types.base import Source, Sourced, process_airport_code, process_code, search_all
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Gate
+from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -25,8 +25,6 @@ class WikiAirport(AirContext, Source):
             rich.print(f"[green]  Extracting data from wikipages ({i + 1}/{len(_EXTRACTORS)})")
             airline(self, cache_dir, timeout)
         rich.print("[green]  Extracted")
-
-        self.update()
 
     def regex_extract_airport(
         self,
@@ -49,9 +47,7 @@ class WikiAirport(AirContext, Source):
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):
-        return self.get_airport(
-            code=process_airport_code(airport_code), link=Sourced(get_wiki_link(page_name)).source(self)
-        )
+        return Airport(self, code=process_airport_code(airport_code), link=get_wiki_link(page_name))
 
     def extract_get_gate(
         self,
@@ -63,9 +59,12 @@ class WikiAirport(AirContext, Source):
         **_,
     ) -> Gate:
         airline = airline or airline2
-        return self.get_gate(
+        g = Gate(
+            self,
             code=process_code(code),
-            airport=airport.source(self),
-            size=Sourced(str(size)).source(self) if size is not None else None,
-            airline=self.get_airline(name=airline).source(self) if airline is not None else None,
+            airport=airport,
+            size=str(size) if size is not None else None,
         )
+        if airline is not None:
+            g.connect_one(self, Airline(self, name=airline))
+        return g

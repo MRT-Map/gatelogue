@@ -36,8 +36,6 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
             WikiAirport(cache_dir, timeout),
         ]
     )
-    ctx.update()
-    ctx.final_update()
     j = msgspec.json.encode(ctx.ser())
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")
@@ -51,7 +49,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
 @click.option("-o", "--output", default="schema.json", type=Path, show_default=True)
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
 def schema(*, output: Path, fmt: bool):
-    s = msgspec.json.encode(msgspec.json.schema(Context.SerializableClass))
+    s = msgspec.json.encode(msgspec.json.schema(Context.Ser))
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(s.decode("utf-8")))

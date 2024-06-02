@@ -1,53 +1,53 @@
 /* eslint-disable */
 export default {
-  $ref: "#/$defs/gatelogue_aggregator.types.context.Context.SerializableClass",
+  $ref: "#/$defs/gatelogue_aggregator.types.context.Context.Ser",
   $defs: {
-    "gatelogue_aggregator.types.context.Context.SerializableClass": {
-      title: "SerializableClass",
+    "gatelogue_aggregator.types.context.Context.Ser": {
+      title: "Ser",
       type: "object",
       properties: {
         flight: {
           type: "object",
           additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Flight.SerializableClass",
+            $ref: "#/$defs/gatelogue_aggregator.types.air.Flight.Ser",
           },
         },
         airport: {
           type: "object",
           additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Airport.SerializableClass",
+            $ref: "#/$defs/gatelogue_aggregator.types.air.Airport.Ser",
           },
         },
         gate: {
           type: "object",
           additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Gate.SerializableClass",
+            $ref: "#/$defs/gatelogue_aggregator.types.air.Gate.Ser",
           },
         },
         airline: {
           type: "object",
           additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Airline.SerializableClass",
+            $ref: "#/$defs/gatelogue_aggregator.types.air.Airline.Ser",
           },
         },
       },
       required: ["flight", "airport", "gate", "airline"],
     },
-    "gatelogue_aggregator.types.air.Flight.SerializableClass": {
-      title: "SerializableClass",
+    "gatelogue_aggregator.types.air.Flight.Ser": {
+      title: "Ser",
       type: "object",
       properties: {
         codes: { type: "array", items: { type: "string" } },
         gates: {
           type: "array",
-          items: { $ref: "#/$defs/SerializableClass_str_" },
+          items: { $ref: "#/$defs/Ser_str_" },
         },
-        airline: { $ref: "#/$defs/SerializableClass_str_" },
+        airline: { $ref: "#/$defs/Ser_str_" },
       },
       required: ["codes", "gates", "airline"],
     },
-    SerializableClass_str_: {
-      title: "SerializableClass[str]",
+    Ser_str_: {
+      title: "Ser[str]",
       type: "object",
       properties: {
         v: { type: "string" },
@@ -55,35 +55,32 @@ export default {
       },
       required: ["v", "s"],
     },
-    "gatelogue_aggregator.types.air.Airport.SerializableClass": {
-      title: "SerializableClass",
+    "gatelogue_aggregator.types.air.Airport.Ser": {
+      title: "Ser",
       type: "object",
       properties: {
         code: { type: "string" },
         name: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
         world: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
         coordinates: {
-          anyOf: [
-            { type: "null" },
-            { $ref: "#/$defs/SerializableClass_tuple_int__int__" },
-          ],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_tuple_int__int__" }],
         },
         link: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
         gates: {
           type: "array",
-          items: { $ref: "#/$defs/SerializableClass_str_" },
+          items: { $ref: "#/$defs/Ser_str_" },
         },
       },
       required: ["code", "name", "world", "coordinates", "link", "gates"],
     },
-    SerializableClass_tuple_int__int__: {
-      title: "SerializableClass[tuple[int, int]]",
+    Ser_tuple_int__int__: {
+      title: "Ser[tuple[int, int]]",
       type: "object",
       properties: {
         v: {
@@ -97,36 +94,36 @@ export default {
       },
       required: ["v", "s"],
     },
-    "gatelogue_aggregator.types.air.Gate.SerializableClass": {
-      title: "SerializableClass",
+    "gatelogue_aggregator.types.air.Gate.Ser": {
+      title: "Ser",
       type: "object",
       properties: {
         code: { anyOf: [{ type: "string" }, { type: "null" }] },
         flights: {
           type: "array",
-          items: { $ref: "#/$defs/SerializableClass_str_" },
+          items: { $ref: "#/$defs/Ser_str_" },
         },
-        airport: { $ref: "#/$defs/SerializableClass_str_" },
+        airport: { $ref: "#/$defs/Ser_str_" },
         airline: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
         size: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
       },
       required: ["code", "flights", "airport", "airline", "size"],
     },
-    "gatelogue_aggregator.types.air.Airline.SerializableClass": {
-      title: "SerializableClass",
+    "gatelogue_aggregator.types.air.Airline.Ser": {
+      title: "Ser",
       type: "object",
       properties: {
         name: { type: "string" },
         flights: {
           type: "array",
-          items: { $ref: "#/$defs/SerializableClass_str_" },
+          items: { $ref: "#/$defs/Ser_str_" },
         },
         link: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
         },
       },
       required: ["name", "flights", "link"],

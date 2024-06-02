@@ -7,8 +7,8 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airline import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airline, Flight
-from gatelogue_aggregator.types.base import Source, Sourced, process_airport_code, process_code, search_all
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate
+from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -25,8 +25,6 @@ class WikiAirline(AirContext, Source):
             rich.print(f"[green]  Extracting data from wikipages ({i+1}/{len(_EXTRACTORS)})")
             airline(self, cache_dir, timeout)
         rich.print("[green]  Extracted")
-
-        self.update()
 
     def regex_extract_airline(
         self,
@@ -49,7 +47,7 @@ class WikiAirline(AirContext, Source):
         return airline
 
     def extract_get_airline(self, airline_name: str, page_name: str) -> Airline:
-        return self.get_airline(name=airline_name, link=Sourced(get_wiki_link(page_name)).source(self))
+        return Airline(self, name=airline_name, link=get_wiki_link(page_name))
 
     def extract_get_flight(
         self,
@@ -62,19 +60,23 @@ class WikiAirline(AirContext, Source):
         s: str | None = None,
         **_,
     ) -> Flight:
-        return self.get_flight(
-            codes={process_code(code)},
-            gates=[
-                self.get_gate(
-                    code=process_code(g1),
-                    size=Sourced(str(s)).source(self) if s is not None else None,
-                    airport=self.get_airport(code=process_airport_code(a1)).source(self),
-                ).source(self),
-                self.get_gate(
-                    code=process_code(g2),
-                    size=Sourced(str(s)).source(self) if s is not None else None,
-                    airport=self.get_airport(code=process_airport_code(a2)).source(self),
-                ).source(self),
-            ],
-            airline=airline.source(self),
+        f = Flight(self, codes={process_code(code)}, airline=airline)
+        f.connect(
+            self,
+            Gate(
+                self,
+                code=process_code(g1),
+                airport=Airport(self, code=process_airport_code(a1)),
+                size=str(s) if s is not None else None,
+            ),
         )
+        f.connect(
+            self,
+            Gate(
+                self,
+                code=process_code(g2),
+                airport=Airport(self, code=process_airport_code(a2)),
+                size=str(s) if s is not None else None,
+            ),
+        )
+        return f
