@@ -22,7 +22,7 @@ class MRTTransit(AirContext, Source):
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache1,
             timeout=timeout,
-        ).encode("latin").decode("utf-8")
+        )
         df = pd.read_csv(cache1, header=1)
 
         df.rename(
@@ -40,7 +40,7 @@ class MRTTransit(AirContext, Source):
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
             cache2,
             timeout=timeout,
-        ).encode("latin").decode("utf-8")
+        )
         df2 = pd.read_csv(cache2, header=1)
 
         df2.rename(

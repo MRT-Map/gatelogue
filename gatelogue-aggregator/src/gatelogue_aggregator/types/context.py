@@ -18,10 +18,10 @@ class Context(AirContext, ToSerializable):
         self = cls()
         for source in rich.progress.track(sources, f"[yellow]Merging sources: {', '.join(s.name for s in sources)}"):
             if isinstance(source, AirContext):
-                MergeableObject.merge_lists(self.flight, source.flight)
-                MergeableObject.merge_lists(self.airport, source.airport)
-                MergeableObject.merge_lists(self.gate, source.gate)
-                MergeableObject.merge_lists(self.airline, source.airline)
+                MergeableObject.merge_lists(self, self.flight, source.flight)
+                MergeableObject.merge_lists(self, self.airport, source.airport)
+                MergeableObject.merge_lists(self, self.gate, source.gate)
+                MergeableObject.merge_lists(self, self.airline, source.airline)
         return self
 
     def update(self):

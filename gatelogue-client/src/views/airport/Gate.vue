@@ -13,12 +13,16 @@ const props = defineProps<{
 const gate = computed(
   () => props.gate ?? gatelogueData.value!.gate[props.gateId]!,
 );
-const airline = computed(() =>
-  gate.value.airline ??
-  (gate.value.code && gate.value.code !== "?" && gate.value.flights.length > 0)
-    ? gatelogueData.value!.flight[gate.value.flights[0].v]!.airline
-    : undefined,
-);
+const airline = computed(() => {
+  if (gate.value.airline) return gate.value.airline;
+  if (
+    gate.value.code &&
+    gate.value.code !== "?" &&
+    gate.value.flights.length > 0
+  )
+    return gatelogueData.value!.flight[gate.value.flights[0].v]!.airline;
+  return undefined;
+});
 </script>
 
 <template>

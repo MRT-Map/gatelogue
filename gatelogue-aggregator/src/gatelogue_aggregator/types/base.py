@@ -38,20 +38,20 @@ class MergeableObject:
     def equivalent(self, other: Self) -> bool:
         raise NotImplementedError
 
-    def merge(self, other: Self):
+    def merge(self, ctx: BaseContext, other: Self):
         raise NotImplementedError
 
-    def merge_if_equivalent(self, other: Self) -> bool:
+    def merge_if_equivalent(self, ctx: BaseContext, other: Self) -> bool:
         if self.equivalent(other):
-            self.merge(other)
+            self.merge(ctx, other)
             return True
         return False
 
     @staticmethod
-    def merge_lists[T: MergeableObject](self: list[T], other: list[T]):
+    def merge_lists[T: MergeableObject](ctx: BaseContext, self: list[T], other: list[T]):
         for o in other:
             for s in self:
-                if s.merge_if_equivalent(o):
+                if s.merge_if_equivalent(ctx, o):
                     break
             else:
                 self.append(o)
@@ -60,10 +60,13 @@ class MergeableObject:
 class IdObject(msgspec.Struct, MergeableObject, kw_only=True):
     id: ID = msgspec.field(default_factory=ID)
 
-    def ctx(self, ctx: Context):
+    def ctx(self, ctx: BaseContext):
         raise NotImplementedError
 
-    def update(self):
+    def de_ctx(self, ctx: BaseContext):
+        raise NotImplementedError
+
+    def update(self, ctx: BaseContext):
         raise NotImplementedError
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
@@ -101,9 +104,9 @@ class Sourced[T](msgspec.Struct, MergeableObject, ToSerializable):
     def equivalent(self, other: Self) -> bool:
         return self.v.equivalent(other.v) if isinstance(self.v, MergeableObject) else self.v == other.v
 
-    def merge(self, other: Self):
+    def merge(self, ctx: BaseContext, other: Self):
         if isinstance(self.v, MergeableObject):
-            self.v.merge(other.v)
+            self.v.merge(ctx, other.v)
         self.s.update(other.s)
 
 
@@ -114,6 +117,10 @@ class Source:
         rich.print(f"[yellow]Retrieving from {self.name}")
 
 
+class BaseContext(ToSerializable):
+    pass
+
+
 def search_all(regex: re.Pattern[str], text: str) -> Generator[re.Match[str], None, None]:
     pos = 0
     while (match := regex.search(text, pos)) is not None:
@@ -121,7 +128,9 @@ def search_all(regex: re.Pattern[str], text: str) -> Generator[re.Match[str], No
         yield match
 
 
-def process_code(s: str) -> str:
+def process_code[T: (str, None)](s: T) -> T:
+    if s is None:
+        return None
     res = ""
     hyphen = False
     for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
@@ -142,7 +151,9 @@ def process_code(s: str) -> str:
     return res
 
 
-def process_airport_code(s: str) -> str:
+def process_airport_code[T: (str, None)](s: T) -> T:
+    if s is None:
+        return None
     s = str(s).upper()
     if len(s) == 4 and s[3] == "T":
         return s[:3]

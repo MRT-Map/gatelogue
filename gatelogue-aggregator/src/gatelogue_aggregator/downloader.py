@@ -16,6 +16,10 @@ def get_url(url: str, cache: Path, timeout: int = 60) -> str:
     status = rich.status.Status(f"Downloading {url}")
     status.start()
     response = requests.get(url, timeout=timeout).text
+    try:
+        response = response.encode("latin").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        pass
     status.stop()
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()

@@ -4,7 +4,7 @@ from typing import Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable, BaseContext
 
 
 class Flight(IdObject, ToSerializable, kw_only=True):
@@ -27,7 +27,14 @@ class Flight(IdObject, ToSerializable, kw_only=True):
         ctx.flight.append(self)
 
     @override
-    def update(self):
+    def de_ctx(self, ctx: AirContext):
+        try:
+            ctx.flight.remove(self)
+        except ValueError:
+            pass
+
+    @override
+    def update(self, ctx: AirContext):
         new_gates = []
         for gate in self.gates:
             try:
@@ -42,7 +49,7 @@ class Flight(IdObject, ToSerializable, kw_only=True):
             elif existing_gate.v.code is not None and gate.v.code is None:
                 gate.v.flights = [a for a in gate.v.flights if a.v != self]
             elif existing_gate.v.code == gate.v.code:
-                existing_gate.merge(gate)
+                existing_gate.merge(ctx, gate)
         self.gates = [v for _, v in {str(a.v.id): a for a in new_gates}.items()]
 
         for gate in self.gates:
@@ -54,14 +61,15 @@ class Flight(IdObject, ToSerializable, kw_only=True):
     def equivalent(self, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.airline.equivalent(other.airline)
 
-    def merge(self, other: Self):
+    def merge(self, ctx: AirContext, other: Self):
         if other.id != self.id:
             other.id.id = self.id
+            other.de_ctx(ctx)
         else:
             return
         self.codes.update(other.codes)
-        self.airline.merge(other.airline)
-        MergeableObject.merge_lists(self.gates, other.gates)
+        self.airline.merge(ctx, other.airline)
+        MergeableObject.merge_lists(ctx, self.gates, other.gates)
 
 
 class Airport(IdObject, ToSerializable, kw_only=True):
@@ -97,7 +105,14 @@ class Airport(IdObject, ToSerializable, kw_only=True):
         ctx.airport.append(self)
 
     @override
-    def update(self):
+    def de_ctx(self, ctx: AirContext):
+        try:
+            ctx.airport.remove(self)
+        except ValueError:
+            pass
+
+    @override
+    def update(self, ctx: AirContext):
         for gate in self.gates:
             gate.v.airport = self.source(gate)
         self.gates = [v for _, v in {str(a.v.id): a for a in self.gates}.items()]
@@ -105,16 +120,17 @@ class Airport(IdObject, ToSerializable, kw_only=True):
     def equivalent(self, other: Self) -> bool:
         return self.code == other.code
 
-    def merge(self, other: Self):
+    def merge(self, ctx: AirContext, other: Self):
         if other.id != self.id:
             other.id.id = self.id
+            other.de_ctx(ctx)
         else:
             return
         self.name = self.name or other.name
         self.world = self.world or other.world
         self.coordinates = self.coordinates or other.coordinates
         self.link = self.link or other.link
-        MergeableObject.merge_lists(self.gates, other.gates)
+        MergeableObject.merge_lists(ctx, self.gates, other.gates)
 
 
 class Gate(IdObject, ToSerializable, kw_only=True):
@@ -147,7 +163,14 @@ class Gate(IdObject, ToSerializable, kw_only=True):
         ctx.gate.append(self)
 
     @override
-    def update(self):
+    def de_ctx(self, ctx: AirContext):
+        try:
+            ctx.gate.remove(self)
+        except ValueError:
+            pass
+
+    @override
+    def update(self, ctx: AirContext):
         for flight in self.flights:
             if self not in (o.v for o in flight.v.gates):
                 flight.v.gates.append(self.source(flight))
@@ -158,15 +181,16 @@ class Gate(IdObject, ToSerializable, kw_only=True):
     def equivalent(self, other: Self) -> bool:
         return self.code == other.code and self.airport.equivalent(other.airport)
 
-    def merge(self, other: Self):
+    def merge(self, ctx: AirContext, other: Self):
         if other.id != self.id:
             other.id.id = self.id
+            other.de_ctx(ctx)
         else:
             return
         self.size = self.size or other.size
         self.airline = self.airline or other.airline
-        MergeableObject.merge_lists(self.flights, other.flights)
-        self.airport.merge(other.airport)
+        MergeableObject.merge_lists(ctx, self.flights, other.flights)
+        self.airport.merge(ctx, other.airport)
 
 
 class Airline(IdObject, ToSerializable, kw_only=True):
@@ -193,7 +217,14 @@ class Airline(IdObject, ToSerializable, kw_only=True):
         ctx.airline.append(self)
 
     @override
-    def update(self):
+    def de_ctx(self, ctx: AirContext):
+        try:
+            ctx.airline.remove(self)
+        except ValueError:
+            pass
+
+    @override
+    def update(self, ctx: AirContext):
         for flight in self.flights:
             flight.v.airline = self.source(flight)
         self.flights = [v for _, v in {str(a.v.id): a for a in self.flights}.items()]
@@ -201,16 +232,17 @@ class Airline(IdObject, ToSerializable, kw_only=True):
     def equivalent(self, other: Self) -> bool:
         return self.name == other.name
 
-    def merge(self, other: Self):
+    def merge(self, ctx: AirContext, other: Self):
         if other.id != self.id:
             other.id.id = self.id
+            other.de_ctx(ctx)
         else:
             return
-        MergeableObject.merge_lists(self.flights, other.flights)
+        MergeableObject.merge_lists(ctx, self.flights, other.flights)
         self.link = self.link or other.link
 
 
-class AirContext(ToSerializable):
+class AirContext(BaseContext):
     __slots__ = ("flight", "airport", "gate", "airline")
     flight: list[Flight]
     airport: list[Airport]
@@ -257,13 +289,13 @@ class AirContext(ToSerializable):
 
     def update(self):
         for o in self.flight:
-            o.update()
+            o.update(self)
         for o in self.airport:
-            o.update()
+            o.update(self)
         for o in self.gate:
-            o.update()
+            o.update(self)
         for o in self.airline:
-            o.update()
+            o.update(self)
 
     @override
     class SerializableClass(msgspec.Struct):
