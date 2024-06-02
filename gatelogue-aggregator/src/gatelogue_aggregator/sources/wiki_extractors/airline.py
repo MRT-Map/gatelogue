@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
     from gatelogue_aggregator.sources.wiki_airline import WikiAirline
 
 _EXTRACTORS: list[Callable[[WikiAirline, Path, int], None]] = []

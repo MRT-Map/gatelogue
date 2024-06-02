@@ -6,7 +6,7 @@ import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.air import AirContext
-from gatelogue_aggregator.types.base import Source, Sourced, process_code, process_airport_code
+from gatelogue_aggregator.types.base import Source, Sourced, process_airport_code, process_code
 
 
 class MRTTransit(AirContext, Source):
@@ -58,7 +58,7 @@ class MRTTransit(AirContext, Source):
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):
             airline = self.get_airline(name=airline_name).source(self)
             for airport_name, airport_code, airport_world, flights in zip(
-                df["Name"], df["Code"], df["World"], df[airline_name]
+                df["Name"], df["Code"], df["World"], df[airline_name], strict=False
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue

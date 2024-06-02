@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import dataclasses
 import re
 import uuid
-from collections.abc import Generator
-from typing import TYPE_CHECKING, Any, ClassVar, Self, override, TypeVar, Generic, AnyStr
+from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override
 
 import msgspec
 import rich
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.types.context import Context
+    from collections.abc import Generator
 
 
 class ID(msgspec.Struct, kw_only=True):

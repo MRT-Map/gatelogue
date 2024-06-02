@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from re import Pattern
 from typing import TYPE_CHECKING
 
 import rich.progress
@@ -9,10 +8,11 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.types.air import AirContext, Airline, Flight
-from gatelogue_aggregator.types.base import Source, Sourced, search_all, process_code, process_airport_code
+from gatelogue_aggregator.types.base import Source, Sourced, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:
     from pathlib import Path
+    from re import Pattern
 
 
 class WikiAirline(AirContext, Source):

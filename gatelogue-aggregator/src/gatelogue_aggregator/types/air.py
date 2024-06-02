@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import contextlib
 from typing import Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import IdObject, MergeableObject, Sourced, ToSerializable, BaseContext
+from gatelogue_aggregator.types.base import BaseContext, IdObject, MergeableObject, Sourced, ToSerializable
 
 
 class Flight(IdObject, ToSerializable, kw_only=True):
@@ -28,10 +29,8 @@ class Flight(IdObject, ToSerializable, kw_only=True):
 
     @override
     def de_ctx(self, ctx: AirContext):
-        try:
+        with contextlib.suppress(ValueError):
             ctx.flight.remove(self)
-        except ValueError:
-            pass
 
     @override
     def update(self, ctx: AirContext):
@@ -106,10 +105,8 @@ class Airport(IdObject, ToSerializable, kw_only=True):
 
     @override
     def de_ctx(self, ctx: AirContext):
-        try:
+        with contextlib.suppress(ValueError):
             ctx.airport.remove(self)
-        except ValueError:
-            pass
 
     @override
     def update(self, ctx: AirContext):
@@ -185,10 +182,8 @@ class Gate(IdObject, ToSerializable, kw_only=True):
 
     @override
     def de_ctx(self, ctx: AirContext):
-        try:
+        with contextlib.suppress(ValueError):
             ctx.gate.remove(self)
-        except ValueError:
-            pass
 
     @override
     def update(self, ctx: AirContext):
@@ -239,10 +234,8 @@ class Airline(IdObject, ToSerializable, kw_only=True):
 
     @override
     def de_ctx(self, ctx: AirContext):
-        try:
+        with contextlib.suppress(ValueError):
             ctx.airline.remove(self)
-        except ValueError:
-            pass
 
     @override
     def update(self, ctx: AirContext):
