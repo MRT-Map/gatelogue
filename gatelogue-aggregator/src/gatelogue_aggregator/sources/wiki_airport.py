@@ -53,9 +53,19 @@ class WikiAirport(AirContext, Source):
             code=process_airport_code(airport_code), link=Sourced(get_wiki_link(page_name)).source(self)
         )
 
-    def extract_get_gate(self, airport: Airport, code: str, size: str | None = None, **_) -> Gate:
+    def extract_get_gate(
+        self,
+        airport: Airport,
+        code: str,
+        size: str | None = None,
+        airline: str | None = None,
+        airline2: str | None = None,
+        **_,
+    ) -> Gate:
+        airline = airline or airline2
         return self.get_gate(
             code=process_code(code),
             airport=airport.source(self),
             size=Sourced(str(size)).source(self) if size is not None else None,
+            airline=self.get_airline(name=airline).source(self) if airline is not None else None,
         )

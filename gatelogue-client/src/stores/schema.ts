@@ -107,11 +107,14 @@ export default {
           items: { $ref: "#/$defs/SerializableClass_str_" },
         },
         airport: { $ref: "#/$defs/SerializableClass_str_" },
+        airline: {
+          anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
+        },
         size: {
           anyOf: [{ type: "null" }, { $ref: "#/$defs/SerializableClass_str_" }],
         },
       },
-      required: ["code", "flights", "airport", "size"],
+      required: ["code", "flights", "airport", "airline", "size"],
     },
     "gatelogue_aggregator.types.air.Airline.SerializableClass": {
       title: "SerializableClass",
