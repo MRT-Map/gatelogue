@@ -37,6 +37,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
         ]
     )
     ctx.update()
+    ctx.final_update()
     j = msgspec.json.encode(ctx.ser())
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")

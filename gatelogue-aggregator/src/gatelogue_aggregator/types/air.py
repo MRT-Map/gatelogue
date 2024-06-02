@@ -117,6 +117,26 @@ class Airport(IdObject, ToSerializable, kw_only=True):
             gate.v.airport = self.source(gate)
         self.gates = [v for _, v in {str(a.v.id): a for a in self.gates}.items()]
 
+    def final_update(self):
+        try:
+            none_gate = next(a.v for a in self.gates if a.v.code is None)
+        except StopIteration:
+            return
+        new_flights = []
+        for flight in none_gate.flights:
+            possible_gates = [
+                a
+                for a in self.gates
+                if a.v.code is not None and a.v.airline is not None and a.v.airline.v.equivalent(flight.v.airline.v)
+            ]
+            if len(possible_gates) == 1:
+                flight.s.update(possible_gates[0].s)
+                flight.v.gates = [a for a in flight.v.gates if a.v != none_gate]
+                possible_gates[0].v.flights.append(flight)
+            else:
+                new_flights.append(flight)
+        none_gate.flights = new_flights
+
     def equivalent(self, other: Self) -> bool:
         return self.code == other.code
 
@@ -296,6 +316,10 @@ class AirContext(BaseContext):
             o.update(self)
         for o in self.airline:
             o.update(self)
+
+    def final_update(self):
+        for airport in self.airport:
+            airport.final_update()
 
     @override
     class SerializableClass(msgspec.Struct):

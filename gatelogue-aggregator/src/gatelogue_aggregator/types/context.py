@@ -27,6 +27,9 @@ class Context(AirContext, ToSerializable):
     def update(self):
         AirContext.update(self)
 
+    def final_update(self):
+        AirContext.final_update(self)
+
     @override
     class SerializableClass(AirContext.SerializableClass):
         pass
