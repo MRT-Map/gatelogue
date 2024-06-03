@@ -184,7 +184,7 @@ def vfw(ctx: WikiAirport, cache_dir, timeout):
         "Venceslo-Fifth Ward International Airport",
         "VFW",
         re.compile(
-            r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
+            r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
         ),
         cache_dir,
         timeout,
@@ -197,7 +197,7 @@ def sdz(ctx: WikiAirport, cache_dir, timeout):
         "San Dzobiak International Airport",
         "SDZ",
         re.compile(
-            r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
+            r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
         ),
         cache_dir,
         timeout,

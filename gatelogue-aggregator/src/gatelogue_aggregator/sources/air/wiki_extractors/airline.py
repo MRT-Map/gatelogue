@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 if TYPE_CHECKING:
@@ -65,8 +66,19 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
             a1 = tr("td")[2].b.string
             a2 = tr("td")[3].b.string
             tr2 = tr.next_sibling.next_sibling
-            g1 = tr2("td")[0].b.string
-            g2 = tr2("td")[1].b.string
+
+            g1 = tr2("td")[0]("b")
+            if a1 in DUPLICATE_GATE_NUM and len(g1) != 1:
+                g1 = f"T{g1[0].string}-{g1[1].string}"
+            else:
+                g1 = g1[-1].string
+
+            g2 = tr2("td")[1]("b")
+            if a2 in DUPLICATE_GATE_NUM and len(g2) != 1:
+                g2 = f"T{g2[0].string}-{g2[1].string}"
+            else:
+                g2 = g2[-1].string
+
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
             ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
