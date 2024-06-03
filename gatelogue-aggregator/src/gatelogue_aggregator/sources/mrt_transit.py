@@ -20,25 +20,25 @@ class MRTTransit(AirSource):
         Source.__init__(self)
 
         get_url(
-            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
+            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
             cache1,
             timeout=timeout,
         )
-        df = pd.read_csv(cache1, header=1)
+        df1 = pd.read_csv(cache1, header=1)
 
-        df.rename(
+        df1.rename(
             columns={
                 "Unnamed: 0": "Name",
                 "Unnamed: 1": "Code",
-                "Unnamed: 2": "World",
-                "Unnamed: 3": "Operator",
+                "Unnamed: 2": "Operator",
             },
             inplace=True,
         )
-        df.drop(df.tail(6).index, inplace=True)
+        df1.drop(df1.tail(66).index, inplace=True)
+        df1["World"] = "New"
 
         get_url(
-            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
+            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache2,
             timeout=timeout,
         )
@@ -48,13 +48,14 @@ class MRTTransit(AirSource):
             columns={
                 "Unnamed: 0": "Name",
                 "Unnamed: 1": "Code",
-                "Unnamed: 2": "Operator",
+                "Unnamed: 2": "World",
+                "Unnamed: 3": "Operator",
             },
             inplace=True,
         )
-        df2.drop(df2.tail(66).index, inplace=True)
-        df2["World"] = "New"
-        df = pd.concat((df, df2))
+        df2.drop(df2.tail(6).index, inplace=True)
+
+        df = pd.concat((df2, df1))
 
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):
             airline = self.airline(name=airline_name)
