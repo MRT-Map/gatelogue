@@ -3,12 +3,13 @@ from pathlib import Path
 import msgspec
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.types.air import AirContext, Airport
+from gatelogue_aggregator.types.air import AirContext, Airport, AirSource
 from gatelogue_aggregator.types.base import Source, process_airport_code
 
 
-class DynmapAirports(AirContext, Source):
+class DynmapAirports(AirSource):
     name = "MRT Dynmap"
+    priority = 0
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         cache1 = cache_dir / "dynmap-markers-new"
@@ -31,4 +32,4 @@ class DynmapAirports(AirContext, Source):
             raise ValueError(response1[:100], response2[:100]) from e
 
         for k, v in json.items():
-            Airport(self, code=process_airport_code(k), coordinates=(v["x"], v["z"]))
+            self.airport(code=process_airport_code(k), coordinates=(v["x"], v["z"]))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override
+from typing import TYPE_CHECKING, Literal, Self, override, Any
 
 import msgspec
 
@@ -32,6 +32,17 @@ class Flight(Node[_AirContext]):
     class Attrs(Node.Attrs):
         codes: set[str]
 
+        @override
+        @staticmethod
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            if k == "codes":
+                return v
+            raise NotImplementedError
+
+        @override
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            existing["codes"].update(self.codes)
+
     @override
     def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Flight.Attrs | None:
         return super().attrs(ctx, source)
@@ -54,10 +65,14 @@ class Flight(Node[_AirContext]):
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
         return len(
-            {c.codes for _, c in self.all_attrs(ctx).items()}.intersection(
-                {c.codes for _, c in other.all_attrs(ctx).items()}
+            {a for _, c in self.all_attrs(ctx).items() for a in c.codes}.intersection(
+                {a for _, c in other.all_attrs(ctx).items() for a in c.codes}
             )
         ) != 0 and self.get_one(ctx, Airline).equivalent(ctx, other.get_one(ctx, Airline))
+
+    @override
+    def key(self, ctx: AirContext) -> str:
+        return self.get_one(ctx, Airline).key(ctx)
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -76,6 +91,37 @@ class Airport(Node[_AirContext]):
         world: Literal["Old", "New"] | None = None
         coordinates: tuple[int, int] | None = None
         link: str | None = None
+
+        @override
+        @staticmethod
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            if k == "code":
+                return v
+            elif k in ("name", "world", "coordinates", "link"):
+                return Sourced(v).source(source)
+            raise NotImplementedError
+
+        @override
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            if existing["name"] is not None and self.name == existing["name"].v:
+                existing["name"].s.add(source.name)
+            if self.name is not None:
+                existing["name"] = existing["name"] or Sourced(self.name).source(source)
+
+            if existing["world"] is not None and self.world == existing["world"].v:
+                existing["world"].s.add(source.name)
+            if self.world is not None:
+                existing["world"] = existing["world"] or Sourced(self.world).source(source)
+
+            if existing["coordinates"] is not None and self.coordinates == existing["coordinates"].v:
+                existing["coordinates"].s.add(source.name)
+            if self.coordinates is not None:
+                existing["coordinates"] = existing["coordinates"] or Sourced(self.coordinates).source(source)
+
+            if existing["link"] is not None and self.link == existing["link"].v:
+                existing["link"].s.add(source.name)
+            if self.link is not None:
+                existing["link"] = existing["link"] or Sourced(self.link).source(source)
 
     @override
     def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Airport.Attrs | None:
@@ -106,6 +152,10 @@ class Airport(Node[_AirContext]):
         other_attrs = sorted(other.all_attrs(ctx).items())[0][1]
         return self_attrs.code == other_attrs.code
 
+    @override
+    def key(self, ctx: AirContext) -> str:
+        return sorted(self.all_attrs(ctx).items())[0][1].code
+
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Gate(Node[_AirContext]):
@@ -124,6 +174,22 @@ class Gate(Node[_AirContext]):
     class Attrs(Node.Attrs):
         code: str | None
         size: str | None = None
+
+        @override
+        @staticmethod
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            if k == "code":
+                return v
+            elif k == "size":
+                return Sourced(v).source(source)
+            raise NotImplementedError
+
+        @override
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            if existing["size"] is not None and self.size == existing["size"].v:
+                existing["size"].s.add(source.name)
+            if self.size is not None:
+                existing["size"] = existing["size"] or Sourced(self.size).source(source)
 
     @override
     def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Gate.Attrs | None:
@@ -157,6 +223,10 @@ class Gate(Node[_AirContext]):
             ctx, other.get_one(ctx, Airport)
         )
 
+    @override
+    def key(self, ctx: AirContext) -> str:
+        return sorted(self.all_attrs(ctx).items())[0][1].code
+
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Airline(Node[_AirContext]):
@@ -171,6 +241,22 @@ class Airline(Node[_AirContext]):
     class Attrs(Node.Attrs):
         name: str
         link: str | None = None
+
+        @override
+        @staticmethod
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            if k == "name":
+                return v
+            elif k == "link":
+                return Sourced(v).source(source)
+            raise NotImplementedError
+
+        @override
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            if existing["link"] is not None and self.link == existing["link"].v:
+                existing["link"].s.add(source.name)
+            if self.link is not None:
+                existing["link"] = existing["link"] or Sourced(self.link).source(source)
 
     @override
     def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Airline.Attrs | None:
@@ -198,6 +284,10 @@ class Airline(Node[_AirContext]):
         other_attrs = sorted(other.all_attrs(ctx).items())[0][1]
         return self_attrs.name == other_attrs.name
 
+    @override
+    def key(self, ctx: AirContext) -> str:
+        return sorted(self.all_attrs(ctx).items())[0][1].name
+
 
 class AirContext(_AirContext):
     @override
@@ -209,15 +299,56 @@ class AirContext(_AirContext):
 
     def ser(self) -> AirContext.Ser:
         return self.Ser(
-            flight={a: a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
-            airport={a: a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},
-            gate={a: a.ser(self) for a in self.g.nodes if isinstance(a, Gate)},
-            airline={a: a.ser(self) for a in self.g.nodes if isinstance(a, Airline)},
+            flight={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
+            airport={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},
+            gate={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Gate)},
+            airline={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Airline)},
         )
+
+    def flight(self, source: type[AirContext] | None = None, *, codes: set[str], airline: Airline, **attrs) -> Flight:
+        for n in self.g.nodes:
+            if not isinstance(n, Flight):
+                continue
+            if len({a for _, c in n.all_attrs(self).items() for a in c.codes}.intersection(codes)) != 0 and n.get_one(
+                self, Airline
+            ).equivalent(self, airline):
+                return n
+        return Flight(self, source, codes=codes, airline=airline, **attrs)
+
+    def airport(self, source: type[AirContext] | None = None, *, code: str, **attrs) -> Airport:
+        for n in self.g.nodes:
+            if not isinstance(n, Airport):
+                continue
+            self_attrs = sorted(n.all_attrs(self).items())[0][1]
+            if self_attrs.code == code:
+                return n
+        return Airport(self, source, code=code, **attrs)
+
+    def gate(self, source: type[AirContext] | None = None, *, code: str | None, airport: Airport, **attrs) -> Gate:
+        for n in self.g.nodes:
+            if not isinstance(n, Gate):
+                continue
+            self_attrs = sorted(n.all_attrs(self).items())[0][1]
+            if self_attrs.code == code and n.get_one(self, Airport).equivalent(self, airport):
+                return n
+        return Gate(self, source, code=code, airport=airport, **attrs)
+
+    def airline(self, source: type[AirContext] | None = None, *, name: str, **attrs) -> Airline:
+        for n in self.g.nodes:
+            if not isinstance(n, Airline):
+                continue
+            self_attrs = sorted(n.all_attrs(self).items())[0][1]
+            if self_attrs.name == name:
+                return n
+        return Airline(self, source, name=name, **attrs)
 
     def update(self):
         # TODO: resolve flights with unknown gates (None+other flight known, None+airport known)
         pass
+
+
+class AirSource(AirContext, Source):
+    pass
 
 
 #

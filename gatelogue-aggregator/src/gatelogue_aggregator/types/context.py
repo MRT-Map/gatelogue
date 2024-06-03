@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from typing import TYPE_CHECKING, Self, override
 
 import networkx as nx
@@ -10,25 +11,29 @@ if TYPE_CHECKING:
 import rich
 import rich.progress
 
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate
-from gatelogue_aggregator.types.base import BaseContext, Source, ToSerializable
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate, AirSource
+from gatelogue_aggregator.types.base import BaseContext, Source, ToSerializable, Node
 
 
 class Context(AirContext, ToSerializable):
     @classmethod
-    def from_sources(cls, sources: Iterable[BaseContext | Source]) -> Self:
+    def from_sources(cls, sources: Iterable[AirSource]) -> Self:
         self = cls()
         for source in rich.progress.track(sources, f"[yellow]Merging sources: {', '.join(s.name for s in sources)}"):
             self.g = nx.compose(self.g, source.g)
-        for ty in (Flight, Airport, Airline, Gate):
-            processed = []
-            for n in self.g.nodes:
-                if not isinstance(n, ty):
-                    continue
-                if (equiv := next((a for a in processed if n.equivalent(self, a)), None)) is None:
-                    processed.append(n)
-                    continue
-                equiv.merge(self, n)
+
+        processed: dict[type[Node], dict[str, list[Node]]] = {}
+        to_merge = []
+        for n in rich.progress.track(self.g.nodes, f"[green]  Finding equivalent nodes"):
+            key = n.key(self)
+            ty = type(n)
+            filtered_processed = processed.get(ty, {}).get(key, [])
+            if (equiv := next((a for a in filtered_processed if n.equivalent(self, a)), None)) is None:
+                processed.setdefault(ty, {}).setdefault(key, []).append(n)
+                continue
+            to_merge.append((equiv, n))
+        for equiv, n in rich.progress.track(to_merge, f"[green]  Merging equivalent nodes"):
+            equiv.merge(self, n)
         self.update()
         return self
 

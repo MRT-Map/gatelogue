@@ -7,7 +7,7 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airline import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate, AirSource
 from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:
@@ -15,8 +15,9 @@ if TYPE_CHECKING:
     from re import Pattern
 
 
-class WikiAirline(AirContext, Source):
+class WikiAirline(AirSource):
     name = "MRT Wiki"
+    priority = 1
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         AirContext.__init__(self)
@@ -47,7 +48,7 @@ class WikiAirline(AirContext, Source):
         return airline
 
     def extract_get_airline(self, airline_name: str, page_name: str) -> Airline:
-        return Airline(self, name=airline_name, link=get_wiki_link(page_name))
+        return self.airline(name=airline_name, link=get_wiki_link(page_name))
 
     def extract_get_flight(
         self,
@@ -60,22 +61,20 @@ class WikiAirline(AirContext, Source):
         s: str | None = None,
         **_,
     ) -> Flight:
-        f = Flight(self, codes={process_code(code)}, airline=airline)
+        f = self.flight(codes={process_code(code)}, airline=airline)
         f.connect(
             self,
-            Gate(
-                self,
+            self.gate(
                 code=process_code(g1),
-                airport=Airport(self, code=process_airport_code(a1)),
+                airport=self.airport(code=process_airport_code(a1)),
                 size=str(s) if s is not None else None,
             ),
         )
         f.connect(
             self,
-            Gate(
-                self,
+            self.gate(
                 code=process_code(g2),
-                airport=Airport(self, code=process_airport_code(a2)),
+                airport=self.airport(code=process_airport_code(a2)),
                 size=str(s) if s is not None else None,
             ),
         )

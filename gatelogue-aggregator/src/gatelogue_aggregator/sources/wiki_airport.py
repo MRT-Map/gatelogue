@@ -7,7 +7,7 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Gate
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Gate, AirSource
 from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:
@@ -15,8 +15,9 @@ if TYPE_CHECKING:
     from re import Pattern
 
 
-class WikiAirport(AirContext, Source):
+class WikiAirport(AirSource):
     name = "MRT Wiki"
+    priority = 3
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         AirContext.__init__(self)
@@ -47,7 +48,7 @@ class WikiAirport(AirContext, Source):
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):
-        return Airport(self, code=process_airport_code(airport_code), link=get_wiki_link(page_name))
+        return self.airport(code=process_airport_code(airport_code), link=get_wiki_link(page_name))
 
     def extract_get_gate(
         self,
@@ -59,12 +60,11 @@ class WikiAirport(AirContext, Source):
         **_,
     ) -> Gate:
         airline = airline or airline2
-        g = Gate(
-            self,
+        g = self.gate(
             code=process_code(code),
             airport=airport,
             size=str(size) if size is not None else None,
         )
         if airline is not None:
-            g.connect_one(self, Airline(self, name=airline))
+            g.connect_one(self, self.airline(name=airline))
         return g

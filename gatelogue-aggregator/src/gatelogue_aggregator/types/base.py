@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+import copy
 import dataclasses
 import re
 import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Self, TypeVar, override
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Self, TypeVar, override, Literal
 
 import msgspec
 import networkx as nx
 import rich
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Generator
+    from collections.abc import Callable, Generator, Iterable, Container
 
 
 class ToSerializable:
@@ -55,8 +56,10 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
 
     def __init__(self, ctx: CTX, source: Source | None = None, **attrs):
+        self.id = uuid.uuid4()
         source = source or type(ctx)
-        ctx.g.add_node(self, **{source: self.Attrs(**attrs)})
+        ctx.g.add_node(self)
+        ctx.g.nodes[self][source] = self.Attrs(**attrs)  # noqa
 
     # def ctx(self, ctx: BaseContext):
     #     raise NotImplementedError
@@ -69,90 +72,101 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
 
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs:
-        pass
+        @staticmethod
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            raise NotImplementedError
+
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            raise NotImplementedError
 
     def attrs(self, ctx: CTX, source: Source | None = None) -> Node.Attrs | None:
         source = source or type(ctx)
-        return ctx.g[self.id].get(source)
+        return ctx.g.nodes[self].get(source)
 
     def all_attrs(self, ctx: CTX) -> dict[Source, Node.Attrs]:
-        return ctx.g[self.id]
+        return ctx.g.nodes[self]
 
-    def merged_attrs(self, ctx: CTX) -> dict[str, Any]:
+    def merged_attrs(self, ctx: CTX, filter_: Container[str] | None = None) -> dict[str, Any]:
         attrs = sorted(self.all_attrs(ctx).items())
         attr = {
-            k: (Sourced(v, {attrs[0][0].name}) if v is not None else None)
+            k: type(attrs[0][1]).prepare_merge(attrs[0][0], k, v) if v is not None else None
             for k, v in dataclasses.asdict(attrs[0][1]).items()
+            if (True if filter_ is None else k in filter_)
         }
         for source, new_attr in attrs[1:]:
-            new_attr = dataclasses.asdict(new_attr)
-            for k, v in new_attr.items():
-                if attr.get(k) is None and v is not None:
-                    attr[k] = Sourced(v, {source.name})
-                elif attr[k].v == v:
-                    attr[k].s.add(source.name)
-                elif isinstance(attr[k].v, set | dict):
-                    attr[k].v.update(v)
-                elif isinstance(attr[k].v, list):
-                    attr[k].v.extend(v)
+            new_attr.merge_into(source, attr)
         return attr
 
     def connect(self, ctx: CTX, node: Node, source: Source | None = None):
         source = source or type(ctx)
-        if type(node) not in self.acceptable_list_node_types():
+        if type(node) not in type(self).acceptable_list_node_types():
             raise TypeError
-        ctx.g.add_edge(self, node, source)
+        ctx.g.add_edge(self, node, source, s=source)
 
     def connect_one(self, ctx: CTX, node: Node, source: Source | None = None):
         source = source or type(ctx)
-        if type(node) not in self.acceptable_single_node_types():
+        if type(node) not in type(self).acceptable_single_node_types():
             raise TypeError
         if (prev := self.get_one(ctx, type(node))) is not None:
             self.disconnect_all(ctx, prev)
-        ctx.g.add_edge(self, node, source)
+        ctx.g.add_edge(self, node, source, s=source)
 
     def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None):
         source = source or type(ctx)
-        if type(node) not in self.acceptable_list_node_types() + self.acceptable_single_node_types():
+        if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
             raise TypeError
         ctx.g.remove_edge(self, node, source)
 
     def disconnect_all(self, ctx: CTX, node: Node):
-        if type(node) not in self.acceptable_list_node_types() + self.acceptable_single_node_types():
+        if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
             raise TypeError
-        for key in ctx.g[self][node]:
+        d = copy.deepcopy(ctx.g[self][node])
+        for key in d:
             ctx.g.remove_edge(self, node, key)
 
     def get_all[T: Node](self, ctx: CTX, ty: type[T]) -> Generator[T, None, None]:
-        if ty not in self.acceptable_list_node_types():
+        if ty not in type(self).acceptable_list_node_types():
             raise TypeError
         return (a for a in ctx.g.neighbors(self) if isinstance(a, ty))
 
+    @staticmethod
+    def _get_sources(d: dict[Literal["contraction"] | type[Source] | int, Any]) -> Generator[str, None, None]:
+        for k, v in d.items():
+            if k == "contraction":
+                yield from Node._get_sources(v)
+            else:
+                yield v["s"].name
+
     def get_all_ser[T: Node](self, ctx: CTX, ty: type[T]) -> list[Sourced.Ser[uuid.UUID]]:
-        if ty not in self.acceptable_list_node_types():
+        if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [Sourced(a.id, {s.name for s in ctx.g[self][a]}).ser() for a in self.get_all(ctx, ty)]
+        return [Sourced(a.id, {s for s in Node._get_sources(ctx.g[self][a])}).ser() for a in self.get_all(ctx, ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T]) -> T | None:
-        if ty not in self.acceptable_single_node_types():
+        if ty not in type(self).acceptable_single_node_types():
             raise TypeError
         return next((a for a in ctx.g.neighbors(self) if isinstance(a, ty)), None)
 
     def get_one_ser[T: Node](self, ctx: CTX, ty: type[T]) -> Sourced.Ser[uuid.UUID] | None:
-        if ty not in self.acceptable_single_node_types():
+        if ty not in type(self).acceptable_single_node_types():
             raise TypeError
         node = self.get_one(ctx, ty)
         if node is None:
             return None
-        return Sourced(node.id, {s.name for s in ctx.g[self][node]}).ser()
+        return Sourced(node.id, {s for s in Node._get_sources(ctx.g[self][node])}).ser()
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)
 
     @override
     def merge(self, ctx: CTX, other: Self):
-        ctx.g[self.id].update(ctx.g[other.id])
-        nx.contracted_nodes(ctx.g, self, other)
+        attrs = ctx.g.nodes[self]
+        attrs.update(ctx.g.nodes[other])
+        nx.contracted_nodes(ctx.g, self, other, copy=False)
+        del attrs["contraction"]
+
+    def key(self, ctx: CTX) -> str:
+        raise NotImplementedError
 
 
 _T = TypeVar("_T")
@@ -173,17 +187,17 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
             s=self.s,
         )
 
-    def source(self, source: Sourced | Source) -> Self:
+    def source(self, source: Sourced | Source | type[Source]) -> Self:
         if isinstance(source, Sourced):
             self.s.update(source.s)
             return self
-        if isinstance(source, Source):
+        if isinstance(source, Source) or issubclass(source, Source):
             self.s.add(source.name)
             return self
         raise NotImplementedError
 
-    def equivalent(self, other: Self) -> bool:
-        return self.v.equivalent(other.v) if isinstance(self.v, Mergeable) else self.v == other.v
+    def equivalent(self, ctx: BaseContext, other: Self) -> bool:
+        return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
 
     def merge(self, ctx: BaseContext, other: Self):
         if isinstance(self.v, Mergeable):
@@ -191,8 +205,16 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
         self.s.update(other.s)
 
 
-class Source:
+class SourceMeta(type):
+    priority: float | int
+
+    def __lt__(self, other):
+        return self.priority < other.priority
+
+
+class Source(metaclass=SourceMeta):
     name: ClassVar[str]
+    priority: ClassVar[float | int]
 
     def __init__(self):
         rich.print(f"[yellow]Retrieving from {self.name}")
