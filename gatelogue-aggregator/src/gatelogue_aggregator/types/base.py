@@ -61,14 +61,13 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         ctx.g.add_node(self)
         ctx.g.nodes[self][source] = self.Attrs(**attrs)
 
-    # def ctx(self, ctx: BaseContext):
-    #     raise NotImplementedError
-    #
-    # def de_ctx(self, ctx: BaseContext):
-    #     raise NotImplementedError
-    #
-    # def update(self, ctx: BaseContext):
-    #     raise NotImplementedError
+    def str_ctx(self, ctx: CTX, filter_: Container[str] | None = None) -> str:
+        return (
+            type(self).__name__
+            + "("
+            + ",".join(f"{k}={v}" for k, v in self.merged_attrs(ctx, filter_).items() if v is not None)
+            + ")"
+        )
 
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs:
@@ -213,6 +212,12 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
     v: T
     s: set[str] = msgspec.field(default_factory=set)
 
+    def __str__(self):
+        s = str(self.v)
+        if len(self.s) != 0:
+            s += "(" + ", ".join(self.s) + ")"
+        return s
+
     @override
     class Ser(msgspec.Struct, Generic[_T]):
         v: _T
@@ -243,10 +248,14 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
 
 
 class SourceMeta(type):
+    name: str
     priority: float | int
 
     def __lt__(cls, other):
         return cls.priority < other.priority
+
+    def encode(cls, encoding: str = "utf-8", errors: str = "strict") -> bytes:
+        return cls.name.encode(encoding, errors)
 
 
 class Source(metaclass=SourceMeta):

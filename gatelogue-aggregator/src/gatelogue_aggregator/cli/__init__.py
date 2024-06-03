@@ -2,7 +2,9 @@ from pathlib import Path
 
 import click
 import msgspec.json
+import networkx as nx
 import rich
+import pygraphviz as pgv
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
@@ -25,9 +27,10 @@ def gatelogue_aggregator():
 @gatelogue_aggregator.command()
 @click.option("--cache-dir", default=DEFAULT_CACHE_DIR, type=Path, show_default=True)
 @click.option("--timeout", default=DEFAULT_TIMEOUT, type=int, show_default=True)
-@click.option("-o", "--output", default="out.json", type=Path, show_default=True)
+@click.option("-o", "--output", default="data.json", type=Path, show_default=True)
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
-def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
+@click.option("-g", "--graph", type=Path, default=None, show_default=True)
+def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None):
     ctx = Context.from_sources(
         [
             MRTTransit(cache_dir, timeout),
@@ -36,6 +39,8 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool):
             WikiAirport(cache_dir, timeout),
         ]
     )
+    if True or graph is not None:
+        ctx.graph(graph)
     j = msgspec.json.encode(ctx.ser())
     if fmt:
         rich.print(f"[yellow]Outputting to {output} (formatted)")

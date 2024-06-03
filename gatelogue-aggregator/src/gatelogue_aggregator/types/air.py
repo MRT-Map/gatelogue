@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Any, Literal, Self, override
+from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 import rich.progress
 
 from gatelogue_aggregator.sources.directional_flights import DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
+
+if TYPE_CHECKING:
+    from collections.abc import Container
 
 
 class _AirContext(BaseContext, Source):
@@ -102,13 +105,10 @@ class Flight(Node[_AirContext]):
         if direction == "odd-even":
             if int(s) % 2 == 1:
                 return {s, str(int(s) + 1)}
-            else:
-                return {s, str(int(s) - 1)}
-        else:
-            if int(s) % 2 == 1:
-                return {s, str(int(s) - 1)}
-            else:
-                return {s, str(int(s) + 1)}
+            return {s, str(int(s) - 1)}
+        if int(s) % 2 == 1:
+            return {s, str(int(s) - 1)}
+        return {s, str(int(s) + 1)}
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -118,6 +118,10 @@ class Airport(Node[_AirContext]):
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str, **attrs):
         super().__init__(ctx, source, code=code, **attrs)
+
+    @override
+    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
+        return super().str_ctx(ctx, filter_ or {"code"})
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -222,6 +226,12 @@ class Gate(Node[_AirContext]):
         self.connect_one(ctx, airport, source)
 
     @override
+    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
+        code = self.merged_attr(ctx, "code")
+        airport = self.get_one(ctx, Airport).merged_attr(ctx, "code")
+        return type(self).__name__ + f"(code={code},airport={airport})"
+
+    @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs(Node.Attrs):
         code: str | None
@@ -282,6 +292,10 @@ class Airline(Node[_AirContext]):
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, name: str, **attrs):
         super().__init__(ctx, source, name=name, **attrs)
+
+    @override
+    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
+        return super().str_ctx(ctx, filter_ or {"name"})
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)

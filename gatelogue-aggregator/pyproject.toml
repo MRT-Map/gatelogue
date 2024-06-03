@@ -28,7 +28,8 @@ dependencies = [
   "requests",
   "BeautifulSoup4",
   "networkx",
-  "types-networkx"
+  "types-networkx",
+  "pygraphviz"
 ]
 
 [project.urls]

@@ -826,5 +826,7 @@ cython_debug/
 .idea/
 
 ### Other
-out.json
+data.json
+schema.json
+graph.svg
 .vite
