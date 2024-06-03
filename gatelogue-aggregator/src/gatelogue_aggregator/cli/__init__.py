@@ -19,7 +19,7 @@ from gatelogue_aggregator.types.context import Context
 )
 @click.version_option(version=__version__, prog_name="gatelogue-aggregator")
 def gatelogue_aggregator():
-    pass
+    click.echo(click.get_current_context().get_help())
 
 
 @gatelogue_aggregator.command()

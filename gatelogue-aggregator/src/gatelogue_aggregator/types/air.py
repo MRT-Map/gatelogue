@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 import rich.progress
 
-from gatelogue_aggregator.sources.air.hardcode import DIRECTIONAL_FLIGHT_AIRLINES
+from gatelogue_aggregator.sources.air.hardcode import DIRECTIONAL_FLIGHT_AIRLINES, AIRLINE_ALIASES, AIRPORT_ALIASES
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
 
 if TYPE_CHECKING:
@@ -205,6 +205,7 @@ class Airport(Node[_AirContext]):
     @staticmethod
     @override
     def process_code[T: (str, None)](s: T) -> T:
+        s = AIRPORT_ALIASES.get(s, s)
         if s is None:
             return None
         s = str(s).upper()
@@ -343,6 +344,10 @@ class Airline(Node[_AirContext]):
     @override
     def key(self, ctx: AirContext) -> str:
         return self.merged_attr(ctx, "name")
+
+    @staticmethod
+    def process_airline_name[T: (str, None)](s: T) -> T:
+        return AIRLINE_ALIASES.get(s, s)
 
 
 class AirContext(_AirContext):

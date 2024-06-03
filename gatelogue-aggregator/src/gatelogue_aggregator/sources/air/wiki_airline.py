@@ -49,7 +49,7 @@ class WikiAirline(AirSource):
         return airline
 
     def extract_get_airline(self, airline_name: str, page_name: str) -> Airline:
-        return self.airline(name=airline_name, link=get_wiki_link(page_name))
+        return self.airline(name=Airline.process_airline_name(airline_name), link=get_wiki_link(page_name))
 
     def extract_get_flight(
         self,

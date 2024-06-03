@@ -7,7 +7,7 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
-from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Gate
+from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Gate, Airline
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.utils import search_all
 
@@ -60,7 +60,7 @@ class WikiAirport(AirSource):
         airline2: str | None = None,
         **_,
     ) -> Gate:
-        airline = airline or airline2
+        airline = Airline.process_airline_name(airline or airline2)
         g = self.gate(
             code=Gate.process_code(code),
             airport=airport,
