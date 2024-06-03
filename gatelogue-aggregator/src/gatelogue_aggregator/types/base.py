@@ -11,7 +11,7 @@ import networkx as nx
 import rich
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container, Generator
+    from collections.abc import Callable, Container, Iterator
 
 
 class ToSerializable:
@@ -79,6 +79,14 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         def merge_into(self, source: Source, existing: dict[str, Any]):
             raise NotImplementedError
 
+        def sourced_merge(self, source: Source, existing: dict[str, Any], attr: str):
+            if attr not in existing:
+                return
+            if existing[attr] is not None and getattr(self, attr) == existing[attr].v:
+                existing[attr].s.add(source.name)
+            if getattr(self, attr) is not None:
+                existing[attr] = existing[attr] or Sourced(getattr(self, attr)).source(source)
+
     def attrs(self, ctx: CTX, source: Source | None = None) -> Node.Attrs | None:
         source = source or type(ctx)
         return ctx.g.nodes[self].get(source)
@@ -96,6 +104,9 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         for source, new_attr in attrs[1:]:
             new_attr.merge_into(source, attr)
         return attr
+
+    def merged_attr[T](self, ctx: CTX, attr: str, _: type[T] = Any) -> T:
+        return self.merged_attrs(ctx, (attr,))[attr]
 
     def connect(self, ctx: CTX, node: Node, source: Source | None = None):
         source = source or type(ctx)
@@ -124,13 +135,13 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         for key in d:
             ctx.g.remove_edge(self, node, key)
 
-    def get_all[T: Node](self, ctx: CTX, ty: type[T]) -> Generator[T, None, None]:
+    def get_all[T: Node](self, ctx: CTX, ty: type[T]) -> Iterator[T]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
         return (a for a in ctx.g.neighbors(self) if isinstance(a, ty))
 
     @staticmethod
-    def _get_sources(d: dict[Literal["contraction"] | type[Source] | int, Any]) -> Generator[str, None, None]:
+    def _get_sources(d: dict[Literal["contraction"] | type[Source] | int, Any]) -> Iterator[str]:
         for k, v in d.items():
             if k == "contraction":
                 yield from Node._get_sources(v)
@@ -220,7 +231,7 @@ class Source(metaclass=SourceMeta):
         rich.print(f"[yellow]Retrieving from {self.name}")
 
 
-def search_all(regex: re.Pattern[str], text: str) -> Generator[re.Match[str], None, None]:
+def search_all(regex: re.Pattern[str], text: str) -> Iterator[re.Match[str]]:
     pos = 0
     while (match := regex.search(text, pos)) is not None:
         pos = match.end()
