@@ -5,7 +5,13 @@ const props = defineProps<{
   sourced: { v: unknown; s: string[] } | undefined | null;
 }>();
 const content = computed(() => {
-  const sources = [...new Set(props.sourced?.s)].join(", ");
+  const sources = [...new Set(props.sourced?.s)]
+    .join(", ")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
   return `<span class="tooltip"><b>Source:</b> ${sources}</span>`;
 });
 </script>
