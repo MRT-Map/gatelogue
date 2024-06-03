@@ -18,7 +18,7 @@ def pce(ctx: WikiAirport, cache_dir, timeout):
         "Peacopolis International Airport",
         "PCE",
         re.compile(
-            r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]].*?|)\|\|(?:(?!Service).)*Service"
+            r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*?|)\|\|(?:(?!Service).)*Service"
         ),
         cache_dir,
         timeout,
@@ -30,7 +30,7 @@ def mwt(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Miu Wan Tseng Tsz Leng International Airport",
         "MWT",
-        re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|\n)"),
+        re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)"),
         cache_dir,
         timeout,
     )
@@ -41,7 +41,7 @@ def kek(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Kazeshima Eumi Konaejima Airport",
         "KEK",
-        re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)\|\|"),
+        re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
         cache_dir,
         timeout,
     )
@@ -64,7 +64,7 @@ def abg(ctx: WikiAirport, cache_dir, timeout):
         "Antioch-Bay Point Garvey International Airport",
         "ABG",
         re.compile(
-            r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)(?:\|\||\n)",
+            r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)(?:\|\||\n)",
         ),
         cache_dir,
         timeout,
@@ -77,7 +77,7 @@ def opa(ctx: WikiAirport, cache_dir, timeout):
         "Oparia LeTourneau International Airport",
         "OPA",
         re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)",
+            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
         ),
         cache_dir,
         timeout,
@@ -90,7 +90,7 @@ def chb(ctx: WikiAirport, cache_dir, timeout):
         "Chan Bay Municipal Airport",
         "CHB",
         re.compile(
-            r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)",
+            r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
         ),
         cache_dir,
         timeout,
@@ -102,7 +102,7 @@ def cbz(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Chan Bay Zeta Airport",
         "CBZ",
-        re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
+        re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
         cache_dir,
         timeout,
     )
@@ -113,7 +113,7 @@ def cbi(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Chan Bay International Airport",
         "CBI",
-        re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
+        re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
         cache_dir,
         timeout,
     )
@@ -135,7 +135,7 @@ def vda(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "Deadbush Valletta Desert Airport",
         "VDA",
-        re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"),
+        re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"),
         cache_dir,
         timeout,
     )
@@ -146,7 +146,7 @@ def wmi(ctx: WikiAirport, cache_dir, timeout):
     ctx.regex_extract_airport(
         "West Mesa International Airport",
         "WMI",
-        re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|[^|]*?)"),
+        re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
         cache_dir,
         timeout,
     )
@@ -158,7 +158,7 @@ def dfm(ctx: WikiAirport, cache_dir, timeout):
         "Deadbush Foxfoe Memorial Airport",
         "DFM",
         re.compile(
-            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
+            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
         ),
         cache_dir,
         timeout,
@@ -171,7 +171,7 @@ def gsm(ctx: WikiAirport, cache_dir, timeout):
         "Gemstride Melodia Airfield",
         "GSM",
         re.compile(
-            r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>.*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
+            r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
         ),
         cache_dir,
         timeout,

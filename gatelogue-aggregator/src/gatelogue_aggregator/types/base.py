@@ -188,21 +188,30 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         if s is None:
             return None
         res = ""
-        hyphen = False
+        hyphen1 = False
+        hyphen2 = False
         for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
             t = match.group(0)
             if len(t) == 0:
                 continue
-            if (hyphen and t[0].isdigit()) or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit()):
+            if (
+                (hyphen1 and t[0].isdigit())
+                or (hyphen2 and t[0].isalpha())
+                or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit())
+            ):
                 res += "-"
-            if hyphen:
-                hyphen = False
+            if hyphen1:
+                hyphen1 = False
+            if hyphen2:
+                hyphen2 = False
             if t.isdigit():
                 res += t.lstrip("0") or "0"
             elif t.isalpha():
                 res += t.upper()
-            elif t == "-" and (len(res) == 0 or res[-1].isalpha()):
-                hyphen = True
+            elif (t == "-" and len(res) == 0) or (len(res) != 0 and res[-1].isdigit()):
+                hyphen1 = True
+            elif len(res) != 0 and res[-1].isalpha():
+                hyphen2 = True
 
         return res
 
