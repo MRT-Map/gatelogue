@@ -10,6 +10,8 @@ import msgspec
 import networkx as nx
 import rich
 
+from gatelogue_aggregator.utils import search_all
+
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterator
 
@@ -20,7 +22,7 @@ class ToSerializable:
 
 
 class BaseContext(ToSerializable):
-    g: nx.MultiGraph[uuid.UUID]
+    g: nx.MultiGraph
 
     def __init__(self):
         self.g = nx.MultiGraph()
@@ -264,10 +266,3 @@ class Source(metaclass=SourceMeta):
 
     def __init__(self):
         rich.print(f"[yellow]Retrieving from {self.name}")
-
-
-def search_all(regex: re.Pattern[str], text: str) -> Iterator[re.Match[str]]:
-    pos = 0
-    while (match := regex.search(text, pos)) is not None:
-        pos = match.end()
-        yield match

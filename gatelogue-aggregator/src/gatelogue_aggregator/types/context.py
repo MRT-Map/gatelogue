@@ -1,20 +1,21 @@
 from __future__ import annotations
 
 import datetime
-from pathlib import Path
-from typing import TYPE_CHECKING, Self, override, cast
+from typing import TYPE_CHECKING, Self, cast, override
 
 import msgspec
 import networkx as nx
-import pygraphviz
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from pathlib import Path
+
+    import pygraphviz
 
 import rich
 import rich.progress
 
-from gatelogue_aggregator.types.air import AirContext, AirSource, Flight, Airport, Airline, Gate
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight, Gate
 from gatelogue_aggregator.types.base import Node, ToSerializable
 
 

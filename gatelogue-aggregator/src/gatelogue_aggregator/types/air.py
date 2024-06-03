@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 import rich.progress
 
-from gatelogue_aggregator.sources.directional_flights import DIRECTIONAL_FLIGHT_AIRLINES
+from gatelogue_aggregator.sources.air.hardcode import DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
 
 if TYPE_CHECKING:

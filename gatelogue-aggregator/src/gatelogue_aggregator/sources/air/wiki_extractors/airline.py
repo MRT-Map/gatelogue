@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
-    from gatelogue_aggregator.sources.wiki_airline import WikiAirline
+    from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
 
 _EXTRACTORS: list[Callable[[WikiAirline, Path, int], None]] = []
 

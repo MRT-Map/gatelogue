@@ -2,16 +2,14 @@ from pathlib import Path
 
 import click
 import msgspec.json
-import networkx as nx
 import rich
-import pygraphviz as pgv
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.sources.dynmap_airports import DynmapAirports
-from gatelogue_aggregator.sources.mrt_transit import MRTTransit
-from gatelogue_aggregator.sources.wiki_airline import WikiAirline
-from gatelogue_aggregator.sources.wiki_airport import WikiAirport
+from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports
+from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
+from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
+from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
 from gatelogue_aggregator.types.context import Context
 
 
@@ -39,7 +37,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
             WikiAirport(cache_dir, timeout),
         ]
     )
-    if True or graph is not None:
+    if graph is not None:
         ctx.graph(graph)
     j = msgspec.json.encode(ctx.ser())
     if fmt:
