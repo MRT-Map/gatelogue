@@ -5,8 +5,8 @@ import rich.progress
 import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.types.air import AirContext, AirSource
-from gatelogue_aggregator.types.base import Source, process_airport_code, process_code
+from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Flight
+from gatelogue_aggregator.types.base import Source
 
 
 class MRTTransit(AirSource):
@@ -64,7 +64,7 @@ class MRTTransit(AirSource):
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = self.airport(code=process_airport_code(airport_code))
+                airport = self.airport(code=Airport.process_code(airport_code))
 
                 if airport_name != "":
                     airport.attrs(self).name = airport_name
@@ -74,7 +74,7 @@ class MRTTransit(AirSource):
                 gate = self.gate(code=None, airport=airport)
 
                 for flight_code in str(flights).split(", "):
-                    flight = self.flight(codes={process_code(flight_code)}, airline=airline)
+                    flight = self.flight(codes=Flight.process_code(flight_code, airline_name), airline=airline)
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)
         rich.print("[green]  Extracted")

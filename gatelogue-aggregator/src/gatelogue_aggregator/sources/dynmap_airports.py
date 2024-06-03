@@ -3,8 +3,8 @@ from pathlib import Path
 import msgspec
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.types.air import AirContext, AirSource
-from gatelogue_aggregator.types.base import Source, process_airport_code
+from gatelogue_aggregator.types.air import AirContext, Airport, AirSource
+from gatelogue_aggregator.types.base import Source
 
 
 class DynmapAirports(AirSource):
@@ -32,4 +32,4 @@ class DynmapAirports(AirSource):
             raise ValueError(response1[:100], response2[:100]) from e
 
         for k, v in json.items():
-            self.airport(code=process_airport_code(k), coordinates=(v["x"], v["z"]))
+            self.airport(code=Airport.process_code(k), coordinates=(v["x"], v["z"]))

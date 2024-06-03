@@ -6,6 +6,7 @@ from typing import Any, Literal, Self, override
 import msgspec
 import rich.progress
 
+from gatelogue_aggregator.sources.directional_flights import DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
 
 
@@ -91,6 +92,23 @@ class Flight(Node[_AirContext]):
                 self.disconnect_all(ctx, gate)
             elif existing.merged_attr(ctx, "code") == gate.merged_attr(ctx, "code"):
                 existing.merge(ctx, gate)
+
+    @staticmethod
+    def process_code[T: (str, None)](s: T, airline_name: str | None = None) -> set[T]:
+        s = Node.process_code(s)
+        direction = DIRECTIONAL_FLIGHT_AIRLINES.get(airline_name)
+        if not s.isdigit() or direction is None:
+            return {s}
+        if direction == "odd-even":
+            if int(s) % 2 == 1:
+                return {s, str(int(s) + 1)}
+            else:
+                return {s, str(int(s) - 1)}
+        else:
+            if int(s) % 2 == 1:
+                return {s, str(int(s) - 1)}
+            else:
+                return {s, str(int(s) + 1)}
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -179,6 +197,16 @@ class Airport(Node[_AirContext]):
                 flight.disconnect_all(ctx, none_gate)
                 for source in sources:
                     flight.connect(ctx, new_gate, source)
+
+    @staticmethod
+    @override
+    def process_code[T: (str, None)](s: T) -> T:
+        if s is None:
+            return None
+        s = str(s).upper()
+        if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
+            return s[:3]
+        return s
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)

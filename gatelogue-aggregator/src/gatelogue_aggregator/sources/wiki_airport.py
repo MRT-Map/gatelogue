@@ -8,7 +8,7 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Gate
-from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
+from gatelogue_aggregator.types.base import Source, search_all
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -48,7 +48,7 @@ class WikiAirport(AirSource):
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):
-        return self.airport(code=process_airport_code(airport_code), link=get_wiki_link(page_name))
+        return self.airport(code=Airport.process_code(airport_code), link=get_wiki_link(page_name))
 
     def extract_get_gate(
         self,
@@ -61,7 +61,7 @@ class WikiAirport(AirSource):
     ) -> Gate:
         airline = airline or airline2
         g = self.gate(
-            code=process_code(code),
+            code=Gate.process_code(code),
             airport=airport,
             size=str(size) if size is not None else None,
         )

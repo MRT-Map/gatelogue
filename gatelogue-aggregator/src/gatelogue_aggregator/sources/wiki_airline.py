@@ -7,8 +7,8 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airline import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airline, AirSource, Flight
-from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight, Gate
+from gatelogue_aggregator.types.base import Source, search_all
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -61,20 +61,20 @@ class WikiAirline(AirSource):
         s: str | None = None,
         **_,
     ) -> Flight:
-        f = self.flight(codes={process_code(code)}, airline=airline)
+        f = self.flight(codes=Flight.process_code(code, airline.merged_attr(self, "name")), airline=airline)
         f.connect(
             self,
             self.gate(
-                code=process_code(g1),
-                airport=self.airport(code=process_airport_code(a1)),
+                code=Gate.process_code(g1),
+                airport=self.airport(code=Airport.process_code(a1)),
                 size=str(s) if s is not None else None,
             ),
         )
         f.connect(
             self,
             self.gate(
-                code=process_code(g2),
-                airport=self.airport(code=process_airport_code(a2)),
+                code=Gate.process_code(g2),
+                airport=self.airport(code=Airport.process_code(a2)),
                 size=str(s) if s is not None else None,
             ),
         )

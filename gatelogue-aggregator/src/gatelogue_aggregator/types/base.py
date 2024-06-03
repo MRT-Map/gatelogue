@@ -72,6 +72,9 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
 
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs:
+        def __init__(self, *args, **kwargs):
+            raise NotImplementedError
+
         @staticmethod
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             raise NotImplementedError
@@ -179,6 +182,29 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     def key(self, ctx: CTX) -> str:
         raise NotImplementedError
 
+    @staticmethod
+    def process_code[T: (str, None)](s: T) -> T:
+        if s is None:
+            return None
+        res = ""
+        hyphen = False
+        for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
+            t = match.group(0)
+            if len(t) == 0:
+                continue
+            if (hyphen and t[0].isdigit()) or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit()):
+                res += "-"
+            if hyphen:
+                hyphen = False
+            if t.isdigit():
+                res += t.lstrip("0") or "0"
+            elif t.isalpha():
+                res += t.upper()
+            elif t == "-" and (len(res) == 0 or res[-1].isalpha()):
+                hyphen = True
+
+        return res
+
 
 _T = TypeVar("_T")
 
@@ -236,35 +262,3 @@ def search_all(regex: re.Pattern[str], text: str) -> Iterator[re.Match[str]]:
     while (match := regex.search(text, pos)) is not None:
         pos = match.end()
         yield match
-
-
-def process_code[T: (str, None)](s: T) -> T:
-    if s is None:
-        return None
-    res = ""
-    hyphen = False
-    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
-        t = match.group(0)
-        if len(t) == 0:
-            continue
-        if (hyphen and t[0].isdigit()) or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit()):
-            res += "-"
-        if hyphen:
-            hyphen = False
-        if t.isdigit():
-            res += t.lstrip("0") or "0"
-        elif t.isalpha():
-            res += t.upper()
-        elif t == "-" and (len(res) == 0 or res[-1].isalpha()):
-            hyphen = True
-
-    return res
-
-
-def process_airport_code[T: (str, None)](s: T) -> T:
-    if s is None:
-        return None
-    s = str(s).upper()
-    if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
-        return s[:3]
-    return s
