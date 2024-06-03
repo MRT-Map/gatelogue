@@ -13,7 +13,9 @@ const airport = computed(
     gatelogueData.value?.airport[route.params.id as string] ??
     Object.values(gatelogueData.value!.airport).find(
       (a) =>
-        a.code !== null && a.code === (route.params.id as string).toUpperCase(),
+        a.code !== null &&
+        encodeURIComponent(a.code) ===
+          (route.params.id as string).toUpperCase(),
     )!,
 );
 watchEffect(() => {

@@ -11,7 +11,7 @@ const airline = computed(
   () =>
     gatelogueData.value!.airline[route.params.id as string] ??
     Object.values(gatelogueData.value!.airline).find(
-      (a) => a.name === route.params.id,
+      (a) => encodeURIComponent(a.name) === route.params.id,
     )!,
 );
 watchEffect(() => {
