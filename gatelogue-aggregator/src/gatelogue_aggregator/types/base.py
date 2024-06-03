@@ -148,23 +148,23 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
             else:
                 yield v["s"].name
 
-    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T]) -> list[Sourced.Ser[uuid.UUID]]:
+    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T]) -> list[Sourced.Ser[str]]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [Sourced(a.id, set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty)]
+        return [Sourced(str(a.id), set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T]) -> T | None:
         if ty not in type(self).acceptable_single_node_types():
             raise TypeError
         return next((a for a in ctx.g.neighbors(self) if isinstance(a, ty)), None)
 
-    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T]) -> Sourced.Ser[uuid.UUID] | None:
+    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T]) -> Sourced.Ser[str] | None:
         if ty not in type(self).acceptable_single_node_types():
             raise TypeError
         node = self.get_one(ctx, ty)
         if node is None:
             return None
-        return Sourced(node.id, set(Node._get_sources(ctx.g[self][node]))).ser()
+        return Sourced(str(node.id), set(Node._get_sources(ctx.g[self][node]))).ser()
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)

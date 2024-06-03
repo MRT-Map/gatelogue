@@ -55,8 +55,8 @@ class Flight(Node[_AirContext]):
     @override
     class Ser(msgspec.Struct):
         codes: set[str]
-        gates: list[Sourced.Ser[uuid.UUID]]
-        airline: Sourced.Ser[uuid.UUID]
+        gates: list[Sourced.Ser[str]]
+        airline: Sourced.Ser[str]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
@@ -144,7 +144,7 @@ class Airport(Node[_AirContext]):
         world: Sourced.Ser[str] | None
         coordinates: Sourced.Ser[tuple[int, int]] | None
         link: Sourced.Ser[str] | None
-        gates: list[Sourced.Ser[uuid.UUID]]
+        gates: list[Sourced.Ser[str]]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
@@ -228,9 +228,9 @@ class Gate(Node[_AirContext]):
     @override
     class Ser(msgspec.Struct):
         code: str | None
-        flights: list[Sourced.Ser[uuid.UUID]]
-        airport: Sourced.Ser[uuid.UUID]
-        airline: Sourced.Ser[uuid.UUID] | None
+        flights: list[Sourced.Ser[str]]
+        airport: Sourced.Ser[str]
+        airline: Sourced.Ser[str] | None
         size: Sourced.Ser[str] | None
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
@@ -292,7 +292,7 @@ class Airline(Node[_AirContext]):
     @override
     class Ser(msgspec.Struct):
         name: str
-        flights: list[Sourced.Ser[uuid.UUID]]
+        flights: list[Sourced.Ser[str]]
         link: Sourced.Ser[str] | None
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
