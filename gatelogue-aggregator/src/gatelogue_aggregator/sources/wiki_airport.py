@@ -7,7 +7,7 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.sources.wiki_extractors.airport import _EXTRACTORS
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Gate, AirSource
+from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Gate
 from gatelogue_aggregator.types.base import Source, process_airport_code, process_code, search_all
 
 if TYPE_CHECKING:

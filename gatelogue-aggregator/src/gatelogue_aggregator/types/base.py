@@ -4,14 +4,14 @@ import copy
 import dataclasses
 import re
 import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Self, TypeVar, override, Literal
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, Self, TypeVar, override
 
 import msgspec
 import networkx as nx
 import rich
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Generator, Iterable, Container
+    from collections.abc import Callable, Container, Generator
 
 
 class ToSerializable:
@@ -59,7 +59,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         self.id = uuid.uuid4()
         source = source or type(ctx)
         ctx.g.add_node(self)
-        ctx.g.nodes[self][source] = self.Attrs(**attrs)  # noqa
+        ctx.g.nodes[self][source] = self.Attrs(**attrs)
 
     # def ctx(self, ctx: BaseContext):
     #     raise NotImplementedError
@@ -140,7 +140,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     def get_all_ser[T: Node](self, ctx: CTX, ty: type[T]) -> list[Sourced.Ser[uuid.UUID]]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [Sourced(a.id, {s for s in Node._get_sources(ctx.g[self][a])}).ser() for a in self.get_all(ctx, ty)]
+        return [Sourced(a.id, set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T]) -> T | None:
         if ty not in type(self).acceptable_single_node_types():
@@ -153,7 +153,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         node = self.get_one(ctx, ty)
         if node is None:
             return None
-        return Sourced(node.id, {s for s in Node._get_sources(ctx.g[self][node])}).ser()
+        return Sourced(node.id, set(Node._get_sources(ctx.g[self][node]))).ser()
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)
@@ -208,8 +208,8 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
 class SourceMeta(type):
     priority: float | int
 
-    def __lt__(self, other):
-        return self.priority < other.priority
+    def __lt__(cls, other):
+        return cls.priority < other.priority
 
 
 class Source(metaclass=SourceMeta):
@@ -254,6 +254,6 @@ def process_airport_code[T: (str, None)](s: T) -> T:
     if s is None:
         return None
     s = str(s).upper()
-    if len(s) == 4 and s[3] == "T":
+    if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
         return s[:3]
     return s

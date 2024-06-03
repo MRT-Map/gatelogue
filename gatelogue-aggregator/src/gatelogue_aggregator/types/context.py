@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 from typing import TYPE_CHECKING, Self, override
 
 import networkx as nx
@@ -11,8 +10,8 @@ if TYPE_CHECKING:
 import rich
 import rich.progress
 
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, Flight, Gate, AirSource
-from gatelogue_aggregator.types.base import BaseContext, Source, ToSerializable, Node
+from gatelogue_aggregator.types.air import AirContext, AirSource
+from gatelogue_aggregator.types.base import Node, ToSerializable
 
 
 class Context(AirContext, ToSerializable):
@@ -24,7 +23,7 @@ class Context(AirContext, ToSerializable):
 
         processed: dict[type[Node], dict[str, list[Node]]] = {}
         to_merge = []
-        for n in rich.progress.track(self.g.nodes, f"[green]  Finding equivalent nodes"):
+        for n in rich.progress.track(self.g.nodes, "[green]  Finding equivalent nodes"):
             key = n.key(self)
             ty = type(n)
             filtered_processed = processed.get(ty, {}).get(key, [])
@@ -32,7 +31,7 @@ class Context(AirContext, ToSerializable):
                 processed.setdefault(ty, {}).setdefault(key, []).append(n)
                 continue
             to_merge.append((equiv, n))
-        for equiv, n in rich.progress.track(to_merge, f"[green]  Merging equivalent nodes"):
+        for equiv, n in rich.progress.track(to_merge, "[green]  Merging equivalent nodes"):
             equiv.merge(self, n)
         self.update()
         return self

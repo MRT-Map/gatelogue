@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override, Any
+from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
@@ -17,8 +17,8 @@ class _AirContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Flight(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Gate,)
-    acceptable_single_node_types = lambda: (Airline,)
+    acceptable_list_node_types = lambda: (Gate,)  # noqa: E731
+    acceptable_single_node_types = lambda: (Airline,)  # noqa: E731
 
     @override
     def __init__(
@@ -77,7 +77,7 @@ class Flight(Node[_AirContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Airport(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Gate,)
+    acceptable_list_node_types = lambda: (Gate,)  # noqa: E731
 
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str, **attrs):
@@ -97,7 +97,7 @@ class Airport(Node[_AirContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            elif k in ("name", "world", "coordinates", "link"):
+            if k in ("name", "world", "coordinates", "link"):
                 return Sourced(v).source(source)
             raise NotImplementedError
 
@@ -159,8 +159,8 @@ class Airport(Node[_AirContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Gate(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Flight,)
-    acceptable_single_node_types = lambda: (Airport, Airline)
+    acceptable_list_node_types = lambda: (Flight,)  # noqa: E731
+    acceptable_single_node_types = lambda: (Airport, Airline)  # noqa: E731
 
     @override
     def __init__(
@@ -180,7 +180,7 @@ class Gate(Node[_AirContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            elif k == "size":
+            if k == "size":
                 return Sourced(v).source(source)
             raise NotImplementedError
 
@@ -230,7 +230,7 @@ class Gate(Node[_AirContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Airline(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Flight,)
+    acceptable_list_node_types = lambda: (Flight,)  # noqa: E731
 
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, name: str, **attrs):
@@ -247,7 +247,7 @@ class Airline(Node[_AirContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "name":
                 return v
-            elif k == "link":
+            if k == "link":
                 return Sourced(v).source(source)
             raise NotImplementedError
 
