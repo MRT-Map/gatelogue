@@ -205,10 +205,10 @@ class Airport(Node[_AirContext]):
     @staticmethod
     @override
     def process_code[T: (str, None)](s: T) -> T:
-        s = AIRPORT_ALIASES.get(s.strip(), s)
         if s is None:
             return None
         s = str(s).upper()
+        s = AIRPORT_ALIASES.get(s.strip(), s)
         if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
             return s[:3]
         return s
@@ -349,7 +349,7 @@ class Airline(Node[_AirContext]):
     def process_airline_name[T: (str, None)](s: T) -> T:
         if s is None:
             return None
-        return AIRLINE_ALIASES.get(s.strip(), s)
+        return AIRLINE_ALIASES.get(str(s).strip(), s)
 
 
 class AirContext(_AirContext):
