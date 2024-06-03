@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Literal, Self, override
+from typing import Any, Literal, Self, override
 
 import msgspec
 import rich.progress
 
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
-
-if TYPE_CHECKING:
-    import uuid
 
 
 class _AirContext(BaseContext, Source):
@@ -33,8 +30,8 @@ class Flight(Node[_AirContext]):
     class Attrs(Node.Attrs):
         codes: set[str]
 
-        @override
         @staticmethod
+        @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "codes":
                 return v
@@ -113,8 +110,8 @@ class Airport(Node[_AirContext]):
         coordinates: tuple[int, int] | None = None
         link: str | None = None
 
-        @override
         @staticmethod
+        @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
@@ -154,13 +151,11 @@ class Airport(Node[_AirContext]):
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        self_attrs = sorted(self.all_attrs(ctx).items())[0][1]
-        other_attrs = sorted(other.all_attrs(ctx).items())[0][1]
-        return self_attrs.code == other_attrs.code
+        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code")
 
     @override
     def key(self, ctx: AirContext) -> str:
-        return sorted(self.all_attrs(ctx).items())[0][1].code
+        return self.merged_attr(ctx, "code")
 
     def update(self, ctx: AirContext):
         if (
@@ -204,8 +199,8 @@ class Gate(Node[_AirContext]):
         code: str | None
         size: str | None = None
 
-        @override
         @staticmethod
+        @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
@@ -243,15 +238,13 @@ class Gate(Node[_AirContext]):
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        self_attrs = sorted(self.all_attrs(ctx).items())[0][1]
-        other_attrs = sorted(other.all_attrs(ctx).items())[0][1]
-        return self_attrs.code == other_attrs.code and self.get_one(ctx, Airport).equivalent(
-            ctx, other.get_one(ctx, Airport)
-        )
+        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
+            ctx, Airport
+        ).equivalent(ctx, other.get_one(ctx, Airport))
 
     @override
     def key(self, ctx: AirContext) -> str:
-        return sorted(self.all_attrs(ctx).items())[0][1].code
+        return self.merged_attr(ctx, "code")
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -268,8 +261,8 @@ class Airline(Node[_AirContext]):
         name: str
         link: str | None = None
 
-        @override
         @staticmethod
+        @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "name":
                 return v
@@ -303,13 +296,11 @@ class Airline(Node[_AirContext]):
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        self_attrs = sorted(self.all_attrs(ctx).items())[0][1]
-        other_attrs = sorted(other.all_attrs(ctx).items())[0][1]
-        return self_attrs.name == other_attrs.name
+        return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
 
     @override
     def key(self, ctx: AirContext) -> str:
-        return sorted(self.all_attrs(ctx).items())[0][1].name
+        return self.merged_attr(ctx, "name")
 
 
 class AirContext(_AirContext):
@@ -342,8 +333,7 @@ class AirContext(_AirContext):
         for n in self.g.nodes:
             if not isinstance(n, Airport):
                 continue
-            self_attrs = sorted(n.all_attrs(self).items())[0][1]
-            if self_attrs.code == code:
+            if n.merged_attr(self, "code") == code:
                 return n
         return Airport(self, source, code=code, **attrs)
 
@@ -351,8 +341,7 @@ class AirContext(_AirContext):
         for n in self.g.nodes:
             if not isinstance(n, Gate):
                 continue
-            self_attrs = sorted(n.all_attrs(self).items())[0][1]
-            if self_attrs.code == code and n.get_one(self, Airport).equivalent(self, airport):
+            if n.merged_attr(self, "code") == code and n.get_one(self, Airport).equivalent(self, airport):
                 return n
         return Gate(self, source, code=code, airport=airport, **attrs)
 
@@ -360,8 +349,7 @@ class AirContext(_AirContext):
         for n in self.g.nodes:
             if not isinstance(n, Airline):
                 continue
-            self_attrs = sorted(n.all_attrs(self).items())[0][1]
-            if self_attrs.name == name:
+            if n.merged_attr(self, "name") == name:
                 return n
         return Airline(self, source, name=name, **attrs)
 
