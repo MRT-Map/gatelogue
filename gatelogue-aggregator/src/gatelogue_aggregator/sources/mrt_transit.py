@@ -55,7 +55,7 @@ class MRTTransit(AirSource):
         )
         df2.drop(df2.tail(6).index, inplace=True)
 
-        df = pd.concat((df2, df1))
+        df = pd.concat((df1, df2))
 
         for airline_name in rich.progress.track(df.columns[4:], "  Extracting data from CSV...", transient=True):
             airline = self.airline(name=airline_name)
