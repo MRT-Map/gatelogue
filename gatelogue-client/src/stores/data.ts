@@ -14,5 +14,5 @@ export const gatelogueData: Ref<GatelogueData | null> = ref(null);
 fetch("https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json")
   .then((res) => res.json())
   .then((json) => {
-    gatelogueData.value = json.air;
+    gatelogueData.value = json;
   });
