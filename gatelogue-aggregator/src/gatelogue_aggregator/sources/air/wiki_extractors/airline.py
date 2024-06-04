@@ -169,7 +169,7 @@ def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
 def continental(ctx: WikiAirline, cache_dir, timeout):
     ctx.regex_extract_airline(
         "Continental Airlines",
-        "Continental",
+        "Continental Airlines",
         re.compile(
             r"\|-\n\|CO(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}"
         ),
