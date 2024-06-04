@@ -68,16 +68,10 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
             tr2 = tr.next_sibling.next_sibling
 
             g1 = tr2("td")[0]("b")
-            if a1 in DUPLICATE_GATE_NUM and len(g1) != 1:
-                g1 = f"T{g1[0].string}-{g1[1].string}"
-            else:
-                g1 = g1[-1].string
+            g1 = f"T{g1[0].string}-{g1[1].string}" if a1 in DUPLICATE_GATE_NUM and len(g1) != 1 else g1[-1].string
 
             g2 = tr2("td")[1]("b")
-            if a2 in DUPLICATE_GATE_NUM and len(g2) != 1:
-                g2 = f"T{g2[0].string}-{g2[1].string}"
-            else:
-                g2 = g2[-1].string
+            g2 = f"T{g2[0].string}-{g2[1].string}" if a2 in DUPLICATE_GATE_NUM and len(g2) != 1 else g2[-1].string
 
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2

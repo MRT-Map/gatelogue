@@ -5,7 +5,7 @@ import rich.progress
 import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.types.air import AirContext, Airport, AirSource, Flight, Airline
+from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight
 from gatelogue_aggregator.types.base import Source
 
 
