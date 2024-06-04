@@ -216,3 +216,15 @@ def rainer_airways(ctx: WikiAirline, cache_dir, timeout):
         cache_dir,
         timeout,
     )
+
+
+@_EXTRACTORS.append
+def marble(ctx: WikiAirline, cache_dir, timeout):
+    # INCOMPLETE
+    ctx.regex_extract_airline(
+        "MarbleAir",
+        "MarbleAir",
+        re.compile(r"\|-\n\|'''MA(?P<flight>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"),
+        cache_dir,
+        timeout,
+    )

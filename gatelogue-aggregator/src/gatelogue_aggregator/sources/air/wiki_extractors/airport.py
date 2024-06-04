@@ -264,7 +264,7 @@ def erz(ctx: WikiAirport, cache_dir, timeout):
         "Erzgard International Airport",
         "ERZ",
         re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)]]|(?P<airline2>.+?)|)\n",
+            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
         ),
         cache_dir,
         timeout,
@@ -277,7 +277,7 @@ def erz2(ctx: WikiAirport, cache_dir, timeout):
         "Erzville Passenger Seaport",
         "ERZ",
         re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?P<airline>.*?)]]|(?P<airline2>.+?)|)\n",
+            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
         ),
         cache_dir,
         timeout,
