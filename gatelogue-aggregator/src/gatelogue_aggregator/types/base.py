@@ -63,11 +63,11 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         ctx.g.add_node(self)
         ctx.g.nodes[self][source] = self.Attrs(**attrs)
 
-    def str_ctx(self, ctx: CTX, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: CTX) -> str:
         return (
             type(self).__name__
             + "("
-            + ",".join(f"{k}={v}" for k, v in self.merged_attrs(ctx, filter_).items() if v is not None)
+            + ",".join(f"{k}={v}" for k, v in self.merged_attrs(ctx).items() if v is not None)
             + ")"
         )
 

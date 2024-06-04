@@ -30,6 +30,12 @@ class Flight(Node[_AirContext]):
         self.connect_one(ctx, airline, source)
 
     @override
+    def str_ctx(self, ctx: AirContext) -> str:
+        airline_name = self.get_one(ctx, Airline).merged_attr(ctx, "name")
+        code = "/".join(self.merged_attr(ctx, "codes"))
+        return f"{airline_name} {code}"
+
+    @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs(Node.Attrs):
         codes: set[str]
@@ -121,7 +127,8 @@ class Airport(Node[_AirContext]):
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        return super().str_ctx(ctx, filter_ or {"code"})
+        code = self.merged_attr(ctx, "code")
+        return code
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -228,9 +235,9 @@ class Gate(Node[_AirContext]):
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        code = self.merged_attr(ctx, "code")
         airport = self.get_one(ctx, Airport).merged_attr(ctx, "code")
-        return type(self).__name__ + f"(code={code},airport={airport})"
+        code = self.merged_attr(ctx, "code")
+        return f"{airport} {code}"
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -296,7 +303,8 @@ class Airline(Node[_AirContext]):
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        return super().str_ctx(ctx, filter_ or {"name"})
+        airline_name = self.merged_attr(ctx, "name")
+        return airline_name
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
