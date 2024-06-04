@@ -37,6 +37,11 @@ class MRTTransit(AirSource):
         df1.drop(df1.tail(66).index, inplace=True)
         df1["World"] = "New"
 
+        df1["Raiko Airlines"] = [
+            (", ".join("S" + b.strip() for b in str(a).split(",")) if str(a) != "nan" else "nan")
+            for a in df1["Raiko Airlines"]
+        ]
+
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache2,
@@ -58,7 +63,7 @@ class MRTTransit(AirSource):
         df = pd.concat((df1, df2))
 
         for airline_name in rich.progress.track(df.columns, "  Extracting data from CSV...", transient=True):
-            if airline_name in ("Name", "Code", "World", "Operator"):
+            if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
             airline = self.airline(name=Airline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, flights in zip(

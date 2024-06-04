@@ -163,3 +163,56 @@ def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
             g1 = list(tr("td")[4].strings)[0]
             g2 = list(tr("td")[4].strings)[1]
             ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
+
+
+@_EXTRACTORS.append
+def continental(ctx: WikiAirline, cache_dir, timeout):
+    ctx.regex_extract_airline(
+        "Continental Airlines",
+        "Continental",
+        re.compile(
+            r"\|-\n\|CO(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}"
+        ),
+        cache_dir,
+        timeout,
+    )
+
+
+@_EXTRACTORS.append
+def air_kanata(ctx: WikiAirline, cache_dir, timeout):
+    ctx.regex_extract_airline(
+        "Air Kanata",
+        "Air Kanata",
+        re.compile(
+            r"\|-\n\|AK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        ),
+        cache_dir,
+        timeout,
+    )
+
+
+@_EXTRACTORS.append
+def raiko(ctx: WikiAirline, cache_dir, timeout):
+    ctx.regex_extract_airline(
+        "Raiko Airlines",
+        "Raiko Airlines",
+        re.compile(
+            r"\|-\n\|RK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        ),
+        cache_dir,
+        timeout,
+    )
+
+
+@_EXTRACTORS.append
+def rainer_airways(ctx: WikiAirline, cache_dir, timeout):
+    # INCOMPLETE
+    ctx.regex_extract_airline(
+        "Rainer Airways",
+        "Rainer Airways",
+        re.compile(
+            r"\|-\n\|\s*RB(?P<code>[^|]*?)\s*\n\|\s*{{afn\|(?P<a1>.*?)}}\s*\n\|\s*(?P<g1>.*?)\s*\n\|\s*{{afn\|(?P<a2>.*?)}}\s*\n\|\s*(?P<g2>.*?)\s*\n"
+        ),
+        cache_dir,
+        timeout,
+    )
