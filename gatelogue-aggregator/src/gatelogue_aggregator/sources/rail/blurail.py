@@ -16,7 +16,6 @@ class BluRail(RailSource):
     priority = 0
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "blurail"
         RailContext.__init__(self)
         Source.__init__(self)
 
@@ -69,7 +68,7 @@ class BluRail(RailSource):
             "WC",
             "WS",
         ):
-            wiki = get_wiki_text(f"{line_code} (BluRail line)", cache / line_code, timeout)
+            wiki = get_wiki_text(f"{line_code} (BluRail line)", cache_dir, timeout)
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
             line = self.line(code=line_code, name=line_name)
             company.connect(self, line)

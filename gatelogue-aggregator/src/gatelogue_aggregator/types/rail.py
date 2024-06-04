@@ -200,7 +200,7 @@ class Station(Node[_RailContext]):
 
 class Connection(msgspec.Struct, ToSerializable, kw_only=True, frozen=True):
     line: uuid.UUID
-    direction: str | None = None
+    one_way_towards: uuid.UUID | None = None
 
 
 class RailContext(_RailContext):
