@@ -21,6 +21,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "FlyLumeva": "Astrella",
     "FlyMighty": "Infamous Airlines",
     "FlySakura": "Michigana",
+    "FlySubway": "Astrella",
     "HarbourAir/Pan Aqua": "HarbourAir",
     "Infamous Eagle": "Oceanic Langus Airways",
     "IntraAir Heli Lines": "IntraAir",
