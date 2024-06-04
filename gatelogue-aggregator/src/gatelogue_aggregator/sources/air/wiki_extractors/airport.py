@@ -282,3 +282,16 @@ def erz2(ctx: WikiAirport, cache_dir, timeout):
         cache_dir,
         timeout,
     )
+
+
+@_EXTRACTORS.append
+def atc(ctx: WikiAirport, cache_dir, timeout):
+    ctx.regex_extract_airport(
+        "Achowalogen Takachsin-Covina International Airport",
+        "ATC",
+        re.compile(
+            r"\|-\n\|\s*(?P<code>[^|]*?)\s*\|\|[^|]*?\|\|\s*(?:\[\[(?P<airline>[^|]*?)(?:\|[^]]*?|)]][^|]*?|(?P<airline2>[^-|]*?)|-*?)\s*\|\|",
+        ),
+        cache_dir,
+        timeout,
+    )
