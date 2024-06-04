@@ -12,6 +12,7 @@ from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
 from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
 from gatelogue_aggregator.sources.rail.blurail import BluRail
 from gatelogue_aggregator.sources.rail.intrarail import IntraRail
+from gatelogue_aggregator.sources.rail.railinq import RaiLinQ
 from gatelogue_aggregator.types.context import Context
 
 
@@ -39,6 +40,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
             WikiAirport(cache_dir, timeout),
             BluRail(cache_dir, timeout),
             IntraRail(cache_dir, timeout),
+            RaiLinQ(cache_dir, timeout),
         ]
     )
     if graph is not None:
