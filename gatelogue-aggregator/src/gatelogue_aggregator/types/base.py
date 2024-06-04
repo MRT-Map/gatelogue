@@ -170,6 +170,12 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
             return None
         return Sourced(str(node.id), set(Node._get_sources(ctx.g[self][node]))).ser()
 
+    def get_edges[T: Node](self, ctx: CTX, node: Node, ty: type[T]) -> Iterator[T]:
+        return (a for a in ctx.g[self][node] if isinstance(a, ty))
+
+    def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T]) -> list[Sourced.Ser[T]]:
+        return [Sourced(k).source(v["s"].name).ser() for k, v in ctx.g[self][node].items() if isinstance(k, ty)]
+
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)
 
