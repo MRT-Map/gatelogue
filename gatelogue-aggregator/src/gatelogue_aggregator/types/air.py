@@ -72,11 +72,9 @@ class Flight(Node[_AirContext]):
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        return len(
-            {a for _, c in self.all_attrs(ctx).items() for a in c.codes}.intersection(
-                {a for _, c in other.all_attrs(ctx).items() for a in c.codes}
-            )
-        ) != 0 and self.get_one(ctx, Airline).equivalent(ctx, other.get_one(ctx, Airline))
+        return len(self.merged_attr(ctx, "codes").intersection(other.merged_attr(ctx, "codes"))) != 0 and self.get_one(
+            ctx, Airline
+        ).equivalent(ctx, other.get_one(ctx, Airline))
 
     @override
     def key(self, ctx: AirContext) -> str:
@@ -378,9 +376,9 @@ class AirContext(_AirContext):
         for n in self.g.nodes:
             if not isinstance(n, Flight):
                 continue
-            if len({a for _, c in n.all_attrs(self).items() for a in c.codes}.intersection(codes)) != 0 and n.get_one(
-                self, Airline
-            ).equivalent(self, airline):
+            if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, Airline).equivalent(
+                self, airline
+            ):
                 return n
         return Flight(self, source, codes=codes, airline=airline, **attrs)
 

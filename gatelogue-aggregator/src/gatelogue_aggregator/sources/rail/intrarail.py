@@ -49,7 +49,7 @@ class IntraRail(RailSource):
                     continue
                 station_name = station_name.strip()
 
-                station = self.station(code=station_name, name=station_name, company=company)
+                station = self.station(codes={station_name}, name=station_name, company=company)
                 stations.append(station)
                 stations_dict[station_name] = station
 

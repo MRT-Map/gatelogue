@@ -74,7 +74,7 @@ class BluRail(RailSource):
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
-                station = self.station(code=result.group("code"), name=result.group("name"), company=company)
+                station = self.station(codes={result.group("code")}, name=result.group("name"), company=company)
                 stations.append(station)
 
             for s1, s2 in itertools.pairwise(stations):
