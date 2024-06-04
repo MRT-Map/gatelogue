@@ -167,10 +167,7 @@ class Station(Node[_RailContext]):
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
-        if (code := self.merged_attr(ctx, "name")) is None:
-            code = "/".join(self.merged_attr(ctx, "codes"))
-        else:
-            code = code.v
+        code = "/".join(self.merged_attr(ctx, "codes")) if (code := self.merged_attr(ctx, "name")) is None else code.v
         company = self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
         return f"{company} {code}"
 

@@ -8,11 +8,11 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailContext, RailSource, Station, Connection
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
 from gatelogue_aggregator.utils import search_all
 
 
-class WikiMRT(RailSource):
+class MRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
     priority = -1
 
@@ -103,10 +103,7 @@ class WikiMRT(RailSource):
             for k, vv in v["markers"].items():
                 code = k.upper()
                 coordinates = (vv["x"], vv["z"])
-                if (result := re.search(r"(<name>.*) \(.*\)", vv["label"])) is None:
-                    name = None
-                else:
-                    name = result.group(1)
+                name = None if (result := re.search("(<name>.*) \\(.*\\)", vv["label"])) is None else result.group(1)
                 self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
             rich.print(f"[green]  MRT {line_code} has {len(v['markers'])} stations")
 
@@ -119,9 +116,6 @@ class WikiMRT(RailSource):
         for k, v in json2["old"]["markers"].items():
             code = "Old-" + k.upper()
             coordinates = (v["x"], v["z"])
-            if (result := re.search(r"(<name>.*) \(.*\)", v["label"])) is None:
-                name = None
-            else:
-                name = result.group(1)
+            name = None if (result := re.search("(<name>.*) \\(.*\\)", v["label"])) is None else result.group(1)
             self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
         rich.print(f"[green]  Old world has {len(json2['old']['markers'])} stations")
