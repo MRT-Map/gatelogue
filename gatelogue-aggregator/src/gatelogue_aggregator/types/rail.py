@@ -75,18 +75,23 @@ class RailLine(Node[_RailContext]):
     acceptable_single_node_types = lambda: (RailCompany,)
 
     @override
-    def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, **attrs):
+    def __init__(
+        self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, company: RailLine, **attrs
+    ):
         super().__init__(ctx, source, code=code, **attrs)
+        self.connect_one(ctx, company)
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
         code = self.merged_attr(ctx, "code")
-        return code
+        company = self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
+        return f"{company} {code}"
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
     class Attrs(Node.Attrs):
         code: str
+        mode: Literal["warp", "cart", "traincart", "vehicles"] | None = None
         name: str | None = None
 
         @staticmethod
@@ -94,13 +99,14 @@ class RailLine(Node[_RailContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            if k == "name":
+            if k == ("name", "mode"):
                 return Sourced(v).source(source)
             raise NotImplementedError
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
             self.sourced_merge(source, existing, "name")
+            self.sourced_merge(source, existing, "mode")
 
     @override
     def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailLine.Attrs | None:
@@ -114,6 +120,7 @@ class RailLine(Node[_RailContext]):
     class Ser(msgspec.Struct):
         code: str
         company: Sourced.Ser[str]
+        mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
         name: Sourced.Ser[str] | None = None
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
@@ -124,7 +131,9 @@ class RailLine(Node[_RailContext]):
 
     @override
     def equivalent(self, ctx: RailContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code")
+        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
+            ctx, RailCompany
+        ).equivalent(ctx, other.get_one(ctx, RailCompany))
 
     @override
     def key(self, ctx: RailContext) -> str:
@@ -137,13 +146,17 @@ class Station(Node[_RailContext]):
     acceptable_single_node_types = lambda: (RailCompany,)
 
     @override
-    def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, **attrs):
+    def __init__(
+        self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, company: RailCompany, **attrs
+    ):
         super().__init__(ctx, source, code=code, **attrs)
+        self.connect_one(ctx, company)
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
         code = self.merged_attr(ctx, "name").v or self.merged_attr(ctx, "code")
-        return code
+        company = self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
+        return f"{company} {code}"
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -191,7 +204,9 @@ class Station(Node[_RailContext]):
 
     @override
     def equivalent(self, ctx: RailContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code")
+        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
+            ctx, RailCompany
+        ).equivalent(ctx, other.get_one(ctx, RailCompany))
 
     @override
     def key(self, ctx: RailContext) -> str:
@@ -225,21 +240,21 @@ class RailContext(_RailContext):
                 return n
         return RailCompany(self, source, name=name, **attrs)
 
-    def line(self, source: type[RailContext] | None = None, *, code: str, **attrs) -> RailLine:
+    def line(self, source: type[RailContext] | None = None, *, code: str, company: RailCompany, **attrs) -> RailLine:
         for n in self.g.nodes:
             if not isinstance(n, RailLine):
                 continue
-            if n.merged_attr(self, "code") == code:
+            if n.merged_attr(self, "code") == code and n.get_one(self, RailCompany).equivalent(self, company):
                 return n
-        return RailLine(self, source, code=code, **attrs)
+        return RailLine(self, source, code=code, company=company, **attrs)
 
-    def station(self, source: type[RailContext] | None = None, *, code: str, **attrs) -> Station:
+    def station(self, source: type[RailContext] | None = None, *, code: str, company: RailCompany, **attrs) -> Station:
         for n in self.g.nodes:
             if not isinstance(n, Station):
                 continue
-            if n.merged_attr(self, "code") == code:
+            if n.merged_attr(self, "code") == code and n.get_one(self, RailCompany).equivalent(self, company):
                 return n
-        return Station(self, source, code=code, **attrs)
+        return Station(self, source, code=code, company=company, **attrs)
 
 
 class RailSource(RailContext, Source):

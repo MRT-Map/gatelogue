@@ -27,13 +27,11 @@ class RaiLinQ(RailSource):
                 continue
             line_code = str(line_table.find("th").find_all("span", style="color:white;")[0].b.string)
             line_name = str(line_table.find("th").find_all("span", style="color:white;")[1].i.string)
-            line = self.line(code=line_code, name=line_name)
-            company.connect(self, line)
+            line = self.line(code=line_code, name=line_name, company=company, mode="warp")
 
             stations = []
             for b in line_table.p.find_all("b"):
-                station = self.station(code=str(b.string), name=str(b.string))
-                company.connect(self, station)
+                station = self.station(code=str(b.string), name=str(b.string), company=company)
                 stations.append(station)
 
             if len(stations) == 0:

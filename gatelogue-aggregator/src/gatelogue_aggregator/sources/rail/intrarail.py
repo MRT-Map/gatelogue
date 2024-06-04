@@ -2,6 +2,7 @@ import itertools
 import re
 from pathlib import Path
 
+import bs4
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
@@ -24,15 +25,14 @@ class IntraRail(RailSource):
 
         html = get_wiki_html("IntraRail", cache_dir, timeout)
 
-        cursor = html.find("span", "mw-headline", string="(1) Whiteliner").parent
+        cursor: bs4.Tag = html.find("span", "mw-headline", string="(1) Whiteliner").parent
 
         while (line_code_name := cursor.find(class_="mw-headline").string).startswith("("):
             result = re.search(r"\((?P<code>.*)\) (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
-            line = self.line(code=line_code, name=line_name)
-            company.connect(self, line)
-            cursor = cursor.next_sibling.next_sibling.next_sibling.next_sibling
+            line = self.line(code=line_code, name=line_name, company=company, mode="warp")
+            cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stations = []
             stations_dict = {}
@@ -48,8 +48,7 @@ class IntraRail(RailSource):
                     continue
                 station_name = station_name.strip()
 
-                station = self.station(code=station_name, name=station_name)
-                company.connect(self, station)
+                station = self.station(code=station_name, name=station_name, company=company)
                 stations.append(station)
                 stations_dict[station_name] = station
 
@@ -85,8 +84,7 @@ class IntraRail(RailSource):
                     s1.connect(self, s2, key=Connection(line=line.id))
 
             if line_code == "66":
-                line2 = self.line(code="<66>", name="East Mesan Express")
-                company.connect(self, line2)
+                line2 = self.line(code="<66>", name="East Mesan Express", company=company, mode="warp")
                 stations2 = [
                     s
                     for s in stations
@@ -110,4 +108,4 @@ class IntraRail(RailSource):
 
             rich.print(f"[green]  IntraRail Line {line_code} has {len(stations)} stations")
 
-            cursor = cursor.next_sibling.next_sibling
+            cursor: bs4.Tag = cursor.next_sibling.next_sibling
