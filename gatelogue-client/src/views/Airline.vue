@@ -11,14 +11,14 @@ const airline = computed(
   () =>
     gatelogueData.value!.airline[route.params.id as string] ??
     Object.values(gatelogueData.value!.airline).find(
-      (a) => encodeURIComponent(a.name) === route.params.id,
+      (a) => a.name === route.params.id,
     )!,
 );
 watchEffect(() => {
   if (airline.value === undefined) {
     router.replace("/").then(() => router.go(0));
   } else if (airline.value.name) {
-    router.replace(`/airline/${encodeURIComponent(airline.value.name)}`);
+    router.replace(`/airline/${airline.value.name}`);
   }
 });
 
