@@ -24,12 +24,12 @@ class DynmapAirports(AirSource):
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json", cache2, timeout=timeout
         )
         try:
-            json = (
-                msgspec.json.decode(response1)["sets"]["airports"]["markers"]
-                | msgspec.json.decode(response2)["sets"]["airports"]["markers"]
-            )
+            json1 = msgspec.json.decode(response1)["sets"]["airports"]["markers"]
+            json2 = msgspec.json.decode(response2)["sets"]["airports"]["markers"]
         except Exception as e:
             raise ValueError(response1[:100], response2[:100]) from e
 
-        for k, v in json.items():
-            self.airport(code=Airport.process_code(k), coordinates=(v["x"], v["z"]))
+        for json, world in ((json1, "New"), (json2, "Old")):
+            for k, v in json.items():
+                name = v["label"].split("(")[0]
+                self.airport(code=Airport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name)

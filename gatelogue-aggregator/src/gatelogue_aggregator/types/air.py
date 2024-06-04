@@ -357,7 +357,7 @@ class Airline(Node[_AirContext]):
     def process_airline_name[T: (str, None)](s: T) -> T:
         if s is None:
             return None
-        return AIRLINE_ALIASES.get(str(s).strip(), s)
+        return AIRLINE_ALIASES.get(str(s).strip(), str(s))
 
 
 class AirContext(_AirContext):

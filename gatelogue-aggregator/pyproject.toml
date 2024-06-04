@@ -30,7 +30,6 @@ dependencies = [
   "networkx",
   "types-networkx",
   "pygraphviz",
-  "lxml"
 ]
 
 [project.urls]

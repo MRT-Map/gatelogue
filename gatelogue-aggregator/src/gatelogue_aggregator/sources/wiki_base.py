@@ -21,7 +21,7 @@ def get_wiki_html(page: str, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int =
     url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
     response = get_url(url, cache, timeout)
     try:
-        return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="lxml")
+        return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="html.parser")
     except Exception as e:
         raise ValueError(response[:100]) from e
 

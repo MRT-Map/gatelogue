@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
+
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
@@ -163,6 +165,32 @@ def dfm(ctx: WikiAirport, cache_dir, timeout):
         cache_dir,
         timeout,
     )
+
+
+@_EXTRACTORS.append
+def dbi(ctx: WikiAirport, cache_dir, timeout):
+    html = get_wiki_html("Deadbush International Airport", cache_dir, timeout)
+    airport = ctx.extract_get_airport("DBI", "Deadbush International Airport")
+    for table in html("table"):
+        if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
+            continue
+        if (
+            concourse := "A"
+            if "Main" in caption
+            else caption[0]
+            if caption.endswith("Gates") and caption[0] != "H"
+            else None
+        ) is None:
+            continue
+        for tr in table("tr")[1:]:
+            code = concourse + tr("td")[0].string
+            size = tr("td")[1].string
+            airline = tr("td")[2]
+            if airline.a is not None:
+                airline = airline.a.string
+            else:
+                airline = airline.string
+            ctx.extract_get_gate(airport, code, size, airline)
 
 
 @_EXTRACTORS.append
