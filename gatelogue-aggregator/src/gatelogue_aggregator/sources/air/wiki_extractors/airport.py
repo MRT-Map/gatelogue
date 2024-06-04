@@ -186,10 +186,7 @@ def dbi(ctx: WikiAirport, cache_dir, timeout):
             code = concourse + tr("td")[0].string
             size = tr("td")[1].string
             airline = tr("td")[2]
-            if airline.a is not None:
-                airline = airline.a.string
-            else:
-                airline = airline.string
+            airline = airline.a.string if airline.a is not None else airline.string
             ctx.extract_get_gate(airport, code, size, airline)
 
 
@@ -239,19 +236,6 @@ def cia(ctx: WikiAirport, cache_dir, timeout):
         "CIA",
         re.compile(
             r"\|\s*(?P<code>.*?)\s*\|\|\s*(?:\[\[(?P<airline>[^|]*?)]]|(?P<airline2>[^|]*?))\s*\|\|",
-        ),
-        cache_dir,
-        timeout,
-    )
-
-
-@_EXTRACTORS.append
-def erz(ctx: WikiAirport, cache_dir, timeout):
-    ctx.regex_extract_airport(
-        "Erzgard International Airport",
-        "ERZ",
-        re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)]]|(?P<airline2>.+?)|)\n",
         ),
         cache_dir,
         timeout,

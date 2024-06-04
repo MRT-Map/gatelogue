@@ -1,15 +1,17 @@
 import itertools
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import bs4
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text, get_wiki_html
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailSource, RailContext, Station, Connection
-from gatelogue_aggregator.utils import search_all
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
+
+if TYPE_CHECKING:
+    import bs4
 
 
 class IntraRail(RailSource):
@@ -17,7 +19,6 @@ class IntraRail(RailSource):
     priority = 0
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "wiki-text" / "intrarail"
         RailContext.__init__(self)
         Source.__init__(self)
 

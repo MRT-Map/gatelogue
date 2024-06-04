@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import dataclasses
-import uuid
-from typing import override, Container, Literal, Any, Self
+from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Source, Node, ToSerializable, Sourced
+from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, ToSerializable
+
+if TYPE_CHECKING:
+    import uuid
+    from collections.abc import Container
 
 
 class _RailContext(BaseContext, Source):
@@ -15,7 +18,7 @@ class _RailContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailCompany(Node[_RailContext]):
-    acceptable_list_node_types = lambda: (RailLine, Station)
+    acceptable_list_node_types = lambda: (RailLine, Station)  # noqa: E731
 
     @override
     def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, name: str, **attrs):
@@ -23,8 +26,7 @@ class RailCompany(Node[_RailContext]):
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
-        name = self.merged_attr(ctx, "name")
-        return name
+        return self.merged_attr(ctx, "name")
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -72,11 +74,11 @@ class RailCompany(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailLine(Node[_RailContext]):
-    acceptable_single_node_types = lambda: (RailCompany,)
+    acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
 
     @override
     def __init__(
-        self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, company: RailLine, **attrs
+        self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, company: RailCompany, **attrs
     ):
         super().__init__(ctx, source, code=code, **attrs)
         self.connect_one(ctx, company)
@@ -99,7 +101,7 @@ class RailLine(Node[_RailContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            if k == ("name", "mode"):
+            if k in ("name", "mode"):
                 return Sourced(v).source(source)
             raise NotImplementedError
 
@@ -137,7 +139,8 @@ class RailLine(Node[_RailContext]):
 
     @override
     def merge(self, ctx: RailContext, other: Self):
-        raise TypeError("Cannot merge")
+        msg = "Cannot merge"
+        raise TypeError(msg)
 
     @override
     def key(self, ctx: RailContext) -> str:
@@ -146,8 +149,8 @@ class RailLine(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Station(Node[_RailContext]):
-    acceptable_list_node_types = lambda: (Station,)
-    acceptable_single_node_types = lambda: (RailCompany,)
+    acceptable_list_node_types = lambda: (Station,)  # noqa: E731
+    acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
 
     @override
     def __init__(

@@ -1,14 +1,12 @@
 import itertools
-import re
 from pathlib import Path
 
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text, get_wiki_html
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailSource, RailContext, Station, Connection
-from gatelogue_aggregator.utils import search_all
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
 
 
 class RaiLinQ(RailSource):

@@ -160,7 +160,7 @@ def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
             a2 = a2.group(1)
             if "?" in a2:
                 a2 = None
-            g1 = list(tr("td")[4].strings)[0]
+            g1 = next(iter(tr("td")[4].strings))
             g2 = list(tr("td")[4].strings)[1]
             ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
 

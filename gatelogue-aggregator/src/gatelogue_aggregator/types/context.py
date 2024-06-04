@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Self, cast, override
 import msgspec
 import networkx as nx
 
-from gatelogue_aggregator.types.rail import RailSource, RailCompany, RailLine, Station, RailContext
+from gatelogue_aggregator.types.rail import RailCompany, RailContext, RailLine, RailSource, Station
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
