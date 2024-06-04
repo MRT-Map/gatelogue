@@ -124,3 +124,42 @@ def air(ctx: WikiAirline, cache_dir, timeout):
         cache_dir,
         timeout,
     )
+
+
+@_EXTRACTORS.append
+def infamous(ctx: WikiAirline, cache_dir, timeout):
+    ctx.regex_extract_airline(
+        "Infamous Airlines",
+        "Infamous Airlines",
+        re.compile(
+            r"\{\{BA\|IN(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
+        ),
+        cache_dir,
+        timeout,
+    )
+
+
+@_EXTRACTORS.append
+def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
+    html = get_wiki_html("FlyCreeper", cache_dir, timeout)
+    airline = ctx.extract_get_airline("FlyCreeper", "FlyCreeper")
+    for table in html("table"):
+        if "Flight No" not in str(table):
+            continue
+        for tr in table.tbody("tr")[1:]:
+            if "Active" not in tr("td")[2].string:
+                continue
+            code = tr("td")[0].string.removeprefix("FC").strip()
+            if (a1 := re.search(r"\((...)\)", str(tr("td")[3]("b")[0]))) is None:
+                continue
+            a1 = a1.group(1)
+            if "?" in a1:
+                a1 = None
+            if (a2 := re.search(r"\((...)\)", str(tr("td")[3]("b")[1]))) is None:
+                continue
+            a2 = a2.group(1)
+            if "?" in a2:
+                a2 = None
+            g1 = list(tr("td")[4].strings)[0]
+            g2 = list(tr("td")[4].strings)[1]
+            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
