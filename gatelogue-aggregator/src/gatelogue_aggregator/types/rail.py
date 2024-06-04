@@ -15,6 +15,8 @@ class _RailContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailCompany(Node[_RailContext]):
+    acceptable_list_node_types = lambda: (RailLine, Station)
+
     @override
     def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, name: str, **attrs):
         super().__init__(ctx, source, name=name, **attrs)
@@ -52,11 +54,11 @@ class RailCompany(Node[_RailContext]):
     class Ser(msgspec.Struct):
         name: str
         lines: list[Sourced.Ser[str]]
+        stations: list[Sourced.Ser[str]]
 
     def ser(self, ctx: RailContext) -> RailCompany.Ser:
         return self.Ser(
-            **self.merged_attrs(ctx),
-            line=self.get_all_ser(ctx, Line),
+            **self.merged_attrs(ctx), lines=self.get_all_ser(ctx, RailLine), stations=self.get_all_ser(ctx, Station)
         )
 
     @override
@@ -69,7 +71,9 @@ class RailCompany(Node[_RailContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Line(Node[_RailContext]):
+class RailLine(Node[_RailContext]):
+    acceptable_single_node_types = lambda: (RailCompany,)
+
     @override
     def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, **attrs):
         super().__init__(ctx, source, code=code, **attrs)
@@ -99,20 +103,20 @@ class Line(Node[_RailContext]):
             self.sourced_merge(source, existing, "name")
 
     @override
-    def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> Line.Attrs | None:
+    def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailLine.Attrs | None:
         return super().attrs(ctx, source)
 
     @override
-    def all_attrs(self, ctx: RailContext) -> dict[Source, Line.Attrs]:
+    def all_attrs(self, ctx: RailContext) -> dict[Source, RailLine.Attrs]:
         return super().all_attrs(ctx)
 
     @override
     class Ser(msgspec.Struct):
         code: str
-        name: Sourced.Ser[str] | None = None
         company: Sourced.Ser[str]
+        name: Sourced.Ser[str] | None = None
 
-    def ser(self, ctx: RailContext) -> Line.Ser:
+    def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
@@ -129,13 +133,16 @@ class Line(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Station(Node[_RailContext]):
+    acceptable_list_node_types = lambda: (Station,)
+    acceptable_single_node_types = lambda: (RailCompany,)
+
     @override
     def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, code: str, **attrs):
         super().__init__(ctx, source, code=code, **attrs)
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
-        code = self.merged_attr(ctx, "code")
+        code = self.merged_attr(ctx, "name").v or self.merged_attr(ctx, "code")
         return code
 
     @override
@@ -170,16 +177,16 @@ class Station(Node[_RailContext]):
     @override
     class Ser(msgspec.Struct):
         code: str
-        name: Sourced.Ser[str] | None = None
-        coordinates: Sourced.Ser[tuple[int, int]] | None = None
         company: Sourced.Ser[str]
         connections: dict[str, list[Sourced.Ser[Connection]]]
+        name: Sourced.Ser[str] | None = None
+        coordinates: Sourced.Ser[tuple[int, int]] | None = None
 
-    def ser(self, ctx: RailContext) -> Line.Ser:
+    def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
-            connections={n: self.get_edges_ser(ctx, n, Connection) for n in self.get_all(ctx, Station)},
+            connections={str(n.id): self.get_edges_ser(ctx, n, Connection) for n in self.get_all(ctx, Station)},
         )
 
     @override
@@ -191,8 +198,7 @@ class Station(Node[_RailContext]):
         return self.merged_attr(ctx, "code")
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Connection(ToSerializable):
+class Connection(msgspec.Struct, ToSerializable, kw_only=True, frozen=True):
     line: uuid.UUID
     direction: str | None = None
 
@@ -200,15 +206,15 @@ class Connection(ToSerializable):
 class RailContext(_RailContext):
     @override
     class Ser(msgspec.Struct):
-        company: dict[str, RailCompany.Ser]
-        line: dict[str, Line.Ser]
+        rail_company: dict[str, RailCompany.Ser]
+        rail_line: dict[str, RailLine.Ser]
         station: dict[str, Station.Ser]
 
     def ser(self) -> RailContext.Ser:
-        return self.Ser(
-            flight={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
-            airport={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Line)},
-            gate={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Station)},
+        return RailContext.Ser(
+            rail_company={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
+            rail_line={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
+            station={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Station)},
         )
 
     def company(self, source: type[RailContext] | None = None, *, name: str, **attrs) -> RailCompany:
@@ -219,13 +225,13 @@ class RailContext(_RailContext):
                 return n
         return RailCompany(self, source, name=name, **attrs)
 
-    def line(self, source: type[RailContext] | None = None, *, code: str, **attrs) -> Line:
+    def line(self, source: type[RailContext] | None = None, *, code: str, **attrs) -> RailLine:
         for n in self.g.nodes:
-            if not isinstance(n, Line):
+            if not isinstance(n, RailLine):
                 continue
             if n.merged_attr(self, "code") == code:
                 return n
-        return Line(self, source, code=code, **attrs)
+        return RailLine(self, source, code=code, **attrs)
 
     def station(self, source: type[RailContext] | None = None, *, code: str, **attrs) -> Station:
         for n in self.g.nodes:

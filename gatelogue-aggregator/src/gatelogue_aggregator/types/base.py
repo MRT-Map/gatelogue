@@ -112,25 +112,28 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     def merged_attr[T](self, ctx: CTX, attr: str, _: type[T] = Any) -> T:
         return self.merged_attrs(ctx, (attr,))[attr]
 
-    def connect(self, ctx: CTX, node: Node, source: Source | None = None):
+    def connect(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
         source = source or type(ctx)
+        key = key or source
         if type(node) not in type(self).acceptable_list_node_types():
             raise TypeError
-        ctx.g.add_edge(self, node, source, s=source)
+        ctx.g.add_edge(self, node, key, s=source)
 
-    def connect_one(self, ctx: CTX, node: Node, source: Source | None = None):
+    def connect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
         source = source or type(ctx)
+        key = key or source
         if type(node) not in type(self).acceptable_single_node_types():
             raise TypeError
         if (prev := self.get_one(ctx, type(node))) is not None:
             self.disconnect_all(ctx, prev)
-        ctx.g.add_edge(self, node, source, s=source)
+        ctx.g.add_edge(self, node, key, s=source)
 
-    def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None):
+    def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
         source = source or type(ctx)
+        key = key or source
         if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
             raise TypeError
-        ctx.g.remove_edge(self, node, source)
+        ctx.g.remove_edge(self, node, key)
 
     def disconnect_all(self, ctx: CTX, node: Node):
         if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
@@ -174,7 +177,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         return (a for a in ctx.g[self][node] if isinstance(a, ty))
 
     def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T]) -> list[Sourced.Ser[T]]:
-        return [Sourced(k).source(v["s"].name).ser() for k, v in ctx.g[self][node].items() if isinstance(k, ty)]
+        return [Sourced(k).source(v["s"]).ser() for k, v in ctx.g[self][node].items() if isinstance(k, ty)]
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)
@@ -232,7 +235,7 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
     def __str__(self):
         s = str(self.v)
         if len(self.s) != 0:
-            s += "(" + ", ".join(self.s) + ")"
+            s += " (" + ", ".join(self.s) + ")"
         return s
 
     @override
@@ -250,10 +253,10 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
         if isinstance(source, Sourced):
             self.s.update(source.s)
             return self
-        if isinstance(source, Source) or issubclass(source, Source):
+        if isinstance(source, Source) or (isinstance(source, type) and issubclass(source, Source)):
             self.s.add(source.name)
             return self
-        raise NotImplementedError
+        raise NotImplementedError(self)
 
     def equivalent(self, ctx: BaseContext, other: Self) -> bool:
         return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v

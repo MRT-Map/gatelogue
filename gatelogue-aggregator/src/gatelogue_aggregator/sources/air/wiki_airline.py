@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class WikiAirline(AirSource):
-    name = "MRT Wiki"
+    name = "MRT Wiki (Airline)"
     priority = 1
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
