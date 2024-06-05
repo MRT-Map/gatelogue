@@ -8,7 +8,7 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station, RailLineBuilder
 from gatelogue_aggregator.utils import search_all
 
 
@@ -43,6 +43,7 @@ class WikiMRT(RailSource):
             ("V", "MRT Valley Line"),
             ("W", "MRT Western Line"),
             ("X", "MRT Expo Line"),
+            ("XM", "MRT Marina Shuttle"),
             ("Z", "MRT Zephyr Line"),
             ("Old-R", "MRT Red Line"),
             ("Old-B", "MRT Blue Line"),
@@ -67,11 +68,22 @@ class WikiMRT(RailSource):
                 station = self.station(codes=codes, company=company)
                 stations.append(station)
 
-            for s1, s2 in itertools.pairwise(stations):
-                s1: Station
-                s2: Station
-                s1.connect(self, s2, value=Connection(self, line=line))
             if line_code in ("C", "U"):
-                stations[0].connect(self, stations[-1], value=Connection(self, line=line))
+                RailLineBuilder(self, line).circle(*stations, forward_label="clockwise", backward_label="anticlockwise")
+            else:
+                forward_label, backward_label = (
+                    ("eastbound", "westbound")
+                    if line_code in ("X", "S", "N", "E")
+                    else ("westbound", "eastbound")
+                    if line_code in ("L", "W")
+                    else ("southbound", "northbound")
+                    if line_code in ("Z", "B", "E", "S", "J", "H")
+                    else ("outbound", "inbound")
+                    if not line_code.startswith("Old")
+                    else (None, None)
+                )
+                RailLineBuilder(self, line).connect(
+                    *stations, forward_label=forward_label, backward_label=backward_label
+                )
 
             rich.print(f"[green]  MRT {line_code} has {len(stations)} stations")

@@ -6,7 +6,7 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station, RailLineBuilder
 
 
 class RaiLinQ(RailSource):
@@ -35,9 +35,6 @@ class RaiLinQ(RailSource):
             if len(stations) == 0:
                 continue
 
-            for s1, s2 in itertools.pairwise(stations):
-                s1: Station
-                s2: Station
-                s1.connect(self, s2, value=Connection(self, line=line))
+            RailLineBuilder(self, line).connect(*stations)
 
             rich.print(f"[green]  RaiLinQ Line {line_code} has {len(stations)} stations")

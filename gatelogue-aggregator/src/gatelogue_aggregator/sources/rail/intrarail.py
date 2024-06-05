@@ -8,7 +8,7 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station
+from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station, RailLineBuilder
 
 if TYPE_CHECKING:
     import bs4
@@ -36,7 +36,6 @@ class IntraRail(RailSource):
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stations = []
-            stations_dict = {}
             for big in cursor.find_all("big")[::2]:
                 if big.find("s") is not None:
                     continue
@@ -51,38 +50,20 @@ class IntraRail(RailSource):
 
                 station = self.station(codes={station_name}, name=station_name, company=company)
                 stations.append(station)
-                stations_dict[station_name] = station
 
             if line_code == "54":
-                for s1, s2 in itertools.pairwise(stations):
-                    s1: Station
-                    s2: Station
-                    if s1.attrs(self).name in (
-                        "Creeperville Shimoko",
-                        "Shadowpoint Capitol Union Station",
-                        "Shadowpoint Old Town",
-                        "Shadowpoint South",
-                    ):
-                        s1.connect(self, s2, value=Connection(self, line=line))
-                    if s1.attrs(self).name == "Creeperville Sakura Park":
-                        s = stations_dict["New Cainport Riverside Stadium"]
-                        s1.connect(self, s, value=Connection(self, line=line, one_way_towards=s.id))
-                    if s1.attrs(self).name in (
-                        "Creeperville Sakura Park",
-                        "Winterside",
-                        "Geneva Bay Hendon Road",
-                    ):
-                        s1.connect(self, s2, value=Connection(self, line=line, one_way_towards=s1.id))
-                    if s1.attrs(self).name == "Hendon":
-                        s = stations_dict["Geneva Bay New Indigo International Airport"]
-                        s2.connect(self, s, value=Connection(self, line=line, one_way_towards=s.id))
-                    if s1.attrs(self).name in ("New Cairnport Riverside Stadium", "Hendon"):
-                        s1.connect(self, s2, value=Connection(self, line=line, one_way_towards=s2.id))
+                forward_label = "towards " + stations[-1].merged_attr(self, "name").v
+                backward_label = "towards " + stations[0].merged_attr(self, "name").v
+                RailLineBuilder(self, line).connect(
+                    *stations[0:2], forward_label=forward_label, backward_label=backward_label
+                )
+                RailLineBuilder(self, line).connect(
+                    *stations[8:12], forward_label=forward_label, backward_label=backward_label
+                )
+                RailLineBuilder(self, line).connect(stations[8], *stations[5:0:-1], forward_label=backward_label)
+                RailLineBuilder(self, line).connect(stations[1], *stations[6:9], forward_label=forward_label)
             else:
-                for s1, s2 in itertools.pairwise(stations):
-                    s1: Station
-                    s2: Station
-                    s1.connect(self, s2, value=Connection(self, line=line))
+                RailLineBuilder(self, line).connect(*stations)
 
             if line_code == "66":
                 line2 = self.line(code="<66>", name="East Mesan Express", company=company, mode="warp")
@@ -101,10 +82,7 @@ class IntraRail(RailSource):
                         "Bawktown South Station",
                     )
                 ]
-                for s1, s2 in itertools.pairwise(stations2):
-                    s1: Station
-                    s2: Station
-                    s1.connect(self, s2, value=Connection(self, line=line2.id))
+                RailLineBuilder(self, line2).connect(*stations2)
                 rich.print(f"[green]  IntraRail Line <66> has {len(stations2)} stations")
 
             rich.print(f"[green]  IntraRail Line {line_code} has {len(stations)} stations")

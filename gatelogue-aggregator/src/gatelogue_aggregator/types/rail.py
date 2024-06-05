@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import itertools
 import typing
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
@@ -233,23 +234,44 @@ class Station(Node[_RailContext]):
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
+class Direction(ToSerializable):
+    forward_towards_code: str
+    forward_direction_label: str | None
+    backward_direction_label: str | None
+    one_way: bool = False
+
+    @override
+    class Ser(msgspec.Struct):
+        forward_towards_code: uuid.UUID
+        forward_direction_label: str | None
+        backward_direction_label: str | None
+        one_way: bool
+
+
+@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Connection(ToSerializable):
     company_name: str
     line_code: str
-    one_way_towards_code: str | None
+    direction: Direction | None = None
 
-    def __init__(self, ctx: RailContext, *, line: RailLine, one_way_towards: Station | None = None):
+    def __init__(self, ctx: RailContext, *, line: RailLine, direction: Direction | None = None):
         self.set_line(ctx, line)
-        self.set_one_way_towards(ctx, one_way_towards)
+        self.direction = direction
 
     @override
     class Ser(msgspec.Struct):
         line: uuid.UUID
-        one_way_towards: uuid.UUID | None = None
+        direction: Direction.Ser | None = None
 
     def ser(self, ctx: RailContext) -> Connection.Ser:
         return self.Ser(
-            line=self.get_line(ctx).id, one_way_towards=None if (s := self.get_one_way_towards(ctx) is None) else s.id
+            line=self.get_line(ctx).id,
+            direction=Direction.Ser(
+                forward_towards_code=self.get_direction_forward_towards(ctx),
+                forward_direction_label=self.direction.forward_direction_label,
+                backward_direction_label=self.direction.backward_direction_label,
+                one_way=self.direction.one_way,
+            ),
         )
 
     def get_company(self, ctx: RailContext) -> RailCompany:
@@ -258,18 +280,15 @@ class Connection(ToSerializable):
     def set_company(self, ctx: RailContext, v: RailCompany):
         self.company_name = v.merged_attr(ctx, "name")
 
-    def get_one_way_towards(self, ctx: RailContext) -> Station | None:
+    def get_direction_forward_towards(self, ctx: RailContext) -> Station | None:
         return (
             None
-            if self.one_way_towards_code is None
-            else ctx.station(codes={self.one_way_towards_code}, company=self.get_company(ctx))
+            if self.direction is None
+            else ctx.station(codes={self.direction.forward_towards_code}, company=self.get_company(ctx))
         )
 
-    def set_one_way_towards(self, ctx: RailContext, v: Station | None):
-        if v is None:
-            self.one_way_towards_code = None
-            return
-        self.one_way_towards_code = v.merged_attr(ctx, "codes")[0]
+    def set_direction_forward_towards(self, ctx: RailContext, v: Station):
+        self.direction.forward_towards_code = v.merged_attr(ctx, "codes")[0]
         self.set_company(ctx, v.get_one(ctx, RailCompany))
 
     def get_line(self, ctx: RailContext) -> RailLine:
@@ -278,6 +297,61 @@ class Connection(ToSerializable):
     def set_line(self, ctx: RailContext, v: RailLine):
         self.line_code = v.merged_attr(ctx, "code")
         self.set_company(ctx, v.get_one(ctx, RailCompany))
+
+
+class RailLineBuilder:
+    def __init__(self, ctx: RailContext, line: RailLine):
+        self.ctx = ctx
+        self.line = line
+
+    def connect(
+        self,
+        *stations: Station,
+        forward_label: str | None = None,
+        backward_label: str | None = None,
+        one_way: bool = False,
+    ):
+        if len(stations) == 0:
+            return
+        forward_label = forward_label or "towards " + (
+            a.v
+            if (a := stations[-1].merged_attr(self.ctx, "name")) is not None
+            else tuple(stations[-1].merged_attr(self.ctx, "codes"))[0]
+        )
+        backward_label = backward_label or "towards " + (
+            a.v
+            if (a := stations[0].merged_attr(self.ctx, "name")) is not None
+            else tuple(stations[0].merged_attr(self.ctx, "codes"))[0]
+        )
+        for s1, s2 in itertools.pairwise(stations):
+            s1: Station
+            s2: Station
+            s1.connect(
+                self.ctx,
+                s2,
+                value=Connection(
+                    self.ctx,
+                    line=self.line,
+                    direction=Direction(
+                        forward_towards_code=tuple(s2.merged_attr(self.ctx, "codes", set))[0],
+                        forward_direction_label=forward_label,
+                        backward_direction_label=backward_label,
+                        one_way=one_way,
+                    ),
+                ),
+            )
+
+    def circle(
+        self,
+        *stations: Station,
+        forward_label: str | None = None,
+        backward_label: str | None = None,
+        one_way: bool = False,
+    ):
+        if len(stations) == 0:
+            return
+        stations = stations + (stations[0],)
+        self.connect(*stations, forward_label=forward_label, backward_label=backward_label, one_way=one_way)
 
 
 class RailContext(_RailContext):
