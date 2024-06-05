@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import uuid
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
@@ -63,8 +64,8 @@ class Flight(Node[_AirContext]):
     @override
     class Ser(msgspec.Struct):
         codes: set[str]
-        gates: list[Sourced.Ser[str]]
-        airline: Sourced.Ser[str]
+        gates: list[Sourced.Ser[uuid.UUID]]
+        airline: Sourced.Ser[uuid.UUID]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
@@ -79,7 +80,7 @@ class Flight(Node[_AirContext]):
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
-        return self.get_one(ctx, Airline).key(ctx)
+        return self.get_one(ctx, Airline).merge_key(ctx)
 
     def update(self, ctx: AirContext):
         processed_gates: list[Gate] = []
@@ -168,7 +169,7 @@ class Airport(Node[_AirContext]):
         world: Sourced.Ser[str] | None
         coordinates: Sourced.Ser[tuple[int, int]] | None
         link: Sourced.Ser[str] | None
-        gates: list[Sourced.Ser[str]]
+        gates: list[Sourced.Ser[uuid.UUID]]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
@@ -267,9 +268,9 @@ class Gate(Node[_AirContext]):
     @override
     class Ser(msgspec.Struct):
         code: str | None
-        flights: list[Sourced.Ser[str]]
-        airport: Sourced.Ser[str]
-        airline: Sourced.Ser[str] | None
+        flights: list[Sourced.Ser[uuid.UUID]]
+        airport: Sourced.Ser[uuid.UUID]
+        airline: Sourced.Ser[uuid.UUID] | None
         size: Sourced.Ser[str] | None
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
@@ -360,17 +361,17 @@ class Airline(Node[_AirContext]):
 class AirContext(_AirContext):
     @override
     class Ser(msgspec.Struct):
-        flight: dict[str, Flight.Ser]
-        airport: dict[str, Airport.Ser]
-        gate: dict[str, Gate.Ser]
-        airline: dict[str, Airline.Ser]
+        flight: dict[uuid.UUID, Flight.Ser]
+        airport: dict[uuid.UUID, Airport.Ser]
+        gate: dict[uuid.UUID, Gate.Ser]
+        airline: dict[uuid.UUID, Airline.Ser]
 
     def ser(self) -> AirContext.Ser:
         return AirContext.Ser(
-            flight={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
-            airport={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},
-            gate={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Gate)},
-            airline={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Airline)},
+            flight={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
+            airport={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},
+            gate={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Gate)},
+            airline={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Airline)},
         )
 
     def flight(self, source: type[AirContext] | None = None, *, codes: set[str], airline: Airline, **attrs) -> Flight:

@@ -1,3 +1,4 @@
+import uuid
 from pathlib import Path
 
 import click
@@ -56,16 +57,3 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
     else:
         rich.print(f"[yellow]Outputting to {output} (unformatted)")
         output.write_bytes(j)
-
-
-@gatelogue_aggregator.command()
-@click.option("-o", "--output", default="schema.json", type=Path, show_default=True)
-@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
-def schema(*, output: Path, fmt: bool):
-    s = msgspec.json.encode(msgspec.json.schema(Context.Ser))
-    if fmt:
-        rich.print(f"[yellow]Outputting to {output} (formatted)")
-        output.write_text(msgspec.json.format(s.decode("utf-8")))
-    else:
-        rich.print(f"[yellow]Outputting to {output} (unformatted)")
-        output.write_bytes(s)

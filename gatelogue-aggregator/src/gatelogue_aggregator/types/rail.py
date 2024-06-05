@@ -55,8 +55,8 @@ class RailCompany(Node[_RailContext]):
     @override
     class Ser(msgspec.Struct):
         name: str
-        lines: list[Sourced.Ser[str]]
-        stations: list[Sourced.Ser[str]]
+        lines: list[Sourced.Ser[uuid.UUID]]
+        stations: list[Sourced.Ser[uuid.UUID]]
 
     def ser(self, ctx: RailContext) -> RailCompany.Ser:
         return self.Ser(
@@ -121,7 +121,7 @@ class RailLine(Node[_RailContext]):
     @override
     class Ser(msgspec.Struct):
         code: str
-        company: Sourced.Ser[str]
+        company: Sourced.Ser[uuid.UUID]
         mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
         name: Sourced.Ser[str] | None = None
 
@@ -207,7 +207,7 @@ class Station(Node[_RailContext]):
     @override
     class Ser(msgspec.Struct):
         codes: str
-        company: Sourced.Ser[str]
+        company: Sourced.Ser[uuid.UUID]
         connections: dict[str, list[Sourced.Ser[Connection]]]
         name: Sourced.Ser[str] | None = None
         world: Sourced.Ser[Literal["New", "Old"]] | None = None
@@ -239,15 +239,15 @@ class Connection(msgspec.Struct, ToSerializable, kw_only=True, frozen=True):
 class RailContext(_RailContext):
     @override
     class Ser(msgspec.Struct):
-        rail_company: dict[str, RailCompany.Ser]
-        rail_line: dict[str, RailLine.Ser]
-        station: dict[str, Station.Ser]
+        rail_company: dict[uuid.UUID, RailCompany.Ser]
+        rail_line: dict[uuid.UUID, RailLine.Ser]
+        station: dict[uuid.UUID, Station.Ser]
 
     def ser(self) -> RailContext.Ser:
         return RailContext.Ser(
-            rail_company={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
-            rail_line={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
-            station={str(a.id): a.ser(self) for a in self.g.nodes if isinstance(a, Station)},
+            rail_company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
+            rail_line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
+            station={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Station)},
         )
 
     def company(self, source: type[RailContext] | None = None, *, name: str, **attrs) -> RailCompany:

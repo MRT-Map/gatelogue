@@ -163,12 +163,10 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
             and (True if conn_ty is None else any(isinstance(b["v"], conn_ty) for b in ctx.g[self][a].values()))
         )
 
-    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> list[Sourced.Ser[str]]:
+    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> list[Sourced.Ser[uuid.UUID]]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [
-            Sourced(str(a.id), set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty, conn_ty)
-        ]
+        return [Sourced(a.id, set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty, conn_ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
         if ty not in type(self).acceptable_single_node_types():
@@ -183,13 +181,13 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
             None,
         )
 
-    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> Sourced.Ser[str] | None:
+    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> Sourced.Ser[uuid.UUID] | None:
         if ty not in type(self).acceptable_single_node_types():
             raise TypeError
         node = self.get_one(ctx, ty, conn_ty)
         if node is None:
             return None
-        return Sourced(str(node.id), set(Node._get_sources(ctx.g[self][node]))).ser()
+        return Sourced(node.id, set(Node._get_sources(ctx.g[self][node]))).ser()
 
     def get_edges[T: Node](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[T]:
         return (a["v"] for a in ctx.g[self][node].values() if (True if ty is None else isinstance(a["v"], ty)))

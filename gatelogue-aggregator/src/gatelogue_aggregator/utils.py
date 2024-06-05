@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import uuid
+from typing import TYPE_CHECKING, Any
+
+import msgspec.json
 
 if TYPE_CHECKING:
     import re
