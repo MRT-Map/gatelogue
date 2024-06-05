@@ -76,7 +76,7 @@ class RailCompany(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailLine(Node[_RailContext]):
-    acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
+    acceptable_single_node_types = lambda: (RailCompany, Station)  # noqa: E731
 
     @override
     def __init__(
@@ -97,13 +97,14 @@ class RailLine(Node[_RailContext]):
         code: str
         mode: Literal["warp", "cart", "traincart", "vehicles"] | None = None
         name: str | None = None
+        colour: str | None = None
 
         @staticmethod
         @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            if k in ("name", "mode"):
+            if k in ("name", "mode", "colour"):
                 return Sourced(v).source(source)
             raise NotImplementedError
 
@@ -111,6 +112,7 @@ class RailLine(Node[_RailContext]):
         def merge_into(self, source: Source, existing: dict[str, Any]):
             self.sourced_merge(source, existing, "name")
             self.sourced_merge(source, existing, "mode")
+            self.sourced_merge(source, existing, "colour")
 
     @override
     def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailLine.Attrs | None:
@@ -124,13 +126,16 @@ class RailLine(Node[_RailContext]):
     class Ser(msgspec.Struct):
         code: str
         company: Sourced.Ser[uuid.UUID]
+        ref_station: Sourced.Ser[uuid.UUID]
         mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
         name: Sourced.Ser[str] | None = None
+        colour: Sourced.Ser[str] | None = None
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
+            ref_station=self.get_one_ser(ctx, Station),
         )
 
     @override
@@ -151,7 +156,7 @@ class RailLine(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Station(Node[_RailContext]):
-    acceptable_list_node_types = lambda: (Station,)  # noqa: E731
+    acceptable_list_node_types = lambda: (Station, RailLine)  # noqa: E731
     acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
 
     @override
@@ -210,7 +215,7 @@ class Station(Node[_RailContext]):
     class Ser(msgspec.Struct):
         codes: str
         company: Sourced.Ser[uuid.UUID]
-        connections: dict[str, list[Sourced.Ser[Connection]]]
+        connections: dict[str, list[Sourced.Ser[RailConnection]]]
         name: Sourced.Ser[str] | None = None
         world: Sourced.Ser[Literal["New", "Old"]] | None = None
         coordinates: Sourced.Ser[tuple[int, int]] | None = None
@@ -219,7 +224,7 @@ class Station(Node[_RailContext]):
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
-            connections={str(n.id): self.get_edges_ser(ctx, n, Connection) for n in self.get_all(ctx, Station)},
+            connections={str(n.id): self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, Station)},
         )
 
     @override
@@ -249,7 +254,7 @@ class Direction(ToSerializable):
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
-class Connection(ToSerializable):
+class RailConnection(ToSerializable):
     company_name: str
     line_code: str
     direction: Direction | None = None
@@ -263,7 +268,7 @@ class Connection(ToSerializable):
         line: uuid.UUID
         direction: Direction.Ser | None = None
 
-    def ser(self, ctx: RailContext) -> Connection.Ser:
+    def ser(self, ctx: RailContext) -> RailConnection.Ser:
         return self.Ser(
             line=self.get_line(ctx).id,
             direction=Direction.Ser(
@@ -313,6 +318,7 @@ class RailLineBuilder:
     ):
         if len(stations) == 0:
             return
+        self.line.connect_one(self.ctx, stations[0])
         forward_label = forward_label or "towards " + (
             a.v
             if (a := stations[-1].merged_attr(self.ctx, "name")) is not None
@@ -329,7 +335,7 @@ class RailLineBuilder:
             s1.connect(
                 self.ctx,
                 s2,
-                value=Connection(
+                value=RailConnection(
                     self.ctx,
                     line=self.line,
                     direction=Direction(

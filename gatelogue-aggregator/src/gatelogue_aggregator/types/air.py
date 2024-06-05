@@ -28,7 +28,7 @@ class Flight(Node[_AirContext]):
         self, ctx: AirContext, source: type[AirContext] | None = None, *, codes: set[str], airline: Airline, **attrs
     ):
         super().__init__(ctx, source, codes=codes, **attrs)
-        self.connect_one(ctx, airline, source)
+        self.connect_one(ctx, airline, source=source)
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
@@ -206,7 +206,7 @@ class Airport(Node[_AirContext]):
                 }
                 flight.disconnect(ctx, none_gate)
                 for source in sources:
-                    flight.connect(ctx, new_gate, source)
+                    flight.connect(ctx, new_gate, source=source)
 
     @staticmethod
     @override
@@ -230,7 +230,7 @@ class Gate(Node[_AirContext]):
         self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str | None, airport: Airport, **attrs
     ):
         super().__init__(ctx, source, code=code, **attrs)
-        self.connect_one(ctx, airport, source)
+        self.connect_one(ctx, airport, source=source)
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:

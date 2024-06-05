@@ -8,7 +8,7 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource, Station, RailLineBuilder
+from gatelogue_aggregator.types.rail import RailConnection, RailContext, RailSource, Station, RailLineBuilder
 
 if TYPE_CHECKING:
     import bs4
@@ -55,13 +55,17 @@ class IntraRail(RailSource):
                 forward_label = "towards " + stations[-1].merged_attr(self, "name").v
                 backward_label = "towards " + stations[0].merged_attr(self, "name").v
                 RailLineBuilder(self, line).connect(
-                    *stations[0:2], forward_label=forward_label, backward_label=backward_label
+                    *stations[0:2], forward_label=forward_label, backward_label=backward_label, one_way=True
                 )
                 RailLineBuilder(self, line).connect(
-                    *stations[8:12], forward_label=forward_label, backward_label=backward_label
+                    *stations[8:12], forward_label=forward_label, backward_label=backward_label, one_way=True
                 )
-                RailLineBuilder(self, line).connect(stations[8], *stations[5:0:-1], forward_label=backward_label)
-                RailLineBuilder(self, line).connect(stations[1], *stations[6:9], forward_label=forward_label)
+                RailLineBuilder(self, line).connect(
+                    stations[8], *stations[5:0:-1], forward_label=backward_label, one_way=True
+                )
+                RailLineBuilder(self, line).connect(
+                    stations[1], *stations[6:9], forward_label=forward_label, one_way=True
+                )
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
