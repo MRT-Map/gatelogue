@@ -10,7 +10,7 @@ from gatelogue_aggregator.types.base import Source
 
 
 class MRTTransit(AirSource):
-    name = "MRT Transit"
+    name = "MRT Transit (Air)"
     priority = 2
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):

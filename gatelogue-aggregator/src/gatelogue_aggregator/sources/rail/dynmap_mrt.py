@@ -1,4 +1,3 @@
-import itertools
 import re
 from pathlib import Path
 
@@ -6,10 +5,8 @@ import msgspec
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailConnection, RailContext, RailSource, Station
-from gatelogue_aggregator.utils import search_all
+from gatelogue_aggregator.types.rail import RailContext, RailSource
 
 
 class DynmapMRT(RailSource):

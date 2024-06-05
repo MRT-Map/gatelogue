@@ -10,15 +10,20 @@ import msgspec
 import networkx as nx
 import rich
 
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container, Iterator, Hashable
+    from collections.abc import Callable, Container, Hashable, Iterator
+    from pathlib import Path
 
 
 class ToSerializable:
     class Ser(msgspec.Struct, kw_only=True):
         pass
+
+    def ser(self, ctx: BaseContext) -> Node.Ser:
+        raise NotImplementedError
 
 
 class BaseContext(ToSerializable):
@@ -306,5 +311,5 @@ class Source(metaclass=SourceMeta):
     name: ClassVar[str]
     priority: ClassVar[float | int]
 
-    def __init__(self):
+    def __init__(self, _: Path = DEFAULT_CACHE_DIR, __: int = DEFAULT_TIMEOUT):
         rich.print(f"[yellow]Retrieving from {self.name}")

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import dataclasses
 import itertools
-import typing
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
@@ -11,7 +10,7 @@ from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, 
 
 if TYPE_CHECKING:
     import uuid
-    from collections.abc import Container, Callable
+    from collections.abc import Container
 
 
 class _RailContext(BaseContext, Source):
@@ -322,12 +321,12 @@ class RailLineBuilder:
         forward_label = forward_label or "towards " + (
             a.v
             if (a := stations[-1].merged_attr(self.ctx, "name")) is not None
-            else tuple(stations[-1].merged_attr(self.ctx, "codes"))[0]
+            else next(iter(stations[-1].merged_attr(self.ctx, "codes")))
         )
         backward_label = backward_label or "towards " + (
             a.v
             if (a := stations[0].merged_attr(self.ctx, "name")) is not None
-            else tuple(stations[0].merged_attr(self.ctx, "codes"))[0]
+            else next(iter(stations[0].merged_attr(self.ctx, "codes")))
         )
         for s1, s2 in itertools.pairwise(stations):
             s1: Station
@@ -339,7 +338,7 @@ class RailLineBuilder:
                     self.ctx,
                     line=self.line,
                     direction=Direction(
-                        forward_towards_code=tuple(s2.merged_attr(self.ctx, "codes", set))[0],
+                        forward_towards_code=next(iter(s2.merged_attr(self.ctx, "codes", set))),
                         forward_direction_label=forward_label,
                         backward_direction_label=backward_label,
                         one_way=one_way,
@@ -356,8 +355,9 @@ class RailLineBuilder:
     ):
         if len(stations) == 0:
             return
-        stations = stations + (stations[0],)
-        self.connect(*stations, forward_label=forward_label, backward_label=backward_label, one_way=one_way)
+        self.connect(
+            *stations, stations[0], forward_label=forward_label, backward_label=backward_label, one_way=one_way
+        )
 
 
 class RailContext(_RailContext):

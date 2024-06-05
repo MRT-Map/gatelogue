@@ -1,4 +1,3 @@
-import itertools
 import re
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -8,7 +7,7 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailConnection, RailContext, RailSource, Station, RailLineBuilder
+from gatelogue_aggregator.types.rail import RailContext, RailLineBuilder, RailSource
 
 if TYPE_CHECKING:
     import bs4

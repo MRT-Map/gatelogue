@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import dataclasses
-import uuid
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
@@ -11,6 +10,7 @@ from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_A
 from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
 
 if TYPE_CHECKING:
+    import uuid
     from collections.abc import Container
 
 
