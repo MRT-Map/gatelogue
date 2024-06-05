@@ -13,7 +13,7 @@ import rich
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container, Iterator
+    from collections.abc import Callable, Container, Iterator, Hashable
 
 
 class ToSerializable:
@@ -112,40 +112,38 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     def merged_attr[T](self, ctx: CTX, attr: str, _: type[T] = Any) -> T:
         return self.merged_attrs(ctx, (attr,))[attr]
 
-    def connect(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
+    def connect(
+        self, ctx: CTX, node: Node, value: Any | None = None, source: Source | None = None, key: Hashable | None = None
+    ):
         source = source or type(ctx)
-        key = key or source
         if type(node) not in type(self).acceptable_list_node_types():
             raise TypeError
-        ctx.g.add_edge(self, node, key, s=source)
+        ctx.g.add_edge(self, node, key, v=value, s=source)
 
-    def connect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
+    def connect_one(
+        self, ctx: CTX, node: Node, value: Any | None = None, source: Source | None = None, key: Any | None = None
+    ):
         source = source or type(ctx)
         key = key or source
         if type(node) not in type(self).acceptable_single_node_types():
             raise TypeError
         if (prev := self.get_one(ctx, type(node))) is not None:
-            self.disconnect_all(ctx, prev)
-        ctx.g.add_edge(self, node, key, s=source)
+            self.disconnect(ctx, prev)
+        ctx.g.add_edge(self, node, key, v=value, s=source)
 
-    def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
-        source = source or type(ctx)
-        key = key or source
-        if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
-            raise TypeError
-        ctx.g.remove_edge(self, node, key)
+    # def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
+    #     source = source or type(ctx)
+    #     key = key or source
+    #     if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
+    #         raise TypeError
+    #     ctx.g.remove_edge(self, node, key)
 
-    def disconnect_all(self, ctx: CTX, node: Node):
+    def disconnect(self, ctx: CTX, node: Node):
         if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
             raise TypeError
         d = copy.deepcopy(ctx.g[self][node])
         for key in d:
             ctx.g.remove_edge(self, node, key)
-
-    def get_all[T: Node](self, ctx: CTX, ty: type[T]) -> Iterator[T]:
-        if ty not in type(self).acceptable_list_node_types():
-            raise TypeError
-        return (a for a in ctx.g.neighbors(self) if isinstance(a, ty))
 
     @staticmethod
     def _get_sources(d: dict[Literal["contraction"] | type[Source] | int, Any]) -> Iterator[str]:
@@ -155,29 +153,53 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
             else:
                 yield v["s"].name
 
-    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T]) -> list[Sourced.Ser[str]]:
+    def get_all[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> Iterator[T]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [Sourced(str(a.id), set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty)]
+        return (
+            a
+            for a in ctx.g.neighbors(self)
+            if isinstance(a, ty)
+            and (True if conn_ty is None else any(isinstance(b["v"], conn_ty) for b in ctx.g[self][a].values()))
+        )
 
-    def get_one[T: Node](self, ctx: CTX, ty: type[T]) -> T | None:
+    def get_all_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> list[Sourced.Ser[str]]:
+        if ty not in type(self).acceptable_list_node_types():
+            raise TypeError
+        return [
+            Sourced(str(a.id), set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty, conn_ty)
+        ]
+
+    def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
         if ty not in type(self).acceptable_single_node_types():
             raise TypeError
-        return next((a for a in ctx.g.neighbors(self) if isinstance(a, ty)), None)
+        return next(
+            (
+                a
+                for a in ctx.g.neighbors(self)
+                if isinstance(a, ty)
+                and (True if conn_ty is None else any(isinstance(b["v"], conn_ty) for b in ctx.g[self][a].values()))
+            ),
+            None,
+        )
 
-    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T]) -> Sourced.Ser[str] | None:
+    def get_one_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> Sourced.Ser[str] | None:
         if ty not in type(self).acceptable_single_node_types():
             raise TypeError
-        node = self.get_one(ctx, ty)
+        node = self.get_one(ctx, ty, conn_ty)
         if node is None:
             return None
         return Sourced(str(node.id), set(Node._get_sources(ctx.g[self][node]))).ser()
 
-    def get_edges[T: Node](self, ctx: CTX, node: Node, ty: type[T]) -> Iterator[T]:
-        return (a for a in ctx.g[self][node] if isinstance(a, ty))
+    def get_edges[T: Node](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[T]:
+        return (a["v"] for a in ctx.g[self][node].values() if (True if ty is None else isinstance(a["v"], ty)))
 
-    def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T]) -> list[Sourced.Ser[T]]:
-        return [Sourced(k).source(v["s"]).ser() for k, v in ctx.g[self][node].items() if isinstance(k, ty)]
+    def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> list[Sourced.Ser[T]]:
+        return [
+            Sourced(v["v"]).source(v["s"]).ser()
+            for v in ctx.g[self][node].values()
+            if (True if ty is None else isinstance(v["v"], ty))
+        ]
 
     def source(self, source: Sourced | Source) -> Sourced[Self]:
         return Sourced(self).source(source)
@@ -189,7 +211,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         nx.contracted_nodes(ctx.g, self, other, copy=False)
         del attrs["contraction"]
 
-    def key(self, ctx: CTX) -> str:
+    def merge_key(self, ctx: CTX) -> str:
         raise NotImplementedError
 
     @staticmethod

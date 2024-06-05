@@ -63,26 +63,26 @@ class IntraRail(RailSource):
                         "Shadowpoint Old Town",
                         "Shadowpoint South",
                     ):
-                        s1.connect(self, s2, key=Connection(line=line.id))
+                        s1.connect(self, s2, value=Connection(line=line.id))
                     if s1.attrs(self).name == "Creeperville Sakura Park":
                         s = stations_dict["New Cainport Riverside Stadium"]
-                        s1.connect(self, s, key=Connection(line=line.id, one_way_towards=s.id))
+                        s1.connect(self, s, value=Connection(line=line.id, one_way_towards=s.id))
                     if s1.attrs(self).name in (
                         "Creeperville Sakura Park",
                         "Winterside",
                         "Geneva Bay Hendon Road",
                     ):
-                        s1.connect(self, s2, key=Connection(line=line.id, one_way_towards=s1.id))
+                        s1.connect(self, s2, value=Connection(line=line.id, one_way_towards=s1.id))
                     if s1.attrs(self).name == "Hendon":
                         s = stations_dict["Geneva Bay New Indigo International Airport"]
-                        s2.connect(self, s, key=Connection(line=line.id, one_way_towards=s.id))
+                        s2.connect(self, s, value=Connection(line=line.id, one_way_towards=s.id))
                     if s1.attrs(self).name in ("New Cairnport Riverside Stadium", "Hendon"):
-                        s1.connect(self, s2, key=Connection(line=line.id, one_way_towards=s2.id))
+                        s1.connect(self, s2, value=Connection(line=line.id, one_way_towards=s2.id))
             else:
                 for s1, s2 in itertools.pairwise(stations):
                     s1: Station
                     s2: Station
-                    s1.connect(self, s2, key=Connection(line=line.id))
+                    s1.connect(self, s2, value=Connection(line=line.id))
 
             if line_code == "66":
                 line2 = self.line(code="<66>", name="East Mesan Express", company=company, mode="warp")
@@ -104,7 +104,7 @@ class IntraRail(RailSource):
                 for s1, s2 in itertools.pairwise(stations2):
                     s1: Station
                     s2: Station
-                    s1.connect(self, s2, key=Connection(line=line2.id))
+                    s1.connect(self, s2, value=Connection(line=line2.id))
                 rich.print(f"[green]  IntraRail Line <66> has {len(stations2)} stations")
 
             rich.print(f"[green]  IntraRail Line {line_code} has {len(stations)} stations")

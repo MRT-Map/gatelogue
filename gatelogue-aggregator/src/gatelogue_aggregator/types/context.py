@@ -31,7 +31,7 @@ class Context(AirContext, RailContext, ToSerializable):
         processed: dict[type[Node], dict[str, list[Node]]] = {}
         to_merge = []
         for n in rich.progress.track(self.g.nodes, "[green]  Finding equivalent nodes"):
-            key = n.key(self)
+            key = n.merge_key(self)
             ty = type(n)
             filtered_processed = processed.get(ty, {}).get(key, [])
             if (equiv := next((a for a in filtered_processed if n.equivalent(self, a)), None)) is None:

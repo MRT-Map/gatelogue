@@ -78,7 +78,7 @@ class Flight(Node[_AirContext]):
         ).equivalent(ctx, other.get_one(ctx, Airline))
 
     @override
-    def key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirContext) -> str:
         return self.get_one(ctx, Airline).key(ctx)
 
     def update(self, ctx: AirContext):
@@ -94,10 +94,10 @@ class Flight(Node[_AirContext]):
                 processed_gates.append(gate)
             elif existing.merged_attr(ctx, "code") is None and gate.merged_attr(ctx, "code") is not None:
                 processed_gates.remove(existing)
-                self.disconnect_all(ctx, existing)
+                self.disconnect(ctx, existing)
                 processed_gates.append(gate)
             elif existing.merged_attr(ctx, "code") is not None and gate.merged_attr(ctx, "code") is None:
-                self.disconnect_all(ctx, gate)
+                self.disconnect(ctx, gate)
             elif existing.merged_attr(ctx, "code") == gate.merged_attr(ctx, "code"):
                 existing.merge(ctx, gate)
 
@@ -181,7 +181,7 @@ class Airport(Node[_AirContext]):
         return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code")
 
     @override
-    def key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirContext) -> str:
         return self.merged_attr(ctx, "code")
 
     def update(self, ctx: AirContext):
@@ -203,7 +203,7 @@ class Airport(Node[_AirContext]):
                 sources = {a["s"] for a in ctx.g[none_gate][flight].values()} | {
                     a["s"] for a in ctx.g[self][new_gate].values()
                 }
-                flight.disconnect_all(ctx, none_gate)
+                flight.disconnect(ctx, none_gate)
                 for source in sources:
                     flight.connect(ctx, new_gate, source)
 
@@ -287,7 +287,7 @@ class Gate(Node[_AirContext]):
         ).equivalent(ctx, other.get_one(ctx, Airport))
 
     @override
-    def key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirContext) -> str:
         return self.merged_attr(ctx, "code")
 
 
@@ -347,7 +347,7 @@ class Airline(Node[_AirContext]):
         return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
 
     @override
-    def key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirContext) -> str:
         return self.merged_attr(ctx, "name")
 
     @staticmethod

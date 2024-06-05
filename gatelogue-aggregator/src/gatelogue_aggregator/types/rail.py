@@ -68,7 +68,7 @@ class RailCompany(Node[_RailContext]):
         return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
 
     @override
-    def key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailContext) -> str:
         return self.merged_attr(ctx, "name")
 
 
@@ -143,7 +143,7 @@ class RailLine(Node[_RailContext]):
         raise TypeError(msg)
 
     @override
-    def key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailContext) -> str:
         return self.merged_attr(ctx, "code")
 
 
@@ -227,7 +227,7 @@ class Station(Node[_RailContext]):
         ).equivalent(ctx, other.get_one(ctx, RailCompany))
 
     @override
-    def key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailContext) -> str:
         return self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
 
 
