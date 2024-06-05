@@ -18,7 +18,7 @@ import rich
 import rich.progress
 
 from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight, Gate
-from gatelogue_aggregator.types.base import Node, ToSerializable
+from gatelogue_aggregator.types.base import Node, ToSerializable, Proximity, LocatedNode
 
 
 class Context(AirContext, RailContext, ToSerializable):
@@ -45,6 +45,23 @@ class Context(AirContext, RailContext, ToSerializable):
 
     def update(self):
         AirContext.update(self)
+
+        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: float = 100**2) -> bool:
+            x1, y1 = a
+            x2, y2 = b
+            return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= thres_sq
+
+        processed = []
+        for node in rich.progress.track(self.g.nodes, description="[yellow]Linking close nodes"):
+            if not isinstance(node, LocatedNode) or (node_coordinates := node.merged_attr(self, "coordinates")) is None:
+                continue
+            node_coordinates = node_coordinates.v
+            if (node_world := node.merged_attr(self, "world")) is None:
+                continue
+            for existing, existing_world, existing_coordinates in processed:
+                if existing_world == node_world and dist_cmp(existing_coordinates, node_coordinates):
+                    node.connect(self, existing, value=Proximity())
+            processed.append((node, node_world, node_coordinates))
 
     @override
     class Ser(msgspec.Struct):

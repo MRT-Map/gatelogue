@@ -155,7 +155,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         for k, v in d.items():
             if k == "contraction":
                 yield from Node._get_sources(v)
-            else:
+            elif hasattr(v["s"], "name"):
                 yield v["s"].name
 
     def get_all[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> Iterator[T]:
@@ -199,7 +199,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
 
     def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> list[Sourced.Ser[T]]:
         return [
-            Sourced(v["v"]).source(v["s"]).ser(ctx)
+            Sourced(v["v"], {v["s"].name} if hasattr(v["s"], "name") else {}).ser(ctx)
             for v in ctx.g[self][node].values()
             if (True if ty is None else isinstance(v["v"], ty))
         ]
@@ -296,6 +296,10 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
         self.s.update(other.s)
 
 
+class LocatedNode[CTX](Node[CTX]):
+    pass
+
+
 class SourceMeta(type):
     name: str
     priority: float | int
@@ -313,3 +317,7 @@ class Source(metaclass=SourceMeta):
 
     def __init__(self, _: Path = DEFAULT_CACHE_DIR, __: int = DEFAULT_TIMEOUT):
         rich.print(f"[yellow]Retrieving from {self.name}")
+
+
+class Proximity(msgspec.Struct):
+    pass

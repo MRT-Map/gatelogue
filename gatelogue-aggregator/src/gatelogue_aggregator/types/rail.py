@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, ToSerializable, LocatedNode, Proximity
 
 if TYPE_CHECKING:
     import uuid
@@ -154,8 +154,8 @@ class RailLine(Node[_RailContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Station(Node[_RailContext]):
-    acceptable_list_node_types = lambda: (Station, RailLine)  # noqa: E731
+class Station(LocatedNode[_RailContext]):
+    acceptable_list_node_types = lambda: (Station, RailLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
 
     @override
@@ -214,7 +214,8 @@ class Station(Node[_RailContext]):
     class Ser(msgspec.Struct):
         codes: str
         company: Sourced.Ser[uuid.UUID]
-        connections: dict[str, list[Sourced.Ser[RailConnection]]]
+        connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
+        proximity: dict[uuid.UUID, tuple[str, list[Sourced.Ser[uuid.UUID]]]]
         name: Sourced.Ser[str] | None = None
         world: Sourced.Ser[Literal["New", "Old"]] | None = None
         coordinates: Sourced.Ser[tuple[int, int]] | None = None
@@ -223,7 +224,12 @@ class Station(Node[_RailContext]):
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
-            connections={str(n.id): self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, Station)},
+            connections={n.id: self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, Station)},
+            proximity={
+                n.id: (type(n).__name__.lower(), self.get_edges_ser(ctx, n, Proximity))
+                for n in self.get_all(ctx, LocatedNode)
+                if len(self.get_edges_ser(ctx, n, Proximity)) != 0
+            },
         )
 
     @override

@@ -7,7 +7,7 @@ import msgspec
 import rich.progress
 
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
-from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced
+from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, LocatedNode, Proximity
 
 if TYPE_CHECKING:
     import uuid
@@ -119,7 +119,7 @@ class Flight(Node[_AirContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Airport(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Gate,)  # noqa: E731
+    acceptable_list_node_types = lambda: (Gate, Airport, LocatedNode)  # noqa: E731
 
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str, **attrs):
@@ -170,11 +170,17 @@ class Airport(Node[_AirContext]):
         coordinates: Sourced.Ser[tuple[int, int]] | None
         link: Sourced.Ser[str] | None
         gates: list[Sourced.Ser[uuid.UUID]]
+        proximity: dict[uuid.UUID, tuple[str, list[Sourced.Ser[uuid.UUID]]]]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
             gates=self.get_all_ser(ctx, Gate),
+            proximity={
+                n.id: (type(n).__name__.lower(), self.get_edges_ser(ctx, n, Proximity))
+                for n in self.get_all(ctx, LocatedNode)
+                if len(self.get_edges_ser(ctx, n, Proximity)) != 0
+            },
         )
 
     @override
