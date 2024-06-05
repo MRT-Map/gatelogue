@@ -36,13 +36,13 @@ def gatelogue_aggregator():
 def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None):
     ctx = Context.from_sources(
         [
-            # MRTTransit(cache_dir, timeout),
-            # DynmapAirports(cache_dir, timeout),
-            # WikiAirline(cache_dir, timeout),
-            # WikiAirport(cache_dir, timeout),
-            # BluRail(cache_dir, timeout),
-            # IntraRail(cache_dir, timeout),
-            # RaiLinQ(cache_dir, timeout),
+            MRTTransit(cache_dir, timeout),
+            DynmapAirports(cache_dir, timeout),
+            WikiAirline(cache_dir, timeout),
+            WikiAirport(cache_dir, timeout),
+            BluRail(cache_dir, timeout),
+            IntraRail(cache_dir, timeout),
+            RaiLinQ(cache_dir, timeout),
             WikiMRT(cache_dir, timeout),
             DynmapMRT(cache_dir, timeout),
         ]

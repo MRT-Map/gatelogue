@@ -7,7 +7,7 @@ import msgspec
 import rich.progress
 
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
-from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, LocatedNode, Proximity
+from gatelogue_aggregator.types.base import BaseContext, LocatedNode, Node, Proximity, Source, Sourced
 
 if TYPE_CHECKING:
     import uuid

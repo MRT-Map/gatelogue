@@ -18,7 +18,7 @@ import rich
 import rich.progress
 
 from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight, Gate
-from gatelogue_aggregator.types.base import Node, ToSerializable, Proximity, LocatedNode
+from gatelogue_aggregator.types.base import LocatedNode, Node, Proximity, ToSerializable
 
 
 class Context(AirContext, RailContext, ToSerializable):
