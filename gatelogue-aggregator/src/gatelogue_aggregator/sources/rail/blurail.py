@@ -80,6 +80,6 @@ class BluRail(RailSource):
             for s1, s2 in itertools.pairwise(stations):
                 s1: Station
                 s2: Station
-                s1.connect(self, s2, value=Connection(line=line.id))
+                s1.connect(self, s2, value=Connection(self, line=line))
 
             rich.print(f"[green]  BluRail Line {line_code} has {len(stations)} stations")

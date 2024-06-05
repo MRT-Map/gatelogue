@@ -166,7 +166,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     def get_all_ser[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> list[Sourced.Ser[uuid.UUID]]:
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
-        return [Sourced(a.id, set(Node._get_sources(ctx.g[self][a]))).ser() for a in self.get_all(ctx, ty, conn_ty)]
+        return [Sourced(a.id, set(Node._get_sources(ctx.g[self][a]))).ser(ctx) for a in self.get_all(ctx, ty, conn_ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
         if ty not in type(self).acceptable_single_node_types():
@@ -187,14 +187,14 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         node = self.get_one(ctx, ty, conn_ty)
         if node is None:
             return None
-        return Sourced(node.id, set(Node._get_sources(ctx.g[self][node]))).ser()
+        return Sourced(node.id, set(Node._get_sources(ctx.g[self][node]))).ser(ctx)
 
     def get_edges[T: Node](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[T]:
         return (a["v"] for a in ctx.g[self][node].values() if (True if ty is None else isinstance(a["v"], ty)))
 
     def get_edges_ser[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> list[Sourced.Ser[T]]:
         return [
-            Sourced(v["v"]).source(v["s"]).ser()
+            Sourced(v["v"]).source(v["s"]).ser(ctx)
             for v in ctx.g[self][node].values()
             if (True if ty is None else isinstance(v["v"], ty))
         ]
@@ -263,9 +263,13 @@ class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
         v: _T
         s: set[str]
 
-    def ser(self) -> Ser:
+    def ser(self, ctx: BaseContext) -> Ser:
         return self.Ser(
-            v=str(self.v.id) if isinstance(self.v, Node) else self.v.ser() if hasattr(self.v, "ser") else self.v,
+            v=str(self.v.id)
+            if isinstance(self.v, Node)
+            else self.v.ser(ctx)
+            if isinstance(self.v, ToSerializable)
+            else self.v,
             s=self.s,
         )
 

@@ -366,7 +366,7 @@ class AirContext(_AirContext):
         gate: dict[uuid.UUID, Gate.Ser]
         airline: dict[uuid.UUID, Airline.Ser]
 
-    def ser(self) -> AirContext.Ser:
+    def ser(self, _=None) -> AirContext.Ser:
         return AirContext.Ser(
             flight={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
             airport={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},

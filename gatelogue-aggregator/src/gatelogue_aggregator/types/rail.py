@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import typing
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
@@ -9,7 +10,7 @@ from gatelogue_aggregator.types.base import BaseContext, Node, Source, Sourced, 
 
 if TYPE_CHECKING:
     import uuid
-    from collections.abc import Container
+    from collections.abc import Container, Callable
 
 
 class _RailContext(BaseContext, Source):
@@ -231,9 +232,52 @@ class Station(Node[_RailContext]):
         return self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
 
 
-class Connection(msgspec.Struct, ToSerializable, kw_only=True, frozen=True):
-    line: uuid.UUID
-    one_way_towards: uuid.UUID | None = None
+@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
+class Connection(ToSerializable):
+    company_name: str
+    line_code: str
+    one_way_towards_code: str | None
+
+    def __init__(self, ctx: RailContext, *, line: RailLine, one_way_towards: Station | None = None):
+        self.set_line(ctx, line)
+        self.set_one_way_towards(ctx, one_way_towards)
+
+    @override
+    class Ser(msgspec.Struct):
+        line: uuid.UUID
+        one_way_towards: uuid.UUID | None = None
+
+    def ser(self, ctx: RailContext) -> Connection.Ser:
+        return self.Ser(
+            line=self.get_line(ctx).id, one_way_towards=None if (s := self.get_one_way_towards(ctx) is None) else s.id
+        )
+
+    def get_company(self, ctx: RailContext) -> RailCompany:
+        return ctx.company(name=self.company_name)
+
+    def set_company(self, ctx: RailContext, v: RailCompany):
+        self.company_name = v.merged_attr(ctx, "name")
+
+    def get_one_way_towards(self, ctx: RailContext) -> Station | None:
+        return (
+            None
+            if self.one_way_towards_code is None
+            else ctx.station(codes={self.one_way_towards_code}, company=self.get_company(ctx))
+        )
+
+    def set_one_way_towards(self, ctx: RailContext, v: Station | None):
+        if v is None:
+            self.one_way_towards_code = None
+            return
+        self.one_way_towards_code = v.merged_attr(ctx, "codes")[0]
+        self.set_company(ctx, v.get_one(ctx, RailCompany))
+
+    def get_line(self, ctx: RailContext) -> RailLine:
+        return ctx.line(code=self.line_code, company=self.get_company(ctx))
+
+    def set_line(self, ctx: RailContext, v: RailLine):
+        self.line_code = v.merged_attr(ctx, "code")
+        self.set_company(ctx, v.get_one(ctx, RailCompany))
 
 
 class RailContext(_RailContext):
@@ -243,7 +287,7 @@ class RailContext(_RailContext):
         rail_line: dict[uuid.UUID, RailLine.Ser]
         station: dict[uuid.UUID, Station.Ser]
 
-    def ser(self) -> RailContext.Ser:
+    def ser(self, _=None) -> RailContext.Ser:
         return RailContext.Ser(
             rail_company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
             rail_line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
