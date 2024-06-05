@@ -12,7 +12,7 @@ from gatelogue_aggregator.types.rail import Connection, RailContext, RailSource,
 from gatelogue_aggregator.utils import search_all
 
 
-class MRT(RailSource):
+class WikiMRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
     priority = -1
 
@@ -75,47 +75,3 @@ class MRT(RailSource):
                 stations[0].connect(self, stations[-1], key=Connection(line=line.id))
 
             rich.print(f"[green]  MRT {line_code} has {len(stations)} stations")
-
-        #####
-
-        cache1 = cache_dir / "dynmap-markers-new"
-        cache2 = cache_dir / "dynmap-markers-old"
-        response1 = get_url(
-            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json", cache1, timeout=timeout
-        )
-        response2 = get_url(
-            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json", cache2, timeout=timeout
-        )
-        try:
-            json1 = msgspec.json.decode(response1)["sets"]
-            json2 = msgspec.json.decode(response2)["sets"]
-        except Exception as e:
-            raise ValueError(response1[:100], response2[:100]) from e
-
-        for v in json1.values():
-            if len(v["markers"]) == 0:
-                continue
-            if (result := re.search(r"\[(?P<code>.*)] (?P<name>.*)", v["label"])) is None:
-                continue
-            line_code = result.group("code").strip()
-            line_name = result.group("name").strip()
-            self.line(code=line_code, name=line_name, company=company, mode="cart")
-            for k, vv in v["markers"].items():
-                code = k.upper()
-                coordinates = (vv["x"], vv["z"])
-                name = None if (result := re.search("(<name>.*) \\(.*\\)", vv["label"])) is None else result.group(1)
-                self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
-            rich.print(f"[green]  MRT {line_code} has {len(v['markers'])} stations")
-
-        (self.line(code="Old-R", name="MRT Red Line", company=company, mode="cart"),)
-        (self.line(code="Old-B", name="MRT Blue Line", company=company, mode="cart"),)
-        (self.line(code="Old-Y", name="MRT Yellow Line", company=company, mode="cart"),)
-        (self.line(code="Old-G", name="MRT Green Line", company=company, mode="cart"),)
-        self.line(code="Old-O", name="MRT Orange Line", company=company, mode="cart")
-
-        for k, v in json2["old"]["markers"].items():
-            code = "Old-" + k.upper()
-            coordinates = (v["x"], v["z"])
-            name = None if (result := re.search("(<name>.*) \\(.*\\)", v["label"])) is None else result.group(1)
-            self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
-        rich.print(f"[green]  Old world has {len(json2['old']['markers'])} stations")

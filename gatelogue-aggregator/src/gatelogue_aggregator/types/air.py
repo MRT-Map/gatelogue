@@ -49,7 +49,8 @@ class Flight(Node[_AirContext]):
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
-            existing["codes"].update(self.codes)
+            if "codes" in existing:
+                existing["codes"].update(self.codes)
 
     @override
     def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Flight.Attrs | None:

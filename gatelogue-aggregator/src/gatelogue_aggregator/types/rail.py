@@ -42,7 +42,7 @@ class RailCompany(Node[_RailContext]):
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
-            existing["name"].update(self.name)
+            pass
 
     @override
     def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailCompany.Attrs | None:
@@ -190,7 +190,8 @@ class Station(Node[_RailContext]):
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
-            existing["codes"].update(self.codes)
+            if "codes" in existing:
+                existing["codes"].update(self.codes)
             self.sourced_merge(source, existing, "name")
             self.sourced_merge(source, existing, "world")
             self.sourced_merge(source, existing, "coordinates")
