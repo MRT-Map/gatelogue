@@ -12,7 +12,7 @@ from gatelogue_aggregator.types.rail import RailContext, RailSource
 
 class DynmapMRT(RailSource):
     name = "MRT Dynmap (Rail, MRT)"
-    priority = 0
+    priority = 1
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         cache1 = cache_dir / "dynmap-markers-new"

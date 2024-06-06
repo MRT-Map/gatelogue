@@ -144,11 +144,6 @@ class RailLine(Node[_RailContext]):
         ).equivalent(ctx, other.get_one(ctx, RailCompany))
 
     @override
-    def merge(self, ctx: RailContext, other: Self):
-        msg = "Cannot merge"
-        raise TypeError(msg)
-
-    @override
     def merge_key(self, ctx: RailContext) -> str:
         return self.merged_attr(ctx, "code")
 

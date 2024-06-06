@@ -46,7 +46,7 @@ class Context(AirContext, RailContext, ToSerializable):
     def update(self):
         AirContext.update(self)
 
-        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: float = 100**2) -> bool:
+        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: float = 250**2) -> bool:
             x1, y1 = a
             x2, y2 = b
             return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= thres_sq
@@ -59,9 +59,9 @@ class Context(AirContext, RailContext, ToSerializable):
             if (node_world := node.merged_attr(self, "world")) is None:
                 continue
             for existing, existing_world, existing_coordinates in processed:
-                if existing_world == node_world and dist_cmp(existing_coordinates, node_coordinates):
+                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates):
                     node.connect(self, existing, value=Proximity())
-            processed.append((node, node_world, node_coordinates))
+            processed.append((node, node_world.v, node_coordinates))
 
     @override
     class Ser(msgspec.Struct):
@@ -89,6 +89,9 @@ class Context(AirContext, RailContext, ToSerializable):
                     g.nodes[node]["fillcolor"] = col
                     break
         for u, v, k in g.edges:
+            if isinstance(g.edges[u, v, k]["v"], Proximity):
+                g.edges[u, v, k]["color"] = "#ff00ff"
+                continue
             for ty1, ty2, col in (
                 (Airport, Gate, "#0000ff"),
                 (Gate, Flight, "#00ff00"),

@@ -12,7 +12,7 @@ from gatelogue_aggregator.utils import search_all
 
 class WikiMRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
-    priority = -1
+    priority = 0
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         RailContext.__init__(self)
