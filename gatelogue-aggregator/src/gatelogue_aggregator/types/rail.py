@@ -210,7 +210,7 @@ class Station(LocatedNode[_RailContext]):
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
-        proximity: dict[uuid.UUID, tuple[str, list[Sourced.Ser[uuid.UUID]]]]
+        proximity: dict[uuid.UUID, str]
         name: Sourced.Ser[str] | None = None
         world: Sourced.Ser[Literal["New", "Old"]] | None = None
         coordinates: Sourced.Ser[tuple[int, int]] | None = None
@@ -221,7 +221,7 @@ class Station(LocatedNode[_RailContext]):
             company=self.get_one_ser(ctx, RailCompany),
             connections={n.id: self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, Station)},
             proximity={
-                n.id: (type(n).__name__.lower(), self.get_edges_ser(ctx, n, Proximity))
+                n.id: type(n).__name__.lower()
                 for n in self.get_all(ctx, LocatedNode)
                 if len(self.get_edges_ser(ctx, n, Proximity)) != 0
             },

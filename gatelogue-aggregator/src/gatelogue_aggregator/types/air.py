@@ -170,14 +170,14 @@ class Airport(LocatedNode[_AirContext]):
         coordinates: Sourced.Ser[tuple[int, int]] | None
         link: Sourced.Ser[str] | None
         gates: list[Sourced.Ser[uuid.UUID]]
-        proximity: dict[uuid.UUID, tuple[str, list[Sourced.Ser[uuid.UUID]]]]
+        proximity: dict[uuid.UUID, str]
 
     def ser(self, ctx: AirContext) -> Flight.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
             gates=self.get_all_ser(ctx, Gate),
             proximity={
-                n.id: (type(n).__name__.lower(), self.get_edges_ser(ctx, n, Proximity))
+                n.id: type(n).__name__.lower()
                 for n in self.get_all(ctx, LocatedNode)
                 if len(self.get_edges_ser(ctx, n, Proximity)) != 0
             },
