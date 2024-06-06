@@ -121,7 +121,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         self, ctx: CTX, node: Node, value: Any | None = None, source: Source | None = None, key: Hashable | None = None
     ):
         source = source or type(ctx)
-        if type(node) not in type(self).acceptable_list_node_types():
+        if not any(isinstance(node, a) for a in type(self).acceptable_list_node_types()):
             raise TypeError
         ctx.g.add_edge(self, node, key, v=value, s=source)
 
@@ -130,7 +130,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     ):
         source = source or type(ctx)
         key = key or source
-        if type(node) not in type(self).acceptable_single_node_types():
+        if not any(isinstance(node, a) for a in type(self).acceptable_single_node_types()):
             raise TypeError
         if (prev := self.get_one(ctx, type(node))) is not None:
             self.disconnect(ctx, prev)
@@ -139,12 +139,15 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
     # def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
     #     source = source or type(ctx)
     #     key = key or source
-    #     if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
+    #     if not any(isinstance(node, a) for a in type(self).acceptable_list_node_types()) + type(self).acceptable_single_node_types():
     #         raise TypeError
     #     ctx.g.remove_edge(self, node, key)
 
     def disconnect(self, ctx: CTX, node: Node):
-        if type(node) not in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types():
+        if not any(
+            isinstance(node, a)
+            for a in type(self).acceptable_list_node_types() + type(self).acceptable_single_node_types()
+        ):
             raise TypeError
         d = copy.deepcopy(ctx.g[self][node])
         for key in d:
