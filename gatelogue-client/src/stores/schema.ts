@@ -1,61 +1,61 @@
 type ID = string;
 type World = "Old" | "New";
+type RailMode = "warp" | "cart" | "traincart" | "vehicles";
 
-export interface Sourced<T> {
-  v: T;
-  s: string[];
-}
+type Sourced<T, S extends boolean = true> = S extends true
+  ? { v: T; s: string[] }
+  : T;
 
-export interface Flight {
+export interface Flight<S extends boolean = true> {
   codes: string[];
-  gates: Sourced<ID>[];
-  airline: Sourced<ID>;
+  gates: Sourced<ID, S>[];
+  airline: Sourced<ID, S>;
 }
 
-export interface Airport {
+export interface Airport<S extends boolean = true> {
   code: string;
-  name: Sourced<string> | null;
-  world: Sourced<World> | null;
+  name: Sourced<string, S> | null;
+  world: Sourced<World, S> | null;
   coordinates: Sourced<[number, number]> | null;
-  link: Sourced<string> | null;
-  gates: Sourced<ID>[];
+  link: Sourced<string, S> | null;
+  gates: Sourced<ID, S>[];
   proximity: Record<ID, string>;
 }
 
-export interface Gate {
+export interface Gate<S extends boolean = true> {
   code: string | null;
-  flights: Sourced<ID>[];
-  airport: Sourced<ID>;
-  airline: Sourced<ID> | null;
-  size: Sourced<string> | null;
+  flights: Sourced<ID, S>[];
+  airport: Sourced<ID, S>;
+  airline: Sourced<ID, S> | null;
+  size: Sourced<string, S> | null;
 }
 
-export interface Airline {
+export interface Airline<S extends boolean = true> {
   name: string;
-  flights: Sourced<ID>[];
-  link: Sourced<string> | null;
+  flights: Sourced<ID, S>[];
+  link: Sourced<string, S> | null;
 }
 
-export interface AirData {
-  flight: Record<ID, Flight>;
-  airport: Record<ID, Airport>;
-  gate: Record<ID, Gate>;
-  airline: Record<ID, Airline>;
+export interface AirData<S extends boolean = true> {
+  flight: Record<ID, Flight<S>>;
+  airport: Record<ID, Airport<S>>;
+  gate: Record<ID, Gate<S>>;
+  airline: Record<ID, Airline<S>>;
 }
 
-export interface RailCompany {
+export interface RailCompany<S extends boolean = true> {
   name: string;
-  lines: Sourced<ID>[];
-  stations: Sourced<ID>[];
+  lines: Sourced<ID, S>[];
+  stations: Sourced<ID, S>[];
 }
 
-export interface RailLine {
+export interface RailLine<S extends boolean = true> {
   code: string;
-  company: Sourced<ID>;
-  ref_station: Sourced<ID>;
-  mode: Sourced<"warp" | "cart" | "traincart" | "vehicles"> | null;
-  name: Sourced<string> | null;
-  colour: Sourced<string> | null;
+  company: Sourced<ID, S>;
+  ref_station: Sourced<ID, S>;
+  mode: Sourced<RailMode, S> | null;
+  name: Sourced<string, S> | null;
+  colour: Sourced<string, S> | null;
 }
 
 export interface Direction {
@@ -70,25 +70,25 @@ export interface RailConnection {
   direction: Direction | null;
 }
 
-export interface Station {
+export interface Station<S extends boolean = true> {
   codes: string[];
-  name: Sourced<string> | null;
-  world: Sourced<World> | null;
-  coordinates: Sourced<[number, number]> | null;
-  company: Sourced<ID>;
+  name: Sourced<string, S> | null;
+  world: Sourced<World, S> | null;
+  coordinates: Sourced<[number, number], S> | null;
+  company: Sourced<ID, S>;
   connections: Record<ID, Sourced<RailConnection>[]>;
   proximity: Record<ID, string>;
 }
 
-export interface RailData {
-  rail_company: Record<ID, RailCompany>;
-  rail_line: Record<ID, RailLine>;
-  station: Record<ID, Station>;
+export interface RailData<S extends boolean = true> {
+  rail_company: Record<ID, RailCompany<S>>;
+  rail_line: Record<ID, RailLine<S>>;
+  station: Record<ID, Station<S>>;
 }
 
-export interface GatelogueData {
+export interface GatelogueData<S extends boolean = true> {
   version: 1;
   timestamp: string;
-  air: AirData;
-  rail: RailData;
+  air: AirData<S>;
+  rail: RailData<S>;
 }
