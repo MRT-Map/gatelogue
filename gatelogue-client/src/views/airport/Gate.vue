@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { type Gate, gatelogueData } from "@/stores/data";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Flight from "./Flight.vue";
+import type { Gate } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
+import { gatelogueData } from "@/stores/data";
 
 const props = defineProps<{
   gate?: Gate;

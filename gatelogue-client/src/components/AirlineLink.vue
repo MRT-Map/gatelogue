@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { type Airline, gatelogueData } from "@/stores/data";
+import type { Airline } from "@/stores/schema";
 import { computed } from "vue";
+import { gatelogueData } from "@/stores/data";
 
 const props = defineProps<{
   airline?: Airline;

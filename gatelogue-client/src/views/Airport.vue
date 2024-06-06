@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { type Gate as GateT, gatelogueData } from "@/stores/data";
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Gate from "./airport/Gate.vue";
+import { type Gate as GateT } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import VueJsonPretty from "vue-json-pretty";
+import { gatelogueData } from "@/stores/data";
 
 const route = useRoute();
 const router = useRouter();
@@ -67,7 +68,7 @@ const maxGateFlightsLength = computed(() =>
     </table>
     <details>
       <summary>Json</summary>
-      <VueJsonPretty :data="airport" :deep="1" />
+      <VueJsonPretty :data="airport as any" :deep="1" />
     </details>
     <br />
   </main>

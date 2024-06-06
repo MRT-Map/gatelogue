@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type Category, gatelogueData } from "@/stores/data";
 import { computed, ref } from "vue";
+import { gatelogueData } from "@/stores/data";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -11,7 +11,7 @@ const sel = computed(() => ({
 const objects = gatelogueData.value!;
 
 const panels: {
-  cat: Category;
+  cat: "airport" | "airline";
   catDisplay: string;
   objDisplay: string;
 }[] = [

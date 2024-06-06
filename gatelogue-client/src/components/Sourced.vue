@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Sourced } from "@/stores/schema";
 import { Tippy } from "vue-tippy";
 import { computed } from "vue";
 const props = defineProps<{
-  sourced: { v: unknown; s: string[] } | undefined | null;
+  sourced: Sourced<unknown> | undefined | null;
 }>();
 const content = computed(() => {
   const sources = [...new Set(props.sourced?.s)]

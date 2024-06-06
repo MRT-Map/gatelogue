@@ -1,132 +1,94 @@
-/* eslint-disable */
-export default {
-  $ref: "#/$defs/gatelogue_aggregator.types.context.Context.Ser",
-  $defs: {
-    "gatelogue_aggregator.types.context.Context.Ser": {
-      title: "Ser",
-      type: "object",
-      properties: {
-        flight: {
-          type: "object",
-          additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Flight.Ser",
-          },
-        },
-        airport: {
-          type: "object",
-          additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Airport.Ser",
-          },
-        },
-        gate: {
-          type: "object",
-          additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Gate.Ser",
-          },
-        },
-        airline: {
-          type: "object",
-          additionalProperties: {
-            $ref: "#/$defs/gatelogue_aggregator.types.air.Airline.Ser",
-          },
-        },
-      },
-      required: ["flight", "airport", "gate", "airline"],
-    },
-    "gatelogue_aggregator.types.air.Flight.Ser": {
-      title: "Ser",
-      type: "object",
-      properties: {
-        codes: { type: "array", items: { type: "string" } },
-        gates: {
-          type: "array",
-          items: { $ref: "#/$defs/Ser_str_" },
-        },
-        airline: { $ref: "#/$defs/Ser_str_" },
-      },
-      required: ["codes", "gates", "airline"],
-    },
-    Ser_str_: {
-      title: "Ser[str]",
-      type: "object",
-      properties: {
-        v: { type: "string" },
-        s: { type: "array", items: { type: "string" } },
-      },
-      required: ["v", "s"],
-    },
-    "gatelogue_aggregator.types.air.Airport.Ser": {
-      title: "Ser",
-      type: "object",
-      properties: {
-        code: { type: "string" },
-        name: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-        world: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-        coordinates: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_tuple_int__int__" }],
-        },
-        link: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-        gates: {
-          type: "array",
-          items: { $ref: "#/$defs/Ser_str_" },
-        },
-      },
-      required: ["code", "name", "world", "coordinates", "link", "gates"],
-    },
-    Ser_tuple_int__int__: {
-      title: "Ser[tuple[int, int]]",
-      type: "object",
-      properties: {
-        v: {
-          type: "array",
-          minItems: 2,
-          maxItems: 2,
-          prefixItems: [{ type: "integer" }, { type: "integer" }],
-          items: false,
-        },
-        s: { type: "array", items: { type: "string" } },
-      },
-      required: ["v", "s"],
-    },
-    "gatelogue_aggregator.types.air.Gate.Ser": {
-      title: "Ser",
-      type: "object",
-      properties: {
-        code: { anyOf: [{ type: "string" }, { type: "null" }] },
-        flights: {
-          type: "array",
-          items: { $ref: "#/$defs/Ser_str_" },
-        },
-        airport: { $ref: "#/$defs/Ser_str_" },
-        airline: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-        size: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-      },
-      required: ["code", "flights", "airport", "airline", "size"],
-    },
-    "gatelogue_aggregator.types.air.Airline.Ser": {
-      title: "Ser",
-      type: "object",
-      properties: {
-        name: { type: "string" },
-        flights: {
-          type: "array",
-          items: { $ref: "#/$defs/Ser_str_" },
-        },
-        link: {
-          anyOf: [{ type: "null" }, { $ref: "#/$defs/Ser_str_" }],
-        },
-      },
-      required: ["name", "flights", "link"],
-    },
-  },
-} as const;
+type ID = string;
+type World = "Old" | "New";
+
+export interface Sourced<T> {
+  v: T;
+  s: string[];
+}
+
+export interface Flight {
+  codes: string[];
+  gates: Sourced<ID>[];
+  airline: Sourced<ID>;
+}
+
+export interface Airport {
+  code: string;
+  name: Sourced<string> | null;
+  world: Sourced<World> | null;
+  coordinates: Sourced<[number, number]> | null;
+  link: Sourced<string> | null;
+  gates: Sourced<ID>[];
+  proximity: Record<ID, string>;
+}
+
+export interface Gate {
+  code: string | null;
+  flights: Sourced<ID>[];
+  airport: Sourced<ID>;
+  airline: Sourced<ID> | null;
+  size: Sourced<string> | null;
+}
+
+export interface Airline {
+  name: string;
+  flights: Sourced<ID>[];
+  link: Sourced<string> | null;
+}
+
+export interface AirData {
+  flight: Record<ID, Flight>;
+  airport: Record<ID, Airport>;
+  gate: Record<ID, Gate>;
+  airline: Record<ID, Airline>;
+}
+
+export interface RailCompany {
+  name: string;
+  lines: Sourced<ID>[];
+  stations: Sourced<ID>[];
+}
+
+export interface RailLine {
+  code: string;
+  company: Sourced<ID>;
+  ref_station: Sourced<ID>;
+  mode: Sourced<"warp" | "cart" | "traincart" | "vehicles"> | null;
+  name: Sourced<string> | null;
+  colour: Sourced<string> | null;
+}
+
+export interface Direction {
+  forward_towards_code: ID;
+  forward_direction_label: string | null;
+  backward_direction_label: string | null;
+  one_way: boolean;
+}
+
+export interface RailConnection {
+  line: ID;
+  direction: Direction | null;
+}
+
+export interface Station {
+  codes: string[];
+  name: Sourced<string> | null;
+  world: Sourced<World> | null;
+  coordinates: Sourced<[number, number]> | null;
+  company: Sourced<ID>;
+  connections: Record<ID, Sourced<RailConnection>[]>;
+  proximity: Record<ID, string>;
+}
+
+export interface RailData {
+  rail_company: Record<ID, RailCompany>;
+  rail_line: Record<ID, RailLine>;
+  station: Record<ID, Station>;
+}
+
+export interface GatelogueData {
+  version: 1;
+  timestamp: string;
+  air: AirData;
+  rail: RailData;
+}

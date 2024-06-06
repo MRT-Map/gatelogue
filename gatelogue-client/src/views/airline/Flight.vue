@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import {
-  type Airport,
-  type Flight,
-  type Gate,
-  gatelogueData,
-} from "@/stores/data";
+import type { Airport, Flight, Gate } from "@/stores/schema";
 import { RouterLink } from "vue-router";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
+import { gatelogueData } from "@/stores/data";
 
 const props = defineProps<{
   flightId: string;
