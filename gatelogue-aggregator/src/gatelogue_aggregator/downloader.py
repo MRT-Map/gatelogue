@@ -1,8 +1,8 @@
 import contextlib
 import tempfile
 import uuid
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import msgspec
 import requests
@@ -33,11 +33,10 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
 def warps(player: uuid.UUID, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT) -> Iterator[dict]:
     link = f"https://api.minecartrapidtransit.net/api/v1/warps?player={player}"
     offset = 0
-    l: list[dict] = msgspec.json.decode(get_url(link, cache_dir / "mrt-api" / str(player) / str(offset), timeout))
-    while len(l) != 0:
-        for d in l:
-            yield d
-        offset += len(l)
-        l = msgspec.json.decode(
+    ls: list[dict] = msgspec.json.decode(get_url(link, cache_dir / "mrt-api" / str(player) / str(offset), timeout))
+    while len(ls) != 0:
+        yield from ls
+        offset += len(ls)
+        ls = msgspec.json.decode(
             get_url(link + f"&offset={offset}", cache_dir / "mrt-api" / str(player) / str(offset), timeout)
         )

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailSource, RailContext
+from gatelogue_aggregator.types.rail import RailContext, RailSource
 
 
 class IntraRailWarp(RailSource):

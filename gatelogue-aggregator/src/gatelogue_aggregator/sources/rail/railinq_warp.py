@@ -1,12 +1,11 @@
-import re
 import uuid
 from pathlib import Path
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps, get_url
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url, warps
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailSource, RailContext
+from gatelogue_aggregator.types.rail import RailContext, RailSource
 
 
 class RaiLinQWarp(RailSource):
@@ -33,7 +32,7 @@ class RaiLinQWarp(RailSource):
             inplace=True,
         )
 
-        d = {warp: name for warp, name in zip(df["Warp"], df["Name"])}
+        d = dict(zip(df["Warp"], df["Name"], strict=False))
 
         names = []
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):

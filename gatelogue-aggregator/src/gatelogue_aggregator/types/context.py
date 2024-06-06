@@ -59,8 +59,8 @@ class Context(AirContext, RailContext, ToSerializable):
             if (node_world := node.merged_attr(self, "world")) is None:
                 continue
             for existing, existing_world, existing_coordinates in processed:
-                thres_sq = 1000**2 if isinstance(existing, Airport) or isinstance(node, Airport) else 250**2
-                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates, thres_sq):
+                thres = 1000 if isinstance(existing, Airport) or isinstance(node, Airport) else 250
+                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates, thres**2):
                     node.connect(self, existing, value=Proximity())
             processed.append((node, node_world.v, node_coordinates))
 
