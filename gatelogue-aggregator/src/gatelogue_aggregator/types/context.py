@@ -77,6 +77,7 @@ class Context(AirContext, RailContext, ToSerializable):
         g = cast(nx.MultiGraph, self.g.copy())
         for node in g.nodes:
             g.nodes[node]["style"] = "filled"
+            g.nodes[node]["tooltip"] = Node.str_ctx(node, self)
             for ty, col in (
                 (Flight, "#ff8080"),
                 (Airport, "#8080ff"),

@@ -26,5 +26,8 @@ class BluRailWarp(RailSource):
             name = match.group(1) or match.group(2)
             if name in names:
                 continue
-            self.station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            if (match := re.match(r"_(...)_", warp["name"])) is None:
+                continue
+            code = match.group(1)
+            self.station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
