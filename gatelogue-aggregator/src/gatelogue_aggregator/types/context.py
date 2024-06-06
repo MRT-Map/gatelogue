@@ -46,7 +46,7 @@ class Context(AirContext, RailContext, ToSerializable):
     def update(self):
         AirContext.update(self)
 
-        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: float = 250**2) -> bool:
+        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: int) -> bool:
             x1, y1 = a
             x2, y2 = b
             return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= thres_sq
@@ -59,7 +59,8 @@ class Context(AirContext, RailContext, ToSerializable):
             if (node_world := node.merged_attr(self, "world")) is None:
                 continue
             for existing, existing_world, existing_coordinates in processed:
-                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates):
+                thres_sq = 1000**2 if isinstance(existing, Airport) or isinstance(node, Airport) else 250**2
+                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates, thres_sq):
                     node.connect(self, existing, value=Proximity())
             processed.append((node, node_world.v, node_coordinates))
 
