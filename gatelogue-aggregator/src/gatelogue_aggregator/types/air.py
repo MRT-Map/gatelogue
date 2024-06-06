@@ -118,7 +118,7 @@ class Flight(Node[_AirContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Airport(Node[_AirContext]):
+class Airport(LocatedNode[_AirContext]):
     acceptable_list_node_types = lambda: (Gate, Airport, LocatedNode)  # noqa: E731
 
     @override
