@@ -91,7 +91,10 @@ class Context(AirContext, RailContext, ToSerializable):
                     g.nodes[node]["fillcolor"] = col
                     break
         for u, v, k in g.edges:
-            if isinstance(g.edges[u, v, k]["v"], Proximity):
+            edge_data = g.edges[u, v, k]["v"]
+            if edge_data is not None:
+                g.edges[u, v, k]["tooltip"] = str(edge_data)
+            if isinstance(edge_data, Proximity):
                 g.edges[u, v, k]["color"] = "#ff00ff"
                 continue
             for ty1, ty2, col in (
