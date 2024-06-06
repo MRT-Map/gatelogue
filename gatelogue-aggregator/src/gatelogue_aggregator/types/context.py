@@ -68,6 +68,7 @@ class Context(AirContext, RailContext, ToSerializable):
         air: AirContext.Ser
         rail: RailContext.Ser
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%M%S%Z"))  # noqa: DTZ005
+        version: int = 1
 
     def ser(self, _=None) -> Context.Ser:
         return self.Ser(air=AirContext.ser(self), rail=RailContext.ser(self))
