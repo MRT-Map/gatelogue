@@ -207,7 +207,7 @@ class Station(LocatedNode[_RailContext]):
 
     @override
     class Ser(msgspec.Struct):
-        codes: str
+        codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
         proximity: dict[uuid.UUID, tuple[str, list[Sourced.Ser[uuid.UUID]]]]
