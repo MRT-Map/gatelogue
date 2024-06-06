@@ -20,7 +20,7 @@ class BluRailWarp(RailSource):
         names = []
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), cache_dir, timeout):
             if (not warp["name"].startswith("BLU")) or (
-                match := re.match(r"(?i)^This is ([^.]*)\.|→ ([^|]*?) *\|", warp["welcomeMessage"])
+                match := re.search(r"(?i)^This is ([^.]*)\.|^→ ([^|]*?) *\|", warp["welcomeMessage"])
             ) is None:
                 continue
             name = match.group(1) or match.group(2)
