@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.logging import INFO1, PROGRESS
+from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Proximity
@@ -380,7 +380,7 @@ class AirContext(_AirContext):
         return Airline(self, source, name=name, **attrs)
 
     def update(self):
-        for node in PROGRESS.track(self.g.nodes, description=INFO1 + "Updating air nodes"):
+        for node in track(self.g.nodes, description=INFO1 + "Updating air nodes"):
             if isinstance(node, Flight | Airport):
                 node.update(self)
 

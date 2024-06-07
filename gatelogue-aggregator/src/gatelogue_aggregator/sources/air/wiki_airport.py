@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.logging import ERROR, INFO2, PROGRESS, RESULT
+from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.base import Source
@@ -24,7 +24,7 @@ class WikiAirport(AirSource):
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         AirContext.__init__(self)
         Source.__init__(self)
-        for airline in PROGRESS.track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
+        for airline in track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
             airline(self, cache_dir, timeout)
 
     def regex_extract_airport(

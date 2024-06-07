@@ -6,7 +6,7 @@ import rich
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.logging import INFO3, PROGRESS, RESULT
+from gatelogue_aggregator.logging import INFO3, RESULT, track
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
@@ -35,7 +35,7 @@ class DynmapMRT(RailSource):
         except Exception as e:
             raise ValueError(response1[:100], response2[:100]) from e
 
-        for v in PROGRESS.track(json1.values(), description=INFO3 + "Extracting from markers"):
+        for v in track(json1.values(), description=INFO3 + "Extracting from markers"):
             if len(v["markers"]) == 0:
                 continue
             if (result := re.search(r"\[(?P<code>.*?)] (?P<name>.*)", v["label"])) is None:

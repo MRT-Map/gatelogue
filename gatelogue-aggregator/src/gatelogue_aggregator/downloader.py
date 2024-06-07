@@ -19,7 +19,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
-    task = PROGRESS.add_task(f"  Downloading {url}", total=None)
+    task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
     response = requests.get(url, timeout=timeout).text
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
         response = response.encode("latin").decode("utf-8")

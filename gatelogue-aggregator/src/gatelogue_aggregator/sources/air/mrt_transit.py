@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
-from gatelogue_aggregator.logging import INFO3, PROGRESS
+from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight
 
@@ -61,7 +61,7 @@ class MRTTransit(AirSource):
 
         df = pd.concat((df1, df2))
 
-        for airline_name in PROGRESS.track(df.columns, description=INFO3 + "Extracting data from CSV"):
+        for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
             airline = self.airline(name=Airline.process_airline_name(airline_name))

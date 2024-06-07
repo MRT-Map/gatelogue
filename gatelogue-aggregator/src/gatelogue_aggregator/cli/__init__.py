@@ -41,7 +41,8 @@ def gatelogue_aggregator():
 @click.option("-o", "--output", default="data.json", type=Path, show_default=True)
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
 @click.option("-g", "--graph", type=Path, default=None, show_default=True)
-def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None):
+@click.option("-w", "--max_workers", type=int, default=8, show_default=True)
+def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int):
     sources = [
         MRTTransit,
         DynmapAirports,
@@ -58,7 +59,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         AquaLinQ,
         AquaLinQWarp,
     ]
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = executor.map(lambda s: s(cache_dir, timeout), sources)
     ctx = Context.from_sources(result)
     if graph is not None:
