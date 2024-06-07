@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, LocatedNode, Node, Proximity, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import BaseContext, Proximity, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.node.base import Node, LocatedNode
 
 if TYPE_CHECKING:
     import uuid
