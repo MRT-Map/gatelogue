@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, Self, cast, override
 import msgspec
 import networkx as nx
 
-from gatelogue_aggregator.types.rail import RailCompany, RailContext, RailLine, RailSource, Station
-from gatelogue_aggregator.types.sea import SeaContext, SeaCompany, SeaLine, SeaStop, SeaSource
+from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 import rich
 import rich.progress
 
-from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSource, Flight, Gate
 from gatelogue_aggregator.types.base import LocatedNode, Node, Proximity, ToSerializable
+from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight, Gate
 
 
 class Context(AirContext, RailContext, SeaContext, ToSerializable):

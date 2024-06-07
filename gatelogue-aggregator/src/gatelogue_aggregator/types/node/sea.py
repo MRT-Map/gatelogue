@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import dataclasses
 import itertools
 from typing import TYPE_CHECKING, Any, Literal, Self, override
@@ -8,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, LocatedNode, Node, Proximity, Source, Sourced, ToSerializable
-from gatelogue_aggregator.types.rail import RailDirection
+from gatelogue_aggregator.types.node.rail import RailDirection
 
 if TYPE_CHECKING:
     import uuid

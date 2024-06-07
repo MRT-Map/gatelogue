@@ -7,7 +7,7 @@ import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.rail import RailContext, RailSource
+from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
 
 class DynmapMRT(RailSource):

@@ -1,13 +1,16 @@
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import bs4
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.sea import SeaLineBuilder, SeaSource, SeaContext
+from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
+
+if TYPE_CHECKING:
+    import bs4
 
 
 class AquaLinQ(SeaSource):
