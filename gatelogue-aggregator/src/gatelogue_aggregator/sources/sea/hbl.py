@@ -7,7 +7,7 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.sea import SeaSource, SeaContext, SeaLineBuilder
+from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
 
 
 class HBL(SeaSource):

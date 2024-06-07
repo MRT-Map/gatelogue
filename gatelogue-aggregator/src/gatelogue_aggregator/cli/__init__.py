@@ -66,7 +66,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         IntraSail,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        result = [s for s in executor.map(lambda s: s(cache_dir, timeout), sources)]
+        result = list(executor.map(lambda s: s(cache_dir, timeout), sources))
     ctx = Context.from_sources(result)
     if graph is not None:
         ctx.graph(graph)

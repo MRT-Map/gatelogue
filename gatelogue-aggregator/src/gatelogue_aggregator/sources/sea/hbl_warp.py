@@ -1,12 +1,12 @@
+import contextlib
 import itertools
 import re
 import uuid
 from pathlib import Path
 
-import pandas as pd
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url, warps
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
 from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
@@ -151,10 +151,8 @@ class HBLWarp(SeaSource):
                     name += " (north)"
 
             self.sea_stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
-            try:
+            with contextlib.suppress(ValueError):
                 names.remove(name)
-            except ValueError:
-                pass
 
         names.remove("Covina")
         names.remove("Kenthurst")
