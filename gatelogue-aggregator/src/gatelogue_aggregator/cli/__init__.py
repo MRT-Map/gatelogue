@@ -25,6 +25,7 @@ from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
 from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
 from gatelogue_aggregator.sources.sea.hbl import HBL
 from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
+from gatelogue_aggregator.sources.sea.intrasail import IntraSail
 from gatelogue_aggregator.types.context import Context
 
 
@@ -62,6 +63,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         AquaLinQWarp,
         HBL,
         HBLWarp,
+        IntraSail,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = [s for s in executor.map(lambda s: s(cache_dir, timeout), sources)]
