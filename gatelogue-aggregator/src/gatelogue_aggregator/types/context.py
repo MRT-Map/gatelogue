@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import datetime
 from typing import TYPE_CHECKING, Self, cast, override
 
@@ -18,7 +19,8 @@ if TYPE_CHECKING:
 import rich
 import rich.progress
 
-from gatelogue_aggregator.types.base import Proximity, ToSerializable
+from gatelogue_aggregator.types.base import ToSerializable
+from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight, Gate
 from gatelogue_aggregator.types.node.base import Node, LocatedNode
 
@@ -67,7 +69,7 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
             processed.append((node, node_world.v, node_coordinates))
 
     @override
-    class Ser(msgspec.Struct):
+    class Ser(msgspec.Struct, kw_only=True):
         air: AirContext.Ser
         rail: RailContext.Ser
         sea: SeaContext.Ser

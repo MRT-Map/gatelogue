@@ -6,9 +6,10 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Proximity, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import BaseContext, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.connections import Proximity, Connection
+from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import Node, LocatedNode
-from gatelogue_aggregator.types.node.rail import RailDirection
 
 if TYPE_CHECKING:
     import uuid
@@ -48,15 +49,7 @@ class SeaCompany(Node[_SeaContext]):
             pass
 
     @override
-    def attrs(self, ctx: SeaContext, source: type[SeaContext] | None = None) -> SeaCompany.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: SeaContext) -> dict[Source, SeaCompany.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         name: str
         lines: list[Sourced.Ser[uuid.UUID]]
         stops: list[Sourced.Ser[uuid.UUID]]
@@ -116,21 +109,13 @@ class SeaLine(Node[_SeaContext]):
             self.sourced_merge(source, existing, "colour")
 
     @override
-    def attrs(self, ctx: SeaContext, source: type[SeaContext] | None = None) -> SeaLine.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: SeaContext) -> dict[Source, SeaLine.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_stop: Sourced.Ser[uuid.UUID]
-        mode: Sourced.Ser[Literal["ferry", "cruise"]] | None = None
-        name: Sourced.Ser[str] | None = None
-        colour: Sourced.Ser[str] | None = None
+        mode: Sourced.Ser[Literal["ferry", "cruise"]] | None
+        name: Sourced.Ser[str] | None
+        colour: Sourced.Ser[str] | None
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:
         return self.Ser(
@@ -176,46 +161,33 @@ class SeaStop(LocatedNode[_SeaContext]):
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
+    class Attrs(LocatedNode.Attrs):
         codes: set[str]
         name: str | None = None
-        world: Literal["New", "Old"] | None = None
-        coordinates: tuple[int, int] | None = None
 
         @staticmethod
         @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "codes":
                 return v
-            if k in ("name", "coordinates", "world"):
+            if k == "name":
                 return Sourced(v).source(source)
-            raise NotImplementedError
+            return LocatedNode.Attrs.prepare_merge(source, k, v)
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
+            super().merge_into(source, existing)
             if "codes" in existing:
                 existing["codes"].update(self.codes)
             self.sourced_merge(source, existing, "name")
-            self.sourced_merge(source, existing, "world")
-            self.sourced_merge(source, existing, "coordinates")
 
     @override
-    def attrs(self, ctx: SeaContext, source: type[SeaContext] | None = None) -> SeaStop.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: SeaContext) -> dict[Source, SeaStop.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(LocatedNode.Ser, kw_only=True):
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection]]]
         proximity: dict[uuid.UUID, str]
-        name: Sourced.Ser[str] | None = None
-        world: Sourced.Ser[Literal["New", "Old"]] | None = None
-        coordinates: Sourced.Ser[tuple[int, int]] | None = None
+        name: Sourced.Ser[str] | None
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:
         return self.Ser(
@@ -240,122 +212,24 @@ class SeaStop(LocatedNode[_SeaContext]):
         return self.get_one(ctx, SeaCompany).merged_attr(ctx, "name")
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
-class SeaDirection(RailDirection):
-    pass
+class SeaConnection(Connection[_SeaContext]):
+    C = SeaCompany
+    L = SeaLine
+    S = SeaStop
+    company_fn = lambda ctx: ctx.sea_company
+    line_fn = lambda ctx: ctx.sea_line
+    station_fn = lambda ctx: ctx.sea_stop
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
-class SeaConnection(ToSerializable):
-    company_name: str
-    line_code: str
-    direction: SeaDirection | None = None
-
-    def __init__(self, ctx: SeaContext, *, line: SeaLine, direction: SeaDirection | None = None):
-        self.set_line(ctx, line)
-        self.direction = direction
-
-    @override
-    class Ser(msgspec.Struct):
-        line: uuid.UUID
-        direction: SeaDirection.Ser | None = None
-
-    def ser(self, ctx: SeaContext) -> SeaConnection.Ser:
-        return self.Ser(
-            line=self.get_line(ctx).id,
-            direction=SeaDirection.Ser(
-                forward_towards_code=self.get_direction_forward_towards(ctx),
-                forward_direction_label=self.direction.forward_direction_label,
-                backward_direction_label=self.direction.backward_direction_label,
-                one_way=self.direction.one_way,
-            )
-            if self.direction is not None
-            else None,
-        )
-
-    def get_company(self, ctx: SeaContext) -> SeaCompany:
-        return ctx.sea_company(name=self.company_name)
-
-    def set_company(self, ctx: SeaContext, v: SeaCompany):
-        self.company_name = v.merged_attr(ctx, "name")
-
-    def get_direction_forward_towards(self, ctx: SeaContext) -> SeaStop | None:
-        return (
-            None
-            if self.direction is None
-            else ctx.sea_stop(codes={self.direction.forward_towards_code}, company=self.get_company(ctx))
-        )
-
-    def set_direction_forward_towards(self, ctx: SeaContext, v: SeaStop):
-        self.direction.forward_towards_code = v.merged_attr(ctx, "codes")[0]
-        self.set_company(ctx, v.get_one(ctx, SeaCompany))
-
-    def get_line(self, ctx: SeaContext) -> SeaLine:
-        return ctx.sea_line(code=self.line_code, company=self.get_company(ctx))
-
-    def set_line(self, ctx: SeaContext, v: SeaLine):
-        self.line_code = v.merged_attr(ctx, "code")
-        self.set_company(ctx, v.get_one(ctx, SeaCompany))
-
-
-class SeaLineBuilder:
-    def __init__(self, ctx: SeaContext, line: SeaLine):
-        self.ctx = ctx
-        self.line = line
-
-    def connect(
-        self,
-        *stops: SeaStop,
-        forward_label: str | None = None,
-        backward_label: str | None = None,
-        one_way: bool = False,
-    ):
-        if len(stops) == 0:
-            return
-        self.line.connect_one(self.ctx, stops[0])
-        forward_label = forward_label or "towards " + (
-            a.v
-            if (a := stops[-1].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stops[-1].merged_attr(self.ctx, "codes")))
-        )
-        backward_label = backward_label or "towards " + (
-            a.v
-            if (a := stops[0].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stops[0].merged_attr(self.ctx, "codes")))
-        )
-        for s1, s2 in itertools.pairwise(stops):
-            s1: SeaStop
-            s2: SeaStop
-            s1.connect(
-                self.ctx,
-                s2,
-                value=SeaConnection(
-                    self.ctx,
-                    line=self.line,
-                    direction=SeaDirection(
-                        forward_towards_code=next(iter(s2.merged_attr(self.ctx, "codes", set))),
-                        forward_direction_label=forward_label,
-                        backward_direction_label=backward_label,
-                        one_way=one_way,
-                    ),
-                ),
-            )
-
-    def circle(
-        self,
-        *stops: SeaStop,
-        forward_label: str | None = None,
-        backward_label: str | None = None,
-        one_way: bool = False,
-    ):
-        if len(stops) == 0:
-            return
-        self.connect(*stops, stops[0], forward_label=forward_label, backward_label=backward_label, one_way=one_way)
+class SeaLineBuilder(LineBuilder[_SeaContext]):
+    L = SeaLine
+    S = SeaStop
+    Conn = SeaConnection
 
 
 class SeaContext(_SeaContext):
     @override
-    class Ser(msgspec.Struct):
+    class Ser(msgspec.Struct, kw_only=True):
         sea_company: dict[uuid.UUID, SeaCompany.Ser]
         sea_line: dict[uuid.UUID, SeaLine.Ser]
         sea_stop: dict[uuid.UUID, SeaStop.Ser]

@@ -7,7 +7,8 @@ import msgspec
 import rich.progress
 
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
-from gatelogue_aggregator.types.base import BaseContext, Proximity, Source, Sourced
+from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.types.node.base import Node, LocatedNode
 
 if TYPE_CHECKING:
@@ -55,15 +56,7 @@ class Flight(Node[_AirContext]):
                 existing["codes"].update(self.codes)
 
     @override
-    def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Flight.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: AirContext) -> dict[Source, Flight.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         codes: set[str]
         gates: list[Sourced.Ser[uuid.UUID]]
         airline: Sourced.Ser[uuid.UUID]
@@ -132,11 +125,9 @@ class Airport(LocatedNode[_AirContext]):
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
+    class Attrs(LocatedNode.Attrs):
         code: str
         name: str | None = None
-        world: Literal["Old", "New"] | None = None
-        coordinates: tuple[int, int] | None = None
         link: str | None = None
 
         @staticmethod
@@ -144,31 +135,20 @@ class Airport(LocatedNode[_AirContext]):
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "code":
                 return v
-            if k in ("name", "world", "coordinates", "link"):
+            if k in ("name", "link"):
                 return Sourced(v).source(source)
-            raise NotImplementedError
+            return LocatedNode.Attrs.prepare_merge(source, k, v)
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
+            super().merge_into(source, existing)
             self.sourced_merge(source, existing, "name")
-            self.sourced_merge(source, existing, "world")
-            self.sourced_merge(source, existing, "coordinates")
             self.sourced_merge(source, existing, "link")
 
     @override
-    def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Airport.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: AirContext) -> dict[Source, Airport.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(LocatedNode.Ser, kw_only=True):
         code: str
         name: Sourced.Ser[str] | None
-        world: Sourced.Ser[str] | None
-        coordinates: Sourced.Ser[tuple[int, int]] | None
         link: Sourced.Ser[str] | None
         gates: list[Sourced.Ser[uuid.UUID]]
         proximity: dict[uuid.UUID, str]
@@ -265,15 +245,7 @@ class Gate(Node[_AirContext]):
             self.sourced_merge(source, existing, "size")
 
     @override
-    def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Gate.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: AirContext) -> dict[Source, Gate.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         code: str | None
         flights: list[Sourced.Ser[uuid.UUID]]
         airport: Sourced.Ser[uuid.UUID]
@@ -331,15 +303,7 @@ class Airline(Node[_AirContext]):
             self.sourced_merge(source, existing, "link")
 
     @override
-    def attrs(self, ctx: AirContext, source: type[AirContext] | None = None) -> Airline.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: AirContext) -> dict[Source, Airline.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         name: str
         flights: list[Sourced.Ser[str]]
         link: Sourced.Ser[str] | None
@@ -367,7 +331,7 @@ class Airline(Node[_AirContext]):
 
 class AirContext(_AirContext):
     @override
-    class Ser(msgspec.Struct):
+    class Ser(msgspec.Struct, kw_only=True):
         flight: dict[uuid.UUID, Flight.Ser]
         airport: dict[uuid.UUID, Airport.Ser]
         gate: dict[uuid.UUID, Gate.Ser]

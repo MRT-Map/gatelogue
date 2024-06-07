@@ -6,6 +6,7 @@ import re
 import uuid
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 
+import msgspec
 import networkx as nx
 
 from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced, ToSerializable
@@ -213,4 +214,25 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
 
 
 class LocatedNode[CTX](Node[CTX]):
-    pass
+    @override
+    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
+    class Attrs(Node.Attrs):
+        world: Literal["New", "Old"] | None = None
+        coordinates: tuple[int, int] | None = None
+
+        @staticmethod
+        @override
+        def prepare_merge(source: Source, k: str, v: Any) -> Any:
+            if k in ("coordinates", "world"):
+                return Sourced(v).source(source)
+            raise NotImplementedError
+
+        @override
+        def merge_into(self, source: Source, existing: dict[str, Any]):
+            self.sourced_merge(source, existing, "world")
+            self.sourced_merge(source, existing, "coordinates")
+
+    @override
+    class Ser(Node.Ser, kw_only=True):
+        coordinates: Sourced.Ser[tuple[int, int]] | None
+        world: Sourced.Ser[Literal["New", "Old"]] | None

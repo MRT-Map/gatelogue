@@ -116,7 +116,3 @@ class Source(metaclass=SourceMeta):
 
     def __init__(self, _: Path = DEFAULT_CACHE_DIR, __: int = DEFAULT_TIMEOUT):
         rich.print(f"[yellow]Retrieving from {self.name}")
-
-
-class Proximity(msgspec.Struct):
-    pass

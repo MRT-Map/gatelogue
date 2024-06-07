@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Proximity, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.base import BaseContext, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.connections import Proximity, Connection
+from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import Node, LocatedNode
 
 if TYPE_CHECKING:
@@ -47,15 +49,7 @@ class RailCompany(Node[_RailContext]):
             pass
 
     @override
-    def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailCompany.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: RailContext) -> dict[Source, RailCompany.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         name: str
         lines: list[Sourced.Ser[uuid.UUID]]
         stations: list[Sourced.Ser[uuid.UUID]]
@@ -115,15 +109,7 @@ class RailLine(Node[_RailContext]):
             self.sourced_merge(source, existing, "colour")
 
     @override
-    def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> RailLine.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: RailContext) -> dict[Source, RailLine.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(Node.Ser, kw_only=True):
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_station: Sourced.Ser[uuid.UUID]
@@ -175,46 +161,33 @@ class Station(LocatedNode[_RailContext]):
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
+    class Attrs(LocatedNode.Attrs):
         codes: set[str]
         name: str | None = None
-        world: Literal["New", "Old"] | None = None
-        coordinates: tuple[int, int] | None = None
 
         @staticmethod
         @override
         def prepare_merge(source: Source, k: str, v: Any) -> Any:
             if k == "codes":
                 return v
-            if k in ("name", "coordinates", "world"):
+            if k == "name":
                 return Sourced(v).source(source)
-            raise NotImplementedError
+            return LocatedNode.Attrs.prepare_merge(source, k, v)
 
         @override
         def merge_into(self, source: Source, existing: dict[str, Any]):
+            super().merge_into(source, existing)
             if "codes" in existing:
                 existing["codes"].update(self.codes)
             self.sourced_merge(source, existing, "name")
-            self.sourced_merge(source, existing, "world")
-            self.sourced_merge(source, existing, "coordinates")
 
     @override
-    def attrs(self, ctx: RailContext, source: type[RailContext] | None = None) -> Station.Attrs | None:
-        return super().attrs(ctx, source)
-
-    @override
-    def all_attrs(self, ctx: RailContext) -> dict[Source, Station.Attrs]:
-        return super().all_attrs(ctx)
-
-    @override
-    class Ser(msgspec.Struct):
+    class Ser(LocatedNode.Ser, kw_only=True):
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
         proximity: dict[uuid.UUID, str]
-        name: Sourced.Ser[str] | None = None
-        world: Sourced.Ser[Literal["New", "Old"]] | None = None
-        coordinates: Sourced.Ser[tuple[int, int]] | None = None
+        name: Sourced.Ser[str] | None
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
@@ -239,134 +212,24 @@ class Station(LocatedNode[_RailContext]):
         return self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
-class RailDirection(ToSerializable):
-    forward_towards_code: str
-    forward_direction_label: str | None
-    backward_direction_label: str | None
-    one_way: bool = False
-
-    @override
-    class Ser(msgspec.Struct):
-        forward_towards_code: uuid.UUID
-        forward_direction_label: str | None
-        backward_direction_label: str | None
-        one_way: bool
+class RailConnection(Connection[_RailContext]):
+    C = RailCompany
+    L = RailLine
+    S = Station
+    company_fn = lambda ctx: ctx.rail_company
+    line_fn = lambda ctx: ctx.rail_line
+    station_fn = lambda ctx: ctx.station
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
-class RailConnection(ToSerializable):
-    company_name: str
-    line_code: str
-    direction: RailDirection | None = None
-
-    def __init__(self, ctx: RailContext, *, line: RailLine, direction: RailDirection | None = None):
-        self.set_line(ctx, line)
-        self.direction = direction
-
-    @override
-    class Ser(msgspec.Struct):
-        line: uuid.UUID
-        direction: RailDirection.Ser | None = None
-
-    def ser(self, ctx: RailContext) -> RailConnection.Ser:
-        return self.Ser(
-            line=self.get_line(ctx).id,
-            direction=RailDirection.Ser(
-                forward_towards_code=self.get_direction_forward_towards(ctx),
-                forward_direction_label=self.direction.forward_direction_label,
-                backward_direction_label=self.direction.backward_direction_label,
-                one_way=self.direction.one_way,
-            )
-            if self.direction is not None
-            else None,
-        )
-
-    def get_company(self, ctx: RailContext) -> RailCompany:
-        return ctx.rail_company(name=self.company_name)
-
-    def set_company(self, ctx: RailContext, v: RailCompany):
-        self.company_name = v.merged_attr(ctx, "name")
-
-    def get_direction_forward_towards(self, ctx: RailContext) -> Station | None:
-        return (
-            None
-            if self.direction is None
-            else ctx.station(codes={self.direction.forward_towards_code}, company=self.get_company(ctx))
-        )
-
-    def set_direction_forward_towards(self, ctx: RailContext, v: Station):
-        self.direction.forward_towards_code = v.merged_attr(ctx, "codes")[0]
-        self.set_company(ctx, v.get_one(ctx, RailCompany))
-
-    def get_line(self, ctx: RailContext) -> RailLine:
-        return ctx.rail_line(code=self.line_code, company=self.get_company(ctx))
-
-    def set_line(self, ctx: RailContext, v: RailLine):
-        self.line_code = v.merged_attr(ctx, "code")
-        self.set_company(ctx, v.get_one(ctx, RailCompany))
-
-
-class RailLineBuilder:
-    def __init__(self, ctx: RailContext, line: RailLine):
-        self.ctx = ctx
-        self.line = line
-
-    def connect(
-        self,
-        *stations: Station,
-        forward_label: str | None = None,
-        backward_label: str | None = None,
-        one_way: bool = False,
-    ):
-        if len(stations) == 0:
-            return
-        self.line.connect_one(self.ctx, stations[0])
-        forward_label = forward_label or "towards " + (
-            a.v
-            if (a := stations[-1].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stations[-1].merged_attr(self.ctx, "codes")))
-        )
-        backward_label = backward_label or "towards " + (
-            a.v
-            if (a := stations[0].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stations[0].merged_attr(self.ctx, "codes")))
-        )
-        for s1, s2 in itertools.pairwise(stations):
-            s1: Station
-            s2: Station
-            s1.connect(
-                self.ctx,
-                s2,
-                value=RailConnection(
-                    self.ctx,
-                    line=self.line,
-                    direction=RailDirection(
-                        forward_towards_code=next(iter(s2.merged_attr(self.ctx, "codes", set))),
-                        forward_direction_label=forward_label,
-                        backward_direction_label=backward_label,
-                        one_way=one_way,
-                    ),
-                ),
-            )
-
-    def circle(
-        self,
-        *stations: Station,
-        forward_label: str | None = None,
-        backward_label: str | None = None,
-        one_way: bool = False,
-    ):
-        if len(stations) == 0:
-            return
-        self.connect(
-            *stations, stations[0], forward_label=forward_label, backward_label=backward_label, one_way=one_way
-        )
+class RailLineBuilder(LineBuilder[_RailContext]):
+    L = RailLine
+    S = Station
+    Conn = RailConnection
 
 
 class RailContext(_RailContext):
     @override
-    class Ser(msgspec.Struct):
+    class Ser(msgspec.Struct, kw_only=True):
         rail_company: dict[uuid.UUID, RailCompany.Ser]
         rail_line: dict[uuid.UUID, RailLine.Ser]
         station: dict[uuid.UUID, Station.Ser]
