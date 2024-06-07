@@ -9,8 +9,9 @@ import rich
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.types.node.base import Node
     from pathlib import Path
+
+    from gatelogue_aggregator.types.node.base import Node
 
 
 class ToSerializable:

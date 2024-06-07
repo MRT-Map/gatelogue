@@ -6,7 +6,6 @@ import re
 import uuid
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 
-import msgspec
 import networkx as nx
 
 from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced, ToSerializable

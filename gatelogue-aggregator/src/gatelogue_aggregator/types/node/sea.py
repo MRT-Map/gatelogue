@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import dataclasses
-import itertools
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Source, Sourced, ToSerializable
-from gatelogue_aggregator.types.connections import Proximity, Connection
+from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.connections import Connection, Proximity
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import Node, LocatedNode
+from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 if TYPE_CHECKING:
     import uuid
@@ -212,19 +211,15 @@ class SeaStop(LocatedNode[_SeaContext]):
         return self.get_one(ctx, SeaCompany).merged_attr(ctx, "name")
 
 
-class SeaConnection(Connection[_SeaContext]):
-    C = SeaCompany
-    L = SeaLine
-    S = SeaStop
-    company_fn = lambda ctx: ctx.sea_company
-    line_fn = lambda ctx: ctx.sea_line
-    station_fn = lambda ctx: ctx.sea_stop
+class SeaConnection(Connection[_SeaContext, SeaCompany, SeaLine, SeaStop]):
+    CT = SeaCompany
+    company_fn = lambda ctx: ctx.sea_company  # noqa: E731
+    line_fn = lambda ctx: ctx.sea_line  # noqa: E731
+    station_fn = lambda ctx: ctx.sea_stop  # noqa: E731
 
 
-class SeaLineBuilder(LineBuilder[_SeaContext]):
-    L = SeaLine
-    S = SeaStop
-    Conn = SeaConnection
+class SeaLineBuilder(LineBuilder[_SeaContext, SeaLine, SeaStop]):
+    CnT = SeaConnection
 
 
 class SeaContext(_SeaContext):

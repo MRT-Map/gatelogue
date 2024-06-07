@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import dataclasses
 import datetime
 from typing import TYPE_CHECKING, Self, cast, override
 
@@ -22,7 +21,7 @@ import rich.progress
 from gatelogue_aggregator.types.base import ToSerializable
 from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight, Gate
-from gatelogue_aggregator.types.node.base import Node, LocatedNode
+from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
 class Context(AirContext, RailContext, SeaContext, ToSerializable):

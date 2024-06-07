@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import dataclasses
-import itertools
 from typing import TYPE_CHECKING, Any, Literal, Self, override
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Source, Sourced, ToSerializable
-from gatelogue_aggregator.types.connections import Proximity, Connection
+from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.connections import Connection, Proximity
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import Node, LocatedNode
+from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 if TYPE_CHECKING:
     import uuid
@@ -212,19 +211,15 @@ class Station(LocatedNode[_RailContext]):
         return self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
 
 
-class RailConnection(Connection[_RailContext]):
-    C = RailCompany
-    L = RailLine
-    S = Station
-    company_fn = lambda ctx: ctx.rail_company
-    line_fn = lambda ctx: ctx.rail_line
-    station_fn = lambda ctx: ctx.station
+class RailConnection(Connection[_RailContext, RailCompany, RailLine, Station]):
+    CT = RailCompany
+    company_fn = lambda ctx: ctx.rail_company  # noqa: E731
+    line_fn = lambda ctx: ctx.rail_line  # noqa: E731
+    station_fn = lambda ctx: ctx.station  # noqa: E731
 
 
-class RailLineBuilder(LineBuilder[_RailContext]):
-    L = RailLine
-    S = Station
-    Conn = RailConnection
+class RailLineBuilder(LineBuilder[_RailContext, RailLine, Station]):
+    CnT = RailConnection
 
 
 class RailContext(_RailContext):

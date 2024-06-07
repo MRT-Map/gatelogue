@@ -1,22 +1,17 @@
 from __future__ import annotations
 
-import dataclasses
 import itertools
-import uuid
-from collections.abc import Callable
-from typing import override, ClassVar, TypeAlias
+from typing import TYPE_CHECKING, ClassVar
 
-import msgspec
+from gatelogue_aggregator.types.base import BaseContext
+from gatelogue_aggregator.types.connections import Connection, Direction
 
-from gatelogue_aggregator.types.base import ToSerializable, BaseContext
-from gatelogue_aggregator.types.connections import Direction, Connection
-from gatelogue_aggregator.types.node.base import Node
+if TYPE_CHECKING:
+    from gatelogue_aggregator.types.node.base import Node
 
 
-class LineBuilder[CTX: BaseContext]:
-    L: ClassVar[type[Node]]
-    S: ClassVar[type[Node]]
-    Conn: ClassVar[type[Connection]]
+class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
+    CnT: ClassVar[type[Connection]]
 
     def __init__(self, ctx: CTX, line: L):
         self.ctx = ctx
@@ -46,7 +41,7 @@ class LineBuilder[CTX: BaseContext]:
             s1.connect(
                 self.ctx,
                 s2,
-                value=type(self).Conn(
+                value=type(self).CnT(
                     self.ctx,
                     line=self.line,
                     direction=Direction(

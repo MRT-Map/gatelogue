@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Literal, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 import msgspec
 import rich.progress
@@ -9,7 +9,7 @@ import rich.progress
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Proximity
-from gatelogue_aggregator.types.node.base import Node, LocatedNode
+from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 if TYPE_CHECKING:
     import uuid
