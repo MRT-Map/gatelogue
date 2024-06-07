@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import rich.progress
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO2, ERROR, PROGRESS, RESULT
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.base import Source
@@ -23,10 +24,8 @@ class WikiAirport(AirSource):
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
         AirContext.__init__(self)
         Source.__init__(self)
-        for i, airline in enumerate(_EXTRACTORS):
-            rich.print(f"[green]  Extracting data from wikipages ({i + 1}/{len(_EXTRACTORS)})")
+        for airline in PROGRESS.track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
             airline(self, cache_dir, timeout)
-        rich.print("[green]  Extracted")
 
     def regex_extract_airport(
         self,
@@ -43,9 +42,9 @@ class WikiAirport(AirSource):
             self.extract_get_gate(airport, **match.groupdict())
             result += 1
         if not result:
-            rich.print(f"[red]  Extraction for {airport_code} yielded no results")
+            rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
         else:
-            rich.print(f"[green]  {airport_code} has {result} gates")
+            rich.print(RESULT + f"{airport_code} has {result} gates")
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):

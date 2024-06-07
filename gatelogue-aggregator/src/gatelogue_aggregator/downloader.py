@@ -9,7 +9,7 @@ import requests
 import rich
 import rich.status
 
-from gatelogue_aggregator.utils import PROGRESS
+from gatelogue_aggregator.logging import PROGRESS, INFO2, INFO3
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
@@ -17,7 +17,7 @@ DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if cache.exists():
-        rich.print(f"[green]  Reading {url} from {cache}")
+        rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
     task = PROGRESS.add_task(f"  Downloading {url}", total=None)
     response = requests.get(url, timeout=timeout).text
@@ -27,7 +27,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
     cache.write_text(response)
-    rich.print(f"[green]  Downloaded {url} to {cache}")
+    rich.print(INFO3 + f"Downloaded {url} to {cache}")
     return response
 
 

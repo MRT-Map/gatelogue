@@ -7,6 +7,7 @@ import networkx as nx
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO1
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -116,4 +117,4 @@ class Source(metaclass=SourceMeta):
     priority: ClassVar[float | int]
 
     def __init__(self, _: Path = DEFAULT_CACHE_DIR, __: int = DEFAULT_TIMEOUT):
-        rich.print(f"[yellow]Retrieving from {self.name}")
+        rich.print(INFO1 + f"Retrieving from {self.name}")

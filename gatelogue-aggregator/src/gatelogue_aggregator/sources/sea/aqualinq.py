@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO2, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
@@ -43,4 +44,4 @@ class AquaLinQ(SeaSource):
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(f"[green]  AquaLinQ Line {line_code} has {len(stops)} stops")
+            rich.print(RESULT + f"AquaLinQ Line {line_code} has {len(stops)} stops")

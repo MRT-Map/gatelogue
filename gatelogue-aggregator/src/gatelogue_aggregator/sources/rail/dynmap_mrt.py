@@ -8,7 +8,7 @@ import rich.progress
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
-from gatelogue_aggregator.utils import PROGRESS
+from gatelogue_aggregator.logging import PROGRESS, INFO2, INFO3, RESULT
 
 
 class DynmapMRT(RailSource):
@@ -35,7 +35,7 @@ class DynmapMRT(RailSource):
         except Exception as e:
             raise ValueError(response1[:100], response2[:100]) from e
 
-        for v in PROGRESS.track(json1.values(), description="Extracting from markers"):
+        for v in PROGRESS.track(json1.values(), description=INFO3 + "Extracting from markers"):
             if len(v["markers"]) == 0:
                 continue
             if (result := re.search(r"\[(?P<code>.*?)] (?P<name>.*)", v["label"])) is None:
@@ -47,11 +47,11 @@ class DynmapMRT(RailSource):
                 coordinates = (vv["x"], vv["z"])
                 name = None if (result := re.search(r"(.*) \((.*?)\)", vv["label"])) is None else result.group(1)
                 self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
-            rich.print(f"[green]  MRT {line_code} has {len(v['markers'])} stations")
+            rich.print(RESULT + f"MRT {line_code} has {len(v['markers'])} stations")
 
         for k, v in json2["old"]["markers"].items():
             code = "Old-" + k.upper()
             coordinates = (v["x"], v["z"])
             name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1)
             self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
-        rich.print(f"[green]  Old world has {len(json2['old']['markers'])} stations")
+        rich.print(RESULT + f"Old world has {len(json2['old']['markers'])} stations")

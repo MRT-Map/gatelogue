@@ -4,6 +4,7 @@ from pathlib import Path
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO2, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
@@ -78,4 +79,4 @@ class BluRail(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(f"[green]  BluRail Line {line_code} has {len(stations)} stations")
+            rich.print(RESULT + f"BluRail Line {line_code} has {len(stations)} stations")

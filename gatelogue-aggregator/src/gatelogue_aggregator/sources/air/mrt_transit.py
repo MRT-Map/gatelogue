@@ -7,7 +7,7 @@ import rich.status
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight
-from gatelogue_aggregator.utils import PROGRESS
+from gatelogue_aggregator.logging import PROGRESS, INFO2, INFO3
 
 
 class MRTTransit(AirSource):
@@ -63,7 +63,7 @@ class MRTTransit(AirSource):
 
         df = pd.concat((df1, df2))
 
-        for airline_name in PROGRESS.track(df.columns, description="  Extracting data from CSV..."):
+        for airline_name in PROGRESS.track(df.columns, description=INFO3 + "Extracting data from CSV"):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
             airline = self.airline(name=Airline.process_airline_name(airline_name))
@@ -85,4 +85,3 @@ class MRTTransit(AirSource):
                     flight = self.flight(codes=Flight.process_code(flight_code, airline_name), airline=airline)
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)
-        rich.print("[green]  Extracted")

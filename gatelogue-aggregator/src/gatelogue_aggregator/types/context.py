@@ -8,7 +8,7 @@ import networkx as nx
 
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.utils import PROGRESS
+from gatelogue_aggregator.logging import PROGRESS, INFO1, INFO2
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -30,13 +30,13 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource]) -> Self:
         self = cls()
         for source in PROGRESS.track(
-            sources, description=f"[yellow]Merging sources: {', '.join(s.name for s in sources)}"
+            sources, description=INFO1 + f"Merging sources: {', '.join(s.name for s in sources)}"
         ):
             self.g = nx.compose(self.g, source.g)
 
         processed: dict[type[Node], dict[str, list[Node]]] = {}
         to_merge = []
-        for n in PROGRESS.track(self.g.nodes, description="[green]  Finding equivalent nodes"):
+        for n in PROGRESS.track(self.g.nodes, description=INFO2 + "Finding equivalent nodes"):
             key = n.merge_key(self)
             ty = type(n)
             filtered_processed = processed.get(ty, {}).get(key, [])
@@ -44,7 +44,7 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
                 processed.setdefault(ty, {}).setdefault(key, []).append(n)
                 continue
             to_merge.append((equiv, n))
-        for equiv, n in PROGRESS.track(to_merge, description="[green]  Merging equivalent nodes"):
+        for equiv, n in PROGRESS.track(to_merge, description=INFO2 + "Merging equivalent nodes"):
             equiv.merge(self, n)
         self.update()
         return self
@@ -58,7 +58,7 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
             return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= thres_sq
 
         processed = []
-        for node in PROGRESS.track(self.g.nodes, description="[yellow]Linking close nodes"):
+        for node in PROGRESS.track(self.g.nodes, description=INFO1 + "Linking close nodes"):
             if not isinstance(node, LocatedNode) or (node_coordinates := node.merged_attr(self, "coordinates")) is None:
                 continue
             node_coordinates = node_coordinates.v

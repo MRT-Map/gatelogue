@@ -4,6 +4,7 @@ from pathlib import Path
 import rich
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO2, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
@@ -84,4 +85,4 @@ class WikiMRT(RailSource):
                     *stations, forward_label=forward_label, backward_label=backward_label
                 )
 
-            rich.print(f"[green]  MRT {line_code} has {len(stations)} stations")
+            rich.print(RESULT + f"MRT {line_code} has {len(stations)} stations")

@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import click
@@ -23,7 +23,7 @@ from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
 from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
 from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
 from gatelogue_aggregator.types.context import Context
-from gatelogue_aggregator.utils import PROGRESS
+from gatelogue_aggregator.logging import INFO1
 
 
 @click.group(
@@ -65,8 +65,8 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         ctx.graph(graph)
     j = msgspec.json.encode(ctx.ser())
     if fmt:
-        rich.print(f"[yellow]Outputting to {output} (formatted)")
+        rich.print(INFO1 + f"Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
     else:
-        rich.print(f"[yellow]Outputting to {output} (unformatted)")
+        rich.print(INFO1 + f"Outputting to {output} (unformatted)")
         output.write_bytes(j)
