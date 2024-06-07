@@ -15,7 +15,7 @@ class BluRailWarp(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="BluRail")
+        company = self.rail_company(name="BluRail")
 
         names = []
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), cache_dir, timeout):

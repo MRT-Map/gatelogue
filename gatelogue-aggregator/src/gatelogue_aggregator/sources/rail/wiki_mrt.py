@@ -18,7 +18,7 @@ class WikiMRT(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="MRT")
+        company = self.rail_company(name="MRT")
 
         for line_code, line_name in (
             ("A", "MRT Arctic Line"),
@@ -50,7 +50,7 @@ class WikiMRT(RailSource):
             ("Old-O", "MRT Orange Line"),
         ):
             text = get_wiki_text(line_name, cache_dir, timeout)
-            line = self.line(code=line_code, company=company, name=line_name)
+            line = self.rail_line(code=line_code, company=company, name=line_name)
 
             stations = []
             for match in search_all(

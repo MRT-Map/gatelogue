@@ -16,7 +16,7 @@ class RaiLinQWarp(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="RaiLinQ")
+        company = self.rail_company(name="RaiLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=0",

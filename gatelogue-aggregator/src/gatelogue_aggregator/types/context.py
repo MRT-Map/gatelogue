@@ -7,6 +7,7 @@ import msgspec
 import networkx as nx
 
 from gatelogue_aggregator.types.rail import RailCompany, RailContext, RailLine, RailSource, Station
+from gatelogue_aggregator.types.sea import SeaContext, SeaCompany, SeaLine, SeaStop, SeaSource
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -21,9 +22,9 @@ from gatelogue_aggregator.types.air import AirContext, Airline, Airport, AirSour
 from gatelogue_aggregator.types.base import LocatedNode, Node, Proximity, ToSerializable
 
 
-class Context(AirContext, RailContext, ToSerializable):
+class Context(AirContext, RailContext, SeaContext, ToSerializable):
     @classmethod
-    def from_sources(cls, sources: Iterable[AirSource | RailSource]) -> Self:
+    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource]) -> Self:
         self = cls()
         for source in rich.progress.track(sources, f"[yellow]Merging sources: {', '.join(s.name for s in sources)}"):
             self.g = nx.compose(self.g, source.g)
@@ -68,11 +69,12 @@ class Context(AirContext, RailContext, ToSerializable):
     class Ser(msgspec.Struct):
         air: AirContext.Ser
         rail: RailContext.Ser
+        sea: SeaContext.Ser
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%M%S%Z"))  # noqa: DTZ005
         version: int = 1
 
     def ser(self, _=None) -> Context.Ser:
-        return self.Ser(air=AirContext.ser(self), rail=RailContext.ser(self))
+        return self.Ser(air=AirContext.ser(self), rail=RailContext.ser(self), sea=SeaContext.ser(self))
 
     def graph(self, path: Path):
         g = cast(nx.MultiGraph, self.g.copy())
@@ -87,6 +89,9 @@ class Context(AirContext, RailContext, ToSerializable):
                 (RailCompany, "#ffff80"),
                 (RailLine, "#ff8080"),
                 (Station, "#8080ff"),
+                (SeaCompany, "#ffff80"),
+                (SeaLine, "#ff8080"),
+                (SeaStop, "#8080ff"),
             ):
                 if isinstance(node, ty):
                     g.nodes[node]["fillcolor"] = col
@@ -94,7 +99,7 @@ class Context(AirContext, RailContext, ToSerializable):
         for u, v, k in g.edges:
             edge_data = g.edges[u, v, k]["v"]
             if edge_data is not None:
-                g.edges[u, v, k]["tooltip"] = str(edge_data)
+                g.edges[u, v, k]["tooltip"] = f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})"
             if isinstance(edge_data, Proximity):
                 g.edges[u, v, k]["color"] = "#ff00ff"
                 continue
@@ -104,6 +109,8 @@ class Context(AirContext, RailContext, ToSerializable):
                 (Flight, Airline, "#ff0000"),
                 (RailCompany, RailLine, "#ff0000"),
                 (Station, Station, "#0000ff"),
+                (SeaCompany, SeaLine, "#ff0000"),
+                (SeaStop, SeaStop, "#0000ff"),
             ):
                 if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
                     g.edges[u, v, k]["color"] = col

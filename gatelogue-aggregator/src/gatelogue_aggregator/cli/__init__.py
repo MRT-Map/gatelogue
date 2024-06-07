@@ -18,6 +18,8 @@ from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
 from gatelogue_aggregator.sources.rail.railinq import RaiLinQ
 from gatelogue_aggregator.sources.rail.railinq_warp import RaiLinQWarp
 from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
+from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
+from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
 from gatelogue_aggregator.types.context import Context
 
 
@@ -51,6 +53,8 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
             RaiLinQWarp(cache_dir, timeout),
             WikiMRT(cache_dir, timeout),
             DynmapMRT(cache_dir, timeout),
+            AquaLinQ(cache_dir, timeout),
+            AquaLinQWarp(cache_dir, timeout),
         ]
     )
     if graph is not None:

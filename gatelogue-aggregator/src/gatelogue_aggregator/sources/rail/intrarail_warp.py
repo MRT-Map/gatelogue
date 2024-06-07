@@ -15,7 +15,7 @@ class IntraRailWarp(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="IntraRail")
+        company = self.rail_company(name="IntraRail")
 
         names = []
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), cache_dir, timeout):

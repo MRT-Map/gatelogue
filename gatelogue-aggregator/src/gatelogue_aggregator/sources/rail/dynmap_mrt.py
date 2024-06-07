@@ -20,7 +20,7 @@ class DynmapMRT(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="MRT")
+        company = self.rail_company(name="MRT")
 
         response1 = get_url(
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json", cache1, timeout=timeout

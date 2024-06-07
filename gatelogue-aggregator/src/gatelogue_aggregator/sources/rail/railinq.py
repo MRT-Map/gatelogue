@@ -16,7 +16,7 @@ class RaiLinQ(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="RaiLinQ")
+        company = self.rail_company(name="RaiLinQ")
 
         html = get_wiki_html("List of RaiLinQ lines", cache_dir, timeout)
         for line_table in html.find_all("table"):
@@ -24,7 +24,7 @@ class RaiLinQ(RailSource):
                 continue
             line_code = str(line_table.find("th").find_all("span", style="color:white;")[0].b.string)
             line_name = str(line_table.find("th").find_all("span", style="color:white;")[1].i.string)
-            line = self.line(code=line_code, name=line_name, company=company, mode="warp")
+            line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
 
             stations = []
             for b in line_table.p.find_all("b"):

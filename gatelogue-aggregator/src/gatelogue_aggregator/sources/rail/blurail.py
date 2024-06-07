@@ -18,7 +18,7 @@ class BluRail(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="BluRail")
+        company = self.rail_company(name="BluRail")
 
         for line_code in (
             "1",
@@ -69,7 +69,7 @@ class BluRail(RailSource):
         ):
             wiki = get_wiki_text(f"{line_code} (BluRail line)", cache_dir, timeout)
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
-            line = self.line(code=line_code, name=line_name, company=company, mode="warp")
+            line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):

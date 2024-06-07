@@ -21,7 +21,7 @@ class IntraRail(RailSource):
         RailContext.__init__(self)
         Source.__init__(self)
 
-        company = self.company(name="IntraRail")
+        company = self.rail_company(name="IntraRail")
 
         html = get_wiki_html("IntraRail", cache_dir, timeout)
 
@@ -31,7 +31,7 @@ class IntraRail(RailSource):
             result = re.search(r"\((?P<code>.*)\) (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
-            line = self.line(code=line_code, name=line_name, company=company, mode="warp")
+            line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stations = []
@@ -69,7 +69,7 @@ class IntraRail(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
             if line_code == "66":
-                line2 = self.line(code="<66>", name="East Mesan Express", company=company, mode="warp")
+                line2 = self.rail_line(code="<66>", name="East Mesan Express", company=company, mode="warp")
                 stations2 = [
                     s
                     for s in stations
