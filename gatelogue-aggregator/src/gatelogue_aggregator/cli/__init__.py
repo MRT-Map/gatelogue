@@ -1,8 +1,10 @@
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from pathlib import Path
 
 import click
 import msgspec.json
 import rich
+import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
@@ -21,6 +23,7 @@ from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
 from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
 from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
 from gatelogue_aggregator.types.context import Context
+from gatelogue_aggregator.utils import PROGRESS
 
 
 @click.group(
@@ -39,24 +42,25 @@ def gatelogue_aggregator():
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
 @click.option("-g", "--graph", type=Path, default=None, show_default=True)
 def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None):
-    ctx = Context.from_sources(
-        [
-            MRTTransit(cache_dir, timeout),
-            DynmapAirports(cache_dir, timeout),
-            WikiAirline(cache_dir, timeout),
-            WikiAirport(cache_dir, timeout),
-            BluRail(cache_dir, timeout),
-            BluRailWarp(cache_dir, timeout),
-            IntraRail(cache_dir, timeout),
-            IntraRailWarp(cache_dir, timeout),
-            RaiLinQ(cache_dir, timeout),
-            RaiLinQWarp(cache_dir, timeout),
-            WikiMRT(cache_dir, timeout),
-            DynmapMRT(cache_dir, timeout),
-            AquaLinQ(cache_dir, timeout),
-            AquaLinQWarp(cache_dir, timeout),
-        ]
-    )
+    sources = [
+        MRTTransit,
+        DynmapAirports,
+        WikiAirline,
+        WikiAirport,
+        BluRail,
+        BluRailWarp,
+        IntraRail,
+        IntraRailWarp,
+        RaiLinQ,
+        RaiLinQWarp,
+        WikiMRT,
+        DynmapMRT,
+        AquaLinQ,
+        AquaLinQWarp,
+    ]
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        result = executor.map(lambda s: s(cache_dir, timeout), sources)
+    ctx = Context.from_sources(result)
     if graph is not None:
         ctx.graph(graph)
     j = msgspec.json.encode(ctx.ser())

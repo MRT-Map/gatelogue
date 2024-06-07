@@ -10,6 +10,7 @@ from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_A
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
+from gatelogue_aggregator.utils import PROGRESS
 
 if TYPE_CHECKING:
     import uuid
@@ -380,7 +381,7 @@ class AirContext(_AirContext):
         return Airline(self, source, name=name, **attrs)
 
     def update(self):
-        for node in rich.progress.track(self.g.nodes, "[yellow]Updating air nodes"):
+        for node in PROGRESS.track(self.g.nodes, description="[yellow]Updating air nodes"):
             if isinstance(node, Flight | Airport):
                 node.update(self)
 
