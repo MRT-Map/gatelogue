@@ -23,6 +23,8 @@ from gatelogue_aggregator.sources.rail.railinq_warp import RaiLinQWarp
 from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
 from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
 from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
+from gatelogue_aggregator.sources.sea.hbl import HBL
+from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
 from gatelogue_aggregator.types.context import Context
 
 
@@ -58,9 +60,11 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         DynmapMRT,
         AquaLinQ,
         AquaLinQWarp,
+        HBL,
+        HBLWarp,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        result = executor.map(lambda s: s(cache_dir, timeout), sources)
+        result = [s for s in executor.map(lambda s: s(cache_dir, timeout), sources)]
     ctx = Context.from_sources(result)
     if graph is not None:
         ctx.graph(graph)
