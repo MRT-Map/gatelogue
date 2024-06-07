@@ -1,13 +1,11 @@
 from pathlib import Path
 
 import pandas as pd
-import rich.progress
-import rich.status
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.logging import INFO3, PROGRESS
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight
-from gatelogue_aggregator.logging import PROGRESS, INFO2, INFO3
 
 
 class MRTTransit(AirSource):

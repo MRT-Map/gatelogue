@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING, Self, cast, override
 import msgspec
 import networkx as nx
 
+from gatelogue_aggregator.logging import INFO1, INFO2, PROGRESS
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.logging import PROGRESS, INFO1, INFO2
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,8 +16,6 @@ if TYPE_CHECKING:
 
     import pygraphviz
 
-import rich
-import rich.progress
 
 from gatelogue_aggregator.types.base import ToSerializable
 from gatelogue_aggregator.types.connections import Proximity

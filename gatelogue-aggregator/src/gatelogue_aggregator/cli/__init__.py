@@ -8,6 +8,7 @@ import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.logging import INFO1
 from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports
 from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
 from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
@@ -23,7 +24,6 @@ from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
 from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
 from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
 from gatelogue_aggregator.types.context import Context
-from gatelogue_aggregator.logging import INFO1
 
 
 @click.group(

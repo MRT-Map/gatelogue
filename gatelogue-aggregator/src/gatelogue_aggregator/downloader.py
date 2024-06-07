@@ -9,7 +9,7 @@ import requests
 import rich
 import rich.status
 
-from gatelogue_aggregator.logging import PROGRESS, INFO2, INFO3
+from gatelogue_aggregator.logging import INFO3, PROGRESS
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
