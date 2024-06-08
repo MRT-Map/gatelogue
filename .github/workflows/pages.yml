@@ -21,7 +21,7 @@ jobs:
     - run: cd gatelogue-client/dist; echo > .nojekyll
     - run: cd gatelogue-aggregator; hatch run docs:build
     - run: mkdir gatelogue-client/dist/docs
-    - run: cp gatelogue-aggregator/docs/_build/html/* gatelogue-client/dist/docs
+    - run: cp -r gatelogue-aggregator/docs/_build/html/* gatelogue-client/dist/docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
