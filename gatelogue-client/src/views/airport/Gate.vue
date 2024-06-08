@@ -4,16 +4,14 @@ import Flight from "./Flight.vue";
 import type { Gate } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const props = defineProps<{
   gate?: Gate;
   gateId: string;
   maxGateFlightsLength?: number;
 }>();
-const gate = computed(
-  () => props.gate ?? gatelogueData.value!.gate[props.gateId]!,
-);
+const gate = computed(() => props.gate ?? gd.value!.airGate(props.gateId)!);
 const airline = computed(() => {
   if (gate.value.airline) return gate.value.airline;
   if (
@@ -21,7 +19,7 @@ const airline = computed(() => {
     gate.value.code !== "?" &&
     gate.value.flights.length > 0
   )
-    return gatelogueData.value!.flight[gate.value.flights[0].v]!.airline;
+    return gd.value!.airFlight(gate.value.flights[0].v)!.airline;
   return undefined;
 });
 </script>

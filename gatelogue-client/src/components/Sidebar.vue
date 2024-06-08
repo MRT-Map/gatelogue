@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { gatelogueData } from "@/stores/data";
+import type { ID } from "@/stores/schema";
+import { gd } from "@/stores/data";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -8,20 +9,24 @@ const sel = computed(() => ({
   cat: route.path.split("/")[1],
   id: route.path.split("/")[2],
 }));
-const objects = gatelogueData.value!;
+const objects = gd.value!;
 
 const panels: {
-  cat: "airport" | "airline";
+  cat: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getter: () => Record<ID, any>;
   catDisplay: string;
   objDisplay: string;
 }[] = [
   {
     cat: "airport",
+    getter: () => objects.airAirports,
     catDisplay: "Airport",
     objDisplay: "code",
   },
   {
     cat: "airline",
+    getter: () => objects.airAirlines,
     catDisplay: "Airline",
     objDisplay: "name",
   },
@@ -29,7 +34,7 @@ const panels: {
 
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() =>
-  Object.entries(objects[selPanel.value.cat]).sort(([, a], [, b]) => {
+  Object.entries(selPanel.value.getter()).sort(([, a], [, b]) => {
     if (a[selPanel.value.objDisplay] === null) return 100;
     if (b[selPanel.value.objDisplay] === null) return -100;
     return a[selPanel.value.objDisplay].localeCompare(

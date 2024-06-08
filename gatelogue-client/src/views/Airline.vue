@@ -4,14 +4,14 @@ import { useRoute, useRouter } from "vue-router";
 import Flight from "./airline/Flight.vue";
 import type { Flight as FlightT } from "@/stores/schema";
 import VueJsonPretty from "vue-json-pretty";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const route = useRoute();
 const router = useRouter();
 const airline = computed(
   () =>
-    gatelogueData.value!.airline[route.params.id as string] ??
-    Object.values(gatelogueData.value!.airline).find(
+    gd.value!.airAirline(route.params.id as string) ??
+    Object.values(gd.value!.airAirlines).find(
       (a) => a.name === route.params.id,
     )!,
 );
@@ -25,7 +25,7 @@ watchEffect(() => {
 
 const flights = computed(() =>
   airline.value.flights
-    .map((f) => [f.v, gatelogueData.value!.flight[f.v]!] as [string, FlightT])
+    .map((f) => [f.v, gd.value!.airFlight(f.v)!] as [string, FlightT])
     .sort(([, a], [, b]) => {
       if (!a.codes[0]) return 100;
       if (!b.codes[0]) return -100;

@@ -5,14 +5,14 @@ import Gate from "./airport/Gate.vue";
 import { type Gate as GateT } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import VueJsonPretty from "vue-json-pretty";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const route = useRoute();
 const router = useRouter();
 const airport = computed(
   () =>
-    gatelogueData.value?.airport[route.params.id as string] ??
-    Object.values(gatelogueData.value!.airport).find(
+    gd.value?.airAirport(route.params.id as string) ??
+    Object.values(gd.value!.airAirports).find(
       (a) =>
         a.code !== null && a.code === (route.params.id as string).toUpperCase(),
     )!,
@@ -27,7 +27,7 @@ watchEffect(() => {
 
 const gates = computed(() =>
   airport.value.gates
-    .map((g) => [g.v, gatelogueData.value!.gate[g.v]!] as [string, GateT])
+    .map((g) => [g.v, gd.value!.airGate(g.v)!] as [string, GateT])
     .sort(([, a], [, b]) => {
       if (!a.code) return 100;
       if (!b.code) return -100;

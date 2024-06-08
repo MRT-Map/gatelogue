@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { Airline } from "@/stores/schema";
+import type { Airline, ID } from "@/stores/schema";
 import { computed } from "vue";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const props = defineProps<{
   airline?: Airline;
-  airlineId: string;
+  airlineId: ID;
 }>();
 
 const airline = computed(
-  () => props.airline ?? gatelogueData.value?.airline[props.airlineId]!,
+  () => props.airline ?? gd.value?.airAirline(props.airlineId)!,
 );
 </script>
 

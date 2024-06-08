@@ -3,7 +3,7 @@ import type { Airport, Flight, Gate } from "@/stores/schema";
 import { RouterLink } from "vue-router";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const props = defineProps<{
   flightId: string;
@@ -11,13 +11,13 @@ const props = defineProps<{
   maxFlightGatesLength?: number;
 }>();
 const flight = computed(
-  () => props.flight ?? gatelogueData.value!.flight[props.flightId]!,
+  () => props.flight ?? gd.value!.airFlight(props.flightId)!,
 );
 const gates = computed(() =>
   flight.value.gates
-    .map((g) => [g.s, gatelogueData.value!.gate[g.v]] as [string[], Gate])
+    .map((g) => [g.s, gd.value!.airGate(g.v)] as [string[], Gate])
     .map(([s, g]) => ({
-      v: [g, gatelogueData.value!.airport[g.airport.v]] as [Gate, Airport],
+      v: [g, gd.value!.airAirport(g.airport.v)] as [Gate, Airport],
       s: s.concat(g.airport.s),
     })),
 );

@@ -3,25 +3,25 @@ import type { Airport, Gate } from "@/stores/schema";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
-import { gatelogueData } from "@/stores/data";
+import { gd } from "@/stores/data";
 
 const props = defineProps<{
   flightId: string;
   gateId: string;
   includeAirline: boolean;
 }>();
-const flight = computed(() => gatelogueData.value!.flight[props.flightId]!);
+const flight = computed(() => gd.value!.airFlight(props.flightId)!);
 const otherGates = computed(() =>
   flight.value.gates
     .filter((g) => g.v !== props.gateId)
-    .map((g) => [g.s, gatelogueData.value!.gate[g.v]!] as [string[], Gate])
+    .map((g) => [g.s, gd.value!.airGate(g.v)!] as [string[], Gate])
     .map(
       ([s, g]) =>
-        [
-          s.concat(g.airport.s),
-          g,
-          gatelogueData.value!.airport[g.airport.v]!,
-        ] as [string[], Gate, Airport],
+        [s.concat(g.airport.s), g, gd.value!.airAirport(g.airport.v)!] as [
+          string[],
+          Gate,
+          Airport,
+        ],
     )
     .map(([s, g, a]) => ({
       v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v] as [

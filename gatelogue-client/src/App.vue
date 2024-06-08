@@ -2,13 +2,13 @@
 import { RouterView, useRoute } from "vue-router";
 import Loading from "./views/Loading.vue";
 import Sidebar from "./components/Sidebar.vue";
-import { gatelogueData } from "./stores/data";
+import { gd } from "./stores/data";
 const route = useRoute();
 </script>
 
 <template>
   <Transition mode="out-in">
-    <div v-if="gatelogueData == null"><Loading /></div>
+    <div v-if="gd == null"><Loading /></div>
     <div v-else>
       <Sidebar />
       <RouterView v-slot="{ Component }">
