@@ -48,11 +48,6 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
     def update(self):
         AirContext.update(self)
 
-        def dist_cmp(a: tuple[int, int], b: tuple[int, int], thres_sq: int) -> bool:
-            x1, y1 = a
-            x2, y2 = b
-            return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= thres_sq
-
         processed = []
         for node in track(self.g.nodes, description=INFO1 + "Linking close nodes", nonlinear=True, remove=False):
             if not isinstance(node, LocatedNode) or (node_coordinates := node.merged_attr(self, "coordinates")) is None:
@@ -61,9 +56,14 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
             if (node_world := node.merged_attr(self, "world")) is None:
                 continue
             for existing, existing_world, existing_coordinates in processed:
-                thres = 500 if isinstance(existing, Airport) or isinstance(node, Airport) else 250
-                if existing_world == node_world.v and dist_cmp(existing_coordinates, node_coordinates, thres**2):
-                    node.connect(self, existing, value=Proximity())
+                if existing_world != node_world.v:
+                    continue
+                x1, y1 = existing_coordinates
+                x2, y2 = node_coordinates
+                dist = (x1 - x2) ** 2 + (y1 - y2) ** 2
+                threshold = 500 if isinstance(existing, Airport) or isinstance(node, Airport) else 250
+                if dist < threshold**2:
+                    node.connect(self, existing, value=Proximity(dist**0.5))
             processed.append((node, node_world.v, node_coordinates))
 
     @override

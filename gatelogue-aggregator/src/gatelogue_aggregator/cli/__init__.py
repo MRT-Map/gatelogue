@@ -29,6 +29,8 @@ from gatelogue_aggregator.sources.sea.hbl import HBL
 from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
 from gatelogue_aggregator.sources.sea.intrasail import IntraSail
 from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
+from gatelogue_aggregator.sources.sea.wzf import WZF
+from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.types.context import Context
 
 
@@ -50,26 +52,28 @@ def gatelogue_aggregator():
 @click.option("-w", "--max_workers", type=int, default=8, show_default=True)
 def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int):
     sources = [
-        # MRTTransit,
-        # DynmapAirports,
-        # WikiAirline,
-        # WikiAirport,
-        # BluRail,
-        # BluRailWarp,
-        # IntraRail,
-        # IntraRailWarp,
-        # RaiLinQ,
-        # RaiLinQWarp,
-        # WikiMRT,
-        # DynmapMRT,
-        # AquaLinQ,
-        # AquaLinQWarp,
-        # HBL,
-        # HBLWarp,
-        # IntraSail,
-        # IntraSailWarp,
+        MRTTransit,
+        DynmapAirports,
+        WikiAirline,
+        WikiAirport,
+        BluRail,
+        BluRailWarp,
+        IntraRail,
+        IntraRailWarp,
+        RaiLinQ,
+        RaiLinQWarp,
         WZR,
         WZRWarp,
+        WikiMRT,
+        DynmapMRT,
+        AquaLinQ,
+        AquaLinQWarp,
+        HBL,
+        HBLWarp,
+        IntraSail,
+        IntraSailWarp,
+        WZF,
+        WZFWarp,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(cache_dir, timeout), sources))

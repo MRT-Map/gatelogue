@@ -87,5 +87,5 @@ class Connection[CTX: BaseContext, C: Node, L: Node, S: Node](ToSerializable):
         self.set_company(ctx, v.get_one(ctx, self.CT))
 
 
-class Proximity(msgspec.Struct, kw_only=True):
-    pass
+class Proximity(msgspec.Struct):
+    distance: int
