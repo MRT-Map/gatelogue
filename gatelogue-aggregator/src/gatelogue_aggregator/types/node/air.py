@@ -258,9 +258,9 @@ class AirGate(Node[_AirContext]):
         import uuid
 
         code: str | None
-        """Unique gate code. If ``None``, all flights under this gate do not have gate information"""
+        """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
         flights: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information"""
+        """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
         airport: Sourced.Ser[uuid.UUID]
         """ID of the :py:class:`AirAirport`"""
         airline: Sourced.Ser[uuid.UUID] | None
