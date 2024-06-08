@@ -116,9 +116,9 @@ class RailLine(Node[_RailContext]):
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_station: Sourced.Ser[uuid.UUID]
-        mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
-        name: Sourced.Ser[str] | None = None
-        colour: Sourced.Ser[str] | None = None
+        mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None
+        name: Sourced.Ser[str] | None
+        colour: Sourced.Ser[str] | None
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
@@ -190,7 +190,7 @@ class RailStation(LocatedNode[_RailContext]):
 
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
-        connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
+        connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection.Ser]]]
         name: Sourced.Ser[str] | None
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:

@@ -190,7 +190,7 @@ class SeaStop(LocatedNode[_SeaContext]):
 
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
-        connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection]]]
+        connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection.Ser]]]
         name: Sourced.Ser[str] | None
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:

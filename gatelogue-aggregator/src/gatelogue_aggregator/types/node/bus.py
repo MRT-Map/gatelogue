@@ -187,7 +187,7 @@ class BusStop(LocatedNode[_BusContext]):
 
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
-        connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection]]]
+        connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection.Ser]]]
         name: Sourced.Ser[str] | None
 
     def ser(self, ctx: BusContext) -> BusLine.Ser:

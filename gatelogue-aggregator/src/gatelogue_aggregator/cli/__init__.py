@@ -34,6 +34,10 @@ from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
 from gatelogue_aggregator.sources.sea.wzf import WZF
 from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.types.context import Context
+from gatelogue_aggregator.types.node.air import AirAirport, AirContext
+from gatelogue_aggregator.types.node.bus import BusContext
+from gatelogue_aggregator.types.node.rail import RailContext, RailCompany, RailLine, RailStation, RailConnection
+from gatelogue_aggregator.types.node.sea import SeaContext
 
 
 @click.group(
@@ -85,6 +89,19 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
     if graph is not None:
         ctx.graph(graph)
     j = msgspec.json.encode(ctx.ser())
+    if fmt:
+        rich.print(INFO1 + f"Outputting to {output} (formatted)")
+        output.write_text(msgspec.json.format(j.decode("utf-8")))
+    else:
+        rich.print(INFO1 + f"Outputting to {output} (unformatted)")
+        output.write_bytes(j)
+
+
+@gatelogue_aggregator.command()
+@click.option("-o", "--output", default="schema.json", type=Path, show_default=True)
+@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
+def schema(output: Path, fmt: bool):
+    j = msgspec.json.encode(msgspec.json.schema(Context.Ser))
     if fmt:
         rich.print(INFO1 + f"Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
