@@ -56,8 +56,8 @@ class Mergeable[CTX: BaseContext]:
 _T = TypeVar("_T")
 
 
-class Sourced[T](msgspec.Struct, Mergeable, ToSerializable):
-    v: T
+class Sourced(msgspec.Struct, Mergeable, ToSerializable, Generic[_T]):
+    v: _T
     s: set[str] = msgspec.field(default_factory=set)
 
     def __str__(self):

@@ -227,6 +227,8 @@ class LocatedNode[CTX](Node[CTX]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         coordinates: Sourced.Ser[tuple[int, int]] | None
         world: Sourced.Ser[Literal["New", "Old"]] | None
         proximity: dict[str, dict[uuid.UUID, Sourced.Ser[Proximity]]]

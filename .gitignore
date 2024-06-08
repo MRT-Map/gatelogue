@@ -735,7 +735,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+gatelogue-aggregator/docs/_build/
 
 # PyBuilder
 .pybuilder/

@@ -49,6 +49,8 @@ class RailCompany(Node[_RailContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         name: str
         lines: list[Sourced.Ser[uuid.UUID]]
         stations: list[Sourced.Ser[uuid.UUID]]
@@ -109,6 +111,8 @@ class RailLine(Node[_RailContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_station: Sourced.Ser[uuid.UUID]
@@ -182,6 +186,8 @@ class RailStation(LocatedNode[_RailContext]):
 
     @override
     class Ser(LocatedNode.Ser, kw_only=True):
+        import uuid
+
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection]]]
@@ -220,6 +226,8 @@ class RailLineBuilder(LineBuilder[_RailContext, RailLine, RailStation]):
 class RailContext(_RailContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         company: dict[uuid.UUID, RailCompany.Ser]
         line: dict[uuid.UUID, RailLine.Ser]
         station: dict[uuid.UUID, RailStation.Ser]

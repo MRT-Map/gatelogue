@@ -23,6 +23,8 @@ class Direction[CTX: BaseContext](ToSerializable):
 
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         forward_towards_code: uuid.UUID
         forward_direction_label: str | None
         backward_direction_label: str | None
@@ -46,6 +48,8 @@ class Connection[CTX: BaseContext, C: Node, L: Node, S: Node](ToSerializable):
 
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         line: uuid.UUID
         direction: Direction.Ser | None = None
 

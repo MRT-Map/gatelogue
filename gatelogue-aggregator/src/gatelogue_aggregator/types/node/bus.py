@@ -49,6 +49,8 @@ class BusCompany(Node[_BusContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         name: str
         lines: list[Sourced.Ser[uuid.UUID]]
         stops: list[Sourced.Ser[uuid.UUID]]
@@ -107,6 +109,8 @@ class BusLine(Node[_BusContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_stop: Sourced.Ser[uuid.UUID]
@@ -179,6 +183,8 @@ class BusStop(LocatedNode[_BusContext]):
 
     @override
     class Ser(LocatedNode.Ser, kw_only=True):
+        import uuid
+
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection]]]
@@ -217,6 +223,8 @@ class BusLineBuilder(LineBuilder[_BusContext, BusLine, BusStop]):
 class BusContext(_BusContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         company: dict[uuid.UUID, BusCompany.Ser]
         line: dict[uuid.UUID, BusLine.Ser]
         stop: dict[uuid.UUID, BusStop.Ser]

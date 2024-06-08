@@ -49,6 +49,8 @@ class SeaCompany(Node[_SeaContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         name: str
         lines: list[Sourced.Ser[uuid.UUID]]
         stops: list[Sourced.Ser[uuid.UUID]]
@@ -109,6 +111,8 @@ class SeaLine(Node[_SeaContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         code: str
         company: Sourced.Ser[uuid.UUID]
         ref_stop: Sourced.Ser[uuid.UUID]
@@ -182,6 +186,8 @@ class SeaStop(LocatedNode[_SeaContext]):
 
     @override
     class Ser(LocatedNode.Ser, kw_only=True):
+        import uuid
+
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection]]]
@@ -220,6 +226,8 @@ class SeaLineBuilder(LineBuilder[_SeaContext, SeaLine, SeaStop]):
 class SeaContext(_SeaContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         company: dict[uuid.UUID, SeaCompany.Ser]
         line: dict[uuid.UUID, SeaLine.Ser]
         stop: dict[uuid.UUID, SeaStop.Ser]

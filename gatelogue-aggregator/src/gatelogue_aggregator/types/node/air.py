@@ -56,6 +56,8 @@ class AirFlight(Node[_AirContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         codes: set[str]
         gates: list[Sourced.Ser[uuid.UUID]]
         airline: Sourced.Ser[uuid.UUID]
@@ -150,6 +152,8 @@ class AirAirport(LocatedNode[_AirContext]):
 
     @override
     class Ser(LocatedNode.Ser, kw_only=True):
+        import uuid
+
         code: str
         name: Sourced.Ser[str] | None
         link: Sourced.Ser[str] | None
@@ -244,6 +248,8 @@ class AirGate(Node[_AirContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         code: str | None
         flights: list[Sourced.Ser[uuid.UUID]]
         airport: Sourced.Ser[uuid.UUID]
@@ -330,6 +336,8 @@ class AirAirline(Node[_AirContext]):
 class AirContext(_AirContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
+        import uuid
+
         flight: dict[uuid.UUID, AirFlight.Ser]
         airport: dict[uuid.UUID, AirAirport.Ser]
         gate: dict[uuid.UUID, AirGate.Ser]

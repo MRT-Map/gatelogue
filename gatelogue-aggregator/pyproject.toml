@@ -43,6 +43,15 @@ gatelogue-aggregator = "gatelogue_aggregator.cli:gatelogue_aggregator"
 [tool.hatch.version]
 path = "src/gatelogue_aggregator/__about__.py"
 
+[tool.hatch.envs.docs]
+extra-dependencies = [
+  "sphinx",
+  "sphinxcontrib-programoutput",
+  "sphinx-codeautolink"
+]
+[tool.hatch.envs.docs.scripts]
+build = "make html"
+
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
