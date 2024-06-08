@@ -13,6 +13,8 @@ from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports
 from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
 from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
 from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
+from gatelogue_aggregator.sources.bus.intrabus import IntraBus
+from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
 from gatelogue_aggregator.sources.rail.blurail import BluRail
 from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
 from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
@@ -74,6 +76,8 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         IntraSailWarp,
         WZF,
         WZFWarp,
+        IntraBus,
+        IntraBusWarp,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(cache_dir, timeout), sources))

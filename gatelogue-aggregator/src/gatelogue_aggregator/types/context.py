@@ -7,6 +7,7 @@ import msgspec
 import networkx as nx
 
 from gatelogue_aggregator.logging import INFO1, INFO2, track
+from gatelogue_aggregator.types.node.bus import BusSource, BusContext, BusCompany, BusLine, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
 
@@ -23,9 +24,9 @@ from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, Ai
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
-class Context(AirContext, RailContext, SeaContext, ToSerializable):
+class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
     @classmethod
-    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource]) -> Self:
+    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource]) -> Self:
         self = cls()
         for source in track(sources, description=INFO1 + "Merging sources", remove=False):
             self.g = nx.compose(self.g, source.g)
@@ -71,11 +72,14 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
         air: AirContext.Ser
         rail: RailContext.Ser
         sea: SeaContext.Ser
+        bus: SeaContext.Ser
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%M%S%Z"))  # noqa: DTZ005
         version: int = 1
 
     def ser(self, _=None) -> Context.Ser:
-        return self.Ser(air=AirContext.ser(self), rail=RailContext.ser(self), sea=SeaContext.ser(self))
+        return self.Ser(
+            air=AirContext.ser(self), rail=RailContext.ser(self), sea=SeaContext.ser(self), bus=BusContext.ser(self)
+        )
 
     def graph(self, path: Path):
         g = cast(nx.MultiGraph, self.g.copy())
@@ -93,6 +97,9 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
                 (SeaCompany, "#ffff80"),
                 (SeaLine, "#ff8080"),
                 (SeaStop, "#8080ff"),
+                (BusCompany, "#ffff80"),
+                (BusLine, "#ff8080"),
+                (BusStop, "#8080ff"),
             ):
                 if isinstance(node, ty):
                     g.nodes[node]["fillcolor"] = col
@@ -112,6 +119,8 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
                 (Station, Station, "#0000ff"),
                 (SeaCompany, SeaLine, "#ff0000"),
                 (SeaStop, SeaStop, "#0000ff"),
+                (BusCompany, BusLine, "#ff0000"),
+                (BusStop, BusStop, "#0000ff"),
             ):
                 if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
                     g.edges[u, v, k]["color"] = col
