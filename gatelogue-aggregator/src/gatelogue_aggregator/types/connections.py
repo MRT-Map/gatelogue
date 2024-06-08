@@ -26,9 +26,13 @@ class Direction[CTX: BaseContext](ToSerializable):
         import uuid
 
         forward_towards_code: uuid.UUID
+        """ID of the :py:class:`RailStation`/:py:class:`SeaStop`/:py:class:`BusStop` that the other fields take with respect to. Should be either of the stations/stops of the connection"""
         forward_direction_label: str | None
+        """Describes the direction taken when travelling **towards the station/stop in** ``forward_towards_code``"""
         backward_direction_label: str | None
+        """Describes the direction taken when travelling **from the station/stop in** ``forward_towards_code``"""
         one_way: bool
+        """Whether the connection is one-way, ie. travel **towards the station/stop in** ``forward_towards_code`` is possible but not the other way"""
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
@@ -51,7 +55,9 @@ class Connection[CTX: BaseContext, C: Node, L: Node, S: Node](ToSerializable):
         import uuid
 
         line: uuid.UUID
+        """ID of the :py:class:`RailLine`/:py:class:`SeaLine`/:py:class:`BusLine` that the connection is made on"""
         direction: Direction.Ser | None = None
+        """Direction information"""
 
     def ser(self, ctx: CTX) -> Connection.Ser:
         return self.Ser(
@@ -93,3 +99,4 @@ class Connection[CTX: BaseContext, C: Node, L: Node, S: Node](ToSerializable):
 
 class Proximity(msgspec.Struct):
     distance: int
+    """Distance between the two objects in blocks"""

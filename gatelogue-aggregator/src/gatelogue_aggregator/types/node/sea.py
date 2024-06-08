@@ -52,8 +52,11 @@ class SeaCompany(Node[_SeaContext]):
         import uuid
 
         name: str
+        """Name of the ferry/cruise company"""
         lines: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of all :py:class:`SeaLine` s the company operates"""
         stops: list[Sourced.Ser[uuid.UUID]]
+        """List of all :py:class:`SeaStops` s the company's lines stop at"""
 
     def ser(self, ctx: SeaContext) -> SeaCompany.Ser:
         return self.Ser(
@@ -112,13 +115,20 @@ class SeaLine(Node[_SeaContext]):
     @override
     class Ser(Node.Ser, kw_only=True):
         import uuid
+        from typing import Literal
 
         code: str
+        """Unique code identifying the sea line"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`SeaCompany` that operates the line"""
         ref_stop: Sourced.Ser[uuid.UUID]
+        """ID of one :py:class:`SeaStop` on the line, typically a terminus"""
         mode: Sourced.Ser[Literal["ferry", "cruise"]] | None
+        """Type of boat used on the line"""
         name: Sourced.Ser[str] | None
+        """Name of the line"""
         colour: Sourced.Ser[str] | None
+        """Colour of the line (on a map)"""
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:
         return self.Ser(
@@ -189,9 +199,17 @@ class SeaStop(LocatedNode[_SeaContext]):
         import uuid
 
         codes: set[str]
+        """Unique code(s) identifying the bus stop. May also be the same as the name"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`SeaCompany` that stops here"""
         connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection.Ser]]]
+        """
+        References all next stops on the lines serving this stop.
+        It is represented as a mapping of stop IDs to a list of connection data (:py:class:`SeaConnection`), each encoding line and route information.
+        For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
+        """
         name: Sourced.Ser[str] | None
+        """Name of the stop"""
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:
         return self.Ser(

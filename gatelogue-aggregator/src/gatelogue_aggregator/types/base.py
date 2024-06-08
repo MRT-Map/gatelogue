@@ -69,7 +69,9 @@ class Sourced(msgspec.Struct, Mergeable, ToSerializable, Generic[_T]):
     @override
     class Ser(msgspec.Struct, Generic[_T]):
         v: _T
+        """Actual value"""
         s: set[str]
+        """List of sources that support the value"""
 
     def ser(self, ctx: BaseContext) -> Ser:
         from gatelogue_aggregator.types.node.base import Node

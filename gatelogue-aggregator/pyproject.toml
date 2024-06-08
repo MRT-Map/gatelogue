@@ -47,7 +47,8 @@ path = "src/gatelogue_aggregator/__about__.py"
 extra-dependencies = [
   "sphinx",
   "sphinxcontrib-programoutput",
-  "sphinx-codeautolink"
+  "sphinx-codeautolink",
+  "sphinx_rtd_theme"
 ]
 [tool.hatch.envs.docs.scripts]
 build = "make html"

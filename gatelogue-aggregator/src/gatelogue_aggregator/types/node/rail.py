@@ -52,8 +52,11 @@ class RailCompany(Node[_RailContext]):
         import uuid
 
         name: str
+        """Name of the rail company"""
         lines: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of all :py:class:`RailLine` s the company operates"""
         stations: list[Sourced.Ser[uuid.UUID]]
+        """List of all :py:class:`RailStation` s the company's lines stop at"""
 
     def ser(self, ctx: RailContext) -> RailCompany.Ser:
         return self.Ser(
@@ -112,13 +115,20 @@ class RailLine(Node[_RailContext]):
     @override
     class Ser(Node.Ser, kw_only=True):
         import uuid
+        from typing import Literal
 
         code: str
+        """Unique code identifying the rail line"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`RailCompany` that operates the line"""
         ref_station: Sourced.Ser[uuid.UUID]
+        """ID of one :py:class:`RailStation` on the line, typically a terminus"""
         mode: Sourced.Ser[Literal["warp", "cart", "traincart", "vehicles"]] | None
+        """Type of rail or rail technology used on the line"""
         name: Sourced.Ser[str] | None
+        """Name of the line"""
         colour: Sourced.Ser[str] | None
+        """Colour of the line (on a map)"""
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(
@@ -189,9 +199,17 @@ class RailStation(LocatedNode[_RailContext]):
         import uuid
 
         codes: set[str]
+        """Unique code(s) identifying the station. May also be the same as the name"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`RailCompany` that stops here"""
         connections: dict[uuid.UUID, list[Sourced.Ser[RailConnection.Ser]]]
+        """
+        References all next stations on the lines serving this station.
+        It is represented as a mapping of station IDs to a list of connection data (:py:class:`RailConnection`), each encoding line and route information.
+        For example, ``{1234: [<conn1>, <conn2>]}`` means that the station with ID ``1234`` is the next station from here on two lines.
+        """
         name: Sourced.Ser[str] | None
+        """Name of the station"""
 
     def ser(self, ctx: RailContext) -> RailLine.Ser:
         return self.Ser(

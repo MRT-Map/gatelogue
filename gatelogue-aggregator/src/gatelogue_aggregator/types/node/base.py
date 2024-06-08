@@ -228,10 +228,18 @@ class LocatedNode[CTX](Node[CTX]):
     @override
     class Ser(Node.Ser, kw_only=True):
         import uuid
+        from typing import Literal
 
         coordinates: Sourced.Ser[tuple[int, int]] | None
+        """Coordinates of the object"""
         world: Sourced.Ser[Literal["New", "Old"]] | None
+        """Whether the object is in the New or Old world"""
         proximity: dict[str, dict[uuid.UUID, Sourced.Ser[Proximity]]]
+        """
+        References all objects that are near (within walking distance of) this object.
+        It is represented as a mapping of object types to a inner mapping of object IDs to proximity data (:py:class:`Proximity`).
+        For example, ``{"airport": {1234: <proximity>}}`` means that there is an airport with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
+        """
 
     def get_proximity_ser(self, ctx: CTX) -> dict[str, dict[uuid.UUID, Sourced.Ser[Proximity]]]:
         out = {}

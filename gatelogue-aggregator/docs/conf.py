@@ -14,18 +14,21 @@ author = "MRT Mapping Services"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "sphinx_rtd_theme",
     "sphinxcontrib.programoutput",
     "sphinx_codeautolink",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.githubpages",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
+html_baseurl = "https://mrt-map.github.io/gatelogue/docs"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]

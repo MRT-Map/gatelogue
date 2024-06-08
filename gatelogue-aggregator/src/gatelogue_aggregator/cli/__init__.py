@@ -34,10 +34,6 @@ from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
 from gatelogue_aggregator.sources.sea.wzf import WZF
 from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.types.context import Context
-from gatelogue_aggregator.types.node.air import AirAirport, AirContext
-from gatelogue_aggregator.types.node.bus import BusContext
-from gatelogue_aggregator.types.node.rail import RailContext, RailCompany, RailLine, RailStation, RailConnection
-from gatelogue_aggregator.types.node.sea import SeaContext
 
 
 @click.group(
@@ -46,7 +42,7 @@ from gatelogue_aggregator.types.node.sea import SeaContext
 )
 @click.version_option(version=__version__, prog_name="gatelogue-aggregator")
 def gatelogue_aggregator():
-    click.echo(click.get_current_context().get_help())
+    pass
 
 
 @gatelogue_aggregator.command()

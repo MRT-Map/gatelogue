@@ -59,8 +59,11 @@ class AirFlight(Node[_AirContext]):
         import uuid
 
         codes: set[str]
+        """Unique flight code(s). **2-letter airline prefix not included**"""
         gates: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
         airline: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`AirAirline` the flight is operated by"""
 
     def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
@@ -155,9 +158,13 @@ class AirAirport(LocatedNode[_AirContext]):
         import uuid
 
         code: str
+        """Unique 3 (sometimes 4)-letter code"""
         name: Sourced.Ser[str] | None
+        """Name of the airport"""
         link: Sourced.Ser[str] | None
+        """Link to the MRT Wiki page for the airport"""
         gates: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of :py:class:`AirGate` s"""
 
     def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
@@ -251,10 +258,15 @@ class AirGate(Node[_AirContext]):
         import uuid
 
         code: str | None
+        """Unique gate code. If ``None``, all flights under this gate do not have gate information"""
         flights: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information"""
         airport: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`AirAirport`"""
         airline: Sourced.Ser[uuid.UUID] | None
+        """ID of the :py:class:`AirAirline` that owns the gate"""
         size: Sourced.Ser[str] | None
+        """Abbreviated size of the gate (eg. ``S``, ``M``)"""
 
     def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
@@ -308,9 +320,14 @@ class AirAirline(Node[_AirContext]):
 
     @override
     class Ser(Node.Ser, kw_only=True):
+        import uuid
+
         name: str
-        flights: list[Sourced.Ser[str]]
+        """Name of the airline"""
+        flights: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of all :py:class:`AirFlight` s the airline operates"""
         link: Sourced.Ser[str] | None
+        """Link to the MRT Wiki page for the airline"""
 
     def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(

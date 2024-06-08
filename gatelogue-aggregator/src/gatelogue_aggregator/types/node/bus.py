@@ -52,8 +52,11 @@ class BusCompany(Node[_BusContext]):
         import uuid
 
         name: str
+        """Name of the bus company"""
         lines: list[Sourced.Ser[uuid.UUID]]
+        """List of IDs of all :py:class:`BusLine` s the company operates"""
         stops: list[Sourced.Ser[uuid.UUID]]
+        """List of all :py:class:`BusStop` s the company's lines stop at"""
 
     def ser(self, ctx: BusContext) -> BusCompany.Ser:
         return self.Ser(
@@ -112,10 +115,15 @@ class BusLine(Node[_BusContext]):
         import uuid
 
         code: str
+        """Unique code identifying the bus line"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`BusCompany` that operates the line"""
         ref_stop: Sourced.Ser[uuid.UUID]
+        """ID of one :py:class:`BusStop` on the line, typically a terminus"""
         name: Sourced.Ser[str] | None
+        """Name of the line"""
         colour: Sourced.Ser[str] | None
+        """Colour of the line (on a map)"""
 
     def ser(self, ctx: BusContext) -> BusLine.Ser:
         return self.Ser(
@@ -186,9 +194,17 @@ class BusStop(LocatedNode[_BusContext]):
         import uuid
 
         codes: set[str]
+        """Unique code(s) identifying the bus stop. May also be the same as the name"""
         company: Sourced.Ser[uuid.UUID]
+        """ID of the :py:class:`BusCompany` that stops here"""
         connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection.Ser]]]
+        """
+        References all next stops on the lines serving this stop.
+        It is represented as a mapping of stop IDs to a list of connection data (:py:class:`BusConnection`), each encoding line and route information.
+        For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
+        """
         name: Sourced.Ser[str] | None
+        """Name of the stop"""
 
     def ser(self, ctx: BusContext) -> BusLine.Ser:
         return self.Ser(
