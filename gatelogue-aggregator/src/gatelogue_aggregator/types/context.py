@@ -7,7 +7,7 @@ import msgspec
 import networkx as nx
 
 from gatelogue_aggregator.logging import INFO1, INFO2, track
-from gatelogue_aggregator.types.node.bus import BusSource, BusContext, BusCompany, BusLine, BusStop
+from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
 
