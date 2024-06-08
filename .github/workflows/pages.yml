@@ -16,6 +16,7 @@ jobs:
       with:
         node-version: 22
     - uses: pypa/hatch@install
+    - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz
     - run: cd gatelogue-client; pnpm install --no-frozen-lockfile; pnpm run build
     - run: cd gatelogue-client/dist; echo > .nojekyll
     - run: cd gatelogue-aggregator; hatch run docs:build
