@@ -27,9 +27,7 @@ class Context(AirContext, RailContext, SeaContext, ToSerializable):
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource]) -> Self:
         self = cls()
-        for source in track(
-            sources, description=INFO1 + f"Merging sources: {', '.join(s.name for s in sources)}", remove=False
-        ):
+        for source in track(sources, description=INFO1 + f"Merging sources", remove=False):
             self.g = nx.compose(self.g, source.g)
 
         processed: dict[type[Node], dict[str, list[Node]]] = {}
