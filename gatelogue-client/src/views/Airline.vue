@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import type { AirFlight } from "@/stores/schema";
 import Flight from "./airline/Flight.vue";
-import type { Flight as FlightT } from "@/stores/schema";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
 
@@ -25,7 +25,7 @@ watchEffect(() => {
 
 const flights = computed(() =>
   airline.value.flights
-    .map((f) => [f.v, gd.value!.airFlight(f.v)!] as [string, FlightT])
+    .map((f) => [f.v, gd.value!.airFlight(f.v)!] as [string, AirFlight])
     .sort(([, a], [, b]) => {
       if (!a.codes[0]) return 100;
       if (!b.codes[0]) return -100;

@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import type { AirGate } from "@/stores/schema";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Flight from "./Flight.vue";
-import type { Gate } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 
 const props = defineProps<{
-  gate?: Gate;
+  gate?: AirGate;
   gateId: string;
   maxGateFlightsLength?: number;
 }>();

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { type AirGate } from "@/stores/schema";
 import Gate from "./airport/Gate.vue";
-import { type Gate as GateT } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
@@ -27,7 +27,7 @@ watchEffect(() => {
 
 const gates = computed(() =>
   airport.value.gates
-    .map((g) => [g.v, gd.value!.airGate(g.v)!] as [string, GateT])
+    .map((g) => [g.v, gd.value!.airGate(g.v)!] as [string, AirGate])
     .sort(([, a], [, b]) => {
       if (!a.code) return 100;
       if (!b.code) return -100;

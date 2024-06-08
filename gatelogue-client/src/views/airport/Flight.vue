@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Airport, Gate } from "@/stores/schema";
+import type { AirAirport, AirGate } from "@/stores/schema";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
@@ -14,13 +14,13 @@ const flight = computed(() => gd.value!.airFlight(props.flightId)!);
 const otherGates = computed(() =>
   flight.value.gates
     .filter((g) => g.v !== props.gateId)
-    .map((g) => [g.s, gd.value!.airGate(g.v)!] as [string[], Gate])
+    .map((g) => [g.s, gd.value!.airGate(g.v)!] as [string[], AirGate])
     .map(
       ([s, g]) =>
         [s.concat(g.airport.s), g, gd.value!.airAirport(g.airport.v)!] as [
           string[],
-          Gate,
-          Airport,
+          AirGate,
+          AirAirport,
         ],
     )
     .map(([s, g, a]) => ({

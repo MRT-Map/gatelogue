@@ -8,6 +8,12 @@ export type Sourced<T, S extends boolean = true> = S extends true
   ? { v: T; s: string[] }
   : T;
 
+export interface Located<S extends boolean = true> {
+  world: Sourced<World, S> | null;
+  coordinates: Sourced<[number, number]> | null;
+  proximity: Record<string, Record<ID, Sourced<{ distance: float }>>>;
+}
+
 export interface Direction {
   forward_towards_code: ID;
   forward_direction_label: string | null;
@@ -20,23 +26,20 @@ export interface Connection {
   direction: Direction | null;
 }
 
-export interface Flight<S extends boolean = true> {
+export interface AirFlight<S extends boolean = true> {
   codes: string[];
   gates: Sourced<ID, S>[];
   airline: Sourced<ID, S>;
 }
 
-export interface Airport<S extends boolean = true> {
+export interface AirAirport<S extends boolean = true> extends Located {
   code: string;
   name: Sourced<string, S> | null;
-  world: Sourced<World, S> | null;
-  coordinates: Sourced<[number, number]> | null;
   link: Sourced<string, S> | null;
   gates: Sourced<ID, S>[];
-  proximity: Record<ID, string>;
 }
 
-export interface Gate<S extends boolean = true> {
+export interface AirGate<S extends boolean = true> {
   code: string | null;
   flights: Sourced<ID, S>[];
   airport: Sourced<ID, S>;
@@ -44,17 +47,17 @@ export interface Gate<S extends boolean = true> {
   size: Sourced<string, S> | null;
 }
 
-export interface Airline<S extends boolean = true> {
+export interface AirAirline<S extends boolean = true> {
   name: string;
   flights: Sourced<ID, S>[];
   link: Sourced<string, S> | null;
 }
 
 export interface AirData<S extends boolean = true> {
-  flight: Record<ID, Flight<S>>;
-  airport: Record<ID, Airport<S>>;
-  gate: Record<ID, Gate<S>>;
-  airline: Record<ID, Airline<S>>;
+  flight: Record<ID, AirFlight<S>>;
+  airport: Record<ID, AirAirport<S>>;
+  gate: Record<ID, AirGate<S>>;
+  airline: Record<ID, AirAirline<S>>;
 }
 
 export interface RailCompany<S extends boolean = true> {
@@ -72,20 +75,17 @@ export interface RailLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface Station<S extends boolean = true> {
+export interface RailStation<S extends boolean = true> extends Located {
   codes: string[];
   name: Sourced<string, S> | null;
-  world: Sourced<World, S> | null;
-  coordinates: Sourced<[number, number], S> | null;
   company: Sourced<ID, S>;
-  connections: Record<ID, Sourced<Connection>[]>;
   proximity: Record<ID, string>;
 }
 
 export interface RailData<S extends boolean = true> {
   rail_company: Record<ID, RailCompany<S>>;
   rail_line: Record<ID, RailLine<S>>;
-  station: Record<ID, Station<S>>;
+  station: Record<ID, RailStation<S>>;
 }
 
 export interface SeaCompany<S extends boolean = true> {
@@ -103,13 +103,10 @@ export interface SeaLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface SeaStop<S extends boolean = true> {
+export interface SeaStop<S extends boolean = true> extends Located {
   codes: string[];
   name: Sourced<string, S> | null;
-  world: Sourced<World, S> | null;
-  coordinates: Sourced<[number, number], S> | null;
   company: Sourced<ID, S>;
-  connections: Record<ID, Sourced<Connection>[]>;
   proximity: Record<ID, string>;
 }
 
@@ -133,14 +130,11 @@ export interface BusLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface BusStop<S extends boolean = true> {
+export interface BusStop<S extends boolean = true> extends Located {
   codes: string[];
   name: Sourced<string, S> | null;
-  world: Sourced<World, S> | null;
-  coordinates: Sourced<[number, number], S> | null;
   company: Sourced<ID, S>;
   connections: Record<ID, Sourced<Connection>[]>;
-  proximity: Record<ID, string>;
 }
 
 export interface BusData<S extends boolean = true> {
@@ -159,13 +153,13 @@ export interface GatelogueData<S extends boolean = true> {
 }
 
 export type Category<S extends boolean = true> =
-  | Flight<S>
-  | Airport<S>
-  | Gate<S>
-  | Airline<S>
+  | AirFlight<S>
+  | AirAirport<S>
+  | AirGate<S>
+  | AirAirline<S>
   | RailCompany<S>
   | RailLine<S>
-  | Station<S>
+  | RailStation<S>
   | SeaCompany<S>
   | SeaLine<S>
   | SeaStop<S>
@@ -180,35 +174,35 @@ export class GD<S extends boolean = true> {
     this.data = data;
   }
 
-  airFlight(id: ID): Flight<S> | undefined {
+  airFlight(id: ID): AirFlight<S> | undefined {
     return this.data.air.flight[id];
   }
 
-  get airFlights(): Record<ID, Flight<S>> {
+  get airFlights(): Record<ID, AirFlight<S>> {
     return this.data.air.flight;
   }
 
-  airAirport(id: ID): Airport<S> | undefined {
+  airAirport(id: ID): AirAirport<S> | undefined {
     return this.data.air.airport[id];
   }
 
-  get airAirports(): Record<ID, Airport<S>> {
+  get airAirports(): Record<ID, AirAirport<S>> {
     return this.data.air.airport;
   }
 
-  airGate(id: ID): Gate<S> | undefined {
+  airGate(id: ID): AirGate<S> | undefined {
     return this.data.air.gate[id];
   }
 
-  get airGates(): Record<ID, Gate<S>> {
+  get airGates(): Record<ID, AirGate<S>> {
     return this.data.air.gate;
   }
 
-  airAirline(id: ID): Airline<S> | undefined {
+  airAirline(id: ID): AirAirline<S> | undefined {
     return this.data.air.airline[id];
   }
 
-  get airAirlines(): Record<ID, Airline<S>> {
+  get airAirlines(): Record<ID, AirAirline<S>> {
     return this.data.air.airline;
   }
 
@@ -228,11 +222,11 @@ export class GD<S extends boolean = true> {
     return this.data.rail.rail_line;
   }
 
-  railStation(id: ID): Station<S> | undefined {
+  railStation(id: ID): RailStation<S> | undefined {
     return this.data.rail.station[id];
   }
 
-  get railStations(): Record<ID, Station<S>> {
+  get railStations(): Record<ID, RailStation<S>> {
     return this.data.rail.station;
   }
 
