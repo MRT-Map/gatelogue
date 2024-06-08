@@ -43,4 +43,4 @@ AIRLINE_ALIASES: dict[str, str] = {
     "Waypoint Hopper": "IntraAir",
 }
 
-AIRPORT_ALIASES: dict[str, str] = {"DTS": "DCA", "RBE": "RBD", "IKLA": "KLA", "ITO": "IAS", "DPH": "DBI"}
+AIRPORT_ALIASES: dict[str, str] = {"DTS": "DCA", "RBE": "RBD", "IKLA": "KLA", "ITO": "IAS", "DPH": "DBI", "COI": "COA"}
