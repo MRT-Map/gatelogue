@@ -19,6 +19,7 @@ jobs:
     - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz
     - run: cd gatelogue-client; pnpm install --no-frozen-lockfile; pnpm run build
     - run: cd gatelogue-client/dist; echo > .nojekyll
+    - run: cd gatelogue-aggregator; hatch -e docs run pip install --global-option=build_ext --global-option="-I/usr/include/graphviz" --global-option="-L/usr/lib/graphviz" pygraphviz
     - run: cd gatelogue-aggregator; hatch run docs:build
     - run: mkdir gatelogue-client/dist/docs
     - run: cp gatelogue-aggregator/docs/_build/html/* gatelogue-client/dist/docs
