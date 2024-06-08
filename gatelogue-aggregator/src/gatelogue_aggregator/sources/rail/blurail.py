@@ -74,7 +74,7 @@ class BluRail(RailSource):
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
-                station = self.station(codes={result.group("code")}, name=result.group("name"), company=company)
+                station = self.rail_station(codes={result.group("code")}, name=result.group("name"), company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)

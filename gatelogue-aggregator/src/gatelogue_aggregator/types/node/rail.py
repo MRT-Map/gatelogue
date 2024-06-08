@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.connections import Connection, Proximity
+from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
@@ -21,7 +21,7 @@ class _RailContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailCompany(Node[_RailContext]):
-    acceptable_list_node_types = lambda: (RailLine, Station)  # noqa: E731
+    acceptable_list_node_types = lambda: (RailLine, RailStation)  # noqa: E731
 
     @override
     def __init__(self, ctx: RailContext, source: type[RailContext] | None = None, *, name: str, **attrs):
@@ -55,7 +55,7 @@ class RailCompany(Node[_RailContext]):
 
     def ser(self, ctx: RailContext) -> RailCompany.Ser:
         return self.Ser(
-            **self.merged_attrs(ctx), lines=self.get_all_ser(ctx, RailLine), stations=self.get_all_ser(ctx, Station)
+            **self.merged_attrs(ctx), lines=self.get_all_ser(ctx, RailLine), stations=self.get_all_ser(ctx, RailStation)
         )
 
     @override
@@ -69,7 +69,7 @@ class RailCompany(Node[_RailContext]):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class RailLine(Node[_RailContext]):
-    acceptable_single_node_types = lambda: (RailCompany, Station)  # noqa: E731
+    acceptable_single_node_types = lambda: (RailCompany, RailStation)  # noqa: E731
 
     @override
     def __init__(
@@ -120,7 +120,7 @@ class RailLine(Node[_RailContext]):
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
-            ref_station=self.get_one_ser(ctx, Station),
+            ref_station=self.get_one_ser(ctx, RailStation),
         )
 
     @override
@@ -135,8 +135,8 @@ class RailLine(Node[_RailContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Station(LocatedNode[_RailContext]):
-    acceptable_list_node_types = lambda: (Station, RailLine, LocatedNode)  # noqa: E731
+class RailStation(LocatedNode[_RailContext]):
+    acceptable_list_node_types = lambda: (RailStation, RailLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types = lambda: (RailCompany,)  # noqa: E731
 
     @override
@@ -191,7 +191,7 @@ class Station(LocatedNode[_RailContext]):
         return self.Ser(
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, RailCompany),
-            connections={n.id: self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, Station)},
+            connections={n.id: self.get_edges_ser(ctx, n, RailConnection) for n in self.get_all(ctx, RailStation)},
             proximity=self.get_proximity_ser(ctx),
         )
 
@@ -206,29 +206,29 @@ class Station(LocatedNode[_RailContext]):
         return self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
 
 
-class RailConnection(Connection[_RailContext, RailCompany, RailLine, Station]):
+class RailConnection(Connection[_RailContext, RailCompany, RailLine, RailStation]):
     CT = RailCompany
     company_fn = lambda ctx: ctx.rail_company  # noqa: E731
     line_fn = lambda ctx: ctx.rail_line  # noqa: E731
-    station_fn = lambda ctx: ctx.station  # noqa: E731
+    station_fn = lambda ctx: ctx.rail_station  # noqa: E731
 
 
-class RailLineBuilder(LineBuilder[_RailContext, RailLine, Station]):
+class RailLineBuilder(LineBuilder[_RailContext, RailLine, RailStation]):
     CnT = RailConnection
 
 
 class RailContext(_RailContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
-        rail_company: dict[uuid.UUID, RailCompany.Ser]
-        rail_line: dict[uuid.UUID, RailLine.Ser]
-        station: dict[uuid.UUID, Station.Ser]
+        company: dict[uuid.UUID, RailCompany.Ser]
+        line: dict[uuid.UUID, RailLine.Ser]
+        station: dict[uuid.UUID, RailStation.Ser]
 
     def ser(self, _=None) -> RailContext.Ser:
         return RailContext.Ser(
-            rail_company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
-            rail_line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
-            station={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Station)},
+            company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailCompany)},
+            line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailLine)},
+            station={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, RailStation)},
         )
 
     def rail_company(self, source: type[RailContext] | None = None, *, name: str, **attrs) -> RailCompany:
@@ -249,17 +249,17 @@ class RailContext(_RailContext):
                 return n
         return RailLine(self, source, code=code, company=company, **attrs)
 
-    def station(
+    def rail_station(
         self, source: type[RailContext] | None = None, *, codes: set[str], company: RailCompany, **attrs
-    ) -> Station:
+    ) -> RailStation:
         for n in self.g.nodes:
-            if not isinstance(n, Station):
+            if not isinstance(n, RailStation):
                 continue
             if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, RailCompany).equivalent(
                 self, company
             ):
                 return n
-        return Station(self, source, codes=codes, company=company, **attrs)
+        return RailStation(self, source, codes=codes, company=company, **attrs)
 
 
 class RailSource(RailContext, Source):

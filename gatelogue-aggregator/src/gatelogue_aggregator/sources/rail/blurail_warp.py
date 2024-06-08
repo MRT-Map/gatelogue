@@ -30,5 +30,5 @@ class BluRailWarp(RailSource):
             if (match := re.search(r"_(...)_", warp["name"])) is None:
                 continue
             code = match.group(1)
-            self.station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.rail_station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

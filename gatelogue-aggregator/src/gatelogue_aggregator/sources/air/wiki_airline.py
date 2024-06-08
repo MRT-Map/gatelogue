@@ -9,7 +9,7 @@ from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight, Gate
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ class WikiAirline(AirSource):
         regex: Pattern[str],
         cache_dir: Path = DEFAULT_CACHE_DIR,
         timeout: int = DEFAULT_TIMEOUT,
-    ) -> Airline:
+    ) -> AirAirline:
         wikitext = get_wiki_text(page_name, cache_dir, timeout)
         airline = self.extract_get_airline(airline_name, page_name)
         result = 0
@@ -47,12 +47,12 @@ class WikiAirline(AirSource):
             rich.print(RESULT + f"{airline_name} has {result} flights")
         return airline
 
-    def extract_get_airline(self, airline_name: str, page_name: str) -> Airline:
-        return self.airline(name=Airline.process_airline_name(airline_name), link=get_wiki_link(page_name))
+    def extract_get_airline(self, airline_name: str, page_name: str) -> AirAirline:
+        return self.air_airline(name=AirAirline.process_airline_name(airline_name), link=get_wiki_link(page_name))
 
     def extract_get_flight(
         self,
-        airline: Airline,
+        airline: AirAirline,
         code: str,
         a1: str,
         a2: str,
@@ -60,21 +60,21 @@ class WikiAirline(AirSource):
         g2: str | None = None,
         s: str | None = None,
         **_,
-    ) -> Flight:
-        f = self.flight(codes=Flight.process_code(code, airline.merged_attr(self, "name")), airline=airline)
+    ) -> AirFlight:
+        f = self.air_flight(codes=AirFlight.process_code(code, airline.merged_attr(self, "name")), airline=airline)
         f.connect(
             self,
-            self.gate(
-                code=Gate.process_code(g1),
-                airport=self.airport(code=Airport.process_code(a1)),
+            self.air_gate(
+                code=AirGate.process_code(g1),
+                airport=self.air_airport(code=AirAirport.process_code(a1)),
                 size=str(s) if s is not None else None,
             ),
         )
         f.connect(
             self,
-            self.gate(
-                code=Gate.process_code(g2),
-                airport=self.airport(code=Airport.process_code(a2)),
+            self.air_gate(
+                code=AirGate.process_code(g2),
+                airport=self.air_airport(code=AirAirport.process_code(a2)),
                 size=str(s) if s is not None else None,
             ),
         )

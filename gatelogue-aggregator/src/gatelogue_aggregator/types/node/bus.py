@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Self, override
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.connections import Connection, Proximity
+from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
@@ -217,15 +217,15 @@ class BusLineBuilder(LineBuilder[_BusContext, BusLine, BusStop]):
 class BusContext(_BusContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
-        bus_company: dict[uuid.UUID, BusCompany.Ser]
-        bus_line: dict[uuid.UUID, BusLine.Ser]
-        bus_stop: dict[uuid.UUID, BusStop.Ser]
+        company: dict[uuid.UUID, BusCompany.Ser]
+        line: dict[uuid.UUID, BusLine.Ser]
+        stop: dict[uuid.UUID, BusStop.Ser]
 
     def ser(self, _=None) -> BusContext.Ser:
         return BusContext.Ser(
-            bus_company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusCompany)},
-            bus_line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusLine)},
-            bus_stop={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusStop)},
+            company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusCompany)},
+            line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusLine)},
+            stop={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusStop)},
         )
 
     def bus_company(self, source: type[BusContext] | None = None, *, name: str, **attrs) -> BusCompany:

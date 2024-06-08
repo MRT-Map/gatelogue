@@ -44,7 +44,7 @@ class WZR(RailSource):
                     continue
                 code = str(tr("td")[0].string).strip()
                 name = "".join(tr("td")[1].strings).strip().rstrip("*")
-                station = self.station(codes={code}, name=name, company=company)
+                station = self.rail_station(codes={code}, name=name, company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)

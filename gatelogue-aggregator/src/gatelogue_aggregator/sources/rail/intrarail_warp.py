@@ -31,5 +31,5 @@ class IntraRailWarp(RailSource):
             name = match.group(1) or match.group(2) or match.group(3)
             if name in names:
                 continue
-            self.station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

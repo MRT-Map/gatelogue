@@ -46,12 +46,12 @@ class DynmapMRT(RailSource):
                 code = k.upper()
                 coordinates = (vv["x"], vv["z"])
                 name = None if (result := re.search(r"(.*) \((.*?)\)", vv["label"])) is None else result.group(1)
-                self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
+                self.rail_station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
             rich.print(RESULT + f"MRT {line_code} has {len(v['markers'])} stations")
 
         for k, v in json2["old"]["markers"].items():
             code = "Old-" + k.upper()
             coordinates = (v["x"], v["z"])
             name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1)
-            self.station(codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
+            self.rail_station(codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
         rich.print(RESULT + f"Old world has {len(json2['old']['markers'])} stations")

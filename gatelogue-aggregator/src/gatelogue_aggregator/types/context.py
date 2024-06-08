@@ -8,7 +8,7 @@ import networkx as nx
 
 from gatelogue_aggregator.logging import INFO1, INFO2, track
 from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine, BusSource, BusStop
-from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, Station
+from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 from gatelogue_aggregator.types.base import ToSerializable
 from gatelogue_aggregator.types.connections import Proximity
-from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight, Gate
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
@@ -62,7 +62,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
                 x1, y1 = existing_coordinates
                 x2, y2 = node_coordinates
                 dist = (x1 - x2) ** 2 + (y1 - y2) ** 2
-                threshold = 500 if isinstance(existing, Airport) or isinstance(node, Airport) else 250
+                threshold = 500 if isinstance(existing, AirAirport) or isinstance(node, AirAirport) else 250
                 if dist < threshold**2:
                     node.connect(self, existing, value=Proximity(dist**0.5))
             processed.append((node, node_world.v, node_coordinates))
@@ -73,7 +73,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
         rail: RailContext.Ser
         sea: SeaContext.Ser
         bus: SeaContext.Ser
-        timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%M%S%Z"))  # noqa: DTZ005
+        timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%:M%:S%Z"))  # noqa: DTZ005
         version: int = 1
 
     def ser(self, _=None) -> Context.Ser:
@@ -87,13 +87,13 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
             g.nodes[node]["style"] = "filled"
             g.nodes[node]["tooltip"] = Node.str_ctx(node, self)
             for ty, col in (
-                (Flight, "#ff8080"),
-                (Airport, "#8080ff"),
-                (Airline, "#ffff80"),
-                (Gate, "#80ff80"),
+                (AirFlight, "#ff8080"),
+                (AirAirport, "#8080ff"),
+                (AirAirline, "#ffff80"),
+                (AirGate, "#80ff80"),
                 (RailCompany, "#ffff80"),
                 (RailLine, "#ff8080"),
-                (Station, "#8080ff"),
+                (RailStation, "#8080ff"),
                 (SeaCompany, "#ffff80"),
                 (SeaLine, "#ff8080"),
                 (SeaStop, "#8080ff"),
@@ -112,11 +112,11 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
                 g.edges[u, v, k]["color"] = "#ff00ff"
                 continue
             for ty1, ty2, col in (
-                (Airport, Gate, "#0000ff"),
-                (Gate, Flight, "#00ff00"),
-                (Flight, Airline, "#ff0000"),
+                (AirAirport, AirGate, "#0000ff"),
+                (AirGate, AirFlight, "#00ff00"),
+                (AirFlight, AirAirline, "#ff0000"),
                 (RailCompany, RailLine, "#ff0000"),
-                (Station, Station, "#0000ff"),
+                (RailStation, RailStation, "#0000ff"),
                 (SeaCompany, SeaLine, "#ff0000"),
                 (SeaStop, SeaStop, "#0000ff"),
                 (BusCompany, BusLine, "#ff0000"),

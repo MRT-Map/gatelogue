@@ -23,5 +23,5 @@ class WZRWarp(RailSource):
             code = warp["name"].split("-")[-1]
             if code in codes:
                 continue
-            self.station(codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.rail_station(codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)

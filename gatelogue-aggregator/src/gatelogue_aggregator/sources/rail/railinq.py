@@ -29,7 +29,7 @@ class RaiLinQ(RailSource):
 
             stations = []
             for b in line_table.p.find_all("b"):
-                station = self.station(codes={str(b.string)}, name=str(b.string), company=company)
+                station = self.rail_station(codes={str(b.string)}, name=str(b.string), company=company)
                 stations.append(station)
 
             if len(stations) == 0:

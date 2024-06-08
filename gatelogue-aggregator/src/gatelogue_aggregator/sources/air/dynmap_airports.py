@@ -4,7 +4,7 @@ import msgspec
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.air import AirContext, Airport, AirSource
+from gatelogue_aggregator.types.node.air import AirAirport, AirContext, AirSource
 
 
 class DynmapAirports(AirSource):
@@ -32,4 +32,4 @@ class DynmapAirports(AirSource):
         for json, world in ((json1, "New"), (json2, "Old")):
             for k, v in json.items():
                 name = v["label"].split("(")[0]
-                self.airport(code=Airport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name)
+                self.air_airport(code=AirAirport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name)

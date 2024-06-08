@@ -5,7 +5,7 @@ import pandas as pd
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.air import AirContext, Airline, Airport, AirSource, Flight
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirSource
 
 
 class MRTTransit(AirSource):
@@ -64,22 +64,22 @@ class MRTTransit(AirSource):
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
-            airline = self.airline(name=Airline.process_airline_name(airline_name))
+            airline = self.air_airline(name=AirAirline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, flights in zip(
                 df["Name"], df["Code"], df["World"], df[airline_name], strict=False
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = self.airport(code=Airport.process_code(airport_code))
+                airport = self.air_airport(code=AirAirport.process_code(airport_code))
 
                 if airport_name != "":
                     airport.attrs(self).name = airport_name
                 if airport_world != "":
                     airport.attrs(self).world = airport_world
 
-                gate = self.gate(code=None, airport=airport)
+                gate = self.air_gate(code=None, airport=airport)
 
                 for flight_code in str(flights).split(", "):
-                    flight = self.flight(codes=Flight.process_code(flight_code, airline_name), airline=airline)
+                    flight = self.air_flight(codes=AirFlight.process_code(flight_code, airline_name), airline=airline)
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)

@@ -48,7 +48,7 @@ class IntraRail(RailSource):
                     continue
                 station_name = station_name.strip()
 
-                station = self.station(codes={station_name}, name=station_name, company=company)
+                station = self.rail_station(codes={station_name}, name=station_name, company=company)
                 stations.append(station)
 
             if line_code == "54":

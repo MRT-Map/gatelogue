@@ -8,7 +8,6 @@ import msgspec
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -21,20 +20,20 @@ class _AirContext(BaseContext, Source):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Flight(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Gate,)  # noqa: E731
-    acceptable_single_node_types = lambda: (Airline,)  # noqa: E731
+class AirFlight(Node[_AirContext]):
+    acceptable_list_node_types = lambda: (AirGate,)  # noqa: E731
+    acceptable_single_node_types = lambda: (AirAirline,)  # noqa: E731
 
     @override
     def __init__(
-        self, ctx: AirContext, source: type[AirContext] | None = None, *, codes: set[str], airline: Airline, **attrs
+        self, ctx: AirContext, source: type[AirContext] | None = None, *, codes: set[str], airline: AirAirline, **attrs
     ):
         super().__init__(ctx, source, codes=codes, **attrs)
         self.connect_one(ctx, airline, source=source)
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
-        airline_name = self.get_one(ctx, Airline).merged_attr(ctx, "name")
+        airline_name = self.get_one(ctx, AirAirline).merged_attr(ctx, "name")
         code = "/".join(self.merged_attr(ctx, "codes"))
         return f"{airline_name} {code}"
 
@@ -61,28 +60,32 @@ class Flight(Node[_AirContext]):
         gates: list[Sourced.Ser[uuid.UUID]]
         airline: Sourced.Ser[uuid.UUID]
 
-    def ser(self, ctx: AirContext) -> Flight.Ser:
+    def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
-            **self.merged_attrs(ctx), gates=self.get_all_ser(ctx, Gate), airline=self.get_one_ser(ctx, Airline)
+            **self.merged_attrs(ctx), gates=self.get_all_ser(ctx, AirGate), airline=self.get_one_ser(ctx, AirAirline)
         )
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
         return len(self.merged_attr(ctx, "codes").intersection(other.merged_attr(ctx, "codes"))) != 0 and self.get_one(
-            ctx, Airline
-        ).equivalent(ctx, other.get_one(ctx, Airline))
+            ctx, AirAirline
+        ).equivalent(ctx, other.get_one(ctx, AirAirline))
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
-        return self.get_one(ctx, Airline).merge_key(ctx)
+        return self.get_one(ctx, AirAirline).merge_key(ctx)
 
     def update(self, ctx: AirContext):
-        processed_gates: list[Gate] = []
-        gates = list(self.get_all(ctx, Gate))
+        processed_gates: list[AirGate] = []
+        gates = list(self.get_all(ctx, AirGate))
         for gate in gates:
             if (
                 existing := next(
-                    (a for a in processed_gates if a.get_one(ctx, Airport).equivalent(ctx, gate.get_one(ctx, Airport))),
+                    (
+                        a
+                        for a in processed_gates
+                        if a.get_one(ctx, AirAirport).equivalent(ctx, gate.get_one(ctx, AirAirport))
+                    ),
                     None,
                 )
             ) is None:
@@ -112,8 +115,8 @@ class Flight(Node[_AirContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Airport(LocatedNode[_AirContext]):
-    acceptable_list_node_types = lambda: (Gate, Airport, LocatedNode)  # noqa: E731
+class AirAirport(LocatedNode[_AirContext]):
+    acceptable_list_node_types = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
 
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str, **attrs):
@@ -152,10 +155,10 @@ class Airport(LocatedNode[_AirContext]):
         link: Sourced.Ser[str] | None
         gates: list[Sourced.Ser[uuid.UUID]]
 
-    def ser(self, ctx: AirContext) -> Flight.Ser:
+    def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
-            gates=self.get_all_ser(ctx, Gate),
+            gates=self.get_all_ser(ctx, AirGate),
             proximity=self.get_proximity_ser(ctx),
         )
 
@@ -169,17 +172,17 @@ class Airport(LocatedNode[_AirContext]):
 
     def update(self, ctx: AirContext):
         if (
-            none_gate := next((a for a in self.get_all(ctx, Gate) if a.merged_attr(ctx, "code") is None), None)
+            none_gate := next((a for a in self.get_all(ctx, AirGate) if a.merged_attr(ctx, "code") is None), None)
         ) is None:
             return
-        for flight in list(none_gate.get_all(ctx, Flight)):
+        for flight in list(none_gate.get_all(ctx, AirFlight)):
             possible_gates = []
-            for possible_gate in self.get_all(ctx, Gate):
+            for possible_gate in self.get_all(ctx, AirGate):
                 if possible_gate.merged_attr(ctx, "code") is None:
                     continue
-                if (airline := possible_gate.get_one(ctx, Airline)) is None:
+                if (airline := possible_gate.get_one(ctx, AirAirline)) is None:
                     continue
-                if airline.equivalent(ctx, flight.get_one(ctx, Airline)):
+                if airline.equivalent(ctx, flight.get_one(ctx, AirAirline)):
                     possible_gates.append(possible_gate)
             if len(possible_gates) == 1:
                 new_gate = possible_gates[0]
@@ -203,20 +206,20 @@ class Airport(LocatedNode[_AirContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Gate(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Flight,)  # noqa: E731
-    acceptable_single_node_types = lambda: (Airport, Airline)  # noqa: E731
+class AirGate(Node[_AirContext]):
+    acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
+    acceptable_single_node_types = lambda: (AirAirport, AirAirline)  # noqa: E731
 
     @override
     def __init__(
-        self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str | None, airport: Airport, **attrs
+        self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str | None, airport: AirAirport, **attrs
     ):
         super().__init__(ctx, source, code=code, **attrs)
         self.connect_one(ctx, airport, source=source)
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        airport = self.get_one(ctx, Airport).merged_attr(ctx, "code")
+        airport = self.get_one(ctx, AirAirport).merged_attr(ctx, "code")
         code = self.merged_attr(ctx, "code")
         return f"{airport} {code}"
 
@@ -247,19 +250,19 @@ class Gate(Node[_AirContext]):
         airline: Sourced.Ser[uuid.UUID] | None
         size: Sourced.Ser[str] | None
 
-    def ser(self, ctx: AirContext) -> Flight.Ser:
+    def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
-            flights=self.get_all_ser(ctx, Flight),
-            airport=self.get_one_ser(ctx, Airport),
-            airline=self.get_one_ser(ctx, Airline),
+            flights=self.get_all_ser(ctx, AirFlight),
+            airport=self.get_one_ser(ctx, AirAirport),
+            airline=self.get_one_ser(ctx, AirAirline),
         )
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
         return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
-            ctx, Airport
-        ).equivalent(ctx, other.get_one(ctx, Airport))
+            ctx, AirAirport
+        ).equivalent(ctx, other.get_one(ctx, AirAirport))
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
@@ -267,8 +270,8 @@ class Gate(Node[_AirContext]):
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Airline(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (Flight,)  # noqa: E731
+class AirAirline(Node[_AirContext]):
+    acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
 
     @override
     def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, name: str, **attrs):
@@ -303,10 +306,10 @@ class Airline(Node[_AirContext]):
         flights: list[Sourced.Ser[str]]
         link: Sourced.Ser[str] | None
 
-    def ser(self, ctx: AirContext) -> Flight.Ser:
+    def ser(self, ctx: AirContext) -> AirFlight.Ser:
         return self.Ser(
             **self.merged_attrs(ctx),
-            flights=self.get_all_ser(ctx, Flight),
+            flights=self.get_all_ser(ctx, AirFlight),
         )
 
     @override
@@ -327,56 +330,60 @@ class Airline(Node[_AirContext]):
 class AirContext(_AirContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
-        flight: dict[uuid.UUID, Flight.Ser]
-        airport: dict[uuid.UUID, Airport.Ser]
-        gate: dict[uuid.UUID, Gate.Ser]
-        airline: dict[uuid.UUID, Airline.Ser]
+        flight: dict[uuid.UUID, AirFlight.Ser]
+        airport: dict[uuid.UUID, AirAirport.Ser]
+        gate: dict[uuid.UUID, AirGate.Ser]
+        airline: dict[uuid.UUID, AirAirline.Ser]
 
     def ser(self, _=None) -> AirContext.Ser:
         return AirContext.Ser(
-            flight={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Flight)},
-            airport={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Airport)},
-            gate={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Gate)},
-            airline={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Airline)},
+            flight={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirFlight)},
+            airport={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirAirport)},
+            gate={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirGate)},
+            airline={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirAirline)},
         )
 
-    def flight(self, source: type[AirContext] | None = None, *, codes: set[str], airline: Airline, **attrs) -> Flight:
+    def air_flight(
+        self, source: type[AirContext] | None = None, *, codes: set[str], airline: AirAirline, **attrs
+    ) -> AirFlight:
         for n in self.g.nodes:
-            if not isinstance(n, Flight):
+            if not isinstance(n, AirFlight):
                 continue
-            if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, Airline).equivalent(
+            if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, AirAirline).equivalent(
                 self, airline
             ):
                 return n
-        return Flight(self, source, codes=codes, airline=airline, **attrs)
+        return AirFlight(self, source, codes=codes, airline=airline, **attrs)
 
-    def airport(self, source: type[AirContext] | None = None, *, code: str, **attrs) -> Airport:
+    def air_airport(self, source: type[AirContext] | None = None, *, code: str, **attrs) -> AirAirport:
         for n in self.g.nodes:
-            if not isinstance(n, Airport):
+            if not isinstance(n, AirAirport):
                 continue
             if n.merged_attr(self, "code") == code:
                 return n
-        return Airport(self, source, code=code, **attrs)
+        return AirAirport(self, source, code=code, **attrs)
 
-    def gate(self, source: type[AirContext] | None = None, *, code: str | None, airport: Airport, **attrs) -> Gate:
+    def air_gate(
+        self, source: type[AirContext] | None = None, *, code: str | None, airport: AirAirport, **attrs
+    ) -> AirGate:
         for n in self.g.nodes:
-            if not isinstance(n, Gate):
+            if not isinstance(n, AirGate):
                 continue
-            if n.merged_attr(self, "code") == code and n.get_one(self, Airport).equivalent(self, airport):
+            if n.merged_attr(self, "code") == code and n.get_one(self, AirAirport).equivalent(self, airport):
                 return n
-        return Gate(self, source, code=code, airport=airport, **attrs)
+        return AirGate(self, source, code=code, airport=airport, **attrs)
 
-    def airline(self, source: type[AirContext] | None = None, *, name: str, **attrs) -> Airline:
+    def air_airline(self, source: type[AirContext] | None = None, *, name: str, **attrs) -> AirAirline:
         for n in self.g.nodes:
-            if not isinstance(n, Airline):
+            if not isinstance(n, AirAirline):
                 continue
             if n.merged_attr(self, "name") == name:
                 return n
-        return Airline(self, source, name=name, **attrs)
+        return AirAirline(self, source, name=name, **attrs)
 
     def update(self):
         for node in track(self.g.nodes, description=INFO1 + "Updating air nodes"):
-            if isinstance(node, Flight | Airport):
+            if isinstance(node, AirFlight | AirAirport):
                 node.update(self)
 
 

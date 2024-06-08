@@ -38,5 +38,5 @@ class RaiLinQWarp(RailSource):
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):
             if warp["name"] not in d or (name := d[warp["name"]]) in names:
                 continue
-            self.station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.connections import Connection, Proximity
+from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
@@ -220,15 +220,15 @@ class SeaLineBuilder(LineBuilder[_SeaContext, SeaLine, SeaStop]):
 class SeaContext(_SeaContext):
     @override
     class Ser(msgspec.Struct, kw_only=True):
-        sea_company: dict[uuid.UUID, SeaCompany.Ser]
-        sea_line: dict[uuid.UUID, SeaLine.Ser]
-        sea_stop: dict[uuid.UUID, SeaStop.Ser]
+        company: dict[uuid.UUID, SeaCompany.Ser]
+        line: dict[uuid.UUID, SeaLine.Ser]
+        stop: dict[uuid.UUID, SeaStop.Ser]
 
     def ser(self, _=None) -> SeaContext.Ser:
         return SeaContext.Ser(
-            sea_company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaCompany)},
-            sea_line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaLine)},
-            sea_stop={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaStop)},
+            company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaCompany)},
+            line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaLine)},
+            stop={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, SeaStop)},
         )
 
     def sea_company(self, source: type[SeaContext] | None = None, *, name: str, **attrs) -> SeaCompany:
