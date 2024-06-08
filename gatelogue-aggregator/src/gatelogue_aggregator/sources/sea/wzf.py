@@ -34,7 +34,7 @@ class WZF(SeaSource):
 
             stops = []
             for tr in table.find_all("tr"):
-                if len(tr("td")) != 4:
+                if len(tr("td")) != 4:  # noqa: PLR2004
                     continue
                 code = str(tr("td")[1].span.string).strip()
                 name = "".join(tr("td")[2].strings).strip()

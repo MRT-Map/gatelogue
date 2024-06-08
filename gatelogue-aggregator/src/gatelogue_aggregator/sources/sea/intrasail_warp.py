@@ -2,13 +2,9 @@ import re
 import uuid
 from pathlib import Path
 
-import rich
-
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
-from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.rail import RailContext, RailSource
-from gatelogue_aggregator.types.node.sea import SeaSource, SeaContext
+from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
 
 
 class IntraSailWarp(SeaSource):

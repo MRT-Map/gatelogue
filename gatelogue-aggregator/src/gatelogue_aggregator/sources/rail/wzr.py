@@ -1,6 +1,5 @@
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 import rich
 
@@ -9,9 +8,6 @@ from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
-
-if TYPE_CHECKING:
-    import bs4
 
 
 class WZR(RailSource):
@@ -42,13 +38,12 @@ class WZR(RailSource):
 
             stations = []
             for tr in table.find_all("tr"):
-                if len(tr("td")) != 4:
+                if len(tr("td")) != 4:  # noqa: PLR2004
                     continue
                 if tr("td")[3].string.strip() == "Planned":
                     continue
                 code = str(tr("td")[0].string).strip()
                 name = "".join(tr("td")[1].strings).strip().rstrip("*")
-                print(code, name)
                 station = self.station(codes={code}, name=name, company=company)
                 stations.append(station)
 
