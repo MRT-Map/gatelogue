@@ -6,9 +6,6 @@ on:
 jobs:
   pages:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./gatelogue-client
 
     steps:
     - uses: actions/checkout@v4
@@ -18,9 +15,16 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22
+    - run: cd gatelogue-client
     - run: pnpm install --no-frozen-lockfile
     - run: pnpm run build
     - run: cd dist; echo > .nojekyll; cd ..
+    - run: cd ../gatelogue-aggregator
+    - uses: pypa/hatch@install
+    - run: hatch run docs:build
+    - run: cd ../gatelogue-client
+    - run: mkdir dist/docs
+    - run: mv ../gatelogue-aggregator/docs/_build/html/* dist/docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:

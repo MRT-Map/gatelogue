@@ -10,6 +10,7 @@ Welcome to gatelogue-aggregator's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   usage
    data_format
    cli
    reference
