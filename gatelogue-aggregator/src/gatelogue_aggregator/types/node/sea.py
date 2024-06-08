@@ -185,7 +185,6 @@ class SeaStop(LocatedNode[_SeaContext]):
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[SeaConnection]]]
-        proximity: dict[uuid.UUID, str]
         name: Sourced.Ser[str] | None
 
     def ser(self, ctx: SeaContext) -> SeaLine.Ser:
@@ -193,11 +192,7 @@ class SeaStop(LocatedNode[_SeaContext]):
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, SeaCompany),
             connections={n.id: self.get_edges_ser(ctx, n, SeaConnection) for n in self.get_all(ctx, SeaStop)},
-            proximity={
-                n.id: type(n).__name__.lower()
-                for n in self.get_all(ctx, LocatedNode)
-                if len(self.get_edges_ser(ctx, n, Proximity)) != 0
-            },
+            proximity=self.get_proximity_ser(ctx),
         )
 
     @override

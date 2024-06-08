@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 import networkx as nx
 
 from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced, ToSerializable
+from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
@@ -94,13 +95,6 @@ class Node[CTX: BaseContext](Mergeable[CTX], ToSerializable):
         if (prev := self.get_one(ctx, type(node))) is not None:
             self.disconnect(ctx, prev)
         ctx.g.add_edge(self, node, key, v=value, s=source)
-
-    # def disconnect_one(self, ctx: CTX, node: Node, source: Source | None = None, key: Any | None = None):
-    #     source = source or type(ctx)
-    #     key = key or source
-    #     if not any(isinstance(node, a) for a in type(self).acceptable_list_node_types()) + type(self).acceptable_single_node_types():
-    #         raise TypeError
-    #     ctx.g.remove_edge(self, node, key)
 
     def disconnect(self, ctx: CTX, node: Node):
         if not any(
@@ -235,3 +229,11 @@ class LocatedNode[CTX](Node[CTX]):
     class Ser(Node.Ser, kw_only=True):
         coordinates: Sourced.Ser[tuple[int, int]] | None
         world: Sourced.Ser[Literal["New", "Old"]] | None
+        proximity: dict[str, dict[uuid.UUID, Sourced.Ser[Proximity]]]
+
+    def get_proximity_ser(self, ctx: CTX) -> dict[str, dict[uuid.UUID, Sourced.Ser[Proximity]]]:
+        out = {}
+        for node in self.get_all(ctx, LocatedNode):
+            for edge in self.get_edges_ser(ctx, node, Proximity):
+                out.setdefault(type(node).__name__.lower(), {})[node.id] = edge
+        return out

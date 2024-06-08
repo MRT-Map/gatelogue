@@ -182,7 +182,6 @@ class BusStop(LocatedNode[_BusContext]):
         codes: set[str]
         company: Sourced.Ser[uuid.UUID]
         connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection]]]
-        proximity: dict[uuid.UUID, str]
         name: Sourced.Ser[str] | None
 
     def ser(self, ctx: BusContext) -> BusLine.Ser:
@@ -190,11 +189,7 @@ class BusStop(LocatedNode[_BusContext]):
             **self.merged_attrs(ctx),
             company=self.get_one_ser(ctx, BusCompany),
             connections={n.id: self.get_edges_ser(ctx, n, BusConnection) for n in self.get_all(ctx, BusStop)},
-            proximity={
-                n.id: type(n).__name__.lower()
-                for n in self.get_all(ctx, LocatedNode)
-                if len(self.get_edges_ser(ctx, n, Proximity)) != 0
-            },
+            proximity=self.get_proximity_ser(ctx),
         )
 
     @override
