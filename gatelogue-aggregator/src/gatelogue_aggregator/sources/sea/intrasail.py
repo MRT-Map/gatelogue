@@ -9,18 +9,18 @@ from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.node.rail import RailContext
-from gatelogue_aggregator.types.node.sea import SeaLineBuilder, SeaSource
+from gatelogue_aggregator.types.node.sea import SeaLineBuilder, SeaSource, SeaContext
 
 if TYPE_CHECKING:
     import bs4
 
 
 class IntraSail(SeaSource):
-    name = "MRT Wiki (Rail, IntraSail)"
+    name = "MRT Wiki (Sea, IntraSail)"
     priority = 0
 
     def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        RailContext.__init__(self)
+        SeaContext.__init__(self)
         Source.__init__(self)
 
         company = self.sea_company(name="IntraSail")
@@ -50,12 +50,14 @@ class IntraSail(SeaSource):
                 if stop_name == "" or stop_name.startswith("["):
                     continue
                 stop_name = stop_name.strip()
+                if stop_name == "New Southport Port of":
+                    stop_name = "Port of New Southport"
 
                 stop = self.sea_stop(codes={stop_name}, name=stop_name, company=company)
                 stops.append(stop)
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"IntraSailRail Line {line_code} has {len(stops)} stops")
+            rich.print(RESULT + f"IntraSail Line {line_code} has {len(stops)} stops")
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling

@@ -15,7 +15,7 @@ class IntraSailWarp(SeaSource):
         SeaContext.__init__(self)
         Source.__init__(self)
 
-        company = self.sea_company(name="IntraRail")
+        company = self.sea_company(name="IntraSail")
 
         names = []
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), cache_dir, timeout):
