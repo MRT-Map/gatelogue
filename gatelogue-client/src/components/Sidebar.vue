@@ -11,13 +11,15 @@ const sel = computed(() => ({
 }));
 const objects = gd.value!;
 
-const panels: {
+interface Panel {
   cat: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getter: () => Record<ID, any>;
   catDisplay: string;
   objDisplay: string;
-}[] = [
+}
+
+const panels: Panel[] = [
   {
     cat: "airport",
     getter: () => objects.airAirports,
