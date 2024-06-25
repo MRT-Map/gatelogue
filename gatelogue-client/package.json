@@ -16,7 +16,7 @@
   "dependencies": {
     "vue": "^3.4.27",
     "vue-json-pretty": "^2.4.0",
-    "vue-router": "^4.3.2",
+    "vue-router": "^4.4.0",
     "vue-tippy": "^6.4.1"
   },
   "devDependencies": {
