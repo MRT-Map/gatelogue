@@ -16,25 +16,25 @@
   "dependencies": {
     "vue": "^3.4.27",
     "vue-json-pretty": "^2.4.0",
-    "vue-router": "^4.3.2",
+    "vue-router": "^4.4.0",
     "vue-tippy": "^6.4.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
+    "@eslint/js": "^9.5.0",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^20.14.2",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/tsconfig": "^0.5.1",
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.26.0",
     "globals": "^15.4.0",
     "json-schema-to-ts": "^3.1.0",
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.3.1",
-    "typescript-eslint": "8.0.0-alpha.26",
+    "typescript-eslint": "8.0.0-alpha.30",
     "vite": "^5.2.13",
     "vite-plugin-vue-devtools": "^7.2.1",
-    "vue-tsc": "^2.0.20"
+    "vue-tsc": "^2.0.22"
   }
 }
