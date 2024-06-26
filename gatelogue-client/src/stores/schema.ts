@@ -11,7 +11,7 @@ export type Sourced<T, S extends boolean = true> = S extends true
 export interface Located<S extends boolean = true> {
   world: Sourced<World, S> | null;
   coordinates: Sourced<[number, number]> | null;
-  proximity: Record<string, Record<ID, Sourced<{ distance: float }>>>;
+  proximity: Record<string, Record<ID, Sourced<{ distance: number }>>>;
 }
 
 export interface Direction {
@@ -75,11 +75,10 @@ export interface RailLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface RailStation<S extends boolean = true> extends Located {
+export interface RailStation<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
   company: Sourced<ID, S>;
-  proximity: Record<ID, string>;
 }
 
 export interface RailData<S extends boolean = true> {
@@ -103,11 +102,10 @@ export interface SeaLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface SeaStop<S extends boolean = true> extends Located {
+export interface SeaStop<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
   company: Sourced<ID, S>;
-  proximity: Record<ID, string>;
 }
 
 export interface SeaData<S extends boolean = true> {
@@ -130,7 +128,7 @@ export interface BusLine<S extends boolean = true> {
   colour: Sourced<string, S> | null;
 }
 
-export interface BusStop<S extends boolean = true> extends Located {
+export interface BusStop<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
   company: Sourced<ID, S>;
@@ -250,7 +248,7 @@ export class GD<S extends boolean = true> {
     return this.data.sea.sea_stop[id];
   }
 
-  get seaStop(): Record<ID, SeaStop<S>> {
+  get seaStops(): Record<ID, SeaStop<S>> {
     return this.data.sea.sea_stop;
   }
 
@@ -274,7 +272,7 @@ export class GD<S extends boolean = true> {
     return this.data.bus.bus_stop[id];
   }
 
-  get busStop(): Record<ID, BusStop<S>> {
+  get busStops(): Record<ID, BusStop<S>> {
     return this.data.bus.bus_stop;
   }
 
