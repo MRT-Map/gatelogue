@@ -82,7 +82,7 @@ class Connection[CTX: BaseContext, C: Node, L: Node, S: Node](ToSerializable):
         return (
             None
             if self.direction is None
-            else type(self).station_fn(ctx)(codes={self.direction.forward_towards_code}, company=self.get_company(ctx))
+            else type(self).station_fn(ctx)(codes={self.direction.forward_towards_code}, company=self.get_company(ctx)).id
         )
 
     def set_direction_forward_towards(self, ctx: CTX, v: S):
