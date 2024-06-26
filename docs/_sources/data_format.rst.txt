@@ -8,6 +8,7 @@ If you use `Typescript <https://www.typescriptlang.org/>`_, see https://github.c
 Specification
 -------------
 * **All links below reference their entries in the full reference page. These classes are here for convenience's sake.**
+* **Do not hardcode any UUIDs in your project!** They change with every update. If you need to reference a specific object, find it by its code/name/something unique to the object.
 * The JSON file at `data.json <https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json>`_ is of base type ``Context``.
 * If you are using `data_no_sources.json <https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json>`_, all instances of ``Sourced[T]`` or ``Sourced.Ser[T]`` below are replaced with just the encapsulated type ``T``.
 
