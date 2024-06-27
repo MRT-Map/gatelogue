@@ -5,4 +5,4 @@ pipx reinstall gatelogue-aggregator || pipx install --python python3.12 --system
 gatelogue-aggregator run -o data.json -g graph.svg
 gatelogue-aggregator schema -o schema.json
 python3.12 remove_sources.py
-git commit -am "update @ $(date +%Y%m%d-%H:%M:%S%Z)"
+git commit -am "update @ $(date +%Y%m%dTH:%M:%S%Z)"
