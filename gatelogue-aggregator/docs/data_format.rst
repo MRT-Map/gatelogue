@@ -22,6 +22,7 @@ Specification
 * ``None`` serialises to ``null``.
 
 The current data format version is
+
 .. program-output:: python -c "from gatelogue_aggregator.__about__ import __version__; print('v'+__version__.split('+')[1])"
 
 .. autoclass:: gatelogue_aggregator.types.context::Context.Ser
