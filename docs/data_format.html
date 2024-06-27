@@ -111,12 +111,12 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> serialises to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
 </ul>
 <p>The current data format version is</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>v1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>v2
 </pre></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Context.</span></span><span class="sig-name descname"><span class="pre">Ser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air:</span> <span class="pre">~gatelogue_aggregator.types.node.air.AirContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rail:</span> <span class="pre">~gatelogue_aggregator.types.node.rail.RailContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sea:</span> <span class="pre">~gatelogue_aggregator.types.node.sea.SeaContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bus:</span> <span class="pre">~gatelogue_aggregator.types.node.sea.SeaContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Context.</span></span><span class="sig-name descname"><span class="pre">Ser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air:</span> <span class="pre">~gatelogue_aggregator.types.node.air.AirContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rail:</span> <span class="pre">~gatelogue_aggregator.types.node.rail.RailContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sea:</span> <span class="pre">~gatelogue_aggregator.types.node.sea.SeaContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bus:</span> <span class="pre">~gatelogue_aggregator.types.node.bus.BusContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">town:</span> <span class="pre">~gatelogue_aggregator.types.node.town.TownContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">air</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference.html#gatelogue_aggregator.types.node.air.AirContext.Ser" title="gatelogue_aggregator.types.node.air.AirContext.Ser"><span class="pre">Ser</span></a></em></dt>
@@ -125,7 +125,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">bus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference.html#gatelogue_aggregator.types.node.sea.SeaContext.Ser" title="gatelogue_aggregator.types.node.sea.SeaContext.Ser"><span class="pre">Ser</span></a></em></dt>
+<span class="sig-name descname"><span class="pre">bus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference.html#gatelogue_aggregator.types.node.bus.BusContext.Ser" title="gatelogue_aggregator.types.node.bus.BusContext.Ser"><span class="pre">Ser</span></a></em></dt>
 <dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">BusContext</span></code> object</p>
 </dd></dl>
 
@@ -145,6 +145,12 @@
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em></dt>
 <dd><p>Time that the aggregation of the data was done</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">town</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Ser</span></em></dt>
+<dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">TownContext</span></code> object</p>
 </dd></dl>
 
 <dl class="py attribute">
