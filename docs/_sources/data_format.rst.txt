@@ -149,6 +149,15 @@ Bus
    :exclude-members: uuid, Literal
    :no-index:
 
+Town
+++++
+
+.. autoclass:: gatelogue_aggregator.types.node.town::Town.Ser
+   :members:
+   :inherited-members:
+   :exclude-members: uuid, Literal
+   :no-index:
+
 Miscellaneous
 +++++++++++++
 .. autoclass:: gatelogue_aggregator.types.base::Sourced.Ser
