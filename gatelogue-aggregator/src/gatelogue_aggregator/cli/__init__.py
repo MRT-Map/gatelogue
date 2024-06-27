@@ -38,20 +38,19 @@ from gatelogue_aggregator.types.context import Context
 
 @click.group(
     context_settings={"help_option_names": ["-h", "--help"]},
-    invoke_without_command=True,
 )
 @click.version_option(version=__version__, prog_name="gatelogue-aggregator")
 def gatelogue_aggregator():
     pass
 
 
-@gatelogue_aggregator.command()
-@click.option("--cache-dir", default=DEFAULT_CACHE_DIR, type=Path, show_default=True)
-@click.option("--timeout", default=DEFAULT_TIMEOUT, type=int, show_default=True)
-@click.option("-o", "--output", default="data.json", type=Path, show_default=True)
-@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
-@click.option("-g", "--graph", type=Path, default=None, show_default=True)
-@click.option("-w", "--max_workers", type=int, default=8, show_default=True)
+@gatelogue_aggregator.command(help="actually run the aggregator")
+@click.option("--cache-dir", default=DEFAULT_CACHE_DIR, type=Path, show_default=True, help="where to cache files downloaded from the Internet (preferably a temporary directory)")
+@click.option("--timeout", default=DEFAULT_TIMEOUT, type=int, show_default=True, help="how long to wait for a network request in seconds before aborting and failing")
+@click.option("-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON")
+@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
+@click.option("-g", "--graph", type=Path, default=None, show_default=True, help="file to output a graph representation of all nodes and objects to, in SVG")
+@click.option("-w", "--max_workers", type=int, default=8, show_default=True, help="maximum number of concurrent workers that download and process data")
 def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int):
     sources = [
         MRTTransit,
@@ -93,9 +92,9 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         output.write_bytes(j)
 
 
-@gatelogue_aggregator.command()
-@click.option("-o", "--output", default="schema.json", type=Path, show_default=True)
-@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True)
+@gatelogue_aggregator.command(help="export a JSON schema of the current data format")
+@click.option("-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON")
+@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
 def schema(output: Path, fmt: bool):
     j = msgspec.json.encode(msgspec.json.schema(Context.Ser))
     if fmt:
