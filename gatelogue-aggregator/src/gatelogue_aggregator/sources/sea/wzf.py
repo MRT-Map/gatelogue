@@ -25,7 +25,11 @@ class WZF(SeaSource):
         for table in html.find_all("table"):
             if "Status" not in table.th.string:
                 continue
-            span = table.previous_sibling.previous_sibling.find("span", class_="mw-headline")
+            span = table.previous_sibling.previous_sibling.find(
+                "span", class_="mw-headline"
+            ) or table.previous_sibling.previous_sibling.previous_sibling.previous_sibling.find(
+                "span", class_="mw-headline"
+            )
             if (result := re.search(r"Line (?P<code>.*?) \((?P<name>.*)\)", span.string)) is None:
                 continue
             line_name = result.group("name")

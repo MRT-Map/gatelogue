@@ -160,7 +160,7 @@ def dfm(ctx: WikiAirport, cache_dir, timeout):
         "Deadbush Foxfoe Memorial Airport",
         "DFM",
         re.compile(
-            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"
+            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)\n|[^|]*?)"
         ),
         cache_dir,
         timeout,
