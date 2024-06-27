@@ -91,21 +91,29 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  run
-  schema
+  run     actually run the aggregator
+  schema  export a JSON schema of the current data format
 </pre></div>
 </div>
 <section id="run">
 <h2>Run<a class="headerlink" href="#run" title="Link to this heading"></a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m gatelogue_aggregator run [OPTIONS]
 
+  actually run the aggregator
+
 Options:
-  --cache-dir PATH           [default: /tmp/gatelogue]
-  --timeout INTEGER          [default: 60]
-  -o, --output PATH          [default: data.json]
-  -f, --fmt / --no-fmt       [default: no-fmt]
-  -g, --graph PATH
-  -w, --max_workers INTEGER  [default: 8]
+  --cache-dir PATH           where to cache files downloaded from the Internet
+                             (preferably a temporary directory)  [default:
+                             /tmp/gatelogue]
+  --timeout INTEGER          how long to wait for a network request in seconds
+                             before aborting and failing  [default: 60]
+  -o, --output PATH          file to output the result to, in JSON  [default:
+                             data.json]
+  -f, --fmt / --no-fmt       prettify the JSON result  [default: no-fmt]
+  -g, --graph PATH           file to output a graph representation of all
+                             nodes and objects to, in SVG
+  -w, --max_workers INTEGER  maximum number of concurrent workers that
+                             download and process data  [default: 8]
   -h, --help                 Show this message and exit.
 </pre></div>
 </div>
@@ -114,9 +122,12 @@ Options:
 <h2>Schema<a class="headerlink" href="#schema" title="Link to this heading"></a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m gatelogue_aggregator schema [OPTIONS]
 
+  export a JSON schema of the current data format
+
 Options:
-  -o, --output PATH     [default: schema.json]
-  -f, --fmt / --no-fmt  [default: no-fmt]
+  -o, --output PATH     file to output the result to, in JSON  [default:
+                        data.json]
+  -f, --fmt / --no-fmt  prettify the JSON result  [default: no-fmt]
   -h, --help            Show this message and exit.
 </pre></div>
 </div>
