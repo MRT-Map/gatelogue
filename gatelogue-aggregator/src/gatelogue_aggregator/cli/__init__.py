@@ -33,6 +33,7 @@ from gatelogue_aggregator.sources.sea.intrasail import IntraSail
 from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
 from gatelogue_aggregator.sources.sea.wzf import WZF
 from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
+from gatelogue_aggregator.sources.town import TownList
 from gatelogue_aggregator.types.context import Context
 
 
@@ -105,6 +106,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         WZFWarp,
         IntraBus,
         IntraBusWarp,
+        TownList,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(cache_dir, timeout), sources))

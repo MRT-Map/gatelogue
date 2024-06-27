@@ -11,6 +11,7 @@ from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine,
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
 from gatelogue_aggregator.__about__ import __version__
+from gatelogue_aggregator.types.node.town import TownContext, TownSource, Town
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -25,9 +26,9 @@ from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirConte
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
-class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
+class Context(AirContext, RailContext, SeaContext, BusContext, TownContext, ToSerializable):
     @classmethod
-    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource]) -> Self:
+    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()
         for source in track(sources, description=INFO1 + "Merging sources", remove=False):
             self.g = nx.compose(self.g, source.g)
@@ -76,8 +77,10 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
         """A :py:class:`RailContext` object"""
         sea: SeaContext.Ser
         """A :py:class:`SeaContext` object"""
-        bus: SeaContext.Ser
+        bus: BusContext.Ser
         """A :py:class:`BusContext` object"""
+        town: TownContext.Ser
+        """A :py:class:`TownContext` object"""
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
         """Time that the aggregation of the data was done"""
         version: int = int(__version__.split("+")[1])
@@ -85,7 +88,11 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
 
     def ser(self, _=None) -> Context.Ser:
         return self.Ser(
-            air=AirContext.ser(self), rail=RailContext.ser(self), sea=SeaContext.ser(self), bus=BusContext.ser(self)
+            air=AirContext.ser(self),
+            rail=RailContext.ser(self),
+            sea=SeaContext.ser(self),
+            bus=BusContext.ser(self),
+            town=TownContext.ser(self),
         )
 
     def graph(self, path: Path):
@@ -107,6 +114,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
                 (BusCompany, "#ffff80"),
                 (BusLine, "#ff8080"),
                 (BusStop, "#8080ff"),
+                (Town, "#aaaaaa"),
             ):
                 if isinstance(node, ty):
                     g.nodes[node]["fillcolor"] = col

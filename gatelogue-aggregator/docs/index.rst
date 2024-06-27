@@ -6,6 +6,10 @@
 Welcome to gatelogue-aggregator's documentation!
 ================================================
 
+The current version is
+
+.. program-output:: python -c "from gatelogue_aggregator.__about__ import __version__; print('v'+__version__)"
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
