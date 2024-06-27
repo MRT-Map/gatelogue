@@ -50,6 +50,11 @@ Node
    :undoc-members:
    :exclude-members: uuid, Literal
 
+.. automodule:: gatelogue_aggregator.types.node.town
+   :members:
+   :undoc-members:
+   :exclude-members: uuid, Literal
+
 Sources
 -------
 
@@ -164,6 +169,13 @@ Sea
    :undoc-members:
 
 .. automodule:: gatelogue_aggregator.sources.sea.wzf_warp
+   :members:
+   :undoc-members:
+
+Town
+++++
+
+.. automodule:: gatelogue_aggregator.sources.town
    :members:
    :undoc-members:
 
