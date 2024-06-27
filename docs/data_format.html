@@ -110,8 +110,10 @@
 <li><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> serialise to a list.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> serialises to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
 </ul>
-<p>The current data format version is
-.. program-output:: python -c “from gatelogue_aggregator.__about__ import __version__; print(‘v’+__version__.split(‘+’)[1])”</p>
+<p>The current data format version is</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>v1
+</pre></div>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Context.</span></span><span class="sig-name descname"><span class="pre">Ser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air:</span> <span class="pre">~gatelogue_aggregator.types.node.air.AirContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rail:</span> <span class="pre">~gatelogue_aggregator.types.node.rail.RailContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sea:</span> <span class="pre">~gatelogue_aggregator.types.node.sea.SeaContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bus:</span> <span class="pre">~gatelogue_aggregator.types.node.sea.SeaContext.Ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
