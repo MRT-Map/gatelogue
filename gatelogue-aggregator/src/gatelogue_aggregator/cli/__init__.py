@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -127,7 +129,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
     "-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON"
 )
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
-def schema(output: Path, fmt: bool):
+def schema(output: Path, *, fmt: bool):
     j = msgspec.json.encode(msgspec.json.schema(Context.Ser))
     if fmt:
         rich.print(INFO1 + f"Outputting to {output} (formatted)")

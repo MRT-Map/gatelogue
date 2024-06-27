@@ -4,7 +4,7 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
 from gatelogue_aggregator.types.base import Source
-from gatelogue_aggregator.types.node.town import TownSource, TownContext
+from gatelogue_aggregator.types.node.town import TownContext, TownSource
 
 
 class TownList(TownSource):

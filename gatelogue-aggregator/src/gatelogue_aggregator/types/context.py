@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING, Self, cast, override
 import msgspec
 import networkx as nx
 
+from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
 from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.__about__ import __version__
-from gatelogue_aggregator.types.node.town import TownContext, TownSource, Town
+from gatelogue_aggregator.types.node.town import Town, TownContext, TownSource
 
 if TYPE_CHECKING:
     from collections.abc import Iterable

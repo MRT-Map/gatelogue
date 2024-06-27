@@ -1,3 +1,4 @@
+# noqa
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -7,7 +8,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "gatelogue-aggregator"
-copyright = "2024, MRT Mapping Services"
+copyright = "2024, MRT Mapping Services"  # noqa: A001
 author = "MRT Mapping Services"
 
 # -- General configuration ---------------------------------------------------
