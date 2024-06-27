@@ -10,6 +10,7 @@ from gatelogue_aggregator.logging import INFO1, INFO2, track
 from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
+from gatelogue_aggregator.__about__ import __version__
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -79,7 +80,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
         """A :py:class:`BusContext` object"""
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
         """Time that the aggregation of the data was done"""
-        version: int = 1
+        version: int = int(__version__.split("+")[1])
         """Version number of the database format"""
 
     def ser(self, _=None) -> Context.Ser:
