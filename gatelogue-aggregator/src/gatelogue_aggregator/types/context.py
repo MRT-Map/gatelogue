@@ -77,7 +77,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, ToSerializable):
         """A :py:class:`SeaContext` object"""
         bus: SeaContext.Ser
         """A :py:class:`BusContext` object"""
-        timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().strftime("%Y%m%d-%H%:M%:S%Z"))  # noqa: DTZ005
+        timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
         """Time that the aggregation of the data was done"""
         version: int = 1
         """Version number of the database format"""
