@@ -43,5 +43,5 @@ class TownList(TownSource):
                 mayor=row["Mayor"],
                 deputy_mayor=None if not row["Deputy Mayor"] or row["Deputy Mayor"] == "-" else row["Deputy Mayor"],
                 world=row["World"],
-                coordinates=None if row["X"] == "nan" else (row["X"], row["Z"]),
+                coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
             )
