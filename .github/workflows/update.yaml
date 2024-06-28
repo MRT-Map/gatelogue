@@ -14,6 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pypa/hatch@install
-- run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
+      - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
       - run: bash update.sh
       - run: git push
