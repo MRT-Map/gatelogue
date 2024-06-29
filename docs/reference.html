@@ -199,6 +199,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.sources.rail.wzr_warp.WZRWarp"><code class="docutils literal notranslate"><span class="pre">WZRWarp</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.sources.rail.dynmap_mrt.DynmapMRT"><code class="docutils literal notranslate"><span class="pre">DynmapMRT</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.sources.rail.wiki_mrt.WikiMRT"><code class="docutils literal notranslate"><span class="pre">WikiMRT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nflr.NFLR"><code class="docutils literal notranslate"><span class="pre">NFLR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp"><code class="docutils literal notranslate"><span class="pre">NFLRWarp</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-gatelogue_aggregator.sources.sea.aqualinq">Sea</a><ul>
@@ -2787,6 +2789,46 @@ For example, <code class="docutils literal notranslate"><span class="pre">{&quot
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.wiki_mrt.WikiMRT.priority">
 <span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.wiki_mrt.WikiMRT.priority" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-gatelogue_aggregator.sources.rail.nflr">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr.NFLR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.rail.nflr.</span></span><span class="sig-name descname"><span class="pre">NFLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/tmp/gatelogue')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr.NFLR" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr.NFLR.g">
+<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">nx.MultiGraph</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr.NFLR.g" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr.NFLR.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MRT</span> <span class="pre">Wiki</span> <span class="pre">(Rail,</span> <span class="pre">nFLR)'</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr.NFLR.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr.NFLR.priority">
+<span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr.NFLR.priority" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-gatelogue_aggregator.sources.rail.nflr_warp">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.rail.nflr_warp.</span></span><span class="sig-name descname"><span class="pre">NFLRWarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/tmp/gatelogue')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.g">
+<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">nx.MultiGraph</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.g" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MRT</span> <span class="pre">Warp</span> <span class="pre">API</span> <span class="pre">(Rail,</span> <span class="pre">nFLR)'</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.priority">
+<span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nflr_warp.NFLRWarp.priority" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

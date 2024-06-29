@@ -138,6 +138,14 @@ Rail
    :members:
    :undoc-members:
 
+.. automodule:: gatelogue_aggregator.sources.rail.nflr
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.nflr_warp
+   :members:
+   :undoc-members:
+
 Sea
 +++
 .. automodule:: gatelogue_aggregator.sources.sea.aqualinq
