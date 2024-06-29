@@ -55,10 +55,14 @@ class IntraRail(RailSource):
                 forward_label = "towards " + stations[-1].merged_attr(self, "name").v
                 backward_label = "towards " + stations[0].merged_attr(self, "name").v
                 RailLineBuilder(self, line).connect(
-                    *stations[0:2], forward_label=forward_label, backward_label=backward_label, one_way=True
+                    *stations[0:2],
+                    forward_label=forward_label,
+                    backward_label=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
-                    *stations[8:12], forward_label=forward_label, backward_label=backward_label, one_way=True
+                    *stations[8:12],
+                    forward_label=forward_label,
+                    backward_label=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
                     stations[8], *stations[5:0:-1], forward_label=backward_label, one_way=True
@@ -66,6 +70,8 @@ class IntraRail(RailSource):
                 RailLineBuilder(self, line).connect(
                     stations[1], *stations[6:9], forward_label=forward_label, one_way=True
                 )
+            elif line_code == "55":
+                RailLineBuilder(self, line).connect(*stations, one_way=True)
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
