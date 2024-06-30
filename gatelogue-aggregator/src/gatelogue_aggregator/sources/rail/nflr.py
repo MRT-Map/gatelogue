@@ -113,13 +113,13 @@ class NFLR(RailSource):
                     *r_stations[:5], forward_label="southbound", backward_label="northbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[5:6], forward_label="southbound", backward_label="northbound CW"
+                    r_stations[4], r_stations[5], forward_label="southbound", backward_label="northbound CW"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[6:7], forward_label="northbound CCW", backward_label="southbound"
+                    r_stations[5], r_stations[6], forward_label="northbound CCW", backward_label="southbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[7:], r_stations[2], forward_label="northbound", backward_label="southbound"
+                    *r_stations[6:], r_stations[2], forward_label="northbound", backward_label="southbound"
                 )
             elif line_name == "R23":
                 RailLineBuilder(self, r_line).connect(
@@ -153,8 +153,8 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(*r_stations[:-2])
                 RailLineBuilder(self, r_line).connect(*r_stations[-2:])
             elif line_name == "R17":
-                RailLineBuilder(self, r_line).connect(*r_stations[:5])
-                RailLineBuilder(self, r_line).connect(*r_stations[5:])
+                RailLineBuilder(self, r_line).connect(*r_stations[:6])
+                RailLineBuilder(self, r_line).connect(*r_stations[6:])
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
