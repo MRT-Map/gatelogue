@@ -44,6 +44,10 @@ class DynmapMRT(RailSource):
 
             for k, vv in v["markers"].items():
                 code = k.upper()
+                if code == "M0":
+                    code = "MW"
+                elif code == "MS":
+                    code = "MH"
                 coordinates = (vv["x"], vv["z"])
                 name = None if (result := re.search(r"(.*) \((.*?)\)", vv["label"])) is None else result.group(1)
                 if name is not None:

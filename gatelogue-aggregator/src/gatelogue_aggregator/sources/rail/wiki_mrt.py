@@ -64,10 +64,6 @@ class WikiMRT(RailSource):
                     codes.add(match2.group(1) or match2.group(2))
                 if line_code.startswith("Old"):
                     codes = {"Old-" + a for a in codes}
-                elif line_code == "MH":
-                    codes.add("MS")
-                elif line_code.startswith("MW"):
-                    codes.add("M0")
                 station = self.rail_station(codes=codes, company=company)
                 stations.append(station)
 
