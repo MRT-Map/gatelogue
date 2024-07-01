@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Any, Container, Literal, Self, override
+from collections.abc import Container
+from typing import Any, Literal, Self, override
 
 import msgspec
 

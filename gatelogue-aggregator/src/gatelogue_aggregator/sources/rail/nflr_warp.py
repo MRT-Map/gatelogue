@@ -23,6 +23,8 @@ class NFLRWarp(RailSource):
             code = warp["name"].split("-")[1].lower()
             if code in ("nsg", "rvb"):
                 continue
+            if code == "dne" and warp["name"].split("-")[2].lower() == "r5a":
+                code = "dnw"
             code = {
                 "n104": {"n104", "n203", "n300"},
                 "n203": {"n104", "n203", "n300"},
