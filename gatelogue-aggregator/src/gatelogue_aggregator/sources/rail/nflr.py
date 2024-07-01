@@ -153,8 +153,8 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(*r_stations[:-2])
                 RailLineBuilder(self, r_line).connect(*r_stations[-2:])
             elif line_name == "R17":
-                RailLineBuilder(self, r_line).connect(*r_stations[:6])
-                RailLineBuilder(self, r_line).connect(*r_stations[6:])
+                RailLineBuilder(self, r_line).connect(*r_stations[:4])
+                RailLineBuilder(self, r_line).connect(*r_stations[4:])
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
