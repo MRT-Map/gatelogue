@@ -46,7 +46,8 @@ class DynmapMRT(RailSource):
                 code = k.upper()
                 coordinates = (vv["x"], vv["z"])
                 name = None if (result := re.search(r"(.*) \((.*?)\)", vv["label"])) is None else result.group(1)
-                name = name.strip().removesuffix("Station")
+                if name is not None:
+                    name = name.strip().removesuffix("Station")
                 self.rail_station(codes={code}, company=company, coordinates=coordinates, name=name, world="New")
             rich.print(RESULT + f"MRT {line_code} has {len(v['markers'])} stations")
 
