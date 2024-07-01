@@ -38,7 +38,7 @@ class NFLR(RailSource):
             ("R6", 1430738786, True),
             ("R7", 1926708521, True),
             ("R7A", 1818351657, False),
-            ("R7Aα", 591894522, False),
+            ("R7Aα", 591894522, False),  # noqa: RUF001
             ("R7Aβ", 1399770737, False),
             ("R7B", 1247441432, False),
             ("R7C", 1332766054, False),
@@ -84,7 +84,7 @@ class NFLR(RailSource):
             r_stations = []
             w_stations = []
             for route, code, name in d:
-                code = {
+                code = {  # noqa: PLW2901
                     "n104": {"n104", "n203", "n300"},
                     "n203": {"n104", "n203", "n300"},
                     "n300": {"n104", "n203", "n300"},
@@ -160,7 +160,7 @@ class NFLR(RailSource):
             rich.print(RESULT + f"nFLR Line {line_name} has {len(r_stations)} stations")
 
             if w:
-                line_name = "W" + line_name[1:]
+                line_name = "W" + line_name[1:]  # noqa: PLW2901
                 w_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
                 RailLineBuilder(self, w_line).connect(*w_stations)
                 rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
