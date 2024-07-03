@@ -47,6 +47,8 @@ class IntraRail(RailSource):
                 if station_name == "":
                     continue
                 station_name = station_name.strip()
+                if station_name == "Siletz Siletz Salvador":
+                    station_name = "Siletz Salzador"
 
                 station = self.rail_station(codes={station_name}, name=station_name, company=company)
                 stations.append(station)

@@ -45,5 +45,24 @@ class IntraRailMCRWarp(RailSource):
                 name = code2name["OCJS-" + warp["name"].split("_")[2]]
             elif code in code2name:
                 name = code2name[code]
+            name = {
+                "Gemstride-MoComm": "Gemstride",
+                "Euphorial": "Deadbush Euphorial",
+                "Quarryville": "Deadbush Quarryville",
+                "Eep": "Eep Underground",
+                "Orange City": "Orange City Proper",
+                "Scarborough (HQ)": "Scarborough MCR HQ",
+                "New Beginnings": "New Beginnings Bus Terminal",
+                "Matheson": "Matheson Lombardo Avenue",
+                "Delta City": "Delta City First Street",
+                "Royal Ferry": "Royal Ferry Downtown",
+                "New Stone City": "New Stone City V43",
+                "New Stone City V44": "New Stone City Intermodal Hub",
+                "Formsa Northern": "New Terra",
+                "Weezerville": "Deadbush Weezerville",
+                "Hacienda Mojito": "Deadbush Hacienta Mojito",
+                "Volkov Bay": "Deadbush Volkov Bay",
+                "Cactus River": "Cactus River SE8",
+            }.get(name, name)
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

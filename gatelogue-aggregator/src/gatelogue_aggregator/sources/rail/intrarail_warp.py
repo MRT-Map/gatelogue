@@ -29,6 +29,19 @@ class IntraRailWarp(RailSource):
                 # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
             name = match.group(1) or match.group(2) or match.group(3)
+            name = {
+                "Heampstead Kings Cross Railway Terminal": "Deadbush Heampstead Kings Cross Railway Terminal",
+                "Musique": "Musique Bayview Avenue",
+                "Zerez": "Zerez Thespe Railway Station",
+                "Pine Mountain": "PMW City Pine Mountain",
+                "Delta City": "Delta City Henry Avenue",
+                "Matheson": "Matheson Araya Avenue",
+                "Scarborough": "Scarborough MRT Plaza",
+                "Cactus River": "Cactus River Main Street",
+                "Southport": "Southfort",
+                "Llanrwst Newydd": "Wurst",
+                "Llanwrst Newydd": "Wurst",
+            }.get(name, name)
             if name in names:
                 continue
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
