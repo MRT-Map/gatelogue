@@ -31,7 +31,6 @@ class IntraRailMCRWarp(RailSource):
                     continue
                 code = str(tr("td")[1].span.span.string).strip()
                 name = "".join(tr("td")[2].strings).strip()
-                print(code, name)
                 code2name[code] = name.replace(" -  ", " ").replace(" - ", " ")
 
         names = []
