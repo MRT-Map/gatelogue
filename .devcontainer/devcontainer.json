@@ -12,7 +12,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev && pip install -e ./gatelogue-aggregator"
+	"postCreateCommand": "apt-get update && apt-get install -y graphviz libgraphviz-dev && pip install -e ./gatelogue-aggregator"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
