@@ -133,9 +133,6 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(
                     *r_stations[9 - 3 : 12 - 3], forward_label="to Sansvikk IKEA", backward_label="to mainline"
                 )
-            elif line_name == "R1":
-                RailLineBuilder(self, r_line).connect(*r_stations[:2])
-                RailLineBuilder(self, r_line).connect(*r_stations[2:])
             elif line_name == "R2":
                 RailLineBuilder(self, r_line).connect(*r_stations[:6])
                 RailLineBuilder(self, r_line).connect(*r_stations[6:])
