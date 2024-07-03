@@ -21,6 +21,7 @@ from gatelogue_aggregator.sources.rail.blurail import BluRail
 from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
 from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
 from gatelogue_aggregator.sources.rail.intrarail import IntraRail
+from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
 from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
 from gatelogue_aggregator.sources.rail.nflr import NFLR
 from gatelogue_aggregator.sources.rail.nflr_warp import NFLRWarp
@@ -113,6 +114,7 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         TownList,
         NFLR,
         NFLRWarp,
+        IntraRailMCRWarp,
     ]
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(cache_dir, timeout), sources))
