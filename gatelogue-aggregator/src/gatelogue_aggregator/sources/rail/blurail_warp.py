@@ -28,11 +28,15 @@ class BluRailWarp(RailSource):
             name = match.group(1) or match.group(2)
             if name in names:
                 continue
-            if (match := re.search(r"_(...)_", warp["name"])) is None:
+            if (match := re.search(r"(\d*)_(...)_", warp["name"])) is None:
                 continue
 
-            code = match.group(1)
-            if "Elecna" in warp["welcomeMessage"]:
-                print(warp["welcomeMessage"], code)
+            code = match.group(2)
+            if code == "BCH":
+                code += match.group(1)
+            elif code == "MCN" and match.group(1) == "11":
+                code += "11"
+            elif code == "STE" and match.group(1) == "1":
+                code += "1"
             self.rail_station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

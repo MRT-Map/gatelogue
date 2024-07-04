@@ -74,6 +74,12 @@ class BluRail(RailSource):
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
                 code = result.group("code").upper()
+                if code == "BCH":
+                    code += line_code
+                elif code == "MCN" and line_code == "11":
+                    code += "11"
+                elif code == "STE" and line_code == "1":
+                    code += "1"
                 codes = {
                     "ILI": {"ILI", "ITC"},
                     "ITC": {"ILI", "ITC"},
