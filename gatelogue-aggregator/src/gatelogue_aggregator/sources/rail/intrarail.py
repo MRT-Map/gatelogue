@@ -48,7 +48,7 @@ class IntraRail(RailSource):
                     continue
                 station_name = station_name.strip()
                 if station_name == "Siletz Siletz Salvador":
-                    station_name = "Siletz Salzador"
+                    station_name = "Siletz Salvador Station"
 
                 station = self.rail_station(codes={station_name}, name=station_name, company=company)
                 stations.append(station)
@@ -62,15 +62,15 @@ class IntraRail(RailSource):
                     backward_label=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
-                    *stations[8:12],
+                    *stations[8 - 1 : 12 - 1],
                     forward_label=forward_label,
                     backward_label=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
-                    stations[8], *stations[5:0:-1], forward_label=backward_label, one_way=True
+                    stations[8 - 1], *stations[5 - 1 : 0 : -1], forward_label=backward_label, one_way=True
                 )
                 RailLineBuilder(self, line).connect(
-                    stations[1], *stations[6:9], forward_label=forward_label, one_way=True
+                    stations[1], *stations[6 - 1 : 9 - 1], forward_label=forward_label, one_way=True
                 )
             elif line_code == "55":
                 RailLineBuilder(self, line).connect(*stations, one_way=True)
