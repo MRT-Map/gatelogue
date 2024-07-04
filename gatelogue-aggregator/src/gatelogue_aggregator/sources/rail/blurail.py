@@ -28,13 +28,11 @@ class BluRail(RailSource):
             "4",
             "5",
             "6",
-            "7",
             "8",
             "9",
             "11",
             "12",
             "14",
-            "15",
             "16",
             "20",
             "23",
@@ -54,6 +52,7 @@ class BluRail(RailSource):
             "GS",
             "IS",
             "JC",
+            "KS",
             "LC",
             "NF",
             "NI",
@@ -74,7 +73,23 @@ class BluRail(RailSource):
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
-                station = self.rail_station(codes={result.group("code")}, name=result.group("name"), company=company)
+                code = result.group("code").upper()
+                codes = {
+                    "ILI": {"ILI", "ITC"},
+                    "ITC": {"ILI", "ITC"},
+                    "SEA": {"SLC", "SEA"},
+                    "SLC": {"SLC", "SEA"},
+                    "IKA": {"UIK", "IKA"},
+                    "UIK": {"UIK", "IKA"},
+                    "EGN": {"EBN", "EGN"},
+                    "EBN": {"EBN", "EGN"},
+                    "SPN": {"FDR", "SPN"},
+                    "FDR": {"FDR", "SPN"},
+                }.get(code, {code})
+                name = result.group("name").strip()
+                if name == "":
+                    continue
+                station = self.rail_station(codes=codes, name=name, company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
