@@ -36,16 +36,18 @@ class RaiLinQWarp(RailSource):
 
         rename = {
             "AT Western Transportation Hub": "Achowalogen Takachsin Western Transportation Hub",
-            "Downtown Achowalogen Takachsin/Covina": "Downtown AT/Covina",
-            "Achowalogen Takachsin Suburb": "AT Suburb",
+            "Downtown AT/Covina": "Downtown Achowalogen Takachsin/Covina",
+            "AT Suburb": "Achowalogen Takachsin Suburb",
             "Vekta & Xandar": "Vekta And Xandar",
+            "Espil North/East": "Espil North-East",
             "Summerville-Ulfthorp": "Summerville - Ulfthorp",
             "Ilirea Cascadia": "Ilirea ITC",
             "Verdantium Fenwick Square": "Fenwick Central",
             "Vergil IKEA": "Covina IKEA",
+            "savacaci": "Savacaci",
         }
 
-        names = ["Amestris West", "Wazamawazi Queen Maxima (Low Level)"]
+        names = ["Amestris West"]
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):
             if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
                 continue
