@@ -31,7 +31,7 @@ class RaiLinQ(RailSource):
             for b in line_table.p.find_all("b"):
                 name = str(b.string)
                 if name == "Wazamawazi Queen Maxima (Low Level)":
-                    name = "Wazamawai Queen Maxima"
+                    name = "Wazamawazi Queen Maxima"
                 station = self.rail_station(codes={name}, name=name, company=company)
                 stations.append(station)
 
