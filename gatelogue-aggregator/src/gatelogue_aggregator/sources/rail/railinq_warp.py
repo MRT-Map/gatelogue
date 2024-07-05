@@ -34,9 +34,21 @@ class RaiLinQWarp(RailSource):
 
         d = dict(zip(df["Warp"], df["Name"], strict=False))
 
-        names = []
+        rename = {
+            "AT Western Transportation Hub": "Achowalogen Takachsin Western Transportation Hub",
+            "Downtown Achowalogen Takachsin/Covina": "Downtown AT/Covina",
+            "Achowalogen Takachsin Suburb": "AT Suburb",
+            "Vekta & Xandar": "Vekta And Xandar",
+            "Summerville-Ulfthorp": "Summerville - Ulfthorp",
+            "Ilirea Cascadia": "Ilirea ITC",
+            "Verdantium Fenwick Square": "Fenwick Central",
+            "Vergil IKEA": "Covina IKEA",
+        }
+
+        names = ["Amestris West", "Wazamawazi Queen Maxima (Low Level)"]
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):
-            if warp["name"] not in d or (name := d[warp["name"]]) in names:
+            if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
                 continue
+
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
