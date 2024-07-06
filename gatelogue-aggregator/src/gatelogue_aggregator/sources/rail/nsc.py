@@ -42,12 +42,12 @@ class NSC(RailSource):
         line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Royal Ferry Paddington",
-            "Subryanville"
-            "Royal Ferry - Broad Street"
-            "Siletz"
-            "San Renoldi"
-            "Thunderbird"
-            "Freedon West"
+            "Subryanville",
+            "Royal Ferry - Broad Street",
+            "Siletz",
+            "San Renoldi",
+            "Thunderbird",
+            "Freedon West",
             "Freedon Exchange",
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]

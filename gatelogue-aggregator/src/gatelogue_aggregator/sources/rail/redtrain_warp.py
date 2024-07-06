@@ -23,9 +23,10 @@ class RedTrainWarp(RailSource):
         for warp in warps(uuid.UUID("7dd701ed-5279-40d8-9db4-82ac57126c2c"), config):
             if not warp["name"].startswith("RT"):
                 continue
-            code = warp["name"].split("_")[1].lower()
+            code = warp["name"].split("_")[1].upper()
             if code in codes:
                 continue
+            code = {"RITO": "ITO", "VEN": "VN", "MTH": "MSN"}.get(code, code)
             self.rail_station(
                 codes={code},
                 company=company,

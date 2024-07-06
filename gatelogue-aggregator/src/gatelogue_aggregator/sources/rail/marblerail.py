@@ -24,19 +24,19 @@ class MarbleRail(RailSource):
         for line_table in html.find_all("table"):
             if line_table.caption is None:
                 continue
-            line_name = str(line_table.caption.string)
-            if line_name not in ("MarbleRail Main Line", "Erzville Line", "Atomic Line"):
+            line_name = str(line_table.caption.string).strip()
+            if line_name not in ("MarbleRail Main Line", "Erzville Line"):
                 continue
             line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
 
             stations = []
-            for tr in line_table.p.find_all("tr"):
-                if len(tr("td")) != 4:  # noqa: PLR2004
+            for tr in line_table.find_all("tr"):
+                if len(tr("td")) != 5:  # noqa: PLR2004
                     continue
-                if tr("td")[3].string.strip() != "Opened":
+                if tr("td")[4].string.strip() != "Opened":
                     continue
-                code = str(tr("td")[0].string)
-                name = str(tr("td")[0].string)
+                code = str(tr("td")[0].string).strip()
+                name = str(tr("td")[1].string).strip()
 
                 station = self.rail_station(codes={code}, name=name, company=company)
                 stations.append(station)
