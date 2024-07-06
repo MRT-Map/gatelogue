@@ -128,7 +128,7 @@ class Source(metaclass=SourceMeta):
         if not cache_file.exists():
             return None
         rich.print(INFO1 + f"Retrieving from cache {cache_file}")
-        return pickle.loads(cache_file.read_bytes(), encoding="utf-8")
+        return pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
 
     @classmethod
     def save_to_cache(cls, config: Config, g: nx.MultiGraph):
