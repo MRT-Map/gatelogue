@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import contextlib
 import tempfile
-import uuid
-from collections.abc import Iterator
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import msgspec
 import requests
@@ -10,6 +11,12 @@ import rich
 import rich.status
 
 from gatelogue_aggregator.logging import INFO3, PROGRESS
+
+if TYPE_CHECKING:
+    import uuid
+    from collections.abc import Iterator
+
+    from gatelogue_aggregator.types.config import Config
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
@@ -31,13 +38,17 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     return response
 
 
-def warps(player: uuid.UUID, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT) -> Iterator[dict]:
+def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
     link = f"https://api.minecartrapidtransit.net/api/v1/warps?player={player}"
     offset = 0
-    ls: list[dict] = msgspec.json.decode(get_url(link, cache_dir / "mrt-api" / str(player) / str(offset), timeout))
+    ls: list[dict] = msgspec.json.decode(
+        get_url(link, config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout)
+    )
     while len(ls) != 0:
         yield from ls
         offset += len(ls)
         ls = msgspec.json.decode(
-            get_url(link + f"&offset={offset}", cache_dir / "mrt-api" / str(player) / str(offset), timeout)
+            get_url(
+                link + f"&offset={offset}", config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout
+            )
         )

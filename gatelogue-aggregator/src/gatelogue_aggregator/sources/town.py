@@ -1,9 +1,8 @@
-from pathlib import Path
-
 import pandas as pd
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.town import TownContext, TownSource
 
 
@@ -11,16 +10,19 @@ class TownList(TownSource):
     name = "MRT Town List"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache1 = cache_dir / "town-list1"
-        cache2 = cache_dir / "town-list2"
+    def __init__(self, config: Config):
+        cache1 = config.cache_dir / "town-list1"
+        cache2 = config.cache_dir / "town-list2"
         TownContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=0",
             cache1,
-            timeout=timeout,
+            timeout=config.timeout,
         )
         df1 = pd.read_csv(cache1)
         df1["World"] = "New"
@@ -28,7 +30,7 @@ class TownList(TownSource):
         get_url(
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=1533469138",
             cache2,
-            timeout=timeout,
+            timeout=config.timeout,
         )
         df2 = pd.read_csv(cache2)
         df2["World"] = "Old"
@@ -45,3 +47,5 @@ class TownList(TownSource):
                 world=row["World"],
                 coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
             )
+
+        self.save_to_cache(config, self.g)

@@ -1,11 +1,10 @@
-from pathlib import Path
-
 import pandas as pd
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
 
 
@@ -13,10 +12,13 @@ class NFLR(RailSource):
     name = "MRT Wiki (Rail, nFLR)"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache = cache_dir / "nflr"
+    def __init__(self, config: Config):
+        cache = config.cache_dir / "nflr"
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="nFLR")
 
@@ -75,7 +77,7 @@ class NFLR(RailSource):
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),
                 cache / line_name,
-                timeout=timeout,
+                timeout=config.timeout,
             )
             df = pd.read_csv(cache / line_name)
 
@@ -161,3 +163,4 @@ class NFLR(RailSource):
                 w_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
                 RailLineBuilder(self, w_line).connect(*w_stations)
                 rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
+        self.save_to_cache(config, self.g)

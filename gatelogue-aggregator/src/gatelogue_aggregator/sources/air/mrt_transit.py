@@ -1,10 +1,9 @@
-from pathlib import Path
-
 import pandas as pd
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirSource
 
 
@@ -12,16 +11,19 @@ class MRTTransit(AirSource):
     name = "MRT Transit (Air)"
     priority = 2
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache1 = cache_dir / "mrt-transit1"
-        cache2 = cache_dir / "mrt-transit2"
+    def __init__(self, config: Config):
+        cache1 = config.cache_dir / "mrt-transit1"
+        cache2 = config.cache_dir / "mrt-transit2"
         AirContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
             cache1,
-            timeout=timeout,
+            timeout=config.timeout,
         )
         df1 = pd.read_csv(cache1, header=1)
 
@@ -44,7 +46,7 @@ class MRTTransit(AirSource):
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache2,
-            timeout=timeout,
+            timeout=config.timeout,
         )
         df2 = pd.read_csv(cache2, header=1)
 
@@ -83,3 +85,5 @@ class MRTTransit(AirSource):
                     flight = self.air_flight(codes=AirFlight.process_code(flight_code, airline_name), airline=airline)
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)
+
+        self.save_to_cache(config, self.g)

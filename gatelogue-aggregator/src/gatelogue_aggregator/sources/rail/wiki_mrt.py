@@ -1,12 +1,11 @@
 import re
-from pathlib import Path
 
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
 from gatelogue_aggregator.utils import search_all
 
@@ -15,9 +14,12 @@ class WikiMRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="MRT")
 
@@ -50,7 +52,7 @@ class WikiMRT(RailSource):
             ("Old-G", "MRT Green Line"),
             ("Old-O", "MRT Orange Line"),
         ):
-            text = get_wiki_text(line_name, cache_dir, timeout)
+            text = get_wiki_text(line_name, config)
             line = self.rail_line(code=line_code, company=company, name=line_name)
 
             stations = []
@@ -86,3 +88,4 @@ class WikiMRT(RailSource):
                 )
 
             rich.print(RESULT + f"MRT {line_code} has {len(stations)} stations")
+        self.save_to_cache(config, self.g)

@@ -1,10 +1,10 @@
 import uuid
-from pathlib import Path
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url, warps
+from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
 
 
@@ -12,18 +12,21 @@ class AquaLinQWarp(SeaSource):
     name = "MRT Warp API (Sea, AquaLinQ)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         SeaContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.sea_company(name="AquaLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=1793169664",
-            cache_dir / "aqualinq",
-            timeout=timeout,
+            config.cache_dir / "aqualinq",
+            timeout=config.timeout,
         )
-        df = pd.read_csv(cache_dir / "aqualinq", header=None)
+        df = pd.read_csv(config.cache_dir / "aqualinq", header=None)
         df.rename(
             columns={
                 0: "Name",
@@ -43,8 +46,10 @@ class AquaLinQWarp(SeaSource):
         d["AQ1600TWEEB"] = "Tweebuffelsmeteenskootmorsdoodgeskietfontein"
 
         names = []
-        for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):
+        for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
             if warp["name"] not in d or (name := d[warp["name"]]) in names:
                 continue
             self.sea_stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
+
+        self.save_to_cache(config, self.g)

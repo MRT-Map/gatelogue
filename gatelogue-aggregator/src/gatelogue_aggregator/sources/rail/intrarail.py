@@ -1,13 +1,12 @@
 import re
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
 
 if TYPE_CHECKING:
@@ -18,13 +17,16 @@ class IntraRail(RailSource):
     name = "MRT Wiki (Rail, IntraRail)"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="IntraRail")
 
-        html = get_wiki_html("IntraRail", cache_dir, timeout)
+        html = get_wiki_html("IntraRail", config)
 
         cursor: bs4.Tag = html.find("span", "mw-headline", string="(1) Whiteliner").parent
 
@@ -100,3 +102,4 @@ class IntraRail(RailSource):
             rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling
+        self.save_to_cache(config, self.g)

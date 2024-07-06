@@ -1,17 +1,16 @@
 from __future__ import annotations
 
+import pickle
 from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override
 
 import msgspec
 import networkx as nx
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
+    from gatelogue_aggregator.types.config import Config
     from gatelogue_aggregator.types.node.base import Node
 
 
@@ -118,5 +117,23 @@ class Source(metaclass=SourceMeta):
     name: ClassVar[str]
     priority: ClassVar[float | int]
 
-    def __init__(self, _: Path = DEFAULT_CACHE_DIR, __: int = DEFAULT_TIMEOUT):
+    def __init__(self, _: Config):
         rich.print(INFO1 + f"Retrieving from {self.name}")
+
+    @classmethod
+    def retrieve_from_cache(cls, config: Config) -> nx.MultiGraph | None:
+        if cls.__name__ in config.cache_exclude:
+            return None
+        cache_file = config.cache_dir / "network-cache" / cls.__name__
+        if not cache_file.exists():
+            return None
+        rich.print(INFO1 + f"Retrieving from cache {cache_file}")
+        return pickle.loads(cache_file.read_bytes(), encoding="utf-8")
+
+    @classmethod
+    def save_to_cache(cls, config: Config, g: nx.MultiGraph):
+        cache_file = config.cache_dir / "network-cache" / cls.__name__
+        rich.print(INFO1 + f"Saving to cache {cache_file}")
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        cache_file.touch()
+        cache_file.write_bytes(pickle.dumps(g))

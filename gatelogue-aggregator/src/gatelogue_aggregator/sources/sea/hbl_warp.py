@@ -2,13 +2,13 @@ import contextlib
 import itertools
 import re
 import uuid
-from pathlib import Path
 
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
 
 # Adapted from https://docs.google.com/spreadsheets/d/1nIIettVbGwzm7DkmYqqPVoguw2U53R5un4nrC76w-Xg/edit#gid=1423194214
@@ -121,16 +121,19 @@ class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         SeaContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.sea_company(name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
         for warp in itertools.chain(
-            warps(uuid.UUID("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"), cache_dir, timeout),
-            warps(uuid.UUID("8a928931-aa14-4a1c-8a39-0a7630922001"), cache_dir, timeout),
+            warps(uuid.UUID("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"), config),
+            warps(uuid.UUID("8a928931-aa14-4a1c-8a39-0a7630922001"), config),
         ):
             if (result := re.match(r"HBL_(...)_(.*)", warp["name"])) is None:
                 continue
@@ -158,3 +161,4 @@ class HBLWarp(SeaSource):
         names.remove("Kenthurst")
         if names:
             rich.print(ERROR + f"Not found: {', '.join(names)}")
+        self.save_to_cache(config, self.g)

@@ -1,11 +1,11 @@
 import itertools
 import re
 import uuid
-from pathlib import Path
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
 
@@ -13,13 +13,16 @@ class IntraRailMCRWarp(RailSource):
     name = "MRT Warp API (Rail, IntraRail MCR)"
     priority = 2
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="IntraRail")
 
-        html = get_wiki_html("", cache_dir, timeout, old_id=203396)
+        html = get_wiki_html("", config, old_id=203396)
 
         code2name = {}
         for table in html.find_all("table"):
@@ -41,10 +44,10 @@ class IntraRailMCRWarp(RailSource):
 
         names = []
         for warp in itertools.chain(
-            warps(uuid.UUID("16990807-9df4-4bde-89b7-efee9836b7a6"), cache_dir, timeout),
-            warps(uuid.UUID("928761c5-d95f-4e16-8761-624dada75dc2"), cache_dir, timeout),
-            warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), cache_dir, timeout),
-            warps(uuid.UUID("5cc70692-7282-4fd5-8d89-11c08535bb11"), cache_dir, timeout),
+            warps(uuid.UUID("16990807-9df4-4bde-89b7-efee9836b7a6"), config),
+            warps(uuid.UUID("928761c5-d95f-4e16-8761-624dada75dc2"), config),
+            warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config),
+            warps(uuid.UUID("5cc70692-7282-4fd5-8d89-11c08535bb11"), config),
         ):
             if not warp["name"].startswith("MCR") or len(warp["name"].split("_")) < 2:
                 continue
@@ -54,10 +57,7 @@ class IntraRailMCRWarp(RailSource):
                 "NROC": "NRH",
                 "OROC": "ROC",
             }.get(code, code)
-            if code == "OCJS":
-                name = code2name["OCJS-" + warp["name"].split("_")[2]]
-            else:
-                name = code2name.get(code, None)
+            name = code2name["OCJS-" + warp["name"].split("_")[2]] if code == "OCJS" else code2name.get(code)
             if name is None:
                 continue
             name = {
@@ -93,3 +93,4 @@ class IntraRailMCRWarp(RailSource):
                 continue
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
+        self.save_to_cache(config, self.g)

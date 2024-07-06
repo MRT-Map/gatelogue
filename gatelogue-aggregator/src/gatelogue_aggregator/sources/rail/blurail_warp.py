@@ -1,9 +1,9 @@
 import re
 import uuid
-from pathlib import Path
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
 
@@ -11,14 +11,17 @@ class BluRailWarp(RailSource):
     name = "MRT Warp API (Rail, BluRail)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="BluRail")
 
         names = []
-        for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), cache_dir, timeout):
+        for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
             if not warp["name"].startswith("BLU") and not warp["name"].startswith("BR"):
                 continue
             if (match := re.search(r"(?i)^This is ([^.]*)\.|^→ ([^|]*?) *\|", warp["welcomeMessage"])) is None:
@@ -40,3 +43,4 @@ class BluRailWarp(RailSource):
                 code += "1"
             self.rail_station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
+        self.save_to_cache(config, self.g)

@@ -1,10 +1,10 @@
 import uuid
-from pathlib import Path
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url, warps
+from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
 
@@ -12,18 +12,21 @@ class RaiLinQWarp(RailSource):
     name = "MRT Warp API (Rail, RaiLinQ)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="RaiLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=0",
-            cache_dir / "railinq",
-            timeout=timeout,
+            config.cache_dir / "railinq",
+            timeout=config.timeout,
         )
-        df = pd.read_csv(cache_dir / "railinq", header=1)
+        df = pd.read_csv(config.cache_dir / "railinq", header=1)
         df.rename(
             columns={
                 "Unnamed: 1": "Name",
@@ -48,9 +51,10 @@ class RaiLinQWarp(RailSource):
         }
 
         names = ["Amestris West"]
-        for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), cache_dir, timeout):
+        for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
             if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
                 continue
 
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
+        self.save_to_cache(config, self.g)

@@ -1,9 +1,9 @@
 import re
 import uuid
-from pathlib import Path
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.bus import BusSource
 from gatelogue_aggregator.types.node.sea import SeaContext
 
@@ -12,14 +12,17 @@ class IntraBusWarp(BusSource):
     name = "MRT Warp API (Rail, IntraBus)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         SeaContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.bus_company(name="IntraBus")
 
         names = []
-        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), cache_dir, timeout):
+        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
             if not warp["name"].startswith("IB"):
                 continue
             if (
@@ -39,3 +42,4 @@ class IntraBusWarp(BusSource):
                 coordinates=(warp["x"], warp["z"]),
             )
             names.append(name)
+        self.save_to_cache(config, self.g)

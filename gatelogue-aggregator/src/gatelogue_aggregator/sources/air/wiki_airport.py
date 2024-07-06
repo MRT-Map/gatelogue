@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 import rich.progress
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
@@ -13,29 +12,33 @@ from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirConte
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from pathlib import Path
     from re import Pattern
+
+    from gatelogue_aggregator.types.config import Config
 
 
 class WikiAirport(AirSource):
     name = "MRT Wiki (Airport)"
     priority = 3
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         AirContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
         for airline in track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
-            airline(self, cache_dir, timeout)
+            airline(self, config)
+        self.save_to_cache(config, self.g)
 
     def regex_extract_airport(
         self,
         page_name: str,
         airport_code: str,
         regex: Pattern[str],
-        cache_dir: Path = DEFAULT_CACHE_DIR,
-        timeout: int = DEFAULT_TIMEOUT,
+        config: Config,
     ) -> AirAirport:
-        wikitext = get_wiki_text(page_name, cache_dir, timeout)
+        wikitext = get_wiki_text(page_name, config)
         airport = self.extract_get_airport(airport_code, page_name)
         result = 0
         for match in search_all(regex, wikitext):

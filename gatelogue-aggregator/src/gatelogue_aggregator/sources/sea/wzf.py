@@ -1,12 +1,11 @@
 import re
-from pathlib import Path
 
 import rich
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
 
 
@@ -14,13 +13,16 @@ class WZF(SeaSource):
     name = "MRT Wiki (Sea, West Zeta Ferry)"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         SeaContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.sea_company(name="West Zeta Ferry")
 
-        html = get_wiki_html("West Zeta Ferry", cache_dir, timeout)
+        html = get_wiki_html("West Zeta Ferry", config)
 
         for table in html.find_all("table"):
             if "Status" not in table.th.string:
@@ -53,3 +55,4 @@ class WZF(SeaSource):
             SeaLineBuilder(self, line).connect(*stops)
 
             rich.print(RESULT + f"WZF Line {line_code} has {len(stops)} stations")
+        self.save_to_cache(config, self.g)

@@ -1,9 +1,8 @@
-from pathlib import Path
-
 import msgspec
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, get_url
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirport, AirContext, AirSource
 
 
@@ -11,17 +10,24 @@ class DynmapAirports(AirSource):
     name = "MRT Dynmap (Air)"
     priority = 0
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
-        cache1 = cache_dir / "dynmap-markers-new"
-        cache2 = cache_dir / "dynmap-markers-old"
+    def __init__(self, config: Config):
+        cache1 = config.cache_dir / "dynmap-markers-new"
+        cache2 = config.cache_dir / "dynmap-markers-old"
         AirContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         response1 = get_url(
-            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json", cache1, timeout=timeout
+            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json",
+            cache1,
+            timeout=config.timeout,
         )
         response2 = get_url(
-            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json", cache2, timeout=timeout
+            "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json",
+            cache2,
+            timeout=config.timeout,
         )
         try:
             json1 = msgspec.json.decode(response1)["sets"]["airports"]["markers"]
@@ -33,3 +39,5 @@ class DynmapAirports(AirSource):
             for k, v in json.items():
                 name = v["label"].split("(")[0]
                 self.air_airport(code=AirAirport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name)
+
+        self.save_to_cache(config, self.g)

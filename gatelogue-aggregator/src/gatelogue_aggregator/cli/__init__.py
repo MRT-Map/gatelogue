@@ -40,6 +40,7 @@ from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
 from gatelogue_aggregator.sources.sea.wzf import WZF
 from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.sources.town import TownList
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.context import Context
 
 
@@ -86,7 +87,17 @@ def gatelogue_aggregator():
     show_default=True,
     help="maximum number of concurrent workers that download and process data",
 )
-def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int):
+@click.option(
+    "-e",
+    "--cache-exclude",
+    type=str,
+    default="",
+    show_default=True,
+    help="re-retrieve data for these sources instead of loading from cache (separate with `;`, use `*` for all sources)",
+)
+def run(
+    *, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int, cache_exclude: str
+):
     sources = [
         MRTTransit,
         DynmapAirports,
@@ -118,8 +129,14 @@ def run(*, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path |
         NFLR,
         NFLRWarp,
     ]
+    cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
+    config = Config(
+        cache_dir=cache_dir,
+        timeout=timeout,
+        cache_exclude=cache_exclude,
+    )
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        result = list(executor.map(lambda s: s(cache_dir, timeout), sources))
+        result = list(executor.map(lambda s: s(config), sources))
     ctx = Context.from_sources(result)
     if graph is not None:
         ctx.graph(graph)

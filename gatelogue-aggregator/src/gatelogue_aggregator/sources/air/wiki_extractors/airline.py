@@ -8,55 +8,52 @@ from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from pathlib import Path
 
     from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
+    from gatelogue_aggregator.types.config import Config
 
-_EXTRACTORS: list[Callable[[WikiAirline, Path, int], None]] = []
+_EXTRACTORS: list[Callable[[WikiAirline, Config], None]] = []
 
 
 @_EXTRACTORS.append
-def astrella(ctx: WikiAirline, cache_dir, timeout):
+def astrella(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Astrella",
         "Astrella",
         re.compile(
             r"\{\{AstrellaFlight\|code = AA(?P<code>[^$\n]*?)\|airport1 = (?P<a1>[^\n]*?)\|gate1 = (?P<g1>[^\n]*?)\|airport2 = (?P<a2>[^\n]*?)\|gate2 = (?P<g2>[^\n]*?)\|size = (?P<s>[^\n]*?)\|status = active}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def turbula(ctx: WikiAirline, cache_dir, timeout):
+def turbula(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Turbula",
         "Template:TurbulaFlightList",
         re.compile(
             r"code = LU(?P<code>\d*).*?(?:\n.*?)?airport1 = (?P<a1>.*?) .*?airport2 = (?P<a2>.*?) .*?status = active"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def blu_air(ctx: WikiAirline, cache_dir, timeout):
+def blu_air(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "BluAir",
         "List of BluAir flights",
         re.compile(
             r"\{\{BA\|BU(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|.}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def intra_air(ctx: WikiAirline, cache_dir, timeout):
-    html = get_wiki_html("IntraAir/Flight List", cache_dir, timeout)
+def intra_air(ctx: WikiAirline, config):
+    html = get_wiki_html("IntraAir/Flight List", config)
     airline = ctx.extract_get_airline("IntraAir", "IntraAir/Flight List")
     for table in html("table"):
         for tr in table("tr")[1::4]:
@@ -79,8 +76,8 @@ def intra_air(ctx: WikiAirline, cache_dir, timeout):
 
 
 @_EXTRACTORS.append
-def fli_high(ctx: WikiAirline, cache_dir, timeout):
-    html = get_wiki_html("FliHigh Airlines", cache_dir, timeout)
+def fli_high(ctx: WikiAirline, config):
+    html = get_wiki_html("FliHigh Airlines", config)
     airline = ctx.extract_get_airline("FliHigh Airlines", "FliHigh Airlines")
     for table in html("table"):
         if table.find(string="Flight #") is None:
@@ -101,47 +98,44 @@ def fli_high(ctx: WikiAirline, cache_dir, timeout):
 
 
 @_EXTRACTORS.append
-def air_mesa(ctx: WikiAirline, cache_dir, timeout):
+def air_mesa(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "AirMesa",
         "AirMesa",
         re.compile(
             r"\{\{BA\|AM(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def air(ctx: WikiAirline, cache_dir, timeout):
+def air(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "air",
         "Template:Air",
         re.compile(
             r"\{\{BA\|↑↑(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def infamous(ctx: WikiAirline, cache_dir, timeout):
+def infamous(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Infamous Airlines",
         "Infamous Airlines",
         re.compile(
             r"\{\{BA\|IN(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
-    html = get_wiki_html("FlyCreeper", cache_dir, timeout)
+def fly_creeper(ctx: WikiAirline, config):
+    html = get_wiki_html("FlyCreeper", config)
     airline = ctx.extract_get_airline("FlyCreeper", "FlyCreeper")
     for table in html("table"):
         if "Flight No" not in str(table):
@@ -166,46 +160,43 @@ def fly_creeper(ctx: WikiAirline, cache_dir, timeout):
 
 
 @_EXTRACTORS.append
-def continental(ctx: WikiAirline, cache_dir, timeout):
+def continental(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Continental Airlines",
         "Continental Airlines",
         re.compile(
             r"\|-\n\|CO(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def air_kanata(ctx: WikiAirline, cache_dir, timeout):
+def air_kanata(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Air Kanata",
         "Air Kanata",
         re.compile(
             r"\|-\n\|AK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def raiko(ctx: WikiAirline, cache_dir, timeout):
+def raiko(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "Raiko Airlines",
         "Raiko Airlines",
         re.compile(
             r"\|-\n\|RK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def rainer_airways(ctx: WikiAirline, cache_dir, timeout):
+def rainer_airways(ctx: WikiAirline, config):
     # INCOMPLETE
     ctx.regex_extract_airline(
         "Rainer Airways",
@@ -213,17 +204,15 @@ def rainer_airways(ctx: WikiAirline, cache_dir, timeout):
         re.compile(
             r"\|-\n\|\s*RB(?P<code>[^|]*?)\s*\n\|\s*{{afn\|(?P<a1>.*?)}}\s*\n\|\s*(?P<g1>.*?)\s*\n\|\s*{{afn\|(?P<a2>.*?)}}\s*\n\|\s*(?P<g2>.*?)\s*\n"
         ),
-        cache_dir,
-        timeout,
+        config,
     )
 
 
 @_EXTRACTORS.append
-def marble(ctx: WikiAirline, cache_dir, timeout):
+def marble(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
         "MarbleAir",
         "MarbleAir",
         re.compile(r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"),
-        cache_dir,
-        timeout,
+        config,
     )

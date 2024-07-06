@@ -1,9 +1,9 @@
 import re
 import uuid
-from pathlib import Path
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT, warps
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.base import Source
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
 
 
@@ -11,9 +11,12 @@ class IntraRailWarp(RailSource):
     name = "MRT Warp API (Rail, IntraRail)"
     priority = 1
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE_DIR, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, config: Config):
         RailContext.__init__(self)
-        Source.__init__(self)
+        Source.__init__(self, config)
+        if (g := self.retrieve_from_cache(config)) is not None:
+            self.g = g
+            return
 
         company = self.rail_company(name="IntraRail")
 
@@ -25,7 +28,7 @@ class IntraRailWarp(RailSource):
             "Mons Pratus",
             "New Stone City South",
         ]
-        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), cache_dir, timeout):
+        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
             if not warp["name"].startswith("IR") and not warp["name"].startswith("MCR"):
                 continue
             if (
@@ -74,3 +77,4 @@ class IntraRailWarp(RailSource):
                 continue
             self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
+        self.save_to_cache(config, self.g)
