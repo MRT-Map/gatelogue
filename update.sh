@@ -5,6 +5,8 @@ pipx reinstall gatelogue-aggregator || pipx install --python python3.12 --system
 until gatelogue-aggregator run -o data.json -g graph.svg "$@"; do
   echo "Retrying in 60s"
   sleep 60
+  rm -rf /tmp/gatelogue/wiki-text
+  rm -rf /tmp/gatelogue/wiki-html
 done
 gatelogue-aggregator schema -o schema.json
 python3.12 remove_sources.py
