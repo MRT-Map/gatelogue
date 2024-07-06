@@ -20,6 +20,7 @@ from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
 from gatelogue_aggregator.sources.rail.blurail import BluRail
 from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
 from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
+from gatelogue_aggregator.sources.rail.fredrail import FredRail
 from gatelogue_aggregator.sources.rail.intrarail import IntraRail
 from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
 from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
@@ -28,6 +29,8 @@ from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
 from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
 from gatelogue_aggregator.sources.rail.nflr import NFLR
 from gatelogue_aggregator.sources.rail.nflr_warp import NFLRWarp
+from gatelogue_aggregator.sources.rail.nsc import NSC
+from gatelogue_aggregator.sources.rail.nsc_warp import NSCWarp
 from gatelogue_aggregator.sources.rail.railinq import RaiLinQ
 from gatelogue_aggregator.sources.rail.railinq_warp import RaiLinQWarp
 from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
@@ -132,6 +135,9 @@ def run(
         NFLRWarp,
         MarbleRail,
         MarbleRailWarp,
+        NSC,
+        NSCWarp,
+        FredRail,
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
     config = Config(
