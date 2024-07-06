@@ -157,11 +157,11 @@ class NFLR(RailSource):
                 w_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
 
                 if line_name == "W2":
-                    RailLineBuilder(self, r_line).connect(*w_stations[:2])
-                    RailLineBuilder(self, r_line).connect(*w_stations[2:])
+                    RailLineBuilder(self, w_line).connect(*w_stations[:2])
+                    RailLineBuilder(self, w_line).connect(*w_stations[2:])
                 elif line_name == "W5":
-                    RailLineBuilder(self, r_line).connect(*w_stations[:-2])
-                    RailLineBuilder(self, r_line).connect(*w_stations[-2:])
+                    RailLineBuilder(self, w_line).connect(*w_stations[:-2])
+                    RailLineBuilder(self, w_line).connect(*w_stations[-2:])
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
 

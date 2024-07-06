@@ -24,6 +24,8 @@ from gatelogue_aggregator.sources.rail.intrarail import IntraRail
 from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
 from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
 from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
+from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
+from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
 from gatelogue_aggregator.sources.rail.nflr import NFLR
 from gatelogue_aggregator.sources.rail.nflr_warp import NFLRWarp
 from gatelogue_aggregator.sources.rail.railinq import RaiLinQ
@@ -128,6 +130,8 @@ def run(
         TownList,
         NFLR,
         NFLRWarp,
+        MarbleRail,
+        MarbleRailWarp,
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
     config = Config(
