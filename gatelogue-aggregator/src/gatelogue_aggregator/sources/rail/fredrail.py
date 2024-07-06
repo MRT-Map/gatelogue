@@ -137,3 +137,5 @@ class FredRail(RailSource):
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
+
+        self.save_to_cache(config, self.g)
