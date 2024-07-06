@@ -138,18 +138,12 @@ class NFLR(RailSource):
             elif line_name == "R2":
                 RailLineBuilder(self, r_line).connect(*r_stations[:6])
                 RailLineBuilder(self, r_line).connect(*r_stations[6:])
-            elif line_name == "W2":
-                RailLineBuilder(self, r_line).connect(*r_stations[:2])
-                RailLineBuilder(self, r_line).connect(*r_stations[2:])
             elif line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations[:-3])
                 RailLineBuilder(self, r_line).connect(*r_stations[-3:])
             elif line_name == "R5":
                 RailLineBuilder(self, r_line).connect(*r_stations[:-7])
                 RailLineBuilder(self, r_line).connect(*r_stations[-7:])
-            elif line_name == "W5":
-                RailLineBuilder(self, r_line).connect(*r_stations[:-2])
-                RailLineBuilder(self, r_line).connect(*r_stations[-2:])
             elif line_name == "R17":
                 RailLineBuilder(self, r_line).connect(*r_stations[:4])
                 RailLineBuilder(self, r_line).connect(*r_stations[4:])
@@ -161,6 +155,15 @@ class NFLR(RailSource):
             if w:
                 line_name = "W" + line_name[1:]  # noqa: PLW2901
                 w_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
-                RailLineBuilder(self, w_line).connect(*w_stations)
+
+                if line_name == "W2":
+                    RailLineBuilder(self, r_line).connect(*w_stations[:2])
+                    RailLineBuilder(self, r_line).connect(*w_stations[2:])
+                elif line_name == "W5":
+                    RailLineBuilder(self, r_line).connect(*w_stations[:-2])
+                    RailLineBuilder(self, r_line).connect(*w_stations[-2:])
+                else:
+                    RailLineBuilder(self, w_line).connect(*w_stations)
+
                 rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
         self.save_to_cache(config, self.g)

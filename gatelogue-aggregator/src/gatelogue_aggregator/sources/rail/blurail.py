@@ -100,7 +100,17 @@ class BluRail(RailSource):
                 station = self.rail_station(codes=codes, name=name, company=company)
                 stations.append(station)
 
-            RailLineBuilder(self, line).connect(*stations)
+            if line_code == "2":
+                RailLineBuilder(self, line).connect(*stations[:-3])
+                RailLineBuilder(self, line).connect(*stations[-3:])
+            if line_code == "2X":
+                RailLineBuilder(self, line).connect(*stations[:-2])
+                RailLineBuilder(self, line).connect(*stations[-2:])
+            if line_code == "11":
+                RailLineBuilder(self, line).connect(*stations[:-5])
+                RailLineBuilder(self, line).connect(*stations[-5:])
+            else:
+                RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"BluRail Line {line_code} has {len(stations)} stations")
         self.save_to_cache(config, self.g)
