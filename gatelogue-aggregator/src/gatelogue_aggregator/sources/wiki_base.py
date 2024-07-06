@@ -14,27 +14,27 @@ if TYPE_CHECKING:
 def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
     cache = config.cache_dir / "wiki-text" / (page if old_id is None else str(old_id))
     if old_id is None:
-        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page={page}"
+        url = f"https://api.allorigins.win/raw?url=https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page={page}"
     else:
-        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&oldid={old_id}"
+        url = f"https://api.allorigins.win/raw?url=https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&oldid={old_id}"
     response = get_url(url, cache, config.timeout)
     try:
         return msgspec.json.decode(response)["parse"]["wikitext"]
     except Exception as e:
-        raise ValueError(response[:100]) from e
+        raise ValueError(response) from e
 
 
 def get_wiki_html(page: str, config: Config, old_id: int | None = None) -> BeautifulSoup:
     cache = config.cache_dir / "wiki-html" / (page if old_id is None else str(old_id))
     if old_id is None:
-        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
+        url = f"https://api.allorigins.win/raw?url=https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
     else:
-        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&oldid={old_id}"
+        url = f"https://api.allorigins.win/raw?url=https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&oldid={old_id}"
     response = get_url(url, cache, config.timeout)
     try:
         return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="html.parser")
     except Exception as e:
-        raise ValueError(response[:100]) from e
+        raise ValueError(response) from e
 
 
 def get_wiki_link(page: str) -> str:
