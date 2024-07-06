@@ -21,7 +21,8 @@ def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
     try:
         return msgspec.json.decode(response)["parse"]["wikitext"]
     except Exception as e:
-        print(response)
+        for a in [line[i:i+100] for i in range(0, len(response), 100)]:
+            print(a, end="")
         raise ValueError(response) from e
 
 
@@ -35,7 +36,6 @@ def get_wiki_html(page: str, config: Config, old_id: int | None = None) -> Beaut
     try:
         return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="html.parser")
     except Exception as e:
-        print(response)
         raise ValueError(response) from e
 
 
