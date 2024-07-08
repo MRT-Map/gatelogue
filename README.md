@@ -3,8 +3,9 @@ Database of air, ~~rail, sea, bus~~ routes on the MRT
 
 ## development setup
 - clone the repository or open it in a github codespace
-- if downloaded locally (not codespaces):
-    -   install the [remote development pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+- if downloaded locally (codespaces does these for you):
+    - install docker
+    - install the [remote development pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
     - vscode will prompt you to open the development container (you may need to restart vscode)
 - the container will take a few minutes to install and set up
 
