@@ -112,14 +112,43 @@ def cbi(ctx: WikiAirport, config):
     )
 
 
+#
+# @_EXTRACTORS.append
+# def dje(ctx: WikiAirport, config):
+#     ctx.regex_extract_airport(
+#         "Deadbush Johnston-Euphorial Airport",
+#         "DJE",
+#         re.compile(r"\|(?P<code>\d+?)\n\| (?:(?P<airline>[^\n<]*)|[^|]*?)"),
+#         config,
+#     )
+#
+
+
 @_EXTRACTORS.append
 def dje(ctx: WikiAirport, config):
-    ctx.regex_extract_airport(
-        "Deadbush Johnston-Euphorial Airport",
-        "DJE",
-        re.compile(r"\|(?P<code>\d+?)\n\| (?:(?P<airline>[^\n<]*)|[^|]*?)"),
-        config,
-    )
+    html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
+    airport = ctx.extract_get_airport("DJE", "Deadbush Johnston-Euphorial Airportt")
+    for table in html("table"):
+        if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
+            continue
+        if caption == "Terminal 1":
+            for tr in table("tr")[1:]:
+                code = tr("td")[0].string
+                size = "MS" if 1 <= int(code) <= 10 else "S"
+                airline = tr("td")[1]
+                airline = airline.a.string if airline.a is not None else airline.string
+                ctx.extract_get_gate(airport, code, size, airline)
+        elif caption == "Terminal 2":
+            concourse = ""
+            for tr in table("tr")[1:]:
+                if len(tr("td")) == 1:
+                    concourse = tr.find("b").string.strip(" ")[0]
+                    continue
+                code = concourse + tr("td")[0].string
+                size = "S"
+                airline = tr("td")[1]
+                airline = airline.a.string if airline.a is not None else airline.string
+                ctx.extract_get_gate(airport, code, size, airline)
 
 
 @_EXTRACTORS.append
