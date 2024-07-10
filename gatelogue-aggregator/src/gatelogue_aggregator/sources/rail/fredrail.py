@@ -112,7 +112,7 @@ class FredRail(RailSource):
         stations = [
             "Bakersville Grand Central",
             "Central City Beltway Terminal North",
-            "Sealane New Forest station",
+            "Sealane New Forest Station",
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
