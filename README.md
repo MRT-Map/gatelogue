@@ -7,7 +7,7 @@ if you'd rather do things locally, the easiest way to get started is with dev co
     - install docker
     - install the [remote development pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) for vscode
     - Use the command 'Clone Repository in Container Volume' to clone this repo (don't use 'reopen in container', as that will conflict with pnpm)
-    - the container will take a few minutes to install and set up. you may need to confirm installation of pnpm.
+    - the container will take a few minutes to install and set up
 
 congrats! you did it!
 
