@@ -2,12 +2,12 @@
 Database of air, ~~rail, sea, bus~~ routes on the MRT
 
 ## development setup
-- clone the repository or open it in a github codespace
-- if downloaded locally (codespaces does these for you):
+if you want to use a github codespace, just open one! setup is handled for you, and will take a few minutes. (it's the green code button, under the codespaces tab)
+if you'd rather do things locally, the easiest way to get started is with dev containers:
     - install docker
-    - install the [remote development pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
-    - vscode will prompt you to open the development container (you may need to restart vscode)
-- the container will take a few minutes to install and set up
+    - install the [remote development pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) for vscode
+    - Use the command 'Clone Repository in Container Volume' to clone this repo (don't use 'reopen in container', as that will conflict with pnpm)
+    - the container will take a few minutes to install and set up. you may need to confirm installation of pnpm.
 
 congrats! you did it!
 
