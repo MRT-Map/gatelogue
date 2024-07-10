@@ -21,7 +21,7 @@ class MarbleRailWarp(RailSource):
 
         codes = []
         for warp in warps(uuid.UUID("8d034d06-8332-479d-84f2-d3922400b1ed"), config):
-            if len(warp["name"].split("-")) > 1 and warp["name"].split("-")[1] != "MTC":
+            if len(warp["name"].split("-")) > 1 and not warp["name"].split("-")[1].startswith("MR"):
                 continue
             code = warp["name"].split("-")[0].upper()
             if code in codes:

@@ -112,18 +112,6 @@ def cbi(ctx: WikiAirport, config):
     )
 
 
-#
-# @_EXTRACTORS.append
-# def dje(ctx: WikiAirport, config):
-#     ctx.regex_extract_airport(
-#         "Deadbush Johnston-Euphorial Airport",
-#         "DJE",
-#         re.compile(r"\|(?P<code>\d+?)\n\| (?:(?P<airline>[^\n<]*)|[^|]*?)"),
-#         config,
-#     )
-#
-
-
 @_EXTRACTORS.append
 def dje(ctx: WikiAirport, config):
     html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
