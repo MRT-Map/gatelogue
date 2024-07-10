@@ -11,3 +11,4 @@ done
 gatelogue-aggregator schema -o schema.json
 python3.12 remove_sources.py
 git commit -am "update @ $(date +%Y%m%dT%H:%M:%S%Z)"
+
