@@ -33,6 +33,8 @@ from gatelogue_aggregator.sources.rail.nsc import NSC
 from gatelogue_aggregator.sources.rail.nsc_warp import NSCWarp
 from gatelogue_aggregator.sources.rail.railinq import RaiLinQ
 from gatelogue_aggregator.sources.rail.railinq_warp import RaiLinQWarp
+from gatelogue_aggregator.sources.rail.railnorth import RailNorth
+from gatelogue_aggregator.sources.rail.railnorth_warp import RailNorthWarp
 from gatelogue_aggregator.sources.rail.redtrain import RedTrain
 from gatelogue_aggregator.sources.rail.redtrain_warp import RedTrainWarp
 from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
@@ -142,6 +144,8 @@ def run(
         FredRail,
         RedTrain,
         RedTrainWarp,
+        RailNorth,
+        RailNorthWarp,
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
     config = Config(
