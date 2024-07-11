@@ -1,5 +1,9 @@
 # gatelogue
-Database of air, ~~rail, sea, bus~~ routes on the MRT
+Database of air, rail, sea, bus routes on the MRT
+
+Client is hosted at https://mrt-map.github.io/gatelogue
+
+Documentation for the aggregator and data format is located at https://mrt-map.github.io/gatelogue/docs
 
 ## development setup
 if you want to use a github codespace, just open one! setup is handled for you, and will take a few minutes. (it's the green code button, under the codespaces tab)
