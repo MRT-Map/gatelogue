@@ -1,4 +1,4 @@
-# gatelogue
+![](./gatelogue-client/public/gat2-light.png)
 Database of air, rail, sea, bus routes on the MRT
 
 Client is hosted at https://mrt-map.github.io/gatelogue
