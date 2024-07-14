@@ -30,8 +30,10 @@ class FredRail(RailSource):
             "Formosa",
             "UCWTIA",
             "Segville International Airport",
+            "Matheson Swamps",
             "Astoria",
             "Fort Yaxier Central",
+            "Fort Yaxier Penn",
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
@@ -52,9 +54,21 @@ class FredRail(RailSource):
         stations = [
             "Tranquil Forest Central",
             "Wythern",
-            "Astoria",
-            "Fort Yaxier West",
+            # "Astoria",
+            # "Fort Yaxier West",
         ]
+        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        RailLineBuilder(self, line).connect(*stations)
+
+        line_name = "Richville Shuttle"
+        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        stations = ["Tranquil Forest Central", "Richville"]
+        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        RailLineBuilder(self, line).connect(*stations)
+
+        line_name = "Fort Yaxier Shuttle"
+        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        stations = ["Utopia", "Utopia AFK"]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
@@ -63,9 +77,9 @@ class FredRail(RailSource):
         stations = [
             "Utopia",
             "Whiteley Turing Square",
-            "Paddington Station",
-            "Zaquar Onika T. Maraj Station",
-            "Fort Yaxier West",
+            # "Paddington Station",
+            # "Zaquar Onika T. Maraj Station",
+            # "Fort Yaxier West",
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
@@ -81,6 +95,12 @@ class FredRail(RailSource):
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
+        line_name = "Lodminechead Limited"
+        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        stations = ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lodminechead"]
+        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        RailLineBuilder(self, line).connect(*stations)
+
         line_name = "New Jerseyan"
         line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
         stations = [
@@ -89,17 +109,25 @@ class FredRail(RailSource):
             "New Haven",
             "Tung Wan Transfer",
             "Palo Alto",
+            "Concord",
+            "Redwood Ferry",
+            "Victoria Ferry",
+            "Victoria Preston",
+            "Veldberg",
+            "Princeton Junction",
+            "Rattlerville Central",
         ]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         forward_label = "towards Boston Waterloo"
-        backward_label = "towards Palo Alto"
-        RailLineBuilder(self, line).connect(*stations[:-2], forward_label=forward_label, backward_label=backward_label)
+        backward_label = "towards Rattlerville Central"
+        RailLineBuilder(self, line).connect(*stations[:3], forward_label=forward_label, backward_label=backward_label)
         RailLineBuilder(self, line).connect(
-            *stations[-2:], forward_label=forward_label, backward_label=backward_label, one_way=True
+            *stations[2:5], forward_label=forward_label, backward_label=backward_label, one_way=True
         )
         RailLineBuilder(self, line).connect(
-            stations[-1], stations[-3], forward_label=backward_label, backward_label=forward_label, one_way=True
+            stations[4], stations[2], forward_label=backward_label, backward_label=forward_label, one_way=True
         )
+        RailLineBuilder(self, line).connect(*stations[4:], forward_label=forward_label, backward_label=backward_label)
 
         line_name = "Blue Water"
         line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
@@ -117,17 +145,17 @@ class FredRail(RailSource):
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
-        line_name = "Borehole Line"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
-        stations = [
-            "Topside",
-            "Rival Station",
-            "Down Under Village",
-            "Borehole Town",
-            "Lushful Caverns",
-        ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
-        RailLineBuilder(self, line).connect(*stations)
+        # line_name = "Borehole Line"
+        # line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        # stations = [
+        #     "Topside",
+        #     "Rival Station",
+        #     "Down Under Village",
+        #     "Borehole Town",
+        #     "Lushful Caverns",
+        # ]
+        # stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        # RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Tung Wan Shuttle"
         line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
@@ -135,6 +163,21 @@ class FredRail(RailSource):
             "Tung Wan Transfer",
             "Tung Wan Halt",
         ]
+        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        RailLineBuilder(self, line).connect(*stations)
+
+        line_name = "Central City Shuttle"
+        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        stations = [
+            "Bakersville Grand Central",
+            "Central City",
+        ]
+        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        RailLineBuilder(self, line).connect(*stations)
+
+        line_name = "Crescent Service"
+        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        stations = ["Bakersville Grand Central", "Woodsdale", "Mihama", "Heights City", "Quiris"]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
