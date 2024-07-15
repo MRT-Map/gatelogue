@@ -46,7 +46,7 @@ class FredRailWarp(RailSource):
             ("San Dzobiak", 2103, 3308),
             ("Siletz", 2544, 2995),
             ("Dabecco", 2595, 2511),
-            ("Lodminechead", 2369, 857),
+            ("Lochminehead", 2369, 857),
             ("Tung Wan Halt", 1799, 13985),
             ("Tung Wan Transfer", 1803, 13692),
             ("Palo Alto", 2923, 13791),

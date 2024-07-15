@@ -95,9 +95,9 @@ class FredRail(RailSource):
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
-        line_name = "Lodminechead Limited"
+        line_name = "Lochminehead Limited"
         line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
-        stations = ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lodminechead"]
+        stations = ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lochminehead"]
         stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
