@@ -1,0 +1,15 @@
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dist'
+
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: mrt-map/transit-map
+          event-type: update_map
