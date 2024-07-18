@@ -1,4 +1,18 @@
 ![](./gatelogue-client/public/gat2-light.png)
+
+![Github Version](https://img.shields.io/github/v/release/MRT-Map/gatelogue)
+![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=docs&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs)
+![GitHub License](https://img.shields.io/github/license/MRT-Map/gatelogue)
+![GitHub Pages Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=website&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue)
+
+![GitHub code size](https://img.shields.io/github/languages/code-size/MRT-Map/gatelogue)
+![GitHub repo size](https://img.shields.io/github/repo-size/MRT-Map/gatelogue)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mrt-map/gatelogue/main)
+![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/mrt-map/gatelogue/latest/main?include_prereleases)
+![GitHub Release Date](https://img.shields.io/github/release-date/MRT-Map/gatelogue)
+
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mrt-map/gatelogue/dist?label=last%20data%20update)
+
 Database of air, rail, sea, bus routes on the MRT
 
 Client is hosted at https://mrt-map.github.io/gatelogue
