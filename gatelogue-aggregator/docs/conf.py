@@ -7,9 +7,13 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+from gatelogue_aggregator.__about__ import __version__
+
 project = "gatelogue-aggregator"
 copyright = "2024, MRT Mapping Services"  # noqa: A001
 author = "MRT Mapping Services"
+version = __version__
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
