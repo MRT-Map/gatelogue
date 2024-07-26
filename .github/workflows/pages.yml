@@ -56,12 +56,13 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: client
+        path: dist
     - uses: actions/download-artifact@v4
       with:
         name: docs
-        path: docs
+        path: dist/docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: .
+        publish_dir: dist
