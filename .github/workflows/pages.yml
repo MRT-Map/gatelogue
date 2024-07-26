@@ -7,26 +7,61 @@ permissions:
   contents: write
   
 jobs:
-  pages:
+  build-client:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - run: |
+          cd gatelogue-client
+          pnpm install --no-frozen-lockfile
+          pnpm run build
+      - run: |
+          cd gatelogue-client/dist
+          echo > .nojekyll
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client
+          path: gatelogue-client/dist
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pypa/hatch@install
+      - run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends graphviz graphviz-dev
+      - run: |
+          cd gatelogue-aggregator
+          hatch run docs:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: gatelogue-aggregator/docs/_build/html/
+
+  pages:
+    runs-on: ubuntu-latest
+    needs: [ build-client, build-docs ]
+
+    steps:
     - uses: actions/checkout@v4
-    - uses: pnpm/action-setup@v4
+    - uses: actions/download-artifact@v4
       with:
-        version: latest
-    - uses: actions/setup-node@v4
+        name: client
+    - uses: actions/download-artifact@v4
       with:
-        node-version: 22
-    - uses: pypa/hatch@install
-    - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
-    - run: cd gatelogue-client; pnpm install --no-frozen-lockfile; pnpm run build
-    - run: cd gatelogue-client/dist; echo > .nojekyll
-    - run: cd gatelogue-aggregator; hatch run docs:build
-    - run: mkdir gatelogue-client/dist/docs
-    - run: cp -r gatelogue-aggregator/docs/_build/html/* gatelogue-client/dist/docs
+        name: docs
+        path: docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./gatelogue-client/dist
+        publish_dir: .

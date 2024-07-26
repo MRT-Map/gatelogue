@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
-  schedule:
-    - cron: 0 0 * * 0
+#  schedule:
+#    - cron: 0 0 * * 0
 
 permissions:
   contents: write
@@ -9,14 +9,12 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dist'
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pypa/hatch@install
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.12' 
+          ref: dist
+      - uses: pypa/hatch@install
       - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
       - run: bash update.sh
       - run: git push
