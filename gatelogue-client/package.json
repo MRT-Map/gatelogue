@@ -1,0 +1,41 @@
+{
+  "name": "gatelogue-client",
+  "version": "2.0.0b2+2",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build --base=/gatelogue",
+    "type-check": "vue-tsc --build --force",
+    "lint": "eslint --fix src/",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "vue": "^3.4.33",
+    "vue-json-pretty": "^2.4.0",
+    "vue-router": "^4.4.0",
+    "vue-tippy": "^6.4.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "^20.14.10",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^9.7.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "globals": "^15.8.0",
+    "json-schema-to-ts": "^3.1.0",
+    "npm-run-all2": "^6.2.2",
+    "prettier": "^3.3.3",
+    "typescript-eslint": "8.0.0-alpha.51",
+    "vite": "^5.3.4",
+    "vite-plugin-vue-devtools": "^7.3.6",
+    "vue-tsc": "^2.0.28"
+  }
+}
