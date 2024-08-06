@@ -18,7 +18,7 @@
     "vue": "^3.4.34",
     "vue-json-pretty": "^2.4.0",
     "vue-router": "^4.4.0",
-    "vue-tippy": "^6.4.1"
+    "vue-tippy": "^6.4.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
