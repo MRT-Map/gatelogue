@@ -22,7 +22,7 @@ class WZR(RailSource):
 
         company = self.rail_company(name="West Zeta Rail")
 
-        html = get_wiki_html("West Zeta Rail", config)
+        html = get_wiki_html("List of West Zeta Rail lines", config)
 
         for table in html.find_all("table"):
             if "Code" not in table.th.string:
