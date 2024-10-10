@@ -23,11 +23,13 @@ _DICT = {
     "BAY": "Bay Point",
     "BEA": "Beach City",
     "BIW": "Biwabik",
+    "BLA": "Blackfriars",
     "BVW": "Beachview",
     "CEL": "Celina",
     "CHG": "Chugsdy Island",
     "COV": "Covina",
     "CPC": "Cape Cambridge",
+    "DAN": "Dand",
     "DEA": "Deadbush",
     "EDN": "Eden",
     "ELC": "Elecna Crescent",
@@ -36,11 +38,13 @@ _DICT = {
     "EMS": "East Mesa",
     "ENB": "East New Brazil",
     "ENS": "Enspington",
+    "ERZ": "Erzville",
     "FYX": "Fort Yaxier",
     "GAD": "Gorre & Daphetid",
     "GEN": "Geneva Bay",
     "GIL": "Gillmont",
     "GRY": "Gray Cloud",
+    "HAM": "Hamblin",
     "HEA": "Heapstead",
     "HUM": "Hummingbird Islands",
     "ILI": "Ilirea",
@@ -75,17 +79,20 @@ _DICT = {
     "ONE": "Onemalu",
     "OPA": "Oparia",
     "OTT": "Ottia Islands",
+    "PCH": "Peach Bay",
     "PIX": "Pixl",
     "PRA": "Praimina",
     "PSM": "Port Smith",
     "RIS": "Risima",
     "RIZ": "Rizalburg",
     "RJN": "Richard's Junction",
+    "RNB": "Rainer Bay",
     "ROK": "Roke",
     "ROS": "New Rosemont",
     "RRI": "Railroad Isle",
     "SAN": "Sansmore",
     "SCH": "Schillerton",
+    "SCV": "Sunshine Cove",
     "SEA": "Seaview",
     "SEC": "Secunda",
     "SEH": "Seolho",
@@ -97,6 +104,7 @@ _DICT = {
     "SOI": "Soiled Solitude",
     "SPL": "Spleef Island",
     "STA": "St. Anna",
+    "STK": "Stockton",
     "STO": "Stoneedge",
     "SUN": "Sunshine Coast",
     "SVK": "Sansvikk",
@@ -104,6 +112,7 @@ _DICT = {
     "TIT": "Titsensaki",
     "TUL": "Tulipsburg",
     "TWE": "Tweebuffel",
+    "VAN": "Vannahelm",
     "VDM": "Verdantium",
     "VEN": "Ventura Harbor",
     "VER": "Vermilion",
@@ -143,7 +152,7 @@ class HBLWarp(SeaSource):
             if name not in ("Covnia", "Kenthurst") and name not in names:
                 continue
             if name == "Covina":
-                if result.group(2) in ("1", "10"):
+                if result.group(2) in ("1", "10", "66"):
                     name += " (marina)"
                 elif result.group(2) in ("55", "57", "58"):
                     name += " (canal)"

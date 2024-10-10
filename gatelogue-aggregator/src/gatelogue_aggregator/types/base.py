@@ -7,7 +7,7 @@ import msgspec
 import networkx as nx
 import rich
 
-from gatelogue_aggregator.logging import INFO1
+from gatelogue_aggregator.logging import INFO1, ERROR
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config
@@ -132,6 +132,9 @@ class Source(metaclass=SourceMeta):
 
     @classmethod
     def save_to_cache(cls, config: Config, g: nx.MultiGraph):
+        if g.number_of_nodes() == 0:
+            rich.print(ERROR + f"{cls.__name__} yielded no results")
+
         cache_file = config.cache_dir / "network-cache" / cls.__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")
         cache_file.parent.mkdir(parents=True, exist_ok=True)

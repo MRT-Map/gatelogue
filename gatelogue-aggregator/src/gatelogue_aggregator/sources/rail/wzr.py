@@ -3,10 +3,11 @@ import re
 import rich
 
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.utils import search_all
 
 
 class WZR(RailSource):
@@ -50,6 +51,44 @@ class WZR(RailSource):
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
-
             rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
+
+        for line_code, line_name in (
+            ("2", "Northmist Line"),
+            ("4", "Genso Line"),
+            ("10", "Centrale Line"),
+        ):
+            wiki = get_wiki_text(line_name, config)
+            line = self.rail_line(code=line_code, name=line_name, company=company)
+
+            stations = []
+            for result in search_all(
+                re.compile(
+                    r"(?:\[\[(?:[^|]*\|)?(?P<name1>[^|]*)]]|{{stl\|WZR\|(?P<name2>[^|]*)}}) *\|\| *(?P<code>\w\w\w)"
+                ),
+                wiki,
+            ):
+                code = result.group("code").upper()
+                name = (result.group("name1") or result.group("name2")).strip()
+                station = self.rail_station(codes={code}, name=name, company=company)
+                stations.append(station)
+
+            RailLineBuilder(self, line).connect(*stations)
+            rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
+
+        wiki = get_wiki_text("Ismael Line", config)
+        line = self.rail_line(code="8", name="Ismael Line", company=company)
+
+        stations = []
+        for result in search_all(
+            re.compile(r"\[\[(?:[^|]*\|)?(?P<name>[^|]*)]] *\|\| *(?P<code>\w\w\w) .*\|\|.*\|\|(?! *Planned)"), wiki
+        ):
+            code = result.group("code").upper()
+            name = result.group("name").strip()
+            station = self.rail_station(codes={code}, name=name, company=company)
+            stations.append(station)
+
+        RailLineBuilder(self, line).connect(*stations)
+        rich.print(RESULT + f"WZR Line 8 has {len(stations)} stations")
+
         self.save_to_cache(config, self.g)
