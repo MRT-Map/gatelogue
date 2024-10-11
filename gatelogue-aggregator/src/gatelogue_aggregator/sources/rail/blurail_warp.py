@@ -39,8 +39,8 @@ class BluRailWarp(RailSource):
                 code += match.group(1)
             elif code == "MCN" and (match.group(1) == "11" or match.group(1) == "6"):
                 code += "11"
-            elif code == "STE" and match.group(1) == "1":
-                code += "1"
+            elif code == "STE" and match.group(1) == "2":
+                code = "SNE"
             self.rail_station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
         self.save_to_cache(config, self.g)
