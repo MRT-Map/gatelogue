@@ -25,3 +25,9 @@ jobs:
         with:
           default_author: github_actions
           message: ${{ env.message }}
+
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: mrt-map/transit-map
+          event-type: update_map
