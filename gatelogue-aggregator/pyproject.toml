@@ -25,7 +25,7 @@ dependencies = [
   "msgspec",
   "pandas",
   "rich",
-  "cfscrape", "urllib3<2.0.0"
+  "cfscrape", "urllib3<2.0.0",
   "BeautifulSoup4",
   "networkx",
   "types-networkx",
