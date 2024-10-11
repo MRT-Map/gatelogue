@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import cfscrape
+import requests
 import msgspec
 import rich
 import rich.status
@@ -21,7 +21,10 @@ if TYPE_CHECKING:
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
-SCRAPER = cfscrape.create_scraper()
+SESSION = requests.session()
+SESSION.headers = {
+    "accept": "application/json"
+}
 
 
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
@@ -29,7 +32,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
     task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
-    response = SCRAPER.get(url, timeout=timeout).text
+    response = SESSION.get(url, timeout=timeout).text
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
         response = response.encode("latin").decode("utf-8")
     PROGRESS.remove_task(task)
