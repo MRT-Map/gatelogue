@@ -33,8 +33,9 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if response.status_code >= 400:
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
 
+    text = response.text
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
-        text = response.text.encode("latin").decode("utf-8")
+        text = text.encode("latin").decode("utf-8")
     PROGRESS.remove_task(task)
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
