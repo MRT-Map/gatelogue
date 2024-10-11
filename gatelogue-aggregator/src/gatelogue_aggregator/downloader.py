@@ -5,12 +5,12 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import requests
+import httpx
 import msgspec
 import rich
 import rich.status
 
-from gatelogue_aggregator.logging import INFO3, PROGRESS
+from gatelogue_aggregator.logging import INFO3, PROGRESS, ERROR
 
 if TYPE_CHECKING:
     import uuid
@@ -21,10 +21,7 @@ if TYPE_CHECKING:
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
-SESSION = requests.session()
-SESSION.headers = {
-    "accept": "application/json"
-}
+SESSION = httpx.Client(http2=True)
 
 
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
@@ -32,15 +29,18 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
     task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
-    response = SESSION.get(url, timeout=timeout).text
+    response = SESSION.get(url, timeout=timeout)
+    if response.is_error:
+        rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
+
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
-        response = response.encode("latin").decode("utf-8")
+        text = response.text.encode("latin").decode("utf-8")
     PROGRESS.remove_task(task)
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
-    cache.write_text(response)
+    cache.write_text(text)
     rich.print(INFO3 + f"Downloaded {url} to {cache}")
-    return response
+    return text
 
 
 def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
