@@ -101,13 +101,13 @@ class BluRail(RailSource):
                 stations.append(station)
 
             if line_code == "2":
-                RailLineBuilder(self, line).connect(*stations[:-7])
+                RailLineBuilder(self, line).connect(*stations[:-3])
                 RailLineBuilder(self, line).connect(*stations[-3:])
             if line_code == "2X":
-                RailLineBuilder(self, line).connect(*stations[:-5])
+                RailLineBuilder(self, line).connect(*stations[:-2])
                 RailLineBuilder(self, line).connect(*stations[-2:])
             if line_code == "11":
-                RailLineBuilder(self, line).connect(*stations[:-10])
+                RailLineBuilder(self, line).connect(*stations[:-5])
                 RailLineBuilder(self, line).connect(*stations[-5:])
             else:
                 RailLineBuilder(self, line).connect(*stations)
