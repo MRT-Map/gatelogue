@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import httpx
+import cloudscraper
 import msgspec
 import rich
 import rich.status
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
-SESSION = httpx.Client(http2=True)
+SESSION = cloudscraper.create_scraper()
 
 
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
