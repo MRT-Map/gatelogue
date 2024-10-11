@@ -1,5 +1,3 @@
-import re
-
 import rich
 
 from gatelogue_aggregator.logging import RESULT

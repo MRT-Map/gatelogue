@@ -1,7 +1,3 @@
-import re
-import uuid
-
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource

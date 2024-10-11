@@ -7,7 +7,7 @@ import msgspec
 import networkx as nx
 import rich
 
-from gatelogue_aggregator.logging import INFO1, ERROR
+from gatelogue_aggregator.logging import ERROR, INFO1
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config

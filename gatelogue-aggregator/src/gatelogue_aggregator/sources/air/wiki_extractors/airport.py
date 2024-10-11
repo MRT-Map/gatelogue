@@ -122,7 +122,7 @@ def dje(ctx: WikiAirport, config):
         if caption == "Terminal 1":
             for tr in table("tr")[1:]:
                 code = tr("td")[0].string
-                size = "MS" if 1 <= int(code) <= 10 else "S"
+                size = "MS" if 1 <= int(code) <= 10 else "S"  # noqa: PLR2004
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
                 ctx.extract_get_gate(airport, code, size, airline)

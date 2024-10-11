@@ -78,7 +78,7 @@ class BluRail(RailSource):
                 code = result.group("code").upper()
                 if code == "BCH":
                     code += line_code
-                elif code == "MCN" and (line_code == "11" or line_code == "14"):
+                elif code == "MCN" and line_code in ("11", "6"):
                     code += "11"
                 elif code == "STE" and line_code == "1":
                     code += "1"

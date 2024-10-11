@@ -98,16 +98,43 @@ def gatelogue_aggregator():
     help="maximum number of concurrent workers that download and process data",
 )
 @click.option(
-    "-e",
+    "-ce",
     "--cache-exclude",
     type=str,
     default="",
     show_default=True,
     help="re-retrieve data for these sources instead of loading from cache (separate with `;`, use `*` for all sources)",
 )
+@click.option(
+    "-i",
+    "--include",
+    type=str,
+    default="",
+    show_default=True,
+    help="sources to retrieve from (do not use with --exclude) (separate with `;`, use `*` for all sources)",
+)
+@click.option(
+    "-e",
+    "--exclude",
+    type=str,
+    default="",
+    show_default=True,
+    help="sources NOT to retrieve from (do not use with --include) (separate with `;`, use `*` for all sources)",
+)
 def run(
-    *, cache_dir: Path, timeout: int, output: Path, fmt: bool, graph: Path | None, max_workers: int, cache_exclude: str
+    *,
+    cache_dir: Path,
+    timeout: int,
+    output: Path,
+    fmt: bool,
+    graph: Path | None,
+    max_workers: int,
+    cache_exclude: str,
+    include: str,
+    exclude: str,
 ):
+    if include and exclude:
+        raise click.BadOptionUsage("--include/--exclude", "cannot use --include and --exclude at the same time")  # noqa: EM101
     sources = [
         MRTTransit,
         DynmapAirports,
@@ -149,6 +176,13 @@ def run(
         RailNorth,
         RailNorthWarp,
     ]
+    sources = [
+        a
+        for a in sources
+        if (include and (include == "*" or a.__name__ in include.split(";")))
+        or (exclude and (exclude != "*" and a.__name__ not in exclude.split(";")))
+    ]
+
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
     config = Config(
         cache_dir=cache_dir,

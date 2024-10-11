@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import msgspec.json
+import rich
 from bs4 import BeautifulSoup
 
 from gatelogue_aggregator.downloader import get_url
@@ -21,6 +22,8 @@ def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
     try:
         return msgspec.json.decode(response)["parse"]["wikitext"]
     except Exception as e:
+        for a in [response[i : i + 100] for i in range(0, len(response), 100)]:
+            rich.print(a)
         raise ValueError(response) from e
 
 
@@ -35,7 +38,7 @@ def get_wiki_html(page: str, config: Config, old_id: int | None = None) -> Beaut
         return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="html.parser")
     except Exception as e:
         for a in [response[i : i + 100] for i in range(0, len(response), 100)]:
-            print(a)
+            rich.print(a)
         raise ValueError(response) from e
 
 
