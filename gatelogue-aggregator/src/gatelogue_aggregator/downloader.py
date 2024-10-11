@@ -30,7 +30,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
         return cache.read_text()
     task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
     response = SESSION.get(url, timeout=timeout)
-    if response.is_error:
+    if response.status_code >= 400:
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
 
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
