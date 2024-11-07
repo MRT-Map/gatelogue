@@ -46,5 +46,4 @@ class IntraBus(BusSource):
 
                 rich.print(RESULT + f"IntraBus Line {line_code} has {len(stops)} stops")
 
-
         self.save_to_cache(config, self.g)

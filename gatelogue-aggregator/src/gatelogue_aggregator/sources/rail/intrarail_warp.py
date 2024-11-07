@@ -72,6 +72,7 @@ class IntraRailWarp(RailSource):
                 "Zaquar Airport": "Zaquar Ménage et Trois Regional Airport",
                 "Veldberg": "Veldberg SE7",
                 "New Stone City V44": "New Stone City V43",
+                "Laclede Theater District": "Laclede Theater District - Xavier Airport",
             }.get(name, name)
             if name in names:
                 continue

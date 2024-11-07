@@ -25,7 +25,9 @@ class BluRail(RailSource):
 
         line_list = get_wiki_text("List of BluRail lines", config)
         line_codes = []
-        for result in search_all(re.compile(r"{{BR\|(?P<code>[^}]+)}}\n\|.*\n\|.*\n\|.*\n\|(?P<adv>.*)\n\|"), line_list):
+        for result in search_all(
+            re.compile(r"{{BR\|(?P<code>[^}]+)}}\n\|.*\n\|.*\n\|.*\n\|(?P<adv>.*)\n\|"), line_list
+        ):
             if "planned service" not in result.group("adv").lower():
                 line_codes.append(result.group("code"))
 
