@@ -49,7 +49,7 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
     offset = 0
     ls: list[dict] = msgspec.json.decode(
         get_url(link, config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout)
-    )
+    )["result"]
     while len(ls) != 0:
         yield from ls
         offset += len(ls)
@@ -57,4 +57,4 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
             get_url(
                 link + f"&offset={offset}", config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout
             )
-        )
+        )["result"]
