@@ -30,7 +30,7 @@ class IntraSail(SeaSource):
 
         cursor: bs4.Tag = html.find("span", "mw-headline", string="[ 1 ] Nansei Gintra").parent
 
-        while (line_code_name := cursor.find(class_="mw-headline").string).startswith("["):
+        while cursor and (line_code_name := cursor.find(class_="mw-headline").string).startswith("["):
             result = re.search(r"\[ (?P<code>.*) ] (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
