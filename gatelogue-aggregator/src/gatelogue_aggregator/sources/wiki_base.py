@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import msgspec.json
-import rich
 from bs4 import BeautifulSoup
 
 from gatelogue_aggregator.downloader import get_url

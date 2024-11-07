@@ -10,7 +10,7 @@ import msgspec
 import rich
 import rich.status
 
-from gatelogue_aggregator.logging import INFO3, PROGRESS, ERROR
+from gatelogue_aggregator.logging import ERROR, INFO3, PROGRESS
 
 if TYPE_CHECKING:
     import uuid
@@ -30,7 +30,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
         return cache.read_text()
     task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
     response = SESSION.get(url, timeout=timeout)
-    if response.status_code >= 400:
+    if response.status_code >= 400:  # noqa: PLR2004
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
 
     text = response.text
