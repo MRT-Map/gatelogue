@@ -28,7 +28,7 @@ class IntraBus(BusSource):
             for tr in table("tr")[1::2]:
                 if tr("td")[3 + shift].find("a", href="/index.php/File:Rsz_open.png") is None:
                     continue
-                line_code = str(tr("td")[0].string).strip()
+                line_code = str(tr("td")[0].find("span").string).strip()
                 line = self.bus_line(code=line_code, company=company)
 
                 stops = []
