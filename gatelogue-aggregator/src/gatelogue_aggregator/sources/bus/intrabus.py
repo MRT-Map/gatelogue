@@ -20,20 +20,22 @@ class IntraBus(BusSource):
 
         company = self.bus_company(name="IntraBus")
 
-        html1 = get_wiki_html("IntraBus", config)
-        html2 = get_wiki_html("OMEGAbus!", config)
-        for html in (html1, html2):
-            for table in html.find_all("table"):
-                if "border-radius: 30px" not in table.attrs.get("style", ""):
+        html = get_wiki_html("IntraBus", config)
+        for table in html.find_all("table"):
+            if not table("th") or "Route Number" not in table.strings:
+                continue
+            shift = 1 if "Replacement For" in table.strings else 0
+            for tr in table("tr")[1::2]:
+                if tr("td")[3 + shift].find("a", href="/index.php/File:Rsz_open.png") is None:
                     continue
-                line_code = str(table("td")[0].find("span").string).strip()
+                line_code = str(tr("td")[0].string).strip()
                 line = self.bus_line(code=line_code, company=company)
 
                 stops = []
-                for span in table("td")[1].find_all("span"):
-                    if span.find("s") is not None:
-                        continue
-                    name = str(span.string).strip()
+                for li in tr("td")[1 + shift]("li"):
+                    name = str(li.find("b").string).strip()
+                    if (more := li.find("i")) is not None:
+                        name += " " + more.string.strip()
                     stop = self.bus_stop(codes={name}, name=name, company=company)
                     stops.append(stop)
 
@@ -43,4 +45,6 @@ class IntraBus(BusSource):
                 BusLineBuilder(self, line).connect(*stops)
 
                 rich.print(RESULT + f"IntraBus Line {line_code} has {len(stops)} stops")
+
+
         self.save_to_cache(config, self.g)

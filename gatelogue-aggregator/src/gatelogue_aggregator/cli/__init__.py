@@ -17,6 +17,7 @@ from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
 from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
 from gatelogue_aggregator.sources.bus.intrabus import IntraBus
 from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
+from gatelogue_aggregator.sources.bus.omegabus import IntraBusOmegaBus
 from gatelogue_aggregator.sources.rail.blurail import BluRail
 from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
 from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
@@ -162,6 +163,7 @@ def run(
         WZFWarp,
         IntraBus,
         IntraBusWarp,
+        IntraBusOmegaBus,
         TownList,
         NFLR,
         NFLRWarp,
