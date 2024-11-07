@@ -45,7 +45,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
 
 
 def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
-    link = f"https://api.minecartrapidtransit.net/api/v1/warps?player={player}"
+    link = f"https://api.minecartrapidtransit.net/api/v2/warps?player={player}"
     offset = 0
     ls: list[dict] = msgspec.json.decode(
         get_url(link, config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout)
