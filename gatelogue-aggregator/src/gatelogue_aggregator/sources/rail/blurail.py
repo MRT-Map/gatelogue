@@ -23,54 +23,13 @@ class BluRail(RailSource):
 
         company = self.rail_company(name="BluRail")
 
-        for line_code in (
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "8",
-            "9",
-            "11",
-            "12",
-            "14",
-            "16",
-            "20",
-            "23",
-            "1X",
-            "2X",
-            "3X",
-            "7X",
-            "14X",
-            "18X",
-            "AA",
-            "AB",
-            "BS",
-            "CS",
-            "ES",
-            "FC",
-            "FY",
-            "GC",
-            "GS",
-            "IS",
-            "JC",
-            "KS",
-            "LC",
-            "NF",
-            "NI",
-            "OP",
-            "OS",
-            "PC",
-            "PS",
-            "PX",
-            "RC",
-            "SF",
-            "SN",
-            "TS",
-            "WC",
-            "WS",
-        ):
+        line_list = get_wiki_text("List of BluRail lines", config)
+        line_codes = []
+        for result in search_all(re.compile(r"{{BR\|(?P<code>[^}]+)}}\n\|.*\n\|.*\n\|.*\n\|(?P<adv>.*)\n\|"), line_list):
+            if "planned service" not in result.group("adv").lower():
+                line_codes.append(result.group("code"))
+
+        for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
             line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
