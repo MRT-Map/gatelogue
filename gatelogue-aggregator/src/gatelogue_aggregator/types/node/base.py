@@ -10,11 +10,11 @@ import msgspec
 import rustworkx as rx
 
 from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced
-from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Hashable, Iterator
+    from gatelogue_aggregator.types.connections import Proximity
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)

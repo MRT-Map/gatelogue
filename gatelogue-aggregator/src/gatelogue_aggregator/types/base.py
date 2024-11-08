@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 import pickle
 from collections.abc import Callable
-from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override
+from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override, Any
 
 import msgspec
 import rustworkx as rx

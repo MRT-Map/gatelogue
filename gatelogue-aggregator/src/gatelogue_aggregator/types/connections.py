@@ -13,11 +13,13 @@ if TYPE_CHECKING:
     import uuid
     from collections.abc import Callable
 
-    from gatelogue_aggregator.types.node.base import Node, NodeRef
+    from gatelogue_aggregator.types.node.base import Node
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
+    from gatelogue_aggregator.types.node.base import NodeRef
+
     direction: NodeRef[S] | int
     """Reference to or ID of the station/stop that the other fields take with respect to. Should be either node of the connection"""
     forward_label: str | None
@@ -36,6 +38,8 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
+    from gatelogue_aggregator.types.node.base import NodeRef
+
     line: NodeRef[L] | int
     """Reference to or ID of the line that the connection is made on"""
     direction: Direction | None = None
