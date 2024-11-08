@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import TYPE_CHECKING, Any, Self, override, Literal
 
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 
 if TYPE_CHECKING:
     import uuid
-    from collections.abc import Container
+    from collections.abc import Container, Iterable
 
 
 class _BusContext(BaseContext, Source):
@@ -23,122 +23,122 @@ class _BusContext(BaseContext, Source):
 class BusCompany(Node[_BusContext]):
     acceptable_list_node_types = lambda: (BusLine, BusStop)  # noqa: E731
 
+    name: str
+    """Name of the bus company"""
+
+    lines: list[Sourced[int]] = None
+    """List of IDs of all :py:class:`BusLine` s the company operates"""
+    stops: list[Sourced[int]] = None
+    """List of all :py:class:`BusStop` s the company's lines stop at"""
+
     @override
-    def __init__(self, ctx: BusContext, source: type[BusContext] | None = None, *, name: str, **attrs):
-        super().__init__(ctx, source, name=name, **attrs)
+    def __init__(
+        self,
+        ctx: BusContext,
+        *,
+        name: str,
+        lines: Iterable[BusLine] | None = None,
+        stops: Iterable[BusStop] | None = None,
+    ):
+        super().__init__(ctx)
+        self.name = name
+        if lines is not None:
+            for line in lines:
+                self.connect(ctx, line, ctx.source(None))
+        if stops is not None:
+            for stop in stops:
+                self.connect(ctx, stop, ctx.source(None))
 
     @override
     def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
-        return self.merged_attr(ctx, "name")
-
-    @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
-        name: str
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "name":
-                return v
-            raise NotImplementedError
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            pass
-
-    @override
-    class Ser(Node.Ser, kw_only=True):
-        import uuid
-
-        name: str
-        """Name of the bus company"""
-        lines: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of all :py:class:`BusLine` s the company operates"""
-        stops: list[Sourced.Ser[uuid.UUID]]
-        """List of all :py:class:`BusStop` s the company's lines stop at"""
-
-    def ser(self, ctx: BusContext) -> BusCompany.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx), lines=self.get_all_ser(ctx, BusLine), stops=self.get_all_ser(ctx, BusStop)
-        )
+        return self.name
 
     @override
     def equivalent(self, ctx: BusContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
+        return self.name == other.name
+
+    @override
+    def merge_attrs(self, ctx: BusContext, other: Self):
+        pass
 
     @override
     def merge_key(self, ctx: BusContext) -> str:
-        return self.merged_attr(ctx, "name")
+        return self.name
+
+    @override
+    def prepare_export(self, ctx: BusContext):
+        self.lines = self.get_all_id(ctx, BusLine)
+        self.stops = self.get_all_id(ctx, BusStop)
+
+    @override
+    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+        return NodeRef(BusCompany, name=self.name)
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class BusLine(Node[_BusContext]):
     acceptable_single_node_types = lambda: (BusCompany, BusStop)  # noqa: E731
 
+    code: str
+    """Unique code identifying the bus line"""
+    name: Sourced[str] | None = None
+    """Name of the line"""
+    colour: Sourced[str] | None = None
+    """Colour of the line (on a map)"""
+
+    company: Sourced[int] = None
+    """ID of the :py:class:`BusCompany` that operates the line"""
+    ref_stop: Sourced[int] | None = None
+    """ID of one :py:class:`BusStop` on the line, typically a terminus"""
+
     @override
     def __init__(
-        self, ctx: BusContext, source: type[BusContext] | None = None, *, code: str, company: BusCompany, **attrs
+        self,
+        ctx: BusContext,
+        *,
+        code: str,
+        company: BusCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        ref_stop: BusStop | None = None,
     ):
-        super().__init__(ctx, source, code=code, **attrs)
-        self.connect_one(ctx, company)
+        super().__init__(ctx)
+        self.code = code
+        self.connect_one(ctx, company, ctx.source(None))
+        if name is not None:
+            self.name = ctx.source(name)
+        if colour is not None:
+            self.colour = ctx.source(colour)
+        if ref_stop is not None:
+            self.connect_one(ctx, ref_stop, ctx.source(None))
 
     @override
-    def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: BusContext) -> str:
         code = self.code
-        company = self.get_one(ctx, BusCompany).merged_attr(ctx, "name")
+        company = self.get_one(ctx, BusCompany).name
         return f"{company} {code}"
-
-    @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
-        code: str
-        name: str | None = None
-        colour: str | None = None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "code":
-                return v
-            if k in ("name", "colour"):
-                return Sourced(v).source(source)
-            raise NotImplementedError
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            self.sourced_merge(source, existing, "name")
-            self.sourced_merge(source, existing, "colour")
-
-    @override
-    class Ser(Node.Ser, kw_only=True):
-        import uuid
-
-        code: str
-        """Unique code identifying the bus line"""
-        company: Sourced.Ser[uuid.UUID]
-        """ID of the :py:class:`BusCompany` that operates the line"""
-        ref_stop: Sourced.Ser[uuid.UUID]
-        """ID of one :py:class:`BusStop` on the line, typically a terminus"""
-        name: Sourced.Ser[str] | None
-        """Name of the line"""
-        colour: Sourced.Ser[str] | None
-        """Colour of the line (on a map)"""
-
-    def ser(self, ctx: BusContext) -> BusLine.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            company=self.get_one_ser(ctx, BusCompany),
-            ref_stop=self.get_one_ser(ctx, BusStop),
-        )
 
     @override
     def equivalent(self, ctx: BusContext, other: Self) -> bool:
         return self.code == other.code and self.get_one(ctx, BusCompany).equivalent(ctx, other.get_one(ctx, BusCompany))
 
     @override
+    def merge_attrs(self, ctx: BusContext, other: Self):
+        self.name.merge(ctx, other.name)
+        self.colour.merge(ctx, other.colour)
+
+    @override
     def merge_key(self, ctx: BusContext) -> str:
         return self.code
+
+    @override
+    def prepare_export(self, ctx: BusContext):
+        self.company = self.get_one_id(ctx, BusCompany)
+        self.ref_stop = self.get_one_id(ctx, BusStop)
+
+    @override
+    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+        return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -146,88 +146,75 @@ class BusStop(LocatedNode[_BusContext]):
     acceptable_list_node_types = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types = lambda: (BusCompany,)  # noqa: E731
 
+    codes: set[str]
+    """Unique code(s) identifying the bus stop. May also be the same as the name"""
+    name: Sourced[str] | None = None
+    """Name of the stop"""
+
+    company: Sourced[int] = None
+    """ID of the :py:class:`BusCompany` that stops here"""
+    connections: dict[int, list[Sourced[BusConnection]]] = None
+    """
+    References all next stops on the lines serving this stop.
+    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`BusConnection`), each encoding line and route information.
+    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
+    """
+
     @override
     def __init__(
         self,
         ctx: BusContext,
-        source: type[BusContext] | None = None,
         *,
         codes: set[str],
         company: BusCompany,
-        **attrs,
+        name: str | None = None,
+        world: Literal["New", "Old"] | None = None,
+        coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx, source, codes=codes, **attrs)
-        self.connect_one(ctx, company)
+        super().__init__(ctx, world=world, coordinates=coordinates)
+        self.codes = codes
+        self.connect_one(ctx, company, ctx.source(None))
+        if name is not None:
+            self.name = ctx.source(name)
 
     @override
     def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
-        code = "/".join(self.merged_attr(ctx, "codes")) if (code := self.merged_attr(ctx, "name")) is None else code.v
-        company = self.get_one(ctx, BusCompany).merged_attr(ctx, "name")
+        code = "/".join(self.codes) if (code := self.name) is None else code.v
+        company = self.get_one(ctx, BusCompany).name
         return f"{company} {code}"
 
     @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(LocatedNode.Attrs):
-        codes: set[str]
-        name: str | None = None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "codes":
-                return v
-            if k == "name":
-                return Sourced(v).source(source)
-            return LocatedNode.Attrs.prepare_merge(source, k, v)
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            super().merge_into(source, existing)
-            if "codes" in existing:
-                existing["codes"].update(self.codes)
-            self.sourced_merge(source, existing, "name")
-
-    @override
-    class Ser(LocatedNode.Ser, kw_only=True):
-        import uuid
-
-        codes: set[str]
-        """Unique code(s) identifying the bus stop. May also be the same as the name"""
-        company: Sourced.Ser[uuid.UUID]
-        """ID of the :py:class:`BusCompany` that stops here"""
-        connections: dict[uuid.UUID, list[Sourced.Ser[BusConnection.Ser]]]
-        """
-        References all next stops on the lines serving this stop.
-        It is represented as a mapping of stop IDs to a list of connection data (:py:class:`BusConnection`), each encoding line and route information.
-        For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
-        """
-        name: Sourced.Ser[str] | None
-        """Name of the stop"""
-
-    def ser(self, ctx: BusContext) -> BusLine.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            company=self.get_one_ser(ctx, BusCompany),
-            connections={n.id: self.get_edges_ser(ctx, n, BusConnection) for n in self.get_all(ctx, BusStop)},
-            proximity=self.get_proximity_ser(ctx),
+    def equivalent(self, ctx: BusContext, other: Self) -> bool:
+        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, BusCompany).equivalent(
+            ctx, other.get_one(ctx, BusCompany)
         )
 
     @override
-    def equivalent(self, ctx: BusContext, other: Self) -> bool:
-        return len(self.merged_attr(ctx, "codes").intersection(other.merged_attr(ctx, "codes"))) != 0 and self.get_one(
-            ctx, BusCompany
-        ).equivalent(ctx, other.get_one(ctx, BusCompany))
+    def merge_attrs(self, ctx: BusContext, other: Self):
+        super().merge_attrs(ctx, other)
+        self.codes.update(other.codes)
+        self._merge_sourced(ctx, other, "name")
 
     @override
     def merge_key(self, ctx: BusContext) -> str:
-        return self.get_one(ctx, BusCompany).merged_attr(ctx, "name")
+        return self.get_one(ctx, BusCompany).name
+
+    @override
+    def prepare_export(self, ctx: BusContext):
+        super().prepare_export(ctx)
+        self.company = self.get_one_id(ctx, BusCompany)
+        self.connections = {
+            node.i: [a for a in self.get_edges(ctx, node, Sourced[BusConnection])]
+            for node in self.get_all(ctx, BusStop)
+        }
+
+    @override
+    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+        return NodeRef(BusStop, codes=self.codes, company=self.get_one(ctx, BusCompany).name)
 
 
-class BusConnection(Connection[_BusContext, BusCompany, BusLine, BusStop]):
-    CT = BusCompany
-    company_fn = lambda ctx: ctx.bus_company  # noqa: E731
-    line_fn = lambda ctx: ctx.bus_line  # noqa: E731
-    station_fn = lambda ctx: ctx.bus_stop  # noqa: E731
+class BusConnection(Connection[_BusContext, BusLine]):
+    pass
 
 
 class BusLineBuilder(LineBuilder[_BusContext, BusLine, BusStop]):
@@ -235,49 +222,7 @@ class BusLineBuilder(LineBuilder[_BusContext, BusLine, BusStop]):
 
 
 class BusContext(_BusContext):
-    @override
-    class Ser(msgspec.Struct, kw_only=True):
-        import uuid
-
-        company: dict[uuid.UUID, BusCompany.Ser]
-        line: dict[uuid.UUID, BusLine.Ser]
-        stop: dict[uuid.UUID, BusStop.Ser]
-
-    def ser(self, _=None) -> BusContext.Ser:
-        return BusContext.Ser(
-            company={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusCompany)},
-            line={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusLine)},
-            stop={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, BusStop)},
-        )
-
-    def bus_company(self, source: type[BusContext] | None = None, *, name: str, **attrs) -> BusCompany:
-        for n in self.g.nodes:
-            if not isinstance(n, BusCompany):
-                continue
-            if n.merged_attr(self, "name") == name:
-                return n
-        return BusCompany(self, source, name=name, **attrs)
-
-    def bus_line(self, source: type[BusContext] | None = None, *, code: str, company: BusCompany, **attrs) -> BusLine:
-        for n in self.g.nodes:
-            if not isinstance(n, BusLine):
-                continue
-            if n.merged_attr(self, "code") == code and n.get_one(self, BusCompany).equivalent(self, company):
-                return n
-        return BusLine(self, source, code=code, company=company, **attrs)
-
-    def bus_stop(
-        self, source: type[BusContext] | None = None, *, codes: set[str], company: BusCompany, **attrs
-    ) -> BusStop:
-        for n in self.g.nodes:
-            if not isinstance(n, BusStop):
-                continue
-            if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, BusCompany).equivalent(
-                self, company
-            ):
-                return n
-        return BusStop(self, source, codes=codes, company=company, **attrs)
-
-
-class BusSource(BusContext, Source):
     pass
+
+
+type BusSource = BusContext

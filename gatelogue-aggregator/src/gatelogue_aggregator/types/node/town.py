@@ -33,7 +33,7 @@ class Town(LocatedNode[_TownContext]):
 
     @override
     def str_ctx(self, ctx: TownContext, filter_: Container[str] | None = None) -> str:
-        return self.merged_attr(ctx, "name")
+        return self.name
 
     @override
     @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -78,11 +78,11 @@ class Town(LocatedNode[_TownContext]):
 
     @override
     def equivalent(self, ctx: TownContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
+        return self.name == other.name
 
     @override
     def merge_key(self, ctx: TownContext) -> str:
-        return self.merged_attr(ctx, "name")
+        return self.name
 
 
 class TownContext(_TownContext):

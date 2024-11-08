@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
-    direction: NodeRef | int
+    direction: NodeRef[S] | int
     """Reference to or ID of the station/stop that the other fields take with respect to. Should be either node of the connection"""
     forward_label: str | None
     """Describes the direction taken when travelling **towards the station/stop in** ``forward_towards_code``"""
@@ -27,29 +27,25 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
     one_way: bool | Sourced[bool] = False
     """Whether the connection is one-way, ie. travel **towards the station/stop in** ``forward_towards_code`` is possible but not the other way"""
 
-    @property
-    def direction_node(self) -> Callable[[CTX], S]:
-        return lambda ctx: ctx.find_by_ref_or_index(self.direction)
+    def get_direction(self, ctx: CTX) -> S:
+        return ctx.find_by_ref_or_index(self.direction)
 
-    @direction_node.setter
-    def direction_node(self, v: S):
-        self.direction = v.ref()
+    def set_direction(self, ctx: CTX, v: S):
+        self.direction = v.ref(ctx)
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
-    line: NodeRef | int
+    line: NodeRef[L] | int
     """Reference to or ID of the line that the connection is made on"""
     direction: Direction | None = None
     """Direction information"""
 
-    @property
-    def line_node(self) -> Callable[[CTX], L]:
-        return lambda ctx: ctx.find_by_ref_or_index(self.line)
+    def get_line(self, ctx: CTX) -> L:
+        return ctx.find_by_ref_or_index(self.line)
 
-    @line_node.setter
-    def line_node(self, v: L):
-        self.line = v.ref()
+    def set_line(self, ctx: CTX, v: L):
+        self.line = v.ref(ctx)
 
 
 class Proximity(msgspec.Struct):

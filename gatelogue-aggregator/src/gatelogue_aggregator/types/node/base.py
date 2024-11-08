@@ -165,10 +165,10 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         return res
 
 
-class LocatedNode[CTX: BaseContext](Node[CTX]):
+class LocatedNode[CTX: BaseContext | Source](Node[CTX]):
     coordinates: Sourced[tuple[int, int]] | None = None
     """Coordinates of the object"""
-    world: Literal["New", "Old"] | None = None
+    world: Sourced[Literal["New", "Old"]] | None = None
     """Whether the object is in the New or Old world"""
 
     proximity: dict[int, Sourced[Proximity]] = None
@@ -177,6 +177,19 @@ class LocatedNode[CTX: BaseContext](Node[CTX]):
     It is represented as an inner mapping of object IDs to proximity data (:py:class:`Proximity`).
     For example, ``{1234: <proximity>}`` means that there is an object with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
     """
+
+    def __init__(
+        self,
+        ctx: CTX,
+        *,
+        world: Literal["New", "Old"] | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ):
+        super().__init__(ctx)
+        if world is not None:
+            self.world = ctx.source(world)
+        if coordinates is not None:
+            self.coordinates = ctx.source(coordinates)
 
     @override
     def merge_attrs(self, ctx: CTX, other: Self):

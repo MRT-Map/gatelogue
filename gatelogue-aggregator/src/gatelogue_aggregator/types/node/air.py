@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Self, override, ClassVar
+from typing import TYPE_CHECKING, Any, Self, override, ClassVar, Literal
 
 import msgspec
 
@@ -134,8 +134,10 @@ class AirAirport(LocatedNode[_AirContext]):
         name: str | None = None,
         link: str | None = None,
         gates: Iterable[AirGate] | None = None,
+        world: Literal["New", "Old"] | None = None,
+        coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx)
+        super().__init__(ctx, world=world, coordinates=coordinates)
         self.code = code
         if name is not None:
             self.name = ctx.source(name)
@@ -155,6 +157,7 @@ class AirAirport(LocatedNode[_AirContext]):
 
     @override
     def merge_attrs(self, ctx: AirContext, other: Self):
+        super().merge_attrs(ctx, other)
         self._merge_sourced(ctx, other, "name")
         self._merge_sourced(ctx, other, "link")
 
@@ -164,6 +167,7 @@ class AirAirport(LocatedNode[_AirContext]):
 
     @override
     def prepare_export(self, ctx: AirContext):
+        super().prepare_export(ctx)
         self.gates = self.get_all_id(ctx, AirGate)
 
     @override
