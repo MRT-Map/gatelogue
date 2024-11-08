@@ -23,7 +23,7 @@ class BaseContext:
         self.g = rx.PyGraph()
 
     def find_by_ref[R: NodeRef, N: Node](self, v: R) -> N | None:
-        indices = self.g.filter_nodes(lambda a: v.refs(a))
+        indices = self.g.filter_nodes(lambda a: v.refs(self, a))
         if len(indices) == 0:
             return
         return self.g[indices[0]]
@@ -37,14 +37,14 @@ class BaseContext:
 
 
 class Mergeable[CTX: BaseContext]:
-    def equivalent(self, other: Self) -> bool:
+    def equivalent(self, ctx: CTX, other: Self) -> bool:
         raise NotImplementedError
 
     def merge(self, ctx: CTX, other: Self):
         raise NotImplementedError
 
     def merge_if_equivalent(self, ctx: CTX, other: Self) -> bool:
-        if self.equivalent(other):
+        if self.equivalent(ctx, other):
             self.merge(ctx, other)
             return True
         return False
@@ -80,8 +80,8 @@ class Sourced[T](msgspec.Struct, Mergeable):
             return self
         raise NotImplementedError(self)
 
-    def equivalent(self, other: Self) -> bool:
-        return self.v.equivalent(other.v) if isinstance(self.v, Mergeable) else self.v == other.v
+    def equivalent(self, ctx: BaseContext, other: Self) -> bool:
+        return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
 
     def merge(self, ctx: BaseContext, other: Self):
         if self.v == other.v:
@@ -142,3 +142,7 @@ class Source(metaclass=SourceMeta):
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         cache_file.touch()
         cache_file.write_bytes(pickle.dumps(g))
+
+    @classmethod
+    def source[T](cls, v: T) -> Sourced[T]:
+        return Sourced(v, s={cls})

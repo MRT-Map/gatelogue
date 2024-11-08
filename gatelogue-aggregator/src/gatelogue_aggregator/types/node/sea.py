@@ -85,7 +85,7 @@ class SeaLine(Node[_SeaContext]):
 
     @override
     def str_ctx(self, ctx: SeaContext, filter_: Container[str] | None = None) -> str:
-        code = self.merged_attr(ctx, "code")
+        code = self.code
         company = self.get_one(ctx, SeaCompany).merged_attr(ctx, "name")
         return f"{company} {code}"
 
@@ -139,13 +139,11 @@ class SeaLine(Node[_SeaContext]):
 
     @override
     def equivalent(self, ctx: SeaContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
-            ctx, SeaCompany
-        ).equivalent(ctx, other.get_one(ctx, SeaCompany))
+        return self.code == other.code and self.get_one(ctx, SeaCompany).equivalent(ctx, other.get_one(ctx, SeaCompany))
 
     @override
     def merge_key(self, ctx: SeaContext) -> str:
-        return self.merged_attr(ctx, "code")
+        return self.code
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)

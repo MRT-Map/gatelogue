@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     import uuid
     from collections.abc import Callable
 
-    from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.types.node.base import Node, NodeRef
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)

@@ -23,10 +23,11 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
     acceptable_single_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     i: int = None
 
-    def add_to_ctx(self, ctx: CTX):
+    def __init__(self, ctx: CTX):
+        super().__init__()
         self.i = ctx.g.add_node(self)
 
-    def __str__(self) -> str:
+    def str_ctx(self, ctx: CTX) -> str:
         return (
             type(self).__name__
             + "("
@@ -78,8 +79,16 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
             and (True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self, a)))
         )
 
+    def get_all_id(self, ctx: CTX, ty: type[Node], conn_ty: type | None = None) -> list[Sourced[int]]:
+        return [Sourced(a.i).source(next(self.get_edges(ctx, a, conn_ty))) for a in self.get_all(ctx, ty, conn_ty)]
+
     def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
         return next(self.get_all(ctx, ty, conn_ty), None)
+
+    def get_one_id(self, ctx: CTX, ty: type[Node], conn_ty: type | None = None) -> Sourced[int] | None:
+        if (n := self.get_one(ctx, ty, conn_ty)) is None:
+            return None
+        return Sourced(n.i).source(next(self.get_edges(ctx, n, conn_ty)))
 
     def get_edges[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[T]:
         def filter_(edge):
@@ -92,9 +101,6 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
             return isinstance(edge.v, get_args(ty)[0])
 
         return (a for a in ctx.g.get_all_edge_data(self, node) if filter_(a))
-
-    def source(self, source: Sourced | Source) -> Sourced[Self]:
-        return Sourced(self).source(source)
 
     @override
     def merge(self, ctx: CTX, other: Self):
@@ -117,14 +123,13 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
     def merge_attrs(self, ctx: CTX, other: Self):
         raise NotImplementedError
 
-    @property
-    def merge_key(self) -> str:
+    def merge_key(self, ctx: CTX) -> str:
         raise NotImplementedError
 
     def prepare_export(self, ctx: CTX):
         raise NotImplementedError
 
-    def ref(self) -> NodeRef[Self]:
+    def ref(self, ctx: CTX) -> NodeRef[Self]:
         raise NotImplementedError
 
     @staticmethod
@@ -165,7 +170,8 @@ class LocatedNode[CTX: BaseContext](Node[CTX]):
     """Coordinates of the object"""
     world: Literal["New", "Old"] | None = None
     """Whether the object is in the New or Old world"""
-    proximity: dict[int, Sourced[Proximity]] = msgspec.field(default_factory=dict)
+
+    proximity: dict[int, Sourced[Proximity]] = None
     """
     References all objects that are near (within walking distance of) this object.
     It is represented as an inner mapping of object IDs to proximity data (:py:class:`Proximity`).
@@ -192,16 +198,21 @@ class NodeRef[T: Node]:
         self.t = t
         self.d = kwargs
 
-    def refs(self, node: Node) -> bool:
+    def refs(self, ctx: BaseContext, node: Node) -> bool:
         if not isinstance(node, self.t):
             return False
+        node_ref = node.ref(ctx)
+        has_match = False
         for k, v in self.d.items():
+            if k not in node_ref.d and v is not None:
+                continue
             if isinstance(v, set):
-                if len(v.union(getattr(node, k))) == 0:
+                if len(v.intersection(node_ref.d[k])) == 0:
                     return False
             elif isinstance(v, Mergeable):
-                if not v.equivalent(getattr(node, k)):
+                if not v.equivalent(ctx, node_ref.d[k]):
                     return False
-            elif v != getattr(node, k):
+            elif v != node_ref.d[k]:
                 return False
-        return True
+            has_match = True
+        return has_match

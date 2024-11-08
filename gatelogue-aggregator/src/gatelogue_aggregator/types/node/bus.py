@@ -85,7 +85,7 @@ class BusLine(Node[_BusContext]):
 
     @override
     def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
-        code = self.merged_attr(ctx, "code")
+        code = self.code
         company = self.get_one(ctx, BusCompany).merged_attr(ctx, "name")
         return f"{company} {code}"
 
@@ -134,13 +134,11 @@ class BusLine(Node[_BusContext]):
 
     @override
     def equivalent(self, ctx: BusContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
-            ctx, BusCompany
-        ).equivalent(ctx, other.get_one(ctx, BusCompany))
+        return self.code == other.code and self.get_one(ctx, BusCompany).equivalent(ctx, other.get_one(ctx, BusCompany))
 
     @override
     def merge_key(self, ctx: BusContext) -> str:
-        return self.merged_attr(ctx, "code")
+        return self.code
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)

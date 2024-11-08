@@ -8,11 +8,11 @@ import msgspec
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.node.base import LocatedNode, Node
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 
 if TYPE_CHECKING:
     import uuid
-    from collections.abc import Container
+    from collections.abc import Container, Iterable
 
 
 class _AirContext(BaseContext, Source):
@@ -21,64 +21,56 @@ class _AirContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class AirFlight(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (AirGate,)  # noqa: E731
-    acceptable_single_node_types = lambda: (AirAirline,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (AirGate,)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (AirAirline,)  # noqa: E731
 
-    @override
+    codes: set[str]
+    """Unique flight code(s). **2-letter airline prefix not included**"""
+
+    # noinspection PyDataclass
+    gates: list[Sourced[int]] = None
+    """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
+    airline: Sourced[int] = None
+    """ID of the :py:class:`AirAirline` the flight is operated by"""
+
     def __init__(
-        self, ctx: AirContext, source: type[AirContext] | None = None, *, codes: set[str], airline: AirAirline, **attrs
+        self,
+        ctx: AirContext,
+        *,
+        codes: set[str],
+        airline: AirAirline,
     ):
-        super().__init__(ctx, source, codes=codes, **attrs)
-        self.connect_one(ctx, airline, source=source)
+        super().__init__(ctx)
+        self.codes = codes
+        self.connect_one(ctx, airline, ctx.source(None))
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
-        airline_name = self.get_one(ctx, AirAirline).merged_attr(ctx, "name")
-        code = "/".join(self.merged_attr(ctx, "codes"))
+        airline_name = self.get_one(ctx, AirAirline).name
+        code = "/".join(self.codes)
         return f"{airline_name} {code}"
 
     @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
-        codes: set[str]
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "codes":
-                return v
-            raise NotImplementedError
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            if "codes" in existing:
-                existing["codes"].update(self.codes)
-
-    @override
-    class Ser(Node.Ser, kw_only=True):
-        import uuid
-
-        codes: set[str]
-        """Unique flight code(s). **2-letter airline prefix not included**"""
-        gates: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
-        airline: Sourced.Ser[uuid.UUID]
-        """ID of the :py:class:`AirAirline` the flight is operated by"""
-
-    def ser(self, ctx: AirContext) -> AirFlight.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx), gates=self.get_all_ser(ctx, AirGate), airline=self.get_one_ser(ctx, AirAirline)
+    def equivalent(self, ctx: AirContext, other: Self) -> bool:
+        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, AirAirline).equivalent(
+            ctx, other.get_one(ctx, AirAirline)
         )
 
     @override
-    def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        return len(self.merged_attr(ctx, "codes").intersection(other.merged_attr(ctx, "codes"))) != 0 and self.get_one(
-            ctx, AirAirline
-        ).equivalent(ctx, other.get_one(ctx, AirAirline))
+    def merge_attrs(self, ctx: AirContext, other: Self):
+        self.codes.update(other.codes)
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
         return self.get_one(ctx, AirAirline).merge_key(ctx)
+
+    @override
+    def prepare_export(self, ctx: AirContext):
+        self.gates = self.get_all_id(ctx, AirGate)
+
+    @override
+    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+        return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(ctx, AirAirline).name)
 
     def update(self, ctx: AirContext):
         processed_gates: list[AirGate] = []
@@ -95,13 +87,13 @@ class AirFlight(Node[_AirContext]):
                 )
             ) is None:
                 processed_gates.append(gate)
-            elif existing.merged_attr(ctx, "code") is None and gate.merged_attr(ctx, "code") is not None:
+            elif existing.code is None and gate.code is not None:
                 processed_gates.remove(existing)
                 self.disconnect(ctx, existing)
                 processed_gates.append(gate)
-            elif existing.merged_attr(ctx, "code") is not None and gate.merged_attr(ctx, "code") is None:
+            elif existing.code is not None and gate.code is None:
                 self.disconnect(ctx, gate)
-            elif existing.merged_attr(ctx, "code") == gate.merged_attr(ctx, "code"):
+            elif existing.code == gate.code:
                 existing.merge(ctx, gate)
 
     @staticmethod
@@ -123,73 +115,68 @@ class AirFlight(Node[_AirContext]):
 class AirAirport(LocatedNode[_AirContext]):
     acceptable_list_node_types = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
 
-    @override
-    def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str, **attrs):
-        super().__init__(ctx, source, code=code, **attrs)
+    code: str
+    """Unique 3 (sometimes 4)-letter code"""
+    name: Sourced[str] | None = None
+    """Name of the airport"""
+    link: Sourced[str] | None = None
+    """Link to the MRT Wiki page for the airport"""
+
+    gates: list[Sourced[int]] = None
+    """List of IDs of :py:class:`AirGate` s"""
 
     @override
-    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        return self.merged_attr(ctx, "code")
+    def __init__(
+        self,
+        ctx: AirContext,
+        *,
+        code: str,
+        name: str | None = None,
+        link: str | None = None,
+        gates: Iterable[AirGate] | None = None,
+    ):
+        super().__init__(ctx)
+        self.code = code
+        if name is not None:
+            self.name = ctx.source(name)
+        if link is not None:
+            self.link = ctx.source(link)
+        if gates is not None:
+            for gate in gates:
+                self.connect(ctx, gate, ctx.source(None))
 
     @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(LocatedNode.Attrs):
-        code: str
-        name: str | None = None
-        link: str | None = None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "code":
-                return v
-            if k in ("name", "link"):
-                return Sourced(v).source(source)
-            return LocatedNode.Attrs.prepare_merge(source, k, v)
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            super().merge_into(source, existing)
-            self.sourced_merge(source, existing, "name")
-            self.sourced_merge(source, existing, "link")
-
-    @override
-    class Ser(LocatedNode.Ser, kw_only=True):
-        import uuid
-
-        code: str
-        """Unique 3 (sometimes 4)-letter code"""
-        name: Sourced.Ser[str] | None
-        """Name of the airport"""
-        link: Sourced.Ser[str] | None
-        """Link to the MRT Wiki page for the airport"""
-        gates: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of :py:class:`AirGate` s"""
-
-    def ser(self, ctx: AirContext) -> AirFlight.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            gates=self.get_all_ser(ctx, AirGate),
-            proximity=self.get_proximity_ser(ctx),
-        )
+    def str_ctx(self, ctx: AirContext) -> str:
+        return self.code
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code")
+        return self.code == other.code
+
+    @override
+    def merge_attrs(self, ctx: AirContext, other: Self):
+        self._merge_sourced(ctx, other, "name")
+        self._merge_sourced(ctx, other, "link")
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
-        return self.merged_attr(ctx, "code")
+        return self.code
+
+    @override
+    def prepare_export(self, ctx: AirContext):
+        self.gates = self.get_all_id(ctx, AirGate)
+
+    @override
+    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+        return NodeRef(AirAirport, code=self.code)
 
     def update(self, ctx: AirContext):
-        if (
-            none_gate := next((a for a in self.get_all(ctx, AirGate) if a.merged_attr(ctx, "code") is None), None)
-        ) is None:
+        if (none_gate := next((a for a in self.get_all(ctx, AirGate) if a.code is None), None)) is None:
             return
         for flight in list(none_gate.get_all(ctx, AirFlight)):
             possible_gates = []
             for possible_gate in self.get_all(ctx, AirGate):
-                if possible_gate.merged_attr(ctx, "code") is None:
+                if possible_gate.code is None:
                     continue
                 if (airline := possible_gate.get_one(ctx, AirAirline)) is None:
                     continue
@@ -197,12 +184,11 @@ class AirAirport(LocatedNode[_AirContext]):
                     possible_gates.append(possible_gate)
             if len(possible_gates) == 1:
                 new_gate = possible_gates[0]
-                sources = {a["s"] for a in ctx.g[none_gate][flight].values()} | {
-                    a["s"] for a in ctx.g[self][new_gate].values()
+                sources = {s for a in none_gate.get_edges(ctx, flight) for s in a.s} | {
+                    s for a in new_gate.get_edges(ctx, flight) for s in a.s
                 }
                 flight.disconnect(ctx, none_gate)
-                for source in sources:
-                    flight.connect(ctx, new_gate, source=source)
+                flight.connect(ctx, new_gate, Sourced(None, sources))
 
     @staticmethod
     @override
@@ -221,127 +207,112 @@ class AirGate(Node[_AirContext]):
     acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
     acceptable_single_node_types = lambda: (AirAirport, AirAirline)  # noqa: E731
 
-    @override
-    def __init__(
-        self, ctx: AirContext, source: type[AirContext] | None = None, *, code: str | None, airport: AirAirport, **attrs
-    ):
-        super().__init__(ctx, source, code=code, **attrs)
-        self.connect_one(ctx, airport, source=source)
+    code: str | None
+    """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
+    size: Sourced[str] | None = None
+    """Abbreviated size of the gate (eg. ``S``, ``M``)"""
+
+    flights: list[Sourced[int]] = None
+    """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
+    airport: Sourced[int] = None
+    """ID of the :py:class:`AirAirport`"""
+    airline: Sourced[int] | None = None
+    """ID of the :py:class:`AirAirline` that owns the gate"""
 
     @override
-    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        airport = self.get_one(ctx, AirAirport).merged_attr(ctx, "code")
-        code = self.merged_attr(ctx, "code")
+    def __init__(
+        self,
+        ctx: AirContext,
+        *,
+        code: str | None,
+        airport: AirAirport,
+        size: str | None = None,
+        flights: Iterable[AirFlight] | None = None,
+        airline: AirAirline | None = None,
+    ):
+        super().__init__(ctx)
+        self.code = code
+        self.connect_one(ctx, airport, ctx.source(None))
+        if size is not None:
+            self.size = ctx.source(size)
+        if flights is not None:
+            for flight in flights:
+                self.connect(ctx, flight, ctx.source(None))
+        if airline is not None:
+            self.connect_one(ctx, airline, ctx.source(None))
+
+    @override
+    def str_ctx(self, ctx: AirContext) -> str:
+        airport = self.get_one(ctx, AirAirport).code
+        code = self.code
         return f"{airport} {code}"
 
     @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
-        code: str | None
-        size: str | None = None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "code":
-                return v
-            if k == "size":
-                return Sourced(v).source(source)
-            raise NotImplementedError
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            self.sourced_merge(source, existing, "size")
-
-    @override
-    class Ser(Node.Ser, kw_only=True):
-        import uuid
-
-        code: str | None
-        """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
-        flights: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
-        airport: Sourced.Ser[uuid.UUID]
-        """ID of the :py:class:`AirAirport`"""
-        airline: Sourced.Ser[uuid.UUID] | None
-        """ID of the :py:class:`AirAirline` that owns the gate"""
-        size: Sourced.Ser[str] | None
-        """Abbreviated size of the gate (eg. ``S``, ``M``)"""
-
-    def ser(self, ctx: AirContext) -> AirFlight.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            flights=self.get_all_ser(ctx, AirFlight),
-            airport=self.get_one_ser(ctx, AirAirport),
-            airline=self.get_one_ser(ctx, AirAirline),
-        )
-
-    @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
-            ctx, AirAirport
-        ).equivalent(ctx, other.get_one(ctx, AirAirport))
+        return self.code == other.code and self.get_one(ctx, AirAirport).equivalent(ctx, other.get_one(ctx, AirAirport))
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
-        return self.merged_attr(ctx, "code")
+        return self.code
+
+    @override
+    def prepare_export(self, ctx: AirContext):
+        self.flights = self.get_all_id(ctx, AirFlight)
+        self.airport = self.get_one_id(ctx, AirAirport)
+        self.airline = self.get_one_id(ctx, AirAirline)
+
+    @override
+    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+        return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class AirAirline(Node[_AirContext]):
     acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
 
+    name: str
+    """Name of the airline"""
+    link: Sourced[str] | None = None
+    """Link to the MRT Wiki page for the airline"""
+
+    flights: list[Sourced[int]] | None = None
+    """List of IDs of all :py:class:`AirFlight` s the airline operates"""
+
     @override
-    def __init__(self, ctx: AirContext, source: type[AirContext] | None = None, *, name: str, **attrs):
-        super().__init__(ctx, source, name=name, **attrs)
+    def __init__(
+        self, ctx: AirContext, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None
+    ):
+        super().__init__(ctx)
+        self.name = name
+        if link is not None:
+            self.link = ctx.source(link)
+        if flights is not None:
+            for flight in flights:
+                self.connect(ctx, flight, ctx.source(None))
 
     @override
     def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
-        return self.merged_attr(ctx, "name")
-
-    @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(Node.Attrs):
-        name: str
-        link: str | None = None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "name":
-                return v
-            if k == "link":
-                return Sourced(v).source(source)
-            raise NotImplementedError
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            self.sourced_merge(source, existing, "link")
-
-    @override
-    class Ser(Node.Ser, kw_only=True):
-        import uuid
-
-        name: str
-        """Name of the airline"""
-        flights: list[Sourced.Ser[uuid.UUID]]
-        """List of IDs of all :py:class:`AirFlight` s the airline operates"""
-        link: Sourced.Ser[str] | None
-        """Link to the MRT Wiki page for the airline"""
-
-    def ser(self, ctx: AirContext) -> AirFlight.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            flights=self.get_all_ser(ctx, AirFlight),
-        )
+        return self.name
 
     @override
     def equivalent(self, ctx: AirContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "name") == other.merged_attr(ctx, "name")
+        return self.name == other.name
+
+    @override
+    def merge_attrs(self, ctx: AirContext, other: Self):
+        self._merge_sourced(ctx, other, "link")
 
     @override
     def merge_key(self, ctx: AirContext) -> str:
-        return self.merged_attr(ctx, "name")
+        return self.name
+
+    @override
+    def prepare_export(self, ctx: AirContext):
+        self.flights = self.get_all_id(ctx, AirFlight)
+
+    @override
+    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+        return NodeRef(AirAirline, name=self.name)
 
     @staticmethod
     def process_airline_name[T: (str, None)](s: T) -> T:
@@ -351,66 +322,10 @@ class AirAirline(Node[_AirContext]):
 
 
 class AirContext(_AirContext):
-    @override
-    class Ser(msgspec.Struct, kw_only=True):
-        import uuid
-
-        flight: dict[uuid.UUID, AirFlight.Ser]
-        airport: dict[uuid.UUID, AirAirport.Ser]
-        gate: dict[uuid.UUID, AirGate.Ser]
-        airline: dict[uuid.UUID, AirAirline.Ser]
-
-    def ser(self, _=None) -> AirContext.Ser:
-        return AirContext.Ser(
-            flight={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirFlight)},
-            airport={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirAirport)},
-            gate={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirGate)},
-            airline={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, AirAirline)},
-        )
-
-    def air_flight(
-        self, source: type[AirContext] | None = None, *, codes: set[str], airline: AirAirline, **attrs
-    ) -> AirFlight:
-        for n in self.g.nodes:
-            if not isinstance(n, AirFlight):
-                continue
-            if len(n.merged_attr(self, "codes").intersection(codes)) != 0 and n.get_one(self, AirAirline).equivalent(
-                self, airline
-            ):
-                return n
-        return AirFlight(self, source, codes=codes, airline=airline, **attrs)
-
-    def air_airport(self, source: type[AirContext] | None = None, *, code: str, **attrs) -> AirAirport:
-        for n in self.g.nodes:
-            if not isinstance(n, AirAirport):
-                continue
-            if n.merged_attr(self, "code") == code:
-                return n
-        return AirAirport(self, source, code=code, **attrs)
-
-    def air_gate(
-        self, source: type[AirContext] | None = None, *, code: str | None, airport: AirAirport, **attrs
-    ) -> AirGate:
-        for n in self.g.nodes:
-            if not isinstance(n, AirGate):
-                continue
-            if n.merged_attr(self, "code") == code and n.get_one(self, AirAirport).equivalent(self, airport):
-                return n
-        return AirGate(self, source, code=code, airport=airport, **attrs)
-
-    def air_airline(self, source: type[AirContext] | None = None, *, name: str, **attrs) -> AirAirline:
-        for n in self.g.nodes:
-            if not isinstance(n, AirAirline):
-                continue
-            if n.merged_attr(self, "name") == name:
-                return n
-        return AirAirline(self, source, name=name, **attrs)
-
     def update(self):
-        for node in track(self.g.nodes, description=INFO1 + "Updating air nodes"):
+        for node in track(self.g.nodes(), description=INFO1 + "Updating air nodes"):
             if isinstance(node, AirFlight | AirAirport):
                 node.update(self)
 
 
-class AirSource(AirContext, Source):
-    pass
+type AirSource = AirContext

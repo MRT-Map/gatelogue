@@ -85,7 +85,7 @@ class RailLine(Node[_RailContext]):
 
     @override
     def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
-        code = self.merged_attr(ctx, "code")
+        code = self.code
         company = self.get_one(ctx, RailCompany).merged_attr(ctx, "name")
         return f"{company} {code}"
 
@@ -139,13 +139,13 @@ class RailLine(Node[_RailContext]):
 
     @override
     def equivalent(self, ctx: RailContext, other: Self) -> bool:
-        return self.merged_attr(ctx, "code") == other.merged_attr(ctx, "code") and self.get_one(
-            ctx, RailCompany
-        ).equivalent(ctx, other.get_one(ctx, RailCompany))
+        return self.code == other.code and self.get_one(ctx, RailCompany).equivalent(
+            ctx, other.get_one(ctx, RailCompany)
+        )
 
     @override
     def merge_key(self, ctx: RailContext) -> str:
-        return self.merged_attr(ctx, "code")
+        return self.code
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
