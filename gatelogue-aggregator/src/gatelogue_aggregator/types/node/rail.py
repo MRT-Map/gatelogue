@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Self, override, Literal
-
-import msgspec
+from typing import TYPE_CHECKING, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Connection
@@ -11,8 +9,7 @@ from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 
 if TYPE_CHECKING:
-    import uuid
-    from collections.abc import Container, Iterable
+    from collections.abc import Iterable
 
 
 class _RailContext(BaseContext, Source):
@@ -206,8 +203,7 @@ class RailStation(LocatedNode[_RailContext]):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, RailCompany)
         self.connections = {
-            node.i: [a for a in self.get_edges(ctx, node, Sourced[RailConnection])]
-            for node in self.get_all(ctx, RailStation)
+            node.i: list(self.get_edges(ctx, node, Sourced[RailConnection])) for node in self.get_all(ctx, RailStation)
         }
 
     @override

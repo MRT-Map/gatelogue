@@ -1,18 +1,13 @@
 from __future__ import annotations
 
 import dataclasses
-import functools
-from struct import Struct
-from typing import TYPE_CHECKING, ClassVar, override, Callable, Any
+from typing import TYPE_CHECKING
 
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Sourced
 
 if TYPE_CHECKING:
-    import uuid
-    from collections.abc import Callable
-
     from gatelogue_aggregator.types.node.base import Node
 
 

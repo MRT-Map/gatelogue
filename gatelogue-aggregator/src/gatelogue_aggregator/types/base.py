@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-import functools
 import pickle
-from collections.abc import Callable
-from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override, Any
+from typing import TYPE_CHECKING, ClassVar, Self
 
 import msgspec
-import rustworkx as rx
 import rich
+import rustworkx as rx
 
 from gatelogue_aggregator.logging import ERROR, INFO1
+from gatelogue_aggregator.types.node.base import NodeRef
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config
-    from gatelogue_aggregator.types.node.base import Node, NodeRef
+    from gatelogue_aggregator.types.node.base import Node
 
 
 class BaseContext:
@@ -91,11 +90,10 @@ class Sourced[T](msgspec.Struct, Mergeable):
             self.v.update(other.v)
             self.s.update(other.s)
             return
-        if isinstance(self.v, Mergeable):
-            if self.v.merge_if_equivalent(ctx, other.v):
-                self.s.update(other.s)
-                return
-        # TODO add to discrepancy list
+        if isinstance(self.v, Mergeable) and self.v.merge_if_equivalent(ctx, other.v):
+            self.s.update(other.s)
+            return
+        # TODO: add to discrepancy list
         if max(self.s, key=lambda x: x.priority) < max(other.s, key=lambda x: x.priority):
             self.v = other.v
             self.s = other.s
@@ -108,8 +106,8 @@ class SourceMeta(type):
     def __lt__(cls, other):
         return cls.priority < other.priority
 
-    def __str__(self):
-        return self.name
+    def __str__(cls):
+        return cls.name
 
     def encode(cls, encoding: str = "utf-8", errors: str = "strict") -> bytes:
         return cls.name.encode(encoding, errors)

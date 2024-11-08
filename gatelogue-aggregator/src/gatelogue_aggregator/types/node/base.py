@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-import copy
 import dataclasses
 import re
-import uuid
-from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override, cast, get_args
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, cast, get_args, override
 
 import msgspec
 import rustworkx as rx
 
 from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced
+from gatelogue_aggregator.types.connections import Proximity
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container, Hashable, Iterator
-    from gatelogue_aggregator.types.connections import Proximity
+    from collections.abc import Callable, Iterator
 
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
@@ -27,7 +25,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         super().__init__()
         self.i = ctx.g.add_node(self)
 
-    def str_ctx(self, ctx: CTX) -> str:
+    def str_ctx(self, _ctx: CTX) -> str:
         return (
             type(self).__name__
             + "("

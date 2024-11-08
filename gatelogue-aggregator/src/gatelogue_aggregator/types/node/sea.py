@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Self, override, Literal
-
-import msgspec
+from typing import TYPE_CHECKING, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.connections import Connection
@@ -11,8 +9,7 @@ from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 
 if TYPE_CHECKING:
-    import uuid
-    from collections.abc import Container, Iterable
+    from collections.abc import Iterable
 
 
 class _SeaContext(BaseContext, Source):
@@ -204,8 +201,7 @@ class SeaStop(LocatedNode[_SeaContext]):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, SeaCompany)
         self.connections = {
-            node.i: [a for a in self.get_edges(ctx, node, Sourced[SeaConnection])]
-            for node in self.get_all(ctx, SeaStop)
+            node.i: list(self.get_edges(ctx, node, Sourced[SeaConnection])) for node in self.get_all(ctx, SeaStop)
         }
 
     @override

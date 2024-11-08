@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Self, override, ClassVar, Literal
-
-import msgspec
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
@@ -11,8 +9,7 @@ from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 
 if TYPE_CHECKING:
-    import uuid
-    from collections.abc import Container, Iterable
+    from collections.abc import Iterable
 
 
 class _AirContext(BaseContext, Source):
@@ -21,8 +18,8 @@ class _AirContext(BaseContext, Source):
 
 @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class AirFlight(Node[_AirContext]):
-    acceptable_list_node_types: ClassVar = lambda: (AirGate,)  # noqa: E731
-    acceptable_single_node_types: ClassVar = lambda: (AirAirline,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (AirGate,)
+    acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
 
     codes: set[str]
     """Unique flight code(s). **2-letter airline prefix not included**"""

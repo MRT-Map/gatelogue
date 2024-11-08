@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING, Self, cast, override
+from typing import TYPE_CHECKING, Self, override
 
 import msgspec
 import rustworkx as rx
@@ -18,8 +18,6 @@ from gatelogue_aggregator.types.node.town import Town, TownContext, TownSource
 if TYPE_CHECKING:
     from collections.abc import Iterable
     from pathlib import Path
-
-    import pygraphviz
 
 
 from gatelogue_aggregator.types.connections import Proximity
@@ -139,11 +137,11 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
         # g.graph_attr["outputorder"] = "edgesfirst"
         # g.draw(path, prog="sfdp", args="")
         def node_fn(node: Node):
-            d = dict(
-                style="filled",
-                tooltip=Node.str_ctx(node, self),
-                label=Node.str_ctx(node, self),
-            )
+            d = {
+                "style": "filled",
+                "tooltip": Node.str_ctx(node, self),
+                "label": Node.str_ctx(node, self),
+            }
             for ty, col in (
                 (AirFlight, "#ff8080"),
                 (AirAirport, "#8080ff"),
@@ -168,8 +166,8 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
         def edge_fn(edge):
             edge_data = edge.v if isinstance(edge, Sourced) else edge
             d = {}
-            if edge_data is not None:
-                d["tooltip"] = f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})"
+            # if edge_data is not None:
+            #     d["tooltip"] = f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})"
             if isinstance(edge_data, Proximity):
                 d["color"] = "#ff00ff"
                 return d
@@ -196,7 +194,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
             self.g,
             node_attr_fn=node_fn,
             edge_attr_fn=edge_fn,
-            graph_attr=dict(overlap="prism1000", outputorder="edgesfirst"),
+            graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"},
             filename=path,
             method="sfdp",
         )

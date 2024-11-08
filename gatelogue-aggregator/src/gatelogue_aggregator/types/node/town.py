@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Any, Literal, Self, override
-
-import msgspec
+from typing import Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
 from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
-
-if TYPE_CHECKING:
-    from collections.abc import Container
 
 
 class _TownContext(BaseContext, Source):
