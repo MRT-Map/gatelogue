@@ -50,7 +50,7 @@ class SeaCompany(Node[_SeaContext]):
                 self.connect(ctx, stop, ctx.source(None))
 
     @override
-    def str_ctx(self, ctx: SeaContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: SeaContext) -> str:
         return self.name
 
     @override
@@ -178,7 +178,7 @@ class SeaStop(LocatedNode[_SeaContext]):
             self.name = ctx.source(name)
 
     @override
-    def str_ctx(self, ctx: SeaContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: SeaContext) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, SeaCompany).name
         return f"{company} {code}"

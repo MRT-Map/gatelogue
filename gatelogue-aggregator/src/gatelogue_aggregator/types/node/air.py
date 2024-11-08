@@ -295,7 +295,7 @@ class AirAirline(Node[_AirContext]):
                 self.connect(ctx, flight, ctx.source(None))
 
     @override
-    def str_ctx(self, ctx: AirContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: AirContext) -> str:
         return self.name
 
     @override

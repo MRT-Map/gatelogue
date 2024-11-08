@@ -50,7 +50,7 @@ class BusCompany(Node[_BusContext]):
                 self.connect(ctx, stop, ctx.source(None))
 
     @override
-    def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: BusContext) -> str:
         return self.name
 
     @override
@@ -178,7 +178,7 @@ class BusStop(LocatedNode[_BusContext]):
             self.name = ctx.source(name)
 
     @override
-    def str_ctx(self, ctx: BusContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: BusContext) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, BusCompany).name
         return f"{company} {code}"

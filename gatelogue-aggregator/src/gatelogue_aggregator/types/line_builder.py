@@ -28,14 +28,10 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
             return
         self.line.connect_one(self.ctx, stations[0])
         forward_label = forward_label or "towards " + (
-            a.v
-            if (a := stations[-1].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stations[-1].merged_attr(self.ctx, "codes")))
+            a.v if (a := stations[-1].name) is not None else next(iter(stations[-1].codes))
         )
         backward_label = backward_label or "towards " + (
-            a.v
-            if (a := stations[0].merged_attr(self.ctx, "name")) is not None
-            else next(iter(stations[0].merged_attr(self.ctx, "codes")))
+            a.v if (a := stations[0].name) is not None else next(iter(stations[0].codes))
         )
         for s1, s2 in itertools.pairwise(stations):
             s1.connect(
@@ -45,9 +41,9 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
                     self.ctx,
                     line=self.line,
                     direction=Direction(
-                        forward_towards_code=next(iter(s2.merged_attr(self.ctx, "codes", set))),
-                        forward_direction_label=forward_label,
-                        backward_direction_label=backward_label,
+                        direction=next(iter(s2.codes)),
+                        forward_label=forward_label,
+                        backward_label=backward_label,
                         one_way=one_way,
                     ),
                 ),
@@ -71,16 +67,8 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
             return
         self.line.connect_one(self.ctx, stations[0])
         for s1, s2 in itertools.combinations(stations, 2):
-            forward_label = "towards " + (
-                a.v
-                if (a := s2.merged_attr(self.ctx, "name")) is not None
-                else next(iter(s2.merged_attr(self.ctx, "codes")))
-            )
-            backward_label = "towards " + (
-                a.v
-                if (a := s1.merged_attr(self.ctx, "name")) is not None
-                else next(iter(s1.merged_attr(self.ctx, "codes")))
-            )
+            forward_label = "towards " + (a.v if (a := s2.name) is not None else next(iter(s2.codes)))
+            backward_label = "towards " + (a.v if (a := s1.name) is not None else next(iter(s1.codes)))
             s1.connect(
                 self.ctx,
                 s2,
@@ -88,9 +76,9 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
                     self.ctx,
                     line=self.line,
                     direction=Direction(
-                        forward_towards_code=next(iter(s2.merged_attr(self.ctx, "codes", set))),
-                        forward_direction_label=forward_label,
-                        backward_direction_label=backward_label,
+                        direction=next(iter(s2.codes)),
+                        forward_label=forward_label,
+                        backward_label=backward_label,
                     ),
                 ),
             )

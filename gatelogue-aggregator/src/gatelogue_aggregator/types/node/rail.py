@@ -50,7 +50,7 @@ class RailCompany(Node[_RailContext]):
                 self.connect(ctx, stop, ctx.source(None))
 
     @override
-    def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: RailContext) -> str:
         return self.name
 
     @override
@@ -180,7 +180,7 @@ class RailStation(LocatedNode[_RailContext]):
             self.name = ctx.source(name)
 
     @override
-    def str_ctx(self, ctx: RailContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: RailContext) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, RailCompany).name
         return f"{company} {code}"

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, Self, override
 import msgspec
 
 from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
-from gatelogue_aggregator.types.node.base import LocatedNode
+from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
 
 if TYPE_CHECKING:
     from collections.abc import Container
@@ -20,91 +20,63 @@ class _TownContext(BaseContext, Source):
 class Town(LocatedNode[_TownContext]):
     acceptable_list_node_types = lambda: (LocatedNode,)  # noqa: E731
 
+    name: str
+    """Name of the town"""
+    rank: Sourced[Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]]
+    """Rank of the town"""
+    mayor: Sourced[str]
+    """Mayor of the town"""
+    deputy_mayor: Sourced[str | None]
+    """Deputy Mayor of the town"""
+
     @override
     def __init__(
         self,
         ctx: TownContext,
-        source: type[TownContext] | None = None,
         *,
         name: str,
-        **attrs,
+        rank: Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"],
+        mayor: str,
+        deputy_mayor: str | None,
+        world: Literal["New", "Old"] | None = None,
+        coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx, source, name=name, **attrs)
+        super().__init__(ctx, world=world, coordinates=coordinates)
+        self.name = name
+        self.rank = ctx.source(rank)
+        self.mayor = ctx.source(mayor)
+        self.deputy_mayor = ctx.source(deputy_mayor)
 
     @override
-    def str_ctx(self, ctx: TownContext, filter_: Container[str] | None = None) -> str:
+    def str_ctx(self, ctx: TownContext) -> str:
         return self.name
-
-    @override
-    @dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-    class Attrs(LocatedNode.Attrs):
-        name: str
-        rank: Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
-        mayor: str
-        deputy_mayor: str | None
-
-        @staticmethod
-        @override
-        def prepare_merge(source: Source, k: str, v: Any) -> Any:
-            if k == "name":
-                return v
-            if k in ("rank", "mayor", "deputy_mayor"):
-                return Sourced(v).source(source)
-            return LocatedNode.Attrs.prepare_merge(source, k, v)
-
-        @override
-        def merge_into(self, source: Source, existing: dict[str, Any]):
-            super().merge_into(source, existing)
-            self.sourced_merge(source, existing, "rank")
-            self.sourced_merge(source, existing, "mayor")
-            self.sourced_merge(source, existing, "deputy_mayor")
-
-    @override
-    class Ser(LocatedNode.Ser, kw_only=True):
-        name: str
-        """Name of the town"""
-        rank: Sourced.Ser[Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]]
-        """Rank of the town"""
-        mayor: Sourced.Ser[str]
-        """Mayor of the town"""
-        deputy_mayor: Sourced.Ser[str | None]
-        """Deputy Mayor of the town"""
-
-    def ser(self, ctx: TownContext) -> Town.Ser:
-        return self.Ser(
-            **self.merged_attrs(ctx),
-            proximity=self.get_proximity_ser(ctx),
-        )
 
     @override
     def equivalent(self, ctx: TownContext, other: Self) -> bool:
         return self.name == other.name
 
     @override
+    def merge_attrs(self, ctx: TownContext, other: Self):
+        super().merge_attrs(ctx, other)
+        self._merge_sourced(ctx, other, "rank")
+        self._merge_sourced(ctx, other, "mayor")
+        self._merge_sourced(ctx, other, "deputy_mayor")
+
+    @override
     def merge_key(self, ctx: TownContext) -> str:
         return self.name
 
+    @override
+    def prepare_export(self, ctx: TownContext):
+        super().prepare_export(ctx)
+
+    @override
+    def ref(self, ctx: TownContext) -> NodeRef[Self]:
+        return NodeRef(Town, name=self.name)
+
 
 class TownContext(_TownContext):
-    @override
-    class Ser(msgspec.Struct, kw_only=True):
-        import uuid
-
-        town: dict[uuid.UUID, Town.Ser]
-
-    def ser(self, _=None) -> TownContext.Ser:
-        return TownContext.Ser(
-            town={a.id: a.ser(self) for a in self.g.nodes if isinstance(a, Town)},
-        )
-
-    def town(self, source: type[TownContext] | None = None, *, name: str, **attrs) -> Town:
-        for n in self.g.nodes:
-            if not isinstance(n, Town):
-                continue
-            if n.merged_attr(self, "name") == name:
-                return n
-        return Town(self, source, name=name, **attrs)
-
-
-class TownSource(TownContext, Source):
     pass
+
+
+type TownSource = TownContext
