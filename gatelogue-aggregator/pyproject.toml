@@ -27,8 +27,7 @@ dependencies = [
   "rich",
   "cloudscraper",
   "BeautifulSoup4",
-  "networkx",
-  "types-networkx",
+  "rustworkx",
   "pygraphviz",
 ]
 

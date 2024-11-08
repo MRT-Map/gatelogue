@@ -96,7 +96,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext, ToSe
         )
 
     def graph(self, path: Path):
-        g = cast(nx.MultiGraph, self.g.copy())
+        g = cast(rx.PyGraph, self.g.copy())
         for node in g.nodes:
             g.nodes[node]["style"] = "filled"
             g.nodes[node]["tooltip"] = Node.str_ctx(node, self)
@@ -143,7 +143,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext, ToSe
             else:
                 g.edges[u, v, k]["style"] = "invis"
 
-        g: nx.MultiGraph = nx.relabel_nodes(g, {n: n.str_ctx(self) for n in g.nodes})
+        g: rx.PyGraph = nx.relabel_nodes(g, {n: n.str_ctx(self) for n in g.nodes})
 
         g: pygraphviz.AGraph = nx.drawing.nx_agraph.to_agraph(g)
         g.graph_attr["overlap"] = "prism1000"

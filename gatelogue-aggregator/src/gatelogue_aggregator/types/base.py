@@ -1,43 +1,50 @@
 from __future__ import annotations
 
+import functools
 import pickle
+from collections.abc import Callable
 from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, override
 
 import msgspec
-import networkx as nx
+import rustworkx as rx
 import rich
 
 from gatelogue_aggregator.logging import ERROR, INFO1
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config
-    from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.types.node.base import Node, NodeRef
 
 
-class ToSerializable:
-    class Ser(msgspec.Struct, kw_only=True):
-        pass
-
-    def ser(self, ctx: BaseContext) -> Node.Ser:
-        raise NotImplementedError
-
-
-class BaseContext(ToSerializable):
-    g: nx.MultiGraph
+class BaseContext:
+    g: rx.PyGraph
 
     def __init__(self):
-        self.g = nx.MultiGraph()
+        self.g = rx.PyGraph()
+
+    def find_by_ref[R: NodeRef, N: Node](self, v: R) -> N | None:
+        indices = self.g.filter_nodes(lambda a: v.refs(a))
+        if len(indices) == 0:
+            return
+        return self.g[indices[0]]
+
+    def find_by_ref_or_index[R: NodeRef, N: Node](self, v: R | int) -> N | None:
+        if isinstance(v, NodeRef):
+            return self.find_by_ref(v)
+        if isinstance(v, int):
+            return self.g[v]
+        raise TypeError(type(v))
 
 
 class Mergeable[CTX: BaseContext]:
-    def equivalent(self, ctx: CTX, other: Self) -> bool:
+    def equivalent(self, other: Self) -> bool:
         raise NotImplementedError
 
     def merge(self, ctx: CTX, other: Self):
         raise NotImplementedError
 
     def merge_if_equivalent(self, ctx: CTX, other: Self) -> bool:
-        if self.equivalent(ctx, other):
+        if self.equivalent(other):
             self.merge(ctx, other)
             return True
         return False
@@ -52,12 +59,11 @@ class Mergeable[CTX: BaseContext]:
                 self.append(o)
 
 
-_T = TypeVar("_T")
-
-
-class Sourced(msgspec.Struct, Mergeable, ToSerializable, Generic[_T]):
-    v: _T
-    s: set[str] = msgspec.field(default_factory=set)
+class Sourced[T](msgspec.Struct, Mergeable):
+    v: T
+    """Actual value"""
+    s: set[type[Source]] = msgspec.field(default_factory=set)
+    """List of sources that support the value"""
 
     def __str__(self):
         s = str(self.v)
@@ -65,41 +71,34 @@ class Sourced(msgspec.Struct, Mergeable, ToSerializable, Generic[_T]):
             s += " (" + ", ".join(self.s) + ")"
         return s
 
-    @override
-    class Ser(msgspec.Struct, Generic[_T]):
-        v: _T
-        """Actual value"""
-        s: set[str]
-        """List of sources that support the value"""
-
-    def ser(self, ctx: BaseContext) -> Ser:
-        from gatelogue_aggregator.types.node.base import Node
-
-        return self.Ser(
-            v=str(self.v.id)
-            if isinstance(self.v, Node)
-            else self.v.ser(ctx)
-            if isinstance(self.v, ToSerializable)
-            else self.v,
-            s=self.s,
-        )
-
     def source(self, source: Sourced | Source | type[Source]) -> Self:
         if isinstance(source, Sourced):
             self.s.update(source.s)
             return self
         if isinstance(source, Source) or (isinstance(source, type) and issubclass(source, Source)):
-            self.s.add(source.name)
+            self.s.add(source)
             return self
         raise NotImplementedError(self)
 
-    def equivalent(self, ctx: BaseContext, other: Self) -> bool:
-        return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
+    def equivalent(self, other: Self) -> bool:
+        return self.v.equivalent(other.v) if isinstance(self.v, Mergeable) else self.v == other.v
 
     def merge(self, ctx: BaseContext, other: Self):
+        if self.v == other.v:
+            self.source(other)
+            return
+        if isinstance(self.v, set) and isinstance(other.v, set):
+            self.v.update(other.v)
+            self.s.update(other.s)
+            return
         if isinstance(self.v, Mergeable):
-            self.v.merge(ctx, other.v)
-        self.s.update(other.s)
+            if self.v.merge_if_equivalent(ctx, other.v):
+                self.s.update(other.s)
+                return
+        # TODO add to discrepancy list
+        if max(self.s, key=lambda x: x.priority) < max(other.s, key=lambda x: x.priority):
+            self.v = other.v
+            self.s = other.s
 
 
 class SourceMeta(type):
@@ -108,6 +107,9 @@ class SourceMeta(type):
 
     def __lt__(cls, other):
         return cls.priority < other.priority
+
+    def __str__(self):
+        return self.name
 
     def encode(cls, encoding: str = "utf-8", errors: str = "strict") -> bytes:
         return cls.name.encode(encoding, errors)
@@ -121,7 +123,7 @@ class Source(metaclass=SourceMeta):
         rich.print(INFO1 + f"Retrieving from {self.name}")
 
     @classmethod
-    def retrieve_from_cache(cls, config: Config) -> nx.MultiGraph | None:
+    def retrieve_from_cache(cls, config: Config) -> rx.PyGraph | None:
         if cls.__name__ in config.cache_exclude:
             return None
         cache_file = config.cache_dir / "network-cache" / cls.__name__
@@ -131,8 +133,8 @@ class Source(metaclass=SourceMeta):
         return pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
 
     @classmethod
-    def save_to_cache(cls, config: Config, g: nx.MultiGraph):
-        if g.number_of_nodes() == 0:
+    def save_to_cache(cls, config: Config, g: rx.PyGraph):
+        if g.num_nodes() == 0:
             rich.print(ERROR + f"{cls.__name__} yielded no results")
 
         cache_file = config.cache_dir / "network-cache" / cls.__name__
