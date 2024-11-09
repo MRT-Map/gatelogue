@@ -41,10 +41,10 @@ class BusCompany(Node[BusSource], kw_only=True):
         self = super().new(ctx, name=name)
         if lines is not None:
             for line in lines:
-                self.connect(ctx, line, ctx.source(None))
+                self.connect(ctx, line)
         if stops is not None:
             for stop in stops:
-                self.connect(ctx, stop, ctx.source(None))
+                self.connect(ctx, stop)
         return self
 
     @override
@@ -101,13 +101,13 @@ class BusLine(Node[BusSource], kw_only=True):
         ref_stop: BusStop | None = None,
     ):
         self = super().new(ctx, code=code)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         if colour is not None:
             self.colour = ctx.source(colour)
         if ref_stop is not None:
-            self.connect_one(ctx, ref_stop, ctx.source(None))
+            self.connect_one(ctx, ref_stop)
         return self
 
     @override
@@ -170,7 +170,7 @@ class BusStop(LocatedNode[BusSource], kw_only=True):
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         return self
@@ -202,7 +202,7 @@ class BusStop(LocatedNode[BusSource], kw_only=True):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, BusCompany)
         self.connections = {
-            node.i: list(self.get_edges(ctx, node, Sourced[BusConnection])) for node in self.get_all(ctx, BusStop)
+            node.i: list(self.get_edges(ctx, node, BusConnection)) for node in self.get_all(ctx, BusStop)
         }
 
     @override

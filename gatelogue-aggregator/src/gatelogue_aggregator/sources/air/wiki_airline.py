@@ -64,7 +64,7 @@ class WikiAirline(AirSource):
         s: str | None = None,
         **_,
     ) -> AirFlight:
-        f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.merged_attr(self, "name")), airline=airline)
+        f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
         f.connect(
             self,
             AirGate.new(

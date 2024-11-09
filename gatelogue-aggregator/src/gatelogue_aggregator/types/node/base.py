@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from gatelogue_aggregator.types.connections import Proximity
 
 
-class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
+class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=True):
     acceptable_list_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     acceptable_single_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     i: int = None
@@ -34,7 +34,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         return (
             type(self).__name__
             + "("
-            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self) if v is not None)
+            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
             + ")"
         )
 
@@ -43,22 +43,26 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         ctx: CTX,
         node: Node,
         value: Any | None = None,
+        source: set[type[Source]] | None = None,
     ):
+        source = source or {type(ctx)}
         if not any(isinstance(node, a) for a in type(self).acceptable_list_node_types()):
             raise TypeError
-        ctx.g.add_edge(self.i, node.i, value)
+        ctx.g.add_edge(self.i, node.i, Sourced(value, source))
 
     def connect_one(
         self,
         ctx: CTX,
         node: Node,
         value: Any | None = None,
+        source: set[type[Source]] | None = None,
     ):
+        source = source or {type(ctx)}
         if not any(isinstance(node, a) for a in type(self).acceptable_single_node_types()):
             raise TypeError
         if (prev := self.get_one(ctx, type(node))) is not None:
             self.disconnect(ctx, prev)
-        ctx.g.add_edge(self.i, node.i, value)
+        ctx.g.add_edge(self.i, node.i, Sourced(value, source))
 
     def disconnect(self, ctx: CTX, node: Node):
         if not any(
@@ -76,43 +80,53 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         if ty not in type(self).acceptable_list_node_types():
             raise TypeError
         return (
-            a
+            ctx.g[a]
             for a in ctx.g.neighbors(self.i)
-            if isinstance(a, ty)
-            and (True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self, a)))
+            if isinstance(ctx.g[a], ty)
+            and (True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self.i, a)))
         )
 
     def get_all_id(self, ctx: CTX, ty: type[Node], conn_ty: type | None = None) -> list[Sourced[int]]:
         return [Sourced(a.i).source(next(self.get_edges(ctx, a, conn_ty))) for a in self.get_all(ctx, ty, conn_ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
-        return next(self.get_all(ctx, ty, conn_ty), None)
+        if ty not in type(self).acceptable_single_node_types():
+            raise TypeError
+        return next(
+            (
+                ctx.g[a]
+                for a in ctx.g.neighbors(self.i)
+                if isinstance(ctx.g[a], ty)
+                and (
+                    True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self.i, a))
+                )
+            ),
+            None,
+        )
 
     def get_one_id(self, ctx: CTX, ty: type[Node], conn_ty: type | None = None) -> Sourced[int] | None:
         if (n := self.get_one(ctx, ty, conn_ty)) is None:
             return None
         return Sourced(n.i).source(next(self.get_edges(ctx, n, conn_ty)))
 
-    def get_edges[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[T]:
-        def filter_(edge):
+    def get_edges[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Iterator[Sourced[T]]:
+        def filter_(edge: Sourced[Any]):
             if ty is None:
                 return True
-            if not isinstance(ty, Sourced):
-                return isinstance(edge, cast(type[T], ty))
-            if not isinstance(edge, Sourced):
-                return False
-            return isinstance(edge.v, get_args(ty)[0])
+            return isinstance(edge.v, ty)
 
-        return (a for a in ctx.g.get_all_edge_data(self, node) if filter_(a))
+        return (a for a in ctx.g.get_all_edge_data(self.i, node.i) if filter_(a))
 
     @override
     def merge(self, ctx: CTX, other: Self):
         self.merge_attrs(ctx, other)
+        assert ctx.g.has_node(self.i)
+        assert ctx.g.has_node(other.i)
         self.i = ctx.g.contract_nodes((self.i, other.i), self)
 
     def _merge_sourced(self, ctx: CTX, other: Self, attr: str):
         self_attr: Sourced | None = getattr(self, attr)
-        other_attr: Sourced | None = getattr(self, other)
+        other_attr: Sourced | None = getattr(other, attr)
         match (self_attr, other_attr):
             case (None, None):
                 pass
@@ -168,7 +182,7 @@ class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
         return res
 
 
-class LocatedNode[CTX: BaseContext | Source](Node[CTX]):
+class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
     coordinates: Sourced[tuple[int, int]] | None = None
     """Coordinates of the object"""
     world: Sourced[Literal["New", "Old"]] | None = None
@@ -207,7 +221,7 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX]):
         from gatelogue_aggregator.types.connections import Proximity
 
         self.proximity = {
-            node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Sourced[Proximity])
+            node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Proximity)
         }
 
 

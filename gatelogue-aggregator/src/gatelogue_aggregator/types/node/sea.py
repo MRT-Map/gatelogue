@@ -41,10 +41,10 @@ class SeaCompany(Node[SeaSource], kw_only=True):
         self = super().new(ctx, name=name)
         if lines is not None:
             for line in lines:
-                self.connect(ctx, line, ctx.source(None))
+                self.connect(ctx, line)
         if stops is not None:
             for stop in stops:
-                self.connect(ctx, stop, ctx.source(None))
+                self.connect(ctx, stop)
         return self
 
     @override
@@ -82,6 +82,8 @@ class SeaLine(Node[SeaSource], kw_only=True):
     """Name of the line"""
     colour: Sourced[str] | None = None
     """Colour of the line (on a map)"""
+    mode: Sourced[Literal["ferry", "cruise"]] | None = None
+    """Type of boat used on the line"""
 
     company: Sourced[int] = None
     """ID of the :py:class:`SeaCompany` that operates the line"""
@@ -98,16 +100,19 @@ class SeaLine(Node[SeaSource], kw_only=True):
         company: SeaCompany,
         name: str | None = None,
         colour: str | None = None,
+        mode: str | None = None,
         ref_stop: SeaStop | None = None,
     ):
         self = super().new(ctx, code=code)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         if colour is not None:
             self.colour = ctx.source(colour)
+        if mode is not None:
+            self.mode = ctx.source(mode)
         if ref_stop is not None:
-            self.connect_one(ctx, ref_stop, ctx.source(None))
+            self.connect_one(ctx, ref_stop)
         return self
 
     @override
@@ -124,6 +129,7 @@ class SeaLine(Node[SeaSource], kw_only=True):
     def merge_attrs(self, ctx: SeaSource, other: Self):
         self.name.merge(ctx, other.name)
         self.colour.merge(ctx, other.colour)
+        self.mode.merge(ctx, other.mode)
 
     @override
     def merge_key(self, ctx: SeaSource) -> str:
@@ -170,7 +176,7 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True):
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         return self

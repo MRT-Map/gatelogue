@@ -70,5 +70,5 @@ class WikiAirport(AirSource):
             size=str(size) if size is not None else None,
         )
         if airline is not None:
-            g.connect_one(self, AirAirline.new(self, name=airline))
+            g.connect_one(self, AirAirline.new(self, name=airline), self.source(None))
         return g

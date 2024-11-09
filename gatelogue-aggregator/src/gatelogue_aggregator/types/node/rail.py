@@ -41,10 +41,10 @@ class RailCompany(Node[RailSource], kw_only=True):
         self = super().new(ctx, name=name)
         if lines is not None:
             for line in lines:
-                self.connect(ctx, line, ctx.source(None))
+                self.connect(ctx, line)
         if stops is not None:
             for stop in stops:
-                self.connect(ctx, stop, ctx.source(None))
+                self.connect(ctx, stop)
         return self
 
     @override
@@ -104,7 +104,7 @@ class RailLine(Node[RailSource], kw_only=True):
         ref_stop: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         if colour is not None:
@@ -112,7 +112,7 @@ class RailLine(Node[RailSource], kw_only=True):
         if mode is not None:
             self.mode = ctx.source(mode)
         if ref_stop is not None:
-            self.connect_one(ctx, ref_stop, ctx.source(None))
+            self.connect_one(ctx, ref_stop)
         return self
 
     @override
@@ -131,6 +131,7 @@ class RailLine(Node[RailSource], kw_only=True):
     def merge_attrs(self, ctx: RailSource, other: Self):
         self.name.merge(ctx, other.name)
         self.colour.merge(ctx, other.colour)
+        self.mode.merge(ctx, other.mode)
 
     @override
     def merge_key(self, ctx: RailSource) -> str:
@@ -177,7 +178,7 @@ class RailStation(LocatedNode[RailSource], kw_only=True):
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
-        self.connect_one(ctx, company, ctx.source(None))
+        self.connect_one(ctx, company)
         if name is not None:
             self.name = ctx.source(name)
         return self
@@ -209,7 +210,7 @@ class RailStation(LocatedNode[RailSource], kw_only=True):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, RailCompany)
         self.connections = {
-            node.i: list(self.get_edges(ctx, node, Sourced[RailConnection])) for node in self.get_all(ctx, RailStation)
+            node.i: list(self.get_edges(ctx, node, RailConnection)) for node in self.get_all(ctx, RailStation)
         }
 
     @override

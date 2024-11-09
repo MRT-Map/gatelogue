@@ -19,7 +19,7 @@ from gatelogue_aggregator.utils import search_all
 
 class BluRail(RailSource):
     name = "MRT Wiki (Rail, BluRail)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

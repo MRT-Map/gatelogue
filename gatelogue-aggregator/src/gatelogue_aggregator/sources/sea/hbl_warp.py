@@ -83,6 +83,7 @@ _DICT = {
     "PIX": "Pixl",
     "PRA": "Praimina",
     "PSM": "Port Smith",
+    "PSY": "Port Sybil",
     "RIS": "Risima",
     "RIZ": "Rizalburg",
     "RJN": "Richard's Junction",

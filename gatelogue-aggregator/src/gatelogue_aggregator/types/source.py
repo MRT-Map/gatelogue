@@ -24,17 +24,20 @@ class Sourced[T](msgspec.Struct, Mergeable):
     def __str__(self):
         s = str(self.v)
         if len(self.s) != 0:
-            s += " (" + ", ".join(self.s) + ")"
+            s += " (" + ", ".join(str(a) for a in self.s) + ")"
         return s
 
     def source(self, source: Sourced | Source | type[Source]) -> Self:
         if isinstance(source, Sourced):
             self.s.update(source.s)
             return self
-        if isinstance(source, Source) or (isinstance(source, type) and issubclass(source, Source)):
+        if isinstance(source, Source):
+            self.s.add(type(source))
+            return self
+        if isinstance(source, type) and issubclass(source, Source):
             self.s.add(source)
             return self
-        raise NotImplementedError(self)
+        raise NotImplementedError(source)
 
     def equivalent(self, ctx: BaseContext, other: Self) -> bool:
         return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
@@ -65,6 +68,9 @@ class SourceMeta(type):
 
     def __str__(cls):
         return cls.name
+
+    def __repr__(self):
+        return f"<{self.__name__}>"
 
     def encode(cls, encoding: str = "utf-8", errors: str = "strict") -> bytes:
         return cls.name.encode(encoding, errors)

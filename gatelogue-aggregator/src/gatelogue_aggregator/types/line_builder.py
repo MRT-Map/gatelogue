@@ -38,10 +38,9 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
                 self.ctx,
                 s2,
                 value=type(self).CnT(
-                    self.ctx,
-                    line=self.line,
+                    line=self.line.ref(self.ctx),
                     direction=Direction(
-                        direction=next(iter(s2.codes)),
+                        direction=s2.ref(self.ctx),
                         forward_label=forward_label,
                         backward_label=backward_label,
                         one_way=one_way,
@@ -73,10 +72,9 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
                 self.ctx,
                 s2,
                 value=type(self).CnT(
-                    self.ctx,
-                    line=self.line,
+                    line=self.line.ref(self.ctx),
                     direction=Direction(
-                        direction=next(iter(s2.codes)),
+                        direction=s2.ref(self.ctx),
                         forward_label=forward_label,
                         backward_label=backward_label,
                     ),

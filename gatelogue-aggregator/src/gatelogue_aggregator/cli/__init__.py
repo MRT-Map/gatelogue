@@ -53,6 +53,19 @@ from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.sources.town import TownList
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.context import Context
+from gatelogue_aggregator.types.source import Source, SourceMeta
+
+
+def _enc_hook(obj):
+    if isinstance(obj, type) and issubclass(obj, Source):
+        return str(obj)
+    raise NotImplementedError(obj)
+
+
+def _schema_hook(obj):
+    if isinstance(obj, Source):
+        return msgspec.json.schema(str)
+    raise NotImplementedError
 
 
 @click.group(
@@ -143,10 +156,10 @@ def run(
         WikiAirport,
         BluRail,
         BluRailWarp,
-        IntraRail,
-        IntraRailLocal,
-        IntraRailWarp,
-        IntraRailMCRWarp,
+        # IntraRail,
+        # IntraRailLocal,
+        # IntraRailWarp,
+        # IntraRailMCRWarp,
         RaiLinQ,
         RaiLinQWarp,
         WZR,
@@ -197,7 +210,7 @@ def run(
     ctx = Context.from_sources(result)
     if graph is not None:
         ctx.graph(graph)
-    j = msgspec.json.encode(ctx.ser())
+    j = msgspec.json.encode(ctx.export(), enc_hook=_enc_hook)
     if fmt:
         rich.print(INFO1 + f"Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
@@ -212,7 +225,7 @@ def run(
 )
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
 def schema(output: Path, *, fmt: bool):
-    j = msgspec.json.encode(msgspec.json.schema(Context.Ser))
+    j = msgspec.json.encode(msgspec.json.schema(Context.Export, schema_hook=_schema_hook))
     if fmt:
         rich.print(INFO1 + f"Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))

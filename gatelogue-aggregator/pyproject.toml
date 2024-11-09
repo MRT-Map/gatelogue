@@ -28,7 +28,8 @@ dependencies = [
   "cloudscraper",
   "BeautifulSoup4",
   "rustworkx",
-  "pygraphviz",
+  "pydot",
+  "pillow"
 ]
 
 [project.urls]

@@ -43,7 +43,7 @@ class AirFlight(Node[AirSource], kw_only=True):
         airline: AirAirline,
     ):
         self = super().new(ctx, codes=codes)
-        self.connect_one(ctx, airline, ctx.source(None))
+        self.connect_one(ctx, airline)
         return self
 
     @override
@@ -146,7 +146,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True):
             self.link = ctx.source(link)
         if gates is not None:
             for gate in gates:
-                self.connect(ctx, gate, ctx.source(None))
+                self.connect(ctx, gate)
         return self
 
     @override
@@ -194,7 +194,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True):
                     s for a in new_gate.get_edges(ctx, flight) for s in a.s
                 }
                 flight.disconnect(ctx, none_gate)
-                flight.connect(ctx, new_gate, Sourced(None, sources))
+                flight.connect(ctx, new_gate, sources=sources)
 
     @staticmethod
     @override
@@ -237,14 +237,14 @@ class AirGate(Node[AirSource], kw_only=True):
         airline: AirAirline | None = None,
     ):
         self = super().new(ctx, code=code)
-        self.connect_one(ctx, airport, ctx.source(None))
+        self.connect_one(ctx, airport)
         if size is not None:
             self.size = ctx.source(size)
         if flights is not None:
             for flight in flights:
-                self.connect(ctx, flight, ctx.source(None))
+                self.connect(ctx, flight)
         if airline is not None:
-            self.connect_one(ctx, airline, ctx.source(None))
+            self.connect_one(ctx, airline)
         return self
 
     @override
@@ -291,7 +291,7 @@ class AirAirline(Node[AirSource], kw_only=True):
             self.link = ctx.source(link)
         if flights is not None:
             for flight in flights:
-                self.connect(ctx, flight, ctx.source(None))
+                self.connect(ctx, flight)
         return self
 
     @override

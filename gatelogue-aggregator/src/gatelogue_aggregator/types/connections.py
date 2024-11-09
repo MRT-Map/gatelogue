@@ -45,6 +45,11 @@ class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
     def set_line(self, ctx: CTX, v: L):
         self.line = v.ref(ctx)
 
+    def prepare_export(self, ctx: CTX):
+        self.line = self.get_line(ctx).i
+        if self.direction is not None:
+            self.direction.direction = self.direction.get_direction(ctx).i
+
 
 class Proximity(msgspec.Struct):
     distance: int
