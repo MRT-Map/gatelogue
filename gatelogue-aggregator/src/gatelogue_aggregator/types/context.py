@@ -190,10 +190,8 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
             d = {}
             if edge_data is None:
                 d["tooltip"] = replace(f"{u.str_ctx(self)} -- {v.str_ctx(self)})")
-                d["label"] = d["tooltip"]
             else:
                 d["tooltip"] = replace(f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
-                d["label"] = replace(f"{type(edge_data).__name__} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
             if isinstance(edge_data, Proximity):
                 d["color"] = "magenta"
                 return d
