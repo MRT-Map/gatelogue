@@ -3,7 +3,14 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailLine,
+    RailCompany,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 
 
@@ -12,13 +19,13 @@ class NSC(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="Network South Central")
+        company = RailCompany.new(self, name="Network South Central")
 
         html = get_wiki_html("Network South Central", config)
         line_table = html.find_all("table")[2]
@@ -33,13 +40,13 @@ class NSC(RailSource):
             if "Line Under Construction" in str(tr("th")[5]):
                 continue
             line_name = str(line_prefix + str(tr("th")[0])).strip()
-            line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+            line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
 
             stations = [str(tr("th")[1])] + [str(a).removesuffix("*") for a in tr("th")[3].strings]
             if tr("th")[2] != "No end":
                 stations += [str(tr("th")[2])]
             for station in stations:
-                self.rail_station(codes={station}, name=station, company=company)
+                RailStation.new(self, codes={station}, name=station, company=company)
 
             if len(stations) == 0:
                 continue

@@ -6,7 +6,7 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
+from gatelogue_aggregator.types.node.sea import SeaSource, SeaLineBuilder, SeaSource, SeaCompany, SeaLine, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
@@ -18,13 +18,13 @@ class IntraSail(SeaSource):
     priority = 0
 
     def __init__(self, config: Config):
-        SeaContext.__init__(self)
+        SeaSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.sea_company(name="IntraSail")
+        company = SeaCompany.new(self, name="IntraSail")
 
         html = get_wiki_html("IntraSail", config)
 
@@ -34,7 +34,7 @@ class IntraSail(SeaSource):
             result = re.search(r"\[ (?P<code>.*) ] (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
-            line = self.sea_line(code=line_code, name=line_name, company=company, mode="ferry")
+            line = SeaLine.new(self, code=line_code, name=line_name, company=company, mode="ferry")
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stops = []
@@ -54,7 +54,7 @@ class IntraSail(SeaSource):
                 if stop_name == "New Southport Port of":
                     stop_name = "Port of New Southport"
 
-                stop = self.sea_stop(codes={stop_name}, name=stop_name, company=company)
+                stop = SeaStop.new(self, codes={stop_name}, name=stop_name, company=company)
                 stops.append(stop)
 
             SeaLineBuilder(self, line).connect(*stops)

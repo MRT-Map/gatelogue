@@ -8,7 +8,7 @@ import rich
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
+from gatelogue_aggregator.types.node.sea import SeaSource, SeaLineBuilder, SeaSource, SeaCompany, SeaLine, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 # Adapted from https://docs.google.com/spreadsheets/d/1nIIettVbGwzm7DkmYqqPVoguw2U53R5un4nrC76w-Xg/edit#gid=1423194214
@@ -131,13 +131,13 @@ class HBLWarp(SeaSource):
     priority = 1
 
     def __init__(self, config: Config):
-        SeaContext.__init__(self)
+        SeaSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.sea_company(name="Hummingbird Boat Lines")
+        company = SeaCompany.new(self, name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
         for warp in itertools.chain(
@@ -162,7 +162,7 @@ class HBLWarp(SeaSource):
                 elif result.group(2) in ("22", "24", "51", "55"):
                     name += " (north)"
 
-            self.sea_stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             with contextlib.suppress(ValueError):
                 names.remove(name)
 

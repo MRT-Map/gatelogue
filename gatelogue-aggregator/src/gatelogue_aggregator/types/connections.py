@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from gatelogue_aggregator.types.base import BaseContext
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
     from gatelogue_aggregator.types.node.base import NodeRef
 
@@ -32,7 +31,6 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
         self.direction = v.ref(ctx)
 
 
-@dataclasses.dataclass(kw_only=True, unsafe_hash=True)
 class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
     from gatelogue_aggregator.types.node.base import NodeRef
 

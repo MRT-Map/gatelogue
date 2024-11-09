@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Literal, Self, override
+from typing import Literal, Self, override, ClassVar
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
 from gatelogue_aggregator.types.source import Source, Sourced
 
 
-class _TownContext(BaseContext, Source):
+class TownSource(BaseContext, Source):
     pass
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class Town(LocatedNode[_TownContext]):
-    acceptable_list_node_types = lambda: (LocatedNode,)  # noqa: E731
+class Town(LocatedNode[TownSource], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)  # noqa: E731
 
     name: str
     """Name of the town"""
@@ -25,10 +24,11 @@ class Town(LocatedNode[_TownContext]):
     deputy_mayor: Sourced[str | None]
     """Deputy Mayor of the town"""
 
-    @override
-    def __init__(
-        self,
-        ctx: TownContext,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
+        ctx: TownSource,
         *,
         name: str,
         rank: Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"],
@@ -37,42 +37,35 @@ class Town(LocatedNode[_TownContext]):
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx, world=world, coordinates=coordinates)
-        self.name = name
+        self = super().new(ctx, world=world, coordinates=coordinates, name=name)
         self.rank = ctx.source(rank)
         self.mayor = ctx.source(mayor)
         self.deputy_mayor = ctx.source(deputy_mayor)
+        return self
 
     @override
-    def str_ctx(self, ctx: TownContext) -> str:
+    def str_ctx(self, ctx: TownSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: TownContext, other: Self) -> bool:
+    def equivalent(self, ctx: TownSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: TownContext, other: Self):
+    def merge_attrs(self, ctx: TownSource, other: Self):
         super().merge_attrs(ctx, other)
         self._merge_sourced(ctx, other, "rank")
         self._merge_sourced(ctx, other, "mayor")
         self._merge_sourced(ctx, other, "deputy_mayor")
 
     @override
-    def merge_key(self, ctx: TownContext) -> str:
+    def merge_key(self, ctx: TownSource) -> str:
         return self.name
 
     @override
-    def prepare_export(self, ctx: TownContext):
+    def prepare_export(self, ctx: TownSource):
         super().prepare_export(ctx)
 
     @override
-    def ref(self, ctx: TownContext) -> NodeRef[Self]:
+    def ref(self, ctx: TownSource) -> NodeRef[Self]:
         return NodeRef(Town, name=self.name)
-
-
-class TownContext(_TownContext):
-    pass
-
-
-type TownSource = TownContext

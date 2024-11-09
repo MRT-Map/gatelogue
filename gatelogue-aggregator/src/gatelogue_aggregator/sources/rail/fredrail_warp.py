@@ -1,5 +1,5 @@
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.node.rail import RailSource, RailSource, RailCompany, RailStation
 from gatelogue_aggregator.types.source import Source
 
 
@@ -8,13 +8,13 @@ class FredRailWarp(RailSource):
     priority = 1
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="Fred Rail")
+        company = RailCompany.new(self, name="Fred Rail")
 
         for station, x, z in (
             ("Bakersville Grand Central", -366, -4180),
@@ -65,7 +65,8 @@ class FredRailWarp(RailSource):
             ("Heights City", 1264, -6568),
             ("Quiris", 1264, -6987),
         ):
-            self.rail_station(
+            RailStation.new(
+                self,
                 codes={station},
                 company=company,
                 world="New",
@@ -95,7 +96,7 @@ class FredRailWarp(RailSource):
         #     print(name)
         #     if name in names:
         #         continue
-        #     self.rail_station(
+        #     RailStation.new(self,
         #         codes={name},
         #         company=company,
         #         world="New",

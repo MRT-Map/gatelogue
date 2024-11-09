@@ -4,7 +4,14 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 
 
@@ -13,13 +20,13 @@ class RaiLinQWarp(RailSource):
     priority = 1
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="RaiLinQ")
+        company = RailCompany.new(self, name="RaiLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=0",
@@ -55,6 +62,8 @@ class RaiLinQWarp(RailSource):
             if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
                 continue
 
-            self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            RailStation.new(
+                self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
+            )
             names.append(name)
         self.save_to_cache(config, self.g)

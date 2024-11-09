@@ -5,7 +5,14 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
@@ -15,13 +22,13 @@ class WikiMRT(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="MRT")
+        company = RailCompany.new(self, name="MRT")
 
         for line_code, line_name in (
             ("A", "MRT Arctic Line"),
@@ -53,7 +60,7 @@ class WikiMRT(RailSource):
             ("Old-O", "MRT Orange Line"),
         ):
             text = get_wiki_text(line_name, config)
-            line = self.rail_line(code=line_code, company=company, name=line_name)
+            line = RailLine.new(self, code=line_code, company=company, name=line_name)
 
             stations = []
             for match in search_all(
@@ -66,7 +73,7 @@ class WikiMRT(RailSource):
                     codes.add(match2.group(1) or match2.group(2))
                 if line_code.startswith("Old"):
                     codes = {"Old-" + a for a in codes}
-                station = self.rail_station(codes=codes, company=company)
+                station = RailStation.new(self, codes=codes, company=company)
                 stations.append(station)
 
             if line_code in ("C", "U"):

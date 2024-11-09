@@ -5,7 +5,14 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
@@ -15,13 +22,13 @@ class BluRail(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="BluRail")
+        company = RailCompany.new(self, name="BluRail")
 
         line_list = get_wiki_text("List of BluRail lines", config)
         line_codes = [
@@ -35,7 +42,7 @@ class BluRail(RailSource):
         for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
-            line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
@@ -61,7 +68,7 @@ class BluRail(RailSource):
                 name = result.group("name").strip()
                 if name == "":
                     continue
-                station = self.rail_station(codes=codes, name=name, company=company)
+                station = RailStation.new(self, codes=codes, name=name, company=company)
                 stations.append(station)
 
             if line_code == "2":

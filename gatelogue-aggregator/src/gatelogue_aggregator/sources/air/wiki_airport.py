@@ -7,7 +7,7 @@ import rich.progress
 from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirGate, AirSource
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirSource, AirGate, AirSource
 from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
@@ -22,7 +22,7 @@ class WikiAirport(AirSource):
     priority = 3
 
     def __init__(self, config: Config):
-        AirContext.__init__(self)
+        AirSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
@@ -51,7 +51,7 @@ class WikiAirport(AirSource):
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):
-        return self.air_airport(code=AirAirport.process_code(airport_code), link=get_wiki_link(page_name))
+        return AirAirport.new(self, code=AirAirport.process_code(airport_code), link=get_wiki_link(page_name))
 
     def extract_get_gate(
         self,
@@ -63,11 +63,12 @@ class WikiAirport(AirSource):
         **_,
     ) -> AirGate:
         airline = AirAirline.process_airline_name(airline or airline2)
-        g = self.air_gate(
+        g = AirGate.new(
+            self,
             code=AirGate.process_code(code),
             airport=airport,
             size=str(size) if size is not None else None,
         )
         if airline is not None:
-            g.connect_one(self, self.air_airline(name=airline))
+            g.connect_one(self, AirAirline.new(self, name=airline))
         return g

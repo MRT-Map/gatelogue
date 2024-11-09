@@ -3,8 +3,8 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.bus import BusSource
-from gatelogue_aggregator.types.node.sea import SeaContext
+from gatelogue_aggregator.types.node.bus import BusSource, BusCompany, BusStop
+from gatelogue_aggregator.types.node.sea import SeaSource
 from gatelogue_aggregator.types.source import Source
 
 
@@ -13,13 +13,13 @@ class IntraBusWarp(BusSource):
     priority = 1
 
     def __init__(self, config: Config):
-        SeaContext.__init__(self)
+        SeaSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.bus_company(name="IntraBus")
+        company = BusCompany.new(self, name="IntraBus")
 
         names = []
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
@@ -35,7 +35,8 @@ class IntraBusWarp(BusSource):
             name = match.group(1) or match.group(2) or match.group(3)
             if name in names:
                 continue
-            self.bus_stop(
+            BusStop.new(
+                self,
                 codes={name},
                 company=company,
                 world="New" if warp["worldUUID"] == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",

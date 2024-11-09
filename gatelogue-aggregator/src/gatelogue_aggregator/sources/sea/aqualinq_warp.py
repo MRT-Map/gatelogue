@@ -4,7 +4,7 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
+from gatelogue_aggregator.types.node.sea import SeaSource, SeaLineBuilder, SeaSource, SeaCompany, SeaLine, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 
@@ -13,13 +13,13 @@ class AquaLinQWarp(SeaSource):
     priority = 1
 
     def __init__(self, config: Config):
-        SeaContext.__init__(self)
+        SeaSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.sea_company(name="AquaLinQ")
+        company = SeaCompany.new(self, name="AquaLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=1793169664",
@@ -49,7 +49,7 @@ class AquaLinQWarp(SeaSource):
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
             if warp["name"] not in d or (name := d[warp["name"]]) in names:
                 continue
-            self.sea_stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
 
         self.save_to_cache(config, self.g)

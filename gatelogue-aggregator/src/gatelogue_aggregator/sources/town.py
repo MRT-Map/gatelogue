@@ -2,7 +2,7 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.town import TownContext, TownSource
+from gatelogue_aggregator.types.node.town import TownSource, TownSource, Town
 from gatelogue_aggregator.types.source import Source
 
 
@@ -13,7 +13,7 @@ class TownList(TownSource):
     def __init__(self, config: Config):
         cache1 = config.cache_dir / "town-list1"
         cache2 = config.cache_dir / "town-list2"
-        TownContext.__init__(self)
+        TownSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
@@ -39,7 +39,8 @@ class TownList(TownSource):
         for _, row in pd.concat((df1, df2)).iterrows():
             if not row["Town Name"]:
                 continue
-            self.town(
+            Town.new(
+                self,
                 name=row["Town Name"],
                 rank=row["Town Rank"] if row["Town Name"] != "Arisa" else "Premier",
                 mayor=row["Mayor"],

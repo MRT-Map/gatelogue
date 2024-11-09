@@ -6,7 +6,14 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailStation,
+    RailCompany,
+    RailLine,
+)
 from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
@@ -18,13 +25,13 @@ class IntraRail(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="IntraRail")
+        company = RailCompany.new(self, name="IntraRail")
 
         html = get_wiki_html("IntraRail", config)
 
@@ -34,7 +41,7 @@ class IntraRail(RailSource):
             result = re.search(r"\((?P<code>.*)\) (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
-            line = self.rail_line(code=line_code, name=line_name, company=company, mode="warp")
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stations = []
@@ -52,7 +59,7 @@ class IntraRail(RailSource):
                 if station_name == "Siletz Siletz Salvador":
                     station_name = "Siletz Salvador Station"
 
-                station = self.rail_station(codes={station_name}, name=station_name, company=company)
+                station = RailStation.new(self, codes={station_name}, name=station_name, company=company)
                 stations.append(station)
 
             if line_code == "54":
@@ -80,7 +87,7 @@ class IntraRail(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
             if line_code == "66":
-                line2 = self.rail_line(code="<66>", name="East Mesan Express", company=company, mode="warp")
+                line2 = RailLine.new(self, code="<66>", name="East Mesan Express", company=company, mode="warp")
                 stations2 = [
                     s
                     for s in stations

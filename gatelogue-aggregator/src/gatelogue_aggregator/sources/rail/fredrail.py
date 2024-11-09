@@ -1,5 +1,12 @@
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 
 
@@ -8,16 +15,16 @@ class FredRail(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="Fred Rail")
+        company = RailCompany.new(self, name="Fred Rail")
 
         line_name = "Main Line"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Bakersville Grand Central",
             "Westchester Junction",
@@ -31,45 +38,45 @@ class FredRail(RailSource):
             "Fort Yaxier Central",
             "Fort Yaxier Penn",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Central Line"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Bakersville Grand Central",
             "UCWTIA",
             "Segville International Airport",
             "Utopia",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Southern Regional Railroad"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Tranquil Forest Central",
             "Wythern",
             # "Astoria",
             # "Fort Yaxier West",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Richville Shuttle"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = ["Tranquil Forest Central", "Richville"]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Fort Yaxier Shuttle"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = ["Utopia", "Utopia AFK"]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Southern Central"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Utopia",
             "Whiteley Turing Square",
@@ -77,28 +84,28 @@ class FredRail(RailSource):
             # "Zaquar Onika T. Maraj Station",
             # "Fort Yaxier West",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Western Line"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Utopia",
             "Kolpino",
             "Espil",
             "Kings Cross Railway Terminal",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Lochminehead Limited"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lochminehead"]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "New Jerseyan"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Boston Waterloo",
             "Boston Clapham Junction",
@@ -113,7 +120,7 @@ class FredRail(RailSource):
             "Princeton Junction",
             "Rattlerville Central",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         forward_label = "towards Boston Waterloo"
         backward_label = "towards Rattlerville Central"
         RailLineBuilder(self, line).connect(*stations[:3], forward_label=forward_label, backward_label=backward_label)
@@ -126,23 +133,23 @@ class FredRail(RailSource):
         RailLineBuilder(self, line).connect(*stations[4:], forward_label=forward_label, backward_label=backward_label)
 
         line_name = "Blue Water"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = ["New Mackinaw Union Station", "Oparia Airport"]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Grand Central Limited"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Bakersville Grand Central",
             "Central City Beltway Terminal North",
             "Sealane New Forest Station",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         # line_name = "Borehole Line"
-        # line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        # line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         # stations = [
         #     "Topside",
         #     "Rival Station",
@@ -150,31 +157,31 @@ class FredRail(RailSource):
         #     "Borehole Town",
         #     "Lushful Caverns",
         # ]
-        # stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        # stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         # RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Tung Wan Shuttle"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Tung Wan Transfer",
             "Tung Wan Halt",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Central City Shuttle"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = [
             "Bakersville Grand Central",
             "Central City",
         ]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Crescent Service"
-        line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
         stations = ["Bakersville Grand Central", "Woodsdale", "Mihama", "Heights City", "Quiris"]
-        stations = [self.rail_station(codes={s}, name=s, company=company) for s in stations]
+        stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).connect(*stations)
 
         self.save_to_cache(config, self.g)

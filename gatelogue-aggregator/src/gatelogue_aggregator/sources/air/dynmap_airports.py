@@ -2,7 +2,7 @@ import msgspec
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.air import AirAirport, AirContext, AirSource
+from gatelogue_aggregator.types.node.air import AirAirport, AirSource, AirSource
 from gatelogue_aggregator.types.source import Source
 
 
@@ -13,7 +13,7 @@ class DynmapAirports(AirSource):
     def __init__(self, config: Config):
         cache1 = config.cache_dir / "dynmap-markers-new"
         cache2 = config.cache_dir / "dynmap-markers-old"
-        AirContext.__init__(self)
+        AirSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
@@ -38,6 +38,8 @@ class DynmapAirports(AirSource):
         for json, world in ((json1, "New"), (json2, "Old")):
             for k, v in json.items():
                 name = v["label"].split("(")[0]
-                self.air_airport(code=AirAirport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name)
+                AirAirport.new(
+                    self, code=AirAirport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name
+                )
 
         self.save_to_cache(config, self.g)

@@ -13,11 +13,11 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class _SeaContext(BaseContext, Source):
+class SeaSource(BaseContext, Source):
     pass
 
 
-class SeaCompany(Node[_SeaContext], kw_only=True):
+class SeaCompany(Node[SeaSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaLine, SeaStop)  # noqa: E731
 
     name: str
@@ -32,7 +32,7 @@ class SeaCompany(Node[_SeaContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: SeaContext,
+        ctx: SeaSource,
         *,
         name: str,
         lines: Iterable[SeaLine] | None = None,
@@ -48,32 +48,32 @@ class SeaCompany(Node[_SeaContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: SeaContext) -> str:
+    def str_ctx(self, ctx: SeaSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: SeaContext, other: Self) -> bool:
+    def equivalent(self, ctx: SeaSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: SeaContext, other: Self):
+    def merge_attrs(self, ctx: SeaSource, other: Self):
         pass
 
     @override
-    def merge_key(self, ctx: SeaContext) -> str:
+    def merge_key(self, ctx: SeaSource) -> str:
         return self.name
 
     @override
-    def prepare_export(self, ctx: SeaContext):
+    def prepare_export(self, ctx: SeaSource):
         self.lines = self.get_all_id(ctx, SeaLine)
         self.stops = self.get_all_id(ctx, SeaStop)
 
     @override
-    def ref(self, ctx: SeaContext) -> NodeRef[Self]:
+    def ref(self, ctx: SeaSource) -> NodeRef[Self]:
         return NodeRef(SeaCompany, name=self.name)
 
 
-class SeaLine(Node[_SeaContext], kw_only=True):
+class SeaLine(Node[SeaSource], kw_only=True):
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany, SeaStop)  # noqa: E731
 
     code: str
@@ -92,7 +92,7 @@ class SeaLine(Node[_SeaContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: SeaContext,
+        ctx: SeaSource,
         *,
         code: str,
         company: SeaCompany,
@@ -111,35 +111,35 @@ class SeaLine(Node[_SeaContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: SeaContext) -> str:
+    def str_ctx(self, ctx: SeaSource) -> str:
         code = self.code
         company = self.get_one(ctx, SeaCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: SeaContext, other: Self) -> bool:
+    def equivalent(self, ctx: SeaSource, other: Self) -> bool:
         return self.code == other.code and self.get_one(ctx, SeaCompany).equivalent(ctx, other.get_one(ctx, SeaCompany))
 
     @override
-    def merge_attrs(self, ctx: SeaContext, other: Self):
+    def merge_attrs(self, ctx: SeaSource, other: Self):
         self.name.merge(ctx, other.name)
         self.colour.merge(ctx, other.colour)
 
     @override
-    def merge_key(self, ctx: SeaContext) -> str:
+    def merge_key(self, ctx: SeaSource) -> str:
         return self.code
 
     @override
-    def prepare_export(self, ctx: SeaContext):
+    def prepare_export(self, ctx: SeaSource):
         self.company = self.get_one_id(ctx, SeaCompany)
         self.ref_stop = self.get_one_id(ctx, SeaStop)
 
     @override
-    def ref(self, ctx: SeaContext) -> NodeRef[Self]:
+    def ref(self, ctx: SeaSource) -> NodeRef[Self]:
         return NodeRef(SeaLine, code=self.code, company=self.get_one(ctx, SeaCompany).name)
 
 
-class SeaStop(LocatedNode[_SeaContext], kw_only=True):
+class SeaStop(LocatedNode[SeaSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany,)  # noqa: E731
 
@@ -161,7 +161,7 @@ class SeaStop(LocatedNode[_SeaContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: SeaContext,
+        ctx: SeaSource,
         *,
         codes: set[str],
         company: SeaCompany,
@@ -176,29 +176,29 @@ class SeaStop(LocatedNode[_SeaContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: SeaContext) -> str:
+    def str_ctx(self, ctx: SeaSource) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, SeaCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: SeaContext, other: Self) -> bool:
+    def equivalent(self, ctx: SeaSource, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, SeaCompany).equivalent(
             ctx, other.get_one(ctx, SeaCompany)
         )
 
     @override
-    def merge_attrs(self, ctx: SeaContext, other: Self):
+    def merge_attrs(self, ctx: SeaSource, other: Self):
         super().merge_attrs(ctx, other)
         self.codes.update(other.codes)
         self._merge_sourced(ctx, other, "name")
 
     @override
-    def merge_key(self, ctx: SeaContext) -> str:
+    def merge_key(self, ctx: SeaSource) -> str:
         return self.get_one(ctx, SeaCompany).name
 
     @override
-    def prepare_export(self, ctx: SeaContext):
+    def prepare_export(self, ctx: SeaSource):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, SeaCompany)
         self.connections = {
@@ -206,20 +206,13 @@ class SeaStop(LocatedNode[_SeaContext], kw_only=True):
         }
 
     @override
-    def ref(self, ctx: SeaContext) -> NodeRef[Self]:
+    def ref(self, ctx: SeaSource) -> NodeRef[Self]:
         return NodeRef(SeaStop, codes=self.codes, company=self.get_one(ctx, SeaCompany).name)
 
 
-class SeaConnection(Connection[_SeaContext, SeaLine]):
+class SeaConnection(Connection[SeaSource, SeaLine]):
     pass
 
 
-class SeaLineBuilder(LineBuilder[_SeaContext, SeaLine, SeaStop]):
+class SeaLineBuilder(LineBuilder[SeaSource, SeaLine, SeaStop]):
     CnT = SeaConnection
-
-
-class SeaContext(_SeaContext):
-    pass
-
-
-type SeaSource = SeaContext

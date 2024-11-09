@@ -9,10 +9,10 @@ from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
-from gatelogue_aggregator.types.node.bus import BusCompany, BusContext, BusLine, BusSource, BusStop
-from gatelogue_aggregator.types.node.rail import RailCompany, RailContext, RailLine, RailSource, RailStation
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaContext, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.types.node.town import Town, TownContext, TownSource
+from gatelogue_aggregator.types.node.bus import BusCompany, BusSource, BusLine, BusSource, BusStop
+from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailLine, RailSource, RailStation
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaLine, SeaSource, SeaStop
+from gatelogue_aggregator.types.node.town import Town, TownSource, TownSource
 from gatelogue_aggregator.types.source import Sourced
 
 if TYPE_CHECKING:
@@ -21,11 +21,11 @@ if TYPE_CHECKING:
 
 
 from gatelogue_aggregator.types.connections import Proximity
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirSource, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
-class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
+class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()
@@ -48,7 +48,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
         return self
 
     def update(self):
-        AirContext.update(self)
+        AirSource.update(self)
 
         processed = []
         for node in track(self.g.nodes(), description=INFO1 + "Linking close nodes", nonlinear=True, remove=False):
@@ -77,7 +77,7 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
         version: int = int(__version__.split("+")[1])
         """Version number of the database format"""
 
-    def export(self, _=None) -> Context.Ser:
+    def export(self, _=None) -> Context.Export:
         for node in self.g.nodes():
             node.prepare_export(self)
         return self.Export(self.g.nodes())
@@ -195,6 +195,6 @@ class Context(AirContext, RailContext, SeaContext, BusContext, TownContext):
             node_attr_fn=node_fn,
             edge_attr_fn=edge_fn,
             graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"},
-            filename=path,
+            filename=str(path),
             method="sfdp",
         )

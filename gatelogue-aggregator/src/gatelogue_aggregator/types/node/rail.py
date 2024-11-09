@@ -13,11 +13,11 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class _RailContext(BaseContext, Source):
+class RailSource(BaseContext, Source):
     pass
 
 
-class RailCompany(Node[_RailContext], kw_only=True):
+class RailCompany(Node[RailSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (RailLine, RailStation)  # noqa: E731
 
     name: str
@@ -32,7 +32,7 @@ class RailCompany(Node[_RailContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: RailContext,
+        ctx: RailSource,
         *,
         name: str,
         lines: Iterable[RailLine] | None = None,
@@ -48,32 +48,32 @@ class RailCompany(Node[_RailContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: RailContext) -> str:
+    def str_ctx(self, ctx: RailSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: RailContext, other: Self) -> bool:
+    def equivalent(self, ctx: RailSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: RailContext, other: Self):
+    def merge_attrs(self, ctx: RailSource, other: Self):
         pass
 
     @override
-    def merge_key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailSource) -> str:
         return self.name
 
     @override
-    def prepare_export(self, ctx: RailContext):
+    def prepare_export(self, ctx: RailSource):
         self.lines = self.get_all_id(ctx, RailLine)
         self.stops = self.get_all_id(ctx, RailStation)
 
     @override
-    def ref(self, ctx: RailContext) -> NodeRef[Self]:
+    def ref(self, ctx: RailSource) -> NodeRef[Self]:
         return NodeRef(RailCompany, name=self.name)
 
 
-class RailLine(Node[_RailContext], kw_only=True):
+class RailLine(Node[RailSource], kw_only=True):
     acceptable_single_node_types: ClassVar = lambda: (RailCompany, RailStation)  # noqa: E731
 
     code: str
@@ -82,6 +82,8 @@ class RailLine(Node[_RailContext], kw_only=True):
     """Name of the line"""
     colour: Sourced[str] | None = None
     """Colour of the line (on a map)"""
+    mode: Sourced[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
+    """Type of rail or rail technology used on the line"""
 
     company: Sourced[int] = None
     """ID of the :py:class:`RailCompany` that operates the line"""
@@ -92,12 +94,13 @@ class RailLine(Node[_RailContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: RailContext,
+        ctx: RailSource,
         *,
         code: str,
         company: RailCompany,
         name: str | None = None,
         colour: str | None = None,
+        mode: str | None = None,
         ref_stop: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -106,42 +109,44 @@ class RailLine(Node[_RailContext], kw_only=True):
             self.name = ctx.source(name)
         if colour is not None:
             self.colour = ctx.source(colour)
+        if mode is not None:
+            self.mode = ctx.source(mode)
         if ref_stop is not None:
             self.connect_one(ctx, ref_stop, ctx.source(None))
         return self
 
     @override
-    def str_ctx(self, ctx: RailContext) -> str:
+    def str_ctx(self, ctx: RailSource) -> str:
         code = self.code
         company = self.get_one(ctx, RailCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: RailContext, other: Self) -> bool:
+    def equivalent(self, ctx: RailSource, other: Self) -> bool:
         return self.code == other.code and self.get_one(ctx, RailCompany).equivalent(
             ctx, other.get_one(ctx, RailCompany)
         )
 
     @override
-    def merge_attrs(self, ctx: RailContext, other: Self):
+    def merge_attrs(self, ctx: RailSource, other: Self):
         self.name.merge(ctx, other.name)
         self.colour.merge(ctx, other.colour)
 
     @override
-    def merge_key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailSource) -> str:
         return self.code
 
     @override
-    def prepare_export(self, ctx: RailContext):
+    def prepare_export(self, ctx: RailSource):
         self.company = self.get_one_id(ctx, RailCompany)
         self.ref_stop = self.get_one_id(ctx, RailStation)
 
     @override
-    def ref(self, ctx: RailContext) -> NodeRef[Self]:
+    def ref(self, ctx: RailSource) -> NodeRef[Self]:
         return NodeRef(RailLine, code=self.code, company=self.get_one(ctx, RailCompany).name)
 
 
-class RailStation(LocatedNode[_RailContext], kw_only=True):
+class RailStation(LocatedNode[RailSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (RailStation, RailLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (RailCompany,)  # noqa: E731
 
@@ -163,7 +168,7 @@ class RailStation(LocatedNode[_RailContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: RailContext,
+        ctx: RailSource,
         *,
         codes: set[str],
         company: RailCompany,
@@ -178,29 +183,29 @@ class RailStation(LocatedNode[_RailContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: RailContext) -> str:
+    def str_ctx(self, ctx: RailSource) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, RailCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: RailContext, other: Self) -> bool:
+    def equivalent(self, ctx: RailSource, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, RailCompany).equivalent(
             ctx, other.get_one(ctx, RailCompany)
         )
 
     @override
-    def merge_attrs(self, ctx: RailContext, other: Self):
+    def merge_attrs(self, ctx: RailSource, other: Self):
         super().merge_attrs(ctx, other)
         self.codes.update(other.codes)
         self._merge_sourced(ctx, other, "name")
 
     @override
-    def merge_key(self, ctx: RailContext) -> str:
+    def merge_key(self, ctx: RailSource) -> str:
         return self.get_one(ctx, RailCompany).name
 
     @override
-    def prepare_export(self, ctx: RailContext):
+    def prepare_export(self, ctx: RailSource):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, RailCompany)
         self.connections = {
@@ -208,20 +213,13 @@ class RailStation(LocatedNode[_RailContext], kw_only=True):
         }
 
     @override
-    def ref(self, ctx: RailContext) -> NodeRef[Self]:
+    def ref(self, ctx: RailSource) -> NodeRef[Self]:
         return NodeRef(RailStation, codes=self.codes, company=self.get_one(ctx, RailCompany).name)
 
 
-class RailConnection(Connection[_RailContext, RailLine]):
+class RailConnection(Connection[RailSource, RailLine]):
     pass
 
 
-class RailLineBuilder(LineBuilder[_RailContext, RailLine, RailStation]):
+class RailLineBuilder(LineBuilder[RailSource, RailLine, RailStation]):
     CnT = RailConnection
-
-
-class RailContext(_RailContext):
-    pass
-
-
-type RailSource = RailContext

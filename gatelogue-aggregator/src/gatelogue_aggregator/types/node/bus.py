@@ -13,11 +13,11 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class _BusContext(BaseContext, Source):
+class BusSource(BaseContext, Source):
     pass
 
 
-class BusCompany(Node[_BusContext], kw_only=True):
+class BusCompany(Node[BusSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)  # noqa: E731
 
     name: str
@@ -32,7 +32,7 @@ class BusCompany(Node[_BusContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: BusContext,
+        ctx: BusSource,
         *,
         name: str,
         lines: Iterable[BusLine] | None = None,
@@ -48,32 +48,32 @@ class BusCompany(Node[_BusContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: BusContext) -> str:
+    def str_ctx(self, ctx: BusSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: BusContext, other: Self) -> bool:
+    def equivalent(self, ctx: BusSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: BusContext, other: Self):
+    def merge_attrs(self, ctx: BusSource, other: Self):
         pass
 
     @override
-    def merge_key(self, ctx: BusContext) -> str:
+    def merge_key(self, ctx: BusSource) -> str:
         return self.name
 
     @override
-    def prepare_export(self, ctx: BusContext):
+    def prepare_export(self, ctx: BusSource):
         self.lines = self.get_all_id(ctx, BusLine)
         self.stops = self.get_all_id(ctx, BusStop)
 
     @override
-    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+    def ref(self, ctx: BusSource) -> NodeRef[Self]:
         return NodeRef(BusCompany, name=self.name)
 
 
-class BusLine(Node[_BusContext], kw_only=True):
+class BusLine(Node[BusSource], kw_only=True):
     acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)  # noqa: E731
 
     code: str
@@ -92,7 +92,7 @@ class BusLine(Node[_BusContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: BusContext,
+        ctx: BusSource,
         *,
         code: str,
         company: BusCompany,
@@ -111,35 +111,35 @@ class BusLine(Node[_BusContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: BusContext) -> str:
+    def str_ctx(self, ctx: BusSource) -> str:
         code = self.code
         company = self.get_one(ctx, BusCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: BusContext, other: Self) -> bool:
+    def equivalent(self, ctx: BusSource, other: Self) -> bool:
         return self.code == other.code and self.get_one(ctx, BusCompany).equivalent(ctx, other.get_one(ctx, BusCompany))
 
     @override
-    def merge_attrs(self, ctx: BusContext, other: Self):
+    def merge_attrs(self, ctx: BusSource, other: Self):
         self.name.merge(ctx, other.name)
         self.colour.merge(ctx, other.colour)
 
     @override
-    def merge_key(self, ctx: BusContext) -> str:
+    def merge_key(self, ctx: BusSource) -> str:
         return self.code
 
     @override
-    def prepare_export(self, ctx: BusContext):
+    def prepare_export(self, ctx: BusSource):
         self.company = self.get_one_id(ctx, BusCompany)
         self.ref_stop = self.get_one_id(ctx, BusStop)
 
     @override
-    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+    def ref(self, ctx: BusSource) -> NodeRef[Self]:
         return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
-class BusStop(LocatedNode[_BusContext], kw_only=True):
+class BusStop(LocatedNode[BusSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (BusCompany,)  # noqa: E731
 
@@ -161,7 +161,7 @@ class BusStop(LocatedNode[_BusContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: BusContext,
+        ctx: BusSource,
         *,
         codes: set[str],
         company: BusCompany,
@@ -176,29 +176,29 @@ class BusStop(LocatedNode[_BusContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: BusContext) -> str:
+    def str_ctx(self, ctx: BusSource) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
         company = self.get_one(ctx, BusCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: BusContext, other: Self) -> bool:
+    def equivalent(self, ctx: BusSource, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, BusCompany).equivalent(
             ctx, other.get_one(ctx, BusCompany)
         )
 
     @override
-    def merge_attrs(self, ctx: BusContext, other: Self):
+    def merge_attrs(self, ctx: BusSource, other: Self):
         super().merge_attrs(ctx, other)
         self.codes.update(other.codes)
         self._merge_sourced(ctx, other, "name")
 
     @override
-    def merge_key(self, ctx: BusContext) -> str:
+    def merge_key(self, ctx: BusSource) -> str:
         return self.get_one(ctx, BusCompany).name
 
     @override
-    def prepare_export(self, ctx: BusContext):
+    def prepare_export(self, ctx: BusSource):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, BusCompany)
         self.connections = {
@@ -206,20 +206,13 @@ class BusStop(LocatedNode[_BusContext], kw_only=True):
         }
 
     @override
-    def ref(self, ctx: BusContext) -> NodeRef[Self]:
+    def ref(self, ctx: BusSource) -> NodeRef[Self]:
         return NodeRef(BusStop, codes=self.codes, company=self.get_one(ctx, BusCompany).name)
 
 
-class BusConnection(Connection[_BusContext, BusLine]):
+class BusConnection(Connection[BusSource, BusLine]):
     pass
 
 
-class BusLineBuilder(LineBuilder[_BusContext, BusLine, BusStop]):
+class BusLineBuilder(LineBuilder[BusSource, BusLine, BusStop]):
     CnT = BusConnection
-
-
-class BusContext(_BusContext):
-    pass
-
-
-type BusSource = BusContext

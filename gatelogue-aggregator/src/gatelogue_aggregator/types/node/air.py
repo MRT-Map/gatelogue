@@ -13,11 +13,14 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class _AirContext(BaseContext, Source):
-    pass
+class AirSource(BaseContext, Source):
+    def update(self):
+        for node in track(self.g.nodes(), description=INFO1 + "Updating air nodes"):
+            if isinstance(node, AirFlight | AirAirport):
+                node.update(self)
 
 
-class AirFlight(Node[_AirContext], kw_only=True):
+class AirFlight(Node[AirSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
 
@@ -34,7 +37,7 @@ class AirFlight(Node[_AirContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: AirContext,
+        ctx: AirSource,
         *,
         codes: set[str],
         airline: AirAirline,
@@ -44,34 +47,34 @@ class AirFlight(Node[_AirContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: AirContext) -> str:
+    def str_ctx(self, ctx: AirSource) -> str:
         airline_name = self.get_one(ctx, AirAirline).name
         code = "/".join(self.codes)
         return f"{airline_name} {code}"
 
     @override
-    def equivalent(self, ctx: AirContext, other: Self) -> bool:
+    def equivalent(self, ctx: AirSource, other: Self) -> bool:
         return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, AirAirline).equivalent(
             ctx, other.get_one(ctx, AirAirline)
         )
 
     @override
-    def merge_attrs(self, ctx: AirContext, other: Self):
+    def merge_attrs(self, ctx: AirSource, other: Self):
         self.codes.update(other.codes)
 
     @override
-    def merge_key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirSource) -> str:
         return self.get_one(ctx, AirAirline).merge_key(ctx)
 
     @override
-    def prepare_export(self, ctx: AirContext):
+    def prepare_export(self, ctx: AirSource):
         self.gates = self.get_all_id(ctx, AirGate)
 
     @override
-    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+    def ref(self, ctx: AirSource) -> NodeRef[Self]:
         return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(ctx, AirAirline).name)
 
-    def update(self, ctx: AirContext):
+    def update(self, ctx: AirSource):
         processed_gates: list[AirGate] = []
         gates = list(self.get_all(ctx, AirGate))
         for gate in gates:
@@ -110,7 +113,7 @@ class AirFlight(Node[_AirContext], kw_only=True):
         return {s, str(int(s) + 1)}
 
 
-class AirAirport(LocatedNode[_AirContext], kw_only=True):
+class AirAirport(LocatedNode[AirSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
 
     code: str
@@ -127,7 +130,7 @@ class AirAirport(LocatedNode[_AirContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: AirContext,
+        ctx: AirSource,
         *,
         code: str,
         name: str | None = None,
@@ -147,33 +150,33 @@ class AirAirport(LocatedNode[_AirContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: AirContext) -> str:
+    def str_ctx(self, ctx: AirSource) -> str:
         return self.code
 
     @override
-    def equivalent(self, ctx: AirContext, other: Self) -> bool:
+    def equivalent(self, ctx: AirSource, other: Self) -> bool:
         return self.code == other.code
 
     @override
-    def merge_attrs(self, ctx: AirContext, other: Self):
+    def merge_attrs(self, ctx: AirSource, other: Self):
         super().merge_attrs(ctx, other)
         self._merge_sourced(ctx, other, "name")
         self._merge_sourced(ctx, other, "link")
 
     @override
-    def merge_key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirSource) -> str:
         return self.code
 
     @override
-    def prepare_export(self, ctx: AirContext):
+    def prepare_export(self, ctx: AirSource):
         super().prepare_export(ctx)
         self.gates = self.get_all_id(ctx, AirGate)
 
     @override
-    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+    def ref(self, ctx: AirSource) -> NodeRef[Self]:
         return NodeRef(AirAirport, code=self.code)
 
-    def update(self, ctx: AirContext):
+    def update(self, ctx: AirSource):
         if (none_gate := next((a for a in self.get_all(ctx, AirGate) if a.code is None), None)) is None:
             return
         for flight in list(none_gate.get_all(ctx, AirFlight)):
@@ -205,7 +208,7 @@ class AirAirport(LocatedNode[_AirContext], kw_only=True):
         return s
 
 
-class AirGate(Node[_AirContext], kw_only=True):
+class AirGate(Node[AirSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)  # noqa: E731
 
@@ -225,7 +228,7 @@ class AirGate(Node[_AirContext], kw_only=True):
     @classmethod
     def new(
         cls,
-        ctx: AirContext,
+        ctx: AirSource,
         *,
         code: str | None,
         airport: AirAirport,
@@ -245,31 +248,31 @@ class AirGate(Node[_AirContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: AirContext) -> str:
+    def str_ctx(self, ctx: AirSource) -> str:
         airport = self.get_one(ctx, AirAirport).code
         code = self.code
         return f"{airport} {code}"
 
     @override
-    def equivalent(self, ctx: AirContext, other: Self) -> bool:
+    def equivalent(self, ctx: AirSource, other: Self) -> bool:
         return self.code == other.code and self.get_one(ctx, AirAirport).equivalent(ctx, other.get_one(ctx, AirAirport))
 
     @override
-    def merge_key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirSource) -> str:
         return self.code
 
     @override
-    def prepare_export(self, ctx: AirContext):
+    def prepare_export(self, ctx: AirSource):
         self.flights = self.get_all_id(ctx, AirFlight)
         self.airport = self.get_one_id(ctx, AirAirport)
         self.airline = self.get_one_id(ctx, AirAirline)
 
     @override
-    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+    def ref(self, ctx: AirSource) -> NodeRef[Self]:
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
-class AirAirline(Node[_AirContext], kw_only=True):
+class AirAirline(Node[AirSource], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
 
     name: str
@@ -282,7 +285,7 @@ class AirAirline(Node[_AirContext], kw_only=True):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def new(cls, ctx: AirContext, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None):
+    def new(cls, ctx: AirSource, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None):
         self = super().new(ctx, name=name)
         if link is not None:
             self.link = ctx.source(link)
@@ -292,27 +295,27 @@ class AirAirline(Node[_AirContext], kw_only=True):
         return self
 
     @override
-    def str_ctx(self, ctx: AirContext) -> str:
+    def str_ctx(self, ctx: AirSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: AirContext, other: Self) -> bool:
+    def equivalent(self, ctx: AirSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: AirContext, other: Self):
+    def merge_attrs(self, ctx: AirSource, other: Self):
         self._merge_sourced(ctx, other, "link")
 
     @override
-    def merge_key(self, ctx: AirContext) -> str:
+    def merge_key(self, ctx: AirSource) -> str:
         return self.name
 
     @override
-    def prepare_export(self, ctx: AirContext):
+    def prepare_export(self, ctx: AirSource):
         self.flights = self.get_all_id(ctx, AirFlight)
 
     @override
-    def ref(self, ctx: AirContext) -> NodeRef[Self]:
+    def ref(self, ctx: AirSource) -> NodeRef[Self]:
         return NodeRef(AirAirline, name=self.name)
 
     @staticmethod
@@ -320,13 +323,3 @@ class AirAirline(Node[_AirContext], kw_only=True):
         if s is None:
             return None
         return AIRLINE_ALIASES.get(str(s).strip(), str(s))
-
-
-class AirContext(_AirContext):
-    def update(self):
-        for node in track(self.g.nodes(), description=INFO1 + "Updating air nodes"):
-            if isinstance(node, AirFlight | AirAirport):
-                node.update(self)
-
-
-type AirSource = AirContext

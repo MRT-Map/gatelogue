@@ -5,7 +5,7 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaContext, SeaLineBuilder, SeaSource
+from gatelogue_aggregator.types.node.sea import SeaSource, SeaLineBuilder, SeaSource, SeaCompany, SeaLine, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 
@@ -14,13 +14,13 @@ class WZF(SeaSource):
     priority = 0
 
     def __init__(self, config: Config):
-        SeaContext.__init__(self)
+        SeaSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.sea_company(name="West Zeta Ferry")
+        company = SeaCompany.new(self, name="West Zeta Ferry")
 
         html = get_wiki_html("West Zeta Ferry", config)
 
@@ -36,7 +36,7 @@ class WZF(SeaSource):
                 continue
             line_name = result.group("name")
             line_code = result.group("code")
-            line = self.sea_line(code=str(line_code).strip(), name=str(line_name).strip(), company=company)
+            line = SeaLine.new(self, code=str(line_code).strip(), name=str(line_name).strip(), company=company)
 
             stops = []
             for tr in table.find_all("tr"):
@@ -46,7 +46,7 @@ class WZF(SeaSource):
                 name = "".join(tr("td")[2].strings).strip()
                 if "planned" in name:
                     continue
-                stop = self.sea_stop(codes={code}, name=name, company=company)
+                stop = SeaStop.new(self, codes={code}, name=name, company=company)
                 stops.append(stop)
 
                 colour = tr("td")[1].attrs["style"].split(":")[1]

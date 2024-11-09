@@ -5,7 +5,14 @@ import rich
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
@@ -15,13 +22,13 @@ class WZR(RailSource):
     priority = 0
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="West Zeta Rail")
+        company = RailCompany.new(self, name="West Zeta Rail")
 
         html = get_wiki_html("List of West Zeta Rail lines", config)
 
@@ -37,7 +44,7 @@ class WZR(RailSource):
                 continue
             line_name = result.group("name") or result.group("name2")
             line_code = result.group("code") or line_name
-            line = self.rail_line(code=str(line_code).strip(), name=str(line_name).strip(), company=company)
+            line = RailLine.new(self, code=str(line_code).strip(), name=str(line_name).strip(), company=company)
 
             stations = []
             for tr in table.find_all("tr"):
@@ -47,7 +54,7 @@ class WZR(RailSource):
                     continue
                 code = str(tr("td")[0].string).strip()
                 name = "".join(tr("td")[1].strings).strip().rstrip("*")
-                station = self.rail_station(codes={code}, name=name, company=company)
+                station = RailStation.new(self, codes={code}, name=name, company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
@@ -59,7 +66,7 @@ class WZR(RailSource):
             ("10", "Centrale Line"),
         ):
             wiki = get_wiki_text(line_name, config)
-            line = self.rail_line(code=line_code, name=line_name, company=company)
+            line = RailLine.new(self, code=line_code, name=line_name, company=company)
 
             stations = []
             for result in search_all(
@@ -70,14 +77,14 @@ class WZR(RailSource):
             ):
                 code = result.group("code").upper()
                 name = (result.group("name1") or result.group("name2")).strip()
-                station = self.rail_station(codes={code}, name=name, company=company)
+                station = RailStation.new(self, codes={code}, name=name, company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
             rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
 
         wiki = get_wiki_text("Ismael Line", config)
-        line = self.rail_line(code="8", name="Ismael Line", company=company)
+        line = RailLine.new(self, code="8", name="Ismael Line", company=company)
 
         stations = []
         for result in search_all(
@@ -85,7 +92,7 @@ class WZR(RailSource):
         ):
             code = result.group("code").upper()
             name = result.group("name").strip()
-            station = self.rail_station(codes={code}, name=name, company=company)
+            station = RailStation.new(self, codes={code}, name=name, company=company)
             stations.append(station)
 
         RailLineBuilder(self, line).connect(*stations)

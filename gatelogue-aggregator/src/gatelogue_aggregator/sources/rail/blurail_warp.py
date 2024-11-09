@@ -3,7 +3,7 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.node.rail import RailSource, RailSource, RailCompany, RailStation
 from gatelogue_aggregator.types.source import Source
 
 
@@ -12,13 +12,13 @@ class BluRailWarp(RailSource):
     priority = 1
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="BluRail")
+        company = RailCompany.new(self, name="BluRail")
 
         names = []
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
@@ -41,6 +41,8 @@ class BluRailWarp(RailSource):
                 code += "11"
             elif code == "STE" and match.group(1) == "2":
                 code = "SNE"
-            self.rail_station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            RailStation.new(
+                self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
+            )
             names.append(name)
         self.save_to_cache(config, self.g)

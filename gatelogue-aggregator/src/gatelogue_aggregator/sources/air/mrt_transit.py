@@ -3,7 +3,7 @@ import pandas as pd
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirSource
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirSource, AirFlight, AirSource, AirGate
 from gatelogue_aggregator.types.source import Source
 
 
@@ -14,7 +14,7 @@ class MRTTransit(AirSource):
     def __init__(self, config: Config):
         cache1 = config.cache_dir / "mrt-transit1"
         cache2 = config.cache_dir / "mrt-transit2"
-        AirContext.__init__(self)
+        AirSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
@@ -66,23 +66,25 @@ class MRTTransit(AirSource):
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
-            airline = self.air_airline(name=AirAirline.process_airline_name(airline_name))
+            airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, flights in zip(
                 df["Name"], df["Code"], df["World"], df[airline_name], strict=False
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = self.air_airport(code=AirAirport.process_code(airport_code))
+                airport = AirAirport.new(self, code=AirAirport.process_code(airport_code))
 
                 if airport_name != "":
                     airport.attrs(self).name = airport_name
                 if airport_world != "":
                     airport.attrs(self).world = airport_world
 
-                gate = self.air_gate(code=None, airport=airport)
+                gate = AirGate.new(self, code=None, airport=airport)
 
                 for flight_code in str(flights).split(", "):
-                    flight = self.air_flight(codes=AirFlight.process_code(flight_code, airline_name), airline=airline)
+                    flight = AirFlight.new(
+                        self, codes=AirFlight.process_code(flight_code, airline_name), airline=airline
+                    )
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)
 

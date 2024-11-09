@@ -4,7 +4,14 @@ import rich
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailLineBuilder, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 
 
@@ -14,13 +21,13 @@ class NFLR(RailSource):
 
     def __init__(self, config: Config):
         cache = config.cache_dir / "nflr"
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="nFLR")
+        company = RailCompany.new(self, name="nFLR")
 
         for line_name, gid, w in (
             ("R1", 282537988, True),
@@ -97,13 +104,13 @@ class NFLR(RailSource):
                 }.get(code, {code})
                 station = None
                 if "R" in route:
-                    station = station or self.rail_station(codes=code, company=company, name=name)
+                    station = station or RailStation.new(self, codes=code, company=company, name=name)
                     r_stations.append(station)
                 if "W" in route and w:
-                    station = station or self.rail_station(codes=code, company=company, name=name)
+                    station = station or RailStation.new(self, codes=code, company=company, name=name)
                     w_stations.append(station)
 
-            r_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+            r_line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
 
             if line_name == "R7A":
                 RailLineBuilder(self, r_line).circle(
@@ -154,7 +161,7 @@ class NFLR(RailSource):
 
             if w:
                 line_name = "W" + line_name[1:]  # noqa: PLW2901
-                w_line = self.rail_line(code=line_name, name=line_name, company=company, mode="warp")
+                w_line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
 
                 if line_name == "W2":
                     RailLineBuilder(self, w_line).connect(*w_stations[:2])

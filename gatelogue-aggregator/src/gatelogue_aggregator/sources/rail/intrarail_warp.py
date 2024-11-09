@@ -3,7 +3,14 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.node.rail import (
+    RailSource,
+    RailLineBuilder,
+    RailSource,
+    RailCompany,
+    RailLine,
+    RailStation,
+)
 from gatelogue_aggregator.types.source import Source
 
 
@@ -12,13 +19,13 @@ class IntraRailWarp(RailSource):
     priority = 1
 
     def __init__(self, config: Config):
-        RailContext.__init__(self)
+        RailSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        company = self.rail_company(name="IntraRail")
+        company = RailCompany.new(self, name="IntraRail")
 
         names = [
             "Whiteley Southwold University",
@@ -76,6 +83,8 @@ class IntraRailWarp(RailSource):
             }.get(name, name)
             if name in names:
                 continue
-            self.rail_station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            RailStation.new(
+                self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
+            )
             names.append(name)
         self.save_to_cache(config, self.g)
