@@ -75,9 +75,9 @@ class MRTTransit(AirSource):
                 airport = AirAirport.new(self, code=AirAirport.process_code(airport_code))
 
                 if airport_name != "":
-                    airport.name = airport_name
+                    airport.name = self.source(airport_name)
                 if airport_world != "":
-                    airport.world = airport_world
+                    airport.world = self.source(airport_world)
 
                 gate = AirGate.new(self, code=None, airport=airport)
 

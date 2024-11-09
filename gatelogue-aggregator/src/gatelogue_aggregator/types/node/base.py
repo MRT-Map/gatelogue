@@ -115,7 +115,10 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
                 return True
             return isinstance(edge.v, ty)
 
-        return (a for a in ctx.g.get_all_edge_data(self.i, node.i) if filter_(a))
+        try:
+            return (a for a in ctx.g.get_all_edge_data(self.i, node.i) if filter_(a))
+        except rx.NoEdgeBetweenNodes:
+            return (a for a in [])
 
     @override
     def merge(self, ctx: CTX, other: Self):

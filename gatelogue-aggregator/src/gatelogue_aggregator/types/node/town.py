@@ -12,7 +12,7 @@ class TownSource(BaseContext, Source):
     pass
 
 
-class Town(LocatedNode[TownSource], kw_only=True):
+class Town(LocatedNode[TownSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)  # noqa: E731
 
     name: str
@@ -37,10 +37,15 @@ class Town(LocatedNode[TownSource], kw_only=True):
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
-        self = super().new(ctx, world=world, coordinates=coordinates, name=name)
-        self.rank = ctx.source(rank)
-        self.mayor = ctx.source(mayor)
-        self.deputy_mayor = ctx.source(deputy_mayor)
+        self = super().new(
+            ctx,
+            world=world,
+            coordinates=coordinates,
+            name=name,
+            rank=ctx.source(rank),
+            mayor=ctx.source(mayor),
+            deputy_mayor=ctx.source(deputy_mayor),
+        )
         return self
 
     @override

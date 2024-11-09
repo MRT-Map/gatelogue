@@ -17,7 +17,7 @@ class RailSource(BaseContext, Source):
     pass
 
 
-class RailCompany(Node[RailSource], kw_only=True):
+class RailCompany(Node[RailSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (RailLine, RailStation)  # noqa: E731
 
     name: str
@@ -73,7 +73,7 @@ class RailCompany(Node[RailSource], kw_only=True):
         return NodeRef(RailCompany, name=self.name)
 
 
-class RailLine(Node[RailSource], kw_only=True):
+class RailLine(Node[RailSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (RailCompany, RailStation)  # noqa: E731
 
     code: str
@@ -129,9 +129,9 @@ class RailLine(Node[RailSource], kw_only=True):
 
     @override
     def merge_attrs(self, ctx: RailSource, other: Self):
-        self.name.merge(ctx, other.name)
-        self.colour.merge(ctx, other.colour)
-        self.mode.merge(ctx, other.mode)
+        self._merge_sourced(ctx, other, "name")
+        self._merge_sourced(ctx, other, "colour")
+        self._merge_sourced(ctx, other, "mode")
 
     @override
     def merge_key(self, ctx: RailSource) -> str:
@@ -147,7 +147,7 @@ class RailLine(Node[RailSource], kw_only=True):
         return NodeRef(RailLine, code=self.code, company=self.get_one(ctx, RailCompany).name)
 
 
-class RailStation(LocatedNode[RailSource], kw_only=True):
+class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (RailStation, RailLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (RailCompany,)  # noqa: E731
 

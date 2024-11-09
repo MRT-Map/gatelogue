@@ -20,7 +20,7 @@ class AirSource(BaseContext, Source):
                 node.update(self)
 
 
-class AirFlight(Node[AirSource], kw_only=True):
+class AirFlight(Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
 
@@ -113,7 +113,7 @@ class AirFlight(Node[AirSource], kw_only=True):
         return {s, str(int(s) + 1)}
 
 
-class AirAirport(LocatedNode[AirSource], kw_only=True):
+class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
 
     code: str
@@ -194,7 +194,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True):
                     s for a in new_gate.get_edges(ctx, flight) for s in a.s
                 }
                 flight.disconnect(ctx, none_gate)
-                flight.connect(ctx, new_gate, sources=sources)
+                flight.connect(ctx, new_gate, source=sources)
 
     @staticmethod
     @override
@@ -208,7 +208,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True):
         return s
 
 
-class AirGate(Node[AirSource], kw_only=True):
+class AirGate(Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)  # noqa: E731
 
@@ -258,6 +258,10 @@ class AirGate(Node[AirSource], kw_only=True):
         return self.code == other.code and self.get_one(ctx, AirAirport).equivalent(ctx, other.get_one(ctx, AirAirport))
 
     @override
+    def merge_attrs(self, ctx: AirSource, other: Self):
+        self._merge_sourced(ctx, other, "size")
+
+    @override
     def merge_key(self, ctx: AirSource) -> str:
         return self.code
 
@@ -272,7 +276,7 @@ class AirGate(Node[AirSource], kw_only=True):
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
-class AirAirline(Node[AirSource], kw_only=True):
+class AirAirline(Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
 
     name: str

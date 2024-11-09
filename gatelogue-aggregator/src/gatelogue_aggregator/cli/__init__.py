@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -10,7 +11,7 @@ import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
-from gatelogue_aggregator.logging import INFO1
+from gatelogue_aggregator.logging import INFO1, PROGRESS
 from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports
 from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
 from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
@@ -198,8 +199,8 @@ def run(
         or (include and (include == "*" or a.__name__ in include.split(";")))
         or (exclude and (exclude != "*" and a.__name__ not in exclude.split(";")))
     ]
-
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
+
     config = Config(
         cache_dir=cache_dir,
         timeout=timeout,
@@ -207,15 +208,22 @@ def run(
     )
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(config), sources))
+
     ctx = Context.from_sources(result)
+
     if graph is not None:
+        task = PROGRESS.add_task(INFO1 + f"Outputting graph to {graph}... ", total=None)
         ctx.graph(graph)
+        PROGRESS.remove_task(task)
+
+    task = PROGRESS.add_task(INFO1 + f"Exporting to JSON... ", total=None)
     j = msgspec.json.encode(ctx.export(), enc_hook=_enc_hook)
+    PROGRESS.remove_task(task)
     if fmt:
-        rich.print(INFO1 + f"Outputting to {output} (formatted)")
+        rich.print(INFO1 + f"Writing to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
     else:
-        rich.print(INFO1 + f"Outputting to {output} (unformatted)")
+        rich.print(INFO1 + f"Writing to {output} (unformatted)")
         output.write_bytes(j)
 
 

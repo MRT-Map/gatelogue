@@ -17,7 +17,7 @@ class BusSource(BaseContext, Source):
     pass
 
 
-class BusCompany(Node[BusSource], kw_only=True):
+class BusCompany(Node[BusSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)  # noqa: E731
 
     name: str
@@ -73,7 +73,7 @@ class BusCompany(Node[BusSource], kw_only=True):
         return NodeRef(BusCompany, name=self.name)
 
 
-class BusLine(Node[BusSource], kw_only=True):
+class BusLine(Node[BusSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)  # noqa: E731
 
     code: str
@@ -122,8 +122,8 @@ class BusLine(Node[BusSource], kw_only=True):
 
     @override
     def merge_attrs(self, ctx: BusSource, other: Self):
-        self.name.merge(ctx, other.name)
-        self.colour.merge(ctx, other.colour)
+        self._merge_sourced(ctx, other, "name")
+        self._merge_sourced(ctx, other, "colour")
 
     @override
     def merge_key(self, ctx: BusSource) -> str:
@@ -139,7 +139,7 @@ class BusLine(Node[BusSource], kw_only=True):
         return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
-class BusStop(LocatedNode[BusSource], kw_only=True):
+class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (BusCompany,)  # noqa: E731
 

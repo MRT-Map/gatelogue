@@ -88,9 +88,9 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
         """Version number of the database format"""
 
     def export(self) -> Context.Export:
-        for node in self.g.nodes():
+        for node in track(self.g.nodes(), description=INFO2 + "Preparing nodes for export", remove=False):
             node.prepare_export(self)
-        for edge in self.g.edges():
+        for edge in track(self.g.edges(), description=INFO2 + "Preparing edges for export", remove=False):
             if isinstance(edge.v, Connection):
                 edge.v.prepare_export(self)
         return self.Export(nodes=self.g.nodes())
@@ -153,62 +153,72 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
         # g.graph_attr["overlap"] = "prism1000"
         # g.graph_attr["outputorder"] = "edgesfirst"
         # g.draw(path, prog="sfdp", args="")
+        replace = lambda s: s.replace('"', '\\"')
+
         def node_fn(node: Node):
             d = {
                 "style": "filled",
-                "tooltip": Node.str_ctx(node, self),
-                "label": node.str_ctx(self),
+                "tooltip": replace(Node.str_ctx(node, self)),
+                "label": replace(node.str_ctx(self)),
             }
             for ty, col in (
-                (AirFlight, "lightcoral"),
-                (AirAirport, "skyblue"),
-                (AirAirline, "khaki"),
-                (AirGate, "lightgreen"),
-                (RailCompany, "khaki"),
-                (RailLine, "lightcoral"),
-                (RailStation, "skyblue"),
-                (SeaCompany, "khaki"),
-                (SeaLine, "lightcoral"),
-                (SeaStop, "skyblue"),
-                (BusCompany, "khaki"),
-                (BusLine, "lightcoral"),
-                (BusStop, "skyblue"),
-                (Town, "gray"),
+                (AirFlight, "#ff8080"),
+                (AirAirport, "#8080ff"),
+                (AirAirline, "#ffff80"),
+                (AirGate, "#80ff80"),
+                (RailCompany, "#ffff80"),
+                (RailLine, "#ff8080"),
+                (RailStation, "#8080ff"),
+                (SeaCompany, "#ffff80"),
+                (SeaLine, "#ff8080"),
+                (SeaStop, "#8080ff"),
+                (BusCompany, "#ffff80"),
+                (BusLine, "#ff8080"),
+                (BusStop, "#8080ff"),
+                (Town, "#aaaaaa"),
             ):
                 if isinstance(node, ty):
-                    d["fillcolor"] = col
+                    d["fillcolor"] = '"' + col + '"'
                     break
             return d
 
         def edge_fn(edge):
-            u, v, edge = edge
+            u = g[edge[0]]
+            v = g[edge[1]]
+            edge = edge[2]
             edge_data = edge.v if isinstance(edge, Sourced) else edge
             d = {}
-            # if edge_data is not None:
-            #     d["tooltip"] = f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})"
+            if edge_data is None:
+                d["tooltip"] = replace(f"{u.str_ctx(self)} -- {v.str_ctx(self)})")
+                d["label"] = d["tooltip"]
+            else:
+                d["tooltip"] = replace(f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
+                d["label"] = replace(f"{type(edge_data).__name__} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
             if isinstance(edge_data, Proximity):
                 d["color"] = "magenta"
                 return d
             for ty1, ty2, col in (
-                (AirAirport, AirGate, "blue"),
-                (AirGate, AirFlight, "green"),
-                (AirFlight, AirAirline, "red"),
-                (RailCompany, RailLine, "red"),
-                (RailStation, RailStation, "blue"),
-                (SeaCompany, SeaLine, "red"),
-                (SeaStop, SeaStop, "blue"),
-                (BusCompany, BusLine, "red"),
-                (BusStop, BusStop, "blue"),
+                (AirAirport, AirGate, "#0000ff"),
+                (AirGate, AirFlight, "#00ff00"),
+                (AirFlight, AirAirline, "#ff0000"),
+                (RailCompany, RailLine, "#ff0000"),
+                (RailStation, RailStation, "#0000ff"),
+                (SeaCompany, SeaLine, "#ff0000"),
+                (SeaStop, SeaStop, "#0000ff"),
+                (BusCompany, BusLine, "#ff0000"),
+                (BusStop, BusStop, "#0000ff"),
             ):
-                if (isinstance(g[u], ty1) and isinstance(g[v], ty2)) or (
-                    isinstance(g[u], ty2) and isinstance(g[v], ty1)
-                ):
-                    d["color"] = col
+                if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
+                    d["color"] = '"' + col + '"'
                     break
             else:
                 d["style"] = "invis"
             return d
 
+        # g.to_dot(
+        #     node_attr=node_fn,
+        #     edge_attr=edge_fn,
+        #     graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"}, filename="test.dot")
         graphviz_draw(
             g,
             node_attr_fn=node_fn,

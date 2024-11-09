@@ -44,7 +44,9 @@ class TownList(TownSource):
                 name=row["Town Name"],
                 rank=row["Town Rank"] if row["Town Name"] != "Arisa" else "Premier",
                 mayor=row["Mayor"],
-                deputy_mayor=None if not row["Deputy Mayor"] or row["Deputy Mayor"] == "-" else row["Deputy Mayor"],
+                deputy_mayor=None
+                if not row["Deputy Mayor"] or str(row["Deputy Mayor"]) == "nan"
+                else row["Deputy Mayor"],
                 world=row["World"],
                 coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
             )

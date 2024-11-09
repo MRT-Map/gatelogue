@@ -17,7 +17,7 @@ class SeaSource(BaseContext, Source):
     pass
 
 
-class SeaCompany(Node[SeaSource], kw_only=True):
+class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaLine, SeaStop)  # noqa: E731
 
     name: str
@@ -73,7 +73,7 @@ class SeaCompany(Node[SeaSource], kw_only=True):
         return NodeRef(SeaCompany, name=self.name)
 
 
-class SeaLine(Node[SeaSource], kw_only=True):
+class SeaLine(Node[SeaSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany, SeaStop)  # noqa: E731
 
     code: str
@@ -127,9 +127,9 @@ class SeaLine(Node[SeaSource], kw_only=True):
 
     @override
     def merge_attrs(self, ctx: SeaSource, other: Self):
-        self.name.merge(ctx, other.name)
-        self.colour.merge(ctx, other.colour)
-        self.mode.merge(ctx, other.mode)
+        self._merge_sourced(ctx, other, "name")
+        self._merge_sourced(ctx, other, "colour")
+        self._merge_sourced(ctx, other, "mode")
 
     @override
     def merge_key(self, ctx: SeaSource) -> str:
@@ -145,7 +145,7 @@ class SeaLine(Node[SeaSource], kw_only=True):
         return NodeRef(SeaLine, code=self.code, company=self.get_one(ctx, SeaCompany).name)
 
 
-class SeaStop(LocatedNode[SeaSource], kw_only=True):
+class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)  # noqa: E731
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany,)  # noqa: E731
 
@@ -208,7 +208,7 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, SeaCompany)
         self.connections = {
-            node.i: list(self.get_edges(ctx, node, Sourced[SeaConnection])) for node in self.get_all(ctx, SeaStop)
+            node.i: list(self.get_edges(ctx, node, SeaConnection)) for node in self.get_all(ctx, SeaStop)
         }
 
     @override
