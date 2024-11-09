@@ -3,8 +3,9 @@ from __future__ import annotations
 import dataclasses
 from typing import Literal, Self, override
 
-from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
+from gatelogue_aggregator.types.source import Source, Sourced
 
 
 class _TownContext(BaseContext, Source):

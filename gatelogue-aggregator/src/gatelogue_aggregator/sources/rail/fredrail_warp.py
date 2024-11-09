@@ -1,6 +1,6 @@
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.source import Source
 
 
 class FredRailWarp(RailSource):

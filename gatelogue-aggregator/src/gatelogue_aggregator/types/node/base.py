@@ -7,23 +7,28 @@ from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, cast, get_args, 
 import msgspec
 import rustworkx as rx
 
-from gatelogue_aggregator.types.base import BaseContext, Mergeable, Source, Sourced
-from gatelogue_aggregator.types.connections import Proximity
+from gatelogue_aggregator.types.source import Source, Sourced
 from gatelogue_aggregator.utils import search_all
+from gatelogue_aggregator.types.base import Mergeable
+from collections.abc import Callable
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
+    from collections.abc import Iterator
+
+    from gatelogue_aggregator.types.base import BaseContext
+    from gatelogue_aggregator.types.connections import Proximity
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
 class Node[CTX: BaseContext](Mergeable[CTX], msgspec.Struct):
     acceptable_list_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     acceptable_single_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     i: int = None
 
-    def __init__(self, ctx: CTX):
-        super().__init__()
+    @classmethod
+    def new(cls, ctx: CTX, **kwargs) -> Self:
+        self = cls(**kwargs)
         self.i = ctx.g.add_node(self)
+        return self
 
     def str_ctx(self, _ctx: CTX) -> str:
         return (
@@ -176,18 +181,21 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX]):
     For example, ``{1234: <proximity>}`` means that there is an object with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
     """
 
-    def __init__(
-        self,
+    @classmethod
+    def new(
+        cls,
         ctx: CTX,
         *,
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
-    ):
-        super().__init__(ctx)
+        **kwargs,
+    ) -> Self:
+        self = super().new(ctx, **kwargs)
         if world is not None:
             self.world = ctx.source(world)
         if coordinates is not None:
             self.coordinates = ctx.source(coordinates)
+        return self
 
     @override
     def merge_attrs(self, ctx: CTX, other: Self):
@@ -196,6 +204,8 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX]):
 
     @override
     def prepare_export(self, ctx: CTX):
+        from gatelogue_aggregator.types.connections import Proximity
+
         self.proximity = {
             node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Sourced[Proximity])
         }

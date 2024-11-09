@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
-from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,8 +17,7 @@ class _AirContext(BaseContext, Source):
     pass
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class AirFlight(Node[_AirContext]):
+class AirFlight(Node[_AirContext], kw_only=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
 
@@ -30,16 +30,18 @@ class AirFlight(Node[_AirContext]):
     airline: Sourced[int] = None
     """ID of the :py:class:`AirAirline` the flight is operated by"""
 
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: AirContext,
         *,
         codes: set[str],
         airline: AirAirline,
     ):
-        super().__init__(ctx)
-        self.codes = codes
+        self = super().new(ctx, codes=codes)
         self.connect_one(ctx, airline, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
@@ -108,9 +110,8 @@ class AirFlight(Node[_AirContext]):
         return {s, str(int(s) + 1)}
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class AirAirport(LocatedNode[_AirContext]):
-    acceptable_list_node_types = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
+class AirAirport(LocatedNode[_AirContext], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
 
     code: str
     """Unique 3 (sometimes 4)-letter code"""
@@ -122,9 +123,10 @@ class AirAirport(LocatedNode[_AirContext]):
     gates: list[Sourced[int]] = None
     """List of IDs of :py:class:`AirGate` s"""
 
-    @override
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: AirContext,
         *,
         code: str,
@@ -134,8 +136,7 @@ class AirAirport(LocatedNode[_AirContext]):
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx, world=world, coordinates=coordinates)
-        self.code = code
+        self = super().new(ctx, code=code, world=world, coordinates=coordinates)
         if name is not None:
             self.name = ctx.source(name)
         if link is not None:
@@ -143,6 +144,7 @@ class AirAirport(LocatedNode[_AirContext]):
         if gates is not None:
             for gate in gates:
                 self.connect(ctx, gate, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
@@ -203,10 +205,9 @@ class AirAirport(LocatedNode[_AirContext]):
         return s
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class AirGate(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
-    acceptable_single_node_types = lambda: (AirAirport, AirAirline)  # noqa: E731
+class AirGate(Node[_AirContext], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)  # noqa: E731
 
     code: str | None
     """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
@@ -220,9 +221,10 @@ class AirGate(Node[_AirContext]):
     airline: Sourced[int] | None = None
     """ID of the :py:class:`AirAirline` that owns the gate"""
 
-    @override
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: AirContext,
         *,
         code: str | None,
@@ -231,8 +233,7 @@ class AirGate(Node[_AirContext]):
         flights: Iterable[AirFlight] | None = None,
         airline: AirAirline | None = None,
     ):
-        super().__init__(ctx)
-        self.code = code
+        self = super().new(ctx, code=code)
         self.connect_one(ctx, airport, ctx.source(None))
         if size is not None:
             self.size = ctx.source(size)
@@ -241,6 +242,7 @@ class AirGate(Node[_AirContext]):
                 self.connect(ctx, flight, ctx.source(None))
         if airline is not None:
             self.connect_one(ctx, airline, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:
@@ -267,9 +269,8 @@ class AirGate(Node[_AirContext]):
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class AirAirline(Node[_AirContext]):
-    acceptable_list_node_types = lambda: (AirFlight,)  # noqa: E731
+class AirAirline(Node[_AirContext], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
 
     name: str
     """Name of the airline"""
@@ -279,17 +280,16 @@ class AirAirline(Node[_AirContext]):
     flights: list[Sourced[int]] | None = None
     """List of IDs of all :py:class:`AirFlight` s the airline operates"""
 
-    @override
-    def __init__(
-        self, ctx: AirContext, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None
-    ):
-        super().__init__(ctx)
-        self.name = name
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(cls, ctx: AirContext, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None):
+        self = super().new(ctx, name=name)
         if link is not None:
             self.link = ctx.source(link)
         if flights is not None:
             for flight in flights:
                 self.connect(ctx, flight, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: AirContext) -> str:

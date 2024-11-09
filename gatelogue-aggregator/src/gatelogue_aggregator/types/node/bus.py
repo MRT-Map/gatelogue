@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override
+from typing import TYPE_CHECKING, Literal, Self, override, ClassVar
 
-from gatelogue_aggregator.types.base import BaseContext, Source, Sourced
+from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,9 +17,8 @@ class _BusContext(BaseContext, Source):
     pass
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class BusCompany(Node[_BusContext]):
-    acceptable_list_node_types = lambda: (BusLine, BusStop)  # noqa: E731
+class BusCompany(Node[_BusContext], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)  # noqa: E731
 
     name: str
     """Name of the bus company"""
@@ -28,23 +28,24 @@ class BusCompany(Node[_BusContext]):
     stops: list[Sourced[int]] = None
     """List of all :py:class:`BusStop` s the company's lines stop at"""
 
-    @override
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: BusContext,
         *,
         name: str,
         lines: Iterable[BusLine] | None = None,
         stops: Iterable[BusStop] | None = None,
     ):
-        super().__init__(ctx)
-        self.name = name
+        self = super().new(ctx, name=name)
         if lines is not None:
             for line in lines:
                 self.connect(ctx, line, ctx.source(None))
         if stops is not None:
             for stop in stops:
                 self.connect(ctx, stop, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: BusContext) -> str:
@@ -72,9 +73,8 @@ class BusCompany(Node[_BusContext]):
         return NodeRef(BusCompany, name=self.name)
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class BusLine(Node[_BusContext]):
-    acceptable_single_node_types = lambda: (BusCompany, BusStop)  # noqa: E731
+class BusLine(Node[_BusContext], kw_only=True):
+    acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)  # noqa: E731
 
     code: str
     """Unique code identifying the bus line"""
@@ -88,9 +88,10 @@ class BusLine(Node[_BusContext]):
     ref_stop: Sourced[int] | None = None
     """ID of one :py:class:`BusStop` on the line, typically a terminus"""
 
-    @override
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: BusContext,
         *,
         code: str,
@@ -99,8 +100,7 @@ class BusLine(Node[_BusContext]):
         colour: str | None = None,
         ref_stop: BusStop | None = None,
     ):
-        super().__init__(ctx)
-        self.code = code
+        self = super().new(ctx, code=code)
         self.connect_one(ctx, company, ctx.source(None))
         if name is not None:
             self.name = ctx.source(name)
@@ -108,6 +108,7 @@ class BusLine(Node[_BusContext]):
             self.colour = ctx.source(colour)
         if ref_stop is not None:
             self.connect_one(ctx, ref_stop, ctx.source(None))
+        return self
 
     @override
     def str_ctx(self, ctx: BusContext) -> str:
@@ -138,10 +139,9 @@ class BusLine(Node[_BusContext]):
         return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
-@dataclasses.dataclass(unsafe_hash=True, kw_only=True)
-class BusStop(LocatedNode[_BusContext]):
-    acceptable_list_node_types = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
-    acceptable_single_node_types = lambda: (BusCompany,)  # noqa: E731
+class BusStop(LocatedNode[_BusContext], kw_only=True):
+    acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (BusCompany,)  # noqa: E731
 
     codes: set[str]
     """Unique code(s) identifying the bus stop. May also be the same as the name"""
@@ -157,9 +157,10 @@ class BusStop(LocatedNode[_BusContext]):
     For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
     """
 
-    @override
-    def __init__(
-        self,
+    # noinspection PyMethodOverriding
+    @classmethod
+    def new(
+        cls,
         ctx: BusContext,
         *,
         codes: set[str],
@@ -168,11 +169,11 @@ class BusStop(LocatedNode[_BusContext]):
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
-        super().__init__(ctx, world=world, coordinates=coordinates)
-        self.codes = codes
+        self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
         self.connect_one(ctx, company, ctx.source(None))
         if name is not None:
             self.name = ctx.source(name)
+        return self
 
     @override
     def str_ctx(self, ctx: BusContext) -> str:

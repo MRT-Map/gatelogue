@@ -1,9 +1,9 @@
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.town import TownContext, TownSource
+from gatelogue_aggregator.types.source import Source
 
 
 class TownList(TownSource):

@@ -6,9 +6,9 @@ import rich.progress
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, RESULT, track
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.source import Source
 
 
 class DynmapMRT(RailSource):

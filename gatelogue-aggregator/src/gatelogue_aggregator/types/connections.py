@@ -5,10 +5,11 @@ from typing import TYPE_CHECKING
 
 import msgspec
 
-from gatelogue_aggregator.types.base import BaseContext, Sourced
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.types.source import Sourced
+    from gatelogue_aggregator.types.base import BaseContext
 
 
 @dataclasses.dataclass(kw_only=True, unsafe_hash=True)

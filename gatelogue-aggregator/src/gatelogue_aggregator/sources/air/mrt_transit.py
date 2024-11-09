@@ -2,9 +2,9 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirContext, AirFlight, AirSource
+from gatelogue_aggregator.types.source import Source
 
 
 class MRTTransit(AirSource):

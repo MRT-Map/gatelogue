@@ -4,9 +4,9 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailContext, RailSource
+from gatelogue_aggregator.types.source import Source
 
 
 class IntraRailMCRWarp(RailSource):

@@ -3,9 +3,9 @@ import uuid
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url, warps
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
+from gatelogue_aggregator.types.source import Source
 
 
 class AquaLinQWarp(SeaSource):

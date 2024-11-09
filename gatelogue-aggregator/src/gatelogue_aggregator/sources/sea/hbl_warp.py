@@ -7,9 +7,9 @@ import rich
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import ERROR
-from gatelogue_aggregator.types.base import Source
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaContext, SeaSource
+from gatelogue_aggregator.types.source import Source
 
 # Adapted from https://docs.google.com/spreadsheets/d/1nIIettVbGwzm7DkmYqqPVoguw2U53R5un4nrC76w-Xg/edit#gid=1423194214
 _DICT = {
