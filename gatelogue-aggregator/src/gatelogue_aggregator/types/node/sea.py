@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
@@ -18,7 +17,7 @@ class SeaSource(BaseContext, Source):
 
 
 class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (SeaLine, SeaStop)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (SeaLine, SeaStop)
 
     name: str
     """Name of the Sea company"""
@@ -74,7 +73,7 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
 
 
 class SeaLine(Node[SeaSource], kw_only=True, tag=True):
-    acceptable_single_node_types: ClassVar = lambda: (SeaCompany, SeaStop)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (SeaCompany, SeaStop)
 
     code: str
     """Unique code identifying the Sea line"""
@@ -146,8 +145,8 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
 
 
 class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)  # noqa: E731
-    acceptable_single_node_types: ClassVar = lambda: (SeaCompany,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)
+    acceptable_single_node_types: ClassVar = lambda: (SeaCompany,)
 
     codes: set[str]
     """Unique code(s) identifying the Sea stop. May also be the same as the name"""

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import dataclasses
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.logging import INFO1, track
@@ -114,7 +113,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
 
 
 class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)
 
     code: str
     """Unique 3 (sometimes 4)-letter code"""
@@ -209,8 +208,8 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
 
 
 class AirGate(Node[AirSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
-    acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)
+    acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)
 
     code: str | None
     """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
@@ -277,7 +276,7 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
 
 
 class AirAirline(Node[AirSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)
 
     name: str
     """Name of the airline"""

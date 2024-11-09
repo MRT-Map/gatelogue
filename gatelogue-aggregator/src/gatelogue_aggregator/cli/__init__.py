@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -24,10 +23,11 @@ from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
 from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
 from gatelogue_aggregator.sources.rail.fredrail import FredRail
 from gatelogue_aggregator.sources.rail.fredrail_warp import FredRailWarp
-from gatelogue_aggregator.sources.rail.intrarail import IntraRail
-from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
-from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
-from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
+
+# from gatelogue_aggregator.sources.rail.intrarail import IntraRail
+# from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
+# from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
+# from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
 from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
 from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
 from gatelogue_aggregator.sources.rail.nflr import NFLR
@@ -54,7 +54,7 @@ from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 from gatelogue_aggregator.sources.town import TownList
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.context import Context
-from gatelogue_aggregator.types.source import Source, SourceMeta
+from gatelogue_aggregator.types.source import Source
 
 
 def _enc_hook(obj):
@@ -216,7 +216,7 @@ def run(
         ctx.graph(graph)
         PROGRESS.remove_task(task)
 
-    task = PROGRESS.add_task(INFO1 + f"Exporting to JSON... ", total=None)
+    task = PROGRESS.add_task(INFO1 + "Exporting to JSON... ", total=None)
     j = msgspec.json.encode(ctx.export(), enc_hook=_enc_hook)
     PROGRESS.remove_task(task)
     if fmt:

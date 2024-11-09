@@ -2,7 +2,7 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaSource, SeaLineBuilder, SeaSource, SeaCompany, SeaLine, SeaStop
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 

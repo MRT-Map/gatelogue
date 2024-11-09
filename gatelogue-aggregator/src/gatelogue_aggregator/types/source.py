@@ -69,8 +69,8 @@ class SourceMeta(type):
     def __str__(cls):
         return cls.name
 
-    def __repr__(self):
-        return f"<{self.__name__}>"
+    def __repr__(cls):
+        return f"<{cls.__name__}>"
 
     def encode(cls, encoding: str = "utf-8", errors: str = "strict") -> bytes:
         return cls.name.encode(encoding, errors)

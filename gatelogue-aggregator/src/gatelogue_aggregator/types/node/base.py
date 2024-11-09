@@ -1,19 +1,17 @@
 from __future__ import annotations
 
-import dataclasses
 import re
-from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, cast, get_args, override
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 
 import msgspec
 import rustworkx as rx
 
+from gatelogue_aggregator.types.base import Mergeable
 from gatelogue_aggregator.types.source import Source, Sourced
 from gatelogue_aggregator.utils import search_all
-from gatelogue_aggregator.types.base import Mergeable
-from collections.abc import Callable
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Callable, Iterator
 
     from gatelogue_aggregator.types.base import BaseContext
     from gatelogue_aggregator.types.connections import Proximity
@@ -123,8 +121,6 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     @override
     def merge(self, ctx: CTX, other: Self):
         self.merge_attrs(ctx, other)
-        assert ctx.g.has_node(self.i)
-        assert ctx.g.has_node(other.i)
         self.i = ctx.g.contract_nodes((self.i, other.i), self)
 
     def _merge_sourced(self, ctx: CTX, other: Self, attr: str):

@@ -1,10 +1,9 @@
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
-    RailSource,
-    RailLineBuilder,
-    RailSource,
     RailCompany,
     RailLine,
+    RailLineBuilder,
+    RailSource,
     RailStation,
 )
 from gatelogue_aggregator.types.source import Source

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import dataclasses
-from typing import Literal, Self, override, ClassVar
+from typing import ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
@@ -13,7 +12,7 @@ class TownSource(BaseContext, Source):
 
 
 class Town(LocatedNode[TownSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)
 
     name: str
     """Name of the town"""
@@ -37,7 +36,7 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         world: Literal["New", "Old"] | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
-        self = super().new(
+        return super().new(
             ctx,
             world=world,
             coordinates=coordinates,
@@ -46,7 +45,6 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
             mayor=ctx.source(mayor),
             deputy_mayor=ctx.source(deputy_mayor),
         )
-        return self
 
     @override
     def str_ctx(self, ctx: TownSource) -> str:

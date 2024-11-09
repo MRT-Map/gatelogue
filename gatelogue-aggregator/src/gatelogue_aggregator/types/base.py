@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Self
 
 import rustworkx as rx
 
-
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.node.base import Node, NodeRef
 

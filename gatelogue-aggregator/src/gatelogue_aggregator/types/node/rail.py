@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
@@ -18,7 +17,7 @@ class RailSource(BaseContext, Source):
 
 
 class RailCompany(Node[RailSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (RailLine, RailStation)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (RailLine, RailStation)
 
     name: str
     """Name of the Rail company"""
@@ -74,7 +73,7 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
 
 
 class RailLine(Node[RailSource], kw_only=True, tag=True):
-    acceptable_single_node_types: ClassVar = lambda: (RailCompany, RailStation)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (RailCompany, RailStation)
 
     code: str
     """Unique code identifying the Rail line"""
@@ -148,8 +147,8 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
 
 
 class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (RailStation, RailLine, LocatedNode)  # noqa: E731
-    acceptable_single_node_types: ClassVar = lambda: (RailCompany,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (RailStation, RailLine, LocatedNode)
+    acceptable_single_node_types: ClassVar = lambda: (RailCompany,)
 
     codes: set[str]
     """Unique code(s) identifying the Rail stop. May also be the same as the name"""

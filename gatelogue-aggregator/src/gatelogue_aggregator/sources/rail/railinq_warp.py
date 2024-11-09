@@ -5,11 +5,8 @@ import pandas as pd
 from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
-    RailSource,
-    RailLineBuilder,
-    RailSource,
     RailCompany,
-    RailLine,
+    RailSource,
     RailStation,
 )
 from gatelogue_aggregator.types.source import Source

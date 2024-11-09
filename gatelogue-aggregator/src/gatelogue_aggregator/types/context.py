@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import datetime
 from typing import TYPE_CHECKING, Self, override
 
@@ -10,10 +9,10 @@ from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
-from gatelogue_aggregator.types.node.bus import BusCompany, BusSource, BusLine, BusSource, BusStop
-from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailLine, RailSource, RailStation
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.types.node.town import Town, TownSource, TownSource
+from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
+from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
+from gatelogue_aggregator.types.node.town import Town, TownSource
 from gatelogue_aggregator.types.source import Sourced
 
 if TYPE_CHECKING:
@@ -21,8 +20,8 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-from gatelogue_aggregator.types.connections import Proximity, Connection
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirSource, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.types.connections import Connection, Proximity
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
@@ -153,7 +152,8 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
         # g.graph_attr["overlap"] = "prism1000"
         # g.graph_attr["outputorder"] = "edgesfirst"
         # g.draw(path, prog="sfdp", args="")
-        replace = lambda s: s.replace('"', '\\"')
+        def replace(s):
+            return s.replace('"', '\\"')
 
         def node_fn(node: Node):
             d = {

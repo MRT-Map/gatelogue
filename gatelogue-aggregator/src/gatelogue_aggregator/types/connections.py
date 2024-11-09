@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-import dataclasses
 from typing import TYPE_CHECKING
 
 import msgspec
 
-
 if TYPE_CHECKING:
+    from gatelogue_aggregator.types.base import BaseContext
     from gatelogue_aggregator.types.node.base import Node
     from gatelogue_aggregator.types.source import Sourced
-    from gatelogue_aggregator.types.base import BaseContext
 
 
 class Direction[CTX: BaseContext, S: Node](msgspec.Struct):

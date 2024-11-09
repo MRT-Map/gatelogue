@@ -1,5 +1,5 @@
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailSource, RailSource, RailCompany, RailStation
+from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
 from gatelogue_aggregator.types.source import Source
 
 

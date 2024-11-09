@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import dataclasses
-from typing import TYPE_CHECKING, Literal, Self, override, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
@@ -18,7 +17,7 @@ class BusSource(BaseContext, Source):
 
 
 class BusCompany(Node[BusSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)
 
     name: str
     """Name of the bus company"""
@@ -74,7 +73,7 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
 
 
 class BusLine(Node[BusSource], kw_only=True, tag=True):
-    acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)  # noqa: E731
+    acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)
 
     code: str
     """Unique code identifying the bus line"""
@@ -140,8 +139,8 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
 
 
 class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)  # noqa: E731
-    acceptable_single_node_types: ClassVar = lambda: (BusCompany,)  # noqa: E731
+    acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)
+    acceptable_single_node_types: ClassVar = lambda: (BusCompany,)
 
     codes: set[str]
     """Unique code(s) identifying the bus stop. May also be the same as the name"""

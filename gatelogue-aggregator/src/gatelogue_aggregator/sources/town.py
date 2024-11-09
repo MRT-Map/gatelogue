@@ -2,7 +2,7 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.town import TownSource, TownSource, Town
+from gatelogue_aggregator.types.node.town import Town, TownSource
 from gatelogue_aggregator.types.source import Source
 
 
