@@ -24,7 +24,7 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
 
     lines: list[Sourced[int]] = None
     """List of IDs of all :py:class:`RailLine` s the company operates"""
-    stops: list[Sourced[int]] = None
+    stations: list[Sourced[int]] = None
     """List of all :py:class:`RailStation` s the company's lines stop at"""
 
     # noinspection PyMethodOverriding
@@ -35,15 +35,15 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
         *,
         name: str,
         lines: Iterable[RailLine] | None = None,
-        stops: Iterable[RailStation] | None = None,
+        stations: Iterable[RailStation] | None = None,
     ):
         self = super().new(ctx, name=name)
         if lines is not None:
             for line in lines:
                 self.connect(ctx, line)
-        if stops is not None:
-            for stop in stops:
-                self.connect(ctx, stop)
+        if stations is not None:
+            for station in stations:
+                self.connect(ctx, station)
         return self
 
     @override
@@ -65,7 +65,7 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
     @override
     def prepare_export(self, ctx: RailSource):
         self.lines = self.get_all_id(ctx, RailLine)
-        self.stops = self.get_all_id(ctx, RailStation)
+        self.stations = self.get_all_id(ctx, RailStation)
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
@@ -86,7 +86,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
 
     company: Sourced[int] = None
     """ID of the :py:class:`RailCompany` that operates the line"""
-    ref_stop: Sourced[int] | None = None
+    ref_station: Sourced[int] | None = None
     """ID of one :py:class:`RailStation` on the line, typically a terminus"""
 
     # noinspection PyMethodOverriding
@@ -100,7 +100,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         name: str | None = None,
         colour: str | None = None,
         mode: str | None = None,
-        ref_stop: RailStation | None = None,
+        ref_station: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
         self.connect_one(ctx, company)
@@ -110,8 +110,8 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
             self.colour = ctx.source(colour)
         if mode is not None:
             self.mode = ctx.source(mode)
-        if ref_stop is not None:
-            self.connect_one(ctx, ref_stop)
+        if ref_station is not None:
+            self.connect_one(ctx, ref_station)
         return self
 
     @override
@@ -139,7 +139,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
     @override
     def prepare_export(self, ctx: RailSource):
         self.company = self.get_one_id(ctx, RailCompany)
-        self.ref_stop = self.get_one_id(ctx, RailStation)
+        self.ref_station = self.get_one_id(ctx, RailStation)
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
@@ -151,17 +151,17 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (RailCompany,)
 
     codes: set[str]
-    """Unique code(s) identifying the Rail stop. May also be the same as the name"""
+    """Unique code(s) identifying the Rail station. May also be the same as the name"""
     name: Sourced[str] | None = None
-    """Name of the stop"""
+    """Name of the station"""
 
     company: Sourced[int] = None
     """ID of the :py:class:`RailCompany` that stops here"""
     connections: dict[int, list[Sourced[RailConnection]]] = None
     """
-    References all next stops on the lines serving this stop.
-    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`RailConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
+    References all next stations on the lines serving this station.
+    It is represented as a mapping of station IDs to a list of connection data (:py:class:`RailConnection`), each encoding line and route information.
+    For example, ``{1234: [<conn1>, <conn2>]}`` means that the station with ID ``1234`` is the next station from here on two lines.
     """
 
     # noinspection PyMethodOverriding
