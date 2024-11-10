@@ -83,7 +83,14 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
             ctx.g[a]
             for a in ctx.g.neighbors(self.i)
             if isinstance(ctx.g[a], ty)
-            and (True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self.i, a)))
+            and (
+                True
+                if conn_ty is None
+                else any(
+                    isinstance(b.v, conn_ty) if isinstance(b, Sourced) else False
+                    for b in ctx.g.get_all_edge_data(self.i, a)
+                )
+            )
         )
 
     def get_all_id(self, ctx: CTX, ty: type[Node], conn_ty: type | None = None) -> list[Sourced[int]]:
@@ -98,7 +105,12 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
                 for a in ctx.g.neighbors(self.i)
                 if isinstance(ctx.g[a], ty)
                 and (
-                    True if conn_ty is None else any(isinstance(b, conn_ty) for b in ctx.g.get_all_edge_data(self.i, a))
+                    True
+                    if conn_ty is None
+                    else any(
+                        isinstance(b.v, conn_ty) if isinstance(b, Sourced) else False
+                        for b in ctx.g.get_all_edge_data(self.i, a)
+                    )
                 )
             ),
             None,
@@ -113,7 +125,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         def filter_(edge: Sourced[Any]):
             if ty is None:
                 return True
-            return isinstance(edge.v, ty)
+            return isinstance(edge.v, ty) if isinstance(edge, Sourced) else False
 
         try:
             return (a for a in ctx.g.get_all_edge_data(self.i, node.i) if filter_(a))

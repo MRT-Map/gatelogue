@@ -124,7 +124,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
                 d["color"] = '"#ff00ff"'
                 return d
             elif isinstance(edge_data, SharedFacility):
-                d["color"] = '"#00ffff"'
+                d["color"] = '"#008080"'
                 return d
             for ty1, ty2, col in (
                 (AirAirport, AirGate, "#0000ff"),
