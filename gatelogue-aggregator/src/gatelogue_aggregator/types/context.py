@@ -79,7 +79,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
 
     @override
     class Export(msgspec.Struct, kw_only=True):
-        nodes: list[Node]
+        nodes: dict[int, Node]
         """List of all nodes, along with their connections to other nodes"""
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
         """Time that the aggregation of the data was done"""
@@ -92,7 +92,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
         for edge in track(self.g.edges(), description=INFO2 + "Preparing edges for export", remove=False):
             if isinstance(edge.v, Connection):
                 edge.v.prepare_export(self)
-        return self.Export(nodes=self.g.nodes())
+        return self.Export(nodes={a.i: a for a in self.g.nodes()})
 
     def graph(self, path: Path):
         g = self.g.copy()
