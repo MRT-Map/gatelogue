@@ -11,7 +11,7 @@ from gatelogue_aggregator.types.source import Source
 
 class HBL(SeaSource):
     name = "MRT Wiki (Sea, Hummingbird Boat Lines)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

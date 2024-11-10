@@ -9,7 +9,7 @@ from gatelogue_aggregator.types.source import Source
 
 class IntraBusOmegaBus(BusSource):
     name = "MRT Wiki (Bus, IntraBus OmegaBus)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         BusSource.__init__(self)

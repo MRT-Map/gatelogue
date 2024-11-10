@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class AquaLinQ(SeaSource):
     name = "MRT Wiki (Sea, AquaLinQ)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

@@ -26,8 +26,8 @@ from gatelogue_aggregator.sources.rail.fredrail_warp import FredRailWarp
 
 # from gatelogue_aggregator.sources.rail.intrarail import IntraRail
 # from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
-# from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
-# from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
+from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
+from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
 from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
 from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
 from gatelogue_aggregator.sources.rail.nflr import NFLR
@@ -159,8 +159,8 @@ def run(
         BluRailWarp,
         # IntraRail,
         # IntraRailLocal,
-        # IntraRailWarp,
-        # IntraRailMCRWarp,
+        IntraRailWarp,
+        IntraRailMCRWarp,
         RaiLinQ,
         RaiLinQWarp,
         WZR,

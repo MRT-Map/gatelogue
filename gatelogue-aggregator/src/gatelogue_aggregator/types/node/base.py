@@ -232,6 +232,9 @@ class NodeRef[T: Node]:
         self.t = t
         self.d = kwargs
 
+    def __repr__(self):
+        return f"Ref@{self.t.__name__}" + "(" + ",".join(f"{k}={v}" for k, v in self.d.items() if v is not None) + ")"
+
     def refs(self, ctx: BaseContext, node: Node) -> bool:
         if not isinstance(node, self.t):
             return False

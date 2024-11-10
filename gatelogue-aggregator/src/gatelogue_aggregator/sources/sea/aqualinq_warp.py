@@ -10,7 +10,7 @@ from gatelogue_aggregator.types.source import Source
 
 class AquaLinQWarp(SeaSource):
     name = "MRT Warp API (Sea, AquaLinQ)"
-    priority = 1
+    priority = 0
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

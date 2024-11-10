@@ -12,7 +12,7 @@ from gatelogue_aggregator.types.source import Source
 
 class MarbleRailWarp(RailSource):
     name = "MRT Warp API (Rail, MarbleRail)"
-    priority = 1
+    priority = 0
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

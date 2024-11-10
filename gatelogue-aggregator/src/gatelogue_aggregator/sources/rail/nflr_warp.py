@@ -12,7 +12,7 @@ from gatelogue_aggregator.types.source import Source
 
 class NFLRWarp(RailSource):
     name = "MRT Warp API (Rail, nFLR)"
-    priority = 1
+    priority = 0
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

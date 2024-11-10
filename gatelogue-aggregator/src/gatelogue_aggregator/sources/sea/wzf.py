@@ -11,7 +11,7 @@ from gatelogue_aggregator.types.source import Source
 
 class WZF(SeaSource):
     name = "MRT Wiki (Sea, West Zeta Ferry)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

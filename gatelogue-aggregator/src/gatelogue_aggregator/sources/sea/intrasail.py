@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class IntraSail(SeaSource):
     name = "MRT Wiki (Sea, IntraSail)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

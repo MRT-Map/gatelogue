@@ -11,7 +11,7 @@ from gatelogue_aggregator.types.source import Source
 
 class NSC(RailSource):
     name = "Hardcode (Rail, Network South Central)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

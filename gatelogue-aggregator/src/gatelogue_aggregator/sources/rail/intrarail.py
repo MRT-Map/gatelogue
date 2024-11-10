@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 class IntraRail(RailSource):
     name = "MRT Wiki (Rail, IntraRail)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

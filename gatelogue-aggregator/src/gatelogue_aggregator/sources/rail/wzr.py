@@ -18,7 +18,7 @@ from gatelogue_aggregator.utils import search_all
 
 class WZR(RailSource):
     name = "MRT Wiki (Rail, West Zeta Rail)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         RailSource.__init__(self)

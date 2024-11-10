@@ -16,7 +16,7 @@ from gatelogue_aggregator.types.source import Source
 
 class NFLR(RailSource):
     name = "MRT Wiki (Rail, nFLR)"
-    priority = 0
+    priority = 1
 
     def __init__(self, config: Config):
         cache = config.cache_dir / "nflr"

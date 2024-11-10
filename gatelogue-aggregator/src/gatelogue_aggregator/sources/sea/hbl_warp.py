@@ -129,7 +129,7 @@ _DICT = {
 
 class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
-    priority = 1
+    priority = 0
 
     def __init__(self, config: Config):
         SeaSource.__init__(self)

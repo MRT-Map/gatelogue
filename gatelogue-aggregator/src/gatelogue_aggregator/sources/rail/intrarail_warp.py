@@ -13,7 +13,7 @@ from gatelogue_aggregator.types.source import Source
 
 class IntraRailWarp(RailSource):
     name = "MRT Warp API (Rail, IntraRail)"
-    priority = 1
+    priority = 0
 
     def __init__(self, config: Config):
         RailSource.__init__(self)
