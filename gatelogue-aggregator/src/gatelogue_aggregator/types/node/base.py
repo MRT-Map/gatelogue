@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 import re
+from collections.abc import Callable  # noqa: TCH003
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 
 import msgspec
@@ -256,4 +256,4 @@ class NodeRef[T: Node]:
         return has_match
 
 
-World = Literal["New", "Old"]
+World = Literal["New", "Old", "Space"]

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
+from calendar import LocaleTextCalendar
+from typing import TYPE_CHECKING, ClassVar, Self, override, Literal
 
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
@@ -25,6 +26,8 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
 
     codes: set[str]
     """Unique flight code(s). **2-letter airline prefix not included**"""
+    mode: Sourced[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]] | None = None
+    """Type of air vehicle or technology used on the flight"""
 
     # noinspection PyDataclass
     gates: list[Sourced[int]] = None
@@ -40,9 +43,16 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         *,
         codes: set[str],
         airline: AirAirline,
+        mode: Literal["helicopter", "seaplane", "warp plane", "traincarts plane"] | None = None,
+        gates: Iterable[AirGate] | None = None,
     ):
         self = super().new(ctx, codes=codes)
         self.connect_one(ctx, airline)
+        if mode is not None:
+            self.mode = ctx.source(mode)
+        if gates is not None:
+            for gate in gates:
+                self.connect(ctx, gate)
         return self
 
     @override
