@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 import re
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
 
 import msgspec
 import rustworkx as rx
