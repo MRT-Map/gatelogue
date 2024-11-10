@@ -21,9 +21,9 @@ if TYPE_CHECKING:
 
 
 from gatelogue_aggregator.types.connections import Connection
-from gatelogue_aggregator.types.proximity import Proximity, ProximityContext
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.node.base import LocatedNode, Node
+from gatelogue_aggregator.types.node.base import Node
+from gatelogue_aggregator.types.proximity import Proximity, ProximityContext
 
 
 class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext):

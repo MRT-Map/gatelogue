@@ -82,7 +82,7 @@ class NFLR(RailSource):
             ("N4", 1065941701, False),
         )
 
-        def retrieve_urls(line_name: str, gid: int, _: bool):
+        def retrieve_urls(line_name: str, gid: int, *args):
             get_url(
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),
@@ -93,7 +93,7 @@ class NFLR(RailSource):
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(*s), lines))
 
-        for line_name, gid, w in lines:
+        for line_name, _, w in lines:
             df = pd.read_csv(cache / line_name)
 
             d = list(zip(df["route"], df["code"], df["name"], strict=False))

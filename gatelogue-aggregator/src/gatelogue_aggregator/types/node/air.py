@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from calendar import LocaleTextCalendar
-from typing import TYPE_CHECKING, ClassVar, Self, override, Literal
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
-from gatelogue_aggregator.logging import INFO1, track, INFO2
+from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World

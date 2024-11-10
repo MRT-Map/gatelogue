@@ -3,11 +3,10 @@ from __future__ import annotations
 import msgspec
 import rustworkx as rx
 
-from gatelogue_aggregator.logging import track, INFO1, INFO2
+from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.air import AirAirport
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
-from gatelogue_aggregator.types.node.town import Town
 
 
 class Proximity(msgspec.Struct):
