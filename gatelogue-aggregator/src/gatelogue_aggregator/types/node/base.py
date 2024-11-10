@@ -185,7 +185,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
 class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
     coordinates: Sourced[tuple[int, int]] | None = None
     """Coordinates of the object"""
-    world: Sourced[Literal["New", "Old"]] | None = None
+    world: Sourced[World] | None = None
     """Whether the object is in the New or Old world"""
 
     proximity: dict[int, Sourced[Proximity]] = None
@@ -200,7 +200,7 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
         cls,
         ctx: CTX,
         *,
-        world: Literal["New", "Old"] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
         **kwargs,
     ) -> Self:
@@ -254,3 +254,6 @@ class NodeRef[T: Node]:
                 return False
             has_match = True
         return has_match
+
+
+World = Literal["New", "Old"]

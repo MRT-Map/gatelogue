@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 from gatelogue_aggregator.logging import INFO1, track
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
 from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
@@ -135,7 +135,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         name: str | None = None,
         link: str | None = None,
         gates: Iterable[AirGate] | None = None,
-        world: Literal["New", "Old"] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, code=code, world=world, coordinates=coordinates)

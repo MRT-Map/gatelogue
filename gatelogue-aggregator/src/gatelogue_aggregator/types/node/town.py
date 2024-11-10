@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
+from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef, World
 from gatelogue_aggregator.types.source import Source, Sourced
 
 
@@ -16,7 +16,7 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
 
     name: str
     """Name of the town"""
-    rank: Sourced[Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]]
+    rank: Sourced[Rank]
     """Rank of the town"""
     mayor: Sourced[str]
     """Mayor of the town"""
@@ -30,10 +30,10 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         ctx: TownSource,
         *,
         name: str,
-        rank: Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"],
+        rank: Rank,
         mayor: str,
         deputy_mayor: str | None,
-        world: Literal["New", "Old"] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
         return super().new(
@@ -72,3 +72,6 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
     @override
     def ref(self, ctx: TownSource) -> NodeRef[Self]:
         return NodeRef(Town, name=self.name)
+
+
+Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]

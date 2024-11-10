@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
 from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
@@ -99,7 +99,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         company: RailCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: str | None = None,
+        mode: Literal["warp", "cart", "traincart", "vehicles"] | None = None,
         ref_station: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -173,7 +173,7 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
         codes: set[str],
         company: RailCompany,
         name: str | None = None,
-        world: Literal["New", "Old"] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)

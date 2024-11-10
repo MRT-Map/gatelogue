@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
 from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
@@ -99,7 +99,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         company: SeaCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: str | None = None,
+        mode: Literal["ferry", "cruise"] | None = None,
         ref_stop: SeaStop | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -171,7 +171,7 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
         codes: set[str],
         company: SeaCompany,
         name: str | None = None,
-        world: Literal["New", "Old"] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
