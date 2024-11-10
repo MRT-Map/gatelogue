@@ -209,7 +209,8 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
         super().prepare_export(ctx)
         self.company = self.get_one_id(ctx, RailCompany)
         self.connections = {
-            node.i: list(self.get_edges(ctx, node, RailConnection)) for node in self.get_all(ctx, RailStation)
+            node.i: list(self.get_edges(ctx, node, RailConnection))
+            for node in self.get_all(ctx, RailStation, RailConnection)
         }
 
     @override
