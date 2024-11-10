@@ -72,15 +72,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.connections.Connection.set_line"><code class="docutils literal notranslate"><span class="pre">Connection.set_line()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context"><code class="docutils literal notranslate"><span class="pre">Context</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.Export"><code class="docutils literal notranslate"><span class="pre">Context.Export</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.export"><code class="docutils literal notranslate"><span class="pre">Context.export()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.from_sources"><code class="docutils literal notranslate"><span class="pre">Context.from_sources()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.g"><code class="docutils literal notranslate"><span class="pre">Context.g</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.graph"><code class="docutils literal notranslate"><span class="pre">Context.graph()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.update"><code class="docutils literal notranslate"><span class="pre">Context.update()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#gatelogue_aggregator.types.line_builder.LineBuilder"><code class="docutils literal notranslate"><span class="pre">LineBuilder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.line_builder.LineBuilder.CnT"><code class="docutils literal notranslate"><span class="pre">LineBuilder.CnT</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gatelogue_aggregator.types.line_builder.LineBuilder.circle"><code class="docutils literal notranslate"><span class="pre">LineBuilder.circle()</span></code></a></li>
@@ -305,61 +296,8 @@
 
 </dd></dl>
 
-<dl class="py class" id="module-gatelogue_aggregator.types.context">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.context.</span></span><span class="sig-name descname"><span class="pre">Context</span></span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context" title="Link to this definition"></a></dt>
-<dd><dl class="py class">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.Export">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*,</span> <span class="pre">nodes:</span> <span class="pre">dict[int,</span> <span class="pre">~gatelogue_aggregator.types.node.base.Node],</span> <span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.Export" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.Export.nodes">
-<span class="sig-name descname"><span class="pre">nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.Export.nodes" title="Link to this definition"></a></dt>
-<dd><p>List of all nodes, along with their connections to other nodes</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.Export.timestamp">
-<span class="sig-name descname"><span class="pre">timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.Export.timestamp" title="Link to this definition"></a></dt>
-<dd><p>Time that the aggregation of the data was done</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.Export.version">
-<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.Export.version" title="Link to this definition"></a></dt>
-<dd><p>Version number of the database format</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gatelogue_aggregator.types.context.Context.Export" title="gatelogue_aggregator.types.context.Context.Export"><span class="pre">Export</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.export" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.from_sources">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#gatelogue_aggregator.types.node.rail.RailSource" title="gatelogue_aggregator.types.node.rail.RailSource"><span class="pre">RailSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#gatelogue_aggregator.types.node.sea.SeaSource" title="gatelogue_aggregator.types.node.sea.SeaSource"><span class="pre">SeaSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#gatelogue_aggregator.types.node.bus.BusSource" title="gatelogue_aggregator.types.node.bus.BusSource"><span class="pre">BusSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#gatelogue_aggregator.types.node.town.TownSource" title="gatelogue_aggregator.types.node.town.TownSource"><span class="pre">TownSource</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.from_sources" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.g">
-<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">rx.PyGraph</span></em><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.g" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.graph">
-<span class="sig-name descname"><span class="pre">graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.graph" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.context.Context.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.context.Context.update" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py class" id="module-gatelogue_aggregator.types.line_builder">
-<dt class="sig sig-object py" id="gatelogue_aggregator.types.line_builder.LineBuilder">
+<span id="module-gatelogue_aggregator.types.context"></span><dt class="sig sig-object py" id="gatelogue_aggregator.types.line_builder.LineBuilder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.line_builder.</span></span><span class="sig-name descname"><span class="pre">LineBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.line_builder.LineBuilder" title="Link to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.line_builder.LineBuilder.CnT">
