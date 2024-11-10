@@ -30,6 +30,8 @@ class RaiLinQ(RailSource):
         for line_table in html.find_all("table"):
             if "border-radius: 11px" not in line_table.attrs.get("style", ""):
                 continue
+            if line_table.find("th") is None:
+                continue
             line_code = str(line_table.find("th").find_all("span", style="color:white;")[0].b.string)
             line_name = str(line_table.find("th").find_all("span", style="color:white;")[1].i.string)
             line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
