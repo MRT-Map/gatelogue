@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Self, override
 
 import msgspec
 import rustworkx as rx
@@ -11,7 +11,7 @@ from gatelogue_aggregator.types.source import Source, Sourced
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
+    from collections.abc import Iterator
 
     from gatelogue_aggregator.types.base import BaseContext
     from gatelogue_aggregator.types.connections import Proximity
