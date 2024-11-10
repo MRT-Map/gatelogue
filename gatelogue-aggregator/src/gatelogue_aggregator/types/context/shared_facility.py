@@ -13,7 +13,10 @@ class SharedFacility(msgspec.Struct):
     pass
 
 
-class SharedFacilityContext(BaseContext):
+class SharedFacilityContext(BaseContext, Source):
+    name = "Gatelogue"
+    priority = 0
+
     def update(self):
         from gatelogue_aggregator.types.node.rail import RailStation, RailCompany
 
