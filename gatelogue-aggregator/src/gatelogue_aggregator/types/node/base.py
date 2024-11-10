@@ -8,6 +8,7 @@ import msgspec
 import rustworkx as rx
 
 from gatelogue_aggregator.types.base import Mergeable
+from gatelogue_aggregator.types.context.shared_facility import SharedFacility
 from gatelogue_aggregator.types.source import Source, Sourced
 from gatelogue_aggregator.utils import search_all
 
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from gatelogue_aggregator.types.base import BaseContext
-    from gatelogue_aggregator.types.proximity import Proximity
+    from gatelogue_aggregator.types.context.proximity import Proximity
 
 
 class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=True):
@@ -194,6 +195,8 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
     It is represented as an inner mapping of object IDs to proximity data (:py:class:`Proximity`).
     For example, ``{1234: <proximity>}`` means that there is an object with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
     """
+    shared_facility: list[Sourced[int]] = None
+    """References all objects that this object shares the same facility with (same building, station, hub etc)"""
 
     @classmethod
     def new(
@@ -218,11 +221,12 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
 
     @override
     def prepare_export(self, ctx: CTX):
-        from gatelogue_aggregator.types.proximity import Proximity
+        from gatelogue_aggregator.types.context.proximity import Proximity
 
         self.proximity = {
             node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Proximity)
         }
+        self.shared_facility = self.get_all_id(ctx, LocatedNode, SharedFacility)
 
 
 class NodeRef[T: Node]:

@@ -9,6 +9,7 @@ from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
+from gatelogue_aggregator.types.context.shared_facility import SharedFacilityContext, SharedFacility
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
@@ -23,10 +24,10 @@ if TYPE_CHECKING:
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import Node
-from gatelogue_aggregator.types.proximity import Proximity, ProximityContext
+from gatelogue_aggregator.types.context.proximity import Proximity, ProximityContext
 
 
-class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext):
+class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext, SharedFacilityContext):
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()
@@ -55,6 +56,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
     def update(self):
         AirSource.update(self)
         ProximityContext.update(self)
+        SharedFacilityContext.update(self)
 
     @override
     class Export(msgspec.Struct, kw_only=True):
@@ -115,11 +117,14 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
             edge_data = edge.v if isinstance(edge, Sourced) else edge
             d = {}
             if edge_data is None:
-                d["tooltip"] = replace(f"{u.str_ctx(self)} -- {v.str_ctx(self)})")
+                d["tooltip"] = replace(f"({u.str_ctx(self)} -- {v.str_ctx(self)})")
             else:
                 d["tooltip"] = replace(f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
             if isinstance(edge_data, Proximity):
-                d["color"] = "magenta"
+                d["color"] = '"#ff00ff"'
+                return d
+            elif isinstance(edge_data, SharedFacility):
+                d["color"] = '"#00ffff"'
                 return d
             for ty1, ty2, col in (
                 (AirAirport, AirGate, "#0000ff"),

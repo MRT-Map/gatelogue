@@ -65,7 +65,7 @@ class DynmapMRT(RailSource):
         for k, v in json2["old"]["markers"].items():
             code = "Old-" + k.upper()
             coordinates = (v["x"], v["z"])
-            name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1)
+            name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1).strip()
             RailStation.new(self, codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
         rich.print(RESULT + f"Old world has {len(json2['old']['markers'])} stations")
         self.save_to_cache(config, self.g)

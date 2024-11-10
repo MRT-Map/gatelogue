@@ -13,7 +13,7 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1, PROGRESS
 from gatelogue_aggregator.sources import SOURCES
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.context import Context
+from gatelogue_aggregator.types.context.context import Context
 from gatelogue_aggregator.types.source import Source
 
 
