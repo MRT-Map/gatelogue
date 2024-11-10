@@ -14,3 +14,4 @@ class Config:
     cache_dir: Path = DEFAULT_CACHE_DIR
     timeout: int = DEFAULT_TIMEOUT
     cache_exclude: list[str] = dataclasses.field(default_factory=list)
+    max_workers: int = 8

@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+
 import pandas as pd
 import rich
 
@@ -28,7 +30,7 @@ class NFLR(RailSource):
 
         company = RailCompany.new(self, name="nFLR")
 
-        for line_name, gid, w in (
+        lines = (
             ("R1", 282537988, True),
             ("R1A", 214164635, False),
             ("R1C", 1902666542, False),
@@ -78,13 +80,20 @@ class NFLR(RailSource):
             ("N2", 497193857, False),
             ("N3", 978256843, False),
             ("N4", 1065941701, False),
-        ):
+        )
+
+        def retrieve_urls(line_name: str, gid: int, _: bool):
             get_url(
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),
                 cache / line_name,
                 timeout=config.timeout,
             )
+
+        with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
+            list(executor.map(lambda s: retrieve_urls(*s), lines))
+
+        for line_name, gid, w in lines:
             df = pd.read_csv(cache / line_name)
 
             d = list(zip(df["route"], df["code"], df["name"], strict=False))

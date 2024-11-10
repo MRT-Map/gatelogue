@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from gatelogue_aggregator.types.base import BaseContext
-    from gatelogue_aggregator.types.connections import Proximity
+    from gatelogue_aggregator.types.proximity import Proximity
 
 
 class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=True):
@@ -89,7 +89,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         return [Sourced(a.i).source(next(self.get_edges(ctx, a, conn_ty))) for a in self.get_all(ctx, ty, conn_ty)]
 
     def get_one[T: Node](self, ctx: CTX, ty: type[T], conn_ty: type | None = None) -> T | None:
-        if ty not in type(self).acceptable_single_node_types():
+        if ty not in type(self).acceptable_single_node_types() and ty not in type(self).acceptable_list_node_types():
             raise TypeError
         return next(
             (
@@ -218,7 +218,7 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
 
     @override
     def prepare_export(self, ctx: CTX):
-        from gatelogue_aggregator.types.connections import Proximity
+        from gatelogue_aggregator.types.proximity import Proximity
 
         self.proximity = {
             node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Proximity)

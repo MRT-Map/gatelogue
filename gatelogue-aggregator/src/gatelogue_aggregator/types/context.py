@@ -20,12 +20,13 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-from gatelogue_aggregator.types.connections import Connection, Proximity
+from gatelogue_aggregator.types.connections import Connection
+from gatelogue_aggregator.types.proximity import Proximity, ProximityContext
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
-class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
+class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext):
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()
@@ -53,29 +54,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
 
     def update(self):
         AirSource.update(self)
-
-        processed = []
-        for node in track(self.g.nodes(), description=INFO1 + "Linking close nodes", nonlinear=True, remove=False):
-            if not isinstance(node, LocatedNode) or node.coordinates is None:
-                continue
-            node_coordinates = node.coordinates.v
-            if node.world is None:
-                continue
-            for existing, existing_world, existing_coordinates in processed:
-                if existing_world != node.world.v:
-                    continue
-                x1, y1 = existing_coordinates
-                x2, y2 = node_coordinates
-                dist = (x1 - x2) ** 2 + (y1 - y2) ** 2
-                threshold = 500 if isinstance(existing, AirAirport) or isinstance(node, AirAirport) else 250
-                if dist < threshold**2:
-                    node.connect(
-                        self,
-                        existing,
-                        Proximity(dist**0.5),
-                        source=node.world.s | node.coordinates.s | existing.world.s | existing.coordinates.s,
-                    )
-            processed.append((node, node.world.v, node_coordinates))
+        ProximityContext.update(self)
 
     @override
     class Export(msgspec.Struct, kw_only=True):
@@ -99,59 +78,6 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource):
         for i, (u, v, data) in g.edge_index_map().items():
             g.update_edge_by_index(i, (u, v, data))
 
-        # g = cast(rx.PyGraph, self.g.copy())
-        # for node in g.nodes:
-        #     g.nodes[node]["style"] = "filled"
-        #     g.nodes[node]["tooltip"] = Node.str_ctx(node, self)
-        #     for ty, col in (
-        #         (AirFlight, "#ff8080"),
-        #         (AirAirport, "#8080ff"),
-        #         (AirAirline, "#ffff80"),
-        #         (AirGate, "#80ff80"),
-        #         (RailCompany, "#ffff80"),
-        #         (RailLine, "#ff8080"),
-        #         (RailStation, "#8080ff"),
-        #         (SeaCompany, "#ffff80"),
-        #         (SeaLine, "#ff8080"),
-        #         (SeaStop, "#8080ff"),
-        #         (BusCompany, "#ffff80"),
-        #         (BusLine, "#ff8080"),
-        #         (BusStop, "#8080ff"),
-        #         (Town, "#aaaaaa"),
-        #     ):
-        #         if isinstance(node, ty):
-        #             g.nodes[node]["fillcolor"] = col
-        #             break
-        # for u, v, k in g.edges:
-        #     edge_data = g.edges[u, v, k]["v"]
-        #     if edge_data is not None:
-        #         g.edges[u, v, k]["tooltip"] = f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})"
-        #     if isinstance(edge_data, Proximity):
-        #         g.edges[u, v, k]["color"] = "#ff00ff"
-        #         continue
-        #     for ty1, ty2, col in (
-        #         (AirAirport, AirGate, "#0000ff"),
-        #         (AirGate, AirFlight, "#00ff00"),
-        #         (AirFlight, AirAirline, "#ff0000"),
-        #         (RailCompany, RailLine, "#ff0000"),
-        #         (RailStation, RailStation, "#0000ff"),
-        #         (SeaCompany, SeaLine, "#ff0000"),
-        #         (SeaStop, SeaStop, "#0000ff"),
-        #         (BusCompany, BusLine, "#ff0000"),
-        #         (BusStop, BusStop, "#0000ff"),
-        #     ):
-        #         if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
-        #             g.edges[u, v, k]["color"] = col
-        #             break
-        #     else:
-        #         g.edges[u, v, k]["style"] = "invis"
-        #
-        # g: rx.PyGraph = nx.relabel_nodes(g, {n: n.str_ctx(self) for n in g.nodes})
-        #
-        # g: pygraphviz.AGraph = nx.drawing.nx_agraph.to_agraph(g)
-        # g.graph_attr["overlap"] = "prism1000"
-        # g.graph_attr["outputorder"] = "edgesfirst"
-        # g.draw(path, prog="sfdp", args="")
         def replace(s):
             return s.replace('"', '\\"')
 

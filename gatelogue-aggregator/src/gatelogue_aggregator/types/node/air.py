@@ -3,7 +3,7 @@ from __future__ import annotations
 from calendar import LocaleTextCalendar
 from typing import TYPE_CHECKING, ClassVar, Self, override, Literal
 
-from gatelogue_aggregator.logging import INFO1, track
+from gatelogue_aggregator.logging import INFO1, track, INFO2
 from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class AirSource(BaseContext, Source):
     def update(self):
-        for node in track(self.g.nodes(), description=INFO1 + "Updating air nodes"):
+        for node in track(self.g.nodes(), description=INFO2 + "Updating air nodes", remove=False):
             if isinstance(node, AirFlight | AirAirport):
                 node.update(self)
 

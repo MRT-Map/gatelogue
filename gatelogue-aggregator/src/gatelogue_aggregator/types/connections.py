@@ -47,8 +47,3 @@ class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
         self.line = self.get_line(ctx).i
         if self.direction is not None:
             self.direction.direction = self.direction.get_direction(ctx).i
-
-
-class Proximity(msgspec.Struct):
-    distance: int
-    """Distance between the two objects in blocks"""

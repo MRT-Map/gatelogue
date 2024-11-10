@@ -120,11 +120,7 @@ def run(
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
-    config = Config(
-        cache_dir=cache_dir,
-        timeout=timeout,
-        cache_exclude=cache_exclude,
-    )
+    config = Config(cache_dir=cache_dir, timeout=timeout, cache_exclude=cache_exclude, max_workers=max_workers)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(config), sources))
 
