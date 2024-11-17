@@ -13,32 +13,30 @@ const props = defineProps<{
 const flight = computed(() => gd.value!.airFlight(props.flightId)!);
 const otherGates = computed(() =>
   flight.value.gates
-    .filter((g) => g.v !== props.gateId)
-    .map((g) => [g.s, gd.value!.airGate(g.v)!] as [string[], AirGate])
+    .filter((g) => g.v.toString() !== props.gateId)
+    .map((g) => [g.s, gd.value!.airGate(g.v.toString())!] as [string[], AirGate])
     .map(
       ([s, g]) =>
-        [s.concat(g.airport.s), g, gd.value!.airAirport(g.airport.v)!] as [
+        [s.concat(g.airport.s), g, gd.value!.airAirport(g.airport.v.toString())!] as [
           string[],
           AirGate,
           AirAirport,
         ],
     )
     .map(([s, g, a]) => ({
-      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v] as [
-        string,
-        string,
-      ],
+      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v.toString()] as [string, string],
       s,
     })),
 );
 const airline = computed(() => flight.value.airline);
+console.log(flight.value);
 </script>
 
 <template>
   <td class="gate-flights">
     <b
       ><Sourced v-if="includeAirline" :sourced="airline"
-        ><AirlineLink :airline-id="airline.v"
+        ><AirlineLink :airline-id="airline.v.toString()"
       /></Sourced>
       {{ flight.codes[0] }}</b
     >

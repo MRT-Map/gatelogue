@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { AirAirport, AirFlight, AirGate } from "@/stores/schema";
+import type {AirAirport, AirFlight, AirGate, StringID} from "@/stores/schema";
 import { RouterLink } from "vue-router";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 
 const props = defineProps<{
-  flightId: string;
+  flightId: StringID<AirFlight>;
   flight?: AirFlight;
   maxFlightGatesLength?: number;
 }>();
@@ -15,9 +15,9 @@ const flight = computed(
 );
 const gates = computed(() =>
   flight.value.gates
-    .map((g) => [g.s, gd.value!.airGate(g.v)] as [string[], AirGate])
+    .map((g) => [g.s, gd.value!.airGate(g.v.toString())] as [string[], AirGate])
     .map(([s, g]) => ({
-      v: [g, gd.value!.airAirport(g.airport.v)] as [AirGate, AirAirport],
+      v: [g, gd.value!.airAirport(g.airport.v.toString())] as [AirGate, AirAirport],
       s: s.concat(g.airport.s),
     })),
 );

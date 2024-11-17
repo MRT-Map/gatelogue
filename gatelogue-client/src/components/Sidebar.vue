@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import type { ID } from "@/stores/schema";
+import {GD, type Node, type StringID} from "@/stores/schema";
 import { gd } from "@/stores/data";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const sel = computed(() => ({
   cat: route.path.split("/")[1],
-  id: route.path.split("/")[2],
+  id: Number(route.path.split("/")[2]),
 }));
-const objects = gd.value!;
+const objects: GD = gd.value!;
 
 interface Panel {
   cat: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getter: () => Record<ID, any>;
+  getter: () => Node[];
   catDisplay: string;
   objDisplay: string;
 }
@@ -36,7 +36,7 @@ const panels: Panel[] = [
 
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() =>
-  Object.entries(selPanel.value.getter()).sort(([, a], [, b]) => {
+  selPanel.value.getter().sort((a, b) => {
     if (a[selPanel.value.objDisplay] === null) return 100;
     if (b[selPanel.value.objDisplay] === null) return -100;
     return a[selPanel.value.objDisplay].localeCompare(
@@ -64,13 +64,13 @@ const sortedObjects = computed(() =>
     <hr />
     <template v-if="selPanel !== undefined">
       <RouterLink
-        v-for="[id, o] in sortedObjects"
-        :key="id"
-        :to="`/${selPanel.cat}/${id}`"
+        v-for="o in sortedObjects"
+        :key="o.i"
+        :to="`/${selPanel.cat}/${o.i}`"
       >
         <div
           class="button"
-          :class="sel.cat === selPanel.cat && sel.id === id ? 'sel' : ''"
+          :class="sel.cat === selPanel.cat && sel.id === o.i ? 'sel' : ''"
         >
           {{ o[selPanel.objDisplay] ?? o.name.v }}
         </div>

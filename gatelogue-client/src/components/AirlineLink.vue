@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { AirAirline, ID } from "@/stores/schema";
+import type { AirAirline, StringID } from "@/stores/schema";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 
 const props = defineProps<{
   airline?: AirAirline;
-  airlineId: ID;
+  airlineId: StringID<AirAirline>;
 }>();
 
 const airline = computed(

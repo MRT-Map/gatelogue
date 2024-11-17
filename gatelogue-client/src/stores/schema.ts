@@ -1,311 +1,234 @@
 /* eslint-disable max-lines */
-export type ID = string;
-export type World = "Old" | "New";
+export type StringID<_ extends Node> = string;
+export type IntID<_ extends Node> = number;
+export type World = "Old" | "New" | "Space";
 export type RailMode = "warp" | "cart" | "traincart" | "vehicles";
 export type SeaMode = "ferry" | "cruise";
+export type PlaneMode = "helicopter" | "seaplane" | "warp plane" | "traincarts plane";
 
 export type Sourced<T, S extends boolean = true> = S extends true
   ? { v: T; s: string[] }
   : T;
 
-export interface Located<S extends boolean = true> {
+export interface Node {
+  i: IntID<Node>
+  type: string,
+}
+
+export interface Located<S extends boolean = true> extends Node {
   world: Sourced<World, S> | null;
   coordinates: Sourced<[number, number]> | null;
-  proximity: Record<string, Record<ID, Sourced<{ distance: number }>>>;
+  proximity: Record<StringID<Located>, Sourced<{ distance: number }>>;
+  shared_facility: Sourced<IntID<Located>>[];
 }
 
-export interface Direction {
-  forward_towards_code: ID;
-  forward_direction_label: string | null;
-  backward_direction_label: string | null;
-  one_way: boolean;
+export interface Direction<St extends Located, S extends boolean = true> {
+  direction: IntID<St>;
+  forward_label: string | null;
+  backward_label: string | null;
+  one_way: boolean | Sourced<boolean, S>;
 }
 
-export interface Connection {
-  line: ID;
-  direction: Direction | null;
+export interface Connection<L extends Node, St extends Located, S extends boolean = true> {
+  line: IntID<L>;
+  direction: Direction<St, S> | null;
 }
 
-export interface AirFlight<S extends boolean = true> {
+export interface AirFlight<S extends boolean = true> extends Node {
   codes: string[];
-  gates: Sourced<ID, S>[];
-  airline: Sourced<ID, S>;
+  mode: Sourced<PlaneMode, S> | null;
+  gates: Sourced<IntID<AirGate<S>>, S>[];
+  airline: Sourced<IntID<AirAirline<S>>, S>;
 }
 
 export interface AirAirport<S extends boolean = true> extends Located {
   code: string;
   name: Sourced<string, S> | null;
   link: Sourced<string, S> | null;
-  gates: Sourced<ID, S>[];
+  gates: Sourced<IntID<AirGate<S>>, S>[];
 }
 
-export interface AirGate<S extends boolean = true> {
+export interface AirGate<S extends boolean = true> extends Node {
   code: string | null;
-  flights: Sourced<ID, S>[];
-  airport: Sourced<ID, S>;
-  airline: Sourced<ID, S> | null;
   size: Sourced<string, S> | null;
+  flights: Sourced<IntID<AirFlight<S>>, S>[];
+  airport: Sourced<IntID<AirAirport<S>>, S>;
+  airline: Sourced<IntID<AirAirline<S>>, S> | null;
 }
 
-export interface AirAirline<S extends boolean = true> {
+export interface AirAirline<S extends boolean = true> extends Node {
   name: string;
-  flights: Sourced<ID, S>[];
+  flights: Sourced<IntID<AirFlight<S>>, S>[];
   link: Sourced<string, S> | null;
 }
 
-export interface AirData<S extends boolean = true> {
-  flight: Record<ID, AirFlight<S>>;
-  airport: Record<ID, AirAirport<S>>;
-  gate: Record<ID, AirGate<S>>;
-  airline: Record<ID, AirAirline<S>>;
-}
-
-export interface RailCompany<S extends boolean = true> {
+export interface RailCompany<S extends boolean = true> extends Node {
   name: string;
-  lines: Sourced<ID, S>[];
-  stations: Sourced<ID, S>[];
+  lines: Sourced<IntID<RailLine<S>>, S>[];
+  stations: Sourced<IntID<RailStation<S>>, S>[];
 }
 
-export interface RailLine<S extends boolean = true> {
+export interface RailLine<S extends boolean = true> extends Node {
   code: string;
-  company: Sourced<ID, S>;
-  ref_station: Sourced<ID, S>;
   mode: Sourced<RailMode, S> | null;
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
+  company: Sourced<IntID<RailCompany<S>>, S>;
+  ref_station: Sourced<IntID<RailStation<S>>, S>;
 }
 
 export interface RailStation<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
-  company: Sourced<ID, S>;
+  company: Sourced<IntID<RailCompany<S>>, S>;
+  connections: Record<StringID<RailStation<S>>, Sourced<Connection<RailLine, RailStation, S>>[]>
 }
 
-export interface RailData<S extends boolean = true> {
-  rail_company: Record<ID, RailCompany<S>>;
-  rail_line: Record<ID, RailLine<S>>;
-  station: Record<ID, RailStation<S>>;
-}
-
-export interface SeaCompany<S extends boolean = true> {
+export interface SeaCompany<S extends boolean = true> extends Node {
   name: string;
-  lines: Sourced<ID, S>[];
-  stops: Sourced<ID, S>[];
+  lines: Sourced<IntID<SeaLine<S>>, S>[];
+  stations: Sourced<IntID<SeaStop<S>>, S>[];
 }
 
-export interface SeaLine<S extends boolean = true> {
+export interface SeaLine<S extends boolean = true> extends Node {
   code: string;
-  company: Sourced<ID, S>;
-  ref_stop: Sourced<ID, S>;
   mode: Sourced<SeaMode, S> | null;
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
+  company: Sourced<IntID<SeaCompany<S>>, S>;
+  ref_stop: Sourced<IntID<SeaStop<S>>, S>;
 }
 
 export interface SeaStop<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
-  company: Sourced<ID, S>;
+  company: Sourced<IntID<SeaCompany<S>>, S>;
+  connections: Record<StringID<SeaStop<S>>, Sourced<Connection<SeaLine, SeaStop, S>>[]>
 }
 
-export interface SeaData<S extends boolean = true> {
-  sea_company: Record<ID, SeaCompany<S>>;
-  sea_line: Record<ID, SeaLine<S>>;
-  sea_stop: Record<ID, SeaStop<S>>;
-}
 
-export interface BusCompany<S extends boolean = true> {
+export interface BusCompany<S extends boolean = true> extends Node {
   name: string;
-  lines: Sourced<ID, S>[];
-  stops: Sourced<ID, S>[];
+  lines: Sourced<IntID<BusLine<S>>, S>[];
+  stations: Sourced<IntID<BusStop<S>>, S>[];
 }
 
-export interface BusLine<S extends boolean = true> {
+export interface BusLine<S extends boolean = true> extends Node {
   code: string;
-  company: Sourced<ID, S>;
-  ref_stop: Sourced<ID, S>;
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
+  company: Sourced<IntID<BusCompany<S>>, S>;
+  ref_stop: Sourced<IntID<BusStop<S>>, S>;
 }
 
 export interface BusStop<S extends boolean = true> extends Located<S> {
   codes: string[];
   name: Sourced<string, S> | null;
-  company: Sourced<ID, S>;
-  connections: Record<ID, Sourced<Connection>[]>;
+  company: Sourced<IntID<BusCompany<S>>, S>;
+  connections: Record<StringID<BusStop<S>>, Sourced<Connection<BusLine, BusStop, S>>[]>
 }
 
-export interface BusData<S extends boolean = true> {
-  bus_company: Record<ID, BusCompany<S>>;
-  bus_line: Record<ID, BusLine<S>>;
-  bus_stop: Record<ID, BusStop<S>>;
-}
-
-export interface GatelogueData<S extends boolean = true> {
+export interface GatelogueData {
   version: 1;
   timestamp: string;
-  air: AirData<S>;
-  rail: RailData<S>;
-  sea: SeaData<S>;
-  bus: BusData<S>;
+  nodes: Record<StringID<Node>, Node>,
 }
 
-export type Category<S extends boolean = true> =
-  | AirFlight<S>
-  | AirAirport<S>
-  | AirGate<S>
-  | AirAirline<S>
-  | RailCompany<S>
-  | RailLine<S>
-  | RailStation<S>
-  | SeaCompany<S>
-  | SeaLine<S>
-  | SeaStop<S>
-  | BusCompany<S>
-  | BusLine<S>
-  | BusStop<S>;
-
 export class GD<S extends boolean = true> {
-  data: GatelogueData<S>;
+  data: GatelogueData;
 
-  constructor(data: GatelogueData<S>) {
+  constructor(data: GatelogueData) {
     this.data = data;
   }
 
-  airFlight(id: ID): AirFlight<S> | undefined {
-    return this.data.air.flight[id];
+  airFlight(id: StringID<AirFlight<S>>): AirFlight<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get airFlights(): AirFlight<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "AirFlight") as any
   }
 
-  get airFlights(): Record<ID, AirFlight<S>> {
-    return this.data.air.flight;
+  airAirport(id: StringID<AirAirport<S>>): AirAirport<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get airAirports(): AirAirport<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "AirAirport") as any
   }
 
-  airAirport(id: ID): AirAirport<S> | undefined {
-    return this.data.air.airport[id];
+  airGate(id: StringID<AirGate<S>>): AirGate<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get airGates(): AirGate<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "AirGate") as any
   }
 
-  get airAirports(): Record<ID, AirAirport<S>> {
-    return this.data.air.airport;
+  airAirline(id: StringID<AirAirline<S>>): AirAirline<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get airAirlines(): AirAirline<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "AirAirline") as any
   }
 
-  airGate(id: ID): AirGate<S> | undefined {
-    return this.data.air.gate[id];
+  railCompany(id: StringID<RailCompany<S>>): RailCompany<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get railCompanies(): RailCompany<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "RailCompany") as any
   }
 
-  get airGates(): Record<ID, AirGate<S>> {
-    return this.data.air.gate;
+  railLine(id: StringID<RailLine<S>>): RailLine<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get railLines(): RailLine<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "RailLine") as any
   }
 
-  airAirline(id: ID): AirAirline<S> | undefined {
-    return this.data.air.airline[id];
+  railStation(id: StringID<RailStation<S>>): RailStation<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get railStations(): RailStation<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "RailStation") as any
   }
 
-  get airAirlines(): Record<ID, AirAirline<S>> {
-    return this.data.air.airline;
+  seaCompany(id: StringID<SeaCompany<S>>): SeaCompany<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get seaCompanies(): SeaCompany<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "SeaCompany") as any
   }
 
-  railCompany(id: ID): RailCompany<S> | undefined {
-    return this.data.rail.rail_company[id];
+  seaLine(id: StringID<SeaLine<S>>): SeaLine<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get seaLines(): SeaLine<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "SeaLine") as any
   }
 
-  get railCompanies(): Record<ID, RailCompany<S>> {
-    return this.data.rail.rail_company;
+  seaStop(id: StringID<SeaStop<S>>): SeaStop<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get seaStops(): SeaStop<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "SeaStop") as any
   }
 
-  railLine(id: ID): RailLine<S> | undefined {
-    return this.data.rail.rail_line[id];
+  busCompany(id: StringID<BusCompany<S>>): BusCompany<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get busCompanies(): BusCompany<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "BusCompany") as any
   }
 
-  get railLines(): Record<ID, RailLine<S>> {
-    return this.data.rail.rail_line;
+  busLine(id: StringID<BusLine<S>>): BusLine<S> | undefined {
+    return this.data.nodes[id] as any;
+  }
+  get busLines(): BusLine<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "BusLine") as any
   }
 
-  railStation(id: ID): RailStation<S> | undefined {
-    return this.data.rail.station[id];
+  busStop(id: StringID<BusStop<S>>): BusStop<S> | undefined {
+    return this.data.nodes[id] as any;
   }
-
-  get railStations(): Record<ID, RailStation<S>> {
-    return this.data.rail.station;
-  }
-
-  seaCompany(id: ID): SeaCompany<S> | undefined {
-    return this.data.sea.sea_company[id];
-  }
-
-  get seaCompanies(): Record<ID, SeaCompany<S>> {
-    return this.data.sea.sea_company;
-  }
-
-  seaLine(id: ID): SeaLine<S> | undefined {
-    return this.data.sea.sea_line[id];
-  }
-
-  get seaLines(): Record<ID, SeaLine<S>> {
-    return this.data.sea.sea_line;
-  }
-
-  seaStop(id: ID): SeaStop<S> | undefined {
-    return this.data.sea.sea_stop[id];
-  }
-
-  get seaStops(): Record<ID, SeaStop<S>> {
-    return this.data.sea.sea_stop;
-  }
-
-  busCompany(id: ID): BusCompany<S> | undefined {
-    return this.data.bus.bus_company[id];
-  }
-
-  get busCompanies(): Record<ID, BusCompany<S>> {
-    return this.data.bus.bus_company;
-  }
-
-  busLine(id: ID): BusLine<S> | undefined {
-    return this.data.bus.bus_line[id];
-  }
-
-  get busLines(): Record<ID, BusLine<S>> {
-    return this.data.bus.bus_line;
-  }
-
-  busStop(id: ID): BusStop<S> | undefined {
-    return this.data.bus.bus_stop[id];
-  }
-
-  get busStops(): Record<ID, BusStop<S>> {
-    return this.data.bus.bus_stop;
-  }
-
-  get(category: string, id: ID): Category<S> | undefined {
-    switch (category) {
-      case "flight":
-        return this.airFlight(id);
-      case "airport":
-        return this.airAirport(id);
-      case "gate":
-        return this.airGate(id);
-      case "airline":
-        return this.airAirline(id);
-      case "railcompany":
-        return this.railCompany(id);
-      case "railline":
-        return this.railLine(id);
-      case "station":
-        return this.railStation(id);
-      case "seacompany":
-        return this.seaCompany(id);
-      case "sealine":
-        return this.seaLine(id);
-      case "seastop":
-        return this.seaStop(id);
-      case "buscompany":
-        return this.busCompany(id);
-      case "busline":
-        return this.busLine(id);
-      case "busstop":
-        return this.busStop(id);
-      default:
-        throw Error(`Unknown category ${category}`);
-    }
+  get busStops(): BusStop<S>[] {
+    return Object.values(this.data.nodes).filter(a => a.type == "BusStop") as any
   }
 }

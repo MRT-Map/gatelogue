@@ -27,7 +27,7 @@ watchEffect(() => {
 
 const gates = computed(() =>
   airport.value.gates
-    .map((g) => [g.v, gd.value!.airGate(g.v)!] as [string, AirGate])
+    .map((g) => [g.v.toString(), gd.value!.airGate(g.v.toString())!] as [string, AirGate])
     .sort(([, a], [, b]) => {
       if (!a.code) return 100;
       if (!b.code) return -100;

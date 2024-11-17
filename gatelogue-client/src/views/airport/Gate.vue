@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AirGate } from "@/stores/schema";
+import type {AirGate, StringID} from "@/stores/schema";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Flight from "./Flight.vue";
 import Sourced from "@/components/Sourced.vue";
@@ -8,7 +8,7 @@ import { gd } from "@/stores/data";
 
 const props = defineProps<{
   gate?: AirGate;
-  gateId: string;
+  gateId: StringID<AirGate>;
   maxGateFlightsLength?: number;
 }>();
 const gate = computed(() => props.gate ?? gd.value!.airGate(props.gateId)!);
@@ -19,7 +19,7 @@ const airline = computed(() => {
     gate.value.code !== "?" &&
     gate.value.flights.length > 0
   )
-    return gd.value!.airFlight(gate.value.flights[0].v)!.airline;
+    return gd.value!.airFlight(gate.value.flights[0].v.toString())!.airline;
   return undefined;
 });
 </script>
@@ -31,13 +31,13 @@ const airline = computed(() => {
   </td>
   <td class="gate-airline">
     <Sourced v-if="airline" :sourced="airline"
-      ><AirlineLink :airline-id="airline.v"
+      ><AirlineLink :airline-id="airline.v.toString()"
     /></Sourced>
   </td>
   <template v-for="flight in gate.flights" :key="flight.v">
     <Flight
       :gate-id="gateId"
-      :flight-id="flight.v"
+      :flight-id="flight.v.toString()"
       :include-airline="airline === undefined"
     />
   </template>
