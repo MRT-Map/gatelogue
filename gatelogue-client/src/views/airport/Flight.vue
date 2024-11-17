@@ -34,7 +34,6 @@ const otherGates = computed(() =>
     })),
 );
 const airline = computed(() => flight.value.airline);
-console.log(flight.value);
 </script>
 
 <template>

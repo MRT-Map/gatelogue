@@ -63,6 +63,10 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
         return self.name
 
     @override
+    def prepare_merge(self):
+        self.name = str(self.name).strip()
+
+    @override
     def prepare_export(self, ctx: BusSource):
         self.lines = self.get_all_id(ctx, BusLine)
         self.stops = self.get_all_id(ctx, BusStop)
@@ -127,6 +131,14 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
     @override
     def merge_key(self, ctx: BusSource) -> str:
         return self.code
+
+    @override
+    def prepare_merge(self):
+        self.code = str(self.code).strip()
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
+        if self.colour is not None:
+            self.colour.v = str(self.colour.v).strip()
 
     @override
     def prepare_export(self, ctx: BusSource):
@@ -195,6 +207,12 @@ class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
     @override
     def merge_key(self, ctx: BusSource) -> str:
         return self.get_one(ctx, BusCompany).name
+
+    @override
+    def prepare_merge(self):
+        self.codes = {str(a).strip() for a in self.codes}
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
 
     @override
     def prepare_export(self, ctx: BusSource):

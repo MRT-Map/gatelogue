@@ -156,6 +156,9 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     def merge_key(self, ctx: CTX) -> str:
         raise NotImplementedError
 
+    def prepare_merge(self):
+        raise NotImplementedError
+
     def prepare_export(self, ctx: CTX):
         raise NotImplementedError
 

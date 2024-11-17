@@ -24,14 +24,14 @@ class IntraBusOmegaBus(BusSource):
         for table in html.find_all("table"):
             if "border-radius: 30px" not in table.attrs.get("style", ""):
                 continue
-            line_code = str(table("td")[0].find("span").string).strip()
+            line_code = table("td")[0].find("span").string
             line = BusLine.new(self, code=line_code, company=company)
 
             stops = []
             for span in table("td")[1].find_all("span"):
                 if span.find("s") is not None:
                     continue
-                name = str(span.string).strip()
+                name = span.string
                 stop = BusStop.new(self, codes={name}, name=name, company=company)
                 stops.append(stop)
 

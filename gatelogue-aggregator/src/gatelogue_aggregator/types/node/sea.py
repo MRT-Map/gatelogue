@@ -63,6 +63,10 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
         return self.name
 
     @override
+    def prepare_merge(self):
+        self.name = str(self.name).strip()
+
+    @override
     def prepare_export(self, ctx: SeaSource):
         self.lines = self.get_all_id(ctx, SeaLine)
         self.stops = self.get_all_id(ctx, SeaStop)
@@ -135,6 +139,14 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         return self.code
 
     @override
+    def prepare_merge(self):
+        self.code = str(self.code).strip()
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
+        if self.colour is not None:
+            self.colour.v = str(self.colour.v).strip()
+
+    @override
     def prepare_export(self, ctx: SeaSource):
         self.company = self.get_one_id(ctx, SeaCompany)
         self.ref_stop = self.get_one_id(ctx, SeaStop)
@@ -201,6 +213,12 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
     @override
     def merge_key(self, ctx: SeaSource) -> str:
         return self.get_one(ctx, SeaCompany).name
+
+    @override
+    def prepare_merge(self):
+        self.codes = {str(a).strip() for a in self.codes}
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
 
     @override
     def prepare_export(self, ctx: SeaSource):

@@ -38,7 +38,7 @@ class NSC(RailSource):
 
             if "Line Under Construction" in str(tr("th")[5]):
                 continue
-            line_name = str(line_prefix + str(tr("th")[0])).strip()
+            line_name = line_prefix + str(tr("th")[0])
             line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
 
             stations = [str(tr("th")[1])] + [str(a).removesuffix("*") for a in tr("th")[3].strings]

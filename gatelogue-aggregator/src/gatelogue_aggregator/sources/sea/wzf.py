@@ -36,14 +36,14 @@ class WZF(SeaSource):
                 continue
             line_name = result.group("name")
             line_code = result.group("code")
-            line = SeaLine.new(self, code=str(line_code).strip(), name=str(line_name).strip(), company=company)
+            line = SeaLine.new(self, code=line_code, name=line_name, company=company)
 
             stops = []
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:  # noqa: PLR2004
                     continue
-                code = str(tr("td")[1].span.string).strip()
-                name = "".join(tr("td")[2].strings).strip()
+                code = tr("td")[1].span.string
+                name = "".join(tr("td")[2].strings)
                 if "planned" in name:
                     continue
                 stop = SeaStop.new(self, codes={code}, name=name, company=company)

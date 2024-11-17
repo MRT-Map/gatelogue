@@ -43,7 +43,7 @@ class WZR(RailSource):
                 continue
             line_name = result.group("name") or result.group("name2")
             line_code = result.group("code") or line_name
-            line = RailLine.new(self, code=str(line_code).strip(), name=str(line_name).strip(), company=company)
+            line = RailLine.new(self, code=line_code, name=line_name, company=company)
 
             stations = []
             for tr in table.find_all("tr"):
@@ -51,7 +51,7 @@ class WZR(RailSource):
                     continue
                 if tr("td")[3].string.strip() == "Planned":
                     continue
-                code = str(tr("td")[0].string).strip()
+                code = tr("td")[0].string
                 name = "".join(tr("td")[1].strings).strip().rstrip("*")
                 station = RailStation.new(self, codes={code}, name=name, company=company)
                 stations.append(station)

@@ -42,7 +42,7 @@ class IntraRailMCRWarp(RailSource):
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:  # noqa: PLR2004
                     continue
-                code = str(tr("td")[1].span.span.string).strip()
+                code = tr("td")[1].span.span.string
                 name = "".join(tr("td")[2].strings).strip()
                 code2name[code] = name.replace(" -  ", " ").replace(" - ", " ")
 

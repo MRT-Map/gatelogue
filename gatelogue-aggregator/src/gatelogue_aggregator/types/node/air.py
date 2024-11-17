@@ -75,6 +75,12 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         return self.get_one(ctx, AirAirline).merge_key(ctx)
 
     @override
+    def prepare_merge(self):
+        self.codes = {str(a).strip() for a in self.codes}
+        if self.mode is not None:
+            self.mode.v = str(self.mode.v).strip()
+
+    @override
     def prepare_export(self, ctx: AirSource):
         self.gates = self.get_all_id(ctx, AirGate)
         self.airline = self.get_one_id(ctx, AirAirline)
@@ -177,6 +183,14 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         return self.code
 
     @override
+    def prepare_merge(self):
+        self.code = str(self.code).strip()
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
+        if self.link is not None:
+            self.link.v = str(self.link.v).strip()
+
+    @override
     def prepare_export(self, ctx: AirSource):
         super().prepare_export(ctx)
         self.gates = self.get_all_id(ctx, AirGate)
@@ -275,6 +289,12 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
         return self.code
 
     @override
+    def prepare_merge(self):
+        self.code = str(self.code).strip()
+        if self.size is not None:
+            self.size.v = str(self.size.v).strip()
+
+    @override
     def prepare_export(self, ctx: AirSource):
         self.flights = self.get_all_id(ctx, AirFlight)
         self.airport = self.get_one_id(ctx, AirAirport)
@@ -322,6 +342,12 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
     @override
     def merge_key(self, ctx: AirSource) -> str:
         return self.name
+
+    @override
+    def prepare_merge(self):
+        self.name = str(self.name).strip()
+        if self.link is not None:
+            self.link.v = str(self.link.v).strip()
 
     @override
     def prepare_export(self, ctx: AirSource):

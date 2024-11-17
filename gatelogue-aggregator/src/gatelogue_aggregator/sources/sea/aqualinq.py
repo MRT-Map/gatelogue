@@ -38,7 +38,7 @@ class AquaLinQ(SeaSource):
 
             stops = []
             for b in p.find_all("b"):
-                stop = SeaStop.new(self, codes={str(b.string)}, name=str(b.string), company=company)
+                stop = SeaStop.new(self, codes={b.string}, name=b.string, company=company)
                 stops.append(stop)
 
             if len(stops) == 0:

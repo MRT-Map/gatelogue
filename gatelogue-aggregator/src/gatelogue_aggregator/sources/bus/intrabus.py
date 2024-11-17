@@ -28,12 +28,12 @@ class IntraBus(BusSource):
             for tr in table("tr")[1::2]:
                 if tr("td")[3 + shift].find("a", href="/index.php/File:Rsz_open.png") is None:
                     continue
-                line_code = str(tr("td")[0].find("span").string).strip()
+                line_code = tr("td")[0].find("span").string
                 line = BusLine.new(self, code=line_code, company=company)
 
                 stops = []
                 for li in tr("td")[1 + shift]("li"):
-                    name = str(li.find("b").string).strip()
+                    name = li.find("b").string
                     if (more := li.find("i")) is not None:
                         name += " " + more.string.strip()
                     stop = BusStop.new(self, codes={name}, name=name, company=company)

@@ -63,6 +63,10 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
         return self.name
 
     @override
+    def prepare_merge(self):
+        self.name = str(self.name).strip()
+
+    @override
     def prepare_export(self, ctx: RailSource):
         self.lines = self.get_all_id(ctx, RailLine)
         self.stations = self.get_all_id(ctx, RailStation)
@@ -137,6 +141,16 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         return self.code
 
     @override
+    def prepare_merge(self):
+        self.code = str(self.code).strip()
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
+        if self.colour is not None:
+            self.colour.v = str(self.colour.v).strip()
+        if self.mode is not None:
+            self.mode.v = str(self.mode.v).strip()
+
+    @override
     def prepare_export(self, ctx: RailSource):
         self.company = self.get_one_id(ctx, RailCompany)
         self.ref_station = self.get_one_id(ctx, RailStation)
@@ -203,6 +217,12 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
     @override
     def merge_key(self, ctx: RailSource) -> str:
         return self.get_one(ctx, RailCompany).name
+
+    @override
+    def prepare_merge(self):
+        self.codes = {str(a).strip() for a in self.codes}
+        if self.name is not None:
+            self.name.v = str(self.name.v).strip()
 
     @override
     def prepare_export(self, ctx: RailSource):

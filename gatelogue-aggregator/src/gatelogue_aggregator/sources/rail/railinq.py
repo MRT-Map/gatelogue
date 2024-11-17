@@ -32,8 +32,8 @@ class RaiLinQ(RailSource):
                 continue
             if line_table.find("th") is None:
                 continue
-            line_code = str(line_table.find("th").find_all("span", style="color:white;")[0].b.string)
-            line_name = str(line_table.find("th").find_all("span", style="color:white;")[1].i.string)
+            line_code = line_table.find("th").find_all("span", style="color:white;")[0].b.string
+            line_name = line_table.find("th").find_all("span", style="color:white;")[1].i.string
             line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
 
             stations = []

@@ -32,6 +32,8 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()
         for source in track(sources, description=INFO1 + "Merging sources", remove=False):
+            for node in source.g.nodes():
+                node.prepare_merge()
             self.g = rx.graph_union(self.g, source.g)
 
         processed: dict[type[Node], dict[str, list[Node]]] = {}

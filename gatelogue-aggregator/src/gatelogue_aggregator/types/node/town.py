@@ -66,6 +66,14 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         return self.name
 
     @override
+    def prepare_merge(self):
+        self.name = str(self.name).strip()
+        self.rank.v = str(self.rank.v).strip()
+        self.mayor.v = str(self.mayor.v).strip()
+        if self.deputy_mayor.v is not None:
+            self.deputy_mayor.v = str(self.deputy_mayor.v).strip()
+
+    @override
     def prepare_export(self, ctx: TownSource):
         super().prepare_export(ctx)
 

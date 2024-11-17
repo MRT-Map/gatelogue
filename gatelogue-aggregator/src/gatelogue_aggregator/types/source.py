@@ -97,6 +97,8 @@ class Source(metaclass=SourceMeta):
     def save_to_cache(cls, config: Config, g: rx.PyGraph):
         if g.num_nodes() == 0:
             rich.print(ERROR + f"{cls.__name__} yielded no results")
+        for node in g.nodes():
+            node.prepare_merge()
 
         cache_file = config.cache_dir / "network-cache" / cls.__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")

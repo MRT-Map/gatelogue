@@ -25,8 +25,8 @@ class HBL(SeaSource):
         html = get_wiki_html("Hummingbird Boat Lines", config)
         for td in html.find("table", class_="multicol").find_all("td"):
             for p, ul in zip(td.find_all("p"), td.find_all("ul"), strict=False):
-                line_code = str(p.span.string or p.span.span.string).strip()
-                line_name = str(p.b.string).strip()
+                line_code = p.span.string or p.span.span.string
+                line_name = p.b.string
                 line_colour = re.match(r"background-color:\s*([^;]*)", p.span.attrs["style"]).group(1)
                 line = SeaLine.new(self, code=line_code, company=company, name=line_name, colour=line_colour)
 

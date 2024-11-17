@@ -39,13 +39,13 @@ class IntraRailLocal(RailSource):
                     continue
                 line_name = result.group("name")
                 line_code = result.group("code") or line_name
-                line = RailLine.new(self, code=str(line_code).strip(), name=str(line_name).strip(), company=company)
+                line = RailLine.new(self, code=line_code, name=line_name, company=company)
 
                 stations = []
                 for tr in table.find_all("tr"):
                     if len(tr("td")) != 4:  # noqa: PLR2004
                         continue
-                    name = str(tr("td")[2].string).strip()
+                    name = tr("td")[2].string
                     station = RailStation.new(self, codes={name}, name=name, company=company)
                     stations.append(station)
 
