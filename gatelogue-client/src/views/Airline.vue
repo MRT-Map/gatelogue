@@ -25,7 +25,13 @@ watchEffect(() => {
 
 const flights = computed(() =>
   airline.value.flights
-    .map((f) => [f.v.toString(), gd.value!.airFlight(f.v.toString())!] as [string, AirFlight])
+    .map(
+      (f) =>
+        [f.v.toString(), gd.value!.airFlight(f.v.toString())!] as [
+          string,
+          AirFlight,
+        ],
+    )
     .sort(([, a], [, b]) => {
       if (!a.codes[0]) return 100;
       if (!b.codes[0]) return -100;

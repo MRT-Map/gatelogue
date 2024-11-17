@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import {GD, type Node, type StringID} from "@/stores/schema";
+import {
+  type AirAirline,
+  type AirAirport,
+  GD,
+  type Node,
+} from "@/stores/schema";
 import { gd } from "@/stores/data";
 import { useRoute } from "vue-router";
 
@@ -11,28 +16,26 @@ const sel = computed(() => ({
 }));
 const objects: GD = gd.value!;
 
-interface Panel {
+interface Panel<T extends Node = Node> {
   cat: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getter: () => Node[];
+  getter: () => T[];
   catDisplay: string;
-  objDisplay: string;
+  objDisplay: keyof T;
 }
 
-const panels: Panel[] = [
-  {
-    cat: "airport",
-    getter: () => objects.airAirports,
-    catDisplay: "Airport",
-    objDisplay: "code",
-  },
-  {
-    cat: "airline",
-    getter: () => objects.airAirlines,
-    catDisplay: "Airline",
-    objDisplay: "name",
-  },
-] as const;
+const airportPanel: Panel<AirAirport> = {
+  cat: "airport",
+  getter: () => objects.airAirports,
+  catDisplay: "Airport",
+  objDisplay: "code",
+};
+const airlinePanel: Panel<AirAirline> = {
+  cat: "airline",
+  getter: () => objects.airAirlines,
+  catDisplay: "Airline",
+  objDisplay: "name",
+};
+const panels: Panel<any>[] = [airlinePanel, airportPanel] as const;
 
 const selPanel = ref(panels[0]);
 const sortedObjects = computed(() =>

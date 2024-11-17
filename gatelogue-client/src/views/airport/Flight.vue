@@ -14,17 +14,22 @@ const flight = computed(() => gd.value!.airFlight(props.flightId)!);
 const otherGates = computed(() =>
   flight.value.gates
     .filter((g) => g.v.toString() !== props.gateId)
-    .map((g) => [g.s, gd.value!.airGate(g.v.toString())!] as [string[], AirGate])
+    .map(
+      (g) => [g.s, gd.value!.airGate(g.v.toString())!] as [string[], AirGate],
+    )
     .map(
       ([s, g]) =>
-        [s.concat(g.airport.s), g, gd.value!.airAirport(g.airport.v.toString())!] as [
-          string[],
-          AirGate,
-          AirAirport,
-        ],
+        [
+          s.concat(g.airport.s),
+          g,
+          gd.value!.airAirport(g.airport.v.toString())!,
+        ] as [string[], AirGate, AirAirport],
     )
     .map(([s, g, a]) => ({
-      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v.toString()] as [string, string],
+      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v.toString()] as [
+        string,
+        string,
+      ],
       s,
     })),
 );
