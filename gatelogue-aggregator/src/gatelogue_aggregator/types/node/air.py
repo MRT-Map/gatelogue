@@ -77,6 +77,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
     @override
     def prepare_export(self, ctx: AirSource):
         self.gates = self.get_all_id(ctx, AirGate)
+        self.airline = self.get_one_id(ctx, AirAirline)
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
