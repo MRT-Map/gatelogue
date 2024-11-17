@@ -28,6 +28,12 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
     def set_direction(self, ctx: CTX, v: S):
         self.direction = v.ref(ctx)
 
+    def prepare_merge(self):
+        if self.forward_label is not None:
+            self.forward_label = str(self.forward_label).strip()
+        if self.backward_label is not None:
+            self.backward_label = str(self.backward_label).strip()
+
 
 class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
     from gatelogue_aggregator.types.node.base import NodeRef
@@ -42,6 +48,10 @@ class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
 
     def set_line(self, ctx: CTX, v: L):
         self.line = v.ref(ctx)
+
+    def prepare_merge(self):
+        if self.direction is not None:
+            self.direction.prepare_merge()
 
     def prepare_export(self, ctx: CTX):
         self.line = self.get_line(ctx).i

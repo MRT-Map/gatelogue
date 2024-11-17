@@ -87,6 +87,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(ctx, AirAirline).name)
 
     def update(self, ctx: AirSource):
@@ -184,6 +185,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
 
     @override
     def prepare_merge(self):
+        super().prepare_merge()
         self.code = str(self.code).strip()
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -197,6 +199,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(AirAirport, code=self.code)
 
     def update(self, ctx: AirSource):
@@ -302,6 +305,7 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
@@ -355,6 +359,7 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(AirAirline, name=self.name)
 
     @staticmethod

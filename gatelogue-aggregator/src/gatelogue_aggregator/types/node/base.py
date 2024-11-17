@@ -235,6 +235,11 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
         self._merge_sourced(ctx, other, "world")
 
     @override
+    def prepare_merge(self):
+        if self.world is not None:
+            self.world.v = str(self.world.v).strip()
+
+    @override
     def prepare_export(self, ctx: CTX):
         from gatelogue_aggregator.types.context.proximity import Proximity
 

@@ -97,14 +97,21 @@ class Source(metaclass=SourceMeta):
     def save_to_cache(cls, config: Config, g: rx.PyGraph):
         if g.num_nodes() == 0:
             rich.print(ERROR + f"{cls.__name__} yielded no results")
-        for node in g.nodes():
-            node.prepare_merge()
+        cls.prepare_merge(g)
 
         cache_file = config.cache_dir / "network-cache" / cls.__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         cache_file.touch()
         cache_file.write_bytes(pickle.dumps(g))
+
+    @classmethod
+    def prepare_merge(cls, g: rx.PyGraph):
+        for node in g.nodes():
+            node.prepare_merge()
+        for edge in g.edges():
+            if hasattr(edge.v, "prepare_merge"):
+                edge.v.prepare_merge()
 
     @classmethod
     def source[T](cls, v: T) -> Sourced[T]:

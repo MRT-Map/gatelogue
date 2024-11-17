@@ -73,6 +73,7 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(RailCompany, name=self.name)
 
 
@@ -157,6 +158,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(RailLine, code=self.code, company=self.get_one(ctx, RailCompany).name)
 
 
@@ -220,6 +222,7 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
 
     @override
     def prepare_merge(self):
+        super().prepare_merge()
         self.codes = {str(a).strip() for a in self.codes}
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -235,6 +238,7 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
+        self.prepare_merge()
         return NodeRef(RailStation, codes=self.codes, company=self.get_one(ctx, RailCompany).name)
 
 
