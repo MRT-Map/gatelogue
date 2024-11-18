@@ -23,11 +23,13 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     acceptable_list_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     acceptable_single_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     i: int = None
+    source: set[type[Source]] = msgspec.field(default_factory=set)
 
     @classmethod
     def new(cls, ctx: CTX, **kwargs) -> Self:
         self = cls(**kwargs)
         self.i = ctx.g.add_node(self)
+        self.source.add(type(ctx))
         return self
 
     def str_ctx(self, _ctx: CTX) -> str:
@@ -135,6 +137,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     @override
     def merge(self, ctx: CTX, other: Self):
         self.merge_attrs(ctx, other)
+        self.source.update(other.source)
         self.i = ctx.g.contract_nodes((self.i, other.i), self)
 
     def _merge_sourced(self, ctx: CTX, other: Self, attr: str):
