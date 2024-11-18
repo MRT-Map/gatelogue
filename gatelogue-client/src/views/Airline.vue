@@ -46,8 +46,11 @@ const maxFlightGatesLength = computed(() =>
 <template>
   <main>
     <a :href="airline.link?.v">
-      <b class="name">{{ airline.name }}</b> </a
+      <b class="name">{{ airline.name }}</b></a
     ><br />
+    <span>
+      Source: {{ airline.source.join(", ") }}
+    </span>
     <table>
       <tr v-for="[flightId, flight] in flights" :key="flightId">
         <Flight

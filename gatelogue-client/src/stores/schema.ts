@@ -16,6 +16,7 @@ export type Sourced<T, S extends boolean = true> = S extends true
 
 export interface Node {
   i: IntID<Node>;
+  source: string[];
   type: string;
 }
 

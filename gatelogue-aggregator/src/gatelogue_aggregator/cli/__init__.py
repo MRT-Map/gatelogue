@@ -24,7 +24,7 @@ def _enc_hook(obj):
 
 
 def _schema_hook(obj):
-    if isinstance(obj, Source):
+    if isinstance(obj, type):
         return msgspec.json.schema(str)
     raise NotImplementedError
 
