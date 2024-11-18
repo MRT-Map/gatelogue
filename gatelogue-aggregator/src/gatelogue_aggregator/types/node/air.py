@@ -293,7 +293,8 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def prepare_merge(self):
-        self.code = str(self.code).strip()
+        if self.code is not None:
+            self.code = str(self.code).strip()
         if self.size is not None:
             self.size.v = str(self.size.v).strip()
 
