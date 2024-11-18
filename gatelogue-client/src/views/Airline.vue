@@ -48,9 +48,6 @@ const maxFlightGatesLength = computed(() =>
     <a :href="airline.link?.v">
       <b class="name">{{ airline.name }}</b></a
     ><br />
-    <span>
-      Source: {{ airline.source.join(", ") }}
-    </span>
     <table>
       <tr v-for="[flightId, flight] in flights" :key="flightId">
         <Flight
@@ -60,6 +57,9 @@ const maxFlightGatesLength = computed(() =>
         ></Flight>
       </tr>
     </table>
+    <span>
+      Source: {{ airline.source.join(", ") }}
+    </span>
     <details>
       <summary>Json</summary>
       <VueJsonPretty :data="airline as any" :deep="1" />
