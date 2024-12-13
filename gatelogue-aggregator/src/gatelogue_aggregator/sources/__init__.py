@@ -28,6 +28,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.railnorth_warp import RailNorthWarp
     from gatelogue_aggregator.sources.rail.redtrain import RedTrain
     from gatelogue_aggregator.sources.rail.redtrain_warp import RedTrainWarp
+    from gatelogue_aggregator.sources.rail.seat import SEAT
     from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
     from gatelogue_aggregator.sources.rail.wzr import WZR
     from gatelogue_aggregator.sources.rail.wzr_warp import WZRWarp
@@ -80,4 +81,5 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         RedTrainWarp,
         RailNorth,
         RailNorthWarp,
+        SEAT,
     ]
