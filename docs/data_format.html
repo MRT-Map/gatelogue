@@ -49,11 +49,11 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Format</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#specification">Specification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#air">Air</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#rail">Rail</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sea">Sea</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bus">Bus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#town">Town</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#air-nodes">Air Nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rail-nodes">Rail Nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sea-nodes">Sea Nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bus-nodes">Bus Nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#town-nodes">Town Nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miscellaneous">Miscellaneous</a></li>
 </ul>
 </li>
@@ -95,17 +95,16 @@
 <h2>Specification<a class="headerlink" href="#specification" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>All links below reference their entries in the full reference page. These classes are here for convenience’s sake.</strong></p></li>
-<li><p><strong>Do not hardcode any UUIDs in your project!</strong> They change with every update. If you need to reference a specific object, find it by its code/name/something unique to the object.</p></li>
+<li><p><strong>Do not hardcode any IDs in your project!</strong> They change with every update. If you need to reference a specific object, find it by its code/name/something unique to the object.</p></li>
 <li><p>Check the <code class="docutils literal notranslate"><span class="pre">version</span></code> field in the <code class="docutils literal notranslate"><span class="pre">Context</span></code> object for the data format version. We will try our best to maintain backwards-compatibility, but we cannot guarantee.</p></li>
 <li><p>The JSON file at <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json">data.json</a> is of base type <code class="docutils literal notranslate"><span class="pre">Context</span></code>.</p></li>
-<li><p>If you are using <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json">data_no_sources.json</a>, all instances of <code class="docutils literal notranslate"><span class="pre">Sourced[T]</span></code> or <code class="docutils literal notranslate"><span class="pre">Sourced.Ser[T]</span></code> below are replaced with just the encapsulated type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<li><p>If you are using <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json">data_no_sources.json</a>, all instances of <code class="docutils literal notranslate"><span class="pre">Sourced[T]</span></code> below are replaced with just the encapsulated type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
 <ul>
 <li><p>If you are using the Typescript types referenced above, the type for the JSON of the no-source version is <code class="docutils literal notranslate"><span class="pre">GatelogueData&lt;false&gt;</span></code> instead of simply <code class="docutils literal notranslate"><span class="pre">GatelogueData</span></code> or <code class="docutils literal notranslate"><span class="pre">GatelogueData&lt;true&gt;</span></code>.</p></li>
 </ul>
 </li>
-<li><p>Most objects here have a <code class="docutils literal notranslate"><span class="pre">.Ser</span></code> prefix because they are the serialised versions of their original classes. However in your own projects a <code class="docutils literal notranslate"><span class="pre">Ser</span></code> suffix is unnecessary.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Context</span></code> objects can be called <code class="docutils literal notranslate"><span class="pre">Data</span></code> in your project.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">uuid.UUID</span></code></a> serialises to a string, eg. <code class="docutils literal notranslate"><span class="pre">0b0e1f74-3683-4ff2-aa51-a13587950c56</span></code></p></li>
+<li><p>Most objects here have a <a href="#id1"><span class="problematic" id="id2">``</span></a>`` prefix because they are the serialised versions of their original classes. However in your own projects a <code class="docutils literal notranslate"><span class="pre">Ser</span></code> suffix is unnecessary.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Context.Export</span></code> can be called <code class="docutils literal notranslate"><span class="pre">Data</span></code> in your project.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> serialise to a list.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> serialises to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
 </ul>
@@ -113,23 +112,61 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>v4
 </pre></div>
 </div>
-<section id="air">
-<h3>Air<a class="headerlink" href="#air" title="Link to this heading"></a></h3>
+<section id="air-nodes">
+<h3>Air Nodes<a class="headerlink" href="#air-nodes" title="Link to this heading"></a></h3>
 </section>
-<section id="rail">
-<h3>Rail<a class="headerlink" href="#rail" title="Link to this heading"></a></h3>
+<section id="rail-nodes">
+<h3>Rail Nodes<a class="headerlink" href="#rail-nodes" title="Link to this heading"></a></h3>
 </section>
-<section id="sea">
-<h3>Sea<a class="headerlink" href="#sea" title="Link to this heading"></a></h3>
+<section id="sea-nodes">
+<h3>Sea Nodes<a class="headerlink" href="#sea-nodes" title="Link to this heading"></a></h3>
 </section>
-<section id="bus">
-<h3>Bus<a class="headerlink" href="#bus" title="Link to this heading"></a></h3>
+<section id="bus-nodes">
+<h3>Bus Nodes<a class="headerlink" href="#bus-nodes" title="Link to this heading"></a></h3>
 </section>
-<section id="town">
-<h3>Town<a class="headerlink" href="#town" title="Link to this heading"></a></h3>
+<section id="town-nodes">
+<h3>Town Nodes<a class="headerlink" href="#town-nodes" title="Link to this heading"></a></h3>
 </section>
 <section id="miscellaneous">
 <h3>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.connections.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="reference.html#gatelogue_aggregator.types.node.base.NodeRef" title="gatelogue_aggregator.types.node.base.NodeRef"><span class="pre">NodeRef</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Direction</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NodeRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">direction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Direction</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em></dt>
+<dd><p>Direction information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">line</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference.html#gatelogue_aggregator.types.connections.Connection.NodeRef" title="gatelogue_aggregator.types.connections.Connection.NodeRef"><span class="pre">NodeRef</span></a><span class="p"><span class="pre">[</span></span><span class="pre">L</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em></dt>
+<dd><p>Reference to or ID of the line that the connection is made on</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.context.proximity.</span></span><span class="sig-name descname"><span class="pre">Proximity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em></dt>
+<dd><p>Distance between the two objects in blocks</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.context.shared_facility.</span></span><span class="sig-name descname"><span class="pre">SharedFacility</span></span></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 </section>
