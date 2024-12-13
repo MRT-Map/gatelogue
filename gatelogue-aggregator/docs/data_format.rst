@@ -15,7 +15,6 @@ Specification
 
   * If you are using the Typescript types referenced above, the type for the JSON of the no-source version is ``GatelogueData<false>`` instead of simply ``GatelogueData`` or ``GatelogueData<true>``.
 
-* Most objects here have a ```` prefix because they are the serialised versions of their original classes. However in your own projects a ``Ser`` suffix is unnecessary.
 * ``Context.Export`` can be called ``Data`` in your project.
 * :py:class:`tuple` and :py:class:`set` serialise to a list.
 * ``None`` serialises to ``null``.
@@ -42,25 +41,21 @@ Air Nodes
 .. autoclass:: gatelogue_aggregator.types.node.air::AirFlight
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.air::AirAirport
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.air::AirGate
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.air::AirAirline
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 Rail Nodes
@@ -69,19 +64,16 @@ Rail Nodes
 .. autoclass:: gatelogue_aggregator.types.node.rail::RailCompany
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.rail::RailLine
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.rail::RailStation
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 Sea Nodes
@@ -90,19 +82,16 @@ Sea Nodes
 .. autoclass:: gatelogue_aggregator.types.node.sea::SeaCompany
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.sea::SeaLine
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.sea::SeaStop
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 Bus Nodes
@@ -111,19 +100,16 @@ Bus Nodes
 .. autoclass:: gatelogue_aggregator.types.node.bus::BusCompany
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.bus::BusLine
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.node.bus::BusStop
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 Town Nodes
@@ -132,7 +118,6 @@ Town Nodes
 .. autoclass:: gatelogue_aggregator.types.node.town::Town
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 Miscellaneous
@@ -141,30 +126,25 @@ Miscellaneous
 .. autoclass:: gatelogue_aggregator.types.base::Sourced
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.connections::Connection
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.connections::Direction
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.context.proximity::Proximity
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
 .. autoclass:: gatelogue_aggregator.types.context.shared_facility::SharedFacility
    :members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
