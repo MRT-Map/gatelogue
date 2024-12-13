@@ -292,7 +292,11 @@ def aix(ctx: WikiAirport, config):
 
     result = 0
     for gate_code, company in d:
-        airline = AirAirline.new(ctx, name=company) if str(company) != "nan" else None
+        airline = (
+            AirAirline.new(ctx, name=AirAirline.process_airline_name(company))
+            if str(company) != "nan" or company == "Unavailable"
+            else None
+        )
         AirGate.new(ctx, airport=airport, code=gate_code, airline=airline)
         result += 1
 
@@ -320,7 +324,11 @@ def lar(ctx: WikiAirport, config):
 
     result = 0
     for gate_code, size, airline, status in d:
-        airline = AirAirline.new(ctx, name=airline) if str(airline) != "nan" else None
+        airline = (
+            AirAirline.new(ctx, name=AirAirline.process_airline_name(airline))
+            if str(airline) != "nan" or airline == "?"
+            else None
+        )
         AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
         result += 1
 
@@ -348,7 +356,11 @@ def lfa(ctx: WikiAirport, config):
 
     result = 0
     for gate_code, size, airline, status in d:
-        airline = AirAirline.new(ctx, name=airline) if str(airline) != "nan" else None
+        airline = (
+            AirAirline.new(ctx, name=AirAirline.process_airline_name(airline))
+            if str(airline) != "nan" or airline == "?"
+            else None
+        )
         AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
         result += 1
 

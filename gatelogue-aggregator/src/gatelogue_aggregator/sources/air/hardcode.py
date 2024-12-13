@@ -8,6 +8,8 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
     "MarbleAir": "odd-even",
     "CampLines": "odd-even",
     "Rainer Airways": "odd-even",
+    "JiffyAir": "odd-even",
+    "AmberAir": "odd-even",
 }
 
 DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT")
@@ -22,6 +24,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "Caelus": "Caelus Airlines",
     "Cascadia": "Cascadia Airways",
     "FliHigh": "FliHigh Airlines",
+    "FlyHigh": "FliHigh",
     "FlyArctic": "Cascadia Airways",
     "FlyLumeva": "Astrella",
     "FlyMighty": "Infamous Airlines",
@@ -37,9 +40,13 @@ AIRLINE_ALIASES: dict[str, str] = {
     "myles": "mylesHeli",
     "mylesAir": "mylesHeli",
     "MylesHeli": "mylesHeli",
+    "Myles Heli": "mylesHeli",
+    "Nexus Airlines": "Nexus",
     "OLA": "Oceanic Langus Airways",
+    "RedWave Airways": "RedWave",
     "South Weast Charter": "South Weast Airlines",
     "SunAir": "FlyBahia",
+    "Utopiair": "UtopiAir",
     "ViaRapid": "ViaFly",
     "Waypoint": "IntraAir",
     "Waypoint Hopper": "IntraAir",
