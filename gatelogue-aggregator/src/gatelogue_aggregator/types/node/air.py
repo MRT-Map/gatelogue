@@ -311,7 +311,7 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
 
 
 class AirAirline(Node[AirSource], kw_only=True, tag=True):
-    acceptable_list_node_types: ClassVar = lambda: (AirFlight,)
+    acceptable_list_node_types: ClassVar = lambda: (AirFlight, AirGate)
 
     name: str
     """Name of the airline"""
@@ -320,16 +320,29 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
 
     flights: list[Sourced[int]] | None = None
     """List of IDs of all :py:class:`AirFlight` s the airline operates"""
+    gates: list[Sourced[int]] | None = None
+    """List of IDs of all :py:class:`AirGate` s the airline owns or operates"""
 
     # noinspection PyMethodOverriding
     @classmethod
-    def new(cls, ctx: AirSource, *, name: str, link: str | None = None, flights: Iterable[AirFlight] | None = None):
+    def new(
+        cls,
+        ctx: AirSource,
+        *,
+        name: str,
+        link: str | None = None,
+        flights: Iterable[AirFlight] | None = None,
+        gates: Iterable[AirFlight] | None = None,
+    ):
         self = super().new(ctx, name=name)
         if link is not None:
             self.link = ctx.source(link)
         if flights is not None:
             for flight in flights:
                 self.connect(ctx, flight)
+        if gates is not None:
+            for gate in gates:
+                self.connect(ctx, gate)
         return self
 
     @override
@@ -357,6 +370,7 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
     @override
     def prepare_export(self, ctx: AirSource):
         self.flights = self.get_all_id(ctx, AirFlight)
+        self.gates = self.get_all_id(ctx, AirGate)
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
