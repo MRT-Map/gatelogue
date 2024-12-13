@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import itertools
 import re
 from typing import TYPE_CHECKING
 
+import pandas as pd
+import rich
+
+from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
@@ -54,7 +60,10 @@ def blu_air(ctx: WikiAirline, config):
 @_EXTRACTORS.append
 def intra_air(ctx: WikiAirline, config):
     html = get_wiki_html("IntraAir/Flight List", config)
-    airline = ctx.extract_get_airline("IntraAir", "IntraAir/Flight List")
+    airline_name = "IntraAir"
+    airline = ctx.extract_get_airline(airline_name, "IntraAir/Flight List")
+
+    result = 0
     for table in html("table"):
         for tr in table("tr")[1::4]:
             if tr("td")[6].find("a", href="/index.php/File:Rsz_open.png") is None:
@@ -73,12 +82,21 @@ def intra_air(ctx: WikiAirline, config):
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
             ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")
 
 
 @_EXTRACTORS.append
 def fli_high(ctx: WikiAirline, config):
     html = get_wiki_html("FliHigh Airlines", config)
-    airline = ctx.extract_get_airline("FliHigh Airlines", "FliHigh Airlines")
+    airline_name = "FliHigh Airlines"
+    airline = ctx.extract_get_airline(airline_name, airline_name)
+
+    result = 0
     for table in html("table"):
         if table.find(string="Flight #") is None:
             continue
@@ -95,6 +113,12 @@ def fli_high(ctx: WikiAirline, config):
             if "idk" in g2 or "CHECK WIKI" in g2:
                 g2 = None
             ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")
 
 
 @_EXTRACTORS.append
@@ -136,7 +160,10 @@ def infamous(ctx: WikiAirline, config):
 @_EXTRACTORS.append
 def fly_creeper(ctx: WikiAirline, config):
     html = get_wiki_html("FlyCreeper", config)
-    airline = ctx.extract_get_airline("FlyCreeper", "FlyCreeper")
+    airline_name = "FlyCreeper"
+    airline = ctx.extract_get_airline(airline_name, airline_name)
+
+    result = 0
     for table in html("table"):
         if "Flight No" not in str(table):
             continue
@@ -157,6 +184,12 @@ def fly_creeper(ctx: WikiAirline, config):
             g1 = next(iter(tr("td")[4].strings))
             g2 = list(tr("td")[4].strings)[1]
             ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")
 
 
 @_EXTRACTORS.append
@@ -267,3 +300,67 @@ def amber_air(ctx: WikiAirline, config):
 \|\[\[File:Service Good\.png\|50px]]"""),
         config,
     )
+
+
+@_EXTRACTORS.append
+def arctic_air(ctx: WikiAirline, config):
+    cache = config.cache_dir / "arctic_air"
+    airline_name = "ArcticAir"
+    airline = ctx.extract_get_airline(airline_name, airline_name)
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=0",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache)
+
+    d = list(zip(df["Flight"], df["Departure"], df["Arrival"], df["D. Gate"], df["A. Gate"], strict=False))
+
+    result = 0
+    for flight, a1, a2, g1, g2 in d[::2]:
+        if flight == "13":
+            continue
+        if not a1 or str(a1) == "nan":
+            continue
+        ctx.extract_get_flight(
+            airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" in g1 else None, g2=g2 if "*" in g2 else None
+        )
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")
+
+
+@_EXTRACTORS.append
+def sandstone_airr(ctx: WikiAirline, config):
+    cache = config.cache_dir / "sandstone_airr"
+    airline_name = "Sandstone Airr"
+    airline = ctx.extract_get_airline(airline_name, airline_name)
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=3084051",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache)
+
+    d = list(zip(df["Unnamed: 1"], df["Airport"], df["Gate"], strict=False))
+
+    result = 0
+    for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
+        if not a1 or str(a1) == "nan":
+            continue
+        ctx.extract_get_flight(
+            airline, code=str(int(flight)), a1=a1, a2=a2, g1=g1 if "*" in g1 else None, g2=g2 if "*" in g2 else None
+        )
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")
