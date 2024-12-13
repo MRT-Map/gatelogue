@@ -34,7 +34,9 @@ class IntraSail(SeaSource):
             result = re.search(r"\[ (?P<code>.*) ] (?P<name>[^|]*)", line_code_name)
             line_code = result.group("code").strip()
             line_name = result.group("name").strip()
-            line = SeaLine.new(self, code=line_code, name=line_name, company=company, mode="ferry")
+
+            line_colour = "#C74EBD" if line_code.endswith("X") else "#3AB3DA" if line_code[-1].isdigit() else "#B02E26"
+            line = SeaLine.new(self, code=line_code, name=line_name, company=company, mode="ferry", colour=line_colour)
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
             stops = []
