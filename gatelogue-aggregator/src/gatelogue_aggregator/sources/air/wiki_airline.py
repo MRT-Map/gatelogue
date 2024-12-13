@@ -71,32 +71,35 @@ class WikiAirline(AirSource):
         **_,
     ) -> AirFlight:
         f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
-        f.connect(
+
+        gate1 = AirGate.new(
             self,
-            AirGate.new(
-                self,
-                code=AirGate.process_code(g1),
-                airport=AirAirport.new(self, code=AirAirport.process_code(a1 or a12)),
-                size=str(s) if s is not None else None,
-            ),
+            code=AirGate.process_code(g1),
+            airport=AirAirport.new(self, code=AirAirport.process_code(a1 or a12)),
+            size=str(s) if s is not None else None,
+        )
+        f.connect(self, gate1)
+        airline.connect(self, gate1)
+
+        gate2 = AirGate.new(
+            self,
+            code=AirGate.process_code(g2),
+            airport=AirAirport.new(self, code=AirAirport.process_code(a2 or a22)),
+            size=str(s) if s is not None else None,
         )
         f.connect(
             self,
-            AirGate.new(
-                self,
-                code=AirGate.process_code(g2),
-                airport=AirAirport.new(self, code=AirAirport.process_code(a2 or a22)),
-                size=str(s) if s is not None else None,
-            ),
+            gate2,
         )
+        airline.connect(self, gate2)
+
         if (a3 is not None or a32 is not None) and g3 is not None:
-            f.connect(
+            gate3 = AirGate.new(
                 self,
-                AirGate.new(
-                    self,
-                    code=AirGate.process_code(g3),
-                    airport=AirAirport.new(self, code=AirAirport.process_code(a3 or a32)),
-                    size=str(s) if s is not None else None,
-                ),
+                code=AirGate.process_code(g3),
+                airport=AirAirport.new(self, code=AirAirport.process_code(a3 or a32)),
+                size=str(s) if s is not None else None,
             )
+            f.connect(self, gate3)
+            airline.connect(self, gate3)
         return f
