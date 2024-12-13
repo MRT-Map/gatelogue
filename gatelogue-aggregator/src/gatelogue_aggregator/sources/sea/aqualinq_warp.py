@@ -44,6 +44,8 @@ class AquaLinQWarp(SeaSource):
         d["AQ300ENCI"] = "Encinitas Embarcadero International Seaport"
         d["AQ1200RELAXE"] = "Relaxation Islands"
         d["AQ1600TWEEB"] = "Tweebuffelsmeteenskootmorsdoodgeskietfontein"
+        d["AQ1300CARDS"] = "Cardinal Bay"
+        d["AQ900ONEM"] = "Onemalu Moku Uopa Regional Pier"
 
         names = []
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):

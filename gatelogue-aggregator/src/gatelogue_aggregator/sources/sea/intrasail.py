@@ -48,9 +48,16 @@ class IntraSail(SeaSource):
                     "color:#AEE4ED;",
                 ):
                     continue
-                stop_name = " ".join(big2.stripped_strings)
+                name = " ".join(big2.stripped_strings)
+                name = {
+                    "Shahai": "Shahai Ferry Terminal",
+                    "Auburn": "Auburn Marina",
+                    "the Port of Ilirea": "Port of Ilirea",
+                    "Xandar-Vekta Ferry Terminal": "Xandar-Vekta Transfer Station",
+                    "Weezerville": "Deadbush Port of Weezerville",
+                }.get(name, name)
 
-                stop = SeaStop.new(self, codes={stop_name}, name=stop_name, company=company)
+                stop = SeaStop.new(self, codes={name}, name=name, company=company)
                 stops.append(stop)
 
             SeaLineBuilder(self, line).connect(*stops)

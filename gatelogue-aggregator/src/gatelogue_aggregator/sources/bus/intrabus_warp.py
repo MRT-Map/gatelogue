@@ -27,13 +27,17 @@ class IntraBusWarp(BusSource):
                 continue
             if (
                 match := re.search(
-                    r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: ([^/]*) /|THIS & LAST STOP: ([^/]*) /",
+                    r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: (.*?) //|THIS & LAST STOP: (.*?) //",
                     warp["welcomeMessage"],
                 )
             ) is None:
                 # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
-            name = match.group(1) or match.group(2) or match.group(3)
+
+            name = (match.group(1) or match.group(2) or match.group(3)).split("(")[0].strip()
+            name = {
+                "Quris Markovi Theatre": "Quiris Markovi Theatre",
+            }.get(name, name)
             if name in names:
                 continue
             BusStop.new(
