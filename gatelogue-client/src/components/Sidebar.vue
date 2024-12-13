@@ -35,6 +35,7 @@ const airlinePanel: Panel<AirAirline> = {
   catDisplay: "Airline",
   objDisplay: "name",
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const panels: Panel<any>[] = [airlinePanel, airportPanel] as const;
 
 const selPanel = ref(panels[0]);

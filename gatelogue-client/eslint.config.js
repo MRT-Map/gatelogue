@@ -40,6 +40,7 @@ export default tseslint.config(
       "one-var": "off",
       radix: "off",
       "sort-keys": "off",
+      "sort-imports": "off",
       "vue/multi-word-component-names": "off",
     },
   },

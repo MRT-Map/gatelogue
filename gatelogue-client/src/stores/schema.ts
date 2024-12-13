@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */
 export type StringID<_ extends Node> = string;
 export type IntID<_ extends Node> = number;
 export type World = "Old" | "New" | "Space";
@@ -160,119 +160,119 @@ export class GD<S extends boolean = true> {
   }
 
   airFlight(id: StringID<AirFlight<S>>): AirFlight<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get airFlights(): AirFlight<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "AirFlight",
-    ) as any;
+      (a) => a.type === "AirFlight",
+    ) as never;
   }
 
   airAirport(id: StringID<AirAirport<S>>): AirAirport<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get airAirports(): AirAirport<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "AirAirport",
-    ) as any;
+      (a) => a.type === "AirAirport",
+    ) as never;
   }
 
   airGate(id: StringID<AirGate<S>>): AirGate<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get airGates(): AirGate<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "AirGate",
-    ) as any;
+      (a) => a.type === "AirGate",
+    ) as never;
   }
 
   airAirline(id: StringID<AirAirline<S>>): AirAirline<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get airAirlines(): AirAirline<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "AirAirline",
-    ) as any;
+      (a) => a.type === "AirAirline",
+    ) as never;
   }
 
   railCompany(id: StringID<RailCompany<S>>): RailCompany<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get railCompanies(): RailCompany<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "RailCompany",
-    ) as any;
+      (a) => a.type === "RailCompany",
+    ) as never;
   }
 
   railLine(id: StringID<RailLine<S>>): RailLine<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get railLines(): RailLine<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "RailLine",
-    ) as any;
+      (a) => a.type === "RailLine",
+    ) as never;
   }
 
   railStation(id: StringID<RailStation<S>>): RailStation<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get railStations(): RailStation<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "RailStation",
-    ) as any;
+      (a) => a.type === "RailStation",
+    ) as never;
   }
 
   seaCompany(id: StringID<SeaCompany<S>>): SeaCompany<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get seaCompanies(): SeaCompany<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "SeaCompany",
-    ) as any;
+      (a) => a.type === "SeaCompany",
+    ) as never;
   }
 
   seaLine(id: StringID<SeaLine<S>>): SeaLine<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get seaLines(): SeaLine<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "SeaLine",
-    ) as any;
+      (a) => a.type === "SeaLine",
+    ) as never;
   }
 
   seaStop(id: StringID<SeaStop<S>>): SeaStop<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get seaStops(): SeaStop<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "SeaStop",
-    ) as any;
+      (a) => a.type === "SeaStop",
+    ) as never;
   }
 
   busCompany(id: StringID<BusCompany<S>>): BusCompany<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get busCompanies(): BusCompany<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "BusCompany",
-    ) as any;
+      (a) => a.type === "BusCompany",
+    ) as never;
   }
 
   busLine(id: StringID<BusLine<S>>): BusLine<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get busLines(): BusLine<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "BusLine",
-    ) as any;
+      (a) => a.type === "BusLine",
+    ) as never;
   }
 
   busStop(id: StringID<BusStop<S>>): BusStop<S> | undefined {
-    return this.data.nodes[id] as any;
+    return this.data.nodes[id] as never;
   }
   get busStops(): BusStop<S>[] {
     return Object.values(this.data.nodes).filter(
-      (a) => a.type == "BusStop",
-    ) as any;
+      (a) => a.type === "BusStop",
+    ) as never;
   }
 }

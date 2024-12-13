@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { AirAirport, AirFlight, AirGate, StringID } from "@/stores/schema";
-import { RouterLink } from "vue-router";
+import type { AirFlight, AirGate, StringID } from "@/stores/schema";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";

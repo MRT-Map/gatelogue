@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AirAirline, AirGate, StringID } from "@/stores/schema";
+import type { AirGate, StringID } from "@/stores/schema";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 import { RouterLink } from "vue-router";

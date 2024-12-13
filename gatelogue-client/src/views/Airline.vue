@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { AirAirport, AirFlight, AirGate } from "@/stores/schema";
+import type { AirFlight } from "@/stores/schema";
 import Flight from "./airline/Flight.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
@@ -44,17 +44,17 @@ const maxFlightGatesLength = computed(() =>
   Math.max(...flights.value.map(([, f]) => f.gates.length)),
 );
 
-const gates = computed(() => {
-  return airline.value.gates
+const gates = computed(() =>
+  airline.value.gates
     .map((g) => ({ s: g.s, v: gd.value!.airGate(g.v.toString())! }))
     .sort((g1, g2) => {
-      let a1 = gd.value!.airAirport(g1.v.airport.v.toString())!.code;
-      let a2 = gd.value!.airAirport(g2.v.airport.v.toString())!.code;
+      const a1 = gd.value!.airAirport(g1.v.airport.v.toString())!.code;
+      const a2 = gd.value!.airAirport(g2.v.airport.v.toString())!.code;
       return a1 === a2
         ? (g1.v.code ?? "?").localeCompare(g2.v.code ?? "?")
         : a1.localeCompare(a2);
-    });
-});
+    }),
+);
 </script>
 
 <template>
