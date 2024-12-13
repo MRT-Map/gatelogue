@@ -9,16 +9,34 @@ Types
    :members:
    :undoc-members:
 
+.. automodule:: gatelogue_aggregator.types.config
+   :members:
+   :undoc-members:
+
 .. automodule:: gatelogue_aggregator.types.connections
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
+
+.. automodule:: gatelogue_aggregator.types.line_builder
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.types.source
+   :members:
+   :undoc-members:
+
+Context
++++++++
 
 .. automodule:: gatelogue_aggregator.types.context
    :members:
    :undoc-members:
 
-.. automodule:: gatelogue_aggregator.types.line_builder
+.. automodule:: gatelogue_aggregator.types.proximity
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.types.shared_facility
    :members:
    :undoc-members:
 
@@ -95,6 +113,10 @@ Bus
    :members:
    :undoc-members:
 
+.. automodule:: gatelogue_aggregator.sources.bus.omegabus
+   :members:
+   :undoc-members:
+
 Rail
 ++++
 
@@ -106,6 +128,14 @@ Rail
    :members:
    :undoc-members:
 
+.. automodule:: gatelogue_aggregator.sources.rail.fredrail
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.fredrail_warp
+   :members:
+   :undoc-members:
+
 .. automodule:: gatelogue_aggregator.sources.rail.intrarail
    :members:
    :undoc-members:
@@ -114,11 +144,51 @@ Rail
    :members:
    :undoc-members:
 
+.. automodule:: gatelogue_aggregator.sources.rail.marblerail
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.marblerail_warp
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.nflr
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.nflr_warp
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.nsc
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.nsc_warp
+   :members:
+   :undoc-members:
+
 .. automodule:: gatelogue_aggregator.sources.rail.railinq
    :members:
    :undoc-members:
 
 .. automodule:: gatelogue_aggregator.sources.rail.railinq_warp
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.railnorth
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.railnorth_warp
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.redtrain
+   :members:
+   :undoc-members:
+
+.. automodule:: gatelogue_aggregator.sources.rail.redtrain_warp
    :members:
    :undoc-members:
 
@@ -135,14 +205,6 @@ Rail
    :undoc-members:
 
 .. automodule:: gatelogue_aggregator.sources.rail.wiki_mrt
-   :members:
-   :undoc-members:
-
-.. automodule:: gatelogue_aggregator.sources.rail.nflr
-   :members:
-   :undoc-members:
-
-.. automodule:: gatelogue_aggregator.sources.rail.nflr_warp
    :members:
    :undoc-members:
 

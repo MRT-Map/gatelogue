@@ -8,16 +8,15 @@ If you use `Typescript <https://www.typescriptlang.org/>`_, see https://github.c
 Specification
 -------------
 * **All links below reference their entries in the full reference page. These classes are here for convenience's sake.**
-* **Do not hardcode any UUIDs in your project!** They change with every update. If you need to reference a specific object, find it by its code/name/something unique to the object.
+* **Do not hardcode any IDs in your project!** They change with every update. If you need to reference a specific object, find it by its code/name/something unique to the object.
 * Check the ``version`` field in the ``Context`` object for the data format version. We will try our best to maintain backwards-compatibility, but we cannot guarantee.
 * The JSON file at `data.json <https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json>`_ is of base type ``Context``.
-* If you are using `data_no_sources.json <https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json>`_, all instances of ``Sourced[T]`` or ``Sourced.Ser[T]`` below are replaced with just the encapsulated type ``T``.
+* If you are using `data_no_sources.json <https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json>`_, all instances of ``Sourced[T]`` below are replaced with just the encapsulated type ``T``.
 
   * If you are using the Typescript types referenced above, the type for the JSON of the no-source version is ``GatelogueData<false>`` instead of simply ``GatelogueData`` or ``GatelogueData<true>``.
 
-* Most objects here have a ``.Ser`` prefix because they are the serialised versions of their original classes. However in your own projects a ``Ser`` suffix is unnecessary.
-* ``Context`` objects can be called ``Data`` in your project.
-* :py:class:`uuid.UUID` serialises to a string, eg. ``0b0e1f74-3683-4ff2-aa51-a13587950c56``
+* Most objects here have a ```` prefix because they are the serialised versions of their original classes. However in your own projects a ``Ser`` suffix is unnecessary.
+* ``Context.Export`` can be called ``Data`` in your project.
 * :py:class:`tuple` and :py:class:`set` serialise to a list.
 * ``None`` serialises to ``null``.
 
@@ -25,134 +24,112 @@ The current data format version is
 
 .. program-output:: python -c "from gatelogue_aggregator.__about__ import __version__; print('v'+__version__.split('+')[1])"
 
-.. autoclass:: gatelogue_aggregator.types.context::Context.Ser
+.. autoclass:: gatelogue_aggregator.types.context::Context.Export
    :members:
    :undoc-members:
    :inherited-members:
    :no-index:
 
-Air
-+++
-
-.. autoclass:: gatelogue_aggregator.types.node.air::AirContext.Ser
+.. autoclass:: gatelogue_aggregator.types.context::Context.Node
    :members:
    :undoc-members:
    :inherited-members:
-   :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.air::AirFlight.Ser
+Air Nodes
++++++++++
+
+.. autoclass:: gatelogue_aggregator.types.node.air::AirFlight
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.air::AirAirport.Ser
+.. autoclass:: gatelogue_aggregator.types.node.air::AirAirport
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.air::AirGate.Ser
+.. autoclass:: gatelogue_aggregator.types.node.air::AirGate
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.air::AirAirline.Ser
+.. autoclass:: gatelogue_aggregator.types.node.air::AirAirline
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-Rail
-++++
+Rail Nodes
+++++++++++
 
-.. autoclass:: gatelogue_aggregator.types.node.rail::RailContext.Ser
-   :members:
-   :undoc-members:
-   :inherited-members:
-   :exclude-members: uuid, Literal
-   :no-index:
-
-.. autoclass:: gatelogue_aggregator.types.node.rail::RailCompany.Ser
+.. autoclass:: gatelogue_aggregator.types.node.rail::RailCompany
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.rail::RailLine.Ser
+.. autoclass:: gatelogue_aggregator.types.node.rail::RailLine
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.rail::RailStation.Ser
+.. autoclass:: gatelogue_aggregator.types.node.rail::RailStation
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-Sea
-+++
+Sea Nodes
++++++++++
 
-.. autoclass:: gatelogue_aggregator.types.node.sea::SeaContext.Ser
-   :members:
-   :undoc-members:
-   :inherited-members:
-   :exclude-members: uuid, Literal
-   :no-index:
-
-.. autoclass:: gatelogue_aggregator.types.node.sea::SeaCompany.Ser
+.. autoclass:: gatelogue_aggregator.types.node.sea::SeaCompany
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.sea::SeaLine.Ser
+.. autoclass:: gatelogue_aggregator.types.node.sea::SeaLine
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.sea::SeaStop.Ser
+.. autoclass:: gatelogue_aggregator.types.node.sea::SeaStop
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-Bus
-+++
+Bus Nodes
++++++++++
 
-.. autoclass:: gatelogue_aggregator.types.node.bus::BusContext.Ser
-   :members:
-   :undoc-members:
-   :inherited-members:
-   :exclude-members: uuid, Literal
-   :no-index:
-
-.. autoclass:: gatelogue_aggregator.types.node.bus::BusCompany.Ser
+.. autoclass:: gatelogue_aggregator.types.node.bus::BusCompany
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.bus::BusLine.Ser
+.. autoclass:: gatelogue_aggregator.types.node.bus::BusLine
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.node.bus::BusStop.Ser
+.. autoclass:: gatelogue_aggregator.types.node.bus::BusStop
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-Town
-++++
+Town Nodes
+++++++++++
 
-.. autoclass:: gatelogue_aggregator.types.node.town::Town.Ser
+.. autoclass:: gatelogue_aggregator.types.node.town::Town
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
@@ -160,26 +137,34 @@ Town
 
 Miscellaneous
 +++++++++++++
-.. autoclass:: gatelogue_aggregator.types.base::Sourced.Ser
+
+.. autoclass:: gatelogue_aggregator.types.base::Sourced
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.connections::Connection.Ser
+.. autoclass:: gatelogue_aggregator.types.connections::Connection
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.connections::Direction.Ser
+.. autoclass:: gatelogue_aggregator.types.connections::Direction
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.connections::Proximity
+.. autoclass:: gatelogue_aggregator.types.context.proximity::Proximity
    :members:
    :inherited-members:
    :exclude-members: uuid, Literal
    :no-index:
+
+.. autoclass:: gatelogue_aggregator.types.context.shared_facility::SharedFacility
+   :members:
+   :inherited-members:
+   :exclude-members: uuid, Literal
+   :no-index:
+
