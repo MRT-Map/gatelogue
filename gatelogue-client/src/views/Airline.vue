@@ -57,9 +57,7 @@ const maxFlightGatesLength = computed(() =>
         ></Flight>
       </tr>
     </table>
-    <span>
-      Source: {{ airline.source.join(", ") }}
-    </span>
+    <span> Source: {{ airline.source.join(", ") }} </span>
     <details>
       <summary>Json</summary>
       <VueJsonPretty :data="airline as any" :deep="1" />

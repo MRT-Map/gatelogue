@@ -11,9 +11,7 @@ from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
 from gatelogue_aggregator.sources.rail.fredrail import FredRail
 from gatelogue_aggregator.sources.rail.fredrail_warp import FredRailWarp
 
-# from gatelogue_aggregator.sources.rail.intrarail import IntraRail
-# from gatelogue_aggregator.sources.rail.intrarail_local import IntraRailLocal
-from gatelogue_aggregator.sources.rail.intrarail_mcr_warp import IntraRailMCRWarp
+from gatelogue_aggregator.sources.rail.intrarail import IntraRail
 from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
 from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
 from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
@@ -47,10 +45,8 @@ SOURCES = [
     WikiAirport,
     BluRail,
     BluRailWarp,
-    # IntraRail,
-    # IntraRailLocal,
+    IntraRail,
     IntraRailWarp,
-    IntraRailMCRWarp,
     RaiLinQ,
     RaiLinQWarp,
     WZR,

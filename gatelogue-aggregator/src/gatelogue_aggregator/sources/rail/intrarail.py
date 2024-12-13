@@ -34,78 +34,31 @@ class IntraRail(RailSource):
 
         html = get_wiki_html("IntraRail", config)
 
-        cursor: bs4.Tag = html.find("span", "mw-headline", string="(1) Whiteliner").parent
-
-        while (line_code_name := cursor.find(class_="mw-headline").string).startswith("("):
-            result = re.search(r"\((?P<code>.*)\) (?P<name>[^|]*)", line_code_name)
-            line_code = result.group("code").strip()
-            line_name = result.group("name").strip()
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
-            cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
+        for h4 in html.find_all("h4"):
+            line_code_name: str = h4.find("span", class_="mw-headline").string
+            if line_code_name.startswith("("):
+                continue
+            line_code = line_code_name.split(" ")[0]
+            line_name = line_code_name.removeprefix(line_code)
+            line = RailLine.new(self, company=company, code=line_code, name=line_name, mode="warp")
 
             stations = []
-            for big in cursor.find_all("big")[::2]:
-                if big.find("s") is not None:
+            for big in h4.find_next("p").find_all("big", recursive=False):
+                if (big2 := big.find("big")) is None:
                     continue
-                station_name = ""
-                if (b := big.find("b")) is not None:
-                    station_name += b.string
-                if (i := big.find("i")) is not None:
-                    station_name += " " + i.string
-                if station_name == "":
-                    continue
-                station_name = station_name.strip()
-                if station_name == "Siletz Siletz Salvador":
-                    station_name = "Siletz Salvador Station"
+                name = " ".join(big2.stripped_strings)
 
-                station = RailStation.new(self, codes={station_name}, name=station_name, company=company)
+                station = RailStation.new(self, company=company, codes={name}, name=name)
                 stations.append(station)
 
-            if line_code == "54":
-                forward_label = "towards " + stations[-1].name.v
-                backward_label = "towards " + stations[0].name.v
+            if line_code == "202":
+                RailLineBuilder(self, line).connect(*stations, exclude=["Amestris Cummins Highway"])
                 RailLineBuilder(self, line).connect(
-                    *stations[0:2],
-                    forward_label=forward_label,
-                    backward_label=backward_label,
+                    *stations, between=("Amestris Cummins Highway", "Laclede Airport Plaza")
                 )
-                RailLineBuilder(self, line).connect(
-                    *stations[8 - 1 : 12 - 1],
-                    forward_label=forward_label,
-                    backward_label=backward_label,
-                )
-                RailLineBuilder(self, line).connect(
-                    stations[8 - 1], *stations[5 - 1 : 0 : -1], forward_label=backward_label, one_way=True
-                )
-                RailLineBuilder(self, line).connect(
-                    stations[1], *stations[6 - 1 : 9 - 1], forward_label=forward_label, one_way=True
-                )
-            elif line_code == "55":
-                RailLineBuilder(self, line).connect(*stations, one_way=True)
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
-            if line_code == "66":
-                line2 = RailLine.new(self, code="<66>", name="East Mesan Express", company=company, mode="warp")
-                stations2 = [
-                    s
-                    for s in stations
-                    if s.name
-                    not in (
-                        "Aurora",
-                        "Lazure",
-                        "Cherrywood",
-                        "Sunset Pass",
-                        "Taiga Hills",
-                        "Addison",
-                        "Raymont",
-                        "Bawktown South Station",
-                    )
-                ]
-                RailLineBuilder(self, line2).connect(*stations2)
-                rich.print(RESULT + f"IntraRail Line <66> has {len(stations2)} stations")
-
             rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
 
-            cursor: bs4.Tag = cursor.next_sibling.next_sibling
         self.save_to_cache(config, self.g)
