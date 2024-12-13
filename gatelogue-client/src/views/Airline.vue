@@ -21,7 +21,7 @@ watchEffect(() => {
   if (airline.value === undefined) {
     router.replace("/").then(() => router.go(0));
   } else if (airline.value.name) {
-    router.replace(`/airline/${airline.value.name}`);
+    router.replace(`/airline/${encodeURIComponent(airline.value.name)}`);
   }
 });
 

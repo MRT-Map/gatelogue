@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { AirAirport, AirGate } from "@/stores/schema";
+import type { AirGate } from "@/stores/schema";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
+import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
   flightId: string;
@@ -17,21 +18,7 @@ const otherGates = computed(() =>
     .map(
       (g) => [g.s, gd.value!.airGate(g.v.toString())!] as [string[], AirGate],
     )
-    .map(
-      ([s, g]) =>
-        [
-          s.concat(g.airport.s),
-          g,
-          gd.value!.airAirport(g.airport.v.toString())!,
-        ] as [string[], AirGate, AirAirport],
-    )
-    .map(([s, g, a]) => ({
-      v: [`${a.code}${g.code ? `-${g.code}` : ""}`, g.airport.v.toString()] as [
-        string,
-        string,
-      ],
-      s,
-    })),
+    .map(([s, g]) => ({ s: s.concat(g.airport.s), v: g })),
 );
 const airline = computed(() => flight.value.airline);
 </script>
@@ -44,9 +31,9 @@ const airline = computed(() => flight.value.airline);
       /></Sourced>
       {{ flight.codes[0] }}</b
     >
-    <Sourced v-for="gate in otherGates" :key="gate.v[0]" :sourced="gate">
+    <Sourced v-for="gate in otherGates" :key="gate.v.i" :sourced="gate">
       <br />
-      <RouterLink :to="`/airport/${gate.v[1]}`">{{ gate.v[0] }}</RouterLink>
+      <GateLink :gate="gate.v" />
     </Sourced>
   </td>
 </template>
