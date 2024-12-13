@@ -3,7 +3,13 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+import pandas as pd
+import rich
+
+from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
+from gatelogue_aggregator.types.node.air import AirGate, AirAirline
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -42,16 +48,6 @@ def kek(ctx: WikiAirport, config):
         "Kazeshima Eumi Konaejima Airport",
         "KEK",
         re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def lar(ctx: WikiAirport, config):
-    ctx.regex_extract_airport(
-        "Larkspur Lilyflower International Airport",
-        "LAR",
-        re.compile(r"(?s)'''(?P<code>[^|]*?)'''\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^\n]*?)]]|[^|]*?)\|\|.*?status"),
         config,
     )
 
@@ -276,3 +272,87 @@ def atc(ctx: WikiAirport, config):
         ),
         config,
     )
+
+
+@_EXTRACTORS.append
+def aix(ctx: WikiAirport, config):
+    cache = config.cache_dir / "aix"
+    airport_code = "AIX"
+    airport = ctx.extract_get_airport(airport_code, "Aurora International Airport")
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1vG_oEj_XzZlckRwxn4jKkK1FcgjjaULpt66XcxClqP8/export?format=csv&gid=0",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache, header=1)
+
+    d = list(zip(df["Gate ID"], df["Company"], strict=False))
+
+    result = 0
+    for gate_code, company in d:
+        airline = AirAirline.new(ctx, name=company) if str(company) != "nan" else None
+        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline)
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
+    else:
+        rich.print(RESULT + f"{airport_code} has {result} gates")
+
+
+@_EXTRACTORS.append
+def lar(ctx: WikiAirport, config):
+    cache = config.cache_dir / "lar"
+    airport_code = "LAR"
+    airport = ctx.extract_get_airport(airport_code, "Larkspur Lilyflower International Airport")
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=0",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache)
+
+    d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
+
+    result = 0
+    for gate_code, size, airline, status in d:
+        airline = AirAirline.new(ctx, name=airline) if str(airline) != "nan" else None
+        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
+    else:
+        rich.print(RESULT + f"{airport_code} has {result} gates")
+
+
+@_EXTRACTORS.append
+def lfa(ctx: WikiAirport, config):
+    cache = config.cache_dir / "lfa"
+    airport_code = "LFA"
+    airport = ctx.extract_get_airport(airport_code, "Larkspur Lilyflower International Airport")
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=1289412824",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache)
+
+    d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
+
+    result = 0
+    for gate_code, size, airline, status in d:
+        airline = AirAirline.new(ctx, name=airline) if str(airline) != "nan" else None
+        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
+    else:
+        rich.print(RESULT + f"{airport_code} has {result} gates")

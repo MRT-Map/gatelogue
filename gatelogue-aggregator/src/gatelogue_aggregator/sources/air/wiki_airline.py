@@ -57,10 +57,15 @@ class WikiAirline(AirSource):
         self,
         airline: AirAirline,
         code: str,
-        a1: str,
-        a2: str,
+        a1: str | None = None,
+        a2: str | None = None,
+        a3: str | None = None,
+        a12: str | None = None,
+        a22: str | None = None,
+        a32: str | None = None,
         g1: str | None = None,
         g2: str | None = None,
+        g3: str | None = None,
         s: str | None = None,
         **_,
     ) -> AirFlight:
@@ -70,7 +75,7 @@ class WikiAirline(AirSource):
             AirGate.new(
                 self,
                 code=AirGate.process_code(g1),
-                airport=AirAirport.new(self, code=AirAirport.process_code(a1)),
+                airport=AirAirport.new(self, code=AirAirport.process_code(a1 or a12)),
                 size=str(s) if s is not None else None,
             ),
         )
@@ -79,8 +84,18 @@ class WikiAirline(AirSource):
             AirGate.new(
                 self,
                 code=AirGate.process_code(g2),
-                airport=AirAirport.new(self, code=AirAirport.process_code(a2)),
+                airport=AirAirport.new(self, code=AirAirport.process_code(a2 or a22)),
                 size=str(s) if s is not None else None,
             ),
         )
+        if (a3 is not None or a32 is not None) and g3 is not None:
+            f.connect(
+                self,
+                AirGate.new(
+                    self,
+                    code=AirGate.process_code(g3),
+                    airport=AirAirport.new(self, code=AirAirport.process_code(a3 or a32)),
+                    size=str(s) if s is not None else None,
+                ),
+            )
         return f
