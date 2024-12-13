@@ -321,7 +321,7 @@ def lar(ctx: WikiAirport, config):
     d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
     result = 0
-    for gate_code, size, airline, status in d:
+    for gate_code, size, airline, _status in d:
         ctx.extract_get_gate(
             airport=airport,
             code=gate_code,
@@ -353,7 +353,7 @@ def lfa(ctx: WikiAirport, config):
     d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
     result = 0
-    for gate_code, size, airline, status in d:
+    for gate_code, size, airline, _status in d:
         ctx.extract_get_gate(
             airport=airport,
             code=gate_code,

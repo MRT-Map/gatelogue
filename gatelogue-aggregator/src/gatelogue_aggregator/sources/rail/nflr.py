@@ -82,7 +82,7 @@ class NFLR(RailSource):
             ("N4", 1065941701, False),
         )
 
-        def retrieve_urls(line_name: str, gid: int, *args):
+        def retrieve_urls(line_name: str, gid: int, *_args):
             get_url(
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),

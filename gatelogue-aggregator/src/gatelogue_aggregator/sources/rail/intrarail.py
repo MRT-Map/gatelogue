@@ -1,6 +1,3 @@
-import re
-from typing import TYPE_CHECKING
-
 import rich
 
 from gatelogue_aggregator.logging import RESULT
@@ -14,9 +11,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailStation,
 )
 from gatelogue_aggregator.types.source import Source
-
-if TYPE_CHECKING:
-    import bs4
 
 
 class IntraRail(RailSource):

@@ -5,7 +5,6 @@ import rich
 
 from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.source import Source
 
 
@@ -18,7 +17,7 @@ class SharedFacilityContext(BaseContext, Source):
     priority = 0
 
     def update(self):
-        from gatelogue_aggregator.types.node.rail import RailStation, RailCompany
+        from gatelogue_aggregator.types.node.rail import RailCompany, RailStation
 
         blu = "BluRail"
         fr = "Fred Rail"

@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import itertools
-from collections.abc import Container
 from typing import TYPE_CHECKING, ClassVar
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection, Direction
 
 if TYPE_CHECKING:
+    from collections.abc import Container
+
     from gatelogue_aggregator.types.node.base import Node
 
 
@@ -37,9 +38,11 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
                 if s.name.v == between[1]:
                     i2 = i
             if i1 is None:
-                raise ValueError(f"{between[0]} not found in list {[s.name.v for s in stations]}")
+                msg = f"{between[0]} not found in list {[s.name.v for s in stations]}"
+                raise ValueError(msg)
             if i2 is None:
-                raise ValueError(f"{between[1]} not found in list {[s.name.v for s in stations]}")
+                msg = f"{between[1]} not found in list {[s.name.v for s in stations]}"
+                raise ValueError(msg)
             stations = list(stations)[i1 : i2 + 1]
         if exclude is not None:
             stations = [s for s in stations if s.name.v not in exclude]
