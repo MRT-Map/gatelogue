@@ -88,8 +88,7 @@ nav {
   height: calc(100vh - 1em);
   width: 10em;
   float: left;
-  padding: 1em;
-  padding-bottom: 0;
+  padding: 1em 1em 0;
   overflow-y: auto;
 }
 img {
@@ -118,30 +117,30 @@ a:hover {
   padding: 0.5em;
   text-align: center;
   user-select: none;
-  box-shadow: var(--col-at) 0px 3px;
+  box-shadow: var(--col-at) 0 3px;
   transition: all 0.1s ease;
   color: white;
   text-overflow: ellipsis;
 }
 .button.sel {
   background-color: var(--acc-a);
-  box-shadow: var(--acc-at) 0px 3px;
+  box-shadow: var(--acc-at) 0 3px;
 }
 .button:hover {
   background-color: var(--col-d);
   color: var(--col-a);
-  box-shadow: var(--col-dt) 0px 4px;
+  box-shadow: var(--col-dt) 0 4px;
   transform: translateY(-1px);
   cursor: pointer;
 }
 .button.sel:hover {
   background-color: var(--acc-b);
-  box-shadow: var(--acc-bt) 0px 4px;
+  box-shadow: var(--acc-bt) 0 4px;
 }
 
 .button:active {
   background-color: var(--col-e) !important;
-  box-shadow: var(--col-et) 0px 0px !important;
+  box-shadow: var(--col-et) 0 0 !important;
   transform: translateY(3px);
   color: var(--col-a);
 }

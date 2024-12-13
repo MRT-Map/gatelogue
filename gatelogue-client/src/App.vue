@@ -34,9 +34,8 @@ main {
   height: calc(100vh - 1em);
   width: calc(100vw - 15em);
   float: right;
-  padding: 1em;
   margin: 0;
-  padding-bottom: 0;
+  padding: 1em 1em 0;
   overflow-y: auto;
   text-align: center;
 }
@@ -50,6 +49,10 @@ a:hover {
 }
 a:active {
   color: var(--acc-b);
+}
+hr {
+  border-style: solid;
+  color: var(--col-c);
 }
 </style>
 <style scoped>

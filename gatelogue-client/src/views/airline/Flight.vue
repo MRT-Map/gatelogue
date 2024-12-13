@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
+import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
   flightId: StringID<AirFlight>;
@@ -17,15 +18,12 @@ const gates = computed(() =>
   flight.value.gates
     .map((g) => [g.s, gd.value!.airGate(g.v.toString())] as [string[], AirGate])
     .map(([s, g]) => ({
-      v: [g, gd.value!.airAirport(g.airport.v.toString())] as [
-        AirGate,
-        AirAirport,
-      ],
+      v: g,
       s: s.concat(g.airport.s),
     })),
 );
 const size = computed(
-  () => gates.value.map((g) => g.v[0].size).filter((s) => s?.v)[0],
+  () => gates.value.map((g) => g.v.size).filter((s) => s?.v)[0],
 );
 </script>
 
@@ -34,11 +32,9 @@ const size = computed(
   <td class="flight-size">
     <Sourced :sourced="size" />
   </td>
-  <td v-for="gate in gates" :key="gate.v[1].code" class="flight-gates">
+  <td v-for="gate in gates" :key="gate.v.code ?? '?'" class="flight-gates">
     <Sourced :sourced="gate">
-      <RouterLink :to="`/airport/${gate.v[0].airport.v}`">
-        {{ gate.v[1].code }}-{{ gate.v[0].code ?? "?" }}
-      </RouterLink>
+      <GateLink :gate="gate.v" />
     </Sourced>
   </td>
   <td

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { AirFlight } from "@/stores/schema";
+import type { AirAirport, AirFlight, AirGate } from "@/stores/schema";
 import Flight from "./airline/Flight.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
+import GateLink from "@/components/GateLink.vue";
+import Sourced from "@/components/Sourced.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -41,6 +43,18 @@ const flights = computed(() =>
 const maxFlightGatesLength = computed(() =>
   Math.max(...flights.value.map(([, f]) => f.gates.length)),
 );
+
+const gates = computed(() => {
+  return airline.value.gates
+    .map((g) => ({ s: g.s, v: gd.value!.airGate(g.v.toString())! }))
+    .sort((g1, g2) => {
+      let a1 = gd.value!.airAirport(g1.v.airport.v.toString())!.code;
+      let a2 = gd.value!.airAirport(g2.v.airport.v.toString())!.code;
+      return a1 === a2
+        ? (g1.v.code ?? "?").localeCompare(g2.v.code ?? "?")
+        : a1.localeCompare(a2);
+    });
+});
 </script>
 
 <template>
@@ -57,6 +71,15 @@ const maxFlightGatesLength = computed(() =>
         ></Flight>
       </tr>
     </table>
+    <hr />
+    <h1>Owned Gates</h1>
+    <div class="owned-gates">
+      <div v-for="gate in gates" :key="gate.v.code ?? '?'" class="owned-gate">
+        <Sourced :sourced="gate">
+          <GateLink :gate="gate.v" />
+        </Sourced>
+      </div>
+    </div>
     <span> Source: {{ airline.source.join(", ") }} </span>
     <details>
       <summary>Json</summary>
@@ -72,5 +95,19 @@ const maxFlightGatesLength = computed(() =>
 }
 table {
   width: 100%;
+}
+.owned-gates {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.owned-gate {
+  background-color: var(--col-c);
+  padding: 0.25em;
+  margin: 1px;
+  width: 5em;
+  min-width: 5em;
+  max-width: 5em;
+  border-radius: 0.5em;
 }
 </style>

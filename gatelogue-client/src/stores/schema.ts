@@ -67,8 +67,9 @@ export interface AirGate<S extends boolean = true> extends Node {
 
 export interface AirAirline<S extends boolean = true> extends Node {
   name: string;
-  flights: Sourced<IntID<AirFlight<S>>, S>[];
   link: Sourced<string, S> | null;
+  flights: Sourced<IntID<AirFlight<S>>, S>[];
+  gates: Sourced<IntID<AirGate<S>>, S>[];
 }
 
 export interface RailCompany<S extends boolean = true> extends Node {

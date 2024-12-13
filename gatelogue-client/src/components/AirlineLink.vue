@@ -5,14 +5,14 @@ import { gd } from "@/stores/data";
 
 const props = defineProps<{
   airline?: AirAirline;
-  airlineId: StringID<AirAirline>;
+  airlineId?: StringID<AirAirline>;
 }>();
 
 const airline = computed(
-  () => props.airline ?? gd.value?.airAirline(props.airlineId)!,
+  () => props.airline ?? gd.value?.airAirline(props.airlineId!)!,
 );
 </script>
 
 <template>
-  <RouterLink :to="`/airline/${airlineId}`">{{ airline.name }}</RouterLink>
+  <RouterLink :to="`/airline/${airline.i}`">{{ airline.name }}</RouterLink>
 </template>
