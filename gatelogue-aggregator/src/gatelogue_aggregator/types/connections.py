@@ -1,20 +1,25 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar, Generic
 
 import msgspec
 
+from gatelogue_aggregator.types.node.base import Node
+from gatelogue_aggregator.types.base import BaseContext
+
 if TYPE_CHECKING:
-    from gatelogue_aggregator.types.base import BaseContext
-    from gatelogue_aggregator.types.node.base import Node
     from gatelogue_aggregator.types.source import Sourced
 
 
-class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
-    from gatelogue_aggregator.types.node.base import NodeRef
+L = TypeVar("L", bound=Node)
+S = TypeVar("S", bound=Node)
+CTX = TypeVar("CTX", bound=BaseContext)
+
+
+class Direction(msgspec.Struct, Generic[CTX, S]):
     from gatelogue_aggregator.types.source import Sourced
 
-    direction: NodeRef[S] | int
+    direction: int  # temp. NodeRef
     """Reference to or ID of the station/stop that the other fields take with respect to. Should be either node of the connection"""
     forward_label: str | None
     """Describes the direction taken when travelling **towards the station/stop in** ``forward_towards_code``"""
@@ -27,7 +32,7 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
         return ctx.find_by_ref_or_index(self.direction)
 
     def set_direction(self, ctx: CTX, v: S):
-        self.direction = v.ref(ctx)
+        self.direction = v.ref(ctx)  # noqa
 
     def sanitise_strings(self):
         if self.forward_label is not None:
@@ -36,10 +41,8 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
             self.backward_label = str(self.backward_label).strip()
 
 
-class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
-    from gatelogue_aggregator.types.node.base import NodeRef
-
-    line: NodeRef[L] | int
+class Connection(msgspec.Struct, Generic[CTX, L]):
+    line: int  # temp. NodeRef
     """Reference to or ID of the line that the connection is made on"""
     direction: Direction | None = None
     """Direction information"""
@@ -48,7 +51,7 @@ class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
         return ctx.find_by_ref_or_index(self.line)
 
     def set_line(self, ctx: CTX, v: L):
-        self.line = v.ref(ctx)
+        self.line = v.ref(ctx)  # noqa
 
     def sanitise_strings(self):
         if self.direction is not None:

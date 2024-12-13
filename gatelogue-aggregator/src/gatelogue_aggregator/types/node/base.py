@@ -202,6 +202,8 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
 
 
 class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
+    from gatelogue_aggregator.types.context.proximity import Proximity
+
     coordinates: Sourced[tuple[int, int]] | None = None
     """Coordinates of the object"""
     world: Sourced[World] | None = None

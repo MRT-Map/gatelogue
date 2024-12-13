@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pickle
-from typing import TYPE_CHECKING, ClassVar, Self
+from typing import TYPE_CHECKING, ClassVar, Self, TypeVar, Generic
 
 import msgspec
 import rich
@@ -15,7 +15,10 @@ if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config
 
 
-class Sourced[T](msgspec.Struct, Mergeable):
+T = TypeVar("T")
+
+
+class Sourced(msgspec.Struct, Mergeable, Generic[T]):
     v: T
     """Actual value"""
     s: set[type[Source]] = msgspec.field(default_factory=set)

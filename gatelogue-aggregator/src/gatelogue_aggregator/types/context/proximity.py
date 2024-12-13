@@ -5,8 +5,6 @@ import rustworkx as rx
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.air import AirAirport
-from gatelogue_aggregator.types.node.base import LocatedNode, Node
 
 
 class Proximity(msgspec.Struct):
@@ -16,6 +14,9 @@ class Proximity(msgspec.Struct):
 
 class ProximityContext(BaseContext):
     def update(self):
+        from gatelogue_aggregator.types.node.air import AirAirport
+        from gatelogue_aggregator.types.node.base import LocatedNode
+
         processed = []
         for node in track(self.g.nodes(), description=INFO2 + "Linking close nodes", nonlinear=True, remove=False):
             if not isinstance(node, LocatedNode) or node.coordinates is None:
@@ -47,7 +48,7 @@ class ProximityContext(BaseContext):
             return (nx - tx) ** 2 + (ny - ty) ** 2
 
         for pass_ in range(1, 10):
-            components: list[list[Node]] = [[self.g[b] for b in a] for a in rx.connected_components(self.g)]
+            components = [[self.g[b] for b in a] for a in rx.connected_components(self.g)]
             components = sorted(components, key=len, reverse=True)
             located_nodes = [a for a in self.g.nodes() if isinstance(a, LocatedNode) and a.coordinates is not None]
             isolated = [
