@@ -32,9 +32,18 @@ class IntraSailWarp(SeaSource):
             ) is None:
                 # rich.print(ERROR + "hUnknown warp message format:", warp['welcomeMessage'])
                 continue
+
             name = match.group(1) or match.group(2) or match.group(3)
+            name = {
+                "Shahai": "Shahai Ferry Terminal",
+                "Auburn": "Auburn Marina",
+                "the Port of Ilirea": "Port of Ilirea",
+                "Xandar-Vekta Ferry Terminal": "Xandar-Vekta Transfer Station",
+                "Weezerville": "Deadbush Port of Weezerville",
+            }.get(name, name)
             if name in names:
                 continue
+
             SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
         self.save_to_cache(config, self.g)
