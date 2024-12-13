@@ -257,7 +257,7 @@ def erz2(ctx: WikiAirport, config):
         "Erzville Passenger Seaport",
         "ERZ",
         re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
+            r"\|-\n\|(?P<code>S.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
         ),
         config,
     )
