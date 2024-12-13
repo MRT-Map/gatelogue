@@ -63,7 +63,7 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
         return self.name
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.name = str(self.name).strip()
 
     @override
@@ -73,7 +73,7 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: BusSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(BusCompany, name=self.name)
 
 
@@ -134,7 +134,7 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
         return self.code
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.code = str(self.code).strip()
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -148,7 +148,7 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: BusSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
@@ -211,8 +211,8 @@ class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
         return self.get_one(ctx, BusCompany).name
 
     @override
-    def prepare_merge(self):
-        super().prepare_merge()
+    def sanitise_strings(self):
+        super().sanitise_strings()
         self.codes = {str(a).strip() for a in self.codes}
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -227,7 +227,7 @@ class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: BusSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(BusStop, codes=self.codes, company=self.get_one(ctx, BusCompany).name)
 
 

@@ -43,7 +43,7 @@ class WZR(RailSource):
                 continue
             line_name = result.group("name") or result.group("name2")
             line_code = result.group("code") or line_name
-            line = RailLine.new(self, code=line_code, name=line_name, company=company)
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
 
             stations = []
             for tr in table.find_all("tr"):

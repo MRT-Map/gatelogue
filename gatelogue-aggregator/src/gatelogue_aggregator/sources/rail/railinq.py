@@ -34,7 +34,9 @@ class RaiLinQ(RailSource):
                 continue
             line_code = line_table.find("th").find_all("span", style="color:white;")[0].b.string
             line_name = line_table.find("th").find_all("span", style="color:white;")[1].i.string
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
+
+            line_colour = "#ff5500" if line_code.startswith("IC") else "#ffaa00"
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour=line_colour)
 
             stations = []
             for b in line_table.p.find_all("b"):

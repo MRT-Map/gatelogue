@@ -159,7 +159,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     def merge_key(self, ctx: CTX) -> str:
         raise NotImplementedError
 
-    def prepare_merge(self):
+    def sanitise_strings(self):
         raise NotImplementedError
 
     def prepare_export(self, ctx: CTX):
@@ -238,7 +238,7 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
         self._merge_sourced(ctx, other, "world")
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         if self.world is not None:
             self.world.v = str(self.world.v).strip()
 

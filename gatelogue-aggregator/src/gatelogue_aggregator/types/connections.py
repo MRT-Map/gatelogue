@@ -28,7 +28,7 @@ class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
     def set_direction(self, ctx: CTX, v: S):
         self.direction = v.ref(ctx)
 
-    def prepare_merge(self):
+    def sanitise_strings(self):
         if self.forward_label is not None:
             self.forward_label = str(self.forward_label).strip()
         if self.backward_label is not None:
@@ -49,9 +49,9 @@ class Connection[CTX: BaseContext, L: Node](msgspec.Struct):
     def set_line(self, ctx: CTX, v: L):
         self.line = v.ref(ctx)
 
-    def prepare_merge(self):
+    def sanitise_strings(self):
         if self.direction is not None:
-            self.direction.prepare_merge()
+            self.direction.sanitise_strings()
 
     def prepare_export(self, ctx: CTX):
         self.line = self.get_line(ctx).i

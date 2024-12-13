@@ -34,7 +34,25 @@ class IntraRail(RailSource):
                 continue
             line_code = line_code_name.split(" ")[0]
             line_name = line_code_name.removeprefix(line_code)
-            line = RailLine.new(self, company=company, code=line_code, name=line_name, mode="warp")
+
+            line_code_base = int(line_code.removesuffix("X"))
+            line_colour = (
+                "#f083a6"
+                if line_code.endswith("X") and 0 <= line_code_base <= 199
+                else "#63dcd6"
+                if 0 <= line_code_base <= 199
+                else "#db100c"
+                if 200 <= line_code_base <= 299
+                else "#22da4f"
+                if 300 <= line_code_base <= 399
+                else "#f4be1b"
+                if 400 <= line_code_base <= 499
+                else "#0000ff"
+                if 500 <= line_code_base <= 599
+                else "#888"
+            )
+
+            line = RailLine.new(self, company=company, code=line_code, name=line_name, mode="warp", colour=line_colour)
 
             stations = []
             for big in h4.find_next("p").find_all("big", recursive=False):

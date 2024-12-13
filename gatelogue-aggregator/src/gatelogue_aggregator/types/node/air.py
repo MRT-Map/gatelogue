@@ -75,7 +75,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         return self.get_one(ctx, AirAirline).merge_key(ctx)
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.codes = {str(a).strip() for a in self.codes}
         if self.mode is not None:
             self.mode.v = str(self.mode.v).strip()
@@ -87,7 +87,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(ctx, AirAirline).name)
 
     def update(self, ctx: AirSource):
@@ -184,8 +184,8 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         return self.code
 
     @override
-    def prepare_merge(self):
-        super().prepare_merge()
+    def sanitise_strings(self):
+        super().sanitise_strings()
         self.code = str(self.code).strip()
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -199,7 +199,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(AirAirport, code=self.code)
 
     def update(self, ctx: AirSource):
@@ -292,7 +292,7 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
         return self.code
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         if self.code is not None:
             self.code = str(self.code).strip()
         if self.size is not None:
@@ -306,7 +306,7 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
 
@@ -349,7 +349,7 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
         return self.name
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.name = str(self.name).strip()
         if self.link is not None:
             self.link.v = str(self.link.v).strip()
@@ -360,7 +360,7 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(AirAirline, name=self.name)
 
     @staticmethod

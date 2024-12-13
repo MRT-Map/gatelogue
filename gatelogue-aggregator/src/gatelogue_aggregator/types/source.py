@@ -97,7 +97,7 @@ class Source(metaclass=SourceMeta):
     def save_to_cache(cls, config: Config, g: rx.PyGraph):
         if g.num_nodes() == 0:
             rich.print(ERROR + f"{cls.__name__} yielded no results")
-        cls.prepare_merge(g)
+        cls.sanitise_strings(g)
 
         cache_file = config.cache_dir / "network-cache" / cls.__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")
@@ -106,12 +106,12 @@ class Source(metaclass=SourceMeta):
         cache_file.write_bytes(pickle.dumps(g))
 
     @classmethod
-    def prepare_merge(cls, g: rx.PyGraph):
+    def sanitise_strings(cls, g: rx.PyGraph):
         for node in g.nodes():
-            node.prepare_merge()
+            node.sanitise_strings()
         for edge in g.edges():
-            if hasattr(edge.v, "prepare_merge"):
-                edge.v.prepare_merge()
+            if hasattr(edge.v, "sanitise_strings"):
+                edge.v.sanitise_strings()
 
     @classmethod
     def source[T](cls, v: T) -> Sourced[T]:

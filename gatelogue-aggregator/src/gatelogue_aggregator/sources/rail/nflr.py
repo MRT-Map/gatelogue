@@ -31,55 +31,55 @@ class NFLR(RailSource):
         company = RailCompany.new(self, name="nFLR")
 
         lines = (
-            ("R1", 282537988, True),
-            ("R1A", 214164635, False),
-            ("R1C", 1902666542, False),
-            ("R2", 115253128, True),
-            ("R2A", 130508390, False),
-            ("R2B", 1843528331, False),
-            ("R2C", 221916670, False),
-            ("R2D", 570220698, False),
-            ("R3", 393671163, True),
-            ("R4", 1996068267, True),
-            ("R4A", 817280717, False),
-            ("R5", 601855467, True),
-            ("R5A", 507470974, False),
-            ("R5B", 2076440356, False),
-            ("R6", 1430738786, True),
-            ("R7", 1926708521, True),
-            ("R7A", 1818351657, False),
-            ("R7Aα", 591894522, False),  # noqa: RUF001
-            ("R7Aβ", 1399770737, False),
-            ("R7B", 1247441432, False),
-            ("R7C", 1332766054, False),
-            ("R8", 1177310537, True),
-            ("R8A", 1172467561, False),
-            ("R9", 758399799, True),
-            ("R10", 1201218447, True),
-            ("R11", 320393003, True),
-            ("R11A", 1797741201, False),
-            ("R12", 1305691925, True),
-            ("R12A", 902217973, False),
-            ("R13", 131759497, True),
-            ("R13A", 1377290085, False),
-            ("R14", 1031060478, True),
-            ("R15", 1924080573, True),
-            ("R15A", 889243147, False),
-            ("R16", 2087524175, True),
-            ("R17", 1747108581, True),
-            ("R18", 831892816, True),
-            ("R19", 743645290, True),
-            ("R20", 431509901, True),
-            ("R21", 1760930420, True),
-            ("R22", 334305123, True),
-            ("R22A", 500206464, False),
-            ("R23", 9575456, True),
-            ("R24", 1618785684, True),
-            ("AB", 1235587478, False),
-            ("N1", 1882236259, False),
-            ("N2", 497193857, False),
-            ("N3", 978256843, False),
-            ("N4", 1065941701, False),
+            ("R1", 282537988, True, "#c00"),
+            ("R1A", 214164635, False, "#c00"),
+            ("R1C", 1902666542, False, "#c00"),
+            ("R2", 115253128, True, "#ffa500"),
+            ("R2A", 130508390, False, "#ffa500"),
+            ("R2B", 1843528331, False, "#ffa500"),
+            ("R2C", 221916670, False, "#ffa500"),
+            ("R2D", 570220698, False, "#ffa500"),
+            ("R3", 393671163, True, "#fe0"),
+            ("R4", 1996068267, True, "#987654"),
+            ("R4A", 817280717, False, "#987654"),
+            ("R5", 601855467, True, "#008000"),
+            ("R5A", 507470974, False, "#008000"),
+            ("R5B", 2076440356, False, "#008000"),
+            ("R6", 1430738786, True, "#0c0"),
+            ("R7", 1926708521, True, "#0cc"),
+            ("R7A", 1818351657, False, "#0cc"),
+            ("R7Aα", 591894522, False, "#0cc"),  # noqa: RUF001
+            ("R7Aβ", 1399770737, False, "#0cc"),
+            ("R7B", 1247441432, False, "#0cc"),
+            ("R7C", 1332766054, False, "#0cc"),
+            ("R8", 1177310537, True, "#008b8b"),
+            ("R8A", 1172467561, False, "#008b8b"),
+            ("R9", 758399799, True, "#00c"),
+            ("R10", 1201218447, True, None),
+            ("R11", 320393003, True, None),
+            ("R11A", 1797741201, False, None),
+            ("R12", 1305691925, True, None),
+            ("R12A", 902217973, False, None),
+            ("R13", 131759497, True, "#555"),
+            ("R13A", 1377290085, False, "#555"),
+            ("R14", 1031060478, True, "#aaa"),
+            ("R15", 1924080573, True, "#000"),
+            ("R15A", 889243147, False, "#000"),
+            ("R16", 2087524175, True, "#eee"),
+            ("R17", 1747108581, True, "#c2b280"),
+            ("R18", 831892816, True, "#bb9955"),
+            ("R19", 743645290, True, "#000080"),
+            ("R20", 431509901, True, "#965f46"),
+            ("R21", 1760930420, True, "#8b3d2e"),
+            ("R22", 334305123, True, "#a3501e"),
+            ("R22A", 500206464, False, "#a3501e"),
+            ("R23", 9575456, True, "#bb8725"),
+            ("R24", 1618785684, True, "#3d291b"),
+            ("AB", 1235587478, False, None),
+            ("N1", 1882236259, False, "#8c0"),
+            ("N2", 497193857, False, "#5cf"),
+            ("N3", 978256843, False, "#f5f"),
+            ("N4", 1065941701, False, "#fc0"),
         )
 
         def retrieve_urls(line_name: str, gid: int, *_args):
@@ -93,7 +93,7 @@ class NFLR(RailSource):
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(*s), lines))
 
-        for line_name, _, w in lines:
+        for line_name, _, w, line_colour in lines:
             df = pd.read_csv(cache / line_name)
 
             d = list(zip(df["route"], df["code"], df["name"], strict=False))
@@ -118,7 +118,9 @@ class NFLR(RailSource):
                     station = station or RailStation.new(self, codes=code, company=company, name=name)
                     w_stations.append(station)
 
-            r_line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+            r_line = RailLine.new(
+                self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour
+            )
 
             if line_name == "R7A":
                 RailLineBuilder(self, r_line).circle(
@@ -169,7 +171,9 @@ class NFLR(RailSource):
 
             if w:
                 line_name = "W" + line_name[1:]  # noqa: PLW2901
-                w_line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+                w_line = RailLine.new(
+                    self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour
+                )
 
                 if line_name == "W2":
                     RailLineBuilder(self, w_line).connect(*w_stations[:2])

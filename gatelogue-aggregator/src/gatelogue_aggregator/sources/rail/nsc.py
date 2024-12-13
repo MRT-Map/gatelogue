@@ -21,9 +21,10 @@ class NSC(RailSource):
             return
 
         company = RailCompany.new(self, name="Network South Central")
+        line_colour = "#cc0000"
 
         line_name = "InterCity 1"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Kolpino",
             "Utopia",
@@ -41,7 +42,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "InterCity 2"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Royal Ferry Paddington",
             "Subryanville",
@@ -62,7 +63,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "InterCity 2N"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Freedon Exchange",
             "Freedon Central",
@@ -76,7 +77,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "InterCity 2S"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Freedon Exchange",
             "Freedon Edo",
@@ -90,7 +91,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "InterCity 3"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Siletz",
             "Loundon",
@@ -108,7 +109,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "InterCity 4"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Royal Ferry Victoria",
             "Siletz",
@@ -128,7 +129,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Commuter 1"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Central City",
             "Government Circle",
@@ -142,7 +143,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Commuter 2"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Central City",
             "Greenplain Heights",
@@ -156,7 +157,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Commuter 3"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Siletz",
             "San Dzobiak Union",
@@ -166,7 +167,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Commuter 3"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Paddington",
             "East La Penitience",
@@ -178,7 +179,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Commuter 5"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Royal Ferry Victoria",
             "Kensington",
@@ -194,7 +195,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "High Speed 1"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Central City",
             "Royal Ferry - Broad Street",
@@ -207,7 +208,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "High Speed 2"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Central City",
             "Royal Ferry - Broad Street",
@@ -218,7 +219,7 @@ class NSC(RailSource):
         RailLineBuilder(self, line).connect(*stations)
 
         line_name = "Central Cities Rail Loop"
-        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
+        line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour=line_colour)
         stations = [
             "Royal Ferry Victoria",
             "Dabecco Exchange",

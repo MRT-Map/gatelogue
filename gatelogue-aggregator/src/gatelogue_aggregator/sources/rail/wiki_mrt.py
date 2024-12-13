@@ -29,37 +29,37 @@ class WikiMRT(RailSource):
 
         company = RailCompany.new(self, name="MRT")
 
-        for line_code, line_name in (
-            ("A", "MRT Arctic Line"),
-            ("C", "MRT Circle Line"),
-            ("D", "MRT Desert Line"),
-            ("E", "MRT Eastern Line"),
-            ("F", "MRT Forest Line"),
-            ("H", "MRT Savannah Line"),
-            ("I", "MRT Island Line"),
-            ("J", "MRT Jungle Line"),
-            ("L", "MRT Lakeshore Line"),
-            ("M", "MRT Mesa Line"),
-            ("N", "MRT Northern Line"),
-            ("O", "MRT Oasis Line"),
-            ("P", "MRT Plains Line"),
-            ("R", "MRT Rose Line"),
-            ("S", "MRT Southern Line"),
-            ("T", "MRT Taiga Line"),
-            ("U", "MRT Union Line"),
-            ("V", "MRT Valley Line"),
-            ("W", "MRT Western Line"),
-            ("X", "MRT Expo Line"),
-            ("XM", "MRT Marina Shuttle"),
-            ("Z", "MRT Zephyr Line"),
-            ("Old-R", "MRT Red Line"),
-            ("Old-B", "MRT Blue Line"),
-            ("Old-Y", "MRT Yellow Line"),
-            ("Old-G", "MRT Green Line"),
-            ("Old-O", "MRT Orange Line"),
+        for line_code, line_name, line_colour in (
+            ("A", "MRT Arctic Line", "#00FFFF"),
+            ("C", "MRT Circle Line", "#5E5E5E"),
+            ("D", "MRT Desert Line", "#9437FF"),
+            ("E", "MRT Eastern Line", "#10D20F"),
+            ("F", "MRT Forest Line", "#0096FF"),
+            ("H", "MRT Savannah Line", "#5B7F00"),
+            ("I", "MRT Island Line", "#FF40FF"),
+            ("J", "MRT Jungle Line", "#4C250D"),
+            ("L", "MRT Lakeshore Line", "#9B95BC"),
+            ("M", "MRT Mesa Line", "#FF8000"),
+            ("N", "MRT Northern Line", "#0433FF"),
+            ("O", "MRT Oasis Line", "#021987"),
+            ("P", "MRT Plains Line", "#008E00"),
+            ("R", "MRT Rose Line", "#FE2E9A"),
+            ("S", "MRT Southern Line", "#FFFA28"),
+            ("T", "MRT Taiga Line", "#915001"),
+            ("U", "MRT Union Line", "#2B2C35"),
+            ("V", "MRT Valley Line", "#FF8AD8"),
+            ("W", "MRT Western Line", "#FF0000"),
+            ("X", "MRT Expo Line", "#000000"),
+            ("XM", "MRT Marina Shuttle", "#000000"),
+            ("Z", "MRT Zephyr Line", "#EEEEEE"),
+            ("Old-R", "MRT Red Line" "#FF0000"),
+            ("Old-B", "MRT Blue Line", "#0000FF"),
+            ("Old-Y", "MRT Yellow Line", "#FFFF00"),
+            ("Old-G", "MRT Green Line", "#00FF00"),
+            ("Old-O", "MRT Orange Line", "#FF8000"),
         ):
             text = get_wiki_text(line_name, config)
-            line = RailLine.new(self, code=line_code, company=company, name=line_name)
+            line = RailLine.new(self, code=line_code, company=company, name=line_name, colour=line_colour)
 
             stations = []
             for match in search_all(

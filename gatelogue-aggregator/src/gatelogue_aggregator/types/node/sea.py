@@ -63,7 +63,7 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
         return self.name
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.name = str(self.name).strip()
 
     @override
@@ -73,7 +73,7 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: SeaSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(SeaCompany, name=self.name)
 
 
@@ -140,7 +140,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         return self.code
 
     @override
-    def prepare_merge(self):
+    def sanitise_strings(self):
         self.code = str(self.code).strip()
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -154,7 +154,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: SeaSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(SeaLine, code=self.code, company=self.get_one(ctx, SeaCompany).name)
 
 
@@ -217,8 +217,8 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
         return self.get_one(ctx, SeaCompany).name
 
     @override
-    def prepare_merge(self):
-        super().prepare_merge()
+    def sanitise_strings(self):
+        super().sanitise_strings()
         self.codes = {str(a).strip() for a in self.codes}
         if self.name is not None:
             self.name.v = str(self.name.v).strip()
@@ -233,7 +233,7 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: SeaSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(SeaStop, codes=self.codes, company=self.get_one(ctx, SeaCompany).name)
 
 

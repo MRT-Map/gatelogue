@@ -32,7 +32,7 @@ class RailNorth(RailSource):
             if "Code" not in table("th")[1].string:
                 continue
             line_name = table.find_previous_sibling("h3").find("span", class_="mw-headline").string
-            line = RailLine.new(self, code=line_name, name=line_name, company=company)
+            line = RailLine.new(self, code=line_name, name=line_name, company=company, colour="#000080")
 
             stations = []
             for tr in table.find_all("tr"):

@@ -30,6 +30,8 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
     ):
         if len(stations) == 0:
             return
+        for s in stations:
+            s.sanitise_strings()
         if between is not None:
             i1 = i2 = None
             if between[0] is None:

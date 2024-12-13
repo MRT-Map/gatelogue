@@ -31,7 +31,9 @@ class RedTrain(RailSource):
         for table in html.find_all("table"):
             if "Code" not in table("th")[1].string:
                 continue
-            line = RailLine.new(self, code="Time Zones High Speed", name="Time Zones High Speed", company=company)
+            line = RailLine.new(
+                self, code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"
+            )
 
             stations = []
             for tr in table.find_all("tr"):

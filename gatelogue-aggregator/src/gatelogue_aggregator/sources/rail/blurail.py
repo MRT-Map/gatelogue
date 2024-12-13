@@ -41,7 +41,16 @@ class BluRail(RailSource):
         for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp")
+
+            line_colour = (
+                "#c01c22"
+                if line_code.endswith("X") and line_code[0].isdigit()
+                else "#0a7ec3"
+                if line_code[-1].isdigit()
+                else "#0c4a9e"
+            )
+
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour=line_colour)
 
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):

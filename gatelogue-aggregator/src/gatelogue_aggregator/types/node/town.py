@@ -66,8 +66,8 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         return self.name
 
     @override
-    def prepare_merge(self):
-        super().prepare_merge()
+    def sanitise_strings(self):
+        super().sanitise_strings()
         self.name = str(self.name).strip()
         self.rank.v = str(self.rank.v).strip()
         self.mayor.v = str(self.mayor.v).strip()
@@ -80,7 +80,7 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
 
     @override
     def ref(self, ctx: TownSource) -> NodeRef[Self]:
-        self.prepare_merge()
+        self.sanitise_strings()
         return NodeRef(Town, name=self.name)
 
 
