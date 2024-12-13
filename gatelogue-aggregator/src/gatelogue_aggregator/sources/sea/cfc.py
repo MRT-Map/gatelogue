@@ -57,9 +57,12 @@ class CFC(SeaSource):
                 continue
 
             warp_name = warp["name"].split("_")[1]
-            name = {",": ",", "DeadbushW": "Deadbush Weezerville", "Leknes": "Leknes"}.get(
-                warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0]
-            )
+            name = {
+                ",": ",",
+                "DeadbushW": "Deadbush Weezerville",
+                "Leknes": "Leknes",
+                "NSouthport": "New Southport",
+            }.get(warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0])
             print(warp_name, name)
             if name in names:
                 continue
