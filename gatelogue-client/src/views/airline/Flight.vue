@@ -27,7 +27,13 @@ const size = computed(
 </script>
 
 <template>
-  <td class="flight-code">{{ flight.codes.join(" ") }}</td>
+  <td class="flight-code">
+    {{
+      flight.codes
+        .sort((a, b) => a.localeCompare(b, "en", { numeric: true }))
+        .join(" ")
+    }}
+  </td>
   <td class="flight-size">
     <Sourced :sourced="size" />
   </td>
