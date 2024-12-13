@@ -120,6 +120,7 @@ def dje(ctx: WikiAirport, config):
                 size = "MS" if 1 <= int(code) <= 10 else "S"  # noqa: PLR2004
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
+                airline = airline if airline.strip() != "" else None
                 ctx.extract_get_gate(airport, code=code, size=size, airline=airline)
         elif caption == "Terminal 2":
             concourse = ""
@@ -131,6 +132,7 @@ def dje(ctx: WikiAirport, config):
                 size = "S"
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
+                airline = airline if airline.strip() != "" else None
                 ctx.extract_get_gate(airport, code=code, size=size, airline=airline)
 
 
@@ -294,7 +296,7 @@ def aix(ctx: WikiAirport, config):
         ctx.extract_get_gate(
             airport=airport,
             code=gate_code,
-            airline=airline if str(airline) != "nan" or airline != "Unavailable" else None,
+            airline=airline if str(airline) != "nan" and airline != "Unavailable" else None,
         )
         result += 1
 
@@ -326,7 +328,7 @@ def lar(ctx: WikiAirport, config):
             airport=airport,
             code=gate_code,
             size=size,
-            airline=airline if str(airline) != "nan" or airline != "?" else None,
+            airline=airline if str(airline) != "nan" and airline != "?" else None,
         )
         result += 1
 
@@ -358,7 +360,7 @@ def lfa(ctx: WikiAirport, config):
             airport=airport,
             code=gate_code,
             size=size,
-            airline=airline if str(airline) != "nan" or airline != "?" else None,
+            airline=airline if str(airline) != "nan" and airline != "?" else None,
         )
         result += 1
 
