@@ -39,20 +39,14 @@ class IntraSail(SeaSource):
 
             stops = []
             for big in cursor.find_all("big"):
-                if big.find("big") is not None:
+                if (big2 := big.find("big")) is None:
                     continue
-                stop_name = ""
-                if (b := big.find("b")) is not None:
-                    if b.parent.attrs.get("style") in ("color:#EA9D9B;", "color:#AEE4ED;"):
-                        continue
-                    stop_name += b.string or ""
-                if (i := big.find("i")) is not None:
-                    stop_name += " " + i.string or ""
-                if stop_name == "" or stop_name.startswith("["):
+                if (span := big.find("span")) is not None and span.attrs.get("style") in (
+                    "color:#EA9D9B;",
+                    "color:#AEE4ED;",
+                ):
                     continue
-                stop_name = stop_name.strip()
-                if stop_name == "New Southport Port of":
-                    stop_name = "Port of New Southport"
+                stop_name = " ".join(big2.stripped_strings)
 
                 stop = SeaStop.new(self, codes={stop_name}, name=stop_name, company=company)
                 stops.append(stop)

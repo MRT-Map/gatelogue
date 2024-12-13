@@ -26,7 +26,7 @@ class IntraSailWarp(SeaSource):
                 continue
             if (
                 match := re.search(
-                    r"(?i)^Welcome to ([^,]*),|^THIS & LAST STOP: ([^/]*) /|THIS STOP: ([^/]*) /",
+                    r"(?i)^Welcome to ([^,]*),|^THIS & LAST STOP: ([^/]*) /|(?:THIS|LAST) STOP: ([^/]*) /",
                     warp["welcomeMessage"],
                 )
             ) is None:
