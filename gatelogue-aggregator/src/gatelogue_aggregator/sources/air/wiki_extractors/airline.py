@@ -325,7 +325,7 @@ def arctic_air(ctx: WikiAirline, config):
         if not a1 or str(a1) == "nan":
             continue
         ctx.extract_get_flight(
-            airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" in g1 else None, g2=g2 if "*" in g2 else None
+            airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" not in g1 else None, g2=g2 if "*" not in g2 else None
         )
         result += 1
 
@@ -356,7 +356,12 @@ def sandstone_airr(ctx: WikiAirline, config):
         if not a1 or str(a1) == "nan":
             continue
         ctx.extract_get_flight(
-            airline, code=str(int(flight)), a1=a1, a2=a2, g1=g1 if "*" in g1 else None, g2=g2 if "*" in g2 else None
+            airline,
+            code=str(int(flight)),
+            a1=a1,
+            a2=a2,
+            g1=g1 if "*" not in g1 else None,
+            g2=g2 if "*" not in g2 else None,
         )
         result += 1
 

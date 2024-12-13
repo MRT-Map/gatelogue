@@ -47,6 +47,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "OLA": "Oceanic Langus Airways",
     "RedWave Airways": "RedWave",
     "rosa": "Rosa",
+    "Sandstone Air": "Sandstone Airr",
     "South Weast Charter": "South Weast Airlines",
     "Spirit": "Spirit Airlines",
     "SunAir": "FlyBahia",
