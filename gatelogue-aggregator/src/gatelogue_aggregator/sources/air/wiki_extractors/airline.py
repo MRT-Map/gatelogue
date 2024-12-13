@@ -384,3 +384,39 @@ def michigana(ctx: WikiAirline, config):
 \|\| \[\[File:Eastern Active1\.png\|50px]]"""),
         config,
     )
+
+
+@_EXTRACTORS.append
+def lilyflower_airlines(ctx: WikiAirline, config):
+    cache = config.cache_dir / "lilyflower"
+    airline_name = "Lilyflower Airlines"
+    airline = ctx.extract_get_airline(airline_name, airline_name)
+
+    get_url(
+        "https://docs.google.com/spreadsheets/d/1B-fSerCAQAtaW-kAfv1npdjpGt-N1PrB1iUOmUBX5HI/export?format=csv&gid=1864111212",
+        cache,
+        timeout=config.timeout,
+    )
+
+    df = pd.read_csv(cache, header=1)
+
+    d = list(zip(df["Flight"], df["IATA"], df["Gate"], df["IATA.1"], df["Gate.1"], strict=False))
+
+    result = 0
+    for flight, a1, g1, a2, g2 in d:
+        if not a1 or str(a1) == "nan":
+            continue
+        ctx.extract_get_flight(
+            airline,
+            code=str(int(flight)),
+            a1=a1,
+            a2=a2,
+            g1=g1,
+            g2=g2,
+        )
+        result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
+    else:
+        rich.print(RESULT + f"{airline_name} has {result} flights")

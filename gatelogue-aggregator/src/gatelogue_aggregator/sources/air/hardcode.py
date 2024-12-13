@@ -37,6 +37,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "IntraAir Poseidon": "IntraAir",
     "Kaloro Air": "Astrella",
     "KaloroAir": "Astrella",
+    "LARLAT Airways": "Lilyflower Airlines",
     "MRTHS Air": "Astrella",
     "MRTHS": "Astrella",
     "myles": "mylesHeli",
