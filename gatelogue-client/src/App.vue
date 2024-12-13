@@ -56,10 +56,12 @@ hr {
 }
 </style>
 <style scoped>
+/*noinspection CssUnusedSymbol*/
 .v-enter-active,
 .v-leave-active {
   transition: all 0.15s ease;
 }
+/*noinspection CssUnusedSymbol*/
 .v-enter-from,
 .v-leave-to {
   opacity: 0;

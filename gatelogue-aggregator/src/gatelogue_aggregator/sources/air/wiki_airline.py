@@ -79,7 +79,8 @@ class WikiAirline(AirSource):
             size=str(s) if s is not None else None,
         )
         f.connect(self, gate1)
-        airline.connect(self, gate1)
+        if gate1.code is not None:
+            airline.connect(self, gate1)
 
         gate2 = AirGate.new(
             self,
@@ -91,7 +92,8 @@ class WikiAirline(AirSource):
             self,
             gate2,
         )
-        airline.connect(self, gate2)
+        if gate2.code is not None:
+            airline.connect(self, gate2)
 
         if (a3 is not None or a32 is not None) and g3 is not None:
             gate3 = AirGate.new(
@@ -101,5 +103,6 @@ class WikiAirline(AirSource):
                 size=str(s) if s is not None else None,
             )
             f.connect(self, gate3)
-            airline.connect(self, gate3)
+            if gate3.code is not None:
+                airline.connect(self, gate3)
         return f

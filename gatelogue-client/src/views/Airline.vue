@@ -74,7 +74,12 @@ const gates = computed(() =>
     <hr />
     <h1>Owned Gates</h1>
     <div class="owned-gates">
-      <div v-for="gate in gates" :key="gate.v.code ?? '?'" class="owned-gate">
+      <div
+        v-for="gate in gates"
+        :key="gate.v.code ?? '?'"
+        class="owned-gate"
+        :class="{ empty: gate.v.flights.length == 0 }"
+      >
         <Sourced :sourced="gate">
           <GateLink :gate="gate.v" />
         </Sourced>
@@ -109,5 +114,8 @@ table {
   min-width: 5em;
   max-width: 5em;
   border-radius: 0.5em;
+}
+.owned-gate.empty {
+  background-color: var(--col-b);
 }
 </style>

@@ -44,6 +44,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "Nexus Airlines": "Nexus",
     "OLA": "Oceanic Langus Airways",
     "RedWave Airways": "RedWave",
+    "rosa": "Rosa",
     "South Weast Charter": "South Weast Airlines",
     "SunAir": "FlyBahia",
     "Utopiair": "UtopiAir",
