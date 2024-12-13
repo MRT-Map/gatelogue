@@ -9,6 +9,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.bus.intrabus import IntraBus
     from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
     from gatelogue_aggregator.sources.bus.omegabus import IntraBusOmegaBus
+    from gatelogue_aggregator.sources.bus.ccc import CCC
     from gatelogue_aggregator.sources.rail.blurail import BluRail
     from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
     from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
@@ -34,6 +35,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.wzr_warp import WZRWarp
     from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
     from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
+    from gatelogue_aggregator.sources.sea.cfc import CFC
     from gatelogue_aggregator.sources.sea.hbl import HBL
     from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
     from gatelogue_aggregator.sources.sea.intrasail import IntraSail
@@ -82,4 +84,6 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         RailNorth,
         RailNorthWarp,
         SEAT,
+        CFC,
+        CCC,
     ]
