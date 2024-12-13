@@ -364,3 +364,18 @@ def sandstone_airr(ctx: WikiAirline, config):
         rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
     else:
         rich.print(RESULT + f"{airline_name} has {result} flights")
+
+
+@_EXTRACTORS.append
+def michigana(ctx: WikiAirline, config):
+    ctx.regex_extract_airline(
+        "Michigana",
+        "Template:Michigana",
+        re.compile(r"""\|\|<font size="4">'''MI(?P<code>.*?)'''</font>
+\|\|<font size="4">'''(?P<a1>.*?)'''</font> <br/>.*?
+\|\|.*?
+\|\|<font size="4">'''(?P<a2>.*?)'''</font> <br/>.*?
+\|\|.*?
+\|\| \[\[File:Eastern Active1\.png\|50px]]"""),
+        config,
+    )
