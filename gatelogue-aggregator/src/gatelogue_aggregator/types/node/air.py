@@ -14,8 +14,11 @@ if TYPE_CHECKING:
 
 class AirSource(BaseContext, Source):
     def update(self):
-        for node in track(self.g.nodes(), description=INFO2 + "Updating air nodes", remove=False):
-            if isinstance(node, AirFlight | AirAirport):
+        for node in track(self.g.nodes(), description=INFO2 + "Updating AirFlights", remove=False):
+            if isinstance(node, AirFlight):
+                node.update(self)
+        for node in track(self.g.nodes(), description=INFO2 + "Updating AirAirports", remove=False):
+            if isinstance(node, AirAirport):
                 node.update(self)
 
 
