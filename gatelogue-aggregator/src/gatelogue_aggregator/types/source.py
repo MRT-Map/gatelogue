@@ -60,7 +60,7 @@ class Sourced[T](msgspec.Struct, Mergeable):
 
 
 class SourceMeta(type):
-    name: str
+    name: str = ""
     priority: float | int
 
     def __lt__(cls, other):

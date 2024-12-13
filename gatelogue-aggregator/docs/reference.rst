@@ -16,6 +16,7 @@ Types
 .. automodule:: gatelogue_aggregator.types.connections
    :members:
    :undoc-members:
+   :exclude-members: Sourced, NodeRef
 
 .. automodule:: gatelogue_aggregator.types.line_builder
    :members:
@@ -28,15 +29,15 @@ Types
 Context
 +++++++
 
-.. automodule:: gatelogue_aggregator.types.context
+.. automodule:: gatelogue_aggregator.types.context.context
    :members:
    :undoc-members:
 
-.. automodule:: gatelogue_aggregator.types.proximity
+.. automodule:: gatelogue_aggregator.types.context.proximity
    :members:
    :undoc-members:
 
-.. automodule:: gatelogue_aggregator.types.shared_facility
+.. automodule:: gatelogue_aggregator.types.context.shared_facility
    :members:
    :undoc-members:
 
@@ -46,32 +47,27 @@ Node
 .. automodule:: gatelogue_aggregator.types.node.base
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
+   :exclude-members: Proximity
 
 .. automodule:: gatelogue_aggregator.types.node.air
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
 
 .. automodule:: gatelogue_aggregator.types.node.bus
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
 
 .. automodule:: gatelogue_aggregator.types.node.rail
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
 
 .. automodule:: gatelogue_aggregator.types.node.sea
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
 
 .. automodule:: gatelogue_aggregator.types.node.town
    :members:
    :undoc-members:
-   :exclude-members: uuid, Literal
 
 Sources
 -------

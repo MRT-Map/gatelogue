@@ -32,7 +32,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "bs4": ("https://www.crummy.com/software/BeautifulSoup/bs4/doc/", None),
-    "networkx": ("https://networkx.org/documentation/stable/", None),
+    "rustworkx": ("https://www.rustworkx.org/", None),
 }
 html_baseurl = "https://mrt-map.github.io/gatelogue/docs"
 

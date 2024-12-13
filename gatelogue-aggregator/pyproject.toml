@@ -51,7 +51,7 @@ extra-dependencies = [
   "sphinx",
   "sphinxcontrib-programoutput",
   "sphinx-codeautolink",
-  "sphinx_rtd_theme"
+  "sphinx_rtd_theme",
 ]
 [tool.hatch.envs.docs.scripts]
 build = "cd docs; make html; cd .."

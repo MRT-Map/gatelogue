@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 class Direction[CTX: BaseContext, S: Node](msgspec.Struct):
     from gatelogue_aggregator.types.node.base import NodeRef
+    from gatelogue_aggregator.types.source import Sourced
 
     direction: NodeRef[S] | int
     """Reference to or ID of the station/stop that the other fields take with respect to. Should be either node of the connection"""

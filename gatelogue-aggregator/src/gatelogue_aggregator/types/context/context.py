@@ -9,7 +9,11 @@ from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
+from gatelogue_aggregator.types.connections import Connection
+from gatelogue_aggregator.types.context.proximity import Proximity, ProximityContext
 from gatelogue_aggregator.types.context.shared_facility import SharedFacility, SharedFacilityContext
+from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
@@ -19,12 +23,6 @@ from gatelogue_aggregator.types.source import Sourced
 if TYPE_CHECKING:
     from collections.abc import Iterable
     from pathlib import Path
-
-
-from gatelogue_aggregator.types.connections import Connection
-from gatelogue_aggregator.types.context.proximity import Proximity, ProximityContext
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.node.base import Node
 
 
 class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext, SharedFacilityContext):
@@ -61,7 +59,22 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
 
     @override
     class Export(msgspec.Struct, kw_only=True):
-        nodes: dict[int, Node]
+        nodes: dict[
+            int,
+            AirAirline
+            | AirAirport
+            | AirFlight
+            | AirGate
+            | BusCompany
+            | BusLine
+            | BusStop
+            | SeaCompany
+            | SeaLine
+            | SeaStop
+            | RailCompany
+            | RailLine
+            | RailStation,
+        ]
         """List of all nodes, along with their connections to other nodes"""
         timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
         """Time that the aggregation of the data was done"""

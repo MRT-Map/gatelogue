@@ -113,7 +113,7 @@ def run(
 
     sources = [
         a
-        for a in SOURCES
+        for a in SOURCES()
         if (not include and not exclude)
         or (include and (include == "*" or a.__name__ in include.split(";")))
         or (exclude and (exclude != "*" and a.__name__ not in exclude.split(";")))

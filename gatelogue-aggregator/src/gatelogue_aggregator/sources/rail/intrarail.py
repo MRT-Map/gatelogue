@@ -38,17 +38,17 @@ class IntraRail(RailSource):
             line_code_base = int(line_code.removesuffix("X"))
             line_colour = (
                 "#f083a6"
-                if line_code.endswith("X") and 0 <= line_code_base <= 199
+                if line_code.endswith("X") and 0 <= line_code_base <= 199  # noqa: PLR2004
                 else "#63dcd6"
-                if 0 <= line_code_base <= 199
+                if 0 <= line_code_base <= 199  # noqa: PLR2004
                 else "#db100c"
-                if 200 <= line_code_base <= 299
+                if 200 <= line_code_base <= 299  # noqa: PLR2004
                 else "#22da4f"
-                if 300 <= line_code_base <= 399
+                if 300 <= line_code_base <= 399  # noqa: PLR2004
                 else "#f4be1b"
-                if 400 <= line_code_base <= 499
+                if 400 <= line_code_base <= 499  # noqa: PLR2004
                 else "#0000ff"
-                if 500 <= line_code_base <= 599
+                if 500 <= line_code_base <= 599  # noqa: PLR2004
                 else "#888"
             )
 

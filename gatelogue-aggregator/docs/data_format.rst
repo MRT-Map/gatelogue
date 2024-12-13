@@ -23,15 +23,13 @@ The current data format version is
 
 .. program-output:: python -c "from gatelogue_aggregator.__about__ import __version__; print('v'+__version__.split('+')[1])"
 
-.. autoclass:: gatelogue_aggregator.types.context::Context.Export
+.. autoclass:: gatelogue_aggregator.types.context.context::Context.Export
    :members:
-   :undoc-members:
    :inherited-members:
    :no-index:
 
-.. autoclass:: gatelogue_aggregator.types.context::Context.Node
+.. autoclass:: gatelogue_aggregator.types.node.base::Node
    :members:
-   :undoc-members:
    :inherited-members:
    :no-index:
 
@@ -123,7 +121,7 @@ Town Nodes
 Miscellaneous
 +++++++++++++
 
-.. autoclass:: gatelogue_aggregator.types.base::Sourced
+.. autoclass:: gatelogue_aggregator.types.source::Sourced
    :members:
    :inherited-members:
    :no-index:
