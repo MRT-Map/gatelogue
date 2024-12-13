@@ -56,6 +56,7 @@ class WikiAirline(AirSource):
     def extract_get_flight(
         self,
         airline: AirAirline,
+        *,
         code: str,
         a1: str | None = None,
         a2: str | None = None,

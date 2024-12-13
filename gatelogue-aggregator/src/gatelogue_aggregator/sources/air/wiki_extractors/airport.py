@@ -9,7 +9,6 @@ import rich
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.node.air import AirGate, AirAirline
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -121,7 +120,7 @@ def dje(ctx: WikiAirport, config):
                 size = "MS" if 1 <= int(code) <= 10 else "S"  # noqa: PLR2004
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
-                ctx.extract_get_gate(airport, code, size, airline)
+                ctx.extract_get_gate(airport, code=code, size=size, airline=airline)
         elif caption == "Terminal 2":
             concourse = ""
             for tr in table("tr")[1:]:
@@ -132,7 +131,7 @@ def dje(ctx: WikiAirport, config):
                 size = "S"
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
-                ctx.extract_get_gate(airport, code, size, airline)
+                ctx.extract_get_gate(airport, code=code, size=size, airline=airline)
 
 
 @_EXTRACTORS.append
@@ -187,7 +186,7 @@ def dbi(ctx: WikiAirport, config):
             size = tr("td")[1].string
             airline = tr("td")[2]
             airline = airline.a.string if airline.a is not None else airline.string
-            ctx.extract_get_gate(airport, code, size, airline)
+            ctx.extract_get_gate(airport, code=code, size=size, airline=airline)
 
 
 @_EXTRACTORS.append
@@ -291,13 +290,12 @@ def aix(ctx: WikiAirport, config):
     d = list(zip(df["Gate ID"], df["Company"], strict=False))
 
     result = 0
-    for gate_code, company in d:
-        airline = (
-            AirAirline.new(ctx, name=AirAirline.process_airline_name(company))
-            if str(company) != "nan" or company == "Unavailable"
-            else None
+    for gate_code, airline in d:
+        ctx.extract_get_gate(
+            airport=airport,
+            code=gate_code,
+            airline=airline if str(airline) != "nan" or airline != "Unavailable" else None,
         )
-        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline)
         result += 1
 
     if not result:
@@ -324,12 +322,12 @@ def lar(ctx: WikiAirport, config):
 
     result = 0
     for gate_code, size, airline, status in d:
-        airline = (
-            AirAirline.new(ctx, name=AirAirline.process_airline_name(airline))
-            if str(airline) != "nan" or airline == "?"
-            else None
+        ctx.extract_get_gate(
+            airport=airport,
+            code=gate_code,
+            size=size,
+            airline=airline if str(airline) != "nan" or airline != "?" else None,
         )
-        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
         result += 1
 
     if not result:
@@ -356,12 +354,12 @@ def lfa(ctx: WikiAirport, config):
 
     result = 0
     for gate_code, size, airline, status in d:
-        airline = (
-            AirAirline.new(ctx, name=AirAirline.process_airline_name(airline))
-            if str(airline) != "nan" or airline == "?"
-            else None
+        ctx.extract_get_gate(
+            airport=airport,
+            code=gate_code,
+            size=size,
+            airline=airline if str(airline) != "nan" or airline != "?" else None,
         )
-        AirGate.new(ctx, airport=airport, code=gate_code, airline=airline, size=size)
         result += 1
 
     if not result:

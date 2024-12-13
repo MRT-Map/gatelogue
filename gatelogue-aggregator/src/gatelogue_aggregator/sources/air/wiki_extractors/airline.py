@@ -72,7 +72,7 @@ def intra_air(ctx: WikiAirline, config):
 
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
-            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
+            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
 
 
 @_EXTRACTORS.append
@@ -94,7 +94,7 @@ def fli_high(ctx: WikiAirline, config):
                 g1 = None
             if "idk" in g2 or "CHECK WIKI" in g2:
                 g2 = None
-            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
+            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
 
 
 @_EXTRACTORS.append
@@ -156,7 +156,7 @@ def fly_creeper(ctx: WikiAirline, config):
                 a2 = None
             g1 = next(iter(tr("td")[4].strings))
             g2 = list(tr("td")[4].strings)[1]
-            ctx.extract_get_flight(airline, code, a1, a2, g1, g2)
+            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
 
 
 @_EXTRACTORS.append

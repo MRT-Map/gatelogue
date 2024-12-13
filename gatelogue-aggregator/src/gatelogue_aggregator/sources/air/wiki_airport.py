@@ -56,6 +56,7 @@ class WikiAirport(AirSource):
     def extract_get_gate(
         self,
         airport: AirAirport,
+        *,
         code: str,
         size: str | None = None,
         airline: str | None = None,
