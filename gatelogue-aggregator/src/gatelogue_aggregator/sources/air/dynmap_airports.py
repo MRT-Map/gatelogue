@@ -37,9 +37,13 @@ class DynmapAirports(AirSource):
 
         for json, world in ((json1, "New"), (json2, "Old")):
             for k, v in json.items():
-                name = next(reversed(v["label"].split("(")[0].split("-")))
+                name = v["label"].split("(")[0]
                 AirAirport.new(
-                    self, code=AirAirport.process_code(k), world=world, coordinates=(v["x"], v["z"]), name=name
+                    self,
+                    code=AirAirport.process_code(next(reversed(k.split("-")))),
+                    world=world,
+                    coordinates=(v["x"], v["z"]),
+                    name=name,
                 )
 
         self.save_to_cache(config, self.g)
