@@ -25,17 +25,21 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
         forward_label: str | None = None,
         backward_label: str | None = None,
         one_way: bool = False,
-        between: tuple[str, str] | None = None,
+        between: tuple[str | None, str | None] | None = None,
         exclude: Container[str] | None = None,
     ):
         if len(stations) == 0:
             return
         if between is not None:
             i1 = i2 = None
+            if between[0] is None:
+                i1 = 0
+            if between[1] is None:
+                i2 = len(stations) - 1
             for i, s in enumerate(stations):
-                if s.name.v == between[0]:
+                if between[0] is not None and s.name.v == between[0]:
                     i1 = i
-                if s.name.v == between[1]:
+                if between[1] is not None and s.name.v == between[1]:
                     i2 = i
             if i1 is None:
                 msg = f"{between[0]} not found in list {[s.name.v for s in stations]}"

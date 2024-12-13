@@ -30,7 +30,7 @@ class MarbleRail(RailSource):
         for line_table in html.find_all("table"):
             if line_table.caption is None:
                 continue
-            line_name = line_table.caption.string
+            line_name = line_table.caption.string.strip()
             if line_name not in ("MarbleRail Main Line", "Erzville Line"):
                 continue
             line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp")
@@ -51,8 +51,8 @@ class MarbleRail(RailSource):
                 continue
 
             if line_name == "MarbleRail Main Line":
-                RailLineBuilder(self, line).connect(*stations[:-4])
-                RailLineBuilder(self, line).connect(*stations[-4:])
+                RailLineBuilder(self, line).connect(*stations, between=(None, "Edwardsburg"))
+                RailLineBuilder(self, line).connect(*stations, between=("Tung Wan", None))
             else:
                 RailLineBuilder(self, line).connect(*stations)
 

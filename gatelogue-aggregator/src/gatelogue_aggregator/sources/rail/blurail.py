@@ -71,14 +71,11 @@ class BluRail(RailSource):
                 stations.append(station)
 
             if line_code == "2":
-                RailLineBuilder(self, line).connect(*stations[:-3])
-                RailLineBuilder(self, line).connect(*stations[-3:])
+                RailLineBuilder(self, line).connect(*stations, between=(None, "Bay Point"))
+                RailLineBuilder(self, line).connect(*stations, between=("Whitecliff Central", None))
             elif line_code == "2X":
-                RailLineBuilder(self, line).connect(*stations[:-2])
-                RailLineBuilder(self, line).connect(*stations[-2:])
-            elif line_code == "11":
-                RailLineBuilder(self, line).connect(*stations[:-5])
-                RailLineBuilder(self, line).connect(*stations[-5:])
+                RailLineBuilder(self, line).connect(*stations, between=(None, "Pine Mountain Airfield"))
+                RailLineBuilder(self, line).connect(*stations, between=("Segav Sal", None))
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
