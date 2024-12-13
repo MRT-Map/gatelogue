@@ -21,7 +21,7 @@ class WZFWarp(SeaSource):
 
         codes = []
         for warp in warps(uuid.UUID("4230e859-a39b-4124-b368-28819b77f986"), config):
-            if not warp["name"].startswith("WZF") or warp["name"].startswith("ZF"):
+            if not warp["name"].startswith("WZF") and not warp["name"].startswith("ZF"):
                 continue
             code = warp["name"].split("-")[-1]
             if code in codes:
