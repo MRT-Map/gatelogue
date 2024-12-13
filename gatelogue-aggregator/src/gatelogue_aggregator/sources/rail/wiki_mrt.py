@@ -52,7 +52,7 @@ class WikiMRT(RailSource):
             ("X", "MRT Expo Line", "#000000"),
             ("XM", "MRT Marina Shuttle", "#000000"),
             ("Z", "MRT Zephyr Line", "#EEEEEE"),
-            ("Old-R", "MRT Red Line" "#FF0000"),
+            ("Old-R", "MRT Red Line", "#FF0000"),
             ("Old-B", "MRT Blue Line", "#0000FF"),
             ("Old-Y", "MRT Yellow Line", "#FFFF00"),
             ("Old-G", "MRT Green Line", "#00FF00"),
