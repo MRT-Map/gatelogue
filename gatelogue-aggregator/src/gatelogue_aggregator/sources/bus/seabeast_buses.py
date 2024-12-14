@@ -68,7 +68,6 @@ class SeabeastBuses(BusSource):
                 warp_name,
                 next(iter(difflib.get_close_matches(warp_name, stop_names.get(warp["name"][3:6], []), 1, 0.0)), None),
             )
-            print(name, warp_name, warp["name"])
             if name in names or name is None:
                 continue
 
