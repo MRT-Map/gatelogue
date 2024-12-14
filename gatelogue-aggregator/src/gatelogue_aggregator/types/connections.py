@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeVar, Generic
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import msgspec
 
-from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.types.base import BaseContext
+from gatelogue_aggregator.types.node.base import Node
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.source import Sourced
@@ -32,7 +32,7 @@ class Direction(msgspec.Struct, Generic[CTX, S]):
         return ctx.find_by_ref_or_index(self.direction)
 
     def set_direction(self, ctx: CTX, v: S):
-        self.direction = v.ref(ctx)  # noqa
+        self.direction = v.ref(ctx)
 
     def sanitise_strings(self):
         if self.forward_label is not None:
@@ -51,7 +51,7 @@ class Connection(msgspec.Struct, Generic[CTX, L]):
         return ctx.find_by_ref_or_index(self.line)
 
     def set_line(self, ctx: CTX, v: L):
-        self.line = v.ref(ctx)  # noqa
+        self.line = v.ref(ctx)
 
     def sanitise_strings(self):
         if self.direction is not None:

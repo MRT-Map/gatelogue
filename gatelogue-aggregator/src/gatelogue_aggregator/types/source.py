@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pickle
-from typing import TYPE_CHECKING, ClassVar, Self, TypeVar, Generic
+from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar
 
 import msgspec
 import rich

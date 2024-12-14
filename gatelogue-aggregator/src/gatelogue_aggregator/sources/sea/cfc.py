@@ -1,12 +1,11 @@
 import difflib
-import re
 import uuid
 
 import rich
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
+from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
 from gatelogue_aggregator.types.source import Source
@@ -31,7 +30,7 @@ class CFC(SeaSource):
             if ". " not in ln:
                 continue
             line_code, line_stations = ln.split(". ")
-            if len(line_code) > 3:
+            if len(line_code) > 3:  # noqa: PLR2004
                 continue
             line = SeaLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
 
@@ -64,7 +63,6 @@ class CFC(SeaSource):
                 "NSouthport": "New Southport",
                 "NBakersville": "New Bakersville",
             }.get(warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0])
-            print(warp_name, name)
             if name in names:
                 continue
 

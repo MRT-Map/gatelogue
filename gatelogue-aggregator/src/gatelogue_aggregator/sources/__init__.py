@@ -1,4 +1,9 @@
-from gatelogue_aggregator.types.source import Source
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gatelogue_aggregator.types.source import Source
 
 
 def SOURCES() -> list[type[Source]]:  # noqa: N802
@@ -6,11 +11,11 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
     from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
     from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
-    from gatelogue_aggregator.sources.bus.seabeast_buses import SeabeastBuses
+    from gatelogue_aggregator.sources.bus.ccc import CCC
     from gatelogue_aggregator.sources.bus.intrabus import IntraBus
     from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
     from gatelogue_aggregator.sources.bus.omegabus import IntraBusOmegaBus
-    from gatelogue_aggregator.sources.bus.ccc import CCC
+    from gatelogue_aggregator.sources.bus.seabeast_buses import SeabeastBuses
     from gatelogue_aggregator.sources.rail.blurail import BluRail
     from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
     from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
@@ -30,8 +35,8 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.railnorth_warp import RailNorthWarp
     from gatelogue_aggregator.sources.rail.redtrain import RedTrain
     from gatelogue_aggregator.sources.rail.redtrain_warp import RedTrainWarp
-    from gatelogue_aggregator.sources.rail.seat import SEAT
     from gatelogue_aggregator.sources.rail.seabeast_rail import SeabeastRail
+    from gatelogue_aggregator.sources.rail.seat import SEAT
     from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
     from gatelogue_aggregator.sources.rail.wzr import WZR
     from gatelogue_aggregator.sources.rail.wzr_warp import WZRWarp
