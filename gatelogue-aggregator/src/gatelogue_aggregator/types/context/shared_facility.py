@@ -155,7 +155,6 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Whiteley College Park", rlq, "Whiteley College Park"),
             (rn, "Kappen", mrt, "Kappen Hauptbahnhof"),
             (intra, "Royalston", mrt, ["V14"]),
-            (intra, "Sunshine Coast Máspalmas International Airport", fr, "Tranquil Forest Central"),
             (intra, "Tranquil Forest Central", fr, "Tranquil Forest Central"),
             (blu, "Sesby MRT Warptrain Museum", rlq, "Sesby MRT Warptrain Museum"),
             (blu, "Sesby Central", rlq, "Sesby Central"),

@@ -14,7 +14,7 @@ from gatelogue_aggregator.types.source import Source
 
 
 class CCC(BusSource):
-    name = "MRT Wiki (Sea, Caravacan Caravan Company)"
+    name = "MRT Wiki (Bus, Caravacan Caravan Company)"
     priority = 1
 
     def __init__(self, config: Config):

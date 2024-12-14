@@ -6,6 +6,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
     from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
     from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
+    from gatelogue_aggregator.sources.bus.seabeast_buses import SeabeastBuses
     from gatelogue_aggregator.sources.bus.intrabus import IntraBus
     from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp
     from gatelogue_aggregator.sources.bus.omegabus import IntraBusOmegaBus
@@ -86,4 +87,5 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         SEAT,
         CFC,
         CCC,
+        SeabeastBuses,
     ]
