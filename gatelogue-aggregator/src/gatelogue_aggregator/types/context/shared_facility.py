@@ -156,6 +156,7 @@ class SharedFacilityContext(BaseContext, Source):
             (rn, "Kappen", mrt, "Kappen Hauptbahnhof"),
             (intra, "Royalston", mrt, ["V14"]),
             (intra, "Tranquil Forest Central", fr, "Tranquil Forest Central"),
+            (blu, "Tranquil Forest Central", fr, "Tranquil Forest Central"),
             (blu, "Sesby MRT Warptrain Museum", rlq, "Sesby MRT Warptrain Museum"),
             (blu, "Sesby Central", rlq, "Sesby Central"),
             (blu, "Airchester Central", rlq, "Airchester Central"),
