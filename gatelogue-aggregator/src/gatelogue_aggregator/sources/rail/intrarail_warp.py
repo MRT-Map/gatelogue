@@ -37,7 +37,8 @@ class IntraRailWarp(RailSource):
                 continue
             if (
                 match := re.search(
-                    r"(?i)^This is ([^.]*)\.|THIS STOP: ([^/]*) /|THIS & LAST STOP: ([^/]*) /", warp["welcomeMessage"]
+                    r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: (.*?) //|THIS & LAST STOP: (.*?) //",
+                    warp["welcomeMessage"],
                 )
             ) is None:
                 # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
