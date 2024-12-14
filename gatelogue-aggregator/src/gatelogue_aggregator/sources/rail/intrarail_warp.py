@@ -43,41 +43,7 @@ class IntraRailWarp(RailSource):
                 # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
             name = match.group(1) or match.group(2) or match.group(3)
-            name = {
-                "Heampstead Kings Cross Railway Terminal": "Deadbush Heampstead Kings Cross Railway Terminal",
-                "Musique": "Musique Bayview Avenue",
-                "Zerez Central": "Zerez Thespe Railway Station",
-                "Pine Mountain": "PMW City Pine Mountain",
-                "Delta City": "Delta City Henry Avenue",
-                "Matheson": "Matheson Araya Avenue",
-                "Scarborough": "Scarborough MRT Plaza",
-                "Cactus River": "Cactus River Main Street",
-                "Southport": "Southfort",
-                "Llanrwst Newydd": "Wurst",
-                "Llanwrst Newyyd": "Wurst",
-                "Kaloro City": "Kaloro City Central",
-                "Venceslo Midtown Multimodal Transit Center": "Venceslo Union Station",
-                "Bristol": "Bristol Downtown",
-                "San Dzobiak Union Station": "San Dzobiak Union Square",
-                "Formsa Northern": "Formosa Northern",
-                "Horizon National Airport": "Lanark-Konawa Horizon National Airport",
-                "Lanark": "Lanark Central",
-                "BirchView": "BirchView Central",
-                "Waverly": "Waverly Edinburgh Station",
-                "Zaquar Onika T": "Zaquar Tanzanite Station",
-                "Cornus": "Cornus Central",
-                "Formosa": "New Terra",
-                "Formosa-Sealane Danielston UCWT International Airport East": "Formosa-Sealane-Danielston UCWT International Airport East",
-                "Musique IntraRail": "Musique Bayview Avenue",
-                "Weezerville": "Deadbush Weezerville",
-                "Hacienda Mojito": "Deadbush Hacienda Mojito",
-                "Volkov Bay": "Deadbush Volkov Bay",
-                "Quarryville": "Deadbush Quarryville",
-                "Zaquar Airport": "Zaquar Ménage et Trois Regional Airport",
-                "Veldberg": "Veldberg SE7",
-                "New Stone City V44": "New Stone City V43",
-                "Laclede Theater District": "Laclede Theater District - Xavier Airport",
-            }.get(name, name)
+            name = {}.get(name, name)
             if name in names:
                 continue
             RailStation.new(
