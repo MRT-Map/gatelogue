@@ -33,7 +33,7 @@ class IntraRailWarp(RailSource):
             "New Stone City South",
         ]
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
-            if not warp["name"].startswith("IR") and not warp["name"].startswith("MCR"):
+            if not warp["name"].startswith("ItR"):
                 continue
             if (
                 match := re.search(
