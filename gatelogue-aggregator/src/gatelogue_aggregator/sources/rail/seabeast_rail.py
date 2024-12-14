@@ -56,7 +56,6 @@ class SeabeastRail(RailSource):
                 warp_name,
                 difflib.get_close_matches(warp_name, station_names, 1, 0.0)[0],
             )
-            print(warp_name, name)
             if name in names:
                 continue
 

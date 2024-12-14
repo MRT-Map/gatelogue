@@ -39,7 +39,14 @@ class SeabeastBuses(BusSource):
             text,
         ):
             line_code = match.group("code")
-            line = BusLine.new(self, code=line_code, company=company, name=line_code, colour=match.group("col"))
+            line_colour = match.group("col")
+            line = BusLine.new(
+                self,
+                code=line_code,
+                company=company,
+                name=line_code,
+                colour="#eee" if line_colour == "white" else line_colour,
+            )
 
             stops = []
             for n in (match.group("origin"), *match.group("dests").split(",")):
@@ -63,7 +70,7 @@ class SeabeastBuses(BusSource):
                 continue
 
             warp_name = warp["name"][6:]
-            name = {"HEN": "Hendon Coach Station"}.get(
+            name = {"HEN": "Hendon Coach Station", "HAM": "Hamblin Municipal Airport"}.get(
                 warp_name,
                 next(iter(difflib.get_close_matches(warp_name, stop_names.get(warp["name"][3:6], []), 1, 0.0)), None),
             )
