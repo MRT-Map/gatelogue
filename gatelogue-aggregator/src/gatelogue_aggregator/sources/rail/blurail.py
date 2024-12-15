@@ -1,9 +1,11 @@
+import json
 import re
 
 import rich
 
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text
+from gatelogue_aggregator.sources.wiki_base import get_wiki_text, get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
@@ -29,17 +31,20 @@ class BluRail(RailSource):
 
         company = RailCompany.new(self, name="BluRail")
 
-        line_list = get_wiki_text("List of BluRail lines", config)
-        line_codes = [
-            result.group("code")
-            for result in search_all(
-                re.compile(r"{{BR\|(?P<code>[^}]+)}}\n\|.*\n\|.*\n\|.*\n\|(?P<adv>.*)\n\|"), line_list
+        line_list = json.loads(
+            get_url(
+                "https://wiki.minecartrapidtransit.net/api.php?action=query&list=categorymembers&cmtitle=Category%3ABluRail+lines&cmlimit=5000&format=json",
+                config.cache_dir / "blurail_line_list",
+                config.timeout,
             )
-            if "planned service" not in result.group("adv").lower()
-        ]
+        )["query"]["categorymembers"]
+
+        line_codes = [result["title"].removesuffix(" (BluRail line)") for result in line_list]
 
         for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
+            if "is a planned [[BluRail]] warp train line" in wiki:
+                continue
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
 
             line_colour = (
@@ -57,7 +62,7 @@ class BluRail(RailSource):
                 code = result.group("code").upper()
                 if code == "BCH":
                     code += line_code
-                elif code == "MCN" and line_code in ("11", "6"):
+                elif code == "MCN" and line_code in ("11", "6", "20"):
                     code += "11"
                 codes = {
                     "ILI": {"ILI", "ITC"},
