@@ -169,6 +169,8 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Oparia LeTourneau International Airport", intra, "Oparia LeTourneau International Airport"),
             (rn, "Oparia LeTourneau International Airport", intra, "Oparia LeTourneau International Airport"),
             (blu, "Woodsdale", fr, "Woodsdale"),
+            (blu, "Kaloro City Sports Park", intra, "Kaloro City Sports Park"),
+            (blu, "Kaloro City Central", intra, "Kaloro City Central"),
         ):
 
             def is_desired_station(a, company, station_name):
