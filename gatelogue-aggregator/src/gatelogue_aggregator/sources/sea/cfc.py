@@ -63,6 +63,7 @@ class CFC(SeaSource):
                 "NSouthport": "New Southport",
                 "NBakersville": "New Bakersville",
             }.get(warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0])
+            print(warp_name, name)
             if name in names:
                 continue
 
