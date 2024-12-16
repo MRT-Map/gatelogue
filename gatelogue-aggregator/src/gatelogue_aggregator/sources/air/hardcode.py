@@ -97,4 +97,5 @@ GATE_ALIASES: dict[str, dict[str | tuple[str, str], str | None]] = {
         "28": "A28",
         "30": "A30",
     },
+    "GSM": {"3": "A3", "7": "A7"},
 }
