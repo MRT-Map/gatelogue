@@ -46,14 +46,23 @@ class MRTTransit(AirSource):
         ]
 
         get_url(
+            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
+            cache2,
+            timeout=config.timeout,
+        )
+        df2 = pd.read_csv(cache2, header=0)
+        df2["Mode"] = "helicopter"
+        df2.drop(df2.tail(4).index, inplace=True)
+
+        get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache2,
             timeout=config.timeout,
         )
-        df2 = pd.read_csv(cache2, header=1)
-        df2["Mode"] = "plane"
+        df3 = pd.read_csv(cache3, header=1)
+        df3["Mode"] = "plane"
 
-        df2.rename(
+        df3.rename(
             columns={
                 "Unnamed: 0": "Name",
                 "Unnamed: 1": "Code",
@@ -62,16 +71,7 @@ class MRTTransit(AirSource):
             },
             inplace=True,
         )
-        df2.drop(df2.tail(6).index, inplace=True)
-
-        get_url(
-            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
-            cache3,
-            timeout=config.timeout,
-        )
-        df3 = pd.read_csv(cache3, header=0)
-        df3["Mode"] = "helicopter"
-        df3.drop(df3.tail(4).index, inplace=True)
+        df3.drop(df3.tail(6).index, inplace=True)
 
         df = pd.concat((df1, df2, df3))
 
@@ -95,7 +95,6 @@ class MRTTransit(AirSource):
                     self,
                     code=None,
                     airport=airport,
-                    size="SP" if mode == "seaplane" else "H" if mode == "helicopter" else None,
                 )
 
                 for flight_code in str(flights).split(", "):
