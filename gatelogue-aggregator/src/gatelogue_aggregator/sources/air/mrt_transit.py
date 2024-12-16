@@ -69,14 +69,14 @@ class MRTTransit(AirSource):
             cache3,
             timeout=config.timeout,
         )
-        df3 = pd.read_csv(cache3)
+        df3 = pd.read_csv(cache3, header=0)
         df3["Mode"] = "helicopter"
         df3.drop(df3.tail(4).index, inplace=True)
 
         df = pd.concat((df1, df2, df3))
 
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
-            if airline_name in ("Name", "Code", "World", "Operator", "Seaplane", "Mode", "Airport Name"):
+            if airline_name in ("Name", "Code", "World", "Operator", "Owner", "Mode", "Airport Name"):
                 continue
             airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, mode, flights in zip(
@@ -91,7 +91,12 @@ class MRTTransit(AirSource):
                 if airport_world != "":
                     airport.world = self.source(airport_world)
 
-                gate = AirGate.new(self, code=None, airport=airport, size="SP" if mode == "seaplane" else None)
+                gate = AirGate.new(
+                    self,
+                    code=None,
+                    airport=airport,
+                    size="SP" if mode == "seaplane" else "H" if mode == "helicopter" else None,
+                )
 
                 for flight_code in str(flights).split(", "):
                     flight = AirFlight.new(
