@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING, Self, override, Any
+from typing import TYPE_CHECKING, Any, Self, override
 
 import msgspec
 import rustworkx as rx
