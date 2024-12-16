@@ -14,6 +14,7 @@ class MRTTransit(AirSource):
     def __init__(self, config: Config):
         cache1 = config.cache_dir / "mrt-transit1"
         cache2 = config.cache_dir / "mrt-transit2"
+        cache3 = config.cache_dir / "mrt-transit3"
         AirSource.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
@@ -63,7 +64,16 @@ class MRTTransit(AirSource):
         )
         df2.drop(df2.tail(6).index, inplace=True)
 
-        df = pd.concat((df1, df2))
+        get_url(
+            "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
+            cache3,
+            timeout=config.timeout,
+        )
+        df3 = pd.read_csv(cache3)
+        df3["Mode"] = "helicopter"
+        df3.drop(df2.tail(4).index, inplace=True)
+
+        df = pd.concat((df1, df2, df3))
 
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane", "Mode"):
