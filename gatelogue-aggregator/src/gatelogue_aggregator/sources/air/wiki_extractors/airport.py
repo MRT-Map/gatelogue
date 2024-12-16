@@ -38,6 +38,13 @@ def mwt(ctx: WikiAirport, config):
         "MWT",
         re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)"),
         config,
+        size=lambda matches: "XS"
+        if (code := matches["size"]).startswith("P")
+        else "S"
+        if int(code) <= 60
+        else "M"
+        if int(code) <= 82
+        else "H",
     )
 
 
@@ -48,6 +55,7 @@ def kek(ctx: WikiAirport, config):
         "KEK",
         re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
         config,
+        size="XS",
     )
 
 
@@ -94,6 +102,7 @@ def cbz(ctx: WikiAirport, config):
         "CBZ",
         re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
         config,
+        size="S",
     )
 
 
@@ -143,6 +152,7 @@ def vda(ctx: WikiAirport, config):
         "VDA",
         re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"),
         config,
+        size="S",
     )
 
 
@@ -200,6 +210,7 @@ def gsm(ctx: WikiAirport, config):
             r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
         ),
         config,
+        size=lambda matches: "H" if matches["code"].startswith("H") else "S",
     )
 
 
@@ -224,6 +235,7 @@ def sdz(ctx: WikiAirport, config):
             r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
         ),
         config,
+        size="S",
     )
 
 
@@ -260,6 +272,7 @@ def erz2(ctx: WikiAirport, config):
             r"\|-\n\|(?P<code>S.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
         ),
         config,
+        size="SP",
     )
 
 

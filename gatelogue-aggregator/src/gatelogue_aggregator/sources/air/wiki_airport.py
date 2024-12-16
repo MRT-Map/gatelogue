@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import rich.progress
@@ -37,12 +38,16 @@ class WikiAirport(AirSource):
         airport_code: str,
         regex: Pattern[str],
         config: Config,
+        size: str | Callable[[dict[str, str]], str] | None = None,
     ) -> AirAirport:
         wikitext = get_wiki_text(page_name, config)
         airport = self.extract_get_airport(airport_code, page_name)
         result = 0
         for match in search_all(regex, wikitext):
-            self.extract_get_gate(airport, **match.groupdict())
+            matches = match.groupdict()
+            if size is not None:
+                matches["size"] = size if isinstance(size, str) else size(matches)
+            self.extract_get_gate(airport, **matches)
             result += 1
         if not result:
             rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
