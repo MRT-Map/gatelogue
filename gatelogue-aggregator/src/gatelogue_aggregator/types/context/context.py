@@ -26,6 +26,9 @@ if TYPE_CHECKING:
 
 
 class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext, SharedFacilityContext):
+    name = "Gatelogue"
+    priority = 0
+
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
         self = cls()

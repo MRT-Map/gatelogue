@@ -13,6 +13,9 @@ class Proximity(msgspec.Struct):
 
 
 class ProximityContext(BaseContext):
+    name = "Gatelogue"
+    priority = 0
+
     def update(self):
         from gatelogue_aggregator.types.node.air import AirAirport
         from gatelogue_aggregator.types.node.base import LocatedNode

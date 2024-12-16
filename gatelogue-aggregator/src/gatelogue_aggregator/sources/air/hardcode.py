@@ -8,7 +8,6 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
     "MarbleAir": "odd-even",
     "CampLines": "odd-even",
     "Rainer Airways": "odd-even",
-    "JiffyAir": "odd-even",
     "AmberAir": "odd-even",
 }
 
@@ -67,6 +66,7 @@ AIRPORT_ALIASES: dict[str, str] = {
     "DPH": "DBI",
     "COI": "COA",
     "TTL": "MWT",
+    "LTN": "LNT",
 }
 
 GATE_ALIASES: dict[str, dict[str | tuple[str, str], str]] = {
