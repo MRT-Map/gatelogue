@@ -82,7 +82,7 @@ def intra_air(ctx: WikiAirline, config):
 
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
-            s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None
+            s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None  # noqa: PLR2004
             ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
             result += 1
 
@@ -333,9 +333,9 @@ def arctic_air(ctx: WikiAirline, config):
             continue
 
         if str(a1).strip() not in DUPLICATE_GATE_NUM:
-            g1 = re.sub(r"T. ", "", g1)
+            g1 = re.sub(r"T. ", "", g1)  # noqa: PLW2901
         if str(a2).strip() not in DUPLICATE_GATE_NUM:
-            g2 = re.sub(r"T. ", "", g2)
+            g2 = re.sub(r"T. ", "", g2)  # noqa: PLW2901
 
         ctx.extract_get_flight(
             airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" not in g1 else None, g2=g2 if "*" not in g2 else None
@@ -370,9 +370,9 @@ def sandstone_airr(ctx: WikiAirline, config):
             continue
 
         if str(a1).strip() not in DUPLICATE_GATE_NUM:
-            g1 = re.sub(r"T. ", "", g1)
+            g1 = re.sub(r"T. ", "", g1)  # noqa: PLW2901
         if str(a2).strip() not in DUPLICATE_GATE_NUM:
-            g2 = re.sub(r"T. ", "", g2)
+            g2 = re.sub(r"T. ", "", g2)  # noqa: PLW2901
 
         ctx.extract_get_flight(
             airline,
