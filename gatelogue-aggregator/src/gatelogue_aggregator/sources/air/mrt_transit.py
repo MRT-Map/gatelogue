@@ -66,7 +66,7 @@ class MRTTransit(AirSource):
         df = pd.concat((df1, df2))
 
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
-            if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
+            if airline_name in ("Name", "Code", "World", "Operator", "Seaplane", "Mode"):
                 continue
             airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, mode, flights in zip(

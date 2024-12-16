@@ -439,3 +439,14 @@ def lilyflower_airlines(ctx: WikiAirline, config):
         rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
     else:
         rich.print(RESULT + f"{airline_name} has {result} flights")
+
+
+@_EXTRACTORS.append
+def rodbla(ctx: WikiAirline, config):
+    ctx.regex_extract_airline(
+        "RodBla Heli",
+        "RodBla Heli",
+        re.compile(r"\|RB(?P<code>.*?)\n\|Active\n\|(?P<a1>.*?)-(?P<a2>.*?)\n"),
+        config,
+        size="H",
+    )
