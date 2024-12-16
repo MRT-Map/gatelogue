@@ -51,7 +51,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
             equiv.merge(self, n)
 
         edges: dict[tuple[int, int], dict[type, Sourced[Any]]] = {}
-        for i in track(self.g.edge_indices(), description="Merging edges", remove=False):
+        for i in track(self.g.edge_indices(), description=INFO2 + "Merging edges", remove=False):
             u, v = self.g.get_edge_endpoints_by_index(i)
             k = self.g.get_edge_data_by_index(i)
 

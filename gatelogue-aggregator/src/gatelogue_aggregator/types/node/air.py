@@ -317,9 +317,11 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
 
     @staticmethod
-    def process_code[T: (str, None)](s: T, airport_code: str | None = None) -> T:
+    def process_code[T: (str, None)](s: T, airline_name: str | None = None, airport_code: str | None = None) -> T:
         s = Node.process_code(s)
         if airport_code in GATE_ALIASES:
+            if airline_name is not None:
+                s = GATE_ALIASES[airport_code].get((airline_name, s), s)
             s = GATE_ALIASES[airport_code].get(s, s)
         return s
 

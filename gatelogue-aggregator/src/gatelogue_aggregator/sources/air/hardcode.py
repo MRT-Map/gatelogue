@@ -69,10 +69,22 @@ AIRPORT_ALIASES: dict[str, str] = {
     "TTL": "MWT",
 }
 
-GATE_ALIASES: dict[str, dict[str, str]] = {
+GATE_ALIASES: dict[str, dict[str | tuple[str, str], str]] = {
     "PCE": {
         "4": "C2",
         "5": "C3",
         "12": "C7",
-    }
+    },
+    "SHI": {
+        "2-4": "T2-4",
+    },
+    "MAX": {
+        ("Lilyflower Airlines", "A3"): "T1A3",
+        ("Astrella", "B1"): "T2B1",
+        "C7": "T1C7",
+        "D4": "T1C22",
+        "D14": "T1D4",
+    },
+    "NMW": {"T2G2": "T2-2"},
+    "NWT": {"T2G2": "T2-2", "T2G5": "T2-5"},
 }
