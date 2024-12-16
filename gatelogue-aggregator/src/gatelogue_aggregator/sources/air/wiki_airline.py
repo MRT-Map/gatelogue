@@ -82,7 +82,7 @@ class WikiAirline(AirSource):
             self,
             code=AirGate.process_code(g1, airline.name, airport1),
             airport=AirAirport.new(self, code=airport1),
-            size=str(s) if s is not None else None,
+            size=str(s) if s is not None and g1 is not None else None,
         )
         f.connect(self, gate1)
         if gate1.code is not None:
@@ -93,7 +93,7 @@ class WikiAirline(AirSource):
             self,
             code=AirGate.process_code(g2, airline.name, airport2),
             airport=AirAirport.new(self, code=airport2),
-            size=str(s) if s is not None else None,
+            size=str(s) if s is not None and g2 is not None else None,
         )
         f.connect(
             self,
@@ -108,7 +108,7 @@ class WikiAirline(AirSource):
                 self,
                 code=AirGate.process_code(g3, airline.name, airport3),
                 airport=AirAirport.new(self, code=airport3),
-                size=str(s) if s is not None else None,
+                size=str(s) if s is not None and g3 is not None else None,
             )
             f.connect(self, gate3)
             if gate3.code is not None:
