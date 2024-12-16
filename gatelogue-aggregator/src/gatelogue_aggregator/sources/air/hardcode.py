@@ -44,6 +44,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "MylesHeli": "mylesHeli",
     "Myles Heli": "mylesHeli",
     "Nexus Airlines": "Nexus",
+    "NextTrain": "NextPlane",
     "OLA": "Oceanic Langus Airways",
     "RedWave Airways": "RedWave",
     "rosa": "Rosa",
