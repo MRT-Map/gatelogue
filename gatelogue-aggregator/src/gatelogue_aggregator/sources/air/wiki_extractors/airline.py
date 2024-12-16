@@ -324,6 +324,12 @@ def arctic_air(ctx: WikiAirline, config):
             continue
         if not a1 or str(a1) == "nan":
             continue
+
+        if str(a1).strip() not in DUPLICATE_GATE_NUM:
+            g1 = re.sub(r"T. ", "", g1)
+        if str(a2).strip() not in DUPLICATE_GATE_NUM:
+            g2 = re.sub(r"T. ", "", g2)
+
         ctx.extract_get_flight(
             airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" not in g1 else None, g2=g2 if "*" not in g2 else None
         )
@@ -355,6 +361,12 @@ def sandstone_airr(ctx: WikiAirline, config):
     for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
         if not a1 or str(a1) == "nan":
             continue
+
+        if str(a1).strip() not in DUPLICATE_GATE_NUM:
+            g1 = re.sub(r"T. ", "", g1)
+        if str(a2).strip() not in DUPLICATE_GATE_NUM:
+            g2 = re.sub(r"T. ", "", g2)
+
         ctx.extract_get_flight(
             airline,
             code=str(int(flight)),

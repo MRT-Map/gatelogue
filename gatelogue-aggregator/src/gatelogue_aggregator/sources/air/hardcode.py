@@ -12,7 +12,7 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
     "AmberAir": "odd-even",
 }
 
-DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT")
+DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT", "NMW")
 
 AIRLINE_ALIASES: dict[str, str] = {
     "Aero": "aero",
@@ -67,4 +67,12 @@ AIRPORT_ALIASES: dict[str, str] = {
     "DPH": "DBI",
     "COI": "COA",
     "TTL": "MWT",
+}
+
+GATE_ALIASES: dict[str, dict[str, str]] = {
+    "PCE": {
+        "4": "C2",
+        "5": "C3",
+        "12": "C7",
+    }
 }

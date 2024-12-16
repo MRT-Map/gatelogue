@@ -3,7 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
 
 from gatelogue_aggregator.logging import INFO2, track
-from gatelogue_aggregator.sources.air.hardcode import AIRLINE_ALIASES, AIRPORT_ALIASES, DIRECTIONAL_FLIGHT_AIRLINES
+from gatelogue_aggregator.sources.air.hardcode import (
+    AIRLINE_ALIASES,
+    AIRPORT_ALIASES,
+    DIRECTIONAL_FLIGHT_AIRLINES,
+    GATE_ALIASES,
+)
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
 from gatelogue_aggregator.types.source import Source, Sourced
@@ -310,6 +315,13 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
+
+    @staticmethod
+    def process_code[T: (str, None)](s: T, airport_code: str | None = None) -> T:
+        s = Node.process_code(s)
+        if airport_code in GATE_ALIASES:
+            s = GATE_ALIASES[airport_code].get(s, s)
+        return s
 
 
 class AirAirline(Node[AirSource], kw_only=True, tag=True):

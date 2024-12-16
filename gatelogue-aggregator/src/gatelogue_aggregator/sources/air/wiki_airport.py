@@ -66,7 +66,7 @@ class WikiAirport(AirSource):
         airline = AirAirline.process_airline_name(airline or airline2)
         g = AirGate.new(
             self,
-            code=AirGate.process_code(code),
+            code=AirGate.process_code(code, airport.code),
             airport=airport,
             size=str(size) if size is not None else None,
         )

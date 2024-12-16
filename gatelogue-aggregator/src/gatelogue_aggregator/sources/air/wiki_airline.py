@@ -72,20 +72,22 @@ class WikiAirline(AirSource):
     ) -> AirFlight:
         f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
 
+        airport1 = AirAirport.process_code(a1 or a12)
         gate1 = AirGate.new(
             self,
-            code=AirGate.process_code(g1),
-            airport=AirAirport.new(self, code=AirAirport.process_code(a1 or a12)),
+            code=AirGate.process_code(g1, airport1),
+            airport=AirAirport.new(self, code=airport1),
             size=str(s) if s is not None else None,
         )
         f.connect(self, gate1)
         if gate1.code is not None:
             airline.connect(self, gate1)
 
+        airport2 = AirAirport.process_code(a2 or a22)
         gate2 = AirGate.new(
             self,
-            code=AirGate.process_code(g2),
-            airport=AirAirport.new(self, code=AirAirport.process_code(a2 or a22)),
+            code=AirGate.process_code(g2, airport2),
+            airport=AirAirport.new(self, code=airport2),
             size=str(s) if s is not None else None,
         )
         f.connect(
@@ -96,10 +98,11 @@ class WikiAirline(AirSource):
             airline.connect(self, gate2)
 
         if (a3 is not None or a32 is not None) and g3 is not None:
+            airport3 = AirAirport.process_code(a3 or a32)
             gate3 = AirGate.new(
                 self,
-                code=AirGate.process_code(g3),
-                airport=AirAirport.new(self, code=AirAirport.process_code(a3 or a32)),
+                code=AirGate.process_code(g3, airport3),
+                airport=AirAirport.new(self, code=airport3),
                 size=str(s) if s is not None else None,
             )
             f.connect(self, gate3)
