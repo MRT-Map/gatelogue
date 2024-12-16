@@ -289,14 +289,20 @@ def aix(ctx: WikiAirport, config):
 
     df = pd.read_csv(cache, header=1)
 
-    d = list(zip(df["Gate ID"], df["Company"], strict=False))
+    d = list(zip(df["Gate ID"], df["Gate Size"], df["Company"], strict=False))
 
     result = 0
-    for gate_code, airline in d:
+    old_gate_size = None
+    for gate_code, gate_size, airline in d:
+        if str(gate_size) == "nan":
+            gate_size = old_gate_size
+        else:
+            old_gate_size = str(gate_size)[0]
         ctx.extract_get_gate(
             airport=airport,
             code=gate_code,
             airline=airline if str(airline) != "nan" and airline != "Unavailable" else None,
+            size=gate_size,
         )
         result += 1
 

@@ -42,6 +42,7 @@ def turbula(ctx: WikiAirline, config):
             r"code = LU(?P<code>\d*).*?(?:\n.*?)?airport1 = (?P<a1>.*?) .*?airport2 = (?P<a2>.*?) .*?status = active"
         ),
         config,
+        size="SP",
     )
 
 
@@ -81,7 +82,8 @@ def intra_air(ctx: WikiAirline, config):
 
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
-            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None
+            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
             result += 1
 
     if not result:
@@ -259,6 +261,11 @@ def raiko(ctx: WikiAirline, config):
             r"\|-\n\|RK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
         config,
+        size=lambda matches: "H"
+        if matches["code"].startswith("H")
+        else "SP"
+        if matches["code"].startswith("S")
+        else None,
     )
 
 
