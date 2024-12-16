@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Self, override, Any
 
 import msgspec
 import rustworkx as rx
@@ -49,6 +49,19 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
             to_merge.append((equiv, n))
         for equiv, n in track(to_merge, description=INFO2 + "Merging equivalent nodes", remove=False):
             equiv.merge(self, n)
+
+        edges: dict[tuple[int, int], dict[type, Sourced[Any]]] = {}
+        for i in track(self.g.edge_indices(), description="Merging edges", remove=False):
+            u, v = self.g.get_edge_endpoints_by_index(i)
+            k = self.g.get_edge_data_by_index(i)
+
+            edge_dict = edges.setdefault((u, v), {})
+            if type(k.v) in edge_dict:
+                edge_dict[type(k.v)].source(k)
+                self.g.remove_edge_from_index(i)
+            else:
+                edge_dict[type(k.v)] = k
+
         self.update()
         return self
 
