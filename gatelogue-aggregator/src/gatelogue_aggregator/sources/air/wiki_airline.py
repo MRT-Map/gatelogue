@@ -78,39 +78,42 @@ class WikiAirline(AirSource):
         f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
 
         airport1 = AirAirport.process_code(a1 or a12)
+        gate_code1 = AirGate.process_code(g1, airline.name, airport1)
         gate1 = AirGate.new(
             self,
-            code=AirGate.process_code(g1, airline.name, airport1),
+            code=gate_code1,
             airport=AirAirport.new(self, code=airport1),
-            size=str(s) if s is not None and g1 is not None else None,
+            size=str(s) if s is not None and gate_code1 is not None else None,
         )
         f.connect(self, gate1)
-        if gate1.code is not None:
+        if gate_code1 is not None:
             airline.connect(self, gate1)
 
         airport2 = AirAirport.process_code(a2 or a22)
+        gate_code2 = AirGate.process_code(g2, airline.name, airport2)
         gate2 = AirGate.new(
             self,
-            code=AirGate.process_code(g2, airline.name, airport2),
+            code=gate_code2,
             airport=AirAirport.new(self, code=airport2),
-            size=str(s) if s is not None and g2 is not None else None,
+            size=str(s) if s is not None and gate_code2 is not None else None,
         )
         f.connect(
             self,
             gate2,
         )
-        if gate2.code is not None:
+        if gate_code2 is not None:
             airline.connect(self, gate2)
 
         if (a3 is not None or a32 is not None) and g3 is not None:
             airport3 = AirAirport.process_code(a3 or a32)
+            gate_code3 = AirGate.process_code(g3, airline.name, airport3)
             gate3 = AirGate.new(
                 self,
-                code=AirGate.process_code(g3, airline.name, airport3),
+                code=gate_code3,
                 airport=AirAirport.new(self, code=airport3),
-                size=str(s) if s is not None and g3 is not None else None,
+                size=str(s) if s is not None and gate_code3 is not None else None,
             )
             f.connect(self, gate3)
-            if gate3.code is not None:
+            if gate_code3 is not None:
                 airline.connect(self, gate3)
         return f

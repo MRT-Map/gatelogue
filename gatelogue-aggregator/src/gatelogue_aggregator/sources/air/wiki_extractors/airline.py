@@ -148,10 +148,10 @@ def air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def infamous(ctx: WikiAirline, config):
+def berryessa(ctx: WikiAirline, config):
     ctx.regex_extract_airline(
-        "Infamous Airlines",
-        "Infamous Airlines",
+        "Berryessa Airlines",
+        "Berryessa Airlines",
         re.compile(
             r"\{\{BA\|IN(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
         ),
@@ -271,12 +271,17 @@ def raiko(ctx: WikiAirline, config):
 
 @_EXTRACTORS.append
 def rainer_airways(ctx: WikiAirline, config):
-    # INCOMPLETE
     ctx.regex_extract_airline(
         "Rainer Airways",
         "Rainer Airways",
         re.compile(
-            r"\|-\n\|\s*RB(?P<code>[^|]*?)\s*\n\|\s*{{afn\|(?P<a1>.*?)}}\s*\n\|\s*(?P<g1>.*?)\s*\n\|\s*{{afn\|(?P<a2>.*?)}}\s*\n\|\s*(?P<g2>.*?)\s*\n"
+            r"""\|-
+\|RB(?P<code>.*?)
+\|(?:{{afn\|(?P<a1>.*?)}}|.*?\((?P<a12>.*?)\))
+\|(?P<g1>.*?)
+\|(?:{{afn\|(?P<a2>.*?)}}|.*?\((?P<a22>.*?)\))
+\|(?P<g2>.*?)
+"""
         ),
         config,
     )
@@ -467,4 +472,20 @@ def mylesheli(ctx: WikiAirline, config):
         re.compile(r"{{mylesh\|MY(?P<code>.*?)\|t\|(?P<a1>.*?)\|.*?\|.*?\|(?P<a2>.*?)\|.*?\|.*?}}"),
         config,
         size=_hack,
+    )
+
+
+@_EXTRACTORS.append
+def aero(ctx: WikiAirline, config):
+    ctx.regex_extract_airline(
+        "aero",
+        "Aero",
+        re.compile(r"""\|\|<font size="4">'''ae(?P<code>.*?)'''.*?
+\|\|<font size="4">'''(?P<a1>.*?)'''(?:.*?gate (?P<g1>.*?)[)']|).*?
+\|\|.*?
+\|\|<font size="4">'''(?P<a2>.*?)'''(?:.*?gate (?P<g2>.*?)[)']|).*?
+\|\|.*?
+\|\|.*?
+\|\|.*?\[\[File:Eastern Active\.gif\|50px]]"""),
+        config,
     )

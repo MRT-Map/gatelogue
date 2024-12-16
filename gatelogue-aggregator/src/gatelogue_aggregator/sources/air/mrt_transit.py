@@ -97,6 +97,9 @@ class MRTTransit(AirSource):
                     airport=airport,
                 )
 
+                if mode == "helicopter":
+                    continue
+
                 for flight_code in str(flights).split(", "):
                     flight = AirFlight.new(
                         self, codes=AirFlight.process_code(flight_code, airline_name), airline=airline

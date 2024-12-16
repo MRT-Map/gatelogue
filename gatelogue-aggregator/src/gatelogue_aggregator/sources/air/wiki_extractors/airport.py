@@ -55,7 +55,7 @@ def kek(ctx: WikiAirport, config):
         "KEK",
         re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
         config,
-        size="XS",
+        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",
     )
 
 
