@@ -450,3 +450,21 @@ def rodbla(ctx: WikiAirline, config):
         config,
         size="H",
     )
+
+
+@_EXTRACTORS.append
+def mylesheli(ctx: WikiAirline, config):
+    def _hack(matches):
+        if matches["a1"] == "GSA":
+            matches["a1"] = "GSAH"
+        if matches["a2"] == "GSA":
+            matches["a2"] = "GSAH"
+        return "H"
+
+    ctx.regex_extract_airline(
+        "MylesHeli",
+        "MylesHeli/Flights",
+        re.compile(r"{{mylesh\|MY(?P<code>.*?)\|t\|(?P<a1>.*?)\|.*?\|.*?\|(?P<a2>.*?)\|.*?\|.*?}}"),
+        config,
+        size=_hack,
+    )
