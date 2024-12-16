@@ -70,7 +70,7 @@ AIRPORT_ALIASES: dict[str, str] = {
     "LTN": "LNT",
 }
 
-GATE_ALIASES: dict[str, dict[str | tuple[str, str], str]] = {
+GATE_ALIASES: dict[str, dict[str | tuple[str, str], str | None]] = {
     "PCE": {
         "4": "C2",
         "5": "C3",
@@ -88,4 +88,13 @@ GATE_ALIASES: dict[str, dict[str | tuple[str, str], str]] = {
     },
     "NMW": {"T2G2": "T2-2"},
     "NWT": {"T2G2": "T2-2", "T2G5": "T2-5"},
+    "DBI": {
+        "1": "A1",
+        "3": None,
+        "4": "A4",
+        "21": "A21",
+        "22": "A22",
+        "28": "A28",
+        "30": "A30",
+    },
 }
