@@ -310,7 +310,8 @@ def aix(ctx: WikiAirport, config):
         if str(gate_size) == "nan":
             gate_size = old_gate_size  # noqa: PLW2901
         else:
-            old_gate_size = str(gate_size)[0]
+            gate_size = str(gate_size)[0]  # noqa: PLW2901
+            old_gate_size = gate_size
         ctx.extract_get_gate(
             airport=airport,
             code=gate_code,
