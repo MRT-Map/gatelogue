@@ -71,7 +71,7 @@ class MRTTransit(AirSource):
         )
         df3 = pd.read_csv(cache3)
         df3["Mode"] = "helicopter"
-        df3.drop(df2.tail(4).index, inplace=True)
+        df3.drop(df3.tail(4).index, inplace=True)
 
         df = pd.concat((df1, df2, df3))
 
