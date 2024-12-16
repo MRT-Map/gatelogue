@@ -39,7 +39,7 @@ def mwt(ctx: WikiAirport, config):
         re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)"),
         config,
         size=lambda matches: "XS"
-        if (code := matches["size"]).startswith("P")
+        if (code := matches["code"]).startswith("P")
         else "S"
         if int(code) <= 60
         else "M"
