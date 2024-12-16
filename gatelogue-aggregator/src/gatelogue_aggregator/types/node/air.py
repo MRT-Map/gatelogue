@@ -107,9 +107,11 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
                 processed_gates.append(gate)
             elif existing.code is None and gate.code is not None:
                 processed_gates.remove(existing)
+                self.get_edge(ctx, gate).source(self.get_edge(ctx, existing))
                 self.disconnect(ctx, existing)
                 processed_gates.append(gate)
             elif existing.code is not None and gate.code is None:
+                self.get_edge(ctx, existing).source(self.get_edge(ctx, gate))
                 self.disconnect(ctx, gate)
             elif existing.code == gate.code:
                 existing.merge(ctx, gate)

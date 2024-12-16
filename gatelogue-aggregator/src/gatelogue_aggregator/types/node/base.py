@@ -134,6 +134,9 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         except rx.NoEdgeBetweenNodes:
             return (a for a in [])
 
+    def get_edge[T](self, ctx: CTX, node: Node, ty: type[T] | None = None) -> Sourced[T] | None:
+        return next(self.get_edges(ctx, node, ty), None)
+
     @override
     def merge(self, ctx: CTX, other: Self):
         self.merge_attrs(ctx, other)
