@@ -19,6 +19,7 @@ const gates = computed(() =>
     .map(([s, g]) => ({
       v: g,
       s: s.concat(g.airport.s),
+      s2: s,
     })),
 );
 const size = computed(
@@ -47,7 +48,7 @@ const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
     class="flight-gates"
     :class="{
       'mrt-transit':
-        !gate.s.includes('MRT Transit (Air)') && mrtTransitUrlParam,
+        !gate.s2.includes('MRT Transit (Air)') && mrtTransitUrlParam,
     }"
   >
     <Sourced :sourced="gate">
