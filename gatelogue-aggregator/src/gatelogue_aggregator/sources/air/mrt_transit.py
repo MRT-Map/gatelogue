@@ -37,6 +37,7 @@ class MRTTransit(AirSource):
         )
         df1.drop(df1.tail(66).index, inplace=True)
         df1["World"] = "New"
+        df1["Mode"] = "seaplane"
 
         df1["Raiko Airlines"] = [
             (", ".join("S" + b.strip() for b in str(a).split(",")) if str(a) != "nan" else "nan")
@@ -49,6 +50,7 @@ class MRTTransit(AirSource):
             timeout=config.timeout,
         )
         df2 = pd.read_csv(cache2, header=1)
+        df2["Mode"] = "plane"
 
         df2.rename(
             columns={
@@ -67,19 +69,19 @@ class MRTTransit(AirSource):
             if airline_name in ("Name", "Code", "World", "Operator", "Seaplane"):
                 continue
             airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
-            for airport_name, airport_code, airport_world, flights in zip(
-                df["Name"], df["Code"], df["World"], df[airline_name], strict=False
+            for airport_name, airport_code, airport_world, mode, flights in zip(
+                df["Name"], df["Code"], df["World"], df["Mode"], df[airline_name], strict=False
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = AirAirport.new(self, code=AirAirport.process_code(airport_code))
+                airport = AirAirport.new(self, code=AirAirport.process_code(airport_code), modes={mode})
 
                 if airport_name != "":
                     airport.name = self.source(airport_name)
                 if airport_world != "":
                     airport.world = self.source(airport_world)
 
-                gate = AirGate.new(self, code=None, airport=airport)
+                gate = AirGate.new(self, code=None, airport=airport, size="SP" if mode == "seaplane" else None)
 
                 for flight_code in str(flights).split(", "):
                     flight = AirFlight.new(

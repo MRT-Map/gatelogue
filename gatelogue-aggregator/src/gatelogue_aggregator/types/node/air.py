@@ -145,6 +145,8 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
     """Name of the airport"""
     link: Sourced[str] | None = None
     """Link to the MRT Wiki page for the airport"""
+    modes: Sourced[set[Literal["helicopter", "seaplane", "plane"]]] | None = None
+    """Modes offered by the airport"""
 
     gates: list[Sourced[int]] = None
     """List of IDs of :py:class:`AirGate` s"""
@@ -158,6 +160,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         code: str,
         name: str | None = None,
         link: str | None = None,
+        modes: set[Literal["helicopter", "seaplane", "plane"]] | None = None,
         gates: Iterable[AirGate] | None = None,
         world: World | None = None,
         coordinates: tuple[int, int] | None = None,
@@ -167,6 +170,8 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
             self.name = ctx.source(name)
         if link is not None:
             self.link = ctx.source(link)
+        if modes is not None:
+            self.modes = ctx.source(modes)
         if gates is not None:
             for gate in gates:
                 self.connect(ctx, gate)
@@ -185,6 +190,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         super().merge_attrs(ctx, other)
         self._merge_sourced(ctx, other, "name")
         self._merge_sourced(ctx, other, "link")
+        self._merge_sourced(ctx, other, "modes")
 
     @override
     def merge_key(self, ctx: AirSource) -> str:
@@ -198,6 +204,8 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
             self.name.v = str(self.name.v).strip()
         if self.link is not None:
             self.link.v = str(self.link.v).strip()
+        if self.modes is not None:
+            self.modes.v = {str(a).strip() for a in self.modes.v}
 
     @override
     def prepare_export(self, ctx: AirSource):
@@ -228,6 +236,13 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
                 }
                 flight.disconnect(ctx, none_gate)
                 flight.connect(ctx, new_gate, source=sources)
+
+        if self.modes.v == {"seaplane"}:
+            for gate in self.get_all(ctx, AirGate):
+                gate.size = Sourced("SP", self.modes.s)
+        if self.modes.v == {"helicopter"}:
+            for gate in self.get_all(ctx, AirGate):
+                gate.size = Sourced("H", self.modes.s)
 
     @staticmethod
     @override
