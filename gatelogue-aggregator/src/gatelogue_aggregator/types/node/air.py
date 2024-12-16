@@ -237,10 +237,10 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
                 flight.disconnect(ctx, none_gate)
                 flight.connect(ctx, new_gate, source=sources)
 
-        if self.modes.v == {"seaplane"}:
+        if self.modes is not None and self.modes.v == {"seaplane"}:
             for gate in self.get_all(ctx, AirGate):
                 gate.size = Sourced("SP", self.modes.s)
-        if self.modes.v == {"helicopter"}:
+        if self.modes is not None and self.modes.v == {"helicopter"}:
             for gate in self.get_all(ctx, AirGate):
                 gate.size = Sourced("H", self.modes.s)
 
