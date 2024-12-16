@@ -39,7 +39,7 @@ def turbula(ctx: WikiAirline, config):
         "Turbula",
         "Template:TurbulaFlightList",
         re.compile(
-            r"code = LU(?P<code>\d*).*?(?:\n.*?)?airport1 = (?P<a1>.*?) .*?airport2 = (?P<a2>.*?) .*?status = active"
+            r"\{\{AstrellaFlight\|imgname = Turbula\|code = LU(?P<code>[^$\n]*?)\|airport1 = (?P<a1>[^\n]*?)(?:\|gate1 = (?P<g1>[^\n]*?)|)\|airport2 = (?P<a2>[^\n]*?)(?:\|gate2 = (?P<g2>[^\n]*?)|)\|[^|]*?\|status = active}}"
         ),
         config,
         size="SP",

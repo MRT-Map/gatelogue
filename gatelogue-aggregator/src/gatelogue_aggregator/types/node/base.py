@@ -173,7 +173,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
 
     @staticmethod
     def process_code[T: (str, None)](s: T) -> T:
-        if s is None:
+        if s is None or str(s).strip().lower() in ("", "?", "-", "foobar"):
             return None
         res = ""
         hyphen1 = False
