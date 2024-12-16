@@ -52,6 +52,7 @@ class MRTTransit(AirSource):
         )
         df2 = pd.read_csv(cache2, header=0)
         df2["Mode"] = "helicopter"
+        df2.rename(columns={"Airport Name": "Name"}, inplace=True)
         df2.drop(df2.tail(4).index, inplace=True)
 
         get_url(
@@ -76,7 +77,7 @@ class MRTTransit(AirSource):
         df = pd.concat((df1, df2, df3))
 
         for airline_name in track(df.columns, description=INFO3 + "Extracting data from CSV", nonlinear=True):
-            if airline_name in ("Name", "Code", "World", "Operator", "Owner", "Mode", "Airport Name"):
+            if airline_name in ("Name", "Code", "World", "Operator", "Owner", "Mode"):
                 continue
             airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
             for airport_name, airport_code, airport_world, mode, flights in zip(
@@ -86,9 +87,10 @@ class MRTTransit(AirSource):
                     continue
                 airport = AirAirport.new(self, code=AirAirport.process_code(airport_code), modes={mode})
 
-                if airport_name != "":
+                if str(airport_name) != "nan":
                     airport.name = self.source(airport_name)
-                if airport_world != "":
+                    print(airport_name)
+                if str(airport_world) != "nan":
                     airport.world = self.source(airport_world)
 
                 gate = AirGate.new(
