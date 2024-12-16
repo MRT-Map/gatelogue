@@ -320,7 +320,7 @@ def arctic_air(ctx: WikiAirline, config):
 
     result = 0
     for flight, a1, a2, g1, g2 in d[::2]:
-        if flight in ("13", "14"):
+        if str(flight).strip() in ("13", "14"):
             continue
         if not a1 or str(a1) == "nan":
             continue
