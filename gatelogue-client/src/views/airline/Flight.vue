@@ -24,6 +24,10 @@ const gates = computed(() =>
 const size = computed(
   () => gates.value.map((g) => g.v.size).filter((s) => s?.v)[0],
 );
+
+const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
+  "mrt-transit",
+);
 </script>
 
 <template>
@@ -37,7 +41,15 @@ const size = computed(
   <td class="flight-size">
     <Sourced :sourced="size" />
   </td>
-  <td v-for="gate in gates" :key="gate.v.code ?? '?'" class="flight-gates">
+  <td
+    v-for="gate in gates"
+    :key="gate.v.code ?? '?'"
+    class="flight-gates"
+    :class="{
+      'mrt-transit':
+        !gate.s.includes('MRT Transit (Air)') && mrtTransitUrlParam,
+    }"
+  >
     <Sourced :sourced="gate">
       <GateLink :gate="gate.v" />
     </Sourced>
@@ -74,6 +86,9 @@ const size = computed(
   width: 5em;
   min-width: 5em;
   max-width: 5em;
+}
+.flight-gates.mrt-transit {
+  background-color: var(--acc-b);
 }
 .closing {
   font-size: 2em;
