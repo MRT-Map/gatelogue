@@ -67,7 +67,6 @@ AIRPORT_ALIASES: dict[str, str] = {
     "RBE": "RBD",
     "IKLA": "KLA",
     "ITO": "IAS",
-    "DPH": "DBI",
     "COI": "COA",
     "TTL": "MWT",
     "LTN": "LNT",
