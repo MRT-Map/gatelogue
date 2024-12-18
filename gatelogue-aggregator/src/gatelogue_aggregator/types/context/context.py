@@ -53,17 +53,17 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
         for equiv, n in track(to_merge, description=INFO2 + "Merging equivalent nodes", remove=False):
             equiv.merge(self, n)
 
-        edges: dict[tuple[int, int], dict[type, Sourced[Any]]] = {}
+        edges: dict[tuple[int, int], list[Sourced[Any]]] = {}
         for i in track(self.g.edge_indices(), description=INFO2 + "Merging edges", remove=False):
             u, v = self.g.get_edge_endpoints_by_index(i)
             k = self.g.get_edge_data_by_index(i)
 
-            edge_dict = edges.setdefault((u, v), {})
-            if type(k.v) in edge_dict:
-                edge_dict[type(k.v)].source(k)
+            edge_list = edges.setdefault((u, v), [])
+            if (existing := next((a for a in edge_list if a.v == k.v), None)) is not None:
+                existing.source(k)
                 self.g.remove_edge_from_index(i)
             else:
-                edge_dict[type(k.v)] = k
+                edge_list.append(k)
 
         self.update()
         return self
