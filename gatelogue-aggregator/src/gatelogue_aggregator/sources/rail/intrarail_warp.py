@@ -44,7 +44,10 @@ class IntraRailWarp(RailSource):
                 # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
             name = match.group(1) or match.group(2) or match.group(3)
-            name = {}.get(name, name)
+            name = {
+                "Miu Wan TTL Airport Terminal 1": "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
+                "Miu Wan TTL Airport Terminal 2": "Miu Wan Tseng Tsz Leng International Airport Terminal 2",
+            }.get(name, name)
             if name in names:
                 continue
             RailStation.new(

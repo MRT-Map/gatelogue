@@ -77,6 +77,8 @@ class BluRail(RailSource):
                     "FDR": {"FDR", "SPN"},
                     "WCA": {"WCA", "WAI"},
                     "WAI": {"WCA", "WAI"},
+                    "CFA": {"CFA", "CHA"},
+                    "CHA": {"CFA", "CHA"},
                 }.get(code, {code})
                 name = result.group("name").strip()
                 if name == "":

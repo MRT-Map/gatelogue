@@ -171,6 +171,25 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Woodsdale", fr, "Woodsdale"),
             (blu, "Kaloro City Sports Park", intra, "Kaloro City Sports Park"),
             (blu, "Kaloro City Central", intra, "Kaloro City Central"),
+            (blu, "Dogwood Madison Beach", intra, "Dogwood Madison Beach"),
+            (blu, "Sand Central", intra, "Sand Central"),
+            (blu, "Laarbroek", intra, "Laarbroek"),
+            (
+                blu,
+                "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
+                intra,
+                "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
+            ),
+            (
+                blu,
+                "Miu Wan Tseng Tsz Leng International Airport Terminal 2",
+                intra,
+                "Miu Wan Tseng Tsz Leng International Airport Terminal 2",
+            ),
+            (blu, "Miu Sai", intra, "Miu Sai"),
+            (blu, "Kwai Tin", intra, "Kwai Tin"),
+            (blu, "Snowtopic Outskirts", intra, "Snowtopic Outskirts"),
+            (blu, "Snowtopic Industrial", intra, "Snowtopic Boulevard"),
         ):
 
             def is_desired_station(a, company, station_name):
