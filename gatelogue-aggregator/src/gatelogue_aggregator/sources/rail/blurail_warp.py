@@ -35,8 +35,8 @@ class BluRailWarp(RailSource):
                 continue
 
             code = match.group(2)
-            if code == "BCH":
-                code += match.group(1)
+            if code == "BCH" and match.group(1) in ("1", "18"):
+                code += "1"
             elif code == "MCN" and (match.group(1) == "11" or match.group(1) == "6" or match.group(1) == "20"):
                 code += "11"
             elif code == "STE" and match.group(1) == "2":

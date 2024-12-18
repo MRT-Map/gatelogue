@@ -60,8 +60,8 @@ class BluRail(RailSource):
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
                 code = result.group("code").upper()
-                if code == "BCH":
-                    code += line_code
+                if code == "BCH" and line_code in ("1", "18"):
+                    code += "1"
                 elif code == "MCN" and line_code in ("11", "6", "20"):
                     code += "11"
                 codes = {
@@ -83,6 +83,8 @@ class BluRail(RailSource):
                     continue
                 station = RailStation.new(self, codes=codes, name=name, company=company)
                 stations.append(station)
+                if line_code == "18":
+                    print(code, name)
 
             if line_code == "2":
                 RailLineBuilder(self, line).connect(*stations, between=(None, "Bay Point"))
