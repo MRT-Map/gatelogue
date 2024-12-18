@@ -83,8 +83,6 @@ class BluRail(RailSource):
                     continue
                 station = RailStation.new(self, codes=codes, name=name, company=company)
                 stations.append(station)
-                if line_code == "18":
-                    print(code, name)
 
             if line_code == "2":
                 RailLineBuilder(self, line).connect(*stations, between=(None, "Bay Point"))
