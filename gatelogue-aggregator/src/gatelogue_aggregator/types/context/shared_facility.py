@@ -171,9 +171,10 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Woodsdale", fr, "Woodsdale"),
             (blu, "Kaloro City Sports Park", intra, "Kaloro City Sports Park"),
             (blu, "Kaloro City Central", intra, "Kaloro City Central"),
-            (blu, "Dogwood Madison Beach", intra, "Dogwood Madison Beach"),
+            (blu, "Dogwood Madison Beach Station", intra, "Dogwood Madison Beach Station"),
             (blu, "Sand Central", intra, "Sand Central"),
             (blu, "Laarbroek", intra, "Laarbroek"),
+            (blu, "Arcadium", intra, "Arcadium"),
             (
                 blu,
                 "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
