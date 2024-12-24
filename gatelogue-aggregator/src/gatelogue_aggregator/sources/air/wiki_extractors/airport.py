@@ -41,9 +41,9 @@ def mwt(ctx: WikiAirport, config):
         size=lambda matches: "XS"
         if (code := matches["code"].removesuffix("A")).startswith("P")
         else "S"
-        if int(code) <= 60
+        if int(code) <= 60  # noqa: PLR2004
         else "M"
-        if int(code) <= 82
+        if int(code) <= 82  # noqa: PLR2004
         else "H",
     )
 
@@ -55,7 +55,7 @@ def kek(ctx: WikiAirport, config):
         "KEK",
         re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
         config,
-        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",
+        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",  # noqa: PLR2004
     )
 
 

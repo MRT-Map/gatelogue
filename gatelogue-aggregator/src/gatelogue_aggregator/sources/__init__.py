@@ -49,8 +49,8 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
     from gatelogue_aggregator.sources.sea.wzf import WZF
     from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
-    from gatelogue_aggregator.sources.town import TownList
     from gatelogue_aggregator.sources.spawn_warp import SpawnWarps
+    from gatelogue_aggregator.sources.town import TownList
 
     return [
         MRTTransit,

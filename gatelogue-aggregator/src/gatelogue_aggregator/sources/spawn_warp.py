@@ -1,12 +1,9 @@
 from typing import Literal
 
-import pandas as pd
-
-from gatelogue_aggregator.downloader import get_url, all_warps
-from gatelogue_aggregator.logging import track, INFO3
+from gatelogue_aggregator.downloader import all_warps
+from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.spawn_warp import SpawnWarpSource, SpawnWarp
-from gatelogue_aggregator.types.node.town import Town, TownSource
+from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
 from gatelogue_aggregator.types.source import Source
 
 
@@ -120,7 +117,7 @@ class SpawnWarps(SpawnWarpSource):
             for ty, search_list in search_dict.items():
                 for search_warp in search_list:
                     if isinstance(search_warp, tuple):
-                        search_warp, name = search_warp
+                        search_warp, name = search_warp  # noqa: PLW2901
                     else:
                         name = search_warp
 

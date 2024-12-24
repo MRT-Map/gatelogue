@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import rich.progress
@@ -13,6 +12,7 @@ from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from re import Pattern
 
     from gatelogue_aggregator.types.config import Config

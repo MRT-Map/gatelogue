@@ -89,7 +89,6 @@ class MRTTransit(AirSource):
 
                 if str(airport_name) != "nan":
                     airport.name = self.source(airport_name)
-                    print(airport_name)
                 if str(airport_world) != "nan":
                     airport.world = self.source(airport_world)
 
