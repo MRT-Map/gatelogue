@@ -37,18 +37,28 @@ class TownList(TownSource):
         df2["Town Rank"] = "Unranked"
 
         for _, row in pd.concat((df1, df2)).iterrows():
-            if not row["Town Name"]:
+            if str(row["Town Name"]) == "nan":
                 continue
             Town.new(
                 self,
                 name=row["Town Name"],
                 rank=row["Town Rank"] if row["Town Name"] != "Arisa" else "Premier",
-                mayor=row["Mayor"],
+                mayor=row["Mayor"] if str(row["Mayor"]) != "nan" else "MRT Staff",
                 deputy_mayor=None
                 if not row["Deputy Mayor"] or str(row["Deputy Mayor"]) == "nan"
                 else row["Deputy Mayor"],
                 world=row["World"],
                 coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
             )
+
+        Town.new(
+            self,
+            name="Central City",
+            rank="Community",
+            mayor="MRT Staff",
+            deputy_mayor=None,
+            world="New",
+            coordinates=(0, 0),
+        )
 
         self.save_to_cache(config, self.g)
