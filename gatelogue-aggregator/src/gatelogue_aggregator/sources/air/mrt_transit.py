@@ -61,7 +61,7 @@ class MRTTransit(AirSource):
             timeout=config.timeout,
         )
         df3 = pd.read_csv(cache3, header=1)
-        df3["Mode"] = "plane"
+        df3["Mode"] = "warp plane"
 
         df3.rename(
             columns={
@@ -104,7 +104,10 @@ class MRTTransit(AirSource):
 
                 for flight_code in str(flights).split(", "):
                     flight = AirFlight.new(
-                        self, codes=AirFlight.process_code(flight_code, airline_name), airline=airline
+                        self,
+                        codes=AirFlight.process_code(flight_code, airline_name),
+                        airline=airline,
+                        mode=mode,
                     )
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)

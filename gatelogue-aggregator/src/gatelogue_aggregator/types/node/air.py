@@ -156,7 +156,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
     """Name of the airport"""
     link: Sourced[str] | None = None
     """Link to the MRT Wiki page for the airport"""
-    modes: Sourced[set[Literal["helicopter", "seaplane", "plane"]]] | None = None
+    modes: Sourced[set[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]]] | None = None
     """Modes offered by the airport"""
 
     gates: list[Sourced[int]] = None
@@ -171,7 +171,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         code: str,
         name: str | None = None,
         link: str | None = None,
-        modes: set[Literal["helicopter", "seaplane", "plane"]] | None = None,
+        modes: set[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]] | None = None,
         gates: Iterable[AirGate] | None = None,
         world: World | None = None,
         coordinates: tuple[int, int] | None = None,
