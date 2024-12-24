@@ -122,9 +122,9 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
             elif existing.code == gate.code:
                 existing.merge(ctx, gate)
 
-        if self.mode is not None:
+        if self.mode is None:
             size = {a.size.v for a in self.get_all(ctx, AirGate) if a.size is not None}
-            sources = {*itertools.chain(a.size.s for a in self.get_all(ctx, AirGate) if a.size is not None)}
+            sources = set(itertools.chain(*(a.size.s for a in self.get_all(ctx, AirGate) if a.size is not None)))
             if size == {"SP"}:
                 self.mode = Sourced("seaplane", sources)
             elif size == {"H"}:
