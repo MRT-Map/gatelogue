@@ -65,7 +65,7 @@ class WZR(RailSource):
             ("10", "Centrale Line"),
         ):
             wiki = get_wiki_text(line_name, config)
-            line = RailLine.new(self, code=line_code, name=line_name, company=company)
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
 
             stations = []
             for result in search_all(
