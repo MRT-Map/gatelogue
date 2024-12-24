@@ -14,8 +14,10 @@ RESULT = "[cyan]  "
 ERROR = "[bold red]"
 
 
-def track[T](it: Iterable[T], *, description: str, nonlinear: bool = False, remove: bool = True) -> Iterable[T]:
-    total = ((len(it) ** 2) / 2 if nonlinear else len(it)) if isinstance(it, Sized) else None
+def track[T](
+    it: Iterable[T], *, description: str, nonlinear: bool = False, remove: bool = True, total: int | None = None
+) -> Iterable[T]:
+    total = total or (((len(it) ** 2) / 2 if nonlinear else len(it)) if isinstance(it, Sized) else None)
     t = PROGRESS.add_task(description, total=total)
     for i, o in enumerate(it):
         yield o

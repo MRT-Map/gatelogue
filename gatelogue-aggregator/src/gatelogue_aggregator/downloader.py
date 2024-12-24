@@ -58,3 +58,17 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
                 link + f"&offset={offset}", config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout
             )
         )["result"]
+
+
+def all_warps(config: Config) -> Iterator[dict]:
+    link = "https://api.minecartrapidtransit.net/api/v2/warps"
+    offset = 0
+    ls: list[dict] = msgspec.json.decode(
+        get_url(link, config.cache_dir / "mrt-api" / "all" / str(offset), config.timeout)
+    )["result"]
+    while len(ls) != 0:
+        yield from ls
+        offset += len(ls)
+        ls = msgspec.json.decode(
+            get_url(link + f"?offset={offset}", config.cache_dir / "mrt-api" / "all" / str(offset), config.timeout)
+        )["result"]
