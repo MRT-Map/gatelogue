@@ -191,6 +191,8 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Kwai Tin", intra, "Kwai Tin"),
             (blu, "Snowtopic Outskirts", intra, "Snowtopic Outskirts"),
             (blu, "Snowtopic Industrial", intra, "Snowtopic Boulevard"),
+            (blu, "Hytown Union", intra, "Hytown Union"),
+            (blu, "Miu Wan Kau Heung Airport", intra, "Miu Wan Kau Heung Airport"),
         ):
 
             def is_desired_station(a, company, station_name):
