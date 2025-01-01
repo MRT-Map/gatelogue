@@ -154,23 +154,23 @@ class NFLR(RailSource):
                     get_stn(r_stations, "Port Dupont"), get_stn(r_stations, "Sansvikk Kamprad Airfield"), forward_label="to Sansvikk IKEA", backward_label="eastbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    r_stations, between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"), forward_label="to Sansvikk IKEA", backward_label="to mainline"
+                    *r_stations, between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"), forward_label="to Sansvikk IKEA", backward_label="to mainline"
                 )
             elif line_name == "R2":
-                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Deadbush Valletta Desert Airport"))
-                RailLineBuilder(self, r_line).connect(r_stations, between=("Paralia", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Deadbush Valletta Desert Airport"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
             elif line_name == "R4":
-                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Birmingham"))
-                RailLineBuilder(self, r_line).connect(r_stations, between=("Cape Cambridge John Glenn Transit Centre", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Cape Cambridge John Glenn Transit Centre", None))
             elif line_name == "R5":
-                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Xterium North"))
-                RailLineBuilder(self, r_line).connect(r_stations, between=("Weston East", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Xterium North"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Weston East", None))
             elif line_name == "R13":
-                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "PCE Terminal 2"))
-                RailLineBuilder(self, r_line).connect(r_stations, between=("Lilygrove Union", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "PCE Terminal 2"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Lilygrove Union", None))
             elif line_name == "R17":
-                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Dewford City Lometa"))
-                RailLineBuilder(self, r_line).connect(r_stations, between=("Fort Torbay", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Dewford City Lometa"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Fort Torbay", None))
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
