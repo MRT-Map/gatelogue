@@ -93,7 +93,11 @@ class NFLR(RailSource):
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(*s), lines))
 
-        get_stn = lambda sts, name: next(st for st in sts if st.name == name)
+        def get_stn(sts, name):
+            st = next((st for st in sts if st.name == name), None)
+            if st is None:
+                raise ValueError(f"{name} not in {','.join(s.name for s in sts)}")
+            return st
         
         for line_name, _, w, line_colour in lines:
             df = pd.read_csv(cache / line_name)
