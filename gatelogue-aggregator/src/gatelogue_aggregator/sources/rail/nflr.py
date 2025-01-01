@@ -94,9 +94,9 @@ class NFLR(RailSource):
             list(executor.map(lambda s: retrieve_urls(*s), lines))
 
         def get_stn(sts, name):
-            st = next((st for st in sts if st.name == name), None)
+            st = next((st for st in sts if st.name.v == name), None)
             if st is None:
-                raise ValueError(f"{name} not in {','.join(s.name for s in sts)}")
+                raise ValueError(f"{name} not in {','.join(s.name.v for s in sts)}")
             return st
         
         for line_name, _, w, line_colour in lines:
