@@ -183,11 +183,11 @@ class NFLR(RailSource):
                 )
 
                 if line_name == "W2":
-                    RailLineBuilder(self, w_line).connect(w_stations, between=(None, "DFM T1 / Borderville"))
-                    RailLineBuilder(self, w_line).connect(w_stations, between=("Southbank", None))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "DFM T1 / Borderville"))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=("Southbank", None))
                 elif line_name == "W5":
-                    RailLineBuilder(self, w_line).connect(w_stations, between=(None, "Xterium North"))
-                    RailLineBuilder(self, w_line).connect(w_stations, between=("Weston East", None))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "Xterium North"))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=("Weston East", None))
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
