@@ -93,6 +93,8 @@ class NFLR(RailSource):
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(*s), lines))
 
+        get_stn = lambda sts, name: next(st for st in stations if st.name == name)
+        
         for line_name, _, w, line_colour in lines:
             df = pd.read_csv(cache / line_name)
 
@@ -130,42 +132,45 @@ class NFLR(RailSource):
                 )
             elif line_name == "R5A":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[:5], forward_label="southbound", backward_label="northbound"
+                    *r_stations, between=(None, "Deadbush Euphorial"), forward_label="southbound", backward_label="northbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    r_stations[4], r_stations[5], forward_label="southbound", backward_label="northbound CW"
+                    *r_stations, between=("Deadbush Euphorial", "Deadbush Quarryville"), forward_label="southbound", backward_label="northbound CW"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    r_stations[5], r_stations[6], forward_label="northbound CCW", backward_label="southbound"
+                    *r_stations, between=("Deadbush Quarryville", "Deadbush Johnston-Euphorial Airport"), forward_label="northbound CCW", backward_label="southbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[6:], r_stations[2], forward_label="northbound", backward_label="southbound"
+                    *r_stations, get_stn(r_stations, "Deadbush Karaj Expo"), between=("Deadbush Johnston-Euphorial Airport", None), forward_label="northbound", backward_label="southbound"
                 )
             elif line_name == "R23":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[: 9 - 3], *r_stations[12 - 3 :], forward_label="eastbound", backward_label="westbound"
+                    *r_stations, exclude=["Sansvikk Kamprad Airfield", "Sansvikk Karlstad", "Sansvikk IKEA"], forward_label="eastbound", backward_label="westbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    r_stations[8 - 3], r_stations[9 - 3], forward_label="to Sansvikk IKEA", backward_label="westbound"
+                    get_stn(r_stations, "Glacierton"), get_stn(r_stations, "Sansvikk Kamprad Airfield"), forward_label="to Sansvikk IKEA", backward_label="westbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    r_stations[12 - 3], r_stations[9 - 3], forward_label="to Sansvikk IKEA", backward_label="eastbound"
+                    get_stn(r_stations, "Port Dupont"), get_stn(r_stations, "Sansvikk Kamprad Airfield"), forward_label="to Sansvikk IKEA", backward_label="eastbound"
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations[9 - 3 : 12 - 3], forward_label="to Sansvikk IKEA", backward_label="to mainline"
+                    r_stations, between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"), forward_label="to Sansvikk IKEA", backward_label="to mainline"
                 )
             elif line_name == "R2":
-                RailLineBuilder(self, r_line).connect(*r_stations[:6])
-                RailLineBuilder(self, r_line).connect(*r_stations[6:])
+                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Deadbush Valletta Desert Airport"))
+                RailLineBuilder(self, r_line).connect(r_stations, between=("Paralia", None))
             elif line_name == "R4":
-                RailLineBuilder(self, r_line).connect(*r_stations[:-3])
-                RailLineBuilder(self, r_line).connect(*r_stations[-3:])
+                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Birmingham"))
+                RailLineBuilder(self, r_line).connect(r_stations, between=("Cape Cambridge John Glenn Transit Centre", None))
             elif line_name == "R5":
-                RailLineBuilder(self, r_line).connect(*r_stations[:-7])
-                RailLineBuilder(self, r_line).connect(*r_stations[-7:])
+                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Xterium North"))
+                RailLineBuilder(self, r_line).connect(r_stations, between=("Weston East", None))
+            elif line_name == "R13":
+                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "PCE Terminal 2"))
+                RailLineBuilder(self, r_line).connect(r_stations, between=("Lilygrove Union", None))
             elif line_name == "R17":
-                RailLineBuilder(self, r_line).connect(*r_stations[:4])
-                RailLineBuilder(self, r_line).connect(*r_stations[4:])
+                RailLineBuilder(self, r_line).connect(r_stations, between=(None, "Dewford City Lometa"))
+                RailLineBuilder(self, r_line).connect(r_stations, between=("Fort Torbay", None))
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
@@ -178,11 +183,11 @@ class NFLR(RailSource):
                 )
 
                 if line_name == "W2":
-                    RailLineBuilder(self, w_line).connect(*w_stations[:2])
-                    RailLineBuilder(self, w_line).connect(*w_stations[2:])
+                    RailLineBuilder(self, w_line).connect(w_stations, between=(None, "DFM T1 / Borderville"))
+                    RailLineBuilder(self, w_line).connect(w_stations, between=("Southbank", None))
                 elif line_name == "W5":
-                    RailLineBuilder(self, w_line).connect(*w_stations[:-2])
-                    RailLineBuilder(self, w_line).connect(*w_stations[-2:])
+                    RailLineBuilder(self, w_line).connect(w_stations, between=(None, "Xterium North"))
+                    RailLineBuilder(self, w_line).connect(w_stations, between=("Weston East", None))
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
