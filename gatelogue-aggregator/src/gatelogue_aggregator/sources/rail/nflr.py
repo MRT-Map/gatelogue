@@ -170,7 +170,7 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Xterium North"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Weston East", None))
             elif line_name == "R13":
-                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "PCE Terminal 2"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Peacopolis"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Lilygrove Union", None))
             elif line_name == "R17":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Dewford City Lometa"))
