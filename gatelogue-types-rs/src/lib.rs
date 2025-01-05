@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::error::Error;
 use std::ops::{Deref, DerefMut};
 use serde::{Deserialize, Deserializer, Serialize};
 
@@ -11,32 +10,32 @@ pub struct GatelogueData {
 }
 impl GatelogueData {
     #[cfg(feature = "reqwest_get")]
-    pub async fn reqwest_get_with_sources() -> Result<Self, Box<dyn Error>> {
+    pub async fn reqwest_get_with_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let bytes = reqwest::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").await?.bytes().await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "reqwest_get")]
-    pub async fn reqwest_get_no_sources() -> Result<Self, Box<dyn Error>> {
+    pub async fn reqwest_get_no_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let bytes = reqwest::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").await?.bytes().await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "surf_get")]
-    pub async fn surf_get_with_sources() -> Result<Self, Box<dyn Error>> {
+    pub async fn surf_get_with_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let bytes = surf::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").recv_bytes().await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "surf_get")]
-    pub async fn surf_get_no_sources() -> Result<Self, Box<dyn Error>> {
+    pub async fn surf_get_no_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let bytes = surf::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").recv_bytes().await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "ureq_get")]
-    pub fn ureq_get_with_sources() -> Result<Self, Box<dyn Error>> {
+    pub fn ureq_get_with_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").call()?.into_reader();
         Ok(serde_json::from_reader(reader)?)
     }
     #[cfg(feature = "ureq_get")]
-    pub fn ureq_get_no_sources() -> Result<Self, Box<dyn Error>> {
+    pub fn ureq_get_no_sources() -> Result<Self, Box<dyn std::error::Error>> {
         let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").call()?.into_reader();
         Ok(serde_json::from_reader(reader)?)
     }
@@ -342,6 +341,7 @@ fn deserialise_connections<'de, D: Deserializer<'de>>(de: D) -> Result<HashMap<I
 
 
 #[cfg(test)]
+#[cfg(feature = "ureq_get")]
 mod test {
     use super::*;
 
