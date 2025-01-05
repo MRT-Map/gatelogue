@@ -98,7 +98,7 @@ class NFLR(RailSource):
             if st is None:
                 raise ValueError(f"{name} not in {','.join(s.name.v for s in sts)}")
             return st
-        
+
         for line_name, _, w, line_colour in lines:
             df = pd.read_csv(cache / line_name)
 
@@ -136,36 +136,63 @@ class NFLR(RailSource):
                 )
             elif line_name == "R5A":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Deadbush Euphorial"), forward_label="southbound", backward_label="northbound"
+                    *r_stations,
+                    between=(None, "Deadbush Euphorial"),
+                    forward_label="southbound",
+                    backward_label="northbound",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Deadbush Euphorial", "Deadbush Quarryville"), forward_label="southbound", backward_label="northbound CW"
+                    *r_stations,
+                    between=("Deadbush Euphorial", "Deadbush Quarryville"),
+                    forward_label="southbound",
+                    backward_label="northbound CW",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Deadbush Quarryville", "Deadbush Johnston-Euphorial Airport"), forward_label="northbound CCW", backward_label="southbound"
+                    *r_stations,
+                    between=("Deadbush Quarryville", "Deadbush Johnston-Euphorial Airport"),
+                    forward_label="northbound CCW",
+                    backward_label="southbound",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, get_stn(r_stations, "Deadbush Karaj Expo"), between=("Deadbush Johnston-Euphorial Airport", None), forward_label="northbound", backward_label="southbound"
+                    *r_stations,
+                    get_stn(r_stations, "Deadbush Karaj Expo"),
+                    between=("Deadbush Johnston-Euphorial Airport", None),
+                    forward_label="northbound",
+                    backward_label="southbound",
                 )
             elif line_name == "R23":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, exclude=["Sansvikk Kamprad Airfield", "Sansvikk Karlstad", "Sansvikk IKEA"], forward_label="eastbound", backward_label="westbound"
+                    *r_stations,
+                    exclude=["Sansvikk Kamprad Airfield", "Sansvikk Karlstad", "Sansvikk IKEA"],
+                    forward_label="eastbound",
+                    backward_label="westbound",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    get_stn(r_stations, "Glacierton"), get_stn(r_stations, "Sansvikk Kamprad Airfield"), forward_label="to Sansvikk IKEA", backward_label="westbound"
+                    get_stn(r_stations, "Glacierton"),
+                    get_stn(r_stations, "Sansvikk Kamprad Airfield"),
+                    forward_label="to Sansvikk IKEA",
+                    backward_label="westbound",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    get_stn(r_stations, "Port Dupont"), get_stn(r_stations, "Sansvikk Kamprad Airfield"), forward_label="to Sansvikk IKEA", backward_label="eastbound"
+                    get_stn(r_stations, "Port Dupont"),
+                    get_stn(r_stations, "Sansvikk Kamprad Airfield"),
+                    forward_label="to Sansvikk IKEA",
+                    backward_label="eastbound",
                 )
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"), forward_label="to Sansvikk IKEA", backward_label="to mainline"
+                    *r_stations,
+                    between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"),
+                    forward_label="to Sansvikk IKEA",
+                    backward_label="to mainline",
                 )
             elif line_name == "R2":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Deadbush Valletta Desert Airport"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
             elif line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
-                RailLineBuilder(self, r_line).connect(*r_stations, between=("Cape Cambridge John Glenn Transit Centre", None))
+                RailLineBuilder(self, r_line).connect(
+                    *r_stations, between=("Cape Cambridge John Glenn Transit Centre", None)
+                )
             elif line_name == "R5":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Xterium North"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Weston East", None))
