@@ -15,6 +15,11 @@ updates:
     schedule:
       interval: "weekly"
     target-branch: "main"
+  - package-ecosystem: "cargo"
+    directory: "/gatelogue-types-rs"
+    schedule:
+      interval: "weekly"
+    target-branch: "main"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
