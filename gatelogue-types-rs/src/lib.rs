@@ -161,7 +161,7 @@ pub struct LocatedNodeCommon {
     pub i: ID,
     pub source: Vec<String>,
     pub world: Option<Sourced<World>>,
-    coordinates: Option<Sourced<(f64, f64)>>,
+    pub coordinates: Option<Sourced<(f64, f64)>>,
     #[serde(deserialize_with = "deserialise_proximity")]
     pub proximity: HashMap<ID, Sourced<Proximity>>,
     pub shared_facility: Vec<Sourced<ID>>,
