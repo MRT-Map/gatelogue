@@ -13,3 +13,9 @@ repos:
         entry: bash -c "cd gatelogue-client && pnpm run format"
         pass_filenames: false
         verbose: true
+      - id: cargo fmt
+        name: cargo fmt
+        entry: cargo +nightly fmt
+        language: system
+        types: [ rust ]
+        pass_filenames: false
