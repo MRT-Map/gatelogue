@@ -15,7 +15,7 @@ repos:
         verbose: true
       - id: cargo fmt
         name: cargo fmt
-        entry: cargo +nightly fmt
+        entry: bash -c "cd gatelogue-types-rs && cargo +nightly fmt"
         language: system
         types: [ rust ]
         pass_filenames: false

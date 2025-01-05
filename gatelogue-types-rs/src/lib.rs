@@ -1,19 +1,25 @@
-use std::collections::HashMap;
-use std::ops::{Deref, DerefMut};
+use anyhow::{Result, anyhow};
+use duplicate::duplicate_item;
 use enum_as_inner::EnumAsInner;
 use serde::{Deserialize, Deserializer, Serialize};
-use anyhow::Result;
+use std::collections::HashMap;
+use std::ops::{Deref, DerefMut};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GatelogueData {
     pub timestamp: String,
     pub version: u64,
-    pub nodes: HashMap<ID, Node>
+    pub nodes: HashMap<ID, Node>,
 }
 impl GatelogueData {
     #[cfg(feature = "reqwest_get")]
     pub async fn reqwest_get_with_sources() -> Result<Self> {
-        let bytes = reqwest::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").await?.bytes().await?;
+        let bytes = reqwest::get(
+            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json",
+        )
+        .await?
+        .bytes()
+        .await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "reqwest_get")]
@@ -23,7 +29,12 @@ impl GatelogueData {
     }
     #[cfg(feature = "surf_get")]
     pub async fn surf_get_with_sources() -> Result<Self> {
-        let bytes = surf::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").recv_bytes().await.map_err(|a| a.into_inner())?;
+        let bytes = surf::get(
+            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json",
+        )
+        .recv_bytes()
+        .await
+        .map_err(|a| a.into_inner())?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "surf_get")]
@@ -33,13 +44,69 @@ impl GatelogueData {
     }
     #[cfg(feature = "ureq_get")]
     pub fn ureq_get_with_sources() -> Result<Self> {
-        let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json").call()?.into_reader();
+        let reader = ureq::get(
+            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json",
+        )
+        .call()?
+        .into_reader();
         Ok(serde_json::from_reader(reader)?)
     }
     #[cfg(feature = "ureq_get")]
     pub fn ureq_get_no_sources() -> Result<Self> {
         let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").call()?.into_reader();
         Ok(serde_json::from_reader(reader)?)
+    }
+
+    #[duplicate_item(
+        get_node  as_node Ty;
+        [get_air_airline] [as_air_airline] [AirAirline];
+        [get_air_airport] [as_air_airport] [AirAirport];
+        [get_air_flight] [as_air_flight] [AirFlight];
+        [get_air_gate] [as_air_gate] [AirGate];
+        [get_bus_company] [as_bus_company] [BusCompany];
+        [get_bus_line] [as_bus_line] [BusLine];
+        [get_bus_stop] [as_bus_stop] [BusStop];
+        [get_rail_company] [as_rail_company] [RailCompany];
+        [get_rail_line] [as_rail_line] [RailLine];
+        [get_rail_station] [as_rail_station] [RailStation];
+        [get_sea_company] [as_sea_company] [SeaCompany];
+        [get_sea_line] [as_sea_line] [SeaLine];
+        [get_sea_stop] [as_sea_stop] [SeaStop];
+        [get_spawn_warp] [as_spawn_warp] [SpawnWarp];
+        [get_town] [as_town] [Town];
+    )]
+    pub fn get_node(&self, id: ID) -> Result<&Ty> {
+        self.nodes
+            .get(&id)
+            .ok_or(anyhow!("No node {id}"))?
+            .as_node()
+            .ok_or(anyhow!("{id} not {}", stringify!(Ty)))
+    }
+
+    #[duplicate_item(
+        get_node_mut  as_node_mut Ty;
+        [get_air_airline_mut] [as_air_airline_mut] [AirAirline];
+        [get_air_airport_mut] [as_air_airport_mut] [AirAirport];
+        [get_air_flight_mut] [as_air_flight_mut] [AirFlight];
+        [get_air_gate_mut] [as_air_gate_mut] [AirGate];
+        [get_bus_company_mut] [as_bus_company_mut] [BusCompany];
+        [get_bus_line_mut] [as_bus_line_mut] [BusLine];
+        [get_bus_stop_mut] [as_bus_stop_mut] [BusStop];
+        [get_rail_company_mut] [as_rail_company_mut] [RailCompany];
+        [get_rail_line_mut] [as_rail_line_mut] [RailLine];
+        [get_rail_station_mut] [as_rail_station_mut] [RailStation];
+        [get_sea_company_mut] [as_sea_company_mut] [SeaCompany];
+        [get_sea_line_mut] [as_sea_line_mut] [SeaLine];
+        [get_sea_stop_mut] [as_sea_stop_mut] [SeaStop];
+        [get_spawn_warp_mut] [as_spawn_warp_mut] [SpawnWarp];
+        [get_town_mut] [as_town_mut] [Town];
+    )]
+    pub fn get_node_mut(&mut self, id: ID) -> Result<&mut Ty> {
+        self.nodes
+            .get_mut(&id)
+            .ok_or(anyhow!("No node {id}"))?
+            .as_node_mut()
+            .ok_or(anyhow!("{id} not {}", stringify!(Ty)))
     }
 }
 
@@ -57,7 +124,7 @@ impl<T> Deref for Sourced<T> {
 
     fn deref(&self) -> &Self::Target {
         match self {
-            Self::Sourced {v, ..} => v,
+            Self::Sourced { v, .. } => v,
             Self::Unsourced(v) => v,
         }
     }
@@ -65,7 +132,7 @@ impl<T> Deref for Sourced<T> {
 impl<T> DerefMut for Sourced<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
-            Self::Sourced {v, ..} => v,
+            Self::Sourced { v, .. } => v,
             Self::Unsourced(v) => v,
         }
     }
@@ -131,7 +198,6 @@ pub enum AirMode {
     #[serde(rename = "traincarts plane")]
     TrainCartsPlane,
 }
-
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirAirline {
@@ -205,7 +271,6 @@ pub struct BusStop {
     #[serde(flatten)]
     pub common: LocatedNodeCommon,
 }
-
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum RailMode {
@@ -287,7 +352,7 @@ pub enum SpawnWarpType {
     Premier,
     Terminus,
     Portal,
-    Misc
+    Misc,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -306,7 +371,7 @@ pub enum Rank {
     Senator,
     Governor,
     Premier,
-    Community
+    Community,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -322,7 +387,7 @@ pub struct Town {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Connection {
     pub line: ID,
-    pub direction: Option<Direction>
+    pub direction: Option<Direction>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -330,17 +395,25 @@ pub struct Direction {
     pub direction: ID,
     pub forward_label: Option<String>,
     pub backward_label: Option<String>,
-    pub one_way: Sourced<bool>
+    pub one_way: Sourced<bool>,
 }
 
-fn deserialise_connections<'de, D: Deserializer<'de>>(de: D) -> Result<HashMap<ID, Vec<Sourced<Connection>>>, D::Error> {
-    HashMap::<String, Vec<Sourced<Connection>>>::deserialize(de)?.into_iter()
-        .map(|(k, v)| Ok((k.parse::<ID>().map_err(serde::de::Error::custom)?, v))).collect()
-}fn deserialise_proximity<'de, D: Deserializer<'de>>(de: D) -> Result<HashMap<ID, Sourced<Proximity>>, D::Error> {
-    HashMap::<String, Sourced<Proximity>>::deserialize(de)?.into_iter()
-        .map(|(k, v)| Ok((k.parse::<ID>().map_err(serde::de::Error::custom)?, v))).collect()
+fn deserialise_connections<'de, D: Deserializer<'de>>(
+    de: D,
+) -> Result<HashMap<ID, Vec<Sourced<Connection>>>, D::Error> {
+    HashMap::<String, Vec<Sourced<Connection>>>::deserialize(de)?
+        .into_iter()
+        .map(|(k, v)| Ok((k.parse::<ID>().map_err(serde::de::Error::custom)?, v)))
+        .collect()
 }
-
+fn deserialise_proximity<'de, D: Deserializer<'de>>(
+    de: D,
+) -> Result<HashMap<ID, Sourced<Proximity>>, D::Error> {
+    HashMap::<String, Sourced<Proximity>>::deserialize(de)?
+        .into_iter()
+        .map(|(k, v)| Ok((k.parse::<ID>().map_err(serde::de::Error::custom)?, v)))
+        .collect()
+}
 
 #[cfg(test)]
 #[cfg(feature = "ureq_get")]
