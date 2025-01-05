@@ -5,9 +5,9 @@ use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GatelogueData {
-    timestamp: String,
-    version: u64,
-    nodes: HashMap<ID, Node>
+    pub timestamp: String,
+    pub version: u64,
+    pub nodes: HashMap<ID, Node>
 }
 impl GatelogueData {
     #[cfg(feature = "reqwest_get")]
@@ -72,8 +72,8 @@ impl<T> DerefMut for Sourced<T> {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct NodeCommon {
-    i: ID,
-    source: Vec<String>,
+    pub i: ID,
+    pub source: Vec<String>,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -85,18 +85,18 @@ pub enum World {
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub struct Proximity {
-    distance: Option<f64>, // TODO remove distance
+    pub distance: Option<f64>, // TODO remove distance
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct LocatedNodeCommon {
-    i: ID,
-    source: Vec<String>,
-    world: Option<Sourced<World>>,
+    pub i: ID,
+    pub source: Vec<String>,
+    pub world: Option<Sourced<World>>,
     coordinates: Option<Sourced<(f64, f64)>>,
     #[serde(deserialize_with = "deserialise_proximity")]
-    proximity: HashMap<ID, Sourced<Proximity>>,
-    shared_facility: Vec<Sourced<ID>>,
+    pub proximity: HashMap<ID, Sourced<Proximity>>,
+    pub shared_facility: Vec<Sourced<ID>>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, EnumAsInner)]
@@ -134,75 +134,75 @@ pub enum AirMode {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirAirline {
-    name: String,
-    link: Option<Sourced<String>>,
-    flights: Vec<Sourced<ID>>,
-    gates: Vec<Sourced<ID>>,
+    pub name: String,
+    pub link: Option<Sourced<String>>,
+    pub flights: Vec<Sourced<ID>>,
+    pub gates: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirAirport {
-    code: String,
-    name: Option<Sourced<String>>,
-    link: Option<Sourced<String>>,
-    modes: Option<Sourced<Vec<AirMode>>>,
-    gates: Vec<Sourced<ID>>,
+    pub code: String,
+    pub name: Option<Sourced<String>>,
+    pub link: Option<Sourced<String>>,
+    pub modes: Option<Sourced<Vec<AirMode>>>,
+    pub gates: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirFlight {
-    codes: Vec<String>,
-    mode: Option<Sourced<AirMode>>,
-    airline: Sourced<ID>,
-    gates: Vec<Sourced<ID>>,
+    pub codes: Vec<String>,
+    pub mode: Option<Sourced<AirMode>>,
+    pub airline: Sourced<ID>,
+    pub gates: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirGate {
-    codes: Option<String>,
-    size: Option<Sourced<String>>,
-    airline: Option<Sourced<ID>>,
-    airport: Sourced<ID>,
-    flights: Vec<Sourced<ID>>,
+    pub codes: Option<String>,
+    pub size: Option<Sourced<String>>,
+    pub airline: Option<Sourced<ID>>,
+    pub airport: Sourced<ID>,
+    pub flights: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BusCompany {
-    name: String,
-    lines: Vec<Sourced<ID>>,
-    stops: Vec<Sourced<ID>>,
+    pub name: String,
+    pub lines: Vec<Sourced<ID>>,
+    pub stops: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BusLine {
-    code: String,
-    name: Option<Sourced<String>>,
-    colour: Option<Sourced<String>>,
-    company: Sourced<ID>,
-    ref_stop: Option<Sourced<ID>>,
+    pub code: String,
+    pub name: Option<Sourced<String>>,
+    pub colour: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
+    pub ref_stop: Option<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BusStop {
-    codes: Vec<String>,
-    name: Option<Sourced<String>>,
-    company: Sourced<ID>,
+    pub codes: Vec<String>,
+    pub name: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
     #[serde(deserialize_with = "deserialise_connections")]
-    connections: HashMap<ID, Vec<Sourced<Connection>>>,
+    pub connections: HashMap<ID, Vec<Sourced<Connection>>>,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 
@@ -220,64 +220,64 @@ pub enum RailMode {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RailCompany {
-    name: String,
-    lines: Vec<Sourced<ID>>,
-    stations: Vec<Sourced<ID>>,
+    pub name: String,
+    pub lines: Vec<Sourced<ID>>,
+    pub stations: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RailLine {
-    code: String,
-    name: Option<Sourced<String>>,
-    colour: Option<Sourced<String>>,
-    company: Sourced<ID>,
-    ref_stop: Option<Sourced<ID>>,
+    pub code: String,
+    pub name: Option<Sourced<String>>,
+    pub colour: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
+    pub ref_stop: Option<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RailStation {
-    codes: Vec<String>,
-    name: Option<Sourced<String>>,
-    company: Sourced<ID>,
+    pub codes: Vec<String>,
+    pub name: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
     #[serde(deserialize_with = "deserialise_connections")]
-    connections: HashMap<ID, Vec<Sourced<Connection>>>,
+    pub connections: HashMap<ID, Vec<Sourced<Connection>>>,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SeaCompany {
-    name: String,
-    lines: Vec<Sourced<ID>>,
-    stops: Vec<Sourced<ID>>,
+    pub name: String,
+    pub lines: Vec<Sourced<ID>>,
+    pub stops: Vec<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SeaLine {
-    code: String,
-    name: Option<Sourced<String>>,
-    colour: Option<Sourced<String>>,
-    company: Sourced<ID>,
-    ref_stop: Option<Sourced<ID>>,
+    pub code: String,
+    pub name: Option<Sourced<String>>,
+    pub colour: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
+    pub ref_stop: Option<Sourced<ID>>,
     #[serde(flatten)]
-    common: NodeCommon,
+    pub common: NodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SeaStop {
-    codes: Vec<String>,
-    name: Option<Sourced<String>>,
-    company: Sourced<ID>,
+    pub codes: Vec<String>,
+    pub name: Option<Sourced<String>>,
+    pub company: Sourced<ID>,
     #[serde(deserialize_with = "deserialise_connections")]
-    connections: HashMap<ID, Vec<Sourced<Connection>>>,
+    pub connections: HashMap<ID, Vec<Sourced<Connection>>>,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -291,10 +291,10 @@ pub enum SpawnWarpType {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SpawnWarp {
-    name: String,
-    warp_type: SpawnWarpType,
+    pub name: String,
+    pub warp_type: SpawnWarpType,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -310,26 +310,26 @@ pub enum Rank {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Town {
-    name: String,
-    rank: Sourced<Rank>,
-    mayor: Sourced<String>,
-    deputy_mayor: Sourced<Option<String>>,
+    pub name: String,
+    pub rank: Sourced<Rank>,
+    pub mayor: Sourced<String>,
+    pub deputy_mayor: Sourced<Option<String>>,
     #[serde(flatten)]
-    common: LocatedNodeCommon,
+    pub common: LocatedNodeCommon,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Connection {
-    line: ID,
-    direction: Option<Direction>
+    pub line: ID,
+    pub direction: Option<Direction>
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Direction {
-    direction: ID,
-    forward_label: Option<String>,
-    backward_label: Option<String>,
-    one_way: Sourced<bool>
+    pub direction: ID,
+    pub forward_label: Option<String>,
+    pub backward_label: Option<String>,
+    pub one_way: Sourced<bool>
 }
 
 fn deserialise_connections<'de, D: Deserializer<'de>>(de: D) -> Result<HashMap<ID, Vec<Sourced<Connection>>>, D::Error> {
