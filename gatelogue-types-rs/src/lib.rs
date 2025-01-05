@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::ops::{Deref, DerefMut};
+use enum_as_inner::EnumAsInner;
 use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -98,7 +99,7 @@ pub struct LocatedNodeCommon {
     shared_facility: Vec<Sourced<ID>>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, EnumAsInner)]
 #[serde(tag = "type")]
 pub enum Node {
     AirAirline(AirAirline),
