@@ -144,7 +144,7 @@ pub struct NodeCommon {
     pub source: Vec<String>,
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Serialize, Deserialize)]
 pub enum World {
     Old,
     New,
@@ -187,7 +187,7 @@ pub enum Node {
     Town(Town),
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Serialize, Deserialize)]
 pub enum AirMode {
     #[serde(rename = "helicopter")]
     Helicopter,
@@ -272,7 +272,7 @@ pub struct BusStop {
     pub common: LocatedNodeCommon,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RailMode {
     #[serde(rename = "warp")]
     Warp,
@@ -346,7 +346,7 @@ pub struct SeaStop {
     pub common: LocatedNodeCommon,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SpawnWarpType {
     Premier,
@@ -363,7 +363,7 @@ pub struct SpawnWarp {
     pub common: LocatedNodeCommon,
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Serialize, Deserialize)]
 pub enum Rank {
     Unranked,
     Councillor,
