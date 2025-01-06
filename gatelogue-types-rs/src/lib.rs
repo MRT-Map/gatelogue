@@ -13,21 +13,28 @@ pub enum Error {
     Reqwest(#[from] reqwest::Error),
     #[cfg(feature = "surf_get")]
     #[error("surf error: {0:?}")]
-    Surf(#[from] surf::Error),
+    Surf(surf::Error),
     #[cfg(feature = "ureq_get")]
     #[error("ureq error: {0:?}")]
     Ureq(#[from] ureq::Error),
 
     #[error("decoding error: {0:?}")]
-    Decode(#[from] serde_json::de::Error),
+    Decode(#[from] serde_json::error::Error),
 
     #[error("No node {0}")]
     NoNode(ID),
     #[error("{0} not {1}")]
-    IncorrectType(ID, String),
+    IncorrectType(ID, &'static str),
 
     #[error("unknown error")]
     Unknown,
+}
+
+#[cfg(feature = "surf_get")]
+impl From<surf::Error> for Error {
+    fn from(err: surf::Error) -> Self {
+        Error::Surf(err)
+    }
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
@@ -104,7 +111,7 @@ impl GatelogueData {
         [towns] [as_town] [Town];
     )]
     pub fn nodes_(&self) -> impl Iterator<Item = &Ty> {
-        self.nodes.iter().filter_map(|a| a.as_node())
+        self.nodes.values().filter_map(|a| a.as_node())
     }
 
     #[duplicate_item(
@@ -126,7 +133,7 @@ impl GatelogueData {
         [towns_mut] [as_town_mut] [Town];
     )]
     pub fn nodes_mut(&mut self) -> impl Iterator<Item = &mut Ty> {
-        self.nodes.iter_mut().filter_map(|a| a.as_node_mut())
+        self.nodes.values_mut().filter_map(|a| a.as_node_mut())
     }
 
     #[duplicate_item(
@@ -176,7 +183,7 @@ impl GatelogueData {
     pub fn get_node_mut(&mut self, id: ID) -> Result<&mut Ty> {
         self.nodes
             .get_mut(&id)
-            .ok_or(Error::NoNode(id))
+            .ok_or(Error::NoNode(id))?
             .as_node_mut()
             .ok_or(Error::IncorrectType(id, stringify!(Ty)))
     }
