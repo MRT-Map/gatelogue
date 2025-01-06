@@ -86,6 +86,50 @@ impl GatelogueData {
     }
 
     #[duplicate_item(
+        nodes_  as_node Ty;
+        [air_airlines] [as_air_airline] [AirAirline];
+        [air_airports] [as_air_airport] [AirAirport];
+        [air_flights] [as_air_flight] [AirFlight];
+        [air_gates] [as_air_gate] [AirGate];
+        [bus_companies] [as_bus_company] [BusCompany];
+        [bus_lines] [as_bus_line] [BusLine];
+        [bus_stops] [as_bus_stop] [BusStop];
+        [rail_companies] [as_rail_company] [RailCompany];
+        [rail_lines] [as_rail_line] [RailLine];
+        [rail_stations] [as_rail_station] [RailStation];
+        [sea_companies] [as_sea_company] [SeaCompany];
+        [sea_lines] [as_sea_line] [SeaLine];
+        [sea_stops] [as_sea_stop] [SeaStop];
+        [spawn_warps] [as_spawn_warp] [SpawnWarp];
+        [towns] [as_town] [Town];
+    )]
+    pub fn nodes_(&self) -> impl Iterator<Item = &Ty> {
+        self.nodes.iter().filter_map(|a| a.as_node())
+    }
+
+    #[duplicate_item(
+        nodes_mut  as_node_mut Ty;
+        [air_airlines_mut] [as_air_airline_mut] [AirAirline];
+        [air_airports_mut] [as_air_airport_mut] [AirAirport];
+        [air_flights_mut] [as_air_flight_mut] [AirFlight];
+        [air_gates_mut] [as_air_gate_mut] [AirGate];
+        [bus_companies_mut] [as_bus_company_mut] [BusCompany];
+        [bus_lines_mut] [as_bus_line_mut] [BusLine];
+        [bus_stops_mut] [as_bus_stop_mut] [BusStop];
+        [rail_companies_mut] [as_rail_company_mut] [RailCompany];
+        [rail_lines_mut] [as_rail_line_mut] [RailLine];
+        [rail_stations_mut] [as_rail_station_mut] [RailStation];
+        [sea_companies_mut] [as_sea_company_mut] [SeaCompany];
+        [sea_lines_mut] [as_sea_line_mut] [SeaLine];
+        [sea_stops_mut] [as_sea_stop_mut] [SeaStop];
+        [spawn_warps_mut] [as_spawn_warp_mut] [SpawnWarp];
+        [towns_mut] [as_town_mut] [Town];
+    )]
+    pub fn nodes_mut(&mut self) -> impl Iterator<Item = &mut Ty> {
+        self.nodes.iter_mut().filter_map(|a| a.as_node_mut())
+    }
+
+    #[duplicate_item(
         get_node  as_node Ty;
         [get_air_airline] [as_air_airline] [AirAirline];
         [get_air_airport] [as_air_airport] [AirAirport];
