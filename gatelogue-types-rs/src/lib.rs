@@ -1,9 +1,38 @@
-use anyhow::{Result, anyhow};
 use duplicate::duplicate_item;
 use enum_as_inner::EnumAsInner;
 use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashMap;
 use std::ops::{Deref, DerefMut};
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+#[non_exhaustive]
+pub enum Error {
+    #[cfg(feature = "reqwest_get")]
+    #[error("reqwest error: {0:?}")]
+    Reqwest(#[from] reqwest::Error),
+    #[cfg(feature = "surf_get")]
+    #[error("surf error: {0:?}")]
+    Surf(#[from] surf::Error),
+    #[cfg(feature = "ureq_get")]
+    #[error("ureq error: {0:?}")]
+    Ureq(#[from] ureq::Error),
+
+    #[error("decoding error: {0:?}")]
+    Decode(#[from] serde_json::de::Error),
+
+    #[error("No node {0}")]
+    NoNode(ID),
+    #[error("{0} not {1}")]
+    IncorrectType(ID, String),
+
+    #[error("unknown error")]
+    Unknown,
+}
+
+pub type Result<T, E = Error> = std::result::Result<T, E>;
+
+pub type ID = u16;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GatelogueData {
@@ -33,13 +62,12 @@ impl GatelogueData {
             "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json",
         )
         .recv_bytes()
-        .await
-        .map_err(|a| a.into_inner())?;
+        .await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "surf_get")]
     pub async fn surf_get_no_sources() -> Result<Self> {
-        let bytes = surf::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").recv_bytes().await.map_err(|a| a.into_inner())?;
+        let bytes = surf::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").recv_bytes().await?;
         Ok(serde_json::from_slice(&bytes)?)
     }
     #[cfg(feature = "ureq_get")]
@@ -78,9 +106,9 @@ impl GatelogueData {
     pub fn get_node(&self, id: ID) -> Result<&Ty> {
         self.nodes
             .get(&id)
-            .ok_or(anyhow!("No node {id}"))?
+            .ok_or(Error::NoNode(id))?
             .as_node()
-            .ok_or(anyhow!("{id} not {}", stringify!(Ty)))
+            .ok_or(Error::IncorrectType(id, stringify!(Ty)))
     }
 
     #[duplicate_item(
@@ -104,13 +132,11 @@ impl GatelogueData {
     pub fn get_node_mut(&mut self, id: ID) -> Result<&mut Ty> {
         self.nodes
             .get_mut(&id)
-            .ok_or(anyhow!("No node {id}"))?
+            .ok_or(Error::NoNode(id))
             .as_node_mut()
-            .ok_or(anyhow!("{id} not {}", stringify!(Ty)))
+            .ok_or(Error::IncorrectType(id, stringify!(Ty)))
     }
 }
-
-pub type ID = u16;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(untagged)]
