@@ -9,6 +9,7 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
     "CampLines": "odd-even",
     "Rainer Airways": "odd-even",
     "AmberAir": "odd-even",
+    "Astrella": "odd-even",
 }
 
 DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT", "NMW")
