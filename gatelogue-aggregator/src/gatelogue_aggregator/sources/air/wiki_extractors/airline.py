@@ -67,6 +67,8 @@ def intra_air(ctx: WikiAirline, config):
     result = 0
     for table in html("table"):
         for tr in table("tr")[1::4]:
+            if len(tr("td")) < 7:
+                continue
             if tr("td")[6].find("a", href="/index.php/File:Rsz_open.png") is None:
                 continue
             code = tr("td")[1].span.string.removeprefix("Flight ")
