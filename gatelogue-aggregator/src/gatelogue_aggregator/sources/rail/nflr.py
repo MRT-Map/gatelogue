@@ -191,7 +191,7 @@ class NFLR(RailSource):
             elif line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Cape Cambridge John Glenn Transit Centre", None)
+                    *r_stations, between=("Oceanside Bayfront", None)
                 )
             elif line_name == "R5":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Xterium North"))
