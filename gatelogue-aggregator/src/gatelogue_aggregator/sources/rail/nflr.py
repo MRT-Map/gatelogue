@@ -37,7 +37,7 @@ class NFLR(RailSource):
         )
         df = pd.read_csv(cache / "lines")
         lines = [
-            (str(line_name), str(back), w == "TRUE", int(gid))
+            (str(line_name), str(back), bool(w), int(gid))
             for line_name, back, w, gid in zip(
                 df["line"], df["back"], df["w"], df["gid"]
             )
