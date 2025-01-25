@@ -218,7 +218,7 @@ class NFLR(RailSource):
 
                 if line_name == "W2":
                     RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=(None, "DFM T1 / Borderville")
+                        *w_stations, between=(None, "Deadbush Foxfoe Memorial Airport Terminal 1 / Borderville")
                     )
                     RailLineBuilder(self, w_line).connect(
                         *w_stations, between=("Southbank", None)
