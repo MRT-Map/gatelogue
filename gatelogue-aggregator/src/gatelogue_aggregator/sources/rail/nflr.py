@@ -124,7 +124,7 @@ class NFLR(RailSource):
                     *r_stations,
                     between=(
                         "Deadbush Quarryville",
-                        "Deadbush Johnston-Euphorial Airport Terminal 2,
+                        "Deadbush Johnston-Euphorial Airport Terminal 2",
                     ),
                     forward_label="northbound CCW",
                     backward_label="southbound",
