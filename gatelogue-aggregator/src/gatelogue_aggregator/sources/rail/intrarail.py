@@ -66,10 +66,15 @@ class IntraRail(RailSource):
             if line_code == "202":
                 RailLineBuilder(self, line).connect(*stations, exclude=["Amestris Cummins Highway"])
                 RailLineBuilder(self, line).connect(
-                    *stations, between=("Amestris Cummins Highway", "Laclede Airport Plaza")
+                    *stations, between=("Amestris Cummins Highway", "Laclede Airport Plaza"),
+                    forward_label="to Bakersville Grand Central",
                 )
             else:
                 RailLineBuilder(self, line).connect(*stations)
+
+            if line_code == "2X":
+                RailLineBuilder(self, line).connect(*stations, between=("Formosa Northern", "UCWT International Airport East"), exclude=["Danielston Paisley Place Transportation Center"], forward_label="to Siletz Salvador Station", backward_label="Whitechapel Border")
+                RailLineBuilder(self, line).connect(*stations, between=("Central City Warp Rail Termina", "Siletz Salvador Station"), exclude=["Rochshire", "Woodsbane"], backward_label="Whitechapel Border")
 
             rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
 
