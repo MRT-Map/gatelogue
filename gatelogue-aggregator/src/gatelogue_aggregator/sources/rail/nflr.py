@@ -124,7 +124,7 @@ class NFLR(RailSource):
                     *r_stations,
                     between=(
                         "Deadbush Quarryville",
-                        "Deadbush Johnston-Euphorial Airport",
+                        "Deadbush Johnston-Euphorial Airport Terminal 2,
                     ),
                     forward_label="northbound CCW",
                     backward_label="southbound",
@@ -132,7 +132,7 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
                     get_stn(r_stations, "Deadbush Karaj Expo"),
-                    between=("Deadbush Johnston-Euphorial Airport", None),
+                    between=("Deadbush Johnston-Euphorial Airport Terminal 2", None),
                     forward_label="northbound",
                     backward_label="southbound",
                 )
