@@ -167,7 +167,7 @@ class NFLR(RailSource):
                 )
             elif line_name == "R2":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Deadbush Valletta Desert Airport")
+                    *r_stations, between=(None, "Totem Beach Transit Center")
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations, between=("Paralia", None)
@@ -218,7 +218,7 @@ class NFLR(RailSource):
 
                 if line_name == "W2":
                     RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=(None, "Deadbush Foxfoe Memorial Airport Terminal 1 / Borderville")
+                        *w_stations, between=(None, "Totem Beach Transit Center")
                     )
                     RailLineBuilder(self, w_line).connect(
                         *w_stations, between=("Southbank", None)
