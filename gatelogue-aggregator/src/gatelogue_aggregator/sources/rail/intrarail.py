@@ -35,7 +35,7 @@ class IntraRail(RailSource):
             line_code = line_code_name.split(" ")[0]
             line_name = line_code_name.removeprefix(line_code)
 
-            line_code_base = int(line_code.removesuffix("X").removesuffix("A"))
+            line_code_base = int(line_code.removesuffix("X").removesuffix("A").removesuffix("W").removesuffix("E"))
             line_colour = (
                 "#f083a6"
                 if line_code.endswith("X") and 0 <= line_code_base <= 199  # noqa: PLR2004
