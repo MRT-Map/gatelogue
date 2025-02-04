@@ -25,7 +25,7 @@ class NFLRWarp(RailSource):
 
         codes = []
         for warp in warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config):
-            if not warp["name"].startswith("FLR") or warp["welcomeMessage"].startswith("Welcome"):
+            if not warp["name"].startswith("FLR"):
                 continue
             code = warp["name"].split("-")[1].lower()
             if code in ("nsg", "rvb"):
@@ -49,7 +49,7 @@ class NFLRWarp(RailSource):
                 company=company,
                 world="New",
                 coordinates=(warp["x"], warp["z"]),
-                name=warp["welcomeMessage"].split("|")[0].strip(),
+                name=None if warp["welcomeMessage"].startswith("Welcome") else warp["welcomeMessage"].split("|")[0].strip(),
             )
             codes.append(code)
         self.save_to_cache(config, self.g)
