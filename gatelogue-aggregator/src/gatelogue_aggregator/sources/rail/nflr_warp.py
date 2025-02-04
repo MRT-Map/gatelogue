@@ -27,6 +27,8 @@ class NFLRWarp(RailSource):
         for warp in warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config):
             if not warp["name"].startswith("FLR"):
                 continue
+            if warp["name"].split("-")[2][0] not in ('r', 'w', 'm', 'n'):
+                continue
             code = warp["name"].split("-")[1].lower()
             if code in ("nsg", "rvb"):
                 continue
