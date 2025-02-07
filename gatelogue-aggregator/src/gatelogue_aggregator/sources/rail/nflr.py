@@ -188,7 +188,7 @@ class NFLR(RailSource):
                 )
             elif line_name == "R13":
                 RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Peacopolis")
+                    *r_stations, between=(None, "New Foresne Cinnameadow")
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations, between=("Lilygrove Union", None)
