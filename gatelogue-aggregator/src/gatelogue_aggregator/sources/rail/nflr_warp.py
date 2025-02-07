@@ -32,7 +32,7 @@ class NFLRWarp(RailSource):
             if not ((warp["name"].split("-")[2][0].lower() in ('r', 'w', 'm', 'n')) or (len(warp['name'].split('-')[1]) == 4 and warp['name'].split("-")[1][0].lower() == "n")):
                 continue
             code = warp["name"].split("-")[1].lower()
-            if code in ("nsg", "rvb"):
+            if code in ("nsg", "rvb", "ply"):
                 continue
             if code == "dne" and warp["name"].split("-")[2].lower() == "r5a":
                 code = "dnw"
