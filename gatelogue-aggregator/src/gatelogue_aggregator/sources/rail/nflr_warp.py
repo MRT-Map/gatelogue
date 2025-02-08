@@ -27,9 +27,12 @@ class NFLRWarp(RailSource):
         for warp in warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config):
             if not warp["name"].startswith("FLR"):
                 continue
-            if len(warp["name"].split("-")) < 3:
+            if len(warp["name"].split("-")) < 3:  # noqa: PLR2004
                 continue
-            if not ((warp["name"].split("-")[2][0].lower() in ('r', 'w', 'm', 'n')) or (len(warp['name'].split('-')[1]) == 4 and warp['name'].split("-")[1][0].lower() == "n")):
+            if not (
+                (warp["name"].split("-")[2][0].lower() in ("r", "w", "m", "n"))
+                or (len(warp["name"].split("-")[1]) == 4 and warp["name"].split("-")[1][0].lower() == "n")  # noqa: PLR2004
+            ):
                 continue
             code = warp["name"].split("-")[1].lower()
             if code in ("nsg", "rvb", "ply"):
@@ -53,7 +56,9 @@ class NFLRWarp(RailSource):
                 company=company,
                 world="New",
                 coordinates=(warp["x"], warp["z"]),
-                name=None if warp["welcomeMessage"].startswith("Welcome") else warp["welcomeMessage"].split("|")[0].strip(),
+                name=None
+                if warp["welcomeMessage"].startswith("Welcome")
+                else warp["welcomeMessage"].split("|")[0].strip(),
             )
             codes.append(code)
         self.save_to_cache(config, self.g)

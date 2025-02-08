@@ -38,9 +38,7 @@ class NFLR(RailSource):
         df = pd.read_csv(cache / "lines")
         lines = [
             (str(line_name), str(back), bool(w), int(gid))
-            for line_name, back, w, gid in zip(
-                df["line"], df["back"], df["w"], df["gid"]
-            )
+            for line_name, back, w, gid in zip(df["line"], df["back"], df["w"], df["gid"])
             if str(gid) != "nan"
         ]
 
@@ -58,7 +56,8 @@ class NFLR(RailSource):
         def get_stn(sts, name):
             st = next((st for st in sts if st.name.v == name), None)
             if st is None:
-                raise ValueError(f"{name} not in {','.join(s.name.v for s in sts)}")
+                msg = f"{name} not in {','.join(s.name.v for s in sts)}"
+                raise ValueError(msg)
             return st
 
         for line_name, line_colour, w, _ in lines:
@@ -82,14 +81,10 @@ class NFLR(RailSource):
                 }.get(code, {code})
                 station = None
                 if "R" in route:
-                    station = station or RailStation.new(
-                        self, codes=code, company=company, name=name
-                    )
+                    station = station or RailStation.new(self, codes=code, company=company, name=name)
                     r_stations.append(station)
                 if "W" in route and w:
-                    station = station or RailStation.new(
-                        self, codes=code, company=company, name=name
-                    )
+                    station = station or RailStation.new(self, codes=code, company=company, name=name)
                     w_stations.append(station)
 
             r_line = RailLine.new(
@@ -166,54 +161,30 @@ class NFLR(RailSource):
                     backward_label="to mainline",
                 )
             elif line_name == "R2":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Totem Beach Transit Center")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Paralia", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Totem Beach Transit Center"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
             elif line_name == "R4":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Birmingham")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Oceanside Bayfront", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Oceanside Bayfront", None))
             elif line_name == "R5":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Xterium North")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Weston East", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Xterium North"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Weston East", None))
             elif line_name == "R13":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "New Foresne Cinnameadow")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Lilygrove Union", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "New Foresne Cinnameadow"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Lilygrove Union", None))
             elif line_name == "R17":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Dewford City Lometa")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Fort Torbay", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Dewford City Lometa"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Fort Torbay", None))
             elif line_name == "R25":
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=(None, "Norwrick")
-                )
-                RailLineBuilder(self, r_line).connect(
-                    *r_stations, between=("Paralia", None)
-                )
+                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Norwrick"))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
             rich.print(RESULT + f"nFLR Line {line_name} has {len(r_stations)} stations")
 
             if w:
-                line_name = "W" + line_name[1:] if line_name.startswith("R") else line_name + " Rapid" # noqa: PLW2901
+                line_name = "W" + line_name[1:] if line_name.startswith("R") else line_name + " Rapid"  # noqa: PLW2901
                 w_line = RailLine.new(
                     self,
                     code=line_name,
@@ -224,23 +195,13 @@ class NFLR(RailSource):
                 )
 
                 if line_name == "W2":
-                    RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=(None, "Totem Beach Transit Center")
-                    )
-                    RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=("Southbank", None)
-                    )
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "Totem Beach Transit Center"))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=("Southbank", None))
                 elif line_name == "W5":
-                    RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=(None, "Xterium North")
-                    )
-                    RailLineBuilder(self, w_line).connect(
-                        *w_stations, between=("Weston East", None)
-                    )
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "Xterium North"))
+                    RailLineBuilder(self, w_line).connect(*w_stations, between=("Weston East", None))
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
-                rich.print(
-                    RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations"
-                )
+                rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
         self.save_to_cache(config, self.g)

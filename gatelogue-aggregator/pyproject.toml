@@ -43,8 +43,8 @@ gatelogue-aggregator = "gatelogue_aggregator.cli:gatelogue_aggregator"
 [tool.hatch.version]
 path = "src/gatelogue_aggregator/__about__.py"
 
-[tool.hatch.envs.default]
-python = "3.12"
+#[tool.hatch.envs.default]
+#python = "3.12"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
