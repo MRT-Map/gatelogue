@@ -206,7 +206,7 @@ class NFLR(RailSource):
             rich.print(RESULT + f"nFLR Line {line_name} has {len(r_stations)} stations")
 
             if w:
-                line_name = "W" + line_name[1:] if line_name.starts_with("R") else line_name + " Rapid" # noqa: PLW2901
+                line_name = "W" + line_name[1:] if line_name.startswith("R") else line_name + " Rapid" # noqa: PLW2901
                 w_line = RailLine.new(
                     self,
                     code=line_name,
