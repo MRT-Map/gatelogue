@@ -200,6 +200,13 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(
                     *r_stations, between=("Fort Torbay", None)
                 )
+            elif line_name == "R25":
+                RailLineBuilder(self, r_line).connect(
+                    *r_stations, between=(None, "Norwrick")
+                )
+                RailLineBuilder(self, r_line).connect(
+                    *r_stations, between=("Paralia", None)
+                )
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
