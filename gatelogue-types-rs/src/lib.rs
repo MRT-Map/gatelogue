@@ -83,12 +83,13 @@ impl GatelogueData {
             "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json",
         )
         .call()?
+        .into_body()
         .into_reader();
         Ok(serde_json::from_reader(reader)?)
     }
     #[cfg(feature = "ureq_get")]
     pub fn ureq_get_no_sources() -> Result<Self> {
-        let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").call()?.into_reader();
+        let reader = ureq::get("https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json").call()?.into_body().into_reader();
         Ok(serde_json::from_reader(reader)?)
     }
 
