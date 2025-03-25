@@ -18,8 +18,8 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue-tippy:
-        specifier: ^6.6.0
-        version: 6.6.0(vue@3.5.13(typescript@5.6.3))
+        specifier: ^6.7.0
+        version: 6.7.0(vue@3.5.13(typescript@5.6.3))
     devDependencies:
       '@eslint/js':
         specifier: ^9.23.0
@@ -1573,8 +1573,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  vue-tippy@6.6.0:
-    resolution: {integrity: sha512-ISRIUQDlcEP05K1nCbvlVcd8yuWS6S3dI91qD0A2slgtwwWjih8Fn9Aymq4SNaHQsdiP5+MLRPZVDxFjKMPgKA==}
+  vue-tippy@6.7.0:
+    resolution: {integrity: sha512-e0w6UA+A+J79GhDYNw5xZjGu7Tc2ksYypwF5RjkJVWgAGNSpXkLVNx4gZ8cMUa8FRHqmGAZxN3ue7MeXgbeZAQ==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -3092,7 +3092,7 @@ snapshots:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.6.3)
 
-  vue-tippy@6.6.0(vue@3.5.13(typescript@5.6.3)):
+  vue-tippy@6.7.0(vue@3.5.13(typescript@5.6.3)):
     dependencies:
       tippy.js: 6.3.7
       vue: 3.5.13(typescript@5.6.3)
