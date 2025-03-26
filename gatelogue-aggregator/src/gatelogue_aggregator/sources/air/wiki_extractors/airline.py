@@ -232,26 +232,26 @@ def jiffy_air(ctx: WikiAirline, config):
     )
 
 
-@_EXTRACTORS.append
-def jiffy_air2(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
-        "JiffyAir",
-        "JiffyAir",
-        re.compile(
-            r"""\|-
-\|rowspan=\"2\"\|JF(?P<code>[^|]*?)
-\|(?:{{afn\|(?P<a1>[^|]*?)}}|.*?\((?P<a12>[^|]*?)\))
-\|(?:{{afn\|(?P<a2>[^|]*?)}}|.*?\((?P<a22>[^|]*?)\))
-\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''
-\|rowspan=\"2\"\|{{[sS]tatus\|good}}
-\|rowspan=\"2\"\|[^\n]*?
-\|-
-\|[^\n]*?
-\|(?:{{afn\|(?P<a3>[^|]*?)}}|.*?\((?P<a32>[^|]*?)\))
-\|'''[^|]*?'''\n\|'''(?P<g3>[^|]*?)'''"""
-        ),
-        config,
-    )
+# @_EXTRACTORS.append
+# def jiffy_air2(ctx: WikiAirline, config):
+#     ctx.regex_extract_airline(
+#         "JiffyAir",
+#         "JiffyAir",
+#         re.compile(
+#             r"""\|-
+# \|rowspan=\"2\"\|JF(?P<code>[^|]*?)
+# \|(?:{{afn\|(?P<a1>[^|]*?)}}|.*?\((?P<a12>[^|]*?)\))
+# \|(?:{{afn\|(?P<a2>[^|]*?)}}|.*?\((?P<a22>[^|]*?)\))
+# \|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''
+# \|rowspan=\"2\"\|{{[sS]tatus\|good}}
+# \|rowspan=\"2\"\|[^\n]*?
+# \|-
+# \|[^\n]*?
+# \|(?:{{afn\|(?P<a3>[^|]*?)}}|.*?\((?P<a32>[^|]*?)\))
+# \|'''[^|]*?'''\n\|'''(?P<g3>[^|]*?)'''"""
+#         ),
+#         config,
+#     )
 
 
 @_EXTRACTORS.append

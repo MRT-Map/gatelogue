@@ -43,6 +43,7 @@ _DICT = {
     "GAD": "Gorre & Daphetid",
     "GEN": "Geneva Bay",
     "GIL": "Gillmont",
+    "GRW": "Greenwolf",
     "GRY": "Gray Cloud",
     "HAM": "Hamblin",
     "HEA": "Heapstead",
