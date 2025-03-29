@@ -80,7 +80,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
             stations = [
                 self.S.new(
                     self,
-                    codes={a[0]} if isinstance(a, tuple) else a,
+                    codes={a[0] if isinstance(a, tuple) else a},
                     name=a[1] if isinstance(a, tuple) else a,
                     company=company,
                 )
