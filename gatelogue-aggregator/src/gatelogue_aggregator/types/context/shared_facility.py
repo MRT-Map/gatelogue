@@ -159,7 +159,7 @@ class SharedFacilityContext(BaseContext, Source):
             (blu, "Sesby Central", rlq, "Sesby Central"),
             (blu, "Airchester Central", rlq, "Airchester Central"),
             (blu, "Accerton", rlq, "Accerton"),
-            (nflr, "West Mesa International Airport / Blackwater", intra, "Deadbush Blackwater"),
+            (nflr, "West Mesa International Airport / Blackwater", intra, "Deadbush Blackwater / WMI"),
             (blu, "Oparia Downtown", intra, "Oparia Downtown"),
             (rlq, "Oparia Downtown", intra, "Oparia Downtown"),
             (rn, "Oparia Downtown", intra, "Oparia Downtown"),
