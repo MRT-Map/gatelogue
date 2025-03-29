@@ -39,7 +39,7 @@ class YamlLine(msgspec.Struct):
 class Yaml(msgspec.Struct):
     company_name: str
     lines: list[YamlLine]
-    coords: dict[str, tuple[int, int]] = msgspec.field(default=dict)
+    coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
 
     colour: str | None = None
     mode: str = "warp"
