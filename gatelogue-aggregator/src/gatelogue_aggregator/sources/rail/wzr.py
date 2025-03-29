@@ -83,7 +83,7 @@ class WZR(RailSource):
             rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
 
         wiki = get_wiki_text("Ismael Line", config)
-        line = RailLine.new(self, code="8", name="Ismael Line", company=company)
+        line = RailLine.new(self, code="8", name="Ismael Line", company=company, colour="#aa0000")
 
         stations = []
         for result in search_all(
