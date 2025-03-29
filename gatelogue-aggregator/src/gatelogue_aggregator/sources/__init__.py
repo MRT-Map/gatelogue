@@ -20,7 +20,6 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
     from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
     from gatelogue_aggregator.sources.rail.fredrail import FredRail
-    from gatelogue_aggregator.sources.rail.fredrail_warp import FredRailWarp
     from gatelogue_aggregator.sources.rail.intrarail import IntraRail
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
     from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
@@ -86,7 +85,6 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         NSC,
         NSCWarp,
         FredRail,
-        FredRailWarp,
         RedTrain,
         RedTrainWarp,
         RailNorth,

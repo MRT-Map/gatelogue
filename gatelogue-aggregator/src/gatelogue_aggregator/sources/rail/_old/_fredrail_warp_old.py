@@ -4,7 +4,7 @@ from gatelogue_aggregator.types.source import Source
 
 
 class FredRailWarp(RailSource):
-    name = "Hardcode (Rail, Fred Rail)"
+    name = "Gatelogue (Rail, Fred Rail)"
     priority = 0
 
     def __init__(self, config: Config):

@@ -1,0 +1,151 @@
+company_name: Fred Rail
+colour: "#000080"
+
+lines:
+  - name: Main Line
+    stations: [
+      "Bakersville Grand Central",
+      "Westchester Junction",
+      "New Risima",
+      "Xilia",
+      "Formosa",
+      "UCWTIA",
+      "Segville International Airport",
+      "Matheson Swamps",
+      "Astoria",
+      "Fort Yaxier Central",
+      "Fort Yaxier Penn",
+    ]
+
+  - name: Central Line
+    stations: [
+      "Bakersville Grand Central",
+      "UCWTIA",
+      "Segville International Airport",
+      "Utopia",
+    ]
+
+  - name: Southern Regional Railroad
+    stations: [
+      "Tranquil Forest Central",
+      "Wythern",
+      # "Astoria",
+      # "Fort Yaxier West",
+    ]
+
+  - name: Richville Shuttle
+    stations: ["Tranquil Forest Central", "Richville"]
+
+  - name: Fort Yaxier Shuttle
+    stations: ["Utopia", "Utopia AFK"]
+
+  - name: Southern Central
+    stations: [
+      "Utopia",
+      "Whiteley Turing Square",
+      # "Paddington Station",
+      # "Zaquar Onika T. Maraj Station",
+      # "Fort Yaxier West",
+    ]
+
+  - name: Western Line
+    stations: [
+      "Utopia",
+      "Kolpino",
+      "Espil",
+      "Kings Cross Railway Terminal",
+    ]
+
+  - name: Lochminehead Limited
+    stations: ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lochminehead"]
+
+  - name: New Jerseyan
+    custom_routing: true
+    stations: [
+      "Boston Waterloo",
+      "Boston Clapham Junction",
+      "New Haven",
+      "Tung Wan Transfer",
+      "Palo Alto",
+      "Concord",
+      "Redwood Ferry",
+      "Victoria Ferry",
+      "Victoria Preston",
+      "Veldberg",
+      "Princeton Junction",
+      "Rattlerville Central",
+    ]
+
+  - name: Blue Water
+    stations: ["New Mackinaw Union Station", "Oparia Airport"]
+
+  - name: Grand Central Limited
+    stations: [
+      "Bakersville Grand Central",
+      "Central City Beltway Terminal North",
+      "Sealane New Forest Station",
+    ]
+
+  - name: Tung Wan Shuttle
+    stations: [
+      "Tung Wan Transfer",
+      "Tung Wan Halt",
+    ]
+
+  - name: Central City Shuttle
+    stations: [
+      "Bakersville Grand Central",
+      "Central City",
+    ]
+
+  - name: Crescent Service
+    stations: ["Bakersville Grand Central", "Woodsdale", "Mihama", "Heights City", "Quiris"]
+
+coords:
+  Bakersville Grand Central: [ -366, -4180 ]
+  Westchester Junction: [ -590, -3588 ]
+  New Risima: [ -590, -3251 ]
+  Xilia: [ -1497, -651 ]
+  Formosa: [ -1982, -242 ]
+  UCWTIA: [ -1706, 939 ]
+  Segville International Airport: [ -1053, 2685 ]
+  Matheson Swamps: [ 2136, 4425 ]
+  Astoria: [ 3199, 7720 ]
+  Fort Yaxier Central: [ 3567, 9400 ]
+  Fort Yaxier Penn: [ 3469, 10133 ]
+  Utopia: [ -1801, 3724 ]
+  Tranquil Forest Central: [ 9601, 7646 ]
+  Wythern: [ 6149, 6825 ]
+  Richville: [ 12513, 6751 ]
+  Utopia AFK: [ -2346, 3414 ]
+  Whiteley Turing Square: [ -1540, 8076 ]
+  Kolpino: [ -3962, 3743 ]
+  Espil: [ -5745, 2048 ]
+  Kings Cross Railway Terminal: [ -8135, 7619 ]
+  Matheson: [ 356, 4473 ]
+  Far Matheson: [ 1832, 4473 ]
+  San Dzobiak: [ 2103, 3308 ]
+  Siletz: [ 2544, 2995 ]
+  Dabecco: [ 2595, 2511 ]
+  Lochminehead: [ 2369, 857 ]
+  Tung Wan Halt: [ 1799, 13985 ]
+  Tung Wan Transfer: [ 1803, 13692 ]
+  Palo Alto: [ 2923, 13791 ]
+  Concord: [ 3609, 15298 ]
+  Redwood Ferry: [ 4002, 16108 ]
+  Victoria Ferry: [ 5572, 16161 ]
+  Victoria Preston: [ 5351, 16704 ]
+  Veldberg: [ 6223, 17741 ]
+  Princeton Junction: [ 6965, 19707 ]
+  Rattlerville Central: [ 5596, 20814 ]
+  New Haven: [ 827, 12152 ]
+  Boston Clapham Junction: [ 1047, 11323 ]
+  Boston Waterloo: [ 769, 10852 ]
+  Central City Beltway Terminal North: [ -923, -678 ]
+  Sealane New Forest Station: [ -821, 81 ]
+  Central City: [ 202, -820 ]
+  Bakersville Penn Station: [ -386, -4870 ]
+  Woodsdale: [ 159, -5514 ]
+  Mihama: [ 265, -6249 ]
+  Heights City: [ 1264, -6568 ]
+  Quiris: [ 1264, -6987 ]

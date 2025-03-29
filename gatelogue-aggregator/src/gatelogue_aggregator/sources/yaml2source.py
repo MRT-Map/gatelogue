@@ -3,7 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import msgspec
+import rich
 
+from gatelogue_aggregator.logging import RESULT
+from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
@@ -35,29 +38,32 @@ class YamlLine(msgspec.Struct):
 
 class Yaml(msgspec.Struct):
     company_name: str
-    coords: dict[str, tuple[int, int]]
     lines: list[YamlLine]
+    coords: dict[str, tuple[int, int]] = msgspec.field(default=dict)
 
     colour: str | None = None
     mode: str = "warp"
+    world: str = "New"
 
 
 class Yaml2Source(RailSource, BusSource, SeaSource):
-    name = "MRT Wiki (Rail, SEAT)"
-    priority = 1
+    name = "Gatelogue"
+    priority = 0
 
+    file_path: Path
     C: type[RailCompany | BusCompany | SeaCompany]
     L: type[RailLine | BusLine | SeaLine]
     S: type[RailStation | BusStop | SeaStop]
     B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
 
-    def __init__(self, config: Config, file_path: Path):
+    def __init__(self, config: Config):
+        BaseContext.__init__(self)
         Source.__init__(self, config)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return
 
-        with file_path.open() as f:
+        with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 
         company = self.C.new(self, name=file.company_name)
@@ -86,6 +92,17 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 self.B(self, line_node).connect(
                     *stations, forward_label=line.forward_label, backward_label=line.backward_label
                 )
+
+            rich.print(RESULT + f"{file.company_name} {line.code or line.name} has {len(stations)} stations")
+
+        for code, (x, z) in file.coords.items():
+            self.S.new(
+                self,
+                codes={code},
+                company=company,
+                world="New",
+                coordinates=(x, z),
+            )
 
         self.save_to_cache(config, self.g)
 

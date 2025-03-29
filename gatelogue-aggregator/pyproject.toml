@@ -29,7 +29,8 @@ dependencies = [
   "BeautifulSoup4",
   "rustworkx",
   "pydot",
-  "pillow"
+  "pillow",
+  "pyyaml"
 ]
 
 [project.urls]

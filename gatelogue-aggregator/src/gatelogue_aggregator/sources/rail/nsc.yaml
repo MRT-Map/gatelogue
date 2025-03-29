@@ -1,0 +1,172 @@
+company_name: Network South Central
+colour: "#cc0000"
+
+lines:
+  - name: Intercity 1
+    stations: [
+    "Kolpino",
+    "Utopia",
+    "Matheson - Old Street",
+    "Siletz",
+    "Royal Ferry Victoria",
+    "Oakley - Exchange",
+    "Segville - International",
+    "Musique East",
+    "Musique West",
+    "Aprix",
+    "Glenbrook",
+    ]
+
+  - name: Intercity 2
+    stations: [
+      "Royal Ferry Paddington",
+      "Subryanville",
+      "Royal Ferry - Broad Street",
+      "Siletz",
+      "San Renoldi",
+      "Thunderbird",
+      "Freedon West",
+      "Freedon Exchange",
+    ]
+  - name: Intercity 2
+    stations: [
+    "Royal Ferry Victoria",
+    "Siletz",
+    ]
+
+  - name: Intercity 2N
+    stations: [
+      "Freedon Exchange",
+      "Freedon Central",
+      "Freedon City Center",
+      "Freedon Market",
+      "Freedon Airfield",
+      "Freedon International",
+      "Northberg Central",
+    ]
+
+  - name: Intercity 2S
+    stations: [
+      "Freedon Exchange",
+      "Freedon Edo",
+      "Izumo Old Town",
+      "Izumo South",
+      "Izumo Mall",
+      "Izumo Backlands",
+      "St.Roux",
+    ]
+
+  - name: Intercity 3
+    stations: [
+      "Siletz",
+      "Loundon",
+      "Dabecco Main",
+      "Dabecco Exchange",
+      "Woodsbane",
+      "Lochminehead - Trijunction",
+      "Rochshire South",
+      "Rochshire Central",
+      "Rochshire North",
+      "Grayzen Airport",
+      "Grayzen Central",
+    ]
+
+  - name: Intercity 4
+    stations: [
+      "Royal Ferry Victoria",
+      "Siletz",
+      "Royalston",
+      "Scarborough North",
+      "Scarborough Central",
+      "Stratos",
+      "Rockham - Eamington West",
+      "Rockham Central",
+      "Haibian North",
+      "Haibian Hall",
+      "Haibian Central",
+      "Sydney",
+      "Astoria",
+    ]
+
+  - name: Commuter 1
+    stations: [
+      "Central City",
+      "Government Circle",
+      "Mountainside",
+      "City Hall",
+      "Royal Ferry Victoria",
+      "Dabecco East",
+      "Siletz",
+    ]
+
+  - name: Commuter 2
+    stations: [
+      "Central City",
+      "Greenplain Heights",
+      "Bourbon Street",
+      "Kensington",
+      "Oakley - Exchange",
+      "Dabecco West",
+      "Siletz",
+    ]
+
+  - name: Commuter 3
+    stations: [
+      "Siletz",
+      "San Dzobiak Union",
+      "Siletz Salvador Station",
+    ]
+
+  - name: Commuter 5
+    stations: [
+      "Royal Ferry Victoria",
+      "Kensington",
+      "UCWTIA",
+      "Little Italy",
+      "Formosa Harbor",
+      "Mount Exclave",
+      "League of Cities",
+      "Danielston Paisley Place",
+      "Danielston South",
+    ]
+
+  - name: High Speed 1
+    stations: [
+      "Central City",
+      "Royal Ferry - Broad Street",
+      "Siletz",
+      "Matheson Junction",
+      "Utopia",
+      "Kolpino",
+    ]
+
+  - name: High Speed 2
+    stations: [
+      "Central City",
+      "Royal Ferry - Broad Street",
+      "Segville",
+      "Evella",
+    ]
+
+  - name: Central Cities Rail Loop
+    stations: [
+      "Royal Ferry Victoria",
+      "Dabecco Exchange",
+      "Sylvania",
+      "Lochminehead - Trijunction",
+      "MRT Land",
+      "Rochshire Central",
+      "Grayzen Transit Hub",
+      "Central City",
+      "Spruce Neck North",
+      "Ashmore",
+      "Mons Pratus",
+      "Xilia",
+      "42",
+      "Formosa Northern",
+      "Formosa City Hall",
+      "UCWTIA",
+      "Greenmount",
+      "PieVille",
+      "Kensington",
+    ]
