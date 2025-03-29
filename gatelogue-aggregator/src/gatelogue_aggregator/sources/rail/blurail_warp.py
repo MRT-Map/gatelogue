@@ -41,6 +41,8 @@ class BluRailWarp(RailSource):
                 code += "11"
             elif code == "STE" and match.group(1) == "2":
                 code = "SNE"
+            elif code == "ROS" and match.group(1) == "7":
+                code += "7"
             RailStation.new(
                 self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )

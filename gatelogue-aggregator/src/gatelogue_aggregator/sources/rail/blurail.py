@@ -64,6 +64,8 @@ class BluRail(RailSource):
                     code += "1"
                 elif code == "MCN" and line_code in ("11", "6", "20"):
                     code += "11"
+                elif code == "ROS" and line_code == "7":
+                    code += "7"
                 codes = {
                     "ILI": {"ILI", "ITC"},
                     "ITC": {"ILI", "ITC"},
