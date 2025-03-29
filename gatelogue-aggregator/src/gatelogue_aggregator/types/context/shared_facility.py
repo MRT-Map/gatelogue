@@ -207,15 +207,9 @@ class SharedFacilityContext(BaseContext, Source):
             station1 = next((a for a in self.g.nodes() if is_desired_station(a, company1, station1_name)), None)
             station2 = next((a for a in self.g.nodes() if is_desired_station(a, company2, station2_name)), None)
             if station1 is None:
-                rich.print(
-                    ERROR
-                    + f"{company1} {station1_name} does not exist"
-                )
+                rich.print(ERROR + f"{company1} {station1_name} does not exist")
                 continue
             if station2 is None:
-                rich.print(
-                    ERROR
-                    + f"{company2} {station2_name} does not exist"
-                )
+                rich.print(ERROR + f"{company2} {station2_name} does not exist")
                 continue
             station1.connect(self, station2, SharedFacility())
