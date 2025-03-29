@@ -14,6 +14,7 @@ from gatelogue_aggregator.types.node.rail import (
     RailStation,
 )
 from gatelogue_aggregator.types.source import Source
+from gatelogue_aggregator.utils import get_stn
 
 
 class NFLR(RailSource):
@@ -52,13 +53,6 @@ class NFLR(RailSource):
 
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(s[0], s[3]), lines))
-
-        def get_stn(sts, name):
-            st = next((st for st in sts if st.name.v == name), None)
-            if st is None:
-                msg = f"{name} not in {','.join(s.name.v for s in sts)}"
-                raise ValueError(msg)
-            return st
 
         for line_name, line_colour, w, _ in lines:
             df = pd.read_csv(cache / line_name)

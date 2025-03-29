@@ -1,13 +1,10 @@
-from pathlib import Path
-from typing import Literal
-import uuid
+from __future__ import annotations
 
-import rich
+from typing import TYPE_CHECKING
 
-from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
+import msgspec
+
+from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
     RailLine,
@@ -15,9 +12,34 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
 from gatelogue_aggregator.types.source import Source
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from gatelogue_aggregator.types.config import Config
+
+
+class YamlLine(msgspec.Struct):
+    name: str
+    stations: list[str | tuple[str, str]]
+
+    forward_label: str = None
+    backward_label: str = None
+    custom_routing: bool = False
+    colour: str | None = None
+    mode: str | None = None
+    code: str | None = None
+
+
+class Yaml(msgspec.Struct):
+    company_name: str
+    coords: dict[str, tuple[int, int]]
+    lines: list[YamlLine]
+
+    colour: str | None = None
+    mode: str = "warp"
 
 
 class Yaml2Source(RailSource, BusSource, SeaSource):
@@ -27,6 +49,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
     C: type[RailCompany | BusCompany | SeaCompany]
     L: type[RailLine | BusLine | SeaLine]
     S: type[RailStation | BusStop | SeaStop]
+    B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
 
     def __init__(self, config: Config, file_path: Path):
         Source.__init__(self, config)
@@ -35,59 +58,36 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
             return
 
         with file_path.open() as f:
-            file = yaml
+            file = msgspec.yaml.decode(f.read(), type=Yaml)
 
-        company = self.C.new(self, name="SEAT")
-        station_names = []
+        company = self.C.new(self, name=file.company_name)
 
-        html = get_wiki_html("Seoland Economically/Ecologically Advanced Transit", config)
-        first_seen = False
-        for h3 in html.find_all("h3"):
-            line_name: str = h3.find("span", class_="mw-headline").string
-            if not first_seen:
-                if "Savagebite" in line_name:
-                    first_seen = True
-                else:
-                    continue
-
-            line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="warp", colour="#000080")
-
-            line_table = h3.find_next("table")
-            if line_table is None or line_table.caption is None or "Line" not in line_table.caption.string:
-                continue
-
-            stations = []
-            for tr in line_table("tr")[1:]:
-                if "Open" not in next(tr("td")[3].strings):
-                    continue
-                name = tr("td")[1].string.strip().removesuffix(" Station")
-
-                station_names.append(name)
-                station = RailStation.new(self, codes={name}, name=name, company=company)
-                stations.append(station)
-
-            if len(stations) == 0:
-                continue
-
-            RailLineBuilder(self, line).connect(*stations)
-
-            rich.print(RESULT + f"SEAT Line {line_name} has {len(stations)} stations")
-
-        ###
-
-        names = []
-        for warp in warps(uuid.UUID("02625b8c-b2a5-4999-8756-855831976411"), config):
-            if not warp["name"].lower().startswith("seatr"):
-                continue
-            warp_name = warp["name"][5:]
-            name = {"niz": "New Izumo", "newgen": "New Genisys"}.get(
-                warp_name,
-                difflib.get_close_matches(warp_name, station_names, 1, 0.0)[0],
+        for line in file.lines:
+            line_node = self.L.new(
+                self,
+                code=line.code or line.name,
+                name=line.name,
+                mode=line.mode or file.mode,
+                colour=line.colour or file.colour,
+                company=company,
             )
-            if name in names or name is None:
-                continue
-
-            RailStation.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
-            names.append(name)
+            stations = [
+                self.S.new(
+                    self,
+                    codes={a[0]} if isinstance(a, tuple) else a,
+                    name=a[1] if isinstance(a, tuple) else a,
+                    company=company,
+                )
+                for a in line.stations
+            ]
+            if line.custom_routing:
+                self.custom_routing(line_node, stations)
+            else:
+                self.B(self, line_node).connect(
+                    *stations, forward_label=line.forward_label, backward_label=line.backward_label
+                )
 
         self.save_to_cache(config, self.g)
+
+    def custom_routing(self, line_node: RailLine | BusLine | SeaLine, stations: list[RailStation | BusStop | SeaStop]):
+        raise NotImplementedError
