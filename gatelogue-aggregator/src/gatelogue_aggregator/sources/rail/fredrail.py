@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from gatelogue_aggregator.sources.yaml2source import Yaml2Source
-from gatelogue_aggregator.types.node.bus import BusLine, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailStation
-from gatelogue_aggregator.types.node.sea import SeaLine, SeaStop
+
+if TYPE_CHECKING:
+    from gatelogue_aggregator.types.node.bus import BusLine, BusStop
+    from gatelogue_aggregator.types.node.sea import SeaLine, SeaStop
 
 
 class FredRail(Yaml2Source):
