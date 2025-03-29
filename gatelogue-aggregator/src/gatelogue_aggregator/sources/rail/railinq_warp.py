@@ -52,9 +52,10 @@ class RaiLinQWarp(RailSource):
             "Verdantium Fenwick Square": "Fenwick Central",
             "Vergil IKEA": "Covina IKEA",
             "savacaci": "Savacaci",
+            "Orio&Waterville": "Orio & Waterville",
         }
 
-        names = ["Amestris West"]
+        names = ["Amestris West", "Washingcube East", "Washingcube West"]
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
             if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
                 continue

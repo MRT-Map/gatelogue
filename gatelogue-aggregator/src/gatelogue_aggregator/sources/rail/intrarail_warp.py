@@ -31,6 +31,7 @@ class IntraRailWarp(RailSource):
             "Schillerton Division Street Terminal",
             "Mons Pratus",
             "New Stone City South",
+            "Zerez Thespe Railway Station",
         ]
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
             if not warp["name"].startswith("ItR"):
@@ -47,6 +48,10 @@ class IntraRailWarp(RailSource):
             name = {
                 "Miu Wan TTL Airport Terminal 1": "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
                 "Miu Wan TTL Airport Terminal 2": "Miu Wan Tseng Tsz Leng International Airport Terminal 2",
+                "Upton Ulster Mesah Central Station": "Upton Ulster Mensah Central Station",
+                "Deadbush Blackwater": "Deadbush Blackwater / WMI",
+                "Murrville Arcadia International Airport": "Murrville-Arcadia International Airport",
+                "Fortaleza": "Fortaleza Marina",
             }.get(name, name)
             if name in names:
                 continue
