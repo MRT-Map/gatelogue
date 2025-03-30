@@ -86,7 +86,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
     """Name of the line"""
     colour: Sourced[str] | None = None
     """Colour of the line (on a map)"""
-    mode: Sourced[Literal["warp", "cart", "traincart", "vehicles"]] | None = None
+    mode: Sourced[RailMode] | None = None
     """Type of rail or rail technology used on the line"""
 
     company: Sourced[int] = None
@@ -104,7 +104,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         company: RailCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: Literal["warp", "cart", "traincart", "vehicles"] | None = None,
+        mode: RailMode | None = None,
         ref_station: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -248,3 +248,6 @@ class RailConnection(Connection[RailSource, RailLine]):
 
 class RailLineBuilder(LineBuilder[RailSource, RailLine, RailStation]):
     CnT = RailConnection
+
+
+type RailMode = Literal["warp", "cart", "traincart", "vehicles"]

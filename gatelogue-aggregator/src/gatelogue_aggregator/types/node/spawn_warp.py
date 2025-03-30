@@ -16,7 +16,7 @@ class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
 
     name: str
     """Name of the spawn warp"""
-    warp_type: Literal["premier", "terminus", "portal", "misc"]
+    warp_type: WarpType
     """The type of warp"""
 
     # noinspection PyMethodOverriding
@@ -26,7 +26,7 @@ class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
         ctx: SpawnWarpSource,
         *,
         name: str,
-        warp_type: Literal["premier", "terminus", "portal", "misc"],
+        warp_type: WarpType,
         world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ):
@@ -71,4 +71,4 @@ class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
         return NodeRef(SpawnWarp, name=self.name)
 
 
-Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
+type WarpType = Literal["premier", "terminus", "portal", "misc"]

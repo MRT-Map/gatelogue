@@ -84,4 +84,4 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         return NodeRef(Town, name=self.name)
 
 
-Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
+type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]

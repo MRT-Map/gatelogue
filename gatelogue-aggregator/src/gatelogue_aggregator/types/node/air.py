@@ -31,7 +31,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
 
     codes: set[str]
     """Unique flight code(s). **2-letter airline prefix not included**"""
-    mode: Sourced[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]] | None = None
+    mode: Sourced[PlaneMode] | None = None
     """Type of air vehicle or technology used on the flight"""
 
     # noinspection PyDataclass
@@ -48,7 +48,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         *,
         codes: set[str],
         airline: AirAirline,
-        mode: Literal["helicopter", "seaplane", "warp plane", "traincarts plane"] | None = None,
+        mode: PlaneMode | None = None,
         gates: Iterable[AirGate] | None = None,
     ):
         self = super().new(ctx, codes=codes)
@@ -156,7 +156,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
     """Name of the airport"""
     link: Sourced[str] | None = None
     """Link to the MRT Wiki page for the airport"""
-    modes: Sourced[set[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]]] | None = None
+    modes: Sourced[set[PlaneMode]] | None = None
     """Modes offered by the airport"""
 
     gates: list[Sourced[int]] = None
@@ -171,7 +171,7 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         code: str,
         name: str | None = None,
         link: str | None = None,
-        modes: set[Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]] | None = None,
+        modes: set[PlaneMode] | None = None,
         gates: Iterable[AirGate] | None = None,
         world: World | None = None,
         coordinates: tuple[int, int] | None = None,
@@ -424,3 +424,6 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
         if s is None:
             return None
         return AIRLINE_ALIASES.get(str(s).strip(), str(s))
+
+
+type PlaneMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]

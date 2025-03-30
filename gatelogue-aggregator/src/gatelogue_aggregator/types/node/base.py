@@ -288,4 +288,4 @@ class NodeRef[T: Node]:
         return has_match
 
 
-World = Literal["New", "Old", "Space"]
+type World = Literal["New", "Old", "Space"]

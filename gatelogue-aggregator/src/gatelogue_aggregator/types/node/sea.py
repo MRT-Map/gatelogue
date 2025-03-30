@@ -86,7 +86,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
     """Name of the line"""
     colour: Sourced[str] | None = None
     """Colour of the line (on a map)"""
-    mode: Sourced[Literal["ferry", "cruise"]] | None = None
+    mode: Sourced[SeaMode] | None = None
     """Type of boat used on the line"""
 
     company: Sourced[int] = None
@@ -104,7 +104,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         company: SeaCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: Literal["ferry", "cruise"] | None = None,
+        mode: SeaMode | None = None,
         ref_stop: SeaStop | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -243,3 +243,6 @@ class SeaConnection(Connection[SeaSource, SeaLine]):
 
 class SeaLineBuilder(LineBuilder[SeaSource, SeaLine, SeaStop]):
     CnT = SeaConnection
+
+
+type SeaMode = Literal["ferry", "cruise"]
