@@ -1,0 +1,24 @@
+on:
+  pull_request
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gatelogue-aggregator
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pypa/hatch@install
+      - run: hatch run gatelogue-aggregator run -o "dist.json"
+      - run: hatch run gatelogue-aggregator schema -o "schema.json"
+      # upload dist.json and schema.json as artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: schema
+          path: schema.json
