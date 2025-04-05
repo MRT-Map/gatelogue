@@ -9,18 +9,25 @@ updates:
     directory: "/gatelogue-aggregator" # Location of package manifests
     schedule:
       interval: "weekly"
+      time: "00:00"
+    versioning-strategy: "increase"
     target-branch: "main"
   - package-ecosystem: "npm"
     directory: "/gatelogue-client"
     schedule:
       interval: "weekly"
+      time: "00:00"
+    versioning-strategy: "increase"
     target-branch: "main"
   - package-ecosystem: "cargo"
     directory: "/gatelogue-types-rs"
     schedule:
       interval: "weekly"
+      time: "00:00"
+    versioning-strategy: "increase"
     target-branch: "main"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      time: "00:00"
