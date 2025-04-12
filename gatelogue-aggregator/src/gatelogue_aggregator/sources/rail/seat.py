@@ -1,9 +1,5 @@
-import difflib
-import uuid
-
 import rich
 
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
@@ -60,25 +56,11 @@ class SEAT(RailSource):
             if len(stations) == 0:
                 continue
 
+            if line.name == "Cross Continental Line":
+                RailLineBuilder(self, line).connect(*stations, between=(None, "Maple St."))
+                RailLineBuilder(self, line).connect(*stations, between=("UTCWIA", None))
             RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"SEAT Line {line_name} has {len(stations)} stations")
-
-        ###
-
-        names = []
-        for warp in warps(uuid.UUID("02625b8c-b2a5-4999-8756-855831976411"), config):
-            if not warp["name"].lower().startswith("seatr"):
-                continue
-            warp_name = warp["name"][5:]
-            name = {"niz": "New Izumo", "newgen": "New Genisys"}.get(
-                warp_name,
-                difflib.get_close_matches(warp_name, station_names, 1, 0.0)[0],
-            )
-            if name in names or name is None:
-                continue
-
-            RailStation.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
-            names.append(name)
 
         self.save_to_cache(config, self.g)

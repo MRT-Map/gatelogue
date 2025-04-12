@@ -30,7 +30,6 @@ class YamlLine(msgspec.Struct):
 
     forward_label: str = None
     backward_label: str = None
-    custom_routing: bool = False
     colour: str | None = None
     mode: str | None = None
     code: str | None = None
@@ -86,9 +85,9 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 )
                 for a in line.stations
             ]
-            if line.custom_routing:
+            try:
                 self.custom_routing(line_node, stations)
-            else:
+            except NotImplementedError:
                 self.B(self, line_node).connect(
                     *stations, forward_label=line.forward_label, backward_label=line.backward_label
                 )
