@@ -25,7 +25,6 @@ class SEAT(RailSource):
             return
 
         company = RailCompany.new(self, name="SEAT")
-        station_names = []
 
         html = get_wiki_html("Seoland Economically/Ecologically Advanced Transit", config)
         first_seen = False
@@ -49,7 +48,6 @@ class SEAT(RailSource):
                     continue
                 name = tr("td")[1].string.strip().removesuffix(" Station")
 
-                station_names.append(name)
                 station = RailStation.new(self, codes={name}, name=name, company=company)
                 stations.append(station)
 
