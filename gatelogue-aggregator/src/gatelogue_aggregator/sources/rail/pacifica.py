@@ -42,10 +42,14 @@ class Pacifica(RailSource):
 
             stations = []
             for name in match.group("stations").split("\n|-\n"):
-                if name.endswith("*"):
-                    name = name.removesuffix("''*").removeprefix("''")
+                if "No Station" in name:
+                    continue
+                name = name.removeprefix("|")
+                if "*" in name:
+                    name = name.strip("*'")
 
                 station = RailStation.new(self, codes={name}, name=name, company=company)
+                print(name)
                 stations.append(station)
 
             if len(stations) == 0:

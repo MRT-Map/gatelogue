@@ -56,7 +56,7 @@ class SEAT(RailSource):
 
             if line.name == "Cross Continental Line":
                 RailLineBuilder(self, line).connect(*stations, between=(None, "Maple St."))
-                RailLineBuilder(self, line).connect(*stations, between=("UTCWIA", None))
+                RailLineBuilder(self, line).connect(*stations, between=("UCWTIA", None))
             RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"SEAT Line {line_name} has {len(stations)} stations")
