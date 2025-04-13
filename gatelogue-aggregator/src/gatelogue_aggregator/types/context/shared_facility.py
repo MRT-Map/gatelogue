@@ -31,6 +31,7 @@ class SharedFacilityContext(BaseContext, Source):
         wzr = "West Zeta Rail"
         seat = "SEAT"
         pac = "Pacifica"
+        flrk = "FLR Kazeshima/Shui Chau"
 
         for company1, station1_name, company2, station2_name in (
             (nflr, "Dand Grand Central", intra, "Dand Grand Central"),
@@ -211,6 +212,9 @@ class SharedFacilityContext(BaseContext, Source):
             (intra, "Birdhall Transit Hub", pac, "Birdhall"),
             (nflr, "Deadbush International Airport", pac, "Deadbush - DBI"),
             (mrt, "New Chandigarh West", pac, "New Chandigarh"),
+            (flrk, "Dirtia Bridge", nflr, "Dirtia Bridge"),
+            (flrk, "Chūōkochō", nflr, "Chūōkochō"),
+            (flrk, "Sakyūchō", nflr, "Sakyūchō"),
         ):
 
             def is_desired_station(a, company, station_name):

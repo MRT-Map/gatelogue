@@ -1,0 +1,82 @@
+company_name: FLR Kazeshima/Shui Chau
+mode: "traincarts"
+
+lines:
+  - name: K1
+    code: K1
+    colour: "#c3f"
+    stations:
+      - [K100, Setsuritsuchō]
+      - [K101, Konranchō]
+      - [K102, Owomachi]
+      - [K103, Sakyūchō]
+  - name: K2
+    code: K2
+    colour: "#f80"
+    stations:
+      - [K200, Chūōkochō]
+      - [K201, Tōkochō]
+      - [K202, Takimachi]
+      - [K203, Takagawaramachi]
+      - [K204, Sonzaishinaimachi]
+      - [K205, Nekotoinumachi]
+  - name: K3
+    code: K3
+    colour: "#fc0"
+    stations:
+      - [K302, Aomi]
+      - [K303, Saikochō]
+      - [K304, Daremachi]
+      - [K305, Sakyūchō]
+      - [K306, Tsukihama]
+      - [K307, Nekotoinumachi]
+      - [K308, Sonzaishinaimachi]
+      - [K309, Takebashi]
+      - [K310, Kuzuhamachi]
+      - [K311, Kuzuha Airport]
+  - name: K6
+    code: K6
+    colour: "#f5c"
+    stations:
+      - [K603, Kazetera]
+      - [K604, Hakobori]
+      - [K607, Sha Tsui]
+      - [K608, Dirtia Bridge]
+  - name: C1
+    code: C1
+    colour: "#808"
+    stations:
+      - [C100, Sha Tsui]
+      - [C101A, Ho Kok West]
+      - [C101, Ho Kok]
+
+coords:
+  K100: [-26414, 16426]
+  K101: [-26574, 16429]
+  K102: [-26770, 16428]
+  K103: [-26972, 16431]
+  K200: [-26668, 16186]
+  K201: [-26580, 16236]
+  K202: [-26541, 16399]
+  K203: [-26542, 16595]
+  K204: [-26615, 16655]
+  K205: [-26682, 16569]
+  K302: [-26841, 15995]
+  K303: [-26914, 16127]
+  K304: [-26963, 16309]
+  K306: [-26832, 16496]
+  K309: [-26497, 16656]
+  K310: [-26349, 16723]
+  K311: [-26250, 16805]
+  K603: [-26628, 16326]
+  K604: [-26798, 16188]
+  K607: [-27784, 16181]
+  K608: [-28024, 16183]
+  C101A: [-27988, 16100]
+  C101: [-27899, 15969]
+
+merge_codes:
+  - [K205, K307]
+  - [K204, K308]
+  - [K103, K305]
+  - [K307, C100]

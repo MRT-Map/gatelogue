@@ -39,6 +39,7 @@ class Yaml(msgspec.Struct):
     company_name: str
     lines: list[YamlLine] = msgspec.field(default_factory=list)
     coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
+    merge_codes: list[set[str]] = msgspec.field(default_factory=list)
 
     colour: str | None = None
     mode: str = "warp"
@@ -86,7 +87,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 for a in line.stations
             ]
             try:
-                self.custom_routing(line_node, stations)
+                self.custom_routing(line_node, stations, line)
             except NotImplementedError:
                 self.B(self, line_node).connect(
                     *stations, forward_label=line.forward_label, backward_label=line.backward_label
@@ -103,7 +104,19 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 coordinates=(x, z),
             )
 
+        for codes in file.merge_codes:
+            self.S.new(
+                self,
+                codes=codes,
+                company=company,
+            )
+
         self.save_to_cache(config, self.g)
 
-    def custom_routing(self, line_node: RailLine | BusLine | SeaLine, stations: list[RailStation | BusStop | SeaStop]):
+    def custom_routing(
+        self,
+        line_node: RailLine | BusLine | SeaLine,
+        stations: list[RailStation | BusStop | SeaStop],
+        line_yaml: YamlLine,
+    ):
         raise NotImplementedError
