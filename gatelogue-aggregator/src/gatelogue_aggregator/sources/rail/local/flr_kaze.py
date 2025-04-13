@@ -1,9 +1,9 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.bus import BusLine, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
-from gatelogue_aggregator.types.node.sea import SeaLine, SeaStop
 
 
 class FLRKaze(Yaml2Source, RailSource):

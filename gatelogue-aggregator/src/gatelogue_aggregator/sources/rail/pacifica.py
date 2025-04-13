@@ -3,7 +3,7 @@ import re
 import rich
 
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
+from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
@@ -44,11 +44,11 @@ class Pacifica(RailSource):
             for name in match.group("stations").split("\n|-\n"):
                 if "No Station" in name:
                     continue
-                name = name.removeprefix("|")
+                name = name.removeprefix("|")  # noqa: PLW2901
                 if "*" in name:
-                    name = name.strip("*'")
+                    name = name.strip("*'")  # noqa: PLW2901
 
-                name = {
+                name = {  # noqa: PLW2901
                     "Janghwa": "Janghwa Northern Union",
                     "Janghwa Northern": "Janghwa Northern Union",
                     "Utopia": "Utopia - AFK Transit Hub",

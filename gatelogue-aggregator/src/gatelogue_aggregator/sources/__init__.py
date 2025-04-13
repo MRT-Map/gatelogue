@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.source import Source
 
@@ -23,6 +22,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.fredrail import FredRail
     from gatelogue_aggregator.sources.rail.intrarail import IntraRail
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
+    from gatelogue_aggregator.sources.rail.local.flr_kaze import FLRKaze
     from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
     from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
     from gatelogue_aggregator.sources.rail.nflr import NFLR
@@ -44,7 +44,6 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.wiki_mrt import WikiMRT
     from gatelogue_aggregator.sources.rail.wzr import WZR
     from gatelogue_aggregator.sources.rail.wzr_warp import WZRWarp
-    from gatelogue_aggregator.sources.rail.local.flr_kaze import FLRKaze
     from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
     from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
     from gatelogue_aggregator.sources.sea.cfc import CFC
