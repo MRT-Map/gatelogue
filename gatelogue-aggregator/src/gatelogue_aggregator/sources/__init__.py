@@ -27,6 +27,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
     from gatelogue_aggregator.sources.rail.nflr import NFLR
     from gatelogue_aggregator.sources.rail.nflr_warp import NFLRWarp
+    from gatelogue_aggregator.sources.rail.nrn import NRN
     from gatelogue_aggregator.sources.rail.nsc import NSC
     from gatelogue_aggregator.sources.rail.nsc_warp import NSCWarp
     from gatelogue_aggregator.sources.rail.pacifica import Pacifica
@@ -79,6 +80,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         MRTTransit,
         NFLR,
         NFLRWarp,
+        NRN,
         NSC,
         NSCWarp,
         Pacifica,

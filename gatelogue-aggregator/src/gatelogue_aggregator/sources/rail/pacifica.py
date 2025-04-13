@@ -34,7 +34,7 @@ class Pacifica(RailSource):
             re.compile(r"(?s){\| class=\"wikitable\".*?\n\|\+\n!(?P<name>.*?)\n\|-\n(?P<stations>.*?)\n\|}"), text
         ):
             line_name = match.group("name")
-            if "Planned" in line_name:
+            if "Planned" in line_name or "Colwyn" in line_name:
                 continue
             line = RailLine.new(
                 self, code=line_name, name=line_name, company=company, mode="traincart", colour="#008080"
@@ -48,8 +48,21 @@ class Pacifica(RailSource):
                 if "*" in name:
                     name = name.strip("*'")
 
+                name = {
+                    "Janghwa": "Janghwa Northern Union",
+                    "Janghwa Northern": "Janghwa Northern Union",
+                    "Utopia": "Utopia - AFK Transit Hub",
+                    "Espil": "Espil - Ricola Terminal",
+                    "Espil - Atvix Centre": "Espil - Ricola Terminal",
+                    "Evella": "Evella Airport",
+                    "Lacelde": "Laclede",
+                    "Lacelde East": "Laclede East",
+                    "West Calbar": "West Calbar - Forest Landing",
+                    "Ilirea - SunrisePark - South": "Ilirea - Sunrise Park - South",
+                    "Pasadena - Voltsphere Union Sta.": "Pasadena - Voltsphere Union",
+                }.get(name, name)
+
                 station = RailStation.new(self, codes={name}, name=name, company=company)
-                print(name)
                 stations.append(station)
 
             if len(stations) == 0:

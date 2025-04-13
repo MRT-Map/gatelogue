@@ -1,0 +1,26 @@
+company_name: Nobody's Rail Network
+colour: "#ff8000"
+mode: "traincarts"
+
+lines:
+  - name: Line 1
+    code: 1
+    stations:
+      - Everton
+      - Nobopolis
+      - Mudd Springs
+      - Victorville
+      - Bluff
+      - ,
+      - Peach Bay
+      - Inkwell
+
+coords:
+  Inkwell: [24930, 26310]
+  Peach Bay: [22932, 26609]
+  ",": [22145, 25697]
+  Bluff: [19611, 26373]
+  Victorville: [18855, 27457]
+  Mudd Springs: [18267, 27535]
+  Nobopolis: [16317, 26809]
+  Everton: [14085, 27119]
