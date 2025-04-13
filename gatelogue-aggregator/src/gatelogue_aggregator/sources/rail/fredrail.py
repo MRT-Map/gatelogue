@@ -21,7 +21,7 @@ class FredRail(Yaml2Source, RailSource):
     S = RailStation
     B = RailLineBuilder
 
-    def custom_routing(self, line_node: RailLine | BusLine | SeaLine, stations: list[RailStation | BusStop | SeaStop]):
+    def custom_routing(self, line_node: RailLine | BusLine | SeaLine, stations: list[RailStation | BusStop | SeaStop], _):
         if line_node.name.v == "New Jerseyan":
             forward_label = "towards Boston Waterloo"
             backward_label = "towards Rattlerville Central"
