@@ -4,14 +4,14 @@ mode: "traincarts"
 
 lines:
   - name: Line 1
-    code: 1
+    code: "1"
     stations:
       - Everton
       - Nobopolis
       - Mudd Springs
       - Victorville
       - Bluff
-      - ,
+      - ","
       - Peach Bay
       - Inkwell
 
