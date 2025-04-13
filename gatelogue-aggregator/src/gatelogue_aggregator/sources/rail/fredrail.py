@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
 
 if TYPE_CHECKING:
@@ -21,7 +21,12 @@ class FredRail(Yaml2Source, RailSource):
     S = RailStation
     B = RailLineBuilder
 
-    def custom_routing(self, line_node: RailLine | BusLine | SeaLine, stations: list[RailStation | BusStop | SeaStop], _):
+    def custom_routing(
+        self,
+        line_node: RailLine | BusLine | SeaLine,
+        stations: list[RailStation | BusStop | SeaStop],
+        line_yaml: YamlLine,
+    ):
         if line_node.name.v == "New Jerseyan":
             forward_label = "towards Boston Waterloo"
             backward_label = "towards Rattlerville Central"

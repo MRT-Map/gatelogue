@@ -26,6 +26,8 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
     """List of IDs of all :py:class:`SeaLine` s the company operates"""
     stops: list[Sourced[int]] = None
     """List of all :py:class:`SeaStop` s the company's lines stop at"""
+    local: bool = False
+    """Whether the company operates within the city, e.g. a local ferry line"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -36,8 +38,9 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
         name: str,
         lines: Iterable[SeaLine] | None = None,
         stops: Iterable[SeaStop] | None = None,
+        local: bool = False,
     ):
-        self = super().new(ctx, name=name)
+        self = super().new(ctx, name=name, local=local)
         if lines is not None:
             for line in lines:
                 self.connect(ctx, line)
@@ -56,7 +59,7 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
 
     @override
     def merge_attrs(self, ctx: SeaSource, other: Self):
-        pass
+        self.local = self.local or other.local
 
     @override
     def merge_key(self, ctx: SeaSource) -> str:

@@ -215,6 +215,7 @@ class SharedFacilityContext(BaseContext, Source):
             (flrk, "Dirtia Bridge", nflr, "Dirtia Bridge"),
             (flrk, "Chūōkochō", nflr, "Chūōkochō"),
             (flrk, "Sakyūchō", nflr, "Sakyūchō"),
+            (flrk, "Aomi", nflr, "Aomi"),
         ):
 
             def is_desired_station(a, company, station_name):

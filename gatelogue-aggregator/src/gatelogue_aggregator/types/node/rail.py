@@ -26,6 +26,8 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
     """List of IDs of all :py:class:`RailLine` s the company operates"""
     stations: list[Sourced[int]] = None
     """List of all :py:class:`RailStation` s the company's lines stop at"""
+    local: bool = False
+    """Whether the company operates within the city, e.g. a metro system"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -36,8 +38,9 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
         name: str,
         lines: Iterable[RailLine] | None = None,
         stations: Iterable[RailStation] | None = None,
+        local: bool = False,
     ):
-        self = super().new(ctx, name=name)
+        self = super().new(ctx, name=name, local=local)
         if lines is not None:
             for line in lines:
                 self.connect(ctx, line)
@@ -56,7 +59,7 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
 
     @override
     def merge_attrs(self, ctx: RailSource, other: Self):
-        pass
+        self.local = self.local or other.local
 
     @override
     def merge_key(self, ctx: RailSource) -> str:

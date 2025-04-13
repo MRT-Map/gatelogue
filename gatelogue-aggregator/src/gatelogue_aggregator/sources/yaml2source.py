@@ -41,6 +41,7 @@ class Yaml(msgspec.Struct):
     coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
     merge_codes: list[set[str]] = msgspec.field(default_factory=list)
 
+    local: bool = False
     colour: str | None = None
     mode: str = "warp"
     world: str = "New"
@@ -66,7 +67,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
         with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 
-        company = self.C.new(self, name=file.company_name)
+        company = self.C.new(self, name=file.company_name, local=file.local)
 
         for line in file.lines:
             line_node = self.L.new(

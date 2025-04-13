@@ -26,6 +26,8 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
     """List of IDs of all :py:class:`BusLine` s the company operates"""
     stops: list[Sourced[int]] = None
     """List of all :py:class:`BusStop` s the company's lines stop at"""
+    local: bool = False
+    """Whether the company operates within the city, e.g. a city bus network"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -36,8 +38,9 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
         name: str,
         lines: Iterable[BusLine] | None = None,
         stops: Iterable[BusStop] | None = None,
+        local: bool = False,
     ):
-        self = super().new(ctx, name=name)
+        self = super().new(ctx, name=name, local=local)
         if lines is not None:
             for line in lines:
                 self.connect(ctx, line)
@@ -56,7 +59,7 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
 
     @override
     def merge_attrs(self, ctx: BusSource, other: Self):
-        pass
+        self.local = self.local or other.local
 
     @override
     def merge_key(self, ctx: BusSource) -> str:

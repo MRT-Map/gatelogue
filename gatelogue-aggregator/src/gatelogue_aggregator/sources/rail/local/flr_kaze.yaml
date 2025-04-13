@@ -1,5 +1,6 @@
 company_name: FLR Kazeshima/Shui Chau
 mode: "traincarts"
+local: true
 
 lines:
   - name: K1
