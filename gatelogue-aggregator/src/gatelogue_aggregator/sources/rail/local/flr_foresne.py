@@ -39,4 +39,5 @@ class FLRForesne(Yaml2Source, RailSource):
                 backward_label=line_yaml.forward_label,
                 one_way=True,
             )
-        raise NotImplementedError
+        else:
+            raise NotImplementedError
