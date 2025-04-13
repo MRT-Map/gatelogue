@@ -1,0 +1,33 @@
+company_name: FLR Shenghua
+mode: "cart"
+local: true
+
+lines:
+  - name: S1
+    code: S1
+    colour: "#5c8"
+    stations:
+      - Ferry Terminal
+      - Shenghua South
+      - City Hall
+  - name: S2
+    code: S2
+    mode: "warp"
+    colour: "#3cf"
+    stations:
+      - Ottia Avenue
+      - Goff Avenue
+  - name: S3
+    code: S3
+    colour: "#c33"
+    stations:
+      - Shenghua South
+      - May 29th
+
+coords:
+  Ferry Terminal: [-26300, 14934]
+  Shenghua South: [-26300, 14809]
+  City Hall: [-26296, 14672]
+  May 29th: [-26178, 14724]
+  Ottia Avenue: [-26374, 14700]
+  Goff Avenue: [-26374, 14563]

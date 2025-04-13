@@ -1,11 +1,13 @@
 company_name: FLR Kazeshima/Shui Chau
-mode: "traincarts"
+mode: "traincart"
 local: true
 
 lines:
   - name: K1
     code: K1
-    colour: "#c3f"
+    colour: "#c33"
+    forward_label: Westbound
+    backward_label: Eastbound
     stations:
       - [K100, Setsuritsuchō]
       - [K101, Konranchō]
@@ -14,6 +16,8 @@ lines:
   - name: K2
     code: K2
     colour: "#f80"
+    forward_label: Southbound
+    backward_label: Northbound
     stations:
       - [K200, Chūōkochō]
       - [K201, Tōkochō]
@@ -24,6 +28,8 @@ lines:
   - name: K3
     code: K3
     colour: "#fc0"
+    forward_label: Southbound
+    backward_label: Northbound
     stations:
       - [K302, Aomi]
       - [K303, Saikochō]
@@ -38,6 +44,8 @@ lines:
   - name: K6
     code: K6
     colour: "#f5c"
+    forward_label: Westbound
+    backward_label: Eastbound
     stations:
       - [K603, Kazetera]
       - [K604, Hakobori]
@@ -46,6 +54,8 @@ lines:
   - name: C1
     code: C1
     colour: "#808"
+    forward_label: Northbound
+    backward_label: Southbound
     stations:
       - [C100, Sha Tsui]
       - [C101A, Ho Kok West]
