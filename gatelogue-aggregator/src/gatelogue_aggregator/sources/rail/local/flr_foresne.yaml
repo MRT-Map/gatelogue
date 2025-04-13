@@ -1,0 +1,108 @@
+company_name: FLR Foresne/Commuter
+mode: "cart"
+local: true
+
+lines:
+  - name: "1"
+    code: "1"
+    colour: "#f00"
+    forward_label: Eastbound
+    backward_label: Westbound
+    stations:
+      - Wontridge
+      - Wontridge Museum
+      - Chinatown
+      - Foresne Central
+      - Lowland Circus
+      - Shenmeadow
+      - Suspension Hill
+      - Shenmore
+  - name: "2"
+    code: "2"
+    colour: "#008"
+    forward_label: Southbound
+    backward_label: Northbound
+    stations:
+      - Liveray
+      - Stonks Lake West
+      - Accident Hill East
+      - Foresne Central
+      - City Hall
+  - name: "3"
+    code: "3"
+    colour: "#080"
+    forward_label: Northbound
+    backward_label: Southbound
+    stations:
+      - Solstinox Zoo
+      - Mayor's Peninsula
+      - City Hall
+      - Lowland Circus
+      - Postieninsula
+  - name: "4"
+    code: "4"
+    colour: "#fc0"
+    forward_label: Southbound
+    backward_label: Northbound
+    stations:
+      - Liveray
+      - Botanic Gardens
+      - Postiensci East
+      - Suspension Hill
+      - Cinnameadow
+      - Firewood Isle
+      - North Plaxaëten
+  - name: "5"
+    code: "5"
+    mode: "warp"
+    colour: "#fa0"
+    forward_label: Northbound
+    backward_label: Southbound
+    stations:
+      - North Plaxaëten
+      - Secatzgarden
+      - The Promontory
+  - name: CG
+    code: CG
+    mode: "warp"
+    colour: "#888"
+    stations:
+      - Postiensci East
+      - Postienvista
+      - Flying Tree Square
+  - name: E
+    code: E
+    colour: "#888"
+    stations:
+      - Foresne Central
+      - Liveray
+      - Peacopolis Mayor's Residence
+      - Twingate Castle
+
+coords:
+  Wontridge: [-1658, 17340]
+  Wontridge Museum: [-1517, 17339]
+  Chinatown: [-1396, 17342]
+  Foresne Central: [-1274, 17340]
+  Lowland Circus: [-1180, 17388]
+  Shenmeadow: [-1062, 17406]
+  Suspension Hill: [-891, 17377]
+  Shenmore: [-749, 17370]
+  City Hall: [-1257, 17551]
+  Accident Hill East: [-1268, 17254]
+  Stonks Lake West: [-1236, 17142]
+  Liveray: [-1320, 16865]
+  Solstinox Zoo: [-1411, 17721]
+  Mayor's Peninsula: [-1372, 17502]
+  Postieninsula: [-1084, 17241]
+  Botanic Gardens: [-1065, 16938]
+  Postiensci East: [-859, 17146]
+  Cinnameadow: [-708, 17974]
+  Firewood Isle: [-620, 17977]
+  North Plaxaëten: [-536, 17973]
+  Secatzgarden: [-618, 17847]
+  The Promontory: [-638, 17750]
+  Postienvista: [-745, 17150]
+  Flying Tree Square: [-689, 17011]
+  Peacopolis Mayor's Residence: [-2223, 16283]
+  Twingate Castle: [-2202, 14983]

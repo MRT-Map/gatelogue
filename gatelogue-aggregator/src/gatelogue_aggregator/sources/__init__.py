@@ -25,6 +25,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
     from gatelogue_aggregator.sources.rail.local.flr_kaze import FLRKaze
     from gatelogue_aggregator.sources.rail.local.flr_sheng import FLRSheng
+    from gatelogue_aggregator.sources.rail.local.flr_foresne import FLRForesne
     from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
     from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
     from gatelogue_aggregator.sources.rail.nflr import NFLR
@@ -67,6 +68,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         CFC,
         DynmapAirports,
         DynmapMRT,
+        FLRForesne,
         FLRKaze,
         FLRSheng,
         FredRail,

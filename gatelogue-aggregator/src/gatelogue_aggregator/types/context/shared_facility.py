@@ -32,6 +32,7 @@ class SharedFacilityContext(BaseContext, Source):
         seat = "SEAT"
         pac = "Pacifica"
         flrk = "FLR Kazeshima/Shui Chau"
+        flrf = "FLR Foresne/Commuter"
 
         for company1, station1_name, company2, station2_name in (
             (nflr, "Dand Grand Central", intra, "Dand Grand Central"),
@@ -216,6 +217,9 @@ class SharedFacilityContext(BaseContext, Source):
             (flrk, "Chūōkochō", nflr, "Chūōkochō"),
             (flrk, "Sakyūchō", nflr, "Sakyūchō"),
             (flrk, "Aomi", nflr, "Aomi"),
+            (flrf, "Liveray", nflr, "Foresne Liveray"),
+            (flrf, "Solstinox Zoo", nflr, "Foresne Solstinox"),
+            (flrf, "Cinnameadow", nflr, "New Foresne Cinnameadow"),
         ):
 
             def is_desired_station(a, company, station_name):
