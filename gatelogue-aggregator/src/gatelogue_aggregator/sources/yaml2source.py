@@ -28,8 +28,8 @@ class YamlLine(msgspec.Struct):
     name: str
     stations: list[str | tuple[str, str]]
 
-    forward_label: str = None
-    backward_label: str = None
+    forward_label: str | None = None
+    backward_label: str | None = None
     colour: str | None = None
     mode: str | None = None
     code: str | None = None

@@ -5,7 +5,7 @@ local: true
 lines:
   - name: "1"
     code: "1"
-    colour: "#f00"
+    colour: "#a00"
     forward_label: Eastbound
     backward_label: Westbound
     stations:
@@ -55,7 +55,7 @@ lines:
   - name: "5"
     code: "5"
     mode: "warp"
-    colour: "#fa0"
+    colour: "#f80"
     forward_label: Northbound
     backward_label: Southbound
     stations:
