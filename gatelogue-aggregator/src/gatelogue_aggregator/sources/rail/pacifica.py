@@ -60,6 +60,7 @@ class Pacifica(RailSource):
                     "West Calbar": "West Calbar - Forest Landing",
                     "Ilirea - SunrisePark - South": "Ilirea - Sunrise Park - South",
                     "Pasadena - Voltsphere Union Sta.": "Pasadena - Voltsphere Union",
+                    "Blueberry City": "Blackberry City",
                 }.get(name, name)
 
                 station = RailStation.new(self, codes={name}, name=name, company=company)
