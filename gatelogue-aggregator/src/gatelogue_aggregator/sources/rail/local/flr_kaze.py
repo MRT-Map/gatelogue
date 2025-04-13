@@ -30,4 +30,5 @@ class FLRKaze(Yaml2Source, RailSource):
                 forward_label=line_yaml.forward_label,
                 backward_label=line_yaml.backward_label,
             )
-        raise NotImplementedError
+        else:
+            raise NotImplementedError
