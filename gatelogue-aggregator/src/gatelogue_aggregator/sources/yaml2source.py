@@ -12,10 +12,11 @@ from gatelogue_aggregator.types.node.rail import (
     RailCompany,
     RailLine,
     RailLineBuilder,
+    RailMode,
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaMode, SeaSource, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
@@ -43,7 +44,7 @@ class Yaml(msgspec.Struct):
 
     local: bool = False
     colour: str | None = None
-    mode: str = "warp"
+    mode: RailMode | SeaMode = "warp"
     world: str = "New"
 
 
@@ -69,15 +70,23 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
 
         company = self.C.new(self, name=file.company_name, local=file.local)
 
+        for codes in file.merge_codes:
+            self.S.new(
+                self,
+                codes=codes,
+                company=company,
+            )
+
         for line in file.lines:
             line_node = self.L.new(
                 self,
                 code=line.code or line.name,
                 name=line.name,
-                mode=line.mode or file.mode,
                 colour=line.colour or file.colour,
                 company=company,
             )
+            if hasattr(line_node, "mode"):
+                line_node.mode = line.mode
             stations = [
                 self.S.new(
                     self,
@@ -103,13 +112,6 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 company=company,
                 world="New",
                 coordinates=(x, z),
-            )
-
-        for codes in file.merge_codes:
-            self.S.new(
-                self,
-                codes=codes,
-                company=company,
             )
 
         self.save_to_cache(config, self.g)
