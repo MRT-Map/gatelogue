@@ -253,4 +253,4 @@ class RailLineBuilder(LineBuilder[RailSource, RailLine, RailStation]):
     CnT = RailConnection
 
 
-type RailMode = Literal["warp", "cart", "traincart", "vehicles"]
+type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]
