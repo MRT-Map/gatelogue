@@ -41,6 +41,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     cache.touch()
     cache.write_text(text)
     rich.print(INFO3 + f"Downloaded {url} to {cache}")
+    rich.print(INFO3 + f"{url} starts with {text[:100]} and ends with {text[-100:]}")
     return text
 
 
