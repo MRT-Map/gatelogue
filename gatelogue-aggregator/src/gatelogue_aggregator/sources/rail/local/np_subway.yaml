@@ -1,0 +1,142 @@
+company_name: New Prubourne Subway
+mode: traincarts
+local: true
+
+lines:
+  - code: "1"
+    name: Steer Avenue Local
+    colour: &red "#f30"
+    stations:
+    - Garfield
+    - City Hall
+    - City Hall-Sara Plaza
+    - North Street-Robin Williams Square
+    - University
+    - Richmond-BED
+  - code: "2"
+    name: Steer Avenue Express
+    colour: *red
+    stations:
+    - Garfield
+    - City Hall-Sara Plaza
+    - University
+    - Wuster Gardens
+    - Valory Park
+  - code: "4"
+    name: Crowfoot/Scholar Local
+    colour: &green "#080"
+    stations:
+    - Sandstone Green
+    - Ontario Street
+    - Sheppard Street
+    - Varsity
+    - Valley Pointe
+  - code: "5"
+    name: Crowfoot/Scholar Express
+    colour: *green
+    stations:
+    - Paul Street
+    - Sheppard Street
+    - Valley Pointe
+  - code: "6"
+    name: Crowfoot/Scholar Local
+    colour: *green
+    stations:
+    - Paul Street
+    - Ontario Street
+    - University
+    - Mayfair Plaza
+  - code: "7"
+    name: Nose Hill Local
+    colour: "#838"
+    stations:
+    - City Hall-Sara Plaza
+    - Stone Street-Halson Terminal
+    - Quin Street
+    - Krypton Parkway
+    - Redbirds-Nose Hill
+  - code: A
+    name: Quincy Street Local
+    colour: &blue "#038"
+    stations:
+    - Polo Avenue
+    - Quin Street
+    - Stone Street-Halson Terminal
+    - Drywood Field
+  - code: C
+    name: Quincy Street Express
+    colour: *blue
+    stations:
+    - Polo Avenue
+    - Quin Street
+    - Eastside
+    - Stone Street-Halson Terminal
+    - Steer Avenue
+    - Ontario Street
+    - Riverbend-Centennial Park
+  - code: B
+    name: Northtown Local/Crosstown Express
+    colour: &orange "#f80" 
+    stations:
+    - Drywood Boulevard
+    - Dry Street
+    - North Street-Robin Williams Square
+    - Sand Street
+    - Penn Island-Zoo
+    - Mayfair Plaza # TODO special service support
+    - Wuster Drive
+    - Evergreen Parkway
+  - code: D
+    name: Northtown Express
+    colour: *orange
+    stations:
+    - Drywood Boulevard
+    - North Street-Robin Williams Square
+    - Polo Avenue
+  - code: G
+    name: Crosstown Local
+    colour: "#8a0"
+    stations:
+    - Thames Avenue
+    - Mayfair Plaza
+    - Wuster Drive
+    - Evergreen Parkway
+  - code: S
+    name: North Street Shuttle
+    colour: "#888"
+    stations:
+    - North Street-Robin Williams Square
+    - Stone Street-Halson Terminal
+
+coords:
+  Garfield: [8269, 21434]
+  Sandstone: [8239, 21301]
+  City Hall-Sara Plaza: [8229, 21158]
+  North Street-Robin Williams Square: [8241, 21064]
+  University: [8241, 20967]
+  Richmond-BED: [7966, 20665]
+  Wuster Gardens: [8315, 20846]
+  Valory Park: [8335, 20601]
+  Sandstone Green: [8075, 21403]
+  Paul Street: [8012, 21312]
+  Ontario Street: [8100, 21149]
+  Sheppard Street: [8159, 20965]
+  Varsity: [8147, 20799]
+  Valley Pointe: [8146, 20656]
+  Stone Street-Halson Terminal: [8313, 21150]
+  Quin Street: [8421, 21157]
+  Krypton Parkway: [8410, 21348]
+  Redbirds-Nose Hill: [8406, 21489]
+  Polo Avenue: [8557, 21155]
+  Eastside: [8340, 21195]
+  Steer Avenue: [8216, 21169]
+  Riverbend-Centennial Park: [7905, 21163]
+  Drywood Field: [7817, 21003]
+  Drywood Boulevard: [7864, 20837]
+  Dry Street: [8028, 20967]
+  Sand Street: [8381, 21106]
+  Thames Avenue: [8459, 21112]
+  Penn Island-Zoo: [8419, 21048]
+  Mayfair Plaza: [8398, 20991]
+  Wuster Drive: [8387, 20909]
+  Evergreen Parkway: [8345, 20829]
