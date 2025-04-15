@@ -3,21 +3,21 @@ mode: "cart"
 local: true
 
 lines:
-  - name: S1
+  - name: Line S1
     code: S1
     colour: "#580"
     stations:
       - Ferry Terminal
       - Shenghua South
       - City Hall
-  - name: S2
+  - name: Line S2
     code: S2
     mode: "warp"
     colour: "#33f"
     stations:
       - Ottia Avenue
       - Goff Avenue
-  - name: S3
+  - name: Line S3
     code: S3
     colour: "#c33"
     stations:

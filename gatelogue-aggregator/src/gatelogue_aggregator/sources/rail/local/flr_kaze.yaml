@@ -3,7 +3,7 @@ mode: "traincarts"
 local: true
 
 lines:
-  - name: K1
+  - name: Line K1
     code: K1
     colour: "#c33"
     forward_label: Westbound
@@ -13,7 +13,7 @@ lines:
       - [K101, Konranchō]
       - [K102, Owomachi]
       - [K103, Sakyūchō]
-  - name: K2
+  - name: Line K2
     code: K2
     colour: "#f80"
     forward_label: Southbound
@@ -25,7 +25,7 @@ lines:
       - [K203, Takagawaramachi]
       - [K204, Sonzaishinaimachi]
       - [K205, Nekotoinumachi]
-  - name: K3
+  - name: Line K3
     code: K3
     colour: "#fc0"
     forward_label: Southbound
@@ -41,7 +41,7 @@ lines:
       - [K309, Takebashi]
       - [K310, Kuzuhamachi]
       - [K311, Kuzuha Airport]
-  - name: K6
+  - name: Line K6
     code: K6
     colour: "#f5c"
     forward_label: Westbound
@@ -51,7 +51,7 @@ lines:
       - [K604, Hakobori]
       - [K607, Sha Tsui]
       - [K608, Dirtia Bridge]
-  - name: C1
+  - name: Line C1
     code: C1
     colour: "#808"
     forward_label: Northbound

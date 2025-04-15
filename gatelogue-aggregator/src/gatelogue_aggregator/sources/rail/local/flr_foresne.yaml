@@ -3,7 +3,7 @@ mode: "cart"
 local: true
 
 lines:
-  - name: "1"
+  - name: Line 1
     code: "1"
     colour: "#a00"
     forward_label: Eastbound
@@ -17,7 +17,7 @@ lines:
       - Shenmeadow
       - Suspension Hill
       - Shenmore
-  - name: "2"
+  - name: Line 2
     code: "2"
     colour: "#008"
     forward_label: Southbound
@@ -28,7 +28,7 @@ lines:
       - Accident Hill East
       - Foresne Central
       - City Hall
-  - name: "3"
+  - name: Line 3
     code: "3"
     colour: "#080"
     forward_label: Northbound
@@ -39,7 +39,7 @@ lines:
       - City Hall
       - Lowland Circus
       - Postieninsula
-  - name: "4"
+  - name: Line 4
     code: "4"
     colour: "#fc0"
     forward_label: Southbound
@@ -52,7 +52,7 @@ lines:
       - Cinnameadow
       - Firewood Isle
       - North Plaxaëten
-  - name: "5"
+  - name: Line 5
     code: "5"
     mode: "warp"
     colour: "#f80"
@@ -62,7 +62,7 @@ lines:
       - North Plaxaëten
       - Secatzgarden
       - The Promontory
-  - name: CG
+  - name: Line CG
     code: CG
     mode: "warp"
     colour: "#888"
@@ -70,7 +70,7 @@ lines:
       - Postiensci East
       - Postienvista
       - Flying Tree Square
-  - name: E
+  - name: Line E
     code: E
     colour: "#888"
     stations:
