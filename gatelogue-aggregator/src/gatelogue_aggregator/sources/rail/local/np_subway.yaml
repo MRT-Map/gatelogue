@@ -98,6 +98,7 @@ lines:
     colour: "#8a0"
     stations:
     - Thames Avenue
+    - Penn Island-Zoo
     - Mayfair Plaza
     - Wuster Drive
     - Evergreen Parkway
@@ -140,3 +141,8 @@ coords:
   Mayfair Plaza: [8398, 20991]
   Wuster Drive: [8387, 20909]
   Evergreen Parkway: [8345, 20829]
+
+proximity:
+  - [Wuster Gardens, Evergreen Parkway]
+  - [City Hall-Sara Plaza, Steer Avenue]
+  - [Thames Avenue, Quin Street]
