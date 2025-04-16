@@ -3,7 +3,9 @@ from __future__ import annotations
 import contextlib
 import tempfile
 from pathlib import Path
+import time
 from typing import TYPE_CHECKING
+from urllib.parse import urlparse
 
 import cloudscraper
 import msgspec
@@ -22,16 +24,26 @@ DEFAULT_TIMEOUT = 60
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
 SESSION = cloudscraper.create_scraper()
-
+COOLDOWN: dict[str, float] = {}
 
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
     task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
+
+    netloc = urlparse(url).netloc
+    if netloc in COOLDOWN and time.time() < (cool := COOLDOWN[netloc]):
+        rich.print(INFO3 + f"Waiting for {url} cooldown")
+        time.sleep(abs(cool - time.time()))
+
     response = SESSION.get(url, timeout=timeout)
     if response.status_code >= 400:  # noqa: PLR2004
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
+        if response.status_code == 429:
+            COOLDOWN[netloc] = time.time() + 15 # TODO config
+            rich.print(ERROR + f"Will try {url} again in 15s")
+            return get_url(url, cache, timeout)
 
     text = response.text
     with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
