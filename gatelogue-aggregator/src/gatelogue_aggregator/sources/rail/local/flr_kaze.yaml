@@ -91,3 +91,6 @@ merge_codes:
   - [K204, K308]
   - [K103, K305]
   - [K607, C100]
+
+proximity:
+  - [K101, K202]
