@@ -89,7 +89,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 company=company,
             )
             if hasattr(line_node, "mode"):
-                line_node.mode = self.source(line.mode)
+                line_node.mode = self.source(line.mode) if line.mode is not None else None
             stations = [
                 self.S.new(
                     self,
