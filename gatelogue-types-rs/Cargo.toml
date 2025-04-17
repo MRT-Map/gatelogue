@@ -1,6 +1,6 @@
 [package]
 name = "gatelogue-types"
-version = "2.0.0-b6+6"
+version = "2.0.0-b8+8"
 edition = "2021"
 
 [dependencies]

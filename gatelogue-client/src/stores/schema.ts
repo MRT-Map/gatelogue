@@ -23,7 +23,10 @@ export interface Node {
 export interface Located<S extends boolean = true> extends Node {
   world: Sourced<World, S> | null;
   coordinates: Sourced<[number, number]> | null;
-  proximity: Record<StringID<Located>, Sourced<{ distance: number }>>;
+  proximity: Record<
+    StringID<Located>,
+    Sourced<{ distance: number; explicit: boolean }>
+  >;
   shared_facility: Sourced<IntID<Located>>[];
 }
 
@@ -76,6 +79,7 @@ export interface RailCompany<S extends boolean = true> extends Node {
   name: string;
   lines: Sourced<IntID<RailLine<S>>, S>[];
   stations: Sourced<IntID<RailStation<S>>, S>[];
+  local: boolean;
 }
 
 export interface RailLine<S extends boolean = true> extends Node {
@@ -101,6 +105,7 @@ export interface SeaCompany<S extends boolean = true> extends Node {
   name: string;
   lines: Sourced<IntID<SeaLine<S>>, S>[];
   stations: Sourced<IntID<SeaStop<S>>, S>[];
+  local: boolean;
 }
 
 export interface SeaLine<S extends boolean = true> extends Node {
@@ -126,6 +131,7 @@ export interface BusCompany<S extends boolean = true> extends Node {
   name: string;
   lines: Sourced<IntID<BusLine<S>>, S>[];
   stations: Sourced<IntID<BusStop<S>>, S>[];
+  local: boolean;
 }
 
 export interface BusLine<S extends boolean = true> extends Node {

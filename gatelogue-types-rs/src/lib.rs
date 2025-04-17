@@ -231,7 +231,8 @@ pub enum World {
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub struct Proximity {
-    pub distance: Option<f64>, // TODO remove distance
+    pub distance: Option<f64>,
+    pub explicit: bool,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -283,6 +284,7 @@ pub struct AirAirline {
     pub link: Option<Sourced<String>>,
     pub flights: Vec<Sourced<ID>>,
     pub gates: Vec<Sourced<ID>>,
+    pub local: bool,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
@@ -324,6 +326,7 @@ pub struct BusCompany {
     pub name: String,
     pub lines: Vec<Sourced<ID>>,
     pub stops: Vec<Sourced<ID>>,
+    pub local: bool,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
@@ -356,7 +359,7 @@ pub enum RailMode {
     Warp,
     #[serde(rename = "cart")]
     Cart,
-    #[serde(rename = "traincart")]
+    #[serde(rename = "traincarts")]
     TrainCart,
     #[serde(rename = "vehicles")]
     Vehicles,
@@ -367,6 +370,7 @@ pub struct RailCompany {
     pub name: String,
     pub lines: Vec<Sourced<ID>>,
     pub stations: Vec<Sourced<ID>>,
+    pub local: bool,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
