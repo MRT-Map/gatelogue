@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gatelogue-types"
+dynamic = ["version"]
+description = ''
+#readme = "README.md"
+requires-python = ">=3.12"
+license = "GPL-3.0-only"
+keywords = []
+authors = [
+  { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  # "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "msgspec",
+  "gatelogue-types[niquests]",
+]
+optional-dependencies = { requests = ["requests"], niquests = ["niquests"], httpx = ["httpx"], aiohttp = ["aiohttp"], all = ["requests", "niquests", "httpx", "aiohttp"] }
+
+[project.urls]
+Documentation = "https://github.com/mrt-map/gatelogue#readme"
+Issues = "https://github.com/mrt-map/gatelogue/issues"
+Source = "https://github.com/mrt-map/gatelogue"
+
+[tool.hatch.version]
+path = "src/gatelogue_types/__about__.py"
+
+[tool.hatch.envs.default]
+extra-dependencies = ["gatelogue-types[all]"]
+#python = "3.12"
+
+[tool.hatch.envs.docs]
+extra-dependencies = [
+  "sphinx",
+  "sphinx-codeautolink",
+  "sphinx_rtd_theme",
+]
+[tool.hatch.envs.docs.scripts]
+build = "cd docs; make html; cd .."
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/gatelogue_types tests}"
+
+[tool.coverage.run]
+source_pkgs = ["gatelogue_types", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/gatelogue_types/__about__.py",
+]
+
+[tool.coverage.paths]
+gatelogue_types = ["src/gatelogue_types", "*/gatelogue-types/src/gatelogue_types"]
+tests = ["tests", "*/gatelogue-types/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
