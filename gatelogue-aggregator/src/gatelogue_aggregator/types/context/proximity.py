@@ -57,7 +57,8 @@ class ProximityContext(BaseContext):
             components = sorted(components, key=len, reverse=True)
             located_nodes = [a for a in self.g.nodes() if isinstance(a, LocatedNode) and a.coordinates is not None]
             isolated = [
-                [b for b in a if isinstance(b, LocatedNode) and b.coordinates is not None] for a in components[1:]
+                [b for b in a if isinstance(b, LocatedNode) and b.coordinates is not None and b.world.v != "Space"]
+                for a in components[1:]
             ]
             isolated = [a for a in isolated if len(a) != 0]
             if len(isolated) == 0:
