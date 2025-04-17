@@ -2,7 +2,7 @@
 export type StringID<_ extends Node> = string;
 export type IntID<_ extends Node> = number;
 export type World = "Old" | "New" | "Space";
-export type RailMode = "warp" | "cart" | "traincart" | "vehicles";
+export type RailMode = "warp" | "cart" | "traincarts" | "vehicles";
 export type SeaMode = "ferry" | "cruise";
 export type PlaneMode =
   | "helicopter"

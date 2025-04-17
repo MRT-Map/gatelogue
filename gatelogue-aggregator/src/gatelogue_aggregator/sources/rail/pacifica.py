@@ -37,7 +37,7 @@ class Pacifica(RailSource):
             if "Planned" in line_name or "Colwyn" in line_name:
                 continue
             line = RailLine.new(
-                self, code=line_name, name=line_name, company=company, mode="traincart", colour="#008080"
+                self, code=line_name, name=line_name, company=company, mode="traincarts", colour="#008080"
             )
 
             stations = []
