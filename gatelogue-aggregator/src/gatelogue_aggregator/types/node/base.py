@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable  # noqa: TCH003
-from typing import TYPE_CHECKING, Any, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
+import gatelogue_types as gt
 import msgspec
 import rustworkx as rx
 
@@ -16,14 +17,11 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from gatelogue_aggregator.types.base import BaseContext
-    from gatelogue_aggregator.types.context.proximity import Proximity
 
 
-class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=True):
+class Node[CTX: BaseContext | Source](gt.Node, Mergeable[CTX], msgspec.Struct, kw_only=True):
     acceptable_list_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
     acceptable_single_node_types: ClassVar[Callable[[], tuple[type[Node], ...]]] = lambda: ()
-    i: int = None
-    source: set[type[Source]] = msgspec.field(default_factory=set)
 
     @classmethod
     def new(cls, ctx: CTX, **kwargs) -> Self:
@@ -45,7 +43,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         ctx: CTX,
         node: Node,
         value: Any | None = None,
-        source: set[type[Source]] | None = None,
+        source: set[str] | None = None,
     ):
         source = source or {type(ctx)}
         if not any(isinstance(node, a) for a in type(self).acceptable_list_node_types()):
@@ -57,7 +55,7 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         ctx: CTX,
         node: Node,
         value: Any | None = None,
-        source: set[type[Source]] | None = None,
+        source: set[str] | None = None,
     ):
         source = source or {type(ctx)}
         if not any(isinstance(node, a) for a in type(self).acceptable_single_node_types()):
@@ -165,8 +163,11 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
     def sanitise_strings(self):
         raise NotImplementedError
 
-    def prepare_export(self, ctx: CTX):
-        raise NotImplementedError
+    def export(self, ctx: CTX) -> gt.Node:
+        return gt.Node(**self._as_dict(ctx))
+
+    def _as_dict(self, _ctx: CTX) -> dict:
+        return msgspec.structs.asdict(self)
 
     def ref(self, ctx: CTX) -> NodeRef[Self]:
         raise NotImplementedError
@@ -204,30 +205,14 @@ class Node[CTX: BaseContext | Source](Mergeable[CTX], msgspec.Struct, kw_only=Tr
         return res
 
 
-class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
-    from gatelogue_aggregator.types.context.proximity import Proximity
-
-    coordinates: Sourced[tuple[int, int]] | None = None
-    """Coordinates of the object"""
-    world: Sourced[World] | None = None
-    """Whether the object is in the New or Old world"""
-
-    proximity: dict[int, Sourced[Proximity]] = None
-    """
-    References all objects that are near (within walking distance of) this object.
-    It is represented as an inner mapping of object IDs to proximity data (:py:class:`Proximity`).
-    For example, ``{1234: <proximity>}`` means that there is an object with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
-    """
-    shared_facility: list[Sourced[int]] = None
-    """References all objects that this object shares the same facility with (same building, station, hub etc)"""
-
+class LocatedNode[CTX: BaseContext | Source](gt.LocatedNode, Node[CTX], kw_only=True):
     @classmethod
     def new(
         cls,
         ctx: CTX,
         *,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
         **kwargs,
     ) -> Self:
         self = super().new(ctx, **kwargs)
@@ -248,13 +233,19 @@ class LocatedNode[CTX: BaseContext | Source](Node[CTX], kw_only=True):
             self.world.v = str(self.world.v).strip()
 
     @override
-    def prepare_export(self, ctx: CTX):
-        from gatelogue_aggregator.types.context.proximity import Proximity
+    def export(self, ctx: CTX) -> gt.LocatedNode:
+        return gt.LocatedNode(**self._as_dict(ctx))
 
-        self.proximity = {
-            node.i: b for node in self.get_all(ctx, LocatedNode) for b in self.get_edges(ctx, node, Proximity)
+    @override
+    def _as_dict(self, ctx: CTX) -> dict:
+        return super()._as_dict(ctx) | {
+            "proximity": {
+                node.i: b.export(ctx)
+                for node in self.get_all(ctx, LocatedNode)
+                for b in self.get_edges(ctx, node, gt.Proximity)
+            },
+            "shared_facility": self.get_all_id(ctx, LocatedNode, SharedFacility),
         }
-        self.shared_facility = self.get_all_id(ctx, LocatedNode, SharedFacility)
 
 
 class NodeRef[T: Node]:
@@ -286,6 +277,3 @@ class NodeRef[T: Node]:
                 return False
             has_match = True
         return has_match
-
-
-type World = Literal["New", "Old", "Space"]

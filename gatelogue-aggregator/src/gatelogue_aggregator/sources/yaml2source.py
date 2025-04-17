@@ -3,22 +3,21 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING
 
+import gatelogue_types as gt
 import msgspec
 import rich
 
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.context.proximity import Proximity
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
     RailLine,
     RailLineBuilder,
-    RailMode,
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaMode, SeaSource, SeaStop
+from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
 from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
@@ -41,13 +40,13 @@ class YamlLine(msgspec.Struct):
 class Yaml(msgspec.Struct):
     company_name: str
     lines: list[YamlLine] = msgspec.field(default_factory=list)
-    coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
+    coords: dict[str, tuple[float, float]] = msgspec.field(default_factory=dict)
     merge_codes: list[set[str]] = msgspec.field(default_factory=list)
     proximity: list[set[str]] = msgspec.field(default_factory=list)
 
     local: bool = False
     colour: str | None = None
-    mode: RailMode | SeaMode = "warp"
+    mode: gt.RailMode | gt.SeaMode | None = "warp"
     world: str = "New"
 
 
@@ -89,7 +88,13 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 company=company,
             )
             if hasattr(line_node, "mode"):
-                line_node.mode = self.source(line.mode) if line.mode is not None else None
+                line_node.mode = (
+                    self.source(line.mode)
+                    if line.mode is not None
+                    else self.source(file.mode)
+                    if file.mode is not None
+                    else None
+                )
             stations = [
                 self.S.new(
                     self,
@@ -123,7 +128,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 st2 = self.S.new(self, codes={code2}, company=company)
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
-                st1.connect(self, st2, Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
+                st1.connect(self, st2, gt.Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
 
         self.save_to_cache(config, self.g)
 

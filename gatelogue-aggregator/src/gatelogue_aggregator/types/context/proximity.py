@@ -1,17 +1,10 @@
 from __future__ import annotations
 
-import msgspec
+import gatelogue_types as gt
 import rustworkx as rx
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.types.base import BaseContext
-
-
-class Proximity(msgspec.Struct):
-    distance: int
-    """Distance between the two objects in blocks"""
-    explicit: bool = False
-    """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
 
 
 class ProximityContext(BaseContext):
@@ -40,7 +33,7 @@ class ProximityContext(BaseContext):
                     node.connect(
                         self,
                         existing,
-                        Proximity(dist**0.5),
+                        gt.Proximity(dist**0.5),
                         source=node.world.s | node.coordinates.s | existing.world.s | existing.coordinates.s,
                     )
             processed.append((node, node.world.v, node_coordinates))
@@ -71,6 +64,6 @@ class ProximityContext(BaseContext):
                     this.connect(
                         self,
                         nearest,
-                        Proximity(dist_sq(nearest, this, component) ** 0.5),
+                        gt.Proximity(dist_sq(nearest, this, component) ** 0.5),
                         source=this.world.s | this.coordinates.s | nearest.world.s | nearest.coordinates.s,
                     )

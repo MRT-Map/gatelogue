@@ -17,38 +17,38 @@ if TYPE_CHECKING:
 type ID = int
 
 type Nodes = (
-    AirAirline
-    | AirAirport
-    | AirFlight
-    | AirGate
-    | BusCompany
-    | BusLine
-    | BusStop
-    | SeaCompany
-    | SeaLine
-    | SeaStop
-    | RailCompany
-    | RailLine
-    | RailStation
-    | SpawnWarp
-    | Town
+        AirAirline
+        | AirAirport
+        | AirFlight
+        | AirGate
+        | BusCompany
+        | BusLine
+        | BusStop
+        | SeaCompany
+        | SeaLine
+        | SeaStop
+        | RailCompany
+        | RailLine
+        | RailStation
+        | SpawnWarp
+        | Town
 )
 type NodesNS = (
-    AirAirline.NS()
-    | AirAirport.NS()
-    | AirFlight.NS()
-    | AirGate.NS()
-    | BusCompany.NS()
-    | BusLine.NS()
-    | BusStop.NS()
-    | SeaCompany.NS()
-    | SeaLine.NS()
-    | SeaStop.NS()
-    | RailCompany.NS()
-    | RailLine.NS()
-    | RailStation.NS()
-    | SpawnWarp.NS()
-    | Town.NS()
+        AirAirline.NS()
+        | AirAirport.NS()
+        | AirFlight.NS()
+        | AirGate.NS()
+        | BusCompany.NS()
+        | BusLine.NS()
+        | BusStop.NS()
+        | SeaCompany.NS()
+        | SeaLine.NS()
+        | SeaStop.NS()
+        | RailCompany.NS()
+        | RailLine.NS()
+        | RailStation.NS()
+        | SpawnWarp.NS()
+        | Town.NS()
 )
 
 
@@ -137,7 +137,7 @@ T = TypeVar("T")
 class Sourced(msgspec.Struct, Generic[T]):
     v: T
     """Actual value"""
-    s: set[str] = msgspec.field(default_factory=set)
+    s: set[set] = msgspec.field(default_factory=set)
     """List of sources that support the value"""
 
     def __str__(self):
@@ -171,10 +171,10 @@ class Node(msgspec.Struct, kw_only=True, tag=True):
 
     def __str__(self) -> str:
         return (
-            type(self).__name__
-            + "("
-            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-            + ")"
+                type(self).__name__
+                + "("
+                + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
+                + ")"
         )
 
 
@@ -211,10 +211,9 @@ class AirFlight(Node, kw_only=True, tag=True):
     mode: Sourced[PlaneMode] | None = None
     """Type of air vehicle or technology used on the flight"""
 
-    # noinspection PyDataclass
     gates: list[Sourced[ID]] = msgspec.field(default_factory=list)
     """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
-    airline: Sourced[ID]
+    airline: Sourced[ID] = None
     """ID of the :py:class:`AirAirline` the flight is operated by"""
 
     @classmethod
@@ -261,7 +260,7 @@ class AirGate(Node, kw_only=True, tag=True):
 
     flights: list[Sourced[ID]] = msgspec.field(default_factory=list)
     """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
-    airport: Sourced[ID]
+    airport: Sourced[ID] = None
     """ID of the :py:class:`AirAirport`"""
     airline: Sourced[ID] | None = None
     """ID of the :py:class:`AirAirline` that owns the gate"""
@@ -334,7 +333,7 @@ class RailLine(Node, kw_only=True, tag=True):
     mode: Sourced[RailMode] | None = None
     """Type of rail or rail technology used on the line"""
 
-    company: Sourced[ID]
+    company: Sourced[ID] = None
     """ID of the :py:class:`RailCompany` that operates the line"""
     ref_station: Sourced[ID] | None = None
     """ID of one :py:class:`RailStation` on the line, typically a terminus"""
@@ -345,7 +344,7 @@ class RailLine(Node, kw_only=True, tag=True):
             name: str | None = None
             colour: str | None = None
             mode: RailMode | None = None
-            company: ID
+            company: ID = None
             ref_station: ID | None = None
 
         NS.__name__ = cls.__name__
@@ -358,7 +357,7 @@ class RailStation(LocatedNode, kw_only=True, tag=True):
     name: Sourced[str] | None = None
     """Name of the station"""
 
-    company: Sourced[ID]
+    company: Sourced[ID] = None
     """ID of the :py:class:`RailCompany` that stops here"""
     connections: dict[ID, list[Sourced[Connection]]] = msgspec.field(default_factory=dict)
     """
@@ -371,7 +370,7 @@ class RailStation(LocatedNode, kw_only=True, tag=True):
     def NS(cls):  # noqa: N802
         class NS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
             name: str | None = None
-            company: ID
+            company: ID = None
             connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         NS.__name__ = cls.__name__
@@ -410,7 +409,7 @@ class BusLine(Node, kw_only=True, tag=True):
     colour: Sourced[str] | None = None
     """Colour of the line (on a map)"""
 
-    company: Sourced[ID]
+    company: Sourced[ID] = None
     """ID of the :py:class:`BusCompany` that operates the line"""
     ref_stop: Sourced[ID] | None = None
     """ID of one :py:class:`BusStop` on the line, typically a terminus"""
@@ -420,7 +419,7 @@ class BusLine(Node, kw_only=True, tag=True):
         class NS(cls, kw_only=True, tag=cls.__name__):
             name: str | None = None
             colour: str | None = None
-            company: ID
+            company: ID = None
             ref_stop: ID | None = None
 
         NS.__name__ = cls.__name__
@@ -446,7 +445,7 @@ class BusStop(LocatedNode, kw_only=True, tag=True):
     def NS(cls):  # noqa: N802
         class NS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
             name: str | None = None
-            company: ID
+            company: ID = None
             connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         NS.__name__ = cls.__name__
@@ -484,7 +483,7 @@ class SeaLine(Node, kw_only=True, tag=True):
     mode: Sourced[SeaMode] | None = None
     """Type of boat used on the line"""
 
-    company: Sourced[ID]
+    company: Sourced[ID] = None
     """ID of the :py:class:`SeaCompany` that operates the line"""
     ref_stop: Sourced[ID] | None = None
     """ID of one :py:class:`SeaStop` on the line, typically a terminus"""
@@ -495,7 +494,7 @@ class SeaLine(Node, kw_only=True, tag=True):
             name: str | None = None
             colour: str | None = None
             mode: SeaMode | None = None
-            company: ID
+            company: ID = None
             ref_stop: ID | None = None
 
         NS.__name__ = cls.__name__
@@ -508,7 +507,7 @@ class SeaStop(LocatedNode, kw_only=True, tag=True):
     name: Sourced[str] | None = None
     """Name of the stop"""
 
-    company: Sourced[ID]
+    company: Sourced[ID] = None
     """ID of the :py:class:`SeaCompany` that stops here"""
     connections: dict[ID, list[Sourced[Connection]]] = msgspec.field(default_factory=dict)
     """
@@ -521,7 +520,7 @@ class SeaStop(LocatedNode, kw_only=True, tag=True):
     def NS(cls):  # noqa: N802
         class NS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
             name: str | None = None
-            company: ID
+            company: ID = None
             connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         NS.__name__ = cls.__name__

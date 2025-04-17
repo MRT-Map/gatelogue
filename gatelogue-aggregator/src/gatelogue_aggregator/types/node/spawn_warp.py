@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from typing import ClassVar, Literal, Self, override
+from typing import ClassVar, Self, override
+
+import gatelogue_types as gt
 
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef, World
+from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
 from gatelogue_aggregator.types.source import Source
 
 
@@ -11,13 +13,8 @@ class SpawnWarpSource(BaseContext, Source):
     pass
 
 
-class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
+class SpawnWarp(gt.SpawnWarp, LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)
-
-    name: str
-    """Name of the spawn warp"""
-    warp_type: WarpType
-    """The type of warp"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -26,9 +23,9 @@ class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
         ctx: SpawnWarpSource,
         *,
         name: str,
-        warp_type: WarpType,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        warp_type: gt.WarpType,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         return super().new(
             ctx,
@@ -62,13 +59,10 @@ class SpawnWarp(LocatedNode[SpawnWarpSource], kw_only=True, tag=True):
         self.warp_type = str(self.warp_type).strip()
 
     @override
-    def prepare_export(self, ctx: SpawnWarpSource):
-        super().prepare_export(ctx)
+    def export(self, ctx: SpawnWarpSource) -> gt.SpawnWarp:
+        return gt.SpawnWarp(**self._as_dict(ctx))
 
     @override
     def ref(self, ctx: SpawnWarpSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(SpawnWarp, name=self.name)
-
-
-type WarpType = Literal["premier", "terminus", "portal", "misc"]

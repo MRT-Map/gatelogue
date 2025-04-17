@@ -21,6 +21,7 @@ classifiers = [
   # "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+  "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
   "click",
   "msgspec",
   "pandas",
@@ -43,6 +44,9 @@ gatelogue-aggregator = "gatelogue_aggregator.cli:gatelogue_aggregator"
 
 [tool.hatch.version]
 path = "src/gatelogue_aggregator/__about__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 #[tool.hatch.envs.default]
 #python = "3.12"

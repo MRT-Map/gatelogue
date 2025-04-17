@@ -1,27 +1,20 @@
 from __future__ import annotations
 
-from typing import ClassVar, Literal, Self, override
+from typing import ClassVar, Self, override
+
+import gatelogue_types as gt
 
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef, World
-from gatelogue_aggregator.types.source import Source, Sourced
+from gatelogue_aggregator.types.node.base import LocatedNode, NodeRef
+from gatelogue_aggregator.types.source import Source
 
 
 class TownSource(BaseContext, Source):
     pass
 
 
-class Town(LocatedNode[TownSource], kw_only=True, tag=True):
+class Town(gt.Town, LocatedNode[TownSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (LocatedNode,)
-
-    name: str
-    """Name of the town"""
-    rank: Sourced[Rank]
-    """Rank of the town"""
-    mayor: Sourced[str]
-    """Mayor of the town"""
-    deputy_mayor: Sourced[str | None]
-    """Deputy Mayor of the town"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -30,11 +23,11 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
         ctx: TownSource,
         *,
         name: str,
-        rank: Rank,
+        rank: gt.Rank,
         mayor: str,
         deputy_mayor: str | None,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         return super().new(
             ctx,
@@ -75,13 +68,10 @@ class Town(LocatedNode[TownSource], kw_only=True, tag=True):
             self.deputy_mayor.v = str(self.deputy_mayor.v).strip()
 
     @override
-    def prepare_export(self, ctx: TownSource):
-        super().prepare_export(ctx)
+    def export(self, ctx: TownSource) -> gt.Town:
+        return gt.Town(**self._as_dict(ctx))
 
     @override
     def ref(self, ctx: TownSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(Town, name=self.name)
-
-
-type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]

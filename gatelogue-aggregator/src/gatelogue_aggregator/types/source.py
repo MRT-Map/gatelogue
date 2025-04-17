@@ -3,10 +3,12 @@ from __future__ import annotations
 import pickle
 from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar
 
+import gatelogue_types as gt
 import msgspec
 import rich
 
 from gatelogue_aggregator.logging import ERROR, INFO1
+from gatelogue_aggregator.sources import SOURCES
 from gatelogue_aggregator.types.base import BaseContext, Mergeable
 
 if TYPE_CHECKING:
@@ -14,16 +16,10 @@ if TYPE_CHECKING:
 
     from gatelogue_aggregator.types.config import Config
 
-
 T = TypeVar("T")
 
 
-class Sourced(msgspec.Struct, Mergeable, Generic[T]):
-    v: T
-    """Actual value"""
-    s: set[type[Source]] = msgspec.field(default_factory=set)
-    """List of sources that support the value"""
-
+class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
     def __str__(self):
         s = str(self.v)
         if len(self.s) != 0:
@@ -35,10 +31,10 @@ class Sourced(msgspec.Struct, Mergeable, Generic[T]):
             self.s.update(source.s)
             return self
         if isinstance(source, Source):
-            self.s.add(type(source))
+            self.s.add(type(source).name)
             return self
         if isinstance(source, type) and issubclass(source, Source):
-            self.s.add(source)
+            self.s.add(source.name)
             return self
         raise NotImplementedError(source)
 
@@ -56,10 +52,19 @@ class Sourced(msgspec.Struct, Mergeable, Generic[T]):
         if isinstance(self.v, Mergeable) and self.v.merge_if_equivalent(ctx, other.v):
             self.s.update(other.s)
             return
+
+        def key(x):
+            return next(a for a in SOURCES() if a.name == x).priority
+
         # TODO: add to discrepancy list
-        if max(self.s, key=lambda x: x.priority) < max(other.s, key=lambda x: x.priority):
+        if max(self.s, key=key) < max(other.s, key=key):
             self.v = other.v
             self.s = other.s
+
+    def export(self, ctx: BaseContext) -> gt.Sourced[T]:
+        if hasattr(self.v, "export"):
+            return gt.Sourced(self.v.export(ctx), self.s)
+        return gt.Sourced(self.v, self.s)
 
 
 class SourceMeta(type):
@@ -118,4 +123,4 @@ class Source(metaclass=SourceMeta):
 
     @classmethod
     def source[T](cls, v: T) -> Sourced[T]:
-        return Sourced(v, s={cls})
+        return Sourced(v, s={cls.name})

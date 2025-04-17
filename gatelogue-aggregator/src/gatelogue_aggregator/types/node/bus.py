@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import gatelogue_types as gt
+
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
-from gatelogue_aggregator.types.source import Source, Sourced
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,18 +18,8 @@ class BusSource(BaseContext, Source):
     pass
 
 
-class BusCompany(Node[BusSource], kw_only=True, tag=True):
+class BusCompany(gt.BusCompany, Node[BusSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)
-
-    name: str
-    """Name of the bus company"""
-
-    lines: list[Sourced[int]] = None
-    """List of IDs of all :py:class:`BusLine` s the company operates"""
-    stops: list[Sourced[int]] = None
-    """List of all :py:class:`BusStop` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a city bus network"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -70,9 +62,15 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
         self.name = str(self.name).strip()
 
     @override
-    def prepare_export(self, ctx: BusSource):
-        self.lines = self.get_all_id(ctx, BusLine)
-        self.stops = self.get_all_id(ctx, BusStop)
+    def export(self, ctx: BusSource) -> gt.BusCompany:
+        return gt.BusCompany(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: BusSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "lines": self.get_all_id(ctx, BusLine),
+            "stops": self.get_all_id(ctx, BusStop),
+        }
 
     @override
     def ref(self, ctx: BusSource) -> NodeRef[Self]:
@@ -80,20 +78,8 @@ class BusCompany(Node[BusSource], kw_only=True, tag=True):
         return NodeRef(BusCompany, name=self.name)
 
 
-class BusLine(Node[BusSource], kw_only=True, tag=True):
+class BusLine(gt.BusLine, Node[BusSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)
-
-    code: str
-    """Unique code identifying the bus line"""
-    name: Sourced[str] | None = None
-    """Name of the line"""
-    colour: Sourced[str] | None = None
-    """Colour of the line (on a map)"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`BusCompany` that operates the line"""
-    ref_stop: Sourced[int] | None = None
-    """ID of one :py:class:`BusStop` on the line, typically a terminus"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -145,9 +131,15 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
             self.colour.v = str(self.colour.v).strip()
 
     @override
-    def prepare_export(self, ctx: BusSource):
-        self.company = self.get_one_id(ctx, BusCompany)
-        self.ref_stop = self.get_one_id(ctx, BusStop)
+    def export(self, ctx: BusSource) -> gt.BusLine:
+        return gt.BusLine(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: BusSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, BusCompany),
+            "ref_stop": self.get_one_id(ctx, BusStop),
+        }
 
     @override
     def ref(self, ctx: BusSource) -> NodeRef[Self]:
@@ -155,23 +147,9 @@ class BusLine(Node[BusSource], kw_only=True, tag=True):
         return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
 
 
-class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
+class BusStop(gt.BusStop, LocatedNode[BusSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)
     acceptable_single_node_types: ClassVar = lambda: (BusCompany,)
-
-    codes: set[str]
-    """Unique code(s) identifying the bus stop. May also be the same as the name"""
-    name: Sourced[str] | None = None
-    """Name of the stop"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`BusCompany` that stops here"""
-    connections: dict[int, list[Sourced[BusConnection]]] = None
-    """
-    References all next stops on the lines serving this stop.
-    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`BusConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
-    """
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -182,8 +160,8 @@ class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
         codes: set[str],
         company: BusCompany,
         name: str | None = None,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
         self.connect_one(ctx, company)
@@ -221,11 +199,19 @@ class BusStop(LocatedNode[BusSource], kw_only=True, tag=True):
             self.name.v = str(self.name.v).strip()
 
     @override
-    def prepare_export(self, ctx: BusSource):
-        super().prepare_export(ctx)
-        self.company = self.get_one_id(ctx, BusCompany)
-        self.connections = {
-            node.i: list(self.get_edges(ctx, node, BusConnection)) for node in self.get_all(ctx, BusStop)
+    def export(self, ctx: BusSource) -> gt.BusStop:
+        return gt.BusStop(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: BusSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, BusCompany),
+            "connections": {
+                node.i: [a.export(ctx) for a in self.get_edges(ctx, node, BusConnection)]
+                for node in self.get_all(ctx, BusStop)
+            },
         }
 
     @override

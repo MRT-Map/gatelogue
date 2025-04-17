@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-import datetime
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import TYPE_CHECKING, Any, Self
 
-import msgspec
+import gatelogue_types as gt
 import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
 
-from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.logging import INFO1, INFO2, track
-from gatelogue_aggregator.types.connections import Connection
-from gatelogue_aggregator.types.context.proximity import Proximity, ProximityContext
+from gatelogue_aggregator.types.context.proximity import ProximityContext
 from gatelogue_aggregator.types.context.shared_facility import SharedFacility, SharedFacilityContext
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import Node
@@ -53,7 +50,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
         for equiv, n in track(to_merge, description=INFO2 + "Merging equivalent nodes", remove=False):
             equiv.merge(self, n)
 
-        edges: dict[tuple[int, int], list[Sourced[Any]]] = {}
+        edges: dict[tuple[float, float], list[Sourced[Any]]] = {}
         for i in track(self.g.edge_indices(), description=INFO2 + "Merging edges", remove=False):
             u, v = self.g.get_edge_endpoints_by_index(i)
             k = self.g.get_edge_data_by_index(i)
@@ -73,37 +70,10 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
         ProximityContext.update(self)
         SharedFacilityContext.update(self)
 
-    @override
-    class Export(msgspec.Struct, kw_only=True):
-        nodes: dict[
-            int,
-            AirAirline
-            | AirAirport
-            | AirFlight
-            | AirGate
-            | BusCompany
-            | BusLine
-            | BusStop
-            | SeaCompany
-            | SeaLine
-            | SeaStop
-            | RailCompany
-            | RailLine
-            | RailStation,
-        ]
-        """List of all nodes, along with their connections to other nodes"""
-        timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
-        """Time that the aggregation of the data was done"""
-        version: int = int(__version__.split("+")[1])
-        """Version number of the database format"""
-
-    def export(self) -> Context.Export:
-        for node in track(self.g.nodes(), description=INFO2 + "Preparing nodes for export", remove=False):
-            node.prepare_export(self)
-        for edge in track(self.g.edges(), description=INFO2 + "Preparing edges for export", remove=False):
-            if isinstance(edge.v, Connection):
-                edge.v.prepare_export(self)
-        return self.Export(nodes={a.i: a for a in self.g.nodes()})
+    def export(self) -> gt.GatelogueData:
+        return gt.GatelogueData(
+            nodes={a.i: a.export(self) for a in track(self.g.nodes(), description=INFO2 + "Exporting", remove=False)}
+        )
 
     def graph(self, path: Path):
         g = self.g.copy()
@@ -150,7 +120,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
                 d["tooltip"] = replace(f"({u.str_ctx(self)} -- {v.str_ctx(self)})")
             else:
                 d["tooltip"] = replace(f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
-            if isinstance(edge_data, Proximity):
+            if isinstance(edge_data, gt.Proximity):
                 d["color"] = '"#ff00ff"'
                 return d
             if isinstance(edge_data, SharedFacility):

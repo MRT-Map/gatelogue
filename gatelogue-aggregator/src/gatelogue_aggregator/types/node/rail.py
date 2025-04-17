@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, ClassVar, Self, override
+
+import gatelogue_types as gt
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
-from gatelogue_aggregator.types.source import Source, Sourced
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,18 +18,8 @@ class RailSource(BaseContext, Source):
     pass
 
 
-class RailCompany(Node[RailSource], kw_only=True, tag=True):
+class RailCompany(gt.RailCompany, Node[RailSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (RailLine, RailStation)
-
-    name: str
-    """Name of the Rail company"""
-
-    lines: list[Sourced[int]] = None
-    """List of IDs of all :py:class:`RailLine` s the company operates"""
-    stations: list[Sourced[int]] = None
-    """List of all :py:class:`RailStation` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a metro system"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -70,9 +62,17 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
         self.name = str(self.name).strip()
 
     @override
-    def prepare_export(self, ctx: RailSource):
-        self.lines = self.get_all_id(ctx, RailLine)
-        self.stations = self.get_all_id(ctx, RailStation)
+    def export(self, ctx: RailSource) -> gt.RailCompany:
+        return gt.RailCompany(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: RailSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "lines": self.get_all_id(ctx, RailLine),
+            "stations": self.get_all_id(ctx, RailStation),
+        }
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
@@ -80,22 +80,8 @@ class RailCompany(Node[RailSource], kw_only=True, tag=True):
         return NodeRef(RailCompany, name=self.name)
 
 
-class RailLine(Node[RailSource], kw_only=True, tag=True):
+class RailLine(gt.RailLine, Node[RailSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (RailCompany, RailStation)
-
-    code: str
-    """Unique code identifying the Rail line"""
-    name: Sourced[str] | None = None
-    """Name of the line"""
-    colour: Sourced[str] | None = None
-    """Colour of the line (on a map)"""
-    mode: Sourced[RailMode] | None = None
-    """Type of rail or rail technology used on the line"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`RailCompany` that operates the line"""
-    ref_station: Sourced[int] | None = None
-    """ID of one :py:class:`RailStation` on the line, typically a terminus"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -107,7 +93,7 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         company: RailCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: RailMode | None = None,
+        mode: gt.RailMode | None = None,
         ref_station: RailStation | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -155,9 +141,17 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
             self.mode.v = str(self.mode.v).strip()
 
     @override
-    def prepare_export(self, ctx: RailSource):
-        self.company = self.get_one_id(ctx, RailCompany)
-        self.ref_station = self.get_one_id(ctx, RailStation)
+    def export(self, ctx: RailSource) -> gt.RailLine:
+        return gt.RailLine(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: RailSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, RailCompany),
+            "ref_station": self.get_one_id(ctx, RailStation),
+        }
 
     @override
     def ref(self, ctx: RailSource) -> NodeRef[Self]:
@@ -165,23 +159,9 @@ class RailLine(Node[RailSource], kw_only=True, tag=True):
         return NodeRef(RailLine, code=self.code, company=self.get_one(ctx, RailCompany).name)
 
 
-class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
+class RailStation(gt.RailStation, LocatedNode[RailSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (RailStation, RailLine, LocatedNode)
     acceptable_single_node_types: ClassVar = lambda: (RailCompany,)
-
-    codes: set[str]
-    """Unique code(s) identifying the Rail station. May also be the same as the name"""
-    name: Sourced[str] | None = None
-    """Name of the station"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`RailCompany` that stops here"""
-    connections: dict[int, list[Sourced[RailConnection]]] = None
-    """
-    References all next stations on the lines serving this station.
-    It is represented as a mapping of station IDs to a list of connection data (:py:class:`RailConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the station with ID ``1234`` is the next station from here on two lines.
-    """
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -192,8 +172,8 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
         codes: set[str],
         company: RailCompany,
         name: str | None = None,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
         self.connect_one(ctx, company)
@@ -231,12 +211,19 @@ class RailStation(LocatedNode[RailSource], kw_only=True, tag=True):
             self.name.v = str(self.name.v).strip()
 
     @override
-    def prepare_export(self, ctx: RailSource):
-        super().prepare_export(ctx)
-        self.company = self.get_one_id(ctx, RailCompany)
-        self.connections = {
-            node.i: list(self.get_edges(ctx, node, RailConnection))
-            for node in self.get_all(ctx, RailStation, RailConnection)
+    def export(self, ctx: RailSource) -> gt.RailStation:
+        return gt.RailStation(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: RailSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, RailCompany),
+            "connections": {
+                node.i: [a.export(ctx) for a in self.get_edges(ctx, node, RailConnection)]
+                for node in self.get_all(ctx, RailStation, RailConnection)
+            },
         }
 
     @override
@@ -251,6 +238,3 @@ class RailConnection(Connection[RailSource, RailLine]):
 
 class RailLineBuilder(LineBuilder[RailSource, RailLine, RailStation]):
     CnT = RailConnection
-
-
-type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import itertools
-from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, ClassVar, Self, override
+
+import gatelogue_types as gt
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.sources.air.hardcode import (
@@ -11,7 +13,7 @@ from gatelogue_aggregator.sources.air.hardcode import (
     GATE_ALIASES,
 )
 from gatelogue_aggregator.types.base import BaseContext
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
@@ -25,20 +27,9 @@ class AirSource(BaseContext, Source):
                 node.update(self)
 
 
-class AirFlight(Node[AirSource], kw_only=True, tag=True):
+class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
-
-    codes: set[str]
-    """Unique flight code(s). **2-letter airline prefix not included**"""
-    mode: Sourced[PlaneMode] | None = None
-    """Type of air vehicle or technology used on the flight"""
-
-    # noinspection PyDataclass
-    gates: list[Sourced[int]] = None
-    """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
-    airline: Sourced[int] = None
-    """ID of the :py:class:`AirAirline` the flight is operated by"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -48,7 +39,7 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         *,
         codes: set[str],
         airline: AirAirline,
-        mode: PlaneMode | None = None,
+        mode: gt.PlaneMode | None = None,
         gates: Iterable[AirGate] | None = None,
     ):
         self = super().new(ctx, codes=codes)
@@ -87,9 +78,15 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
             self.mode.v = str(self.mode.v).strip()
 
     @override
-    def prepare_export(self, ctx: AirSource):
-        self.gates = self.get_all_id(ctx, AirGate)
-        self.airline = self.get_one_id(ctx, AirAirline)
+    def export(self, ctx: AirSource) -> gt.AirFlight:
+        return gt.AirFlight(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: AirSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "gates": self.get_all_id(ctx, AirGate),
+            "airline": self.get_one_id(ctx, AirAirline),
+        }
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
@@ -147,20 +144,8 @@ class AirFlight(Node[AirSource], kw_only=True, tag=True):
         return {s, str(int(s) + 1)}
 
 
-class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
+class AirAirport(gt.AirAirport, LocatedNode[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)
-
-    code: str
-    """Unique 3 (sometimes 4)-letter code"""
-    name: Sourced[str] | None = None
-    """Name of the airport"""
-    link: Sourced[str] | None = None
-    """Link to the MRT Wiki page for the airport"""
-    modes: Sourced[set[PlaneMode]] | None = None
-    """Modes offered by the airport"""
-
-    gates: list[Sourced[int]] = None
-    """List of IDs of :py:class:`AirGate` s"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -171,10 +156,10 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         code: str,
         name: str | None = None,
         link: str | None = None,
-        modes: set[PlaneMode] | None = None,
+        modes: set[gt.PlaneMode] | None = None,
         gates: Iterable[AirGate] | None = None,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         self = super().new(ctx, code=code, world=world, coordinates=coordinates)
         if name is not None:
@@ -219,9 +204,14 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
             self.modes.v = {str(a).strip() for a in self.modes.v}
 
     @override
-    def prepare_export(self, ctx: AirSource):
-        super().prepare_export(ctx)
-        self.gates = self.get_all_id(ctx, AirGate)
+    def export(self, ctx: AirSource) -> gt.AirAirport:
+        return gt.AirAirport(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: AirSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "gates": self.get_all_id(ctx, AirGate),
+        }
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
@@ -267,21 +257,9 @@ class AirAirport(LocatedNode[AirSource], kw_only=True, tag=True):
         return s
 
 
-class AirGate(Node[AirSource], kw_only=True, tag=True):
+class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)
-
-    code: str | None
-    """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
-    size: Sourced[str] | None = None
-    """Abbreviated size of the gate (eg. ``S``, ``M``)"""
-
-    flights: list[Sourced[int]] = None
-    """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
-    airport: Sourced[int] = None
-    """ID of the :py:class:`AirAirport`"""
-    airline: Sourced[int] | None = None
-    """ID of the :py:class:`AirAirline` that owns the gate"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -332,10 +310,16 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
             self.size.v = str(self.size.v).strip()
 
     @override
-    def prepare_export(self, ctx: AirSource):
-        self.flights = self.get_all_id(ctx, AirFlight)
-        self.airport = self.get_one_id(ctx, AirAirport)
-        self.airline = self.get_one_id(ctx, AirAirline)
+    def export(self, ctx: AirSource) -> gt.AirGate:
+        return gt.AirGate(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: AirSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "flights": self.get_all_id(ctx, AirFlight),
+            "airport": self.get_one_id(ctx, AirAirport),
+            "airline": self.get_one_id(ctx, AirAirline),
+        }
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
@@ -352,18 +336,8 @@ class AirGate(Node[AirSource], kw_only=True, tag=True):
         return s
 
 
-class AirAirline(Node[AirSource], kw_only=True, tag=True):
+class AirAirline(gt.AirAirline, Node[AirSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight, AirGate)
-
-    name: str
-    """Name of the airline"""
-    link: Sourced[str] | None = None
-    """Link to the MRT Wiki page for the airline"""
-
-    flights: list[Sourced[int]] | None = None
-    """List of IDs of all :py:class:`AirFlight` s the airline operates"""
-    gates: list[Sourced[int]] | None = None
-    """List of IDs of all :py:class:`AirGate` s the airline owns or operates"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -410,9 +384,15 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
             self.link.v = str(self.link.v).strip()
 
     @override
-    def prepare_export(self, ctx: AirSource):
-        self.flights = self.get_all_id(ctx, AirFlight)
-        self.gates = self.get_all_id(ctx, AirGate)
+    def export(self, ctx: AirSource) -> gt.AirAirline:
+        return gt.AirAirline(**self._as_dict(ctx))
+
+    @override
+    def _as_dict(self, ctx: AirSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "flights": self.get_all_id(ctx, AirFlight),
+            "gates": self.get_all_id(ctx, AirGate),
+        }
 
     @override
     def ref(self, ctx: AirSource) -> NodeRef[Self]:
@@ -424,6 +404,3 @@ class AirAirline(Node[AirSource], kw_only=True, tag=True):
         if s is None:
             return None
         return AIRLINE_ALIASES.get(str(s).strip(), str(s))
-
-
-type PlaneMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]

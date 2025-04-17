@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Literal, Self, override
+from typing import TYPE_CHECKING, ClassVar, Self, override
+
+import gatelogue_types as gt
 
 from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
-from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef, World
-from gatelogue_aggregator.types.source import Source, Sourced
+from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
+from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -16,18 +18,8 @@ class SeaSource(BaseContext, Source):
     pass
 
 
-class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
+class SeaCompany(gt.SeaCompany, Node[SeaSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaLine, SeaStop)
-
-    name: str
-    """Name of the Sea company"""
-
-    lines: list[Sourced[int]] = None
-    """List of IDs of all :py:class:`SeaLine` s the company operates"""
-    stops: list[Sourced[int]] = None
-    """List of all :py:class:`SeaStop` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a local ferry line"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -70,9 +62,17 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
         self.name = str(self.name).strip()
 
     @override
-    def prepare_export(self, ctx: SeaSource):
-        self.lines = self.get_all_id(ctx, SeaLine)
-        self.stops = self.get_all_id(ctx, SeaStop)
+    def export(self, ctx: SeaSource) -> gt.SeaCompany:
+        return gt.SeaCompany(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: SeaSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "lines": self.get_all_id(ctx, SeaLine),
+            "stops": self.get_all_id(ctx, SeaStop),
+        }
 
     @override
     def ref(self, ctx: SeaSource) -> NodeRef[Self]:
@@ -80,22 +80,8 @@ class SeaCompany(Node[SeaSource], kw_only=True, tag=True):
         return NodeRef(SeaCompany, name=self.name)
 
 
-class SeaLine(Node[SeaSource], kw_only=True, tag=True):
+class SeaLine(gt.SeaLine, Node[SeaSource], kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany, SeaStop)
-
-    code: str
-    """Unique code identifying the Sea line"""
-    name: Sourced[str] | None = None
-    """Name of the line"""
-    colour: Sourced[str] | None = None
-    """Colour of the line (on a map)"""
-    mode: Sourced[SeaMode] | None = None
-    """Type of boat used on the line"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`SeaCompany` that operates the line"""
-    ref_stop: Sourced[int] | None = None
-    """ID of one :py:class:`SeaStop` on the line, typically a terminus"""
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -107,7 +93,7 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         company: SeaCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: SeaMode | None = None,
+        mode: gt.SeaMode | None = None,
         ref_stop: SeaStop | None = None,
     ):
         self = super().new(ctx, code=code)
@@ -151,9 +137,17 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
             self.colour.v = str(self.colour.v).strip()
 
     @override
-    def prepare_export(self, ctx: SeaSource):
-        self.company = self.get_one_id(ctx, SeaCompany)
-        self.ref_stop = self.get_one_id(ctx, SeaStop)
+    def export(self, ctx: SeaSource) -> gt.SeaLine:
+        return gt.SeaLine(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: SeaSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, SeaCompany),
+            "ref_stop": self.get_one_id(ctx, SeaStop),
+        }
 
     @override
     def ref(self, ctx: SeaSource) -> NodeRef[Self]:
@@ -161,23 +155,9 @@ class SeaLine(Node[SeaSource], kw_only=True, tag=True):
         return NodeRef(SeaLine, code=self.code, company=self.get_one(ctx, SeaCompany).name)
 
 
-class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
+class SeaStop(gt.SeaStop, LocatedNode[SeaSource], kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)
     acceptable_single_node_types: ClassVar = lambda: (SeaCompany,)
-
-    codes: set[str]
-    """Unique code(s) identifying the Sea stop. May also be the same as the name"""
-    name: Sourced[str] | None = None
-    """Name of the stop"""
-
-    company: Sourced[int] = None
-    """ID of the :py:class:`SeaCompany` that stops here"""
-    connections: dict[int, list[Sourced[SeaConnection]]] = None
-    """
-    References all next stops on the lines serving this stop.
-    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`SeaConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
-    """
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -188,8 +168,8 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
         codes: set[str],
         company: SeaCompany,
         name: str | None = None,
-        world: World | None = None,
-        coordinates: tuple[int, int] | None = None,
+        world: gt.World | None = None,
+        coordinates: tuple[float, float] | None = None,
     ):
         self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
         self.connect_one(ctx, company)
@@ -227,11 +207,19 @@ class SeaStop(LocatedNode[SeaSource], kw_only=True, tag=True):
             self.name.v = str(self.name.v).strip()
 
     @override
-    def prepare_export(self, ctx: SeaSource):
-        super().prepare_export(ctx)
-        self.company = self.get_one_id(ctx, SeaCompany)
-        self.connections = {
-            node.i: list(self.get_edges(ctx, node, SeaConnection)) for node in self.get_all(ctx, SeaStop)
+    def export(self, ctx: SeaSource) -> gt.SeaStop:
+        return gt.SeaStop(
+            **self._as_dict(ctx),
+        )
+
+    @override
+    def _as_dict(self, ctx: SeaSource) -> dict:
+        return super()._as_dict(ctx) | {
+            "company": self.get_one_id(ctx, SeaCompany),
+            "connections": {
+                node.i: [a.export(ctx) for a in self.get_edges(ctx, node, SeaConnection)]
+                for node in self.get_all(ctx, SeaStop)
+            },
         }
 
     @override
@@ -246,6 +234,3 @@ class SeaConnection(Connection[SeaSource, SeaLine]):
 
 class SeaLineBuilder(LineBuilder[SeaSource, SeaLine, SeaStop]):
     CnT = SeaConnection
-
-
-type SeaMode = Literal["ferry", "cruise"]
