@@ -6,6 +6,7 @@ from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
 from gatelogue_aggregator.utils import get_stn
 
+
 class NPSubway(Yaml2Source, RailSource):
     name = "Gatelogue (Rail, New Prubourne Subway)"
     priority = 1
@@ -24,7 +25,8 @@ class NPSubway(Yaml2Source, RailSource):
                 backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
-                get_stn(stations, "Penn Island-Zoo"), get_stn(stations, "Evergreen Parkway"),
+                get_stn(stations, "Penn Island-Zoo"),
+                get_stn(stations, "Evergreen Parkway"),
                 forward_label=line_yaml.forward_label,
                 backward_label=line_yaml.backward_label,
             )

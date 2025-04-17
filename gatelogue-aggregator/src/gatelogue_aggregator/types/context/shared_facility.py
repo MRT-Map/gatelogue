@@ -144,7 +144,12 @@ class SharedFacilityContext(BaseContext, Source):
             (rlq, "Downtown Achowalogen Takachsin/Covina", intra, "Achowalogen Takachsin-Covina Downtown"),
             (rlq, "Achowalogen Takachsin Western Transportation Hub", intra, "Achowalogen Takachsin West"),
             (blu, "Achowalogen Takachsin West", intra, "Achowalogen Takachsin West"),
-            (blu, "Achowalogen Takachsin-Covina International Airport", intra, "Achowalogen Takachsin-Covina International Airport"),
+            (
+                blu,
+                "Achowalogen Takachsin-Covina International Airport",
+                intra,
+                "Achowalogen Takachsin-Covina International Airport",
+            ),
             (rlq, "ATC International Airport", intra, "Achowalogen Takachsin-Covina International Airport"),
             (blu, "Chalxior Femtoprism Airfield", intra, "Chalxior Femtoprism Airfield"),
             (rn, "Chalxior", intra, "Chalxior Femtoprism Airfield"),
@@ -228,7 +233,7 @@ class SharedFacilityContext(BaseContext, Source):
             (flrf, "Liveray", nflr, "Foresne Liveray"),
             (flrf, "Solstinox Zoo", nflr, "Foresne Solstinox"),
             (flrf, "Cinnameadow", nflr, "New Foresne Cinnameadow"),
-            (flrk, "Tsukihama", nflr, "Tsukihama")
+            (flrk, "Tsukihama", nflr, "Tsukihama"),
         ):
 
             def is_desired_station(a, company, station_name):

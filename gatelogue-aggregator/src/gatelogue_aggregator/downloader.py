@@ -26,6 +26,7 @@ DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 SESSION = cloudscraper.create_scraper()
 COOLDOWN: dict[str, float] = {}
 
+
 def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
@@ -41,7 +42,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     if response.status_code >= 400:  # noqa: PLR2004
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
         if response.status_code == 429:
-            COOLDOWN[netloc] = time.time() + 15 # TODO config
+            COOLDOWN[netloc] = time.time() + 15  # TODO config
             rich.print(ERROR + f"Will try {url} again in 15s")
             return get_url(url, cache, timeout)
 
@@ -53,7 +54,6 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT) -> str:
     cache.touch()
     cache.write_text(text)
     rich.print(INFO3 + f"Downloaded {url} to {cache}")
-    rich.print(INFO3 + f"{url} starts with {text[:100]} and ends with {text[-100:]}")
     return text
 
 
