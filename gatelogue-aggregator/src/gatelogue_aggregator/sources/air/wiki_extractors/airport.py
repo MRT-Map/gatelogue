@@ -298,6 +298,7 @@ def aix(ctx: WikiAirport, config):
         "https://docs.google.com/spreadsheets/d/1vG_oEj_XzZlckRwxn4jKkK1FcgjjaULpt66XcxClqP8/export?format=csv&gid=0",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache, header=1)
@@ -336,6 +337,7 @@ def lar(ctx: WikiAirport, config):
         "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=0",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache)
@@ -368,6 +370,7 @@ def lfa(ctx: WikiAirport, config):
         "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=1289412824",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache)

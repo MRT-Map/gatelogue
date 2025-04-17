@@ -30,11 +30,13 @@ class DynmapMRT(RailSource):
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json",
             cache1,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         response2 = get_url(
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json",
             cache2,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         try:
             json1 = msgspec.json.decode(response1)["sets"]

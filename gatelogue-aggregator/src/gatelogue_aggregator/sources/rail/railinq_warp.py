@@ -29,6 +29,7 @@ class RaiLinQWarp(RailSource):
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=0",
             config.cache_dir / "railinq",
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df = pd.read_csv(config.cache_dir / "railinq", header=1)
         df.rename(

@@ -25,6 +25,7 @@ class AquaLinQWarp(SeaSource):
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=1793169664",
             config.cache_dir / "aqualinq",
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df = pd.read_csv(config.cache_dir / "aqualinq", header=None)
         df.rename(

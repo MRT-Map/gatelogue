@@ -326,6 +326,7 @@ def arctic_air(ctx: WikiAirline, config):
         "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=0",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache)
@@ -365,6 +366,7 @@ def sandstone_airr(ctx: WikiAirline, config):
         "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=3084051",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache)
@@ -422,6 +424,7 @@ def lilyflower_airlines(ctx: WikiAirline, config):
         "https://docs.google.com/spreadsheets/d/1B-fSerCAQAtaW-kAfv1npdjpGt-N1PrB1iUOmUBX5HI/export?format=csv&gid=1864111212",
         cache,
         timeout=config.timeout,
+        cooldown=config.cooldown,
     )
 
     df = pd.read_csv(cache, header=1)

@@ -36,6 +36,7 @@ class BluRail(RailSource):
                 "https://wiki.minecartrapidtransit.net/api.php?action=query&list=categorymembers&cmtitle=Category%3ABluRail+lines&cmlimit=5000&format=json",
                 config.cache_dir / "blurail_line_list",
                 config.timeout,
+                cooldown=config.cooldown,
             )
         )["query"]["categorymembers"]
 

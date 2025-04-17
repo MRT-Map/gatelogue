@@ -23,6 +23,7 @@ class TownList(TownSource):
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=0",
             cache1,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df1 = pd.read_csv(cache1)
         df1["World"] = "New"
@@ -31,6 +32,7 @@ class TownList(TownSource):
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=1533469138",
             cache2,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df2 = pd.read_csv(cache2)
         df2["World"] = "Old"

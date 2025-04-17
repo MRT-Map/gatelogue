@@ -25,7 +25,7 @@ class FredRail(Yaml2Source, RailSource):
         self,
         line_node: RailLine | BusLine | SeaLine,
         stations: list[RailStation | BusStop | SeaStop],
-        line_yaml: YamlLine,
+        _line_yaml: YamlLine,
     ):
         if line_node.name.v == "New Jerseyan":
             forward_label = "towards Boston Waterloo"

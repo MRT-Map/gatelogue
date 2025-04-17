@@ -25,6 +25,7 @@ class MRTTransit(AirSource):
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
             cache1,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df1 = pd.read_csv(cache1, header=1)
 
@@ -49,6 +50,7 @@ class MRTTransit(AirSource):
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
             cache2,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df2 = pd.read_csv(cache2, header=0)
         df2["Mode"] = "helicopter"
@@ -59,6 +61,7 @@ class MRTTransit(AirSource):
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
             cache3,
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df3 = pd.read_csv(cache3, header=1)
         df3["Mode"] = "warp plane"

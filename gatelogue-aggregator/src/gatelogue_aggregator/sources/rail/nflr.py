@@ -35,6 +35,7 @@ class NFLR(RailSource):
             "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid=1540849896",
             cache / "lines",
             timeout=config.timeout,
+            cooldown=config.cooldown,
         )
         df = pd.read_csv(cache / "lines")
         lines = [
@@ -49,6 +50,7 @@ class NFLR(RailSource):
                 + str(gid),
                 cache / line_name,
                 timeout=config.timeout,
+                cooldown=config.cooldown,
             )
 
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
