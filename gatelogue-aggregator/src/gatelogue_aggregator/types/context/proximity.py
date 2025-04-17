@@ -10,6 +10,8 @@ from gatelogue_aggregator.types.base import BaseContext
 class Proximity(msgspec.Struct):
     distance: int
     """Distance between the two objects in blocks"""
+    explicit: bool = False
+    """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
 
 
 class ProximityContext(BaseContext):
