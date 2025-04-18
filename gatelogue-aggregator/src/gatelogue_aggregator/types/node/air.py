@@ -348,7 +348,7 @@ class AirAirline(gt.AirAirline, Node[AirSource], kw_only=True, tag=True):
         name: str,
         link: str | None = None,
         flights: Iterable[AirFlight] | None = None,
-        gates: Iterable[AirFlight] | None = None,
+        gates: Iterable[AirGate] | None = None,
     ):
         self = super().new(ctx, name=name)
         if link is not None:

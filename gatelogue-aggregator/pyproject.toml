@@ -59,7 +59,15 @@ extra-dependencies = [
   "sphinx_rtd_theme",
 ]
 [tool.hatch.envs.docs.scripts]
-build = "cd docs; make html; cd .."
+build = """
+  cd docs
+  cp _templates/custom-class-template-temp.rst _templates/custom-class-template.rst
+  make html
+  cp _templates/custom-class-template-actual.rst _templates/custom-class-template.rst
+  make html
+  rm _templates/custom-class-template.rst
+  cd ..
+"""
 
 [tool.hatch.envs.types]
 extra-dependencies = [

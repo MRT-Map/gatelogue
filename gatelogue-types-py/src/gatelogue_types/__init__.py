@@ -17,38 +17,38 @@ if TYPE_CHECKING:
 type ID = int
 
 type Nodes = (
-        AirAirline
-        | AirAirport
-        | AirFlight
-        | AirGate
-        | BusCompany
-        | BusLine
-        | BusStop
-        | SeaCompany
-        | SeaLine
-        | SeaStop
-        | RailCompany
-        | RailLine
-        | RailStation
-        | SpawnWarp
-        | Town
+    AirAirline
+    | AirAirport
+    | AirFlight
+    | AirGate
+    | BusCompany
+    | BusLine
+    | BusStop
+    | SeaCompany
+    | SeaLine
+    | SeaStop
+    | RailCompany
+    | RailLine
+    | RailStation
+    | SpawnWarp
+    | Town
 )
 type NodesNS = (
-        AirAirlineNS
-        | AirAirportNS
-        | AirFlightNS
-        | AirGateNS
-        | BusCompanyNS
-        | BusLineNS
-        | BusStopNS
-        | SeaCompanyNS
-        | SeaLineNS
-        | SeaStopNS
-        | RailCompanyNS
-        | RailLineNS
-        | RailStationNS
-        | SpawnWarpNS
-        | TownNS
+    AirAirlineNS
+    | AirAirportNS
+    | AirFlightNS
+    | AirGateNS
+    | BusCompanyNS
+    | BusLineNS
+    | BusStopNS
+    | SeaCompanyNS
+    | SeaLineNS
+    | SeaStopNS
+    | RailCompanyNS
+    | RailLineNS
+    | RailStationNS
+    | SpawnWarpNS
+    | TownNS
 )
 
 
@@ -177,10 +177,10 @@ class Node(msgspec.Struct, kw_only=True, tag=True):
 
     def __str__(self) -> str:
         return (
-                type(self).__name__
-                + "("
-                + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-                + ")"
+            type(self).__name__
+            + "("
+            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
+            + ")"
         )
 
 
@@ -277,7 +277,6 @@ class AirGate(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return AirGateNS
 
 
@@ -351,7 +350,6 @@ class RailLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return RailLineNS
 
 
@@ -380,7 +378,6 @@ class RailStation(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return RailStationNS
 
 
@@ -406,7 +403,6 @@ class BusCompany(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return BusCompanyNS
 
 
@@ -430,7 +426,6 @@ class BusLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return BusLineNS
 
 
@@ -458,7 +453,6 @@ class BusStop(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return BusStopNS
 
 
@@ -481,7 +475,6 @@ class SeaCompany(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return SeaCompanyNS
 
 
@@ -507,7 +500,6 @@ class SeaLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return SeaLineNS
 
 
@@ -536,7 +528,6 @@ class SeaStop(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return SeaStopNS
 
 
@@ -557,7 +548,6 @@ class SpawnWarp(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return SpawnWarpNS
 
 
@@ -580,7 +570,6 @@ class Town(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return TownNS
 
 
@@ -601,7 +590,6 @@ class Connection(msgspec.Struct):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return ConnectionNS
 
 
@@ -621,7 +609,6 @@ class Direction(msgspec.Struct):
 
     @classmethod
     def NS(cls):  # noqa: N802
-
         return DirectionNS
 
 

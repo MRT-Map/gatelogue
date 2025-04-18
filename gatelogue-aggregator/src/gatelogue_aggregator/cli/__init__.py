@@ -8,6 +8,7 @@ import msgspec.json
 import rich
 import rich.progress
 
+import gatelogue_types as gt
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1, PROGRESS
@@ -148,7 +149,7 @@ def run(
 )
 @click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
 def schema(output: Path, *, fmt: bool):
-    j = msgspec.json.encode(msgspec.json.schema(Context.Export, schema_hook=_schema_hook))
+    j = msgspec.json.encode(msgspec.json.schema(gt.GatelogueData, schema_hook=_schema_hook))
     if fmt:
         rich.print(INFO1 + f"Outputting to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
