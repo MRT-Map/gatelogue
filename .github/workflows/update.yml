@@ -2,6 +2,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
+    paths: [ "gatelogue-aggregator", "gatelogue-types-py" ]
   schedule:
     - cron: 0 0 * * *
 
