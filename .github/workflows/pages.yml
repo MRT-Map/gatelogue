@@ -30,7 +30,7 @@ jobs:
           name: client
           path: gatelogue-client/dist
 
-  build-docs:
+  build-docs-py:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,12 +44,25 @@ jobs:
           hatch run docs:build
       - uses: actions/upload-artifact@v4
         with:
-          name: docs
+          name: docs-py
           path: gatelogue-aggregator/docs/_build/html/
+
+  build-docs-rs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cd gatelogue-types-rs
+          cargo doc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-rs
+          path: gatelogue-types-rs/target/doc/gatelogue_types
 
   pages:
     runs-on: ubuntu-latest
-    needs: [ build-client, build-docs ]
+    needs: [ build-client, build-docs-py ]
 
     steps:
     - uses: actions/checkout@v4
@@ -59,8 +72,12 @@ jobs:
         path: dist
     - uses: actions/download-artifact@v4
       with:
-        name: docs
+        name: docs-py
         path: dist/docs
+    - uses: actions/download-artifact@v4
+      with:
+        name: docs-rs
+        path: dist/docs/rs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:

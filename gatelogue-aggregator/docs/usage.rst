@@ -36,7 +36,7 @@ See :doc:`the API reference for gatelogue_types<_autosummary/gatelogue_types>`.
 
 gatelogue-types (Rust)
 ++++++++++++++++++++++
-See TODO.
+See `the docs for gatelogue-types (Rust) <https://mrt-map.github.io/gatelogue/docs/rs>`_.
 
 TypeScript
 ++++++++++

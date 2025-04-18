@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to gatelogue-aggregator's documentation!
-================================================
+Welcome to gatelogue's documentation!
+=====================================
 
 The current version is
 
