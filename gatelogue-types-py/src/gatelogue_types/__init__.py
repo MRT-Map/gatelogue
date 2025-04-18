@@ -62,7 +62,7 @@ class GatelogueData(msgspec.Struct, kw_only=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class NS(cls, kw_only=True, tag=cls.__name__):
+        class GatelogueDataNS(cls, kw_only=True, tag=cls.__name__):
             nodes: dict[ID, NodesNS]
 
             @classmethod
@@ -82,8 +82,7 @@ class GatelogueData(msgspec.Struct, kw_only=True):
                     session,
                 )
 
-        NS.__name__ = cls.__name__
-        return NS
+        return GatelogueDataNS
 
     @classmethod
     def get(cls, *args, **kwargs) -> Self:
