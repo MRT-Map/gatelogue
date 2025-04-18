@@ -736,6 +736,7 @@ instance/
 
 # Sphinx documentation
 gatelogue-aggregator/docs/_build/
+gatelogue-aggregator/docs/_autosummary
 
 # PyBuilder
 .pybuilder/
