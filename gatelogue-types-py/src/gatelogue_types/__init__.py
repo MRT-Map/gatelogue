@@ -17,38 +17,38 @@ if TYPE_CHECKING:
 type ID = int
 
 type Nodes = (
-    AirAirline
-    | AirAirport
-    | AirFlight
-    | AirGate
-    | BusCompany
-    | BusLine
-    | BusStop
-    | SeaCompany
-    | SeaLine
-    | SeaStop
-    | RailCompany
-    | RailLine
-    | RailStation
-    | SpawnWarp
-    | Town
+        AirAirline
+        | AirAirport
+        | AirFlight
+        | AirGate
+        | BusCompany
+        | BusLine
+        | BusStop
+        | SeaCompany
+        | SeaLine
+        | SeaStop
+        | RailCompany
+        | RailLine
+        | RailStation
+        | SpawnWarp
+        | Town
 )
 type NodesNS = (
-    AirAirline.NS()
-    | AirAirport.NS()
-    | AirFlight.NS()
-    | AirGate.NS()
-    | BusCompany.NS()
-    | BusLine.NS()
-    | BusStop.NS()
-    | SeaCompany.NS()
-    | SeaLine.NS()
-    | SeaStop.NS()
-    | RailCompany.NS()
-    | RailLine.NS()
-    | RailStation.NS()
-    | SpawnWarp.NS()
-    | Town.NS()
+        AirAirlineNS
+        | AirAirportNS
+        | AirFlightNS
+        | AirGateNS
+        | BusCompanyNS
+        | BusLineNS
+        | BusStopNS
+        | SeaCompanyNS
+        | SeaLineNS
+        | SeaStopNS
+        | RailCompanyNS
+        | RailLineNS
+        | RailStationNS
+        | SpawnWarpNS
+        | TownNS
 )
 
 
@@ -62,26 +62,6 @@ class GatelogueData(msgspec.Struct, kw_only=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class GatelogueDataNS(cls, kw_only=True, tag=cls.__name__):
-            nodes: dict[ID, NodesNS]
-
-            @classmethod
-            def get(cls, *args, **kwargs) -> Self:
-                return cls._get(
-                    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
-                    cls.NS(),
-                    *args,
-                    **kwargs,
-                )
-
-            @classmethod
-            async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None) -> Self:
-                return cls._aiohttp_get(
-                    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
-                    cls.NS(),
-                    session,
-                )
-
         return GatelogueDataNS
 
     @classmethod
@@ -134,6 +114,33 @@ class GatelogueData(msgspec.Struct, kw_only=True):
         return self.nodes[item]
 
 
+class GatelogueDataNS(GatelogueData, kw_only=True, tag=GatelogueData.__name__):
+    nodes: dict[ID, NodesNS]
+
+    @classmethod
+    def get(cls, *args, **kwargs) -> Self:
+        return cls._get(
+            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
+            cls.NS(),
+            *args,
+            **kwargs,
+        )
+
+    @classmethod
+    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None) -> Self:
+        return cls._aiohttp_get(
+            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
+            cls.NS(),
+            session,
+        )
+
+    def __iter__(self) -> Iterator[NodeNS]:
+        return iter(self.nodes.values())
+
+    def __getitem__(self, item: ID) -> NodeNS:
+        return self.nodes[item]
+
+
 T = TypeVar("T")
 
 
@@ -166,17 +173,19 @@ class Node(msgspec.Struct, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class NodeNS(cls, kw_only=True, tag=cls.__name__):
-            pass
         return NodeNS
 
     def __str__(self) -> str:
         return (
-            type(self).__name__
-            + "("
-            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-            + ")"
+                type(self).__name__
+                + "("
+                + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
+                + ")"
         )
+
+
+class NodeNS(Node, kw_only=True, tag=Node.__name__):
+    pass
 
 
 class LocatedNode(Node, kw_only=True, tag=True):
@@ -196,13 +205,14 @@ class LocatedNode(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class LocatedNodeNS(cls, kw_only=True, tag=cls.__name__):
-            coordinates: tuple[float, float] | None = None
-            world: World | None = None
-            proximity: dict[ID, Proximity] = msgspec.field(default_factory=dict)
-            shared_facility: list[ID] = msgspec.field(default_factory=list)
-
         return LocatedNodeNS
+
+
+class LocatedNodeNS(LocatedNode, kw_only=True, tag=LocatedNode.__name__):
+    coordinates: tuple[float, float] | None = None
+    world: World | None = None
+    proximity: dict[ID, Proximity] = msgspec.field(default_factory=dict)
+    shared_facility: list[ID] = msgspec.field(default_factory=list)
 
 
 class AirFlight(Node, kw_only=True, tag=True):
@@ -218,12 +228,13 @@ class AirFlight(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class AirFlightNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            mode: PlaneMode | None = None
-            gates: list[ID] = msgspec.field(default_factory=list)
-            airline: ID
-
         return AirFlightNS
+
+
+class AirFlightNS(AirFlight, NodeNS, kw_only=True, tag=AirFlight.__name__):
+    mode: PlaneMode | None = None
+    gates: list[ID] = msgspec.field(default_factory=list)
+    airline: ID
 
 
 class AirAirport(LocatedNode, kw_only=True, tag=True):
@@ -241,13 +252,14 @@ class AirAirport(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class AirAirportNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            link: str | None = None
-            modes: set[PlaneMode] | None = None
-            gates: list[ID] = msgspec.field(default_factory=list)
-
         return AirAirportNS
+
+
+class AirAirportNS(AirAirport, LocatedNodeNS, kw_only=True, tag=AirAirport.__name__):
+    name: str | None = None
+    link: str | None = None
+    modes: set[PlaneMode] | None = None
+    gates: list[ID] = msgspec.field(default_factory=list)
 
 
 class AirGate(Node, kw_only=True, tag=True):
@@ -265,13 +277,15 @@ class AirGate(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class AirGateNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            size: str | None = None
-            flights: list[ID] = msgspec.field(default_factory=list)
-            airport: ID
-            airline: ID | None = None
 
         return AirGateNS
+
+
+class AirGateNS(AirGate, NodeNS, kw_only=True, tag=AirGate.__name__):
+    size: str | None = None
+    flights: list[ID] = msgspec.field(default_factory=list)
+    airport: ID
+    airline: ID | None = None
 
 
 class AirAirline(Node, kw_only=True, tag=True):
@@ -287,12 +301,13 @@ class AirAirline(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class AirAirlineNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            link: str | None = None
-            flights: list[ID] = msgspec.field(default_factory=list)
-            gates: list[ID] = msgspec.field(default_factory=list)
-
         return AirAirlineNS
+
+
+class AirAirlineNS(AirAirline, NodeNS, kw_only=True, tag=AirAirline.__name__):
+    link: str | None = None
+    flights: list[ID] = msgspec.field(default_factory=list)
+    gates: list[ID] = msgspec.field(default_factory=list)
 
 
 type PlaneMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
@@ -311,11 +326,12 @@ class RailCompany(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class RailCompanyNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            lines: list[ID] = msgspec.field(default_factory=list)
-            stations: list[ID] = msgspec.field(default_factory=list)
-
         return RailCompanyNS
+
+
+class RailCompanyNS(RailCompany, NodeNS, kw_only=True, tag=RailCompany.__name__):
+    lines: list[ID] = msgspec.field(default_factory=list)
+    stations: list[ID] = msgspec.field(default_factory=list)
 
 
 class RailLine(Node, kw_only=True, tag=True):
@@ -335,14 +351,16 @@ class RailLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class RailLineNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            colour: str | None = None
-            mode: RailMode | None = None
-            company: ID = None
-            ref_station: ID | None = None
 
         return RailLineNS
+
+
+class RailLineNS(RailLine, NodeNS, kw_only=True, tag=RailLine.__name__):
+    name: str | None = None
+    colour: str | None = None
+    mode: RailMode | None = None
+    company: ID = None
+    ref_station: ID | None = None
 
 
 class RailStation(LocatedNode, kw_only=True, tag=True):
@@ -362,12 +380,14 @@ class RailStation(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class RailStationNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            company: ID = None
-            connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         return RailStationNS
+
+
+class RailStationNS(RailStation, LocatedNodeNS, kw_only=True, tag=RailStation.__name__):
+    name: str | None = None
+    company: ID = None
+    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
 
 
 type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]
@@ -386,11 +406,13 @@ class BusCompany(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class BusCompanyNS(cls, Node.NS(), Node.NS(), kw_only=True, tag=cls.__name__):
-            lines: list[ID] = msgspec.field(default_factory=list)
-            stops: list[ID] = msgspec.field(default_factory=list)
 
         return BusCompanyNS
+
+
+class BusCompanyNS(BusCompany, NodeNS, NodeNS, kw_only=True, tag=BusCompany.__name__):
+    lines: list[ID] = msgspec.field(default_factory=list)
+    stops: list[ID] = msgspec.field(default_factory=list)
 
 
 class BusLine(Node, kw_only=True, tag=True):
@@ -408,13 +430,15 @@ class BusLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class BusLineNS(cls, kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            colour: str | None = None
-            company: ID = None
-            ref_stop: ID | None = None
 
         return BusLineNS
+
+
+class BusLineNS(BusLine, kw_only=True, tag=BusLine.__name__):
+    name: str | None = None
+    colour: str | None = None
+    company: ID = None
+    ref_stop: ID | None = None
 
 
 class BusStop(LocatedNode, kw_only=True, tag=True):
@@ -434,12 +458,14 @@ class BusStop(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class BusStopNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            company: ID = None
-            connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         return BusStopNS
+
+
+class BusStopNS(BusStop, LocatedNodeNS, kw_only=True, tag=BusStop.__name__):
+    name: str | None = None
+    company: ID = None
+    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
 
 
 class SeaCompany(Node, kw_only=True, tag=True):
@@ -455,11 +481,13 @@ class SeaCompany(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class SeaCompanyNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            lines: list[ID] = msgspec.field(default_factory=list)
-            stops: list[ID] = msgspec.field(default_factory=list)
 
         return SeaCompanyNS
+
+
+class SeaCompanyNS(SeaCompany, NodeNS, kw_only=True, tag=SeaCompany.__name__):
+    lines: list[ID] = msgspec.field(default_factory=list)
+    stops: list[ID] = msgspec.field(default_factory=list)
 
 
 class SeaLine(Node, kw_only=True, tag=True):
@@ -479,14 +507,16 @@ class SeaLine(Node, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class SeaLineNS(cls, Node.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            colour: str | None = None
-            mode: SeaMode | None = None
-            company: ID = None
-            ref_stop: ID | None = None
 
         return SeaLineNS
+
+
+class SeaLineNS(SeaLine, NodeNS, kw_only=True, tag=SeaLine.__name__):
+    name: str | None = None
+    colour: str | None = None
+    mode: SeaMode | None = None
+    company: ID = None
+    ref_stop: ID | None = None
 
 
 class SeaStop(LocatedNode, kw_only=True, tag=True):
@@ -506,12 +536,14 @@ class SeaStop(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class SeaStopNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            name: str | None = None
-            company: ID = None
-            connections: dict[ID, list[Connection.NS()]] = msgspec.field(default_factory=dict)
 
         return SeaStopNS
+
+
+class SeaStopNS(SeaStop, LocatedNodeNS, kw_only=True, tag=SeaStop.__name__):
+    name: str | None = None
+    company: ID = None
+    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
 
 
 type SeaMode = Literal["ferry", "cruise"]
@@ -525,10 +557,12 @@ class SpawnWarp(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class SpawnWarpNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            pass
 
         return SpawnWarpNS
+
+
+class SpawnWarpNS(SpawnWarp, LocatedNodeNS, kw_only=True, tag=SpawnWarp.__name__):
+    pass
 
 
 type WarpType = Literal["premier", "terminus", "portal", "misc"]
@@ -546,12 +580,14 @@ class Town(LocatedNode, kw_only=True, tag=True):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class TownNS(cls, LocatedNode.NS(), kw_only=True, tag=cls.__name__):
-            rank: Rank
-            mayor: str
-            deputy_mayor: str | None
 
         return TownNS
+
+
+class TownNS(Town, LocatedNodeNS, kw_only=True, tag=Town.__name__):
+    rank: Rank
+    mayor: str
+    deputy_mayor: str | None
 
 
 type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
@@ -565,10 +601,12 @@ class Connection(msgspec.Struct):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class ConnectionNS(cls, kw_only=True, tag=cls.__name__):
-            direction: Direction.NS() | None = None
 
         return ConnectionNS
+
+
+class ConnectionNS(Connection, kw_only=True, tag=Connection.__name__):
+    direction: DirectionNS | None = None
 
 
 class Direction(msgspec.Struct):
@@ -583,7 +621,9 @@ class Direction(msgspec.Struct):
 
     @classmethod
     def NS(cls):  # noqa: N802
-        class DirectionNS(cls, kw_only=True, tag=cls.__name__):
-            one_way: bool = False
 
         return DirectionNS
+
+
+class DirectionNS(Direction, kw_only=True, tag=Direction.__name__):
+    one_way: bool = False
