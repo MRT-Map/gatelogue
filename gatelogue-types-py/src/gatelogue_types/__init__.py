@@ -169,7 +169,9 @@ class Proximity(msgspec.Struct):
 
 class Node(msgspec.Struct, kw_only=True, tag=True):
     i: ID = None
+    """The ID of the node"""
     source: set[str] = msgspec.field(default_factory=set)
+    """All sources that prove the node's existence"""
 
     @classmethod
     def NS(cls):  # noqa: N802
