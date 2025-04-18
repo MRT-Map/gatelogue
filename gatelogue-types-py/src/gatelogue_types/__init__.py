@@ -410,7 +410,7 @@ class BusCompany(Node, kw_only=True, tag=True):
         return BusCompanyNS
 
 
-class BusCompanyNS(BusCompany, NodeNS, NodeNS, kw_only=True, tag=BusCompany.__name__):
+class BusCompanyNS(BusCompany, NodeNS, kw_only=True, tag=BusCompany.__name__):
     lines: list[ID] = msgspec.field(default_factory=list)
     stops: list[ID] = msgspec.field(default_factory=list)
 
