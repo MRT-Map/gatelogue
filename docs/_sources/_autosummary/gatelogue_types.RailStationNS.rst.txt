@@ -1,0 +1,42 @@
+﻿gatelogue\_types.RailStationNS
+==============================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: RailStationNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailStationNS.NS
+      ~RailStationNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailStationNS.codes
+      ~RailStationNS.company
+      ~RailStationNS.connections
+      ~RailStationNS.coordinates
+      ~RailStationNS.i
+      ~RailStationNS.name
+      ~RailStationNS.proximity
+      ~RailStationNS.shared_facility
+      ~RailStationNS.source
+      ~RailStationNS.world
+   
+   

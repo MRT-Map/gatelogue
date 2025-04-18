@@ -1,0 +1,33 @@
+gatelogue\_aggregator.types.source
+==================================
+
+.. automodule:: gatelogue_aggregator.types.source
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Source
+      SourceMeta
+      Sourced
+   
+   
+
+   
+   
+   
+
+
+

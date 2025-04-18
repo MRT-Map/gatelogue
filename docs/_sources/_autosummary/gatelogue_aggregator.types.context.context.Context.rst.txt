@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.types.context.context.Context
+===================================================
+
+.. currentmodule:: gatelogue_aggregator.types.context.context
+
+.. autoclass:: Context
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Context.__init__
+      ~Context.export
+      ~Context.find_by_ref
+      ~Context.find_by_ref_or_index
+      ~Context.from_sources
+      ~Context.graph
+      ~Context.retrieve_from_cache
+      ~Context.sanitise_strings
+      ~Context.save_to_cache
+      ~Context.source
+      ~Context.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Context.name
+      ~Context.priority
+      ~Context.g
+   
+   

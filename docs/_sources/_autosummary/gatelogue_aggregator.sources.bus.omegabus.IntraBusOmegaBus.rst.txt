@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.bus.omegabus.IntraBusOmegaBus
+===========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.bus.omegabus
+
+.. autoclass:: IntraBusOmegaBus
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~IntraBusOmegaBus.__init__
+      ~IntraBusOmegaBus.find_by_ref
+      ~IntraBusOmegaBus.find_by_ref_or_index
+      ~IntraBusOmegaBus.retrieve_from_cache
+      ~IntraBusOmegaBus.sanitise_strings
+      ~IntraBusOmegaBus.save_to_cache
+      ~IntraBusOmegaBus.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~IntraBusOmegaBus.name
+      ~IntraBusOmegaBus.priority
+      ~IntraBusOmegaBus.g
+   
+   

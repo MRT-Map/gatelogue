@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.sea.wzf.WZF
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.wzf
+
+.. autoclass:: WZF
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WZF.__init__
+      ~WZF.find_by_ref
+      ~WZF.find_by_ref_or_index
+      ~WZF.retrieve_from_cache
+      ~WZF.sanitise_strings
+      ~WZF.save_to_cache
+      ~WZF.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WZF.name
+      ~WZF.priority
+      ~WZF.g
+   
+   

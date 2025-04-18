@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.intrarail\_warp.IntraRailWarp
+================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.intrarail_warp
+
+.. autoclass:: IntraRailWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~IntraRailWarp.__init__
+      ~IntraRailWarp.find_by_ref
+      ~IntraRailWarp.find_by_ref_or_index
+      ~IntraRailWarp.retrieve_from_cache
+      ~IntraRailWarp.sanitise_strings
+      ~IntraRailWarp.save_to_cache
+      ~IntraRailWarp.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~IntraRailWarp.name
+      ~IntraRailWarp.priority
+      ~IntraRailWarp.g
+   
+   

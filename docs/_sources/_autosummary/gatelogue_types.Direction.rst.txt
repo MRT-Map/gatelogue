@@ -1,0 +1,36 @@
+﻿gatelogue\_types.Direction
+==========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: Direction
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Direction.NS
+      ~Direction.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Direction.backward_label
+      ~Direction.direction
+      ~Direction.forward_label
+      ~Direction.one_way
+   
+   

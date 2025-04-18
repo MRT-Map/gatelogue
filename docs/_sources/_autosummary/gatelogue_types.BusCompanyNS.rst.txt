@@ -1,0 +1,38 @@
+﻿gatelogue\_types.BusCompanyNS
+=============================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: BusCompanyNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusCompanyNS.NS
+      ~BusCompanyNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusCompanyNS.i
+      ~BusCompanyNS.lines
+      ~BusCompanyNS.local
+      ~BusCompanyNS.name
+      ~BusCompanyNS.source
+      ~BusCompanyNS.stops
+   
+   

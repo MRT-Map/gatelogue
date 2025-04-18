@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gatelogue_aggregator.types.node.air.AirAirline &mdash; gatelogue-aggregator 2.0.0b8+8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+    <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.types.node.air.AirAirline.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=0c9e5b23"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gatelogue_aggregator.types.node.air.AirAirport" href="gatelogue_aggregator.types.node.air.AirAirport.html" />
+    <link rel="prev" title="gatelogue_aggregator.types.node.air" href="gatelogue_aggregator.types.node.air.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            gatelogue-aggregator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_format.html">Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gatelogue_aggregator.html">gatelogue_aggregator</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.cli.html">gatelogue_aggregator.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.downloader.html">gatelogue_aggregator.downloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.base.html">gatelogue_aggregator.types.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.config.html">gatelogue_aggregator.types.config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.connections.html">gatelogue_aggregator.types.connections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.context.html">gatelogue_aggregator.types.context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.line_builder.html">gatelogue_aggregator.types.line_builder</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.types.node.html">gatelogue_aggregator.types.node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.source.html">gatelogue_aggregator.types.source</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.utils.html">gatelogue_aggregator.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gatelogue_types.html">gatelogue_types</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gatelogue-aggregator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../reference.html">Reference</a></li>
+          <li class="breadcrumb-item"><a href="gatelogue_aggregator.html">gatelogue_aggregator</a></li>
+          <li class="breadcrumb-item"><a href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a></li>
+          <li class="breadcrumb-item"><a href="gatelogue_aggregator.types.node.html">gatelogue_aggregator.types.node</a></li>
+          <li class="breadcrumb-item"><a href="gatelogue_aggregator.types.node.air.html">gatelogue_aggregator.types.node.air</a></li>
+      <li class="breadcrumb-item active">gatelogue_aggregator.types.node.air.AirAirline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/gatelogue_aggregator.types.node.air.AirAirline.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gatelogue-aggregator-types-node-air-airairline">
+<h1>gatelogue_aggregator.types.node.air.AirAirline<a class="headerlink" href="#gatelogue-aggregator-types-node-air-airairline" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.node.air.</span></span><span class="sig-name descname"><span class="pre">AirAirline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link:</span> <span class="pre">~gatelogue_types.Sourced[str]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flights:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.AirAirline.html#gatelogue_types.AirAirline" title="gatelogue_types.AirAirline"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirAirline</span></code></a>, <a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>[<a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirSource</span></code></a>]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.NS" title="gatelogue_aggregator.types.node.air.AirAirline.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.__init__" title="gatelogue_aggregator.types.node.air.AirAirline.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.acceptable_list_node_types" title="gatelogue_aggregator.types.node.air.AirAirline.acceptable_list_node_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acceptable_list_node_types</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.acceptable_single_node_types" title="gatelogue_aggregator.types.node.air.AirAirline.acceptable_single_node_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acceptable_single_node_types</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.connect" title="gatelogue_aggregator.types.node.air.AirAirline.connect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect</span></code></a>(ctx, node[, value, source])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.connect_one" title="gatelogue_aggregator.types.node.air.AirAirline.connect_one"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect_one</span></code></a>(ctx, node[, value, source])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.disconnect" title="gatelogue_aggregator.types.node.air.AirAirline.disconnect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect</span></code></a>(ctx, node)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.equivalent" title="gatelogue_aggregator.types.node.air.AirAirline.equivalent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent</span></code></a>(ctx, other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.export" title="gatelogue_aggregator.types.node.air.AirAirline.export"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export</span></code></a>(ctx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_all" title="gatelogue_aggregator.types.node.air.AirAirline.get_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all</span></code></a>(ctx, ty[, conn_ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_all_id" title="gatelogue_aggregator.types.node.air.AirAirline.get_all_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_id</span></code></a>(ctx, ty[, conn_ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_edge" title="gatelogue_aggregator.types.node.air.AirAirline.get_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_edge</span></code></a>(ctx, node[, ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_edges" title="gatelogue_aggregator.types.node.air.AirAirline.get_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_edges</span></code></a>(ctx, node[, ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_one" title="gatelogue_aggregator.types.node.air.AirAirline.get_one"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_one</span></code></a>(ctx, ty[, conn_ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.get_one_id" title="gatelogue_aggregator.types.node.air.AirAirline.get_one_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_one_id</span></code></a>(ctx, ty[, conn_ty])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.merge" title="gatelogue_aggregator.types.node.air.AirAirline.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(ctx, other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_attrs" title="gatelogue_aggregator.types.node.air.AirAirline.merge_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_attrs</span></code></a>(ctx, other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_if_equivalent" title="gatelogue_aggregator.types.node.air.AirAirline.merge_if_equivalent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_if_equivalent</span></code></a>(ctx, other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_key" title="gatelogue_aggregator.types.node.air.AirAirline.merge_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_key</span></code></a>(ctx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_lists" title="gatelogue_aggregator.types.node.air.AirAirline.merge_lists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_lists</span></code></a>(ctx, self, other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.new" title="gatelogue_aggregator.types.node.air.AirAirline.new"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new</span></code></a>(ctx, *, name[, link, flights, gates])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.process_airline_name" title="gatelogue_aggregator.types.node.air.AirAirline.process_airline_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_airline_name</span></code></a>(s)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.process_code" title="gatelogue_aggregator.types.node.air.AirAirline.process_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_code</span></code></a>(s)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.ref" title="gatelogue_aggregator.types.node.air.AirAirline.ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ref</span></code></a>(ctx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.sanitise_strings" title="gatelogue_aggregator.types.node.air.AirAirline.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.str_ctx" title="gatelogue_aggregator.types.node.air.AirAirline.str_ctx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_ctx</span></code></a>(ctx)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.flights" title="gatelogue_aggregator.types.node.air.AirAirline.flights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flights</span></code></a></p></td>
+<td><p>List of IDs of all <a class="reference internal" href="gatelogue_aggregator.types.node.air.AirFlight.html#gatelogue_aggregator.types.node.air.AirFlight" title="gatelogue_aggregator.types.node.air.AirFlight"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirFlight</span></code></a> s the airline operates</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.gates" title="gatelogue_aggregator.types.node.air.AirAirline.gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gates</span></code></a></p></td>
+<td><p>List of IDs of all <a class="reference internal" href="gatelogue_aggregator.types.node.air.AirGate.html#gatelogue_aggregator.types.node.air.AirGate" title="gatelogue_aggregator.types.node.air.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> s the airline owns or operates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.i" title="gatelogue_aggregator.types.node.air.AirAirline.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<td><p>The ID of the node</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.link" title="gatelogue_aggregator.types.node.air.AirAirline.link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">link</span></code></a></p></td>
+<td><p>Link to the MRT Wiki page for the airline</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.name" title="gatelogue_aggregator.types.node.air.AirAirline.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Name of the airline</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.air.AirAirline.source" title="gatelogue_aggregator.types.node.air.AirAirline.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
+<td><p>All sources that prove the node's existence</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.NS">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.NS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.acceptable_list_node_types">
+<span class="sig-name descname"><span class="pre">acceptable_list_node_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.acceptable_list_node_types" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.acceptable_single_node_types">
+<span class="sig-name descname"><span class="pre">acceptable_single_node_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.acceptable_single_node_types" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.connect" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.connect_one">
+<span class="sig-name descname"><span class="pre">connect_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.connect_one" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.disconnect" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.equivalent">
+<span class="sig-name descname"><span class="pre">equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Self" title="(in Python v3.13)"><span class="pre">Self</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.equivalent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.AirAirline.html#gatelogue_types.AirAirline" title="gatelogue_types.AirAirline"><span class="pre">AirAirline</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.export" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.flights">
+<span class="sig-name descname"><span class="pre">flights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ID</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.flights" title="Link to this definition"></a></dt>
+<dd><p>List of IDs of all <a class="reference internal" href="gatelogue_aggregator.types.node.air.AirFlight.html#gatelogue_aggregator.types.node.air.AirFlight" title="gatelogue_aggregator.types.node.air.AirFlight"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirFlight</span></code></a> s the airline operates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.gates">
+<span class="sig-name descname"><span class="pre">gates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ID</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.gates" title="Link to this definition"></a></dt>
+<dd><p>List of IDs of all <a class="reference internal" href="gatelogue_aggregator.types.node.air.AirGate.html#gatelogue_aggregator.types.node.air.AirGate" title="gatelogue_aggregator.types.node.air.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> s the airline owns or operates</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_all">
+<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_all" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_all_id">
+<span class="sig-name descname"><span class="pre">get_all_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_all_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_edge">
+<span class="sig-name descname"><span class="pre">get_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_edge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_edges">
+<span class="sig-name descname"><span class="pre">get_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_edges" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_one">
+<span class="sig-name descname"><span class="pre">get_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_one" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.get_one_id">
+<span class="sig-name descname"><span class="pre">get_one_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_ty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.get_one_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.i">
+<span class="sig-name descname"><span class="pre">i</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ID</span></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.i" title="Link to this definition"></a></dt>
+<dd><p>The ID of the node</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.link">
+<span class="sig-name descname"><span class="pre">link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.link" title="Link to this definition"></a></dt>
+<dd><p>Link to the MRT Wiki page for the airline</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.merge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.merge_attrs">
+<span class="sig-name descname"><span class="pre">merge_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Self" title="(in Python v3.13)"><span class="pre">Self</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_attrs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.merge_if_equivalent">
+<span class="sig-name descname"><span class="pre">merge_if_equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_if_equivalent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.merge_key">
+<span class="sig-name descname"><span class="pre">merge_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_key" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.merge_lists">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_lists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CTX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.merge_lists" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.name" title="Link to this definition"></a></dt>
+<dd><p>Name of the airline</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.new">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">link</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirFlight.html#gatelogue_aggregator.types.node.air.AirFlight" title="gatelogue_aggregator.types.node.air.AirFlight"><span class="pre">AirFlight</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirGate.html#gatelogue_aggregator.types.node.air.AirGate" title="gatelogue_aggregator.types.node.air.AirGate"><span class="pre">AirGate</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.process_airline_name">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_airline_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.process_airline_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.process_code">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.process_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.ref">
+<span class="sig-name descname"><span class="pre">ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_aggregator.types.node.base.NodeRef.html#gatelogue_aggregator.types.node.base.NodeRef" title="gatelogue_aggregator.types.node.base.NodeRef"><span class="pre">NodeRef</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Self" title="(in Python v3.13)"><span class="pre">Self</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.ref" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.sanitise_strings">
+<span class="sig-name descname"><span class="pre">sanitise_strings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.sanitise_strings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.source" title="Link to this definition"></a></dt>
+<dd><p>All sources that prove the node’s existence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.air.AirAirline.str_ctx">
+<span class="sig-name descname"><span class="pre">str_ctx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.air.AirSource.html#gatelogue_aggregator.types.node.air.AirSource" title="gatelogue_aggregator.types.node.air.AirSource"><span class="pre">AirSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.air.AirAirline.str_ctx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gatelogue_aggregator.types.node.air.html" class="btn btn-neutral float-left" title="gatelogue_aggregator.types.node.air" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gatelogue_aggregator.types.node.air.AirAirport.html" class="btn btn-neutral float-right" title="gatelogue_aggregator.types.node.air.AirAirport" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

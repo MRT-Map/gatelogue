@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.bus.ccc.CCC
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.bus.ccc
+
+.. autoclass:: CCC
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CCC.__init__
+      ~CCC.find_by_ref
+      ~CCC.find_by_ref_or_index
+      ~CCC.retrieve_from_cache
+      ~CCC.sanitise_strings
+      ~CCC.save_to_cache
+      ~CCC.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CCC.name
+      ~CCC.priority
+      ~CCC.g
+   
+   

@@ -1,0 +1,6 @@
+gatelogue\_aggregator.utils.search\_all
+=======================================
+
+.. currentmodule:: gatelogue_aggregator.utils
+
+.. autofunction:: search_all

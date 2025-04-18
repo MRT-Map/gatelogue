@@ -1,0 +1,40 @@
+﻿gatelogue\_types.SpawnWarpNS
+============================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: SpawnWarpNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SpawnWarpNS.NS
+      ~SpawnWarpNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SpawnWarpNS.coordinates
+      ~SpawnWarpNS.i
+      ~SpawnWarpNS.name
+      ~SpawnWarpNS.proximity
+      ~SpawnWarpNS.shared_facility
+      ~SpawnWarpNS.source
+      ~SpawnWarpNS.warp_type
+      ~SpawnWarpNS.world
+   
+   

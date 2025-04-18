@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.redtrain\_warp.RedTrainWarp
+==============================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.redtrain_warp
+
+.. autoclass:: RedTrainWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RedTrainWarp.__init__
+      ~RedTrainWarp.find_by_ref
+      ~RedTrainWarp.find_by_ref_or_index
+      ~RedTrainWarp.retrieve_from_cache
+      ~RedTrainWarp.sanitise_strings
+      ~RedTrainWarp.save_to_cache
+      ~RedTrainWarp.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RedTrainWarp.name
+      ~RedTrainWarp.priority
+      ~RedTrainWarp.g
+   
+   

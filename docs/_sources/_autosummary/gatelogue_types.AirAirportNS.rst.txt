@@ -1,0 +1,43 @@
+﻿gatelogue\_types.AirAirportNS
+=============================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: AirAirportNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirAirportNS.NS
+      ~AirAirportNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirAirportNS.code
+      ~AirAirportNS.coordinates
+      ~AirAirportNS.gates
+      ~AirAirportNS.i
+      ~AirAirportNS.link
+      ~AirAirportNS.modes
+      ~AirAirportNS.name
+      ~AirAirportNS.proximity
+      ~AirAirportNS.shared_facility
+      ~AirAirportNS.source
+      ~AirAirportNS.world
+   
+   

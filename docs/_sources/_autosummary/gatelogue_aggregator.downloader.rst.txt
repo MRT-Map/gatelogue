@@ -1,0 +1,32 @@
+gatelogue\_aggregator.downloader
+================================
+
+.. automodule:: gatelogue_aggregator.downloader
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      all_warps
+      get_url
+      warps
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

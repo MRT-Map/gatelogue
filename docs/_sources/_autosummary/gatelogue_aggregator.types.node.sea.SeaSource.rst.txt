@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.types.node.sea.SeaSource
+==============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.sea
+
+.. autoclass:: SeaSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaSource.__init__
+      ~SeaSource.find_by_ref
+      ~SeaSource.find_by_ref_or_index
+      ~SeaSource.retrieve_from_cache
+      ~SeaSource.sanitise_strings
+      ~SeaSource.save_to_cache
+      ~SeaSource.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaSource.g
+      ~SeaSource.name
+      ~SeaSource.priority
+   
+   

@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gatelogue_types.AirAirlineNS &mdash; gatelogue-aggregator 2.0.0b8+8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+    <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_types.AirAirlineNS.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=0c9e5b23"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gatelogue_types.AirAirport" href="gatelogue_types.AirAirport.html" />
+    <link rel="prev" title="gatelogue_types.AirAirline" href="gatelogue_types.AirAirline.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            gatelogue-aggregator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_format.html">Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gatelogue_aggregator.html">gatelogue_aggregator</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="gatelogue_types.html">gatelogue_types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirAirline.html">gatelogue_types.AirAirline</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gatelogue_types.AirAirlineNS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gatelogue_types.AirAirlineNS"><code class="docutils literal notranslate"><span class="pre">AirAirlineNS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirAirport.html">gatelogue_types.AirAirport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirAirportNS.html">gatelogue_types.AirAirportNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirFlight.html">gatelogue_types.AirFlight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirFlightNS.html">gatelogue_types.AirFlightNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirGate.html">gatelogue_types.AirGate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.AirGateNS.html">gatelogue_types.AirGateNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusCompany.html">gatelogue_types.BusCompany</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusCompanyNS.html">gatelogue_types.BusCompanyNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusLine.html">gatelogue_types.BusLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusLineNS.html">gatelogue_types.BusLineNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusStop.html">gatelogue_types.BusStop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.BusStopNS.html">gatelogue_types.BusStopNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Connection.html">gatelogue_types.Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.ConnectionNS.html">gatelogue_types.ConnectionNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Direction.html">gatelogue_types.Direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.DirectionNS.html">gatelogue_types.DirectionNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.GatelogueData.html">gatelogue_types.GatelogueData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.GatelogueDataNS.html">gatelogue_types.GatelogueDataNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.LocatedNode.html">gatelogue_types.LocatedNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.LocatedNodeNS.html">gatelogue_types.LocatedNodeNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Node.html">gatelogue_types.Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.NodeNS.html">gatelogue_types.NodeNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Proximity.html">gatelogue_types.Proximity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailCompany.html">gatelogue_types.RailCompany</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailCompanyNS.html">gatelogue_types.RailCompanyNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailLine.html">gatelogue_types.RailLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailLineNS.html">gatelogue_types.RailLineNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailStation.html">gatelogue_types.RailStation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.RailStationNS.html">gatelogue_types.RailStationNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaCompany.html">gatelogue_types.SeaCompany</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaCompanyNS.html">gatelogue_types.SeaCompanyNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaLine.html">gatelogue_types.SeaLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaLineNS.html">gatelogue_types.SeaLineNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaStop.html">gatelogue_types.SeaStop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SeaStopNS.html">gatelogue_types.SeaStopNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Sourced.html">gatelogue_types.Sourced</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SpawnWarp.html">gatelogue_types.SpawnWarp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.SpawnWarpNS.html">gatelogue_types.SpawnWarpNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.Town.html">gatelogue_types.Town</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_types.TownNS.html">gatelogue_types.TownNS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gatelogue-aggregator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../reference.html">Reference</a></li>
+          <li class="breadcrumb-item"><a href="gatelogue_types.html">gatelogue_types</a></li>
+      <li class="breadcrumb-item active">gatelogue_types.AirAirlineNS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/gatelogue_types.AirAirlineNS.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gatelogue-types-airairlinens">
+<h1>gatelogue_types.AirAirlineNS<a class="headerlink" href="#gatelogue-types-airairlinens" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">AirAirlineNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flights:</span> <span class="pre">list[ID]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates:</span> <span class="pre">list[ID]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirAirlineNS" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.AirAirline.html#gatelogue_types.AirAirline" title="gatelogue_types.AirAirline"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirAirline</span></code></a>, <a class="reference internal" href="gatelogue_types.NodeNS.html#gatelogue_types.NodeNS" title="gatelogue_types.NodeNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeNS</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirAirlineNS.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.NS" title="gatelogue_types.AirAirlineNS.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.__init__" title="gatelogue_types.AirAirlineNS.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.flights" title="gatelogue_types.AirAirlineNS.flights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flights</span></code></a></p></td>
+<td><p>List of IDs of all <a class="reference internal" href="gatelogue_types.AirFlight.html#gatelogue_types.AirFlight" title="gatelogue_types.AirFlight"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirFlight</span></code></a> s the airline operates</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.gates" title="gatelogue_types.AirAirlineNS.gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gates</span></code></a></p></td>
+<td><p>List of IDs of all <a class="reference internal" href="gatelogue_types.AirGate.html#gatelogue_types.AirGate" title="gatelogue_types.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> s the airline owns or operates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.i" title="gatelogue_types.AirAirlineNS.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<td><p>The ID of the node</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.link" title="gatelogue_types.AirAirlineNS.link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">link</span></code></a></p></td>
+<td><p>Link to the MRT Wiki page for the airline</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.name" title="gatelogue_types.AirAirlineNS.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Name of the airline</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirAirlineNS.source" title="gatelogue_types.AirAirlineNS.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
+<td><p>All sources that prove the node's existence</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.NS">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirAirlineNS.NS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.flights">
+<span class="sig-name descname"><span class="pre">flights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.flights" title="Link to this definition"></a></dt>
+<dd><p>List of IDs of all <a class="reference internal" href="gatelogue_types.AirFlight.html#gatelogue_types.AirFlight" title="gatelogue_types.AirFlight"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirFlight</span></code></a> s the airline operates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.gates">
+<span class="sig-name descname"><span class="pre">gates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.gates" title="Link to this definition"></a></dt>
+<dd><p>List of IDs of all <a class="reference internal" href="gatelogue_types.AirGate.html#gatelogue_types.AirGate" title="gatelogue_types.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> s the airline owns or operates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.i">
+<span class="sig-name descname"><span class="pre">i</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ID</span></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.i" title="Link to this definition"></a></dt>
+<dd><p>The ID of the node</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.link">
+<span class="sig-name descname"><span class="pre">link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.link" title="Link to this definition"></a></dt>
+<dd><p>Link to the MRT Wiki page for the airline</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.name" title="Link to this definition"></a></dt>
+<dd><p>Name of the airline</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.AirAirlineNS.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_types.AirAirlineNS.source" title="Link to this definition"></a></dt>
+<dd><p>All sources that prove the node’s existence</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gatelogue_types.AirAirline.html" class="btn btn-neutral float-left" title="gatelogue_types.AirAirline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gatelogue_types.AirAirport.html" class="btn btn-neutral float-right" title="gatelogue_types.AirAirport" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

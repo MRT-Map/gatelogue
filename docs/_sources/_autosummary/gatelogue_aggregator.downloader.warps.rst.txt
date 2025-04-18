@@ -1,0 +1,6 @@
+gatelogue\_aggregator.downloader.warps
+======================================
+
+.. currentmodule:: gatelogue_aggregator.downloader
+
+.. autofunction:: warps

@@ -1,0 +1,62 @@
+﻿gatelogue\_aggregator.types.node.bus.BusLine
+============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.bus
+
+.. autoclass:: BusLine
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusLine.NS
+      ~BusLine.__init__
+      ~BusLine.acceptable_list_node_types
+      ~BusLine.acceptable_single_node_types
+      ~BusLine.connect
+      ~BusLine.connect_one
+      ~BusLine.disconnect
+      ~BusLine.equivalent
+      ~BusLine.export
+      ~BusLine.get_all
+      ~BusLine.get_all_id
+      ~BusLine.get_edge
+      ~BusLine.get_edges
+      ~BusLine.get_one
+      ~BusLine.get_one_id
+      ~BusLine.merge
+      ~BusLine.merge_attrs
+      ~BusLine.merge_if_equivalent
+      ~BusLine.merge_key
+      ~BusLine.merge_lists
+      ~BusLine.new
+      ~BusLine.process_code
+      ~BusLine.ref
+      ~BusLine.sanitise_strings
+      ~BusLine.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusLine.code
+      ~BusLine.colour
+      ~BusLine.company
+      ~BusLine.i
+      ~BusLine.name
+      ~BusLine.ref_stop
+      ~BusLine.source
+   
+   

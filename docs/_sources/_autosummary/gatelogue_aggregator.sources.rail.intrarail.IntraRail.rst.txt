@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.intrarail.IntraRail
+======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.intrarail
+
+.. autoclass:: IntraRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~IntraRail.__init__
+      ~IntraRail.find_by_ref
+      ~IntraRail.find_by_ref_or_index
+      ~IntraRail.retrieve_from_cache
+      ~IntraRail.sanitise_strings
+      ~IntraRail.save_to_cache
+      ~IntraRail.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~IntraRail.name
+      ~IntraRail.priority
+      ~IntraRail.g
+   
+   

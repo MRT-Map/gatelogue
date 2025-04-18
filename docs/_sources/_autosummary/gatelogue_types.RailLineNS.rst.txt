@@ -1,0 +1,40 @@
+﻿gatelogue\_types.RailLineNS
+===========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: RailLineNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailLineNS.NS
+      ~RailLineNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailLineNS.code
+      ~RailLineNS.colour
+      ~RailLineNS.company
+      ~RailLineNS.i
+      ~RailLineNS.mode
+      ~RailLineNS.name
+      ~RailLineNS.ref_station
+      ~RailLineNS.source
+   
+   

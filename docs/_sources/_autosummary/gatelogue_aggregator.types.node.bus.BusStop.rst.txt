@@ -1,0 +1,65 @@
+﻿gatelogue\_aggregator.types.node.bus.BusStop
+============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.bus
+
+.. autoclass:: BusStop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusStop.NS
+      ~BusStop.__init__
+      ~BusStop.acceptable_list_node_types
+      ~BusStop.acceptable_single_node_types
+      ~BusStop.connect
+      ~BusStop.connect_one
+      ~BusStop.disconnect
+      ~BusStop.equivalent
+      ~BusStop.export
+      ~BusStop.get_all
+      ~BusStop.get_all_id
+      ~BusStop.get_edge
+      ~BusStop.get_edges
+      ~BusStop.get_one
+      ~BusStop.get_one_id
+      ~BusStop.merge
+      ~BusStop.merge_attrs
+      ~BusStop.merge_if_equivalent
+      ~BusStop.merge_key
+      ~BusStop.merge_lists
+      ~BusStop.new
+      ~BusStop.process_code
+      ~BusStop.ref
+      ~BusStop.sanitise_strings
+      ~BusStop.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusStop.codes
+      ~BusStop.company
+      ~BusStop.connections
+      ~BusStop.coordinates
+      ~BusStop.i
+      ~BusStop.name
+      ~BusStop.proximity
+      ~BusStop.shared_facility
+      ~BusStop.source
+      ~BusStop.world
+   
+   

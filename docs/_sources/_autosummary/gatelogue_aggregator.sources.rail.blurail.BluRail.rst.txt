@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.blurail.BluRail
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.blurail
+
+.. autoclass:: BluRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BluRail.__init__
+      ~BluRail.find_by_ref
+      ~BluRail.find_by_ref_or_index
+      ~BluRail.retrieve_from_cache
+      ~BluRail.sanitise_strings
+      ~BluRail.save_to_cache
+      ~BluRail.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BluRail.name
+      ~BluRail.priority
+      ~BluRail.g
+   
+   

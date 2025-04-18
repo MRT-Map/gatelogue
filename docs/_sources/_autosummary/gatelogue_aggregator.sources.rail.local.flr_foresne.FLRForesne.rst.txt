@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.sources.rail.local.flr\_foresne.FLRForesne
+================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.flr_foresne
+
+.. autoclass:: FLRForesne
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FLRForesne.__init__
+      ~FLRForesne.custom_routing
+      ~FLRForesne.find_by_ref
+      ~FLRForesne.find_by_ref_or_index
+      ~FLRForesne.retrieve_from_cache
+      ~FLRForesne.sanitise_strings
+      ~FLRForesne.save_to_cache
+      ~FLRForesne.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FLRForesne.file_path
+      ~FLRForesne.name
+      ~FLRForesne.priority
+      ~FLRForesne.g
+   
+   

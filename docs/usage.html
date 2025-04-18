@@ -1,53 +1,52 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+
+<html class="writer-html5" data-content_root="./" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; gatelogue-aggregator 2.0.0b8+8 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
-
-  
-    <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/usage.html" />
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0c9e5b23"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Format" href="data_format.html" />
-    <link rel="prev" title="Welcome to gatelogue-aggregator’s documentation!" href="index.html" /> 
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Usage — gatelogue-aggregator 2.0.0b8+8 documentation</title>
+<link href="_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="https://mrt-map.github.io/gatelogue/docs/usage.html" rel="canonical"/>
+<script src="_static/jquery.js?v=5d32c60e"></script>
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="_static/documentation_options.js?v=0c9e5b23"></script>
+<script src="_static/doctools.js?v=9bcbadda"></script>
+<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="_static/js/theme.js"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="data_format.html" rel="next" title="Data Format"/>
+<link href="index.html" rel="prev" title="Welcome to gatelogue’s documentation!"/>
 </head>
-
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="index.html">
             gatelogue-aggregator
           </a>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database">Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raw">Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gatelogue-types-python">gatelogue-types (Python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gatelogue-types-rust">gatelogue-types (Rust)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typescript">TypeScript</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#cli">CLI</a></li>
 </ul>
 </li>
@@ -55,59 +54,80 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 </ul>
-
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">gatelogue-aggregator</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Usage</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="usage">
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">gatelogue-aggregator</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="index.html"></a></li>
+<li class="breadcrumb-item active">Usage</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
 <section id="database">
 <h2>Database<a class="headerlink" href="#database" title="Link to this heading"></a></h2>
+<p>The data is provided in JSON. Its format and description is outlined at <a class="reference internal" href="data_format.html"><span class="doc">Data Format</span></a>.</p>
+<section id="raw">
+<h3>Raw<a class="headerlink" href="#raw" title="Link to this heading"></a></h3>
 <p>Use a HTTP GET request to <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json</a> to retrieve the data.</p>
 <p>A version without sources is available, at <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json</a></p>
-<p>The data is provided in JSON. Its format and description is outlined at <a class="reference internal" href="data_format.html"><span class="doc">Data Format</span></a>.</p>
+</section>
+<section id="gatelogue-types-python">
+<h3>gatelogue-types (Python)<a class="headerlink" href="#gatelogue-types-python" title="Link to this heading"></a></h3>
+<p>The data can be imported to your Python project in dataclasses.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py</span></code> or add <code class="docutils literal notranslate"><span class="pre">gatelogue-types</span> <span class="pre">@</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py</span></code> to your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> or <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>. You can also use <code class="docutils literal notranslate"><span class="pre">requests</span></code>, <code class="docutils literal notranslate"><span class="pre">niquests</span></code>, <code class="docutils literal notranslate"><span class="pre">httpx</span></code>, <code class="docutils literal notranslate"><span class="pre">urllib3</span></code> or <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> to retrieve the data via <code class="docutils literal notranslate"><span class="pre">gatelogue-types</span></code> if <code class="docutils literal notranslate"><span class="pre">[requests]</span></code>, <code class="docutils literal notranslate"><span class="pre">[niquests]</span></code>, <code class="docutils literal notranslate"><span class="pre">[httpx]</span></code>, <code class="docutils literal notranslate"><span class="pre">[urllib3]</span></code> or <code class="docutils literal notranslate"><span class="pre">[aiohttp]</span></code> is suffixed. Otherwise <code class="docutils literal notranslate"><span class="pre">urllib</span></code> is used.</p>
+<p>To retrieve the data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="_autosummary/gatelogue_types.html#module-gatelogue_types" title="gatelogue_types"><span class="nn">gatelogue_types</span></a><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gt</span>  <span class="c1"># alias highly recommended for convenience's sake</span>
+
+<span class="n">gt</span><span class="o">.</span><span class="n">GatelogueData</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># retrieve data, with sources</span>
+
+<span class="n">gt</span><span class="o">.</span><span class="n">GatelogueDataNS</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># retrieve data, no sources</span>
+
+<span class="k">await</span> <span class="n">gt</span><span class="o">.</span><span class="n">GatelogueData</span><span class="o">.</span><span class="n">aiohttp_get</span><span class="p">()</span>  <span class="c1"># retrieve data, with sources, async</span>
+
+<span class="k">await</span> <span class="n">gt</span><span class="o">.</span><span class="n">GatelogueDataNS</span><span class="o">.</span><span class="n">aiohttp_get</span><span class="p">()</span>  <span class="c1"># retrieve data, no sources, async</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="_autosummary/gatelogue_types.html"><span class="doc">the API reference for gatelogue_types</span></a>.</p>
+</section>
+<section id="gatelogue-types-rust">
+<h3>gatelogue-types (Rust)<a class="headerlink" href="#gatelogue-types-rust" title="Link to this heading"></a></h3>
+<p>See <a class="reference external" href="https://mrt-map.github.io/gatelogue/docs/rs">the docs for gatelogue-types (Rust)</a>.</p>
+</section>
+<section id="typescript">
+<h3>TypeScript<a class="headerlink" href="#typescript" title="Link to this heading"></a></h3>
+<p>See <a class="reference external" href="https://github.com/MRT-Map/gatelogue/blob/main/gatelogue-client/src/stores/schema.ts">https://github.com/MRT-Map/gatelogue/blob/main/gatelogue-client/src/stores/schema.ts</a> for a schema.</p>
+</section>
 </section>
 <section id="cli">
 <h2>CLI<a class="headerlink" href="#cli" title="Link to this heading"></a></h2>
-<p>The aggregator can be installed wih <code class="docutils literal notranslate"><span class="pre">pipx</span></code>: <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">--python</span> <span class="pre">python3.12</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator</span></code>.</p>
+<p>The aggregator can be installed wih <code class="docutils literal notranslate"><span class="pre">pipx</span></code>: <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator</span></code>.</p>
 <p>See <a class="reference internal" href="cli.html"><span class="doc">Command Line</span></a>.</p>
 </section>
 </section>
-
-
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to gatelogue-aggregator’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data_format.html" class="btn btn-neutral float-right" title="Data Format" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
-  </div>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="index.html" rel="prev" title="Welcome to gatelogue’s documentation!"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+<a accesskey="n" class="btn btn-neutral float-right" href="data_format.html" rel="next" title="Data Format">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, MRT Mapping Services.</p>
+</div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
@@ -115,15 +135,14 @@
    
 
 </footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
+</div>
+</div>
+</section>
+</div>
+<script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
-
+  </script>
 </body>
 </html>

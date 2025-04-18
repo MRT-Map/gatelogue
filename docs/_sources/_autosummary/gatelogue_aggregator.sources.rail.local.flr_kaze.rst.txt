@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.rail.local.flr\_kaze
+==================================================
+
+.. automodule:: gatelogue_aggregator.sources.rail.local.flr_kaze
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      FLRKaze
+   
+   
+
+   
+   
+   
+
+
+

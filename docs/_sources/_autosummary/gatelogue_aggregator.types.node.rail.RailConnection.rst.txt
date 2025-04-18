@@ -1,0 +1,38 @@
+﻿gatelogue\_aggregator.types.node.rail.RailConnection
+====================================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.rail
+
+.. autoclass:: RailConnection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailConnection.NS
+      ~RailConnection.__init__
+      ~RailConnection.export
+      ~RailConnection.get_line
+      ~RailConnection.sanitise_strings
+      ~RailConnection.set_line
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailConnection.direction
+      ~RailConnection.line
+   
+   

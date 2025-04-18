@@ -1,0 +1,42 @@
+﻿gatelogue\_types.BusStopNS
+==========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: BusStopNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusStopNS.NS
+      ~BusStopNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusStopNS.codes
+      ~BusStopNS.company
+      ~BusStopNS.connections
+      ~BusStopNS.coordinates
+      ~BusStopNS.i
+      ~BusStopNS.name
+      ~BusStopNS.proximity
+      ~BusStopNS.shared_facility
+      ~BusStopNS.source
+      ~BusStopNS.world
+   
+   

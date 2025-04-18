@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.seabeast\_rail.SeabeastRail
+==============================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.seabeast_rail
+
+.. autoclass:: SeabeastRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeabeastRail.__init__
+      ~SeabeastRail.find_by_ref
+      ~SeabeastRail.find_by_ref_or_index
+      ~SeabeastRail.retrieve_from_cache
+      ~SeabeastRail.sanitise_strings
+      ~SeabeastRail.save_to_cache
+      ~SeabeastRail.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeabeastRail.name
+      ~SeabeastRail.priority
+      ~SeabeastRail.g
+   
+   
