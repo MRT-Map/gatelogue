@@ -107,10 +107,10 @@ class GatelogueData(msgspec.Struct, kw_only=True):
         async with session as session, session.get(url) as response:
             return msgspec.json.decode(await response.text(), type=ty)
 
-    def __iter__(self) -> Iterator[Node]:
+    def __iter__(self) -> Iterator[Nodes]:
         return iter(self.nodes.values())
 
-    def __getitem__(self, item: ID) -> Node:
+    def __getitem__(self, item: ID) -> Nodes:
         return self.nodes[item]
 
 
@@ -134,10 +134,10 @@ class GatelogueDataNS(GatelogueData, kw_only=True, tag=GatelogueData.__name__):
             session,
         )
 
-    def __iter__(self) -> Iterator[NodeNS]:
+    def __iter__(self) -> Iterator[NodesNS]:
         return iter(self.nodes.values())
 
-    def __getitem__(self, item: ID) -> NodeNS:
+    def __getitem__(self, item: ID) -> NodesNS:
         return self.nodes[item]
 
 
