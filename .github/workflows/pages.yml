@@ -62,7 +62,7 @@ jobs:
 
   pages:
     runs-on: ubuntu-latest
-    needs: [ build-client, build-docs-py ]
+    needs: [ build-client, build-docs-py, build-docs-rs ]
 
     steps:
     - uses: actions/checkout@v4
