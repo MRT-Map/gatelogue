@@ -24,7 +24,7 @@ dependencies = [
   "msgspec",
   "gatelogue-types[niquests]",
 ]
-optional-dependencies = { requests = ["requests"], niquests = ["niquests"], httpx = ["httpx"], aiohttp = ["aiohttp"], all = ["requests", "niquests", "httpx", "aiohttp"] }
+optional-dependencies = { requests = ["requests"], niquests = ["niquests"], httpx = ["httpx"], urllib3 = ["urllib3"], aiohttp = ["aiohttp"], all = ["requests", "niquests", "httpx", "urllib3", "aiohttp"] }
 
 [project.urls]
 Documentation = "https://github.com/mrt-map/gatelogue#readme"

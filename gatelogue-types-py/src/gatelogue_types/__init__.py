@@ -17,38 +17,38 @@ if TYPE_CHECKING:
 type ID = int
 
 type Nodes = (
-        AirAirline
-        | AirAirport
-        | AirFlight
-        | AirGate
-        | BusCompany
-        | BusLine
-        | BusStop
-        | SeaCompany
-        | SeaLine
-        | SeaStop
-        | RailCompany
-        | RailLine
-        | RailStation
-        | SpawnWarp
-        | Town
+    AirAirline
+    | AirAirport
+    | AirFlight
+    | AirGate
+    | BusCompany
+    | BusLine
+    | BusStop
+    | SeaCompany
+    | SeaLine
+    | SeaStop
+    | RailCompany
+    | RailLine
+    | RailStation
+    | SpawnWarp
+    | Town
 )
 type NodesNS = (
-        AirAirline.NS()
-        | AirAirport.NS()
-        | AirFlight.NS()
-        | AirGate.NS()
-        | BusCompany.NS()
-        | BusLine.NS()
-        | BusStop.NS()
-        | SeaCompany.NS()
-        | SeaLine.NS()
-        | SeaStop.NS()
-        | RailCompany.NS()
-        | RailLine.NS()
-        | RailStation.NS()
-        | SpawnWarp.NS()
-        | Town.NS()
+    AirAirline.NS()
+    | AirAirport.NS()
+    | AirFlight.NS()
+    | AirGate.NS()
+    | BusCompany.NS()
+    | BusLine.NS()
+    | BusStop.NS()
+    | SeaCompany.NS()
+    | SeaLine.NS()
+    | SeaStop.NS()
+    | RailCompany.NS()
+    | RailLine.NS()
+    | RailStation.NS()
+    | SpawnWarp.NS()
+    | Town.NS()
 )
 
 
@@ -111,6 +111,10 @@ class GatelogueData(msgspec.Struct, kw_only=True):
             import httpx
 
             return msgspec.json.decode(httpx.get(url, *args, **kwargs).text, type=ty)
+        with contextlib.suppress(ImportError):
+            import urllib3
+
+            return msgspec.json.decode(urllib3.request("GET", url, *args, **kwargs).data, type=ty)
         if not url.startswith("https:"):
             raise ValueError
         with urllib.request.urlopen(url, *args, **kwargs) as response:  # noqa: S310
@@ -137,7 +141,7 @@ T = TypeVar("T")
 class Sourced(msgspec.Struct, Generic[T]):
     v: T
     """Actual value"""
-    s: set[set] = msgspec.field(default_factory=set)
+    s: set[str] = msgspec.field(default_factory=set)
     """List of sources that support the value"""
 
     def __str__(self):
@@ -171,10 +175,10 @@ class Node(msgspec.Struct, kw_only=True, tag=True):
 
     def __str__(self) -> str:
         return (
-                type(self).__name__
-                + "("
-                + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-                + ")"
+            type(self).__name__
+            + "("
+            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
+            + ")"
         )
 
 
