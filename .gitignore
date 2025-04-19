@@ -853,3 +853,4 @@ schema.json
 graph.svg
 .vite
 gatelogue-types-ts/docs
+!gatelogue-types-ts/dist
