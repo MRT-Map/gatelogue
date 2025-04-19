@@ -14,6 +14,8 @@
  * await GD.get() // retrieve data, with sources
  * await GD.getNoSources() // retrieve data, no sources
  * ```
+ *
+ * @packageDocumentation
  */
 
 /* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */

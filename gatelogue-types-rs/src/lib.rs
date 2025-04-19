@@ -11,11 +11,11 @@
 //! ```rust,ignore
 //! use gatelogue_types::GatelogueData;
 //! GatelogueData::reqwest_get_with_sources().await?; // with sources, requires `reqwest_get` feature
-//! GatelogueData::reqwest_get_no_sources().await?; // with sources, requires `reqwest_get` feature
+//! GatelogueData::reqwest_get_no_sources().await?; // no sources, requires `reqwest_get` feature
 //! GatelogueData::surf_get_with_sources().await?; // with sources, requires `surf_get` feature
-//! GatelogueData::surf_get_no_sources().await?; // with sources, requires `surf_get` feature
+//! GatelogueData::surf_get_no_sources().await?; // no sources, requires `surf_get` feature
 //! GatelogueData::ureq_get_with_sources()?; // with sources, requires `ureq_get` feature
-//! GatelogueData::ureq_get_no_sources()?; // with sources, requires `ureq_get` feature
+//! GatelogueData::ureq_get_no_sources()?; // no sources, requires `ureq_get` feature
 //! ```
 
 use duplicate::duplicate_item;
