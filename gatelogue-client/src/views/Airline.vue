@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { AirFlight } from "@/stores/schema";
+import type { AirFlight } from "gatelogue-types";
 import Flight from "./airline/Flight.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";

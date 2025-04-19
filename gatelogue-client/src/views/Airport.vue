@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { type AirGate } from "@/stores/schema";
+import { type AirGate } from "gatelogue-types";
 import Gate from "./airport/Gate.vue";
 import Sourced from "@/components/Sourced.vue";
 import VueJsonPretty from "vue-json-pretty";

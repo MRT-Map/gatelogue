@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AirGate } from "@/stores/schema";
+import type { AirGate } from "gatelogue-types";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Sourced } from "@/stores/schema";
+import type { Sourced } from "gatelogue-types";
 import { Tippy } from "vue-tippy";
 import { computed } from "vue";
 const props = defineProps<{

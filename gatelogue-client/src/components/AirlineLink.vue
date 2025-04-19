@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AirAirline, StringID } from "@/stores/schema";
+import type { AirAirline, StringID } from "gatelogue-types";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 

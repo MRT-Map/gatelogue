@@ -4,7 +4,7 @@
   "private": true,
   "license": "GPL-3.0-only",
   "type": "module",
-  "packageManager": "pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b",
+  "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -29,6 +29,7 @@
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-vue": "^9.33.0",
+    "gatelogue-types": "link:../gatelogue-types-ts",
     "globals": "^16.0.0",
     "json-schema-to-ts": "^3.1.1",
     "npm-run-all2": "^7.0.2",

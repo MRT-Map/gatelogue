@@ -5,7 +5,7 @@ import {
   type AirAirport,
   GD,
   type Node,
-} from "@/stores/schema";
+} from "gatelogue-types";
 import { gd } from "@/stores/data";
 import { useRoute } from "vue-router";
 

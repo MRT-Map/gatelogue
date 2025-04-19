@@ -1,5 +1,5 @@
-import { GD } from "./schema";
 import { ref } from "vue";
+import {GD} from "gatelogue-types";
 
 export const gd = ref<GD | null>(null);
 
