@@ -23,7 +23,7 @@ jobs:
           ref: dist
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12' 
+          python-version: '3.13'
       - uses: pypa/hatch@install
       - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
       - run: bash update.sh
