@@ -11,20 +11,16 @@ export default tseslint.config(
   pluginJs.configs.all,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
-  //@ts-expect-error
   ...pluginVue.configs["flat/essential"],
   ...pluginVue.configs["flat/recommended"],
   {
     languageOptions: {
+      sourceType: "module",
       globals: globals.browser,
       parser: vueParser,
       parserOptions: {
         parser: tseslint.parser,
-        sourceType: "module",
       },
-    },
-    plugins: {
-      "typescript-eslint": tseslint.plugin,
     },
     rules: {
       "@typescript-eslint/ban-ts-comment": "off",
