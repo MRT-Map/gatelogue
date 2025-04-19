@@ -53,7 +53,7 @@ pub enum Error {
 #[cfg(feature = "surf_get")]
 impl From<surf::Error> for Error {
     fn from(err: surf::Error) -> Self {
-        Error::Surf(err)
+        Self::Surf(err)
     }
 }
 
@@ -222,16 +222,14 @@ impl<T> Deref for Sourced<T> {
 
     fn deref(&self) -> &Self::Target {
         match self {
-            Self::Sourced { v, .. } => v,
-            Self::Unsourced(v) => v,
+            Self::Unsourced(v) | Self::Sourced { v, .. } => v,
         }
     }
 }
 impl<T> DerefMut for Sourced<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
-            Self::Sourced { v, .. } => v,
-            Self::Unsourced(v) => v,
+            Self::Unsourced(v) | Self::Sourced { v, .. } => v,
         }
     }
 }
