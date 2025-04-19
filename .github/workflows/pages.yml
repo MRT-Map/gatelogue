@@ -55,14 +55,30 @@ jobs:
       - run: |
           cd gatelogue-types-rs
           cargo doc --no-deps
+      - run: cp .github/docs-rs-redirect.html target/doc/
       - uses: actions/upload-artifact@v4
         with:
           name: docs-rs
           path: gatelogue-types-rs/target/doc/
 
+  build-docs-ts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cd gatelogue-types-ts
+          pnpm install --no-frozen-lockfile
+          pnpm run doc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-ts
+          path: gatelogue-types-ts/docs
+
+
   pages:
     runs-on: ubuntu-latest
-    needs: [ build-client, build-docs-py, build-docs-rs ]
+    needs: [ build-client, build-docs-py, build-docs-rs, build-docs-ts ]
 
     steps:
     - uses: actions/checkout@v4
@@ -78,6 +94,10 @@ jobs:
       with:
         name: docs-rs
         path: dist/docs/rs
+    - uses: actions/download-artifact@v4
+      with:
+        name: docs-rs
+        path: dist/docs/ts
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:

@@ -18,7 +18,8 @@
     "vue": "^3.5.13",
     "vue-json-pretty": "^2.4.0",
     "vue-router": "^4.5.0",
-    "vue-tippy": "^6.7.0"
+    "vue-tippy": "^6.7.0",
+    "gatelogue-types": "link:../gatelogue-types-ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
@@ -29,7 +30,6 @@
     "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-vue": "^10.0.0",
-    "gatelogue-types": "link:../gatelogue-types-ts",
     "globals": "^16.0.0",
     "json-schema-to-ts": "^3.1.1",
     "npm-run-all2": "^7.0.2",
