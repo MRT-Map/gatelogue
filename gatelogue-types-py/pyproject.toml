@@ -5,31 +5,38 @@ build-backend = "hatchling.build"
 [project]
 name = "gatelogue-types"
 dynamic = ["version"]
-description = ''
-#readme = "README.md"
+description = "Types for loading and reading Gatelogue data"
+readme = "../README.md"
 requires-python = ">=3.12"
 license = "GPL-3.0-only"
-keywords = []
+keywords = ["gatelogue", "mrt", "minecart rapid transit"]
 authors = [
+  { name = "MRT Mapping Services" },
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   # "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Games/Entertainment",
+  "Typing :: Typed",
 ]
 dependencies = [
   "msgspec",
-  "gatelogue-types[niquests]",
 ]
 optional-dependencies = { requests = ["requests"], niquests = ["niquests"], httpx = ["httpx"], urllib3 = ["urllib3"], aiohttp = ["aiohttp"], all = ["requests", "niquests", "httpx", "urllib3", "aiohttp"] }
 
 [project.urls]
-Documentation = "https://github.com/mrt-map/gatelogue#readme"
+Documentation = "https://mrt-map.github.io/gatelogue/docs"
 Issues = "https://github.com/mrt-map/gatelogue/issues"
 Source = "https://github.com/mrt-map/gatelogue"
+Changelog = "https://github.com/MRT-Map/gatelogue/commits/main/"
+Homepage = "https://mrt-map.github.io/gatelogue"
 
 [tool.hatch.version]
 path = "src/gatelogue_types/__about__.py"

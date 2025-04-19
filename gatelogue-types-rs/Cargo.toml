@@ -2,6 +2,14 @@
 name = "gatelogue-types"
 version = "2.0.0-b8+8"
 edition = "2021"
+description = "Types for loading and reading Gatelogue data"
+license = "GPL-3.0-only"
+readme = "../README.md"
+homepage = "https://mrt-map.github.io/gatelogue"
+repository = "https://github.com/mrt-map/gatelogue"
+keywords = ["gatelogue", "mrt"]
+categories = ["games"]
+authors = ["MRT Mapping Services", "7d <61975820+iiiii7d@users.noreply.github.com>"]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -20,13 +28,13 @@ reqwest_get = ["dep:reqwest"]
 surf_get = ["dep:surf"]
 ureq_get = ["dep:ureq"]
 
-[workspace.lints.rust]
+[lints.rust]
 future-incompatible = "deny"
 
-[workspace.lints.clippy]
+[lints.clippy]
 all = "warn"
 pedantic = "warn"
-# cargo = "warn"
+cargo = "warn"
 nursery = "warn"
 
 missing_errors_doc = { level="allow", priority = 1 }

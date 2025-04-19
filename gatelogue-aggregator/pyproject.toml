@@ -6,19 +6,25 @@ build-backend = "hatchling.build"
 name = "gatelogue-aggregator"
 dynamic = ["version"]
 description = ''
-#readme = "README.md"
+readme = "../README.md"
 requires-python = ">=3.12"
 license = "GPL-3.0-only"
-keywords = []
+keywords = ["gatelogue", "mrt", "minecart rapid transit"]
 authors = [
+  { name = "MRT Mapping Services" },
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   # "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Games/Entertainment",
+  "Typing :: Typed",
 ]
 dependencies = [
   "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
@@ -35,9 +41,11 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/mrt-map/gatelogue#readme"
+Documentation = "https://mrt-map.github.io/gatelogue/docs"
 Issues = "https://github.com/mrt-map/gatelogue/issues"
 Source = "https://github.com/mrt-map/gatelogue"
+Changelog = "https://github.com/MRT-Map/gatelogue/commits/main/"
+Homepage = "https://mrt-map.github.io/gatelogue"
 
 [project.scripts]
 gatelogue-aggregator = "gatelogue_aggregator.cli:gatelogue_aggregator"
