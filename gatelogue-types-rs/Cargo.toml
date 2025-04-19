@@ -7,6 +7,7 @@ license = "GPL-3.0-only"
 readme = "../README.md"
 homepage = "https://mrt-map.github.io/gatelogue"
 repository = "https://github.com/mrt-map/gatelogue"
+documentation = "htttps://mrt-map.github.io/gatelogue/docs/rs"
 keywords = ["gatelogue", "mrt"]
 categories = ["games"]
 authors = ["MRT Mapping Services", "7d <61975820+iiiii7d@users.noreply.github.com>"]
