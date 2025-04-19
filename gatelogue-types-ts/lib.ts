@@ -1,3 +1,21 @@
+/**
+ * # Usage
+ * The data can be imported into your JavaScript/TypeScript project with classes and type definitions.
+ *
+ * To add `gatelogue-types` (TypeScript) into your project:
+ * * pnpm: `pnpm add mrt-map/gatelogue#path:/gatelogue-types-ts`
+ * * npm: `npm i 'https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
+ * * yarn: `yarn add 'https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
+ * * bun: `bun add 'git+https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
+ *
+ * To retrieve the data:
+ * ```ts
+ * import { GD } from "gatelogue-types";
+ * await GD.get() // retrieve data, with sources
+ * await GD.getNoSources() // retrieve data, no sources
+ * ```
+ */
+
 /* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */
 
 export type StringID<_ extends Node> = string;

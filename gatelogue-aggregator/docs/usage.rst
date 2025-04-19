@@ -1,8 +1,8 @@
 Usage
 =====
 
-Database
---------
+Data
+----
 
 The data is provided in JSON. Its format and description is outlined at :doc:`data_format`.
 
@@ -38,12 +38,12 @@ gatelogue-types (Rust)
 ++++++++++++++++++++++
 See `the docs for gatelogue-types (Rust) <https://mrt-map.github.io/gatelogue/docs/rs>`_.
 
-TypeScript
+gatelogue-types (TypeScript)
 ++++++++++
-See https://github.com/MRT-Map/gatelogue/blob/main/gatelogue-client/src/stores/schema.ts for a schema.
+See `the docs for gatelogue-types (TypeScript) <https://mrt-map.github.io/gatelogue/docs/ts>`_.
 
-CLI
----
-The aggregator can be installed wih ``pipx``: ``pipx install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator``.
+Aggregator
+----------
+The aggregator can be installed wih ``pipx`` (regular ``pip`` is fine too): ``pipx install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator``.
 
 See :doc:`cli`.

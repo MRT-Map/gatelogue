@@ -1,3 +1,23 @@
+//! # Usage
+//! The data can be imported into your Rust project with `serde`.
+//!
+//! Add to your `Cargo.toml`:
+//! ```toml
+//! gatelogue-types = { git = "https://github.com/mrt-map/gatelogue", package = "gatelogue-types", features = [...] }
+//! ```
+//! where `features` as denoted by `...` are `reqwest_get`, `surf_get` and `ureq_get`.
+//!
+//! To retrieve the data:
+//! ```rust,ignore
+//! use gatelogue_types::GatelogueData;
+//! GatelogueData::reqwest_get_with_sources().await?; // with sources, requires `reqwest_get` feature
+//! GatelogueData::reqwest_get_no_sources().await?; // with sources, requires `reqwest_get` feature
+//! GatelogueData::surf_get_with_sources().await?; // with sources, requires `surf_get` feature
+//! GatelogueData::surf_get_no_sources().await?; // with sources, requires `surf_get` feature
+//! GatelogueData::ureq_get_with_sources()?; // with sources, requires `ureq_get` feature
+//! GatelogueData::ureq_get_no_sources()?; // with sources, requires `ureq_get` feature
+//! ```
+
 use duplicate::duplicate_item;
 use enum_as_inner::EnumAsInner;
 use serde::{Deserialize, Deserializer, Serialize};
