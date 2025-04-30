@@ -1,0 +1,42 @@
+﻿gatelogue\_types.SeaStop
+========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: SeaStop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaStop.NS
+      ~SeaStop.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaStop.codes
+      ~SeaStop.company
+      ~SeaStop.connections
+      ~SeaStop.name
+      ~SeaStop.coordinates
+      ~SeaStop.i
+      ~SeaStop.proximity
+      ~SeaStop.shared_facility
+      ~SeaStop.source
+      ~SeaStop.world
+   
+   

@@ -1,0 +1,41 @@
+﻿gatelogue\_aggregator.types.node.air.AirSource
+==============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.air
+
+.. autoclass:: AirSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirSource.__init__
+      ~AirSource.find_by_ref
+      ~AirSource.find_by_ref_or_index
+      ~AirSource.retrieve_from_cache
+      ~AirSource.sanitise_strings
+      ~AirSource.save_to_cache
+      ~AirSource.source
+      ~AirSource.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirSource.g
+      ~AirSource.name
+      ~AirSource.priority
+   
+   

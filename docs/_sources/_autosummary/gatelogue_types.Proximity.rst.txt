@@ -1,0 +1,33 @@
+﻿gatelogue\_types.Proximity
+==========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: Proximity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Proximity.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Proximity.distance
+      ~Proximity.explicit
+   
+   

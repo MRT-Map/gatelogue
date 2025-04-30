@@ -1,0 +1,32 @@
+gatelogue\_aggregator.types.base
+================================
+
+.. automodule:: gatelogue_aggregator.types.base
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      BaseContext
+      Mergeable
+   
+   
+
+   
+   
+   
+
+
+

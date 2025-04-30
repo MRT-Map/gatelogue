@@ -1,0 +1,65 @@
+﻿gatelogue\_aggregator.types.node.sea.SeaStop
+============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.sea
+
+.. autoclass:: SeaStop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaStop.NS
+      ~SeaStop.__init__
+      ~SeaStop.acceptable_list_node_types
+      ~SeaStop.acceptable_single_node_types
+      ~SeaStop.connect
+      ~SeaStop.connect_one
+      ~SeaStop.disconnect
+      ~SeaStop.equivalent
+      ~SeaStop.export
+      ~SeaStop.get_all
+      ~SeaStop.get_all_id
+      ~SeaStop.get_edge
+      ~SeaStop.get_edges
+      ~SeaStop.get_one
+      ~SeaStop.get_one_id
+      ~SeaStop.merge
+      ~SeaStop.merge_attrs
+      ~SeaStop.merge_if_equivalent
+      ~SeaStop.merge_key
+      ~SeaStop.merge_lists
+      ~SeaStop.new
+      ~SeaStop.process_code
+      ~SeaStop.ref
+      ~SeaStop.sanitise_strings
+      ~SeaStop.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaStop.codes
+      ~SeaStop.company
+      ~SeaStop.connections
+      ~SeaStop.coordinates
+      ~SeaStop.i
+      ~SeaStop.name
+      ~SeaStop.proximity
+      ~SeaStop.shared_facility
+      ~SeaStop.source
+      ~SeaStop.world
+   
+   

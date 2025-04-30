@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.railinq.RaiLinQ
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.railinq
+
+.. autoclass:: RaiLinQ
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RaiLinQ.__init__
+      ~RaiLinQ.find_by_ref
+      ~RaiLinQ.find_by_ref_or_index
+      ~RaiLinQ.retrieve_from_cache
+      ~RaiLinQ.sanitise_strings
+      ~RaiLinQ.save_to_cache
+      ~RaiLinQ.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RaiLinQ.name
+      ~RaiLinQ.priority
+      ~RaiLinQ.g
+   
+   

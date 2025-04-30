@@ -1,0 +1,38 @@
+﻿gatelogue\_aggregator.sources.yaml2source.YamlLine
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.yaml2source
+
+.. autoclass:: YamlLine
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~YamlLine.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~YamlLine.backward_label
+      ~YamlLine.code
+      ~YamlLine.colour
+      ~YamlLine.forward_label
+      ~YamlLine.mode
+      ~YamlLine.name
+      ~YamlLine.stations
+   
+   

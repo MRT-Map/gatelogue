@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.nflr.NFLR
+============================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.nflr
+
+.. autoclass:: NFLR
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NFLR.__init__
+      ~NFLR.find_by_ref
+      ~NFLR.find_by_ref_or_index
+      ~NFLR.retrieve_from_cache
+      ~NFLR.sanitise_strings
+      ~NFLR.save_to_cache
+      ~NFLR.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NFLR.name
+      ~NFLR.priority
+      ~NFLR.g
+   
+   

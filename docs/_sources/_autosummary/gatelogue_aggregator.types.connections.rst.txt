@@ -1,0 +1,32 @@
+gatelogue\_aggregator.types.connections
+=======================================
+
+.. automodule:: gatelogue_aggregator.types.connections
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Connection
+      Direction
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,6 @@
+gatelogue\_aggregator.sources.wiki\_base.get\_wiki\_text
+========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.wiki_base
+
+.. autofunction:: get_wiki_text

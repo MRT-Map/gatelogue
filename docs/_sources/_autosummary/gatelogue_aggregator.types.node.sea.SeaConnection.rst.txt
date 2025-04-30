@@ -1,0 +1,38 @@
+﻿gatelogue\_aggregator.types.node.sea.SeaConnection
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.sea
+
+.. autoclass:: SeaConnection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaConnection.NS
+      ~SeaConnection.__init__
+      ~SeaConnection.export
+      ~SeaConnection.get_line
+      ~SeaConnection.sanitise_strings
+      ~SeaConnection.set_line
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaConnection.direction
+      ~SeaConnection.line
+   
+   

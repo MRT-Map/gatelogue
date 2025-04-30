@@ -1,0 +1,42 @@
+﻿gatelogue\_types.TownNS
+=======================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: TownNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TownNS.NS
+      ~TownNS.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TownNS.coordinates
+      ~TownNS.deputy_mayor
+      ~TownNS.i
+      ~TownNS.mayor
+      ~TownNS.name
+      ~TownNS.proximity
+      ~TownNS.rank
+      ~TownNS.shared_facility
+      ~TownNS.source
+      ~TownNS.world
+   
+   

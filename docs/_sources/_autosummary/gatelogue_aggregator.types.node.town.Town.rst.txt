@@ -1,0 +1,65 @@
+﻿gatelogue\_aggregator.types.node.town.Town
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.town
+
+.. autoclass:: Town
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Town.NS
+      ~Town.__init__
+      ~Town.acceptable_list_node_types
+      ~Town.acceptable_single_node_types
+      ~Town.connect
+      ~Town.connect_one
+      ~Town.disconnect
+      ~Town.equivalent
+      ~Town.export
+      ~Town.get_all
+      ~Town.get_all_id
+      ~Town.get_edge
+      ~Town.get_edges
+      ~Town.get_one
+      ~Town.get_one_id
+      ~Town.merge
+      ~Town.merge_attrs
+      ~Town.merge_if_equivalent
+      ~Town.merge_key
+      ~Town.merge_lists
+      ~Town.new
+      ~Town.process_code
+      ~Town.ref
+      ~Town.sanitise_strings
+      ~Town.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Town.coordinates
+      ~Town.deputy_mayor
+      ~Town.i
+      ~Town.mayor
+      ~Town.name
+      ~Town.proximity
+      ~Town.rank
+      ~Town.shared_facility
+      ~Town.source
+      ~Town.world
+   
+   

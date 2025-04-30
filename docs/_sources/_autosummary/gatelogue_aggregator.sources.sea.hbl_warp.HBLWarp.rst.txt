@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.sea.hbl\_warp.HBLWarp
+===================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.hbl_warp
+
+.. autoclass:: HBLWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HBLWarp.__init__
+      ~HBLWarp.find_by_ref
+      ~HBLWarp.find_by_ref_or_index
+      ~HBLWarp.retrieve_from_cache
+      ~HBLWarp.sanitise_strings
+      ~HBLWarp.save_to_cache
+      ~HBLWarp.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HBLWarp.name
+      ~HBLWarp.priority
+      ~HBLWarp.g
+   
+   

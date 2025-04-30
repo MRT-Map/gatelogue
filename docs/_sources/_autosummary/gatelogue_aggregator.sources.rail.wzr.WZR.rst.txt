@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.wzr.WZR
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.wzr
+
+.. autoclass:: WZR
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WZR.__init__
+      ~WZR.find_by_ref
+      ~WZR.find_by_ref_or_index
+      ~WZR.retrieve_from_cache
+      ~WZR.sanitise_strings
+      ~WZR.save_to_cache
+      ~WZR.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WZR.name
+      ~WZR.priority
+      ~WZR.g
+   
+   

@@ -1,0 +1,63 @@
+﻿gatelogue\_aggregator.types.node.sea.SeaLine
+============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.sea
+
+.. autoclass:: SeaLine
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaLine.NS
+      ~SeaLine.__init__
+      ~SeaLine.acceptable_list_node_types
+      ~SeaLine.acceptable_single_node_types
+      ~SeaLine.connect
+      ~SeaLine.connect_one
+      ~SeaLine.disconnect
+      ~SeaLine.equivalent
+      ~SeaLine.export
+      ~SeaLine.get_all
+      ~SeaLine.get_all_id
+      ~SeaLine.get_edge
+      ~SeaLine.get_edges
+      ~SeaLine.get_one
+      ~SeaLine.get_one_id
+      ~SeaLine.merge
+      ~SeaLine.merge_attrs
+      ~SeaLine.merge_if_equivalent
+      ~SeaLine.merge_key
+      ~SeaLine.merge_lists
+      ~SeaLine.new
+      ~SeaLine.process_code
+      ~SeaLine.ref
+      ~SeaLine.sanitise_strings
+      ~SeaLine.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaLine.code
+      ~SeaLine.colour
+      ~SeaLine.company
+      ~SeaLine.i
+      ~SeaLine.mode
+      ~SeaLine.name
+      ~SeaLine.ref_stop
+      ~SeaLine.source
+   
+   

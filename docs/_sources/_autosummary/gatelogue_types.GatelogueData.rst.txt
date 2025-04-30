@@ -1,0 +1,37 @@
+﻿gatelogue\_types.GatelogueData
+==============================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: GatelogueData
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~GatelogueData.NS
+      ~GatelogueData.__init__
+      ~GatelogueData.aiohttp_get
+      ~GatelogueData.get
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~GatelogueData.nodes
+      ~GatelogueData.timestamp
+      ~GatelogueData.version
+   
+   

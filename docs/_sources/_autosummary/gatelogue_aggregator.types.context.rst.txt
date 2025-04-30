@@ -1,0 +1,34 @@
+gatelogue\_aggregator.types.context
+===================================
+
+.. automodule:: gatelogue_aggregator.types.context
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   context
+   proximity
+   shared_facility
+

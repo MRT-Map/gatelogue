@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.sources.rail.local.flr\_sheng.FLRSheng
+============================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.flr_sheng
+
+.. autoclass:: FLRSheng
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FLRSheng.__init__
+      ~FLRSheng.custom_routing
+      ~FLRSheng.find_by_ref
+      ~FLRSheng.find_by_ref_or_index
+      ~FLRSheng.retrieve_from_cache
+      ~FLRSheng.sanitise_strings
+      ~FLRSheng.save_to_cache
+      ~FLRSheng.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FLRSheng.file_path
+      ~FLRSheng.name
+      ~FLRSheng.priority
+      ~FLRSheng.g
+   
+   

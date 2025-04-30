@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.nsc\_warp.NSCWarp
+====================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.nsc_warp
+
+.. autoclass:: NSCWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NSCWarp.__init__
+      ~NSCWarp.find_by_ref
+      ~NSCWarp.find_by_ref_or_index
+      ~NSCWarp.retrieve_from_cache
+      ~NSCWarp.sanitise_strings
+      ~NSCWarp.save_to_cache
+      ~NSCWarp.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NSCWarp.name
+      ~NSCWarp.priority
+      ~NSCWarp.g
+   
+   

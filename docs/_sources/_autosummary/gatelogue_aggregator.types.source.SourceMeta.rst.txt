@@ -1,0 +1,35 @@
+﻿gatelogue\_aggregator.types.source.SourceMeta
+=============================================
+
+.. currentmodule:: gatelogue_aggregator.types.source
+
+.. autoclass:: SourceMeta
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SourceMeta.__init__
+      ~SourceMeta.encode
+      ~SourceMeta.mro
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SourceMeta.name
+      ~SourceMeta.priority
+   
+   

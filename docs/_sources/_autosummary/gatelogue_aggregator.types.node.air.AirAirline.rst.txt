@@ -1,0 +1,62 @@
+﻿gatelogue\_aggregator.types.node.air.AirAirline
+===============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.air
+
+.. autoclass:: AirAirline
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirAirline.NS
+      ~AirAirline.__init__
+      ~AirAirline.acceptable_list_node_types
+      ~AirAirline.acceptable_single_node_types
+      ~AirAirline.connect
+      ~AirAirline.connect_one
+      ~AirAirline.disconnect
+      ~AirAirline.equivalent
+      ~AirAirline.export
+      ~AirAirline.get_all
+      ~AirAirline.get_all_id
+      ~AirAirline.get_edge
+      ~AirAirline.get_edges
+      ~AirAirline.get_one
+      ~AirAirline.get_one_id
+      ~AirAirline.merge
+      ~AirAirline.merge_attrs
+      ~AirAirline.merge_if_equivalent
+      ~AirAirline.merge_key
+      ~AirAirline.merge_lists
+      ~AirAirline.new
+      ~AirAirline.process_airline_name
+      ~AirAirline.process_code
+      ~AirAirline.ref
+      ~AirAirline.sanitise_strings
+      ~AirAirline.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirAirline.flights
+      ~AirAirline.gates
+      ~AirAirline.i
+      ~AirAirline.link
+      ~AirAirline.name
+      ~AirAirline.source
+   
+   

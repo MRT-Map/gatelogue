@@ -1,0 +1,61 @@
+﻿gatelogue\_aggregator.types.node.rail.RailCompany
+=================================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.rail
+
+.. autoclass:: RailCompany
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailCompany.NS
+      ~RailCompany.__init__
+      ~RailCompany.acceptable_list_node_types
+      ~RailCompany.acceptable_single_node_types
+      ~RailCompany.connect
+      ~RailCompany.connect_one
+      ~RailCompany.disconnect
+      ~RailCompany.equivalent
+      ~RailCompany.export
+      ~RailCompany.get_all
+      ~RailCompany.get_all_id
+      ~RailCompany.get_edge
+      ~RailCompany.get_edges
+      ~RailCompany.get_one
+      ~RailCompany.get_one_id
+      ~RailCompany.merge
+      ~RailCompany.merge_attrs
+      ~RailCompany.merge_if_equivalent
+      ~RailCompany.merge_key
+      ~RailCompany.merge_lists
+      ~RailCompany.new
+      ~RailCompany.process_code
+      ~RailCompany.ref
+      ~RailCompany.sanitise_strings
+      ~RailCompany.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailCompany.i
+      ~RailCompany.lines
+      ~RailCompany.local
+      ~RailCompany.name
+      ~RailCompany.source
+      ~RailCompany.stations
+   
+   

@@ -1,0 +1,62 @@
+﻿gatelogue\_aggregator.types.node.air.AirGate
+============================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.air
+
+.. autoclass:: AirGate
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirGate.NS
+      ~AirGate.__init__
+      ~AirGate.acceptable_list_node_types
+      ~AirGate.acceptable_single_node_types
+      ~AirGate.connect
+      ~AirGate.connect_one
+      ~AirGate.disconnect
+      ~AirGate.equivalent
+      ~AirGate.export
+      ~AirGate.get_all
+      ~AirGate.get_all_id
+      ~AirGate.get_edge
+      ~AirGate.get_edges
+      ~AirGate.get_one
+      ~AirGate.get_one_id
+      ~AirGate.merge
+      ~AirGate.merge_attrs
+      ~AirGate.merge_if_equivalent
+      ~AirGate.merge_key
+      ~AirGate.merge_lists
+      ~AirGate.new
+      ~AirGate.process_code
+      ~AirGate.ref
+      ~AirGate.sanitise_strings
+      ~AirGate.str_ctx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirGate.airline
+      ~AirGate.airport
+      ~AirGate.code
+      ~AirGate.flights
+      ~AirGate.i
+      ~AirGate.size
+      ~AirGate.source
+   
+   

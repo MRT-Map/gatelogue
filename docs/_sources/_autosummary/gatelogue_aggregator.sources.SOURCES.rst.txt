@@ -1,0 +1,6 @@
+gatelogue\_aggregator.sources.SOURCES
+=====================================
+
+.. currentmodule:: gatelogue_aggregator.sources
+
+.. autofunction:: SOURCES

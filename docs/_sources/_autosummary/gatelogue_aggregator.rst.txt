@@ -1,0 +1,37 @@
+﻿gatelogue\_aggregator
+=====================
+
+.. automodule:: gatelogue_aggregator
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   cli
+   downloader
+   logging
+   sources
+   types
+   utils
+

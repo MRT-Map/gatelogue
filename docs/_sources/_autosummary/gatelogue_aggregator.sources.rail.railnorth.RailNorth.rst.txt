@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.rail.railnorth.RailNorth
+======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.railnorth
+
+.. autoclass:: RailNorth
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailNorth.__init__
+      ~RailNorth.find_by_ref
+      ~RailNorth.find_by_ref_or_index
+      ~RailNorth.retrieve_from_cache
+      ~RailNorth.sanitise_strings
+      ~RailNorth.save_to_cache
+      ~RailNorth.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailNorth.name
+      ~RailNorth.priority
+      ~RailNorth.g
+   
+   

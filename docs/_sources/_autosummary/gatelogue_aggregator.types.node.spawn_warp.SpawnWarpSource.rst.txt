@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.types.node.spawn\_warp.SpawnWarpSource
+============================================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.spawn_warp
+
+.. autoclass:: SpawnWarpSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SpawnWarpSource.__init__
+      ~SpawnWarpSource.find_by_ref
+      ~SpawnWarpSource.find_by_ref_or_index
+      ~SpawnWarpSource.retrieve_from_cache
+      ~SpawnWarpSource.sanitise_strings
+      ~SpawnWarpSource.save_to_cache
+      ~SpawnWarpSource.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SpawnWarpSource.g
+      ~SpawnWarpSource.name
+      ~SpawnWarpSource.priority
+   
+   

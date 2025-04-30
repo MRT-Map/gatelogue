@@ -1,0 +1,39 @@
+﻿gatelogue\_aggregator.types.source.Sourced
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.types.source
+
+.. autoclass:: Sourced
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Sourced.__init__
+      ~Sourced.equivalent
+      ~Sourced.export
+      ~Sourced.merge
+      ~Sourced.merge_if_equivalent
+      ~Sourced.merge_lists
+      ~Sourced.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Sourced.s
+      ~Sourced.v
+   
+   

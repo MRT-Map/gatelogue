@@ -1,0 +1,46 @@
+gatelogue\_aggregator.sources
+=============================
+
+.. automodule:: gatelogue_aggregator.sources
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      SOURCES
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   air
+   bus
+   rail
+   sea
+   spawn_warp
+   town
+   wiki_base
+   yaml2source
+

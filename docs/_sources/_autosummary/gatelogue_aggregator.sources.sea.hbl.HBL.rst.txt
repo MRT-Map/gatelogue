@@ -1,0 +1,40 @@
+﻿gatelogue\_aggregator.sources.sea.hbl.HBL
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.hbl
+
+.. autoclass:: HBL
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HBL.__init__
+      ~HBL.find_by_ref
+      ~HBL.find_by_ref_or_index
+      ~HBL.retrieve_from_cache
+      ~HBL.sanitise_strings
+      ~HBL.save_to_cache
+      ~HBL.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HBL.name
+      ~HBL.priority
+      ~HBL.g
+   
+   

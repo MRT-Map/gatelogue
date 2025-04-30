@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.yaml2source.Yaml2Source
+=====================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.yaml2source
+
+.. autoclass:: Yaml2Source
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Yaml2Source.__init__
+      ~Yaml2Source.custom_routing
+      ~Yaml2Source.find_by_ref
+      ~Yaml2Source.find_by_ref_or_index
+      ~Yaml2Source.retrieve_from_cache
+      ~Yaml2Source.sanitise_strings
+      ~Yaml2Source.save_to_cache
+      ~Yaml2Source.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Yaml2Source.name
+      ~Yaml2Source.priority
+      ~Yaml2Source.file_path
+      ~Yaml2Source.C
+      ~Yaml2Source.L
+      ~Yaml2Source.S
+      ~Yaml2Source.B
+      ~Yaml2Source.g
+   
+   

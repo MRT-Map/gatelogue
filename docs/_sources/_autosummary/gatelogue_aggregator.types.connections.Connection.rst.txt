@@ -1,0 +1,38 @@
+﻿gatelogue\_aggregator.types.connections.Connection
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.types.connections
+
+.. autoclass:: Connection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Connection.NS
+      ~Connection.__init__
+      ~Connection.export
+      ~Connection.get_line
+      ~Connection.sanitise_strings
+      ~Connection.set_line
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Connection.direction
+      ~Connection.line
+   
+   

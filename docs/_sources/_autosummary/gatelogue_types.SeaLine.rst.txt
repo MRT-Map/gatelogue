@@ -1,0 +1,40 @@
+﻿gatelogue\_types.SeaLine
+========================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: SeaLine
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaLine.NS
+      ~SeaLine.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaLine.code
+      ~SeaLine.colour
+      ~SeaLine.company
+      ~SeaLine.mode
+      ~SeaLine.name
+      ~SeaLine.ref_stop
+      ~SeaLine.i
+      ~SeaLine.source
+   
+   

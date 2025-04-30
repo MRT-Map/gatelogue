@@ -1,0 +1,29 @@
+﻿gatelogue\_aggregator.types.node.rail.RailLineBuilder
+=====================================================
+
+.. currentmodule:: gatelogue_aggregator.types.node.rail
+
+.. autoclass:: RailLineBuilder
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailLineBuilder.__init__
+      ~RailLineBuilder.circle
+      ~RailLineBuilder.connect
+      ~RailLineBuilder.matrix
+   
+   
+
+   
+   
+   
