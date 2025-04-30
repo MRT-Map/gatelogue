@@ -1,6 +1,6 @@
 {
   "name": "gatelogue-client",
-  "version": "2.0.0-b14+8",
+  "version": "2.0.0+8",
   "private": true,
   "license": "GPL-3.0-only",
   "type": "module",

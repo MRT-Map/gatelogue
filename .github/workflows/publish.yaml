@@ -109,8 +109,8 @@ jobs:
           path: dist
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.build-py.outputs.version }}
-          body: ${{ needs.build-rs.outputs.changelog }}
+          tag_name: ${{ needs.changelog-version.outputs.version }}
+          body: ${{ needs.changelog-version.outputs.changelog }}
           files: dist/*
 
   publish-pypi:
