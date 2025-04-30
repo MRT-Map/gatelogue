@@ -21,7 +21,7 @@ Specification
 
 The current data format version is
 
-.. program-output:: python -c "from gatelogue_aggregator.__about__ import __version__; print('v'+__version__.split('+')[1])"
+.. program-output:: python -c "from gatelogue_aggregator.__about__ import __data_version__; print('v'+__data_version__)"
 
 .. py:currentmodule:: gt
 

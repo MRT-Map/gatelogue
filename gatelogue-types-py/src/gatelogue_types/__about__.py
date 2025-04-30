@@ -1,1 +1,2 @@
-__version__ = "2.0.0b8+8"
+__version__ = "2.0.0-b10"
+__data_version__ = 8

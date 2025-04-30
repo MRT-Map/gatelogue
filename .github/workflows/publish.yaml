@@ -1,0 +1,198 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build-py:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-py
+    outputs:
+      # changelog: ${{ steps.release-info.outputs.changelog }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pypa/hatch@install
+    - run: hatch build
+
+    - id: version
+      run: |
+        # {
+        # echo 'changelog<<__EOF__'
+        # hatch run python -c "
+        # from tile_renderer.__about__ import __version__
+        # print('\n'.join(open('CHANGELOG.md').read().split('## v'+__version__)[1].split('\n')[1:]).split('\n##')[0])
+        # "
+        # echo __EOF__
+        # } >> "$GITHUB_OUTPUT"
+        
+        hatch run python -c "
+        from gatelogue_types.__about__ import __version__
+        print('version=v'+__version__)
+        " >> "$GITHUB_OUTPUT"
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-py
+        path: gatelogue-types-py/dist
+
+  build-rs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-rs
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - run: cargo update
+    - run: cargo package
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-rs
+        path: gatelogue-types-rs/target/package/*.crate
+
+  build-ts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-ts
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          registry-url: https://registry.npmjs.org/
+      - run: pnpm i
+      - run: pnpm pack
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-ts
+          path: gatelogue-types-ts/gatelogue-types-*.tgz
+
+  github-release:
+    runs-on: ubuntu-latest
+    needs: [ build-py, build-rs, build-ts ]
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-py
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-rs
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-ts
+          path: dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build-py.outputs.version }}
+          # body: ${{ needs.build-rs.outputs.changelog }}
+          files: dist/*
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: build-py
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gatelogue-types
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-py
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-crates-io:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-rs
+    needs: build-rs
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo login "$CRATES_IO_API"
+        env:
+          CRATES_IO_API: ${{ secrets.CRATES_IO_API }}
+      - run: cargo publish
+
+  publish-npm:
+    needs: build-ts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-ts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          registry-url: https://registry.npmjs.org/
+      - run: pnpm i
+      - run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  publish-gpr:
+    needs: build-ts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-ts
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          registry-url: https://npm.pkg.github.com/
+      - run: pnpm i
+      - run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  publish-jsr:
+    needs: build-ts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-ts
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - run: pnpx jsr publish
+

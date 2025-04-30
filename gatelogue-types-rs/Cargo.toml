@@ -1,13 +1,13 @@
 [package]
 name = "gatelogue-types"
-version = "2.0.0-b8+8"
+version = "2.0.0-b10+8"
 edition = "2021"
 description = "Types for loading and reading Gatelogue data"
 license = "GPL-3.0-only"
 readme = "../README.md"
 homepage = "https://mrt-map.github.io/gatelogue"
 repository = "https://github.com/mrt-map/gatelogue"
-documentation = "htttps://mrt-map.github.io/gatelogue/docs/rs"
+documentation = "https://mrt-map.github.io/gatelogue/docs/rs"
 keywords = ["gatelogue", "mrt"]
 categories = ["games"]
 authors = ["MRT Mapping Services", "7d <61975820+iiiii7d@users.noreply.github.com>"]

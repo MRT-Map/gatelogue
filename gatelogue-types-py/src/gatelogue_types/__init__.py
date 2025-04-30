@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Generic, Literal, Self, TypeVar
 
 import msgspec
 
-from gatelogue_types.__about__ import __version__
+from gatelogue_types.__about__ import __version__, __data_version__
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -57,7 +57,7 @@ class GatelogueData(msgspec.Struct, kw_only=True):
     """List of all nodes, along with their connections to other nodes"""
     timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
     """Time that the aggregation of the data was done"""
-    version: int = int(__version__.split("+")[1])
+    version: int = __data_version__
     """Version number of the database format"""
 
     @classmethod

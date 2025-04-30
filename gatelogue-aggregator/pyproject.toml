@@ -25,6 +25,7 @@ classifiers = [
   # "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Games/Entertainment",
   "Typing :: Typed",
+  "Private :: Do Not Upload",
 ]
 dependencies = [
   "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
