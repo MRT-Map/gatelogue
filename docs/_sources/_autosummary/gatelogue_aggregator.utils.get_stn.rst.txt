@@ -1,6 +1,0 @@
-gatelogue\_aggregator.utils.get\_stn
-====================================
-
-.. currentmodule:: gatelogue_aggregator.utils
-
-.. autofunction:: get_stn

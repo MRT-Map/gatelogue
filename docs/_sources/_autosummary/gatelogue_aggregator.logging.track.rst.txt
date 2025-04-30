@@ -1,6 +1,0 @@
-gatelogue\_aggregator.logging.track
-===================================
-
-.. currentmodule:: gatelogue_aggregator.logging
-
-.. autofunction:: track
