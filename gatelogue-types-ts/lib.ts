@@ -29,7 +29,6 @@
  * ```
  *
  * @packageDocumentation
- * @module
  */
 
 /* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */
