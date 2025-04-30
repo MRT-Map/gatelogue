@@ -2,35 +2,47 @@ on:
   workflow_dispatch:
 
 jobs:
+  changelog-version:
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+      short_version: ${{ steps.version.outputs.version }}
+      data_version: ${{ steps.version.outputs.data_version }}
+      version: ${{ steps.version.outputs.short_version }}+${{ steps.version.outputs.data_version }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - id: version
+        run: |
+          cd gatelogue-aggregator/src
+          python -c "
+          from gatelogue_aggregator.__about__ import __version__, __data_version__
+          print('version=v'+__version__)
+          print('data_version='+str(__data_version__))
+          " >> "$GITHUB_OUTPUT"
+
+      - id: changelog
+        run: |
+           cd gatelogue-aggregator/src
+           {
+           echo 'changelog<<__EOF__'
+           python -c "
+           from gatelogue_aggregator.__about__ import __version__, __data_version__
+           print('\n'.join(open('../../CHANGELOG.md').read().split('## v'+__version__+'+'+str(__data_version__))[1].split('\n')[1:]).split('\n##')[0])
+           "
+           echo __EOF__
+           } >> "$GITHUB_OUTPUT"
+
   build-py:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: gatelogue-types-py
-    outputs:
-      # changelog: ${{ steps.release-info.outputs.changelog }}
-      version: ${{ steps.version.outputs.version }}
 
     steps:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
     - run: hatch build
-
-    - id: version
-      run: |
-        # {
-        # echo 'changelog<<__EOF__'
-        # hatch run python -c "
-        # from tile_renderer.__about__ import __version__
-        # print('\n'.join(open('CHANGELOG.md').read().split('## v'+__version__)[1].split('\n')[1:]).split('\n##')[0])
-        # "
-        # echo __EOF__
-        # } >> "$GITHUB_OUTPUT"
-        
-        hatch run python -c "
-        from gatelogue_types.__about__ import __version__
-        print('version=v'+__version__)
-        " >> "$GITHUB_OUTPUT"
     - uses: actions/upload-artifact@v4
       with:
         name: dist-py
@@ -78,7 +90,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    needs: [ build-py, build-rs, build-ts ]
+    needs: [ build-py, build-rs, build-ts, changelog-version ]
     permissions:
       contents: write
 
@@ -98,7 +110,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.build-py.outputs.version }}
-          # body: ${{ needs.build-rs.outputs.changelog }}
+          body: ${{ needs.build-rs.outputs.changelog }}
           files: dist/*
 
   publish-pypi:
@@ -172,8 +184,11 @@ jobs:
         with:
           node-version: latest
           registry-url: https://npm.pkg.github.com/
+      - run: |
+          cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
+          mv package2.json package.json
       - run: pnpm i
-      - run: pnpm publish
+      - run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -194,5 +209,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: latest
-      - run: pnpx jsr publish
+      - run: mv ../README.md .
+      - run: pnpx jsr publish --allow-dirty
 

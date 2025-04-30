@@ -1,6 +1,6 @@
 {
-  "name": "@mrt-map/gatelogue-types",
-  "version": "2.0.0-b10+8",
+  "name": "gatelogue-types",
+  "version": "2.0.0-b14+8",
   "license": "GPL-3.0-only",
   "author": {
     "name": "MRT Mapping Services",
@@ -32,7 +32,10 @@
     "lint": "eslint --fix lib.ts",
     "format": "prettier --write .",
     "doc": "typedoc",
-    "prepare": "npm run build"
+
+    "prepare": "npm run build",
+    "prepublish": "cp ../README.md .",
+    "postpublish": "rm ./README.md"
   },
   "types": "./dist/lib.d.ts",
   "exports": {
@@ -40,7 +43,8 @@
     "require": "./dist/cjs/lib.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "tsconfig.json"
   ],
   "devDependencies": {
     "@eslint/js": "^9.25",

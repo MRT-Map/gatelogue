@@ -35,7 +35,7 @@ optional-dependencies = { requests = ["requests"], niquests = ["niquests"], http
 Documentation = "https://mrt-map.github.io/gatelogue/docs"
 Issues = "https://github.com/mrt-map/gatelogue/issues"
 Source = "https://github.com/mrt-map/gatelogue"
-Changelog = "https://github.com/MRT-Map/gatelogue/commits/main/"
+Changelog = "https://github.com/MRT-Map/gatelogue/blob/main/CHANGELOG.md"
 Homepage = "https://mrt-map.github.io/gatelogue"
 
 [tool.hatch.version]
