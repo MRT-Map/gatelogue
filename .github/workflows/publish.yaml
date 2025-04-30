@@ -8,7 +8,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
       short_version: ${{ steps.version.outputs.version }}
       data_version: ${{ steps.version.outputs.data_version }}
-      version: ${{ steps.version.outputs.short_version }}+${{ steps.version.outputs.data_version }}
+      version: ${{ steps.version.outputs.version }}+${{ steps.version.outputs.data_version }}
 
     steps:
       - uses: actions/checkout@v4

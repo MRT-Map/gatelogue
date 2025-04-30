@@ -1,8 +1,9 @@
 //! # Usage
-//! The data can be imported into your Rust project with `serde`.
-//!
-//! Add to your `Cargo.toml`:
+//! The data can be imported into your Rust project with `serde`. Add to your `Cargo.toml`:
 //! ```toml
+//! gatelogue-types = { version = "2", features = [...] }
+//!
+//! # To import directly from the repository:
 //! gatelogue-types = { git = "https://github.com/mrt-map/gatelogue", package = "gatelogue-types", features = [...] }
 //! ```
 //! where `features` as denoted by `...` are `reqwest_get`, `surf_get` and `ureq_get`.

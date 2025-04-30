@@ -16,7 +16,7 @@
   "repository": "github:mrt-map/gatelogue",
   "homepage": "https://mrt-map.github.io/gatelogue",
   "bugs": "https://github.com/mrt-map/gatelogue/issues",
-  "readme": "../README.md",
+  "readme": "README.md",
   "keywords": [
     "gatelogue",
     "mrt",

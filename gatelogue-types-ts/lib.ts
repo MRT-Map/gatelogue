@@ -1,14 +1,27 @@
 /**
  * # Usage
  * The data can be imported into your JavaScript/TypeScript project with classes and type definitions.
+ * * retrieving from npmjs.com:
+ *   * npm: `npm i gatelogue-types`
+ *   * yarn: `yarn add gatelogue-types`
+ *   * pnpm: `pnpm add gatelogue-types`
+ *   * denoL `deno add npm:gatelogue-types`
+ *   * bun: `bun add gatelogue-types`
+ * * retrieving from jsr.io:
+ *   * npm: `npx jsr add @mrt-map/gatelogue-types`
+ *   * yarn: `yarn add jsr:@mrt-map/gatelogue-types`
+ *   * pnpm: `pnpm i jsr:@mrt-map/gatelogue-types`
+ *   * deno: `deno add jsr:@mrt-map/gatelogue-types`
+ *   * bun: `bunx jsr add @mrt-map/gatelogue-types`
  *
- * To add `gatelogue-types` (TypeScript) into your project:
- * * pnpm: `pnpm add mrt-map/gatelogue#path:/gatelogue-types-ts`
+ * To import directly from the repository:
  * * npm: `npm i 'https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
  * * yarn: `yarn add 'https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
+ * * pnpm: `pnpm add mrt-map/gatelogue#path:/gatelogue-types-ts`
  * * bun: `bun add 'git+https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
  *
  * To retrieve the data:
+ * @example
  * ```ts
  * import { GD } from "gatelogue-types";
  * await GD.get() // retrieve data, with sources
@@ -16,6 +29,7 @@
  * ```
  *
  * @packageDocumentation
+ * @module
  */
 
 /* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */

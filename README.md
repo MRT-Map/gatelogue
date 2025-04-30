@@ -23,6 +23,7 @@
 `gatelogue-types` (rust):
 ![Crates.io Version](https://img.shields.io/crates/v/gatelogue-types)
 ![Crates.io MSRV](https://img.shields.io/crates/msrv/gatelogue-types)
+![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=local%20docs&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs%2Frs)
 ![docs.rs](https://img.shields.io/docsrs/gatelogue-types?label=docs.rs)
 ![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/gatelogue-types)
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/gatelogue-types)
@@ -36,12 +37,13 @@
 `gatelogue-types` (ts, jsr):
 ![JSR Version](https://img.shields.io/jsr/v/@mrt-map/gatelogue-types)
 
-Database of air, rail, sea, bus routes on the MRT
+Database of air, rail, sea, bus routes on the [Minecart Rapid Transit server](https://minecartrapidtransit.net).
 
-Client is hosted at https://mrt-map.github.io/gatelogue
+Data is aggregated by `gatelogue-aggregator`, as shown by `gatelogue-client` at https://mrt-map.github.io/gatelogue (air only). The data can then be retrieved in your application with `gatelogue-types` (py, rs, ts)
 
-Documentation for the aggregator and data format is located at https://mrt-map.github.io/gatelogue/docs
+Docs for the aggregator, data format, and type libraries are located at https://mrt-map.github.io/gatelogue/docs
 
+<!-- TODO: rework dev container
 ## development setup
 if you want to use a github codespace, just open one! setup is handled for you, and will take a few minutes. (it's the green code button, under the codespaces tab)
 
@@ -57,3 +59,4 @@ congrats! you did it!
 run the aggregator with the command `gatelogue-aggregator run`
 
 run the client with the command `cd gatelogue-client` and `pnpm run dev`
+-->
