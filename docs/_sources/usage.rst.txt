@@ -14,9 +14,11 @@ A version without sources is available, at https://raw.githubusercontent.com/MRT
 
 gatelogue-types (Python)
 ++++++++++++++++++++++++
-The data can be imported to your Python project in dataclasses.
+The data can be imported to your Python project in ``msgspec`` dataclasses. Run ``pip install gatelogue-types`` or add ``gatelogue-types`` to your ``requirements.txt`` or ``pyproject.toml``.
 
-Run ``pip install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` or add ``gatelogue-types @ git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` to your ``requirements.txt`` or ``pyproject.toml``. You can also use ``requests``, ``niquests``, ``httpx``, ``urllib3`` or ``aiohttp`` to retrieve the data via ``gatelogue-types`` if ``[requests]``, ``[niquests]``, ``[httpx]``, ``[urllib3]`` or ``[aiohttp]`` is suffixed. Otherwise ``urllib`` is used.
+(To import directly from the repository, run ``pip install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` or add ``gatelogue-types @ git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` to your ``requirements.txt`` or ``pyproject.toml``.)
+
+You can also use ``requests``, ``niquests``, ``httpx``, ``urllib3`` or ``aiohttp`` to retrieve the data via ``gatelogue-types`` if ``[requests]``, ``[niquests]``, ``[httpx]``, ``[urllib3]`` or ``[aiohttp]`` is suffixed. Otherwise ``urllib`` is used.
 
 To retrieve the data:
 
