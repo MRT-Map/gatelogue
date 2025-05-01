@@ -1,0 +1,30 @@
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  test-types-py:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-py
+  
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pypa/hatch@install
+      - run: hatch test --all
+
+  test-types-rs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-rs
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo test --all
