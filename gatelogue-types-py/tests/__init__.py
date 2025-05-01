@@ -7,5 +7,5 @@ def test_with_sources():
 
 
 def test_no_sources():
-    GatelogueDataNS.get()
+    GatelogueData.NS().get()
     assert True
