@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-    paths: [ "gatelogue-aggregator", "gatelogue-types-py" ]
+    paths: [ "gatelogue-aggregator/**", "gatelogue-types-py/**" ]
   schedule:
     - cron: 0 0 * * *
 
@@ -25,7 +25,10 @@ jobs:
         with:
           python-version: '3.13'
       - uses: pypa/hatch@install
-      - run: sudo apt-get update; sudo apt-get install --no-install-recommends graphviz graphviz-dev
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: graphviz graphviz-dev
+          version: 1.0
       - run: bash update.sh
       - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
       - uses: EndBug/add-and-commit@v9
