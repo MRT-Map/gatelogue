@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-    paths: [ "gatelogue-aggregator/**", "gatelogue-types-py/**" ]
+    paths: [ "gatelogue-aggregator/**", "gatelogue-types-py/**", ".github/workflows/update.yml" ]
   schedule:
     - cron: 0 0 * * *
 
@@ -27,7 +27,7 @@ jobs:
       - uses: pypa/hatch@install
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: graphviz graphviz-dev
+          packages: graphviz libgraphviz-dev
           version: 1.0
       - run: bash update.sh
       - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
