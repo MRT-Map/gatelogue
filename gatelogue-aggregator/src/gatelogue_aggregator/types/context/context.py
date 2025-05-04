@@ -15,6 +15,7 @@ from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, 
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
 from gatelogue_aggregator.types.node.town import Town, TownSource
+from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
 from gatelogue_aggregator.types.source import Sourced
 
 if TYPE_CHECKING:
@@ -22,7 +23,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, ProximityContext, SharedFacilityContext):
+class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, SpawnWarpSource, ProximityContext, SharedFacilityContext):
     name = "Gatelogue"
     priority = 0
 
@@ -104,6 +105,7 @@ class Context(AirSource, RailSource, SeaSource, BusSource, TownSource, Proximity
                 (BusLine, "#ff8080"),
                 (BusStop, "#8080ff"),
                 (Town, "#aaaaaa"),
+                (SpawnWarp, "#aaaaaa"),
             ):
                 if isinstance(node, ty):
                     d["fillcolor"] = '"' + col + '"'
