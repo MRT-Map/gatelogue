@@ -105,6 +105,9 @@ Options:
                              /tmp/gatelogue]
   --timeout INTEGER          how long to wait for a network request in seconds
                              before aborting and failing  [default: 60]
+  --cooldown INTEGER         how long to wait before sending new requests to
+                             the same URL if `429 Too Many Requests` is
+                             received  [default: 15]
   -o, --output PATH          file to output the result to, in JSON  [default:
                              data.json]
   -f, --fmt / --no-fmt       prettify the JSON result  [default: no-fmt]
