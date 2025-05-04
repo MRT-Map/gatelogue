@@ -10,7 +10,7 @@ import rich.progress
 
 import gatelogue_types as gt
 from gatelogue_aggregator.__about__ import __version__
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_TIMEOUT
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1, PROGRESS
 from gatelogue_aggregator.sources import SOURCES
 from gatelogue_aggregator.types.config import Config
@@ -52,6 +52,13 @@ def gatelogue_aggregator():
     type=int,
     show_default=True,
     help="how long to wait for a network request in seconds before aborting and failing",
+)
+@click.option(
+    "--cooldown",
+    default=DEFAULT_COOLDOWN,
+    type=int,
+    show_default=True,
+    help="how long to wait before sending new requests to the same URL if `429 Too Many Requests` is received",
 )
 @click.option(
     "-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON"
@@ -101,6 +108,7 @@ def run(
     *,
     cache_dir: Path,
     timeout: int,
+    cooldown: int,
     output: Path,
     fmt: bool,
     graph: Path | None,
@@ -121,7 +129,7 @@ def run(
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
-    config = Config(cache_dir=cache_dir, timeout=timeout, cache_exclude=cache_exclude, max_workers=max_workers)
+    config = Config(cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(config), sources))
 
