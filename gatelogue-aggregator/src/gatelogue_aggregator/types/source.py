@@ -56,10 +56,15 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
         def key(x):
             return next(a for a in SOURCES() if a.name == x).priority
 
-        # TODO: add to discrepancy list
+        # TODO: also print node ref
         if max(self.s, key=key) < max(other.s, key=key):
             self.v = other.v
             self.s = other.s
+            rich.print(ERROR + f"{', '.join(self.s)} reported outdated data {self.v}")
+            rich.print(ERROR + f"{', '.join(other.s)} has updated data {other.v}")
+        else:
+            rich.print(ERROR + f"{', '.join(other.s)} reported outdated data {other.v}")
+            rich.print(ERROR + f"{', '.join(self.s)} has updated data {self.v}")
 
     def export(self, ctx: BaseContext) -> gt.Sourced[T]:
         if hasattr(self.v, "export"):
