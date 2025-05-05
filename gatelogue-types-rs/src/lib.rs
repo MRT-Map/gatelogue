@@ -303,7 +303,6 @@ pub struct AirAirline {
     pub link: Option<Sourced<String>>,
     pub flights: Vec<Sourced<ID>>,
     pub gates: Vec<Sourced<ID>>,
-    pub local: bool,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
@@ -421,6 +420,7 @@ pub struct SeaCompany {
     pub name: String,
     pub lines: Vec<Sourced<ID>>,
     pub stops: Vec<Sourced<ID>>,
+    pub local: bool,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
