@@ -42,7 +42,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int
     response = SESSION.get(url, timeout=timeout)
     if response.status_code >= 400:  # noqa: PLR2004
         rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
-        if response.status_code == 429:  # noqa: PLR2004
+        if response.status_code in (408, 429):  # noqa: PLR2004
             COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
             rich.print(ERROR + f"Will try {url} again in 15s")
             return get_url(url, cache, timeout, cooldown)
