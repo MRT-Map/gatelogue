@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 env:
-  TTY_COMPATIBLE: 1
+  TTY_COMPATIBLE: "1"
 
 concurrency:
   group: ${{ github.workflow }}
