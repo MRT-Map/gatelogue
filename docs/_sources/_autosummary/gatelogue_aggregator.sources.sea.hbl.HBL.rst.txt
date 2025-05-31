@@ -21,7 +21,7 @@
       ~HBL.build
       ~HBL.find_by_ref
       ~HBL.find_by_ref_or_index
-      ~HBL.is_warp_source
+      ~HBL.is_coord_source
       ~HBL.report
       ~HBL.reported_nodes
       ~HBL.retrieve_from_cache

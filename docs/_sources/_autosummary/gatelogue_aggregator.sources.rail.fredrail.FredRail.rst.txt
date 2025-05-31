@@ -22,7 +22,7 @@
       ~FredRail.custom_routing
       ~FredRail.find_by_ref
       ~FredRail.find_by_ref_or_index
-      ~FredRail.is_warp_source
+      ~FredRail.is_coord_source
       ~FredRail.report
       ~FredRail.reported_nodes
       ~FredRail.retrieve_from_cache

@@ -21,7 +21,7 @@
       ~MarbleRailWarp.build
       ~MarbleRailWarp.find_by_ref
       ~MarbleRailWarp.find_by_ref_or_index
-      ~MarbleRailWarp.is_warp_source
+      ~MarbleRailWarp.is_coord_source
       ~MarbleRailWarp.report
       ~MarbleRailWarp.reported_nodes
       ~MarbleRailWarp.retrieve_from_cache

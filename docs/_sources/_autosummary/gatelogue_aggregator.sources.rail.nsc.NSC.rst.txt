@@ -22,7 +22,7 @@
       ~NSC.custom_routing
       ~NSC.find_by_ref
       ~NSC.find_by_ref_or_index
-      ~NSC.is_warp_source
+      ~NSC.is_coord_source
       ~NSC.report
       ~NSC.reported_nodes
       ~NSC.retrieve_from_cache

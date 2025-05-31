@@ -21,7 +21,7 @@
       ~DynmapMRT.build
       ~DynmapMRT.find_by_ref
       ~DynmapMRT.find_by_ref_or_index
-      ~DynmapMRT.is_warp_source
+      ~DynmapMRT.is_coord_source
       ~DynmapMRT.report
       ~DynmapMRT.reported_nodes
       ~DynmapMRT.retrieve_from_cache

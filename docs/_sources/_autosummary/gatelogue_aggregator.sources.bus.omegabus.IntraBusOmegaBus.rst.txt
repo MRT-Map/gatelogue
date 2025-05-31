@@ -21,7 +21,7 @@
       ~IntraBusOmegaBus.build
       ~IntraBusOmegaBus.find_by_ref
       ~IntraBusOmegaBus.find_by_ref_or_index
-      ~IntraBusOmegaBus.is_warp_source
+      ~IntraBusOmegaBus.is_coord_source
       ~IntraBusOmegaBus.report
       ~IntraBusOmegaBus.reported_nodes
       ~IntraBusOmegaBus.retrieve_from_cache

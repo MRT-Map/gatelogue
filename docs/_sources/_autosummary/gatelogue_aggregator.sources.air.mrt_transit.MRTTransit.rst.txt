@@ -21,7 +21,7 @@
       ~MRTTransit.build
       ~MRTTransit.find_by_ref
       ~MRTTransit.find_by_ref_or_index
-      ~MRTTransit.is_warp_source
+      ~MRTTransit.is_coord_source
       ~MRTTransit.report
       ~MRTTransit.reported_nodes
       ~MRTTransit.retrieve_from_cache

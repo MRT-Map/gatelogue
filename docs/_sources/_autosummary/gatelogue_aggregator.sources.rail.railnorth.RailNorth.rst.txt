@@ -21,7 +21,7 @@
       ~RailNorth.build
       ~RailNorth.find_by_ref
       ~RailNorth.find_by_ref_or_index
-      ~RailNorth.is_warp_source
+      ~RailNorth.is_coord_source
       ~RailNorth.report
       ~RailNorth.reported_nodes
       ~RailNorth.retrieve_from_cache

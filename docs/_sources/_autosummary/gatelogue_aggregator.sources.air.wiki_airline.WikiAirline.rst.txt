@@ -23,7 +23,7 @@
       ~WikiAirline.extract_get_flight
       ~WikiAirline.find_by_ref
       ~WikiAirline.find_by_ref_or_index
-      ~WikiAirline.is_warp_source
+      ~WikiAirline.is_coord_source
       ~WikiAirline.regex_extract_airline
       ~WikiAirline.report
       ~WikiAirline.reported_nodes

@@ -21,7 +21,7 @@
       ~IntraRailWarp.build
       ~IntraRailWarp.find_by_ref
       ~IntraRailWarp.find_by_ref_or_index
-      ~IntraRailWarp.is_warp_source
+      ~IntraRailWarp.is_coord_source
       ~IntraRailWarp.report
       ~IntraRailWarp.reported_nodes
       ~IntraRailWarp.retrieve_from_cache

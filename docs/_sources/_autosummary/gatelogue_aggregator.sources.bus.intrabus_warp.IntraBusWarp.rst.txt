@@ -21,7 +21,7 @@
       ~IntraBusWarp.build
       ~IntraBusWarp.find_by_ref
       ~IntraBusWarp.find_by_ref_or_index
-      ~IntraBusWarp.is_warp_source
+      ~IntraBusWarp.is_coord_source
       ~IntraBusWarp.report
       ~IntraBusWarp.reported_nodes
       ~IntraBusWarp.retrieve_from_cache

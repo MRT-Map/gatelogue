@@ -21,7 +21,7 @@
       ~RedTrain.build
       ~RedTrain.find_by_ref
       ~RedTrain.find_by_ref_or_index
-      ~RedTrain.is_warp_source
+      ~RedTrain.is_coord_source
       ~RedTrain.report
       ~RedTrain.reported_nodes
       ~RedTrain.retrieve_from_cache

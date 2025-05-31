@@ -21,7 +21,7 @@
       ~DynmapAirports.build
       ~DynmapAirports.find_by_ref
       ~DynmapAirports.find_by_ref_or_index
-      ~DynmapAirports.is_warp_source
+      ~DynmapAirports.is_coord_source
       ~DynmapAirports.report
       ~DynmapAirports.reported_nodes
       ~DynmapAirports.retrieve_from_cache

@@ -22,7 +22,7 @@
       ~FLRForesne.custom_routing
       ~FLRForesne.find_by_ref
       ~FLRForesne.find_by_ref_or_index
-      ~FLRForesne.is_warp_source
+      ~FLRForesne.is_coord_source
       ~FLRForesne.report
       ~FLRForesne.reported_nodes
       ~FLRForesne.retrieve_from_cache

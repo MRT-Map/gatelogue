@@ -22,7 +22,7 @@
       ~PacificaCoord.custom_routing
       ~PacificaCoord.find_by_ref
       ~PacificaCoord.find_by_ref_or_index
-      ~PacificaCoord.is_warp_source
+      ~PacificaCoord.is_coord_source
       ~PacificaCoord.report
       ~PacificaCoord.reported_nodes
       ~PacificaCoord.retrieve_from_cache

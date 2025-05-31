@@ -21,7 +21,7 @@
       ~ProximitySource.build
       ~ProximitySource.find_by_ref
       ~ProximitySource.find_by_ref_or_index
-      ~ProximitySource.is_warp_source
+      ~ProximitySource.is_coord_source
       ~ProximitySource.report
       ~ProximitySource.reported_nodes
       ~ProximitySource.retrieve_from_cache

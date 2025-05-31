@@ -21,7 +21,7 @@
       ~NSCWarp.build
       ~NSCWarp.find_by_ref
       ~NSCWarp.find_by_ref_or_index
-      ~NSCWarp.is_warp_source
+      ~NSCWarp.is_coord_source
       ~NSCWarp.report
       ~NSCWarp.reported_nodes
       ~NSCWarp.retrieve_from_cache

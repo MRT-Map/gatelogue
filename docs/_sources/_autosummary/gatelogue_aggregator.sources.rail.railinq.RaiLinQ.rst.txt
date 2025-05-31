@@ -21,7 +21,7 @@
       ~RaiLinQ.build
       ~RaiLinQ.find_by_ref
       ~RaiLinQ.find_by_ref_or_index
-      ~RaiLinQ.is_warp_source
+      ~RaiLinQ.is_coord_source
       ~RaiLinQ.report
       ~RaiLinQ.reported_nodes
       ~RaiLinQ.retrieve_from_cache

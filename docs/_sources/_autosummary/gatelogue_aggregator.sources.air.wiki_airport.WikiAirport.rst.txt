@@ -23,7 +23,7 @@
       ~WikiAirport.extract_get_gate
       ~WikiAirport.find_by_ref
       ~WikiAirport.find_by_ref_or_index
-      ~WikiAirport.is_warp_source
+      ~WikiAirport.is_coord_source
       ~WikiAirport.regex_extract_airport
       ~WikiAirport.report
       ~WikiAirport.reported_nodes

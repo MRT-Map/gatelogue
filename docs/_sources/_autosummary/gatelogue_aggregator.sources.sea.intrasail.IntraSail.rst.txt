@@ -21,7 +21,7 @@
       ~IntraSail.build
       ~IntraSail.find_by_ref
       ~IntraSail.find_by_ref_or_index
-      ~IntraSail.is_warp_source
+      ~IntraSail.is_coord_source
       ~IntraSail.report
       ~IntraSail.reported_nodes
       ~IntraSail.retrieve_from_cache

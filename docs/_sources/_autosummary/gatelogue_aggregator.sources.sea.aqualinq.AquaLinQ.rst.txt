@@ -21,7 +21,7 @@
       ~AquaLinQ.build
       ~AquaLinQ.find_by_ref
       ~AquaLinQ.find_by_ref_or_index
-      ~AquaLinQ.is_warp_source
+      ~AquaLinQ.is_coord_source
       ~AquaLinQ.report
       ~AquaLinQ.reported_nodes
       ~AquaLinQ.retrieve_from_cache

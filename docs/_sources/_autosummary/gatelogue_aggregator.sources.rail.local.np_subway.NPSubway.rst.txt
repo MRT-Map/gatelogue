@@ -22,7 +22,7 @@
       ~NPSubway.custom_routing
       ~NPSubway.find_by_ref
       ~NPSubway.find_by_ref_or_index
-      ~NPSubway.is_warp_source
+      ~NPSubway.is_coord_source
       ~NPSubway.report
       ~NPSubway.reported_nodes
       ~NPSubway.retrieve_from_cache

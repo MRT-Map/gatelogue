@@ -21,7 +21,7 @@
       ~WZR.build
       ~WZR.find_by_ref
       ~WZR.find_by_ref_or_index
-      ~WZR.is_warp_source
+      ~WZR.is_coord_source
       ~WZR.report
       ~WZR.reported_nodes
       ~WZR.retrieve_from_cache

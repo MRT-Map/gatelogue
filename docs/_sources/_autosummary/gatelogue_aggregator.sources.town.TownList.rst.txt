@@ -21,7 +21,7 @@
       ~TownList.build
       ~TownList.find_by_ref
       ~TownList.find_by_ref_or_index
-      ~TownList.is_warp_source
+      ~TownList.is_coord_source
       ~TownList.report
       ~TownList.reported_nodes
       ~TownList.retrieve_from_cache

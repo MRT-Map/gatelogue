@@ -21,7 +21,7 @@
       ~NFLRWarp.build
       ~NFLRWarp.find_by_ref
       ~NFLRWarp.find_by_ref_or_index
-      ~NFLRWarp.is_warp_source
+      ~NFLRWarp.is_coord_source
       ~NFLRWarp.report
       ~NFLRWarp.reported_nodes
       ~NFLRWarp.retrieve_from_cache

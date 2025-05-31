@@ -21,7 +21,7 @@
       ~SpawnWarpSource.build
       ~SpawnWarpSource.find_by_ref
       ~SpawnWarpSource.find_by_ref_or_index
-      ~SpawnWarpSource.is_warp_source
+      ~SpawnWarpSource.is_coord_source
       ~SpawnWarpSource.report
       ~SpawnWarpSource.reported_nodes
       ~SpawnWarpSource.retrieve_from_cache

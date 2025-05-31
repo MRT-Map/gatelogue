@@ -21,7 +21,7 @@
       ~SeaSource.build
       ~SeaSource.find_by_ref
       ~SeaSource.find_by_ref_or_index
-      ~SeaSource.is_warp_source
+      ~SeaSource.is_coord_source
       ~SeaSource.report
       ~SeaSource.reported_nodes
       ~SeaSource.retrieve_from_cache

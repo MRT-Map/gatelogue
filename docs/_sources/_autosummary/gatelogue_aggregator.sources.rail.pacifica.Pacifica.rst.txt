@@ -21,7 +21,7 @@
       ~Pacifica.build
       ~Pacifica.find_by_ref
       ~Pacifica.find_by_ref_or_index
-      ~Pacifica.is_warp_source
+      ~Pacifica.is_coord_source
       ~Pacifica.report
       ~Pacifica.reported_nodes
       ~Pacifica.retrieve_from_cache

@@ -24,7 +24,7 @@
       ~GatelogueData.find_by_ref_or_index
       ~GatelogueData.from_sources
       ~GatelogueData.graph
-      ~GatelogueData.is_warp_source
+      ~GatelogueData.is_coord_source
       ~GatelogueData.report
       ~GatelogueData.reported_nodes
       ~GatelogueData.retrieve_from_cache

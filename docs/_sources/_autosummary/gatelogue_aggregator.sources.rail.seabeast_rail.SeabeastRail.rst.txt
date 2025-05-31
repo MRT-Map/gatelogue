@@ -21,7 +21,7 @@
       ~SeabeastRail.build
       ~SeabeastRail.find_by_ref
       ~SeabeastRail.find_by_ref_or_index
-      ~SeabeastRail.is_warp_source
+      ~SeabeastRail.is_coord_source
       ~SeabeastRail.report
       ~SeabeastRail.reported_nodes
       ~SeabeastRail.retrieve_from_cache

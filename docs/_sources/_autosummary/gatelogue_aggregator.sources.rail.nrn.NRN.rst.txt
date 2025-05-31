@@ -22,7 +22,7 @@
       ~NRN.custom_routing
       ~NRN.find_by_ref
       ~NRN.find_by_ref_or_index
-      ~NRN.is_warp_source
+      ~NRN.is_coord_source
       ~NRN.report
       ~NRN.reported_nodes
       ~NRN.retrieve_from_cache

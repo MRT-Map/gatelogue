@@ -21,7 +21,7 @@
       ~WikiMRT.build
       ~WikiMRT.find_by_ref
       ~WikiMRT.find_by_ref_or_index
-      ~WikiMRT.is_warp_source
+      ~WikiMRT.is_coord_source
       ~WikiMRT.report
       ~WikiMRT.reported_nodes
       ~WikiMRT.retrieve_from_cache

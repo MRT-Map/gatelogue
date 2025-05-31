@@ -21,7 +21,7 @@
       ~CCC.build
       ~CCC.find_by_ref
       ~CCC.find_by_ref_or_index
-      ~CCC.is_warp_source
+      ~CCC.is_coord_source
       ~CCC.report
       ~CCC.reported_nodes
       ~CCC.retrieve_from_cache

@@ -22,7 +22,7 @@
       ~SEATWarp.custom_routing
       ~SEATWarp.find_by_ref
       ~SEATWarp.find_by_ref_or_index
-      ~SEATWarp.is_warp_source
+      ~SEATWarp.is_coord_source
       ~SEATWarp.report
       ~SEATWarp.reported_nodes
       ~SEATWarp.retrieve_from_cache

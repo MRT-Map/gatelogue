@@ -21,7 +21,7 @@
       ~SEAT.build
       ~SEAT.find_by_ref
       ~SEAT.find_by_ref_or_index
-      ~SEAT.is_warp_source
+      ~SEAT.is_coord_source
       ~SEAT.report
       ~SEAT.reported_nodes
       ~SEAT.retrieve_from_cache

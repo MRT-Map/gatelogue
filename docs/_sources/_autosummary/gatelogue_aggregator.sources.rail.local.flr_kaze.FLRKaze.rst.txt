@@ -22,7 +22,7 @@
       ~FLRKaze.custom_routing
       ~FLRKaze.find_by_ref
       ~FLRKaze.find_by_ref_or_index
-      ~FLRKaze.is_warp_source
+      ~FLRKaze.is_coord_source
       ~FLRKaze.report
       ~FLRKaze.reported_nodes
       ~FLRKaze.retrieve_from_cache
