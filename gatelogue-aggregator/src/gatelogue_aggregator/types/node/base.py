@@ -4,10 +4,13 @@ import re
 from collections.abc import Callable  # noqa: TCH003
 from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
+import rich
+
 import gatelogue_types as gt
 import msgspec
 import rustworkx as rx
 
+from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.types.edge.shared_facility import SharedFacility
 from gatelogue_aggregator.types.mergeable import Mergeable
 from gatelogue_aggregator.types.source import Source, Sourced
@@ -242,6 +245,13 @@ class LocatedNode(gt.LocatedNode, Node, kw_only=True):
             },
             "shared_facility": self.get_all_id(src, LocatedNode, SharedFacility),
         }
+
+    @override
+    def report(self, src: Source):
+        if self.coordinates is None:
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no coordinates")
+        if self.world is None:
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no world")
 
 
 class NodeRef[T: Node]:

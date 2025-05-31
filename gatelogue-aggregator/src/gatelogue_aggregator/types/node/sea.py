@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import rich
+
 import gatelogue_types as gt
+from gatelogue_aggregator.logging import RESULT, ERROR
 
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
@@ -77,6 +80,13 @@ class SeaCompany(gt.SeaCompany, Node, kw_only=True, tag=True):
     def ref(self, src: SeaSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(SeaCompany, name=self.name)
+
+    @override
+    def report(self, src: SeaSource):
+        num_lines = len(list(self.get_all(src, SeaLine)))
+        num_stops = len(list(self.get_all(src, SeaStop)))
+        colour = ERROR if num_lines == 0 or num_stops == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stops} stops")
 
 
 class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
@@ -153,6 +163,11 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
         self.sanitise_strings()
         return NodeRef(SeaLine, code=self.code, company=self.get_one(src, SeaCompany).name)
 
+    @override
+    def report(self, src: SeaSource):
+        # TODO: report num of stations
+        pass
+
 
 class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (SeaStop, SeaLine, LocatedNode)
@@ -178,7 +193,7 @@ class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: SeaSource) -> str:
-        code = "/".join(self.codes) if (code := self.name) is None else code.v
+        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
         company = self.get_one(src, SeaCompany).name
         return f"{company} {code}"
 
@@ -225,6 +240,13 @@ class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
     def ref(self, src: SeaSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(SeaStop, codes=self.codes, company=self.get_one(src, SeaCompany).name)
+
+    @override
+    def report(self, src: SeaSource):
+        super().report(src)
+        num_connections = len(list(self.get_all(src, SeaStop, SeaConnection)))
+        if num_connections == 0:
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has no connections")
 
 
 class SeaConnection(Connection[SeaLine]):

@@ -3,9 +3,11 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import rich
+
 import gatelogue_types as gt
 
-from gatelogue_aggregator.logging import INFO2, track
+from gatelogue_aggregator.logging import INFO2, track, RESULT, ERROR
 from gatelogue_aggregator.sources.air.hardcode import (
     AIRLINE_ALIASES,
     AIRPORT_ALIASES,
@@ -91,6 +93,10 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
     def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(src, AirAirline).name)
+
+    @override
+    def report(self, src: AirSource):
+        pass
 
     def update(self, src: AirSource):
         processed_gates: list[AirGate] = []
@@ -217,6 +223,13 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
         self.sanitise_strings()
         return NodeRef(AirAirport, code=self.code)
 
+    @override
+    def report(self, src: AirSource):
+        super().report(src)
+        num_gates = len(list(self.get_all(src, AirGate)))
+        colour = ERROR if num_gates == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_gates} gates")
+
     def update(self, src: AirSource):
         if (none_gate := next((a for a in self.get_all(src, AirGate) if a.code is None), None)) is None:
             return
@@ -325,6 +338,12 @@ class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
         self.sanitise_strings()
         return NodeRef(AirGate, code=self.code, airport=self.get_one(src, AirAirport).code)
 
+    @override
+    def report(self, src: AirSource):
+        num_flights = len(list(self.get_all(src, AirFlight)))
+        if num_flights > 6:
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights")
+
     @staticmethod
     def process_code[T: (str, None)](s: T, airline_name: str | None = None, airport_code: str | None = None) -> T:
         s = Node.process_code(s)
@@ -397,6 +416,13 @@ class AirAirline(gt.AirAirline, Node, kw_only=True, tag=True):
     def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(AirAirline, name=self.name)
+
+    @override
+    def report(self, src: AirSource):
+        num_flights = len(list(self.get_all(src, AirFlight)))
+        num_gates = len(list(self.get_all(src, AirGate)))
+        colour = ERROR if num_flights == 0 or num_gates == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights and {num_gates} gates")
 
     @staticmethod
     def process_airline_name[T: (str, None)](s: T) -> T:

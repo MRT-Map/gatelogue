@@ -136,6 +136,7 @@ def run(
         result = list(executor.map(lambda s: s(config), sources))
 
     src = GatelogueData.from_sources(result)
+    src.report()
 
     if graph is not None:
         task = PROGRESS.add_task(INFO1 + f"Outputting graph to {graph}... ", total=None)

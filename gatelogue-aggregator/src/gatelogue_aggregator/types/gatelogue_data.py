@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Self
 
+import rich
+
 import gatelogue_types as gt
 import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
@@ -74,6 +76,12 @@ class GatelogueData(
         AirSource.update(self)
         ProximitySource.update(self)
         SharedFacilitySource.update(self)
+
+    def report(self):
+        rich.print(INFO1 + "Below is a final report of all nodes collected")
+        for node in self.g.nodes():
+            node.report(self)
+        rich.print(INFO1 + "End of report")
 
     def export(self) -> gt.GatelogueData:
         return gt.GatelogueData(

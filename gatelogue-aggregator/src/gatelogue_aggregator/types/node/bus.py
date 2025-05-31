@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import rich
+
 import gatelogue_types as gt
+from gatelogue_aggregator.logging import ERROR, RESULT
 
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
@@ -76,6 +79,13 @@ class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):
         self.sanitise_strings()
         return NodeRef(BusCompany, name=self.name)
 
+    @override
+    def report(self, src: BusSource):
+        num_lines = len(list(self.get_all(src, BusLine)))
+        num_stops = len(list(self.get_all(src, BusStop)))
+        colour = ERROR if num_lines == 0 or num_stops == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stops} stops")
+
 
 class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)
@@ -145,6 +155,11 @@ class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
         self.sanitise_strings()
         return NodeRef(BusLine, code=self.code, company=self.get_one(src, BusCompany).name)
 
+    @override
+    def report(self, src: BusSource):
+        # TODO: report num of stations
+        pass
+
 
 class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)
@@ -170,7 +185,7 @@ class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: BusSource) -> str:
-        code = "/".join(self.codes) if (code := self.name) is None else code.v
+        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"[{codes}] {name.v}"
         company = self.get_one(src, BusCompany).name
         return f"{company} {code}"
 
@@ -217,6 +232,13 @@ class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
     def ref(self, src: BusSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(BusStop, codes=self.codes, company=self.get_one(src, BusCompany).name)
+
+    @override
+    def report(self, src: BusSource):
+        super().report(src)
+        num_connections = len(list(self.get_all(src, BusStop, BusConnection)))
+        if num_connections == 0:
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has no connections")
 
 
 class BusConnection(Connection[BusLine]):

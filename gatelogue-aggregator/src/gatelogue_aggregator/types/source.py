@@ -144,14 +144,12 @@ class Source(metaclass=SourceMeta):
             return None
         rich.print(INFO1 + f"Retrieving from cache {cache_file}")
         self.g = pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
-        if self.g.num_nodes() == 0:
-            rich.print(ERROR + f"{type(self).__name__} yielded no results")
+        self.report()
         return self.g
 
     def save_to_cache(self, config: Config):
-        if self.g.num_nodes() == 0:
-            rich.print(ERROR + f"{self.__name__} yielded no results")
         self.sanitise_strings()
+        self.report()
 
         cache_file = config.cache_dir / "network-cache" / type(self).__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")
@@ -165,3 +163,7 @@ class Source(metaclass=SourceMeta):
         for edge in self.g.edges():
             if hasattr(edge.v, "sanitise_strings"):
                 edge.v.sanitise_strings()
+
+    def report(self):
+        if self.g.num_nodes() == 0:
+            rich.print(ERROR + f"{self.__name__} yielded no results")

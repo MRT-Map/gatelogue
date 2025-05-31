@@ -118,8 +118,11 @@ def cbi(src: WikiAirport, config):
 
 @_EXTRACTORS.append
 def dje(src: WikiAirport, config):
+    airport_code = "DJE"
     html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
-    airport = src.extract_get_airport("DJE", "Deadbush Johnston-Euphorial Airportt")
+    airport = src.extract_get_airport(airport_code, "Deadbush Johnston-Euphorial Airport")
+
+    result = 0
     for table in html("table"):
         if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
             continue
@@ -131,6 +134,7 @@ def dje(src: WikiAirport, config):
                 airline = airline.a.string if airline.a is not None else airline.string
                 airline = airline if airline is not None and airline.strip() != "" else None
                 src.extract_get_gate(airport, code=code, size=size, airline=airline)
+                result += 1
         elif caption == "Terminal 2":
             concourse = ""
             for tr in table("tr")[1:]:
@@ -143,6 +147,12 @@ def dje(src: WikiAirport, config):
                 airline = airline.a.string if airline.a is not None else airline.string
                 airline = airline if airline is not None and airline.strip() != "" else None
                 src.extract_get_gate(airport, code=code, size=size, airline=airline)
+                result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
+    else:
+        rich.print(RESULT + f"{airport_code} has {result} gates")
 
 
 @_EXTRACTORS.append
@@ -181,7 +191,10 @@ def dfm(src: WikiAirport, config):
 @_EXTRACTORS.append
 def dbi(src: WikiAirport, config):
     html = get_wiki_html("Deadbush International Airport", config)
-    airport = src.extract_get_airport("DBI", "Deadbush International Airport")
+    airport_code = "DBI"
+    airport = src.extract_get_airport(airport_code, "Deadbush International Airport")
+
+    result = 0
     for table in html("table"):
         if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
             continue
@@ -199,6 +212,12 @@ def dbi(src: WikiAirport, config):
             airline = tr("td")[2]
             airline = airline.a.string if airline.a is not None else airline.string
             src.extract_get_gate(airport, code=code, size=size, airline=airline)
+            result += 1
+
+    if not result:
+        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
+    else:
+        rich.print(RESULT + f"{airport_code} has {result} gates")
 
 
 @_EXTRACTORS.append
