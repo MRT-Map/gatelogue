@@ -7,7 +7,8 @@ from collections.abc import Iterable, Sized
 import rich.progress
 
 PROGRESS: rich.progress.Progress = rich.progress.Progress()
-PROGRESS.start()
+if not os.getenv("NO_PROGRESS_BAR"):
+    PROGRESS.start()
 
 INFO1 = "[yellow]"
 INFO2 = "[green]  "
