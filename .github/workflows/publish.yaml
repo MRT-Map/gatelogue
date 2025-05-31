@@ -2,6 +2,9 @@ on:
   workflow_dispatch:
 
 jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+
   changelog-version:
     runs-on: ubuntu-latest
     outputs:
@@ -90,7 +93,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    needs: [ build-py, build-rs, build-ts, changelog-version ]
+    needs: [ build-py, build-rs, build-ts, changelog-version, tests ]
     permissions:
       contents: write
 
@@ -115,7 +118,7 @@ jobs:
 
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: build-py
+    needs: [ build-py, tests ]
     environment:
       name: pypi
       url: https://pypi.org/p/gatelogue-types
@@ -134,7 +137,7 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-rs
-    needs: build-rs
+    needs: [ build-rs, tests ]
 
     steps:
       - uses: actions/checkout@v4
@@ -147,11 +150,12 @@ jobs:
       - run: cargo publish
 
   publish-npm:
-    needs: build-ts
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: gatelogue-types-ts
+    needs: [ build-ts, tests ]
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -167,7 +171,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish-gpr:
-    needs: build-ts
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -175,6 +178,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    needs: [ build-ts, tests ]
+
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -193,7 +199,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-jsr:
-    needs: build-ts
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -201,6 +206,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    needs: [ build-ts, tests ]
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
