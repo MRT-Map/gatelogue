@@ -157,8 +157,13 @@ class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: BusSource):
-        # TODO: report num of stations
-        pass
+        num_stops = len([stn for stn in self.get_one(src, BusCompany).get_all(src, BusStop) if any(
+            conn.v.line.refs(src, self)
+            for node in stn.get_all(src, BusStop, BusConnection)
+            for conn in stn.get_edges(src, node, BusConnection)
+        )])
+        colour = ERROR if num_stops == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stops} stops")
 
 
 class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):

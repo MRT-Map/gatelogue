@@ -169,8 +169,13 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: RailSource):
-        # TODO: report num of stations
-        pass
+        num_stations = len([stn for stn in self.get_one(src, RailCompany).get_all(src, RailStation) if any(
+            conn.v.line.refs(src, self)
+            for node in stn.get_all(src, RailStation, RailConnection)
+            for conn in stn.get_edges(src, node, RailConnection)
+        )])
+        colour = ERROR if num_stations == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stations} stations")
 
 
 class RailStation(gt.RailStation, LocatedNode, kw_only=True, tag=True):

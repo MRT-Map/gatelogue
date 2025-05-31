@@ -165,8 +165,13 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: SeaSource):
-        # TODO: report num of stations
-        pass
+        num_stops = len([stn for stn in self.get_one(src, SeaCompany).get_all(src, SeaStop) if any(
+            conn.v.line.refs(src, self)
+            for node in stn.get_all(src, SeaStop, SeaConnection)
+            for conn in stn.get_edges(src, node, SeaConnection)
+        )])
+        colour = ERROR if num_stops == 0 else RESULT
+        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stops} stops")
 
 
 class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
