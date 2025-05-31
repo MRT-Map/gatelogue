@@ -11,7 +11,7 @@ import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
-from gatelogue_aggregator.logging import INFO1, PROGRESS
+from gatelogue_aggregator.logging import INFO1, PROGRESS, progress_bar
 from gatelogue_aggregator.sources import SOURCES
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.gatelogue_data import GatelogueData
@@ -139,9 +139,8 @@ def run(
     src.report()
 
     if graph is not None:
-        task = PROGRESS.add_task(INFO1 + f"Outputting graph to {graph}... ", total=None)
-        src.graph(graph)
-        PROGRESS.remove_task(task)
+        with progress_bar(INFO1, f"Outputting graph to {graph}..."):
+            src.graph(graph)
 
     j = msgspec.json.encode(src.export(), enc_hook=_enc_hook)
     if fmt:

@@ -12,7 +12,7 @@ import msgspec
 import rich
 import rich.status
 
-from gatelogue_aggregator.logging import ERROR, INFO3, PROGRESS
+from gatelogue_aggregator.logging import ERROR, INFO3, PROGRESS, progress_bar
 
 if TYPE_CHECKING:
     import uuid
@@ -32,25 +32,25 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
-    task = PROGRESS.add_task(INFO3 + f"  Downloading {url}", total=None)
 
-    netloc = urlparse(url).netloc
-    if netloc in COOLDOWN and time.time() < (cool := COOLDOWN[netloc]):
-        rich.print(INFO3 + f"Waiting for {url} cooldown")
-        time.sleep(abs(cool - time.time()))
+    with progress_bar(INFO3, f"  Downloading {url}"):
+        netloc = urlparse(url).netloc
+        if netloc in COOLDOWN and time.time() < (cool := COOLDOWN[netloc]):
+            rich.print(INFO3 + f"Waiting for {url} cooldown")
+            time.sleep(abs(cool - time.time()))
 
-    response = SESSION.get(url, timeout=timeout)
-    if response.status_code >= 400:  # noqa: PLR2004
-        rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
-        if response.status_code in (408, 429):
-            COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
-            rich.print(ERROR + f"Will try {url} again in 15s")
-            return get_url(url, cache, timeout, cooldown)
+        response = SESSION.get(url, timeout=timeout)
+        if response.status_code >= 400:  # noqa: PLR2004
+            rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
+            if response.status_code in (408, 429):
+                COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
+                rich.print(ERROR + f"Will try {url} again in 15s")
+                return get_url(url, cache, timeout, cooldown)
 
-    text = response.text
-    with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
-        text = text.encode("latin").decode("utf-8")
-    PROGRESS.remove_task(task)
+        text = response.text
+        with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
+            text = text.encode("latin").decode("utf-8")
+
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
     cache.write_text(text)

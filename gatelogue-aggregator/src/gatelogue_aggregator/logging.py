@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import os
 from collections.abc import Iterable, Sized
 
@@ -29,4 +30,16 @@ def track[T](
             PROGRESS.advance(t, i + 1 if nonlinear else 1)
         PROGRESS.remove_task(t)
 
+    rich.print(level + description + " done")
+
+
+@contextlib.contextmanager
+def progress_bar(level: str, description: str):
+    if os.getenv("NO_PROGRESS_BAR"):
+        rich.print(level + description)
+        yield
+    else:
+        t = PROGRESS.add_task(level + description, total=None)
+        yield
+        PROGRESS.remove_task(t)
     rich.print(level + description + " done")
