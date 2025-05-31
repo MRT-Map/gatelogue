@@ -347,8 +347,8 @@ class RailLine(Node, kw_only=True, tag=True):
 
     company: Sourced[ID] = None
     """ID of the :py:class:`RailCompany` that operates the line"""
-    ref_station: Sourced[ID] | None = None
-    """ID of one :py:class:`RailStation` on the line, typically a terminus"""
+    stations: list[Sourced[ID]] = msgspec.field(default_factory=list)
+    """List of all :py:class:`RailStation` s the line stops at"""
 
     @classmethod
     def NS(cls):  # noqa: N802
@@ -360,7 +360,7 @@ class RailLineNS(RailLine, NodeNS, kw_only=True, tag=RailLine.__name__):
     colour: str | None = None
     mode: RailMode | None = None
     company: ID = None
-    ref_station: ID | None = None
+    stations: list[ID] = msgspec.field(default_factory=list)
 
 
 class RailStation(LocatedNode, kw_only=True, tag=True):
@@ -423,8 +423,8 @@ class BusLine(Node, kw_only=True, tag=True):
 
     company: Sourced[ID] = None
     """ID of the :py:class:`BusCompany` that operates the line"""
-    ref_stop: Sourced[ID] | None = None
-    """ID of one :py:class:`BusStop` on the line, typically a terminus"""
+    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
+    """List of all :py:class:`BusStop` s the line stops at"""
 
     @classmethod
     def NS(cls):  # noqa: N802
@@ -435,7 +435,7 @@ class BusLineNS(BusLine, kw_only=True, tag=BusLine.__name__):
     name: str | None = None
     colour: str | None = None
     company: ID = None
-    ref_stop: ID | None = None
+    stops: list[ID] = msgspec.field(default_factory=list)
 
 
 class BusStop(LocatedNode, kw_only=True, tag=True):
@@ -497,8 +497,8 @@ class SeaLine(Node, kw_only=True, tag=True):
 
     company: Sourced[ID] = None
     """ID of the :py:class:`SeaCompany` that operates the line"""
-    ref_stop: Sourced[ID] | None = None
-    """ID of one :py:class:`SeaStop` on the line, typically a terminus"""
+    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
+    """List of all :py:class:`SeaStop` s the line stops at"""
 
     @classmethod
     def NS(cls):  # noqa: N802
@@ -510,7 +510,7 @@ class SeaLineNS(SeaLine, NodeNS, kw_only=True, tag=SeaLine.__name__):
     colour: str | None = None
     mode: SeaMode | None = None
     company: ID = None
-    ref_stop: ID | None = None
+    stops: list[ID] = msgspec.field(default_factory=list)
 
 
 class SeaStop(LocatedNode, kw_only=True, tag=True):

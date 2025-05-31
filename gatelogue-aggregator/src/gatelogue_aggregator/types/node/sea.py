@@ -8,10 +8,10 @@ from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
-from gatelogue_aggregator.types.source import Source
+from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Iterator
 
 
 class SeaSource(Source):
@@ -108,7 +108,6 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
         name: str | None = None,
         colour: str | None = None,
         mode: gt.SeaMode | None = None,
-        ref_stop: SeaStop | None = None,
     ):
         self = super().new(src, code=code)
         self.connect_one(src, company)
@@ -118,8 +117,6 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
             self.colour = src.source(colour)
         if mode is not None:
             self.mode = src.source(mode)
-        if ref_stop is not None:
-            self.connect_one(src, ref_stop)
         return self
 
     @override
@@ -156,11 +153,20 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
             **self._as_dict(src),
         )
 
+    def _stops(self, src: SeaSource) -> Iterator[SeaStop]:
+        return (stn
+                for stn in self.get_one(src, SeaCompany).get_all(src, SeaStop)
+                if any(
+            conn.v.line.refs(src, self)
+            for node in stn.get_all(src, SeaStop, SeaConnection)
+            for conn in stn.get_edges(src, node, SeaConnection)
+        ))
+
     @override
     def _as_dict(self, src: SeaSource) -> dict:
         return super()._as_dict(src) | {
             "company": self.get_one_id(src, SeaCompany),
-            "ref_stop": self.get_one_id(src, SeaStop),
+            "stops": [Sourced(a.i) for a in self._stops(src)],  # TODO sources
         }
 
     @override
@@ -171,15 +177,7 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
     @override
     def report(self, src: SeaSource):
         num_stops = len(
-            [
-                stn
-                for stn in self.get_one(src, SeaCompany).get_all(src, SeaStop)
-                if any(
-                    conn.v.line.refs(src, self)
-                    for node in stn.get_all(src, SeaStop, SeaConnection)
-                    for conn in stn.get_edges(src, node, SeaConnection)
-                )
-            ]
+            list(self._stops(src))
         )
         colour = ERROR if num_stops == 0 else RESULT
         self.print_report(src, colour, f"has {num_stops} stops")

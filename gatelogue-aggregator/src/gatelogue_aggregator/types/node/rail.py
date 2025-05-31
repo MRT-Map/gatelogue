@@ -8,10 +8,10 @@ from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
-from gatelogue_aggregator.types.source import Source
+from gatelogue_aggregator.types.source import Source, Sourced
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Iterator
 
 
 class RailSource(Source):
@@ -108,7 +108,6 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
         name: str | None = None,
         colour: str | None = None,
         mode: gt.RailMode | None = None,
-        ref_station: RailStation | None = None,
     ):
         self = super().new(src, code=code)
         self.connect_one(src, company)
@@ -118,8 +117,6 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
             self.colour = src.source(colour)
         if mode is not None:
             self.mode = src.source(mode)
-        if ref_station is not None:
-            self.connect_one(src, ref_station)
         return self
 
     @override
@@ -160,11 +157,20 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
             **self._as_dict(src),
         )
 
+    def _stations(self, src: RailSource) -> Iterator[RailStation]:
+        return (stn
+                for stn in self.get_one(src, RailCompany).get_all(src, RailStation)
+                if any(
+            conn.v.line.refs(src, self)
+            for node in stn.get_all(src, RailStation, RailConnection)
+            for conn in stn.get_edges(src, node, RailConnection)
+        ))
+
     @override
     def _as_dict(self, src: RailSource) -> dict:
         return super()._as_dict(src) | {
             "company": self.get_one_id(src, RailCompany),
-            "ref_station": self.get_one_id(src, RailStation),
+            "stations": [Sourced(a.i) for a in self._stations(src)],  # TODO sources
         }
 
     @override
@@ -175,15 +181,7 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
     @override
     def report(self, src: RailSource):
         num_stations = len(
-            [
-                stn
-                for stn in self.get_one(src, RailCompany).get_all(src, RailStation)
-                if any(
-                    conn.v.line.refs(src, self)
-                    for node in stn.get_all(src, RailStation, RailConnection)
-                    for conn in stn.get_edges(src, node, RailConnection)
-                )
-            ]
+            list(self._stations(src))
         )
         colour = ERROR if num_stations == 0 else RESULT
         self.print_report(src, colour, f"has {num_stations} stations")

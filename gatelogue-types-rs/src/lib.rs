@@ -355,7 +355,7 @@ pub struct BusLine {
     pub name: Option<Sourced<String>>,
     pub colour: Option<Sourced<String>>,
     pub company: Sourced<ID>,
-    pub ref_stop: Option<Sourced<ID>>,
+    pub stops: Vec<Sourced<ID>>,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
@@ -399,7 +399,7 @@ pub struct RailLine {
     pub name: Option<Sourced<String>>,
     pub colour: Option<Sourced<String>>,
     pub company: Sourced<ID>,
-    pub ref_stop: Option<Sourced<ID>>,
+    pub stations: Vec<Sourced<ID>>,
     #[serde(flatten)]
     pub common: NodeCommon,
 }
@@ -431,7 +431,7 @@ pub struct SeaLine {
     pub name: Option<Sourced<String>>,
     pub colour: Option<Sourced<String>>,
     pub company: Sourced<ID>,
-    pub ref_stop: Option<Sourced<ID>>,
+    pub stops: Vec<Sourced<ID>>,
     #[serde(flatten)]
     pub common: NodeCommon,
 }

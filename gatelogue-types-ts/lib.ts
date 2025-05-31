@@ -43,6 +43,8 @@ export type PlaneMode =
   | "seaplane"
   | "warp plane"
   | "traincarts plane";
+export type WarpType = "premier" | "terminus" | "portal" | "misc"
+export type Rank =  "Unranked" | "Councillor" | "Mayor" | "Senator" | "Governor" | "Premier" | "Community"
 
 export type Sourced<T, S extends boolean = true> = S extends true
   ? { v: T; s: string[] }
@@ -122,7 +124,7 @@ export interface RailLine<S extends boolean = true> extends Node {
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
   company: Sourced<IntID<RailCompany<S>>, S>;
-  ref_station: Sourced<IntID<RailStation<S>>, S>;
+  stations: Sourced<IntID<RailStation<S>>, S>[];
 }
 
 export interface RailStation<S extends boolean = true> extends Located<S> {
@@ -138,7 +140,7 @@ export interface RailStation<S extends boolean = true> extends Located<S> {
 export interface SeaCompany<S extends boolean = true> extends Node {
   name: string;
   lines: Sourced<IntID<SeaLine<S>>, S>[];
-  stations: Sourced<IntID<SeaStop<S>>, S>[];
+  stops: Sourced<IntID<SeaStop<S>>, S>[];
   local: boolean;
 }
 
@@ -148,7 +150,7 @@ export interface SeaLine<S extends boolean = true> extends Node {
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
   company: Sourced<IntID<SeaCompany<S>>, S>;
-  ref_stop: Sourced<IntID<SeaStop<S>>, S>;
+  stops: Sourced<IntID<SeaStop<S>>, S>[];
 }
 
 export interface SeaStop<S extends boolean = true> extends Located<S> {
@@ -164,7 +166,7 @@ export interface SeaStop<S extends boolean = true> extends Located<S> {
 export interface BusCompany<S extends boolean = true> extends Node {
   name: string;
   lines: Sourced<IntID<BusLine<S>>, S>[];
-  stations: Sourced<IntID<BusStop<S>>, S>[];
+  stops: Sourced<IntID<BusStop<S>>, S>[];
   local: boolean;
 }
 
@@ -173,7 +175,7 @@ export interface BusLine<S extends boolean = true> extends Node {
   name: Sourced<string, S> | null;
   colour: Sourced<string, S> | null;
   company: Sourced<IntID<BusCompany<S>>, S>;
-  ref_stop: Sourced<IntID<BusStop<S>>, S>;
+  stops: Sourced<IntID<BusStop<S>>, S>[];
 }
 
 export interface BusStop<S extends boolean = true> extends Located<S> {
@@ -184,6 +186,18 @@ export interface BusStop<S extends boolean = true> extends Located<S> {
     StringID<BusStop<S>>,
     Sourced<Connection<BusLine, BusStop, S>>[]
   >;
+}
+
+export interface SpawnWarp<S extends boolean = true> extends Located<S> {
+    name: string;
+    warp_type: WarpType
+}
+
+export interface Town<S extends boolean = true> extends Located<S> {
+    name: string;
+    rank: Sourced<Rank, S>;
+    mayor: Sourced<string, S>;
+    deputy_mayor: Sourced<string | null, S>;
 }
 
 export interface GatelogueData {
