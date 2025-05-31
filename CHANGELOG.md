@@ -6,6 +6,7 @@
 
 ## v2.0.3+9 (20250601)
 * various refactors inside `gatelogue-aggregator`
+* `gatelogue-types` (ts): fix `stops` field inside `RailCompany`
 
 ### Data v9
 * `ref_stop`, `ref_station` removed from `BusLine`, `RailLine`, `SeaLine`
