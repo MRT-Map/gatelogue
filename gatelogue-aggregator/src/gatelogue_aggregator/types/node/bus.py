@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
 
-from gatelogue_aggregator.types.connections import Connection
-from gatelogue_aggregator.types.line_builder import LineBuilder
+from gatelogue_aggregator.types.edge.connections import Connection
+from gatelogue_aggregator.types.edge.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 from gatelogue_aggregator.types.source import Source
 

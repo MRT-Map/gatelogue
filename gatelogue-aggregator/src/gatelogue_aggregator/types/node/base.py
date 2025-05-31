@@ -8,8 +8,8 @@ import gatelogue_types as gt
 import msgspec
 import rustworkx as rx
 
+from gatelogue_aggregator.types.edge.shared_facility import SharedFacility
 from gatelogue_aggregator.types.mergeable import Mergeable
-from gatelogue_aggregator.types.shared_facility import SharedFacility
 from gatelogue_aggregator.types.source import Source, Sourced
 from gatelogue_aggregator.utils import search_all
 

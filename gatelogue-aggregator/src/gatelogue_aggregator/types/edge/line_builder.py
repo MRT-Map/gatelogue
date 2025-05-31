@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING, ClassVar
 
-from gatelogue_aggregator.types.connections import Connection, Direction
+from gatelogue_aggregator.types.edge.connections import Connection, Direction
 
 if TYPE_CHECKING:
     from collections.abc import Container
