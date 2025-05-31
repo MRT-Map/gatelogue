@@ -63,7 +63,10 @@ def gatelogue_aggregator():
 @click.option(
     "-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON"
 )
-@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
+@click.option("-f/-F", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
+@click.option(
+    "-r/-R", "--report/--no-report", default=True, show_default=True, help="print a report of all nodes after merger"
+)
 @click.option(
     "-g",
     "--graph",
@@ -111,6 +114,7 @@ def run(
     cooldown: int,
     output: Path,
     fmt: bool,
+    report: bool,
     graph: Path | None,
     max_workers: int,
     cache_exclude: str,
@@ -136,7 +140,9 @@ def run(
         result = list(executor.map(lambda s: s(config), sources))
 
     src = GatelogueData.from_sources(result)
-    src.report()
+
+    if report:
+        src.report()
 
     if graph is not None:
         with progress_bar(INFO1, f"Outputting graph to {graph}..."):
