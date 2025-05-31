@@ -165,6 +165,9 @@ class Node(gt.Node, Mergeable, msgspec.Struct, kw_only=True):
     def ref(self, src: Source) -> NodeRef[Self]:
         raise NotImplementedError
 
+    def report(self, src: Source):
+        raise NotImplementedError
+
     @staticmethod
     def process_code[T: (str, None)](s: T) -> T:
         if s is None or str(s).strip().lower() in ("", "?", "-", "foobar"):
