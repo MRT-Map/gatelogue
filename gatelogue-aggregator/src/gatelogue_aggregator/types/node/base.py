@@ -170,6 +170,11 @@ class Node(gt.Node, Mergeable, msgspec.Struct, kw_only=True):
     def report(self, src: Source):
         raise NotImplementedError
 
+    def print_report(self, src: Source, level: str, msg: str):
+        from gatelogue_aggregator.types.gatelogue_data import GatelogueData
+        src_name = "" if isinstance(src, GatelogueData) else (src.name + ": ")
+        rich.print(level + src_name + type(self).__name__ + " " + self.str_src(src) + " " + msg)
+
     @staticmethod
     def process_code[T: (str, None)](s: T) -> T:
         if s is None or str(s).strip().lower() in ("", "?", "-", "foobar"):
@@ -247,10 +252,13 @@ class LocatedNode(gt.LocatedNode, Node, kw_only=True):
 
     @override
     def report(self, src: Source):
+        from gatelogue_aggregator.types.gatelogue_data import GatelogueData
+        if not isinstance(src, GatelogueData):
+            return
         if self.coordinates is None:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no coordinates")
+            self.print_report(src, ERROR, "has no coordinates")
         if self.world is None:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no world")
+            self.print_report(src, ERROR, "has no world")
 
 
 class NodeRef[T: Node]:

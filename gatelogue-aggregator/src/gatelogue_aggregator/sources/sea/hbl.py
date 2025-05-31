@@ -36,4 +36,4 @@ class HBL(SeaSource):
 
                 SeaLineBuilder(self, line).matrix(*stops)
 
-                rich.print(RESULT + f"HBL Line {line_code} has {len(stops)} stops")
+                

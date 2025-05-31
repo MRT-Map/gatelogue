@@ -88,10 +88,7 @@ def intra_air(src: WikiAirline, config):
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
             result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append
@@ -119,10 +116,7 @@ def fli_high(src: WikiAirline, config):
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
             result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append
@@ -190,10 +184,7 @@ def fly_creeper(src: WikiAirline, config):
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
             result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append
@@ -350,10 +341,7 @@ def arctic_air(src: WikiAirline, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append
@@ -393,10 +381,7 @@ def sandstone_airr(src: WikiAirline, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append
@@ -445,10 +430,7 @@ def lilyflower_airlines(src: WikiAirline, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airline_name} yielded no results")
-    else:
-        rich.print(RESULT + f"{airline_name} has {result} flights")
+    
 
 
 @_EXTRACTORS.append

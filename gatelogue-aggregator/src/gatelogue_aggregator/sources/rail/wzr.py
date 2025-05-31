@@ -50,7 +50,7 @@ class WZR(RailSource):
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
-            rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
+            
 
         for line_code, line_name in (
             ("2", "Northmist Line"),
@@ -73,7 +73,7 @@ class WZR(RailSource):
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
-            rich.print(RESULT + f"WZR Line {line_code} has {len(stations)} stations")
+            
 
         wiki = get_wiki_text("Ismael Line", config)
         line = RailLine.new(self, code="8", name="Ismael Line", company=company, colour="#aa0000")
@@ -88,4 +88,4 @@ class WZR(RailSource):
             stations.append(station)
 
         RailLineBuilder(self, line).connect(*stations)
-        rich.print(RESULT + f"WZR Line 8 has {len(stations)} stations")
+        

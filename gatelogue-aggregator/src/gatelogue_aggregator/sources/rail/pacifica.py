@@ -64,4 +64,4 @@ class Pacifica(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"Pacifica {line_name} has {len(stations)} stations")
+            

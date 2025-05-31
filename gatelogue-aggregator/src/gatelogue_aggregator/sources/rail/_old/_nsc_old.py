@@ -50,4 +50,4 @@ class NSC(RailSource):
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"NSC {line_name} has {len(stations)} stations")
+            

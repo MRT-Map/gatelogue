@@ -171,7 +171,7 @@ class NFLR(RailSource):
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
-            rich.print(RESULT + f"nFLR Line {line_name} has {len(r_stations)} stations")
+            
 
             if w:
                 line_name = "W" + line_name[1:] if line_name.startswith("R") else line_name + " Rapid"  # noqa: PLW2901
@@ -193,4 +193,4 @@ class NFLR(RailSource):
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
-                rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
+                

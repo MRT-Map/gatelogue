@@ -113,6 +113,10 @@ class Source(metaclass=SourceMeta):
         self.build(config)
         self.save_to_cache(config)
 
+    @classmethod
+    def is_warp_source(cls) -> bool:
+        return cls.__name__.startswith("Dynmap") or cls.__name__.endswith("Warp")
+
     def build(self, config: Config):
         raise NotImplementedError
 
@@ -164,6 +168,15 @@ class Source(metaclass=SourceMeta):
             if hasattr(edge.v, "sanitise_strings"):
                 edge.v.sanitise_strings()
 
+    @classmethod
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
+        return tuple()
+
     def report(self):
         if self.g.num_nodes() == 0:
             rich.print(ERROR + f"{self.__name__} yielded no results")
+
+        reported_nodes = self.reported_nodes()
+        for node in self.g.nodes():
+            if isinstance(node, reported_nodes):
+                node.report(self)

@@ -3,11 +3,15 @@ import msgspec
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirport, AirSource
+from gatelogue_aggregator.types.node.base import Node
 
 
 class DynmapAirports(AirSource):
     name = "MRT Dynmap (Air)"
     priority = 0
+
+    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+        return (AirAirport,)
 
     def build(self, config: Config):
         cache1 = config.cache_dir / "dynmap-markers-new"

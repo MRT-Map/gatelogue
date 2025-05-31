@@ -16,7 +16,14 @@ if TYPE_CHECKING:
 
 
 class SeaSource(Source):
-    pass
+    @classmethod
+    @override
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
+        return (
+            (SeaCompany,)
+            if cls.__name__.startswith("Dynmap") or cls.__name__.endswith("Warp")
+            else (SeaCompany, SeaLine)
+        )
 
 
 class SeaCompany(gt.SeaCompany, Node, kw_only=True, tag=True):
@@ -84,10 +91,8 @@ class SeaCompany(gt.SeaCompany, Node, kw_only=True, tag=True):
     def report(self, src: SeaSource):
         num_lines = len(list(self.get_all(src, SeaLine)))
         num_stops = len(list(self.get_all(src, SeaStop)))
-        colour = ERROR if num_lines == 0 or num_stops == 0 else RESULT
-        rich.print(
-            colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stops} stops"
-        )
+        colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stops == 0 else RESULT
+        self.print_report(src, colour, f"has {num_lines} lines and {num_stops} stops")
 
 
 class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
@@ -178,7 +183,7 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
             ]
         )
         colour = ERROR if num_stops == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stops} stops")
+        self.print_report(src, colour, f"has {num_stops} stops")
 
 
 class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
@@ -259,7 +264,7 @@ class SeaStop(gt.SeaStop, LocatedNode, kw_only=True, tag=True):
         super().report(src)
         num_connections = len(list(self.get_all(src, SeaStop, SeaConnection)))
         if num_connections == 0:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no connections")
+            self.print_report(src, ERROR, "has no connections")
 
 
 class SeaConnection(Connection[SeaLine]):

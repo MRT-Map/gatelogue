@@ -81,4 +81,4 @@ class IntraRail(RailSource):
                     backward_label="Whitechapel Border",
                 )
 
-            rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
+            

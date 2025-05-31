@@ -47,4 +47,4 @@ class WZF(SeaSource):
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"WZF Line {line_code} has {len(stops)} stations")
+            

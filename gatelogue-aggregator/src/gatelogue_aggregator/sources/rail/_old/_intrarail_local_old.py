@@ -44,4 +44,4 @@ class IntraRailLocal(RailSource):
 
                 RailLineBuilder(self, line).connect(*stations)
 
-                rich.print(RESULT + f"IntraRail Local Line {line_code} has {len(stations)} stations")
+                

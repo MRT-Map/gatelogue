@@ -37,4 +37,4 @@ class IntraBus(BusSource):
 
                 BusLineBuilder(self, line).connect(*stops)
 
-                rich.print(RESULT + f"IntraBus Line {line_code} has {len(stops)} stops")
+                

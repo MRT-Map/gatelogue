@@ -12,7 +12,7 @@ import msgspec
 import rich
 import rich.status
 
-from gatelogue_aggregator.logging import ERROR, INFO3, PROGRESS, progress_bar
+from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
 
 if TYPE_CHECKING:
     import uuid

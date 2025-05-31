@@ -89,4 +89,4 @@ class BluRail(RailSource):
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"BluRail Line {line_code} has {len(stations)} stations")
+            

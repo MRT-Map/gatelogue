@@ -48,6 +48,6 @@ class IntraSail(SeaSource):
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"IntraSail Line {line_code} has {len(stops)} stops")
+            
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling

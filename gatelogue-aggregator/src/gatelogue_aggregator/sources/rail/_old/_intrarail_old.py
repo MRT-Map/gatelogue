@@ -96,8 +96,8 @@ class IntraRail(RailSource):
                     )
                 ]
                 RailLineBuilder(self, line2).connect(*stations2)
-                rich.print(RESULT + f"IntraRail Line <66> has {len(stations2)} stations")
+                
 
-            rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
+            
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling

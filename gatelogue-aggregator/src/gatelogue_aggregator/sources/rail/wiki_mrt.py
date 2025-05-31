@@ -86,4 +86,4 @@ class WikiMRT(RailSource):
                     *stations, forward_label=forward_label, backward_label=backward_label
                 )
 
-            rich.print(RESULT + f"MRT {line_code} has {len(stations)} stations")
+            

@@ -41,4 +41,4 @@ class RedTrain(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"RedTrain has {len(stations)} stations")
+            

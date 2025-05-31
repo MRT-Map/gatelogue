@@ -39,7 +39,7 @@ class CFC(SeaSource):
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"CFC Line {line_code} has {len(stops)} stops")
+            
 
         ###
 

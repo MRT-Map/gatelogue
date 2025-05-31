@@ -149,10 +149,7 @@ def dje(src: WikiAirport, config):
                 src.extract_get_gate(airport, code=code, size=size, airline=airline)
                 result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-    else:
-        rich.print(RESULT + f"{airport_code} has {result} gates")
+    
 
 
 @_EXTRACTORS.append
@@ -214,10 +211,7 @@ def dbi(src: WikiAirport, config):
             src.extract_get_gate(airport, code=code, size=size, airline=airline)
             result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-    else:
-        rich.print(RESULT + f"{airport_code} has {result} gates")
+    
 
 
 @_EXTRACTORS.append
@@ -340,10 +334,7 @@ def aix(src: WikiAirport, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-    else:
-        rich.print(RESULT + f"{airport_code} has {result} gates")
+    
 
 
 @_EXTRACTORS.append
@@ -373,10 +364,7 @@ def lar(src: WikiAirport, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-    else:
-        rich.print(RESULT + f"{airport_code} has {result} gates")
+    
 
 
 @_EXTRACTORS.append
@@ -406,7 +394,4 @@ def lfa(src: WikiAirport, config):
         )
         result += 1
 
-    if not result:
-        rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-    else:
-        rich.print(RESULT + f"{airport_code} has {result} gates")
+    

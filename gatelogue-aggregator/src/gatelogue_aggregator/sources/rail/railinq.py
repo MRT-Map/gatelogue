@@ -44,4 +44,4 @@ class RaiLinQ(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"RaiLinQ Line {line_code} has {len(stations)} stations")
+            

@@ -225,9 +225,11 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     @override
     def report(self, src: AirSource):
         super().report(src)
+        if src.is_warp_source():
+            return
         num_gates = len(list(self.get_all(src, AirGate)))
         colour = ERROR if num_gates == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_gates} gates")
+        self.print_report(src, colour, f"has {num_gates} gates")
 
     def update(self, src: AirSource):
         if (none_gate := next((a for a in self.get_all(src, AirGate) if a.code is None), None)) is None:
@@ -341,7 +343,7 @@ class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
     def report(self, src: AirSource):
         num_flights = len(list(self.get_all(src, AirFlight)))
         if num_flights > 6 and self.code is not None:  # noqa: PLR2004
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights")
+            self.print_report(src, ERROR, f"has {num_flights} flights")
 
     @staticmethod
     def process_code[T: (str, None)](s: T, airline_name: str | None = None, airport_code: str | None = None) -> T:
@@ -418,12 +420,12 @@ class AirAirline(gt.AirAirline, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: AirSource):
+        from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
+        from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
         num_flights = len(list(self.get_all(src, AirFlight)))
         num_gates = len(list(self.get_all(src, AirGate)))
-        colour = ERROR if num_flights == 0 or num_gates == 0 else RESULT
-        rich.print(
-            colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights and {num_gates} gates"
-        )
+        colour = ERROR if num_flights == 0 or (num_gates == 0 and not isinstance(src, (WikiAirline, MRTTransit))) else RESULT
+        self.print_report(src, colour, f"has {num_flights} flights and {num_gates} gates")
 
     @staticmethod
     def process_airline_name[T: (str, None)](s: T) -> T:

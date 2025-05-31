@@ -8,6 +8,7 @@ from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirGate, AirSource
+from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
@@ -20,6 +21,9 @@ if TYPE_CHECKING:
 class WikiAirport(AirSource):
     name = "MRT Wiki (Airport)"
     priority = 3
+
+    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+        return (AirAirport,)
 
     def build(self, config: Config):
         for airline in track(_EXTRACTORS, INFO2, description="Extracting data from wikipages"):
@@ -42,10 +46,6 @@ class WikiAirport(AirSource):
                 matches["size"] = size if isinstance(size, str) else size(matches)
             self.extract_get_gate(airport, **matches)
             result += 1
-        if not result:
-            rich.print(ERROR + f"Extraction for {airport_code} yielded no results")
-        else:
-            rich.print(RESULT + f"{airport_code} has {result} gates")
         return airport
 
     def extract_get_airport(self, airport_code: str, page_name: str):

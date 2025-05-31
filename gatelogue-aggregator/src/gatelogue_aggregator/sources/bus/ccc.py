@@ -46,7 +46,7 @@ class CCC(BusSource):
 
             BusLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"CCC Line {line_code} has {len(stops)} stops")
+            
 
         ###
 

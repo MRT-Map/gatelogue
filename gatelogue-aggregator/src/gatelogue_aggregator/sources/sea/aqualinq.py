@@ -39,4 +39,4 @@ class AquaLinQ(SeaSource):
 
             SeaLineBuilder(self, line).connect(*stops)
 
-            rich.print(RESULT + f"AquaLinQ Line {line_code} has {len(stops)} stops")
+            

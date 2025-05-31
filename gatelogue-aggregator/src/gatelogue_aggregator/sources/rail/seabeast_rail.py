@@ -35,7 +35,7 @@ class SeabeastRail(RailSource):
 
         RailLineBuilder(self, line).connect(*stations)
 
-        rich.print(RESULT + f"Seabeast Rail Green Line has {len(stations)} stops")
+        
 
         ###
 

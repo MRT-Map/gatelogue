@@ -4,11 +4,15 @@ from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.types.node.base import Node
 
 
 class MRTTransit(AirSource):
     name = "MRT Transit (Air)"
     priority = 2
+
+    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+        return (AirAirline, AirAirport)
 
     def build(self, config: Config):
         cache1 = config.cache_dir / "mrt-transit1"

@@ -49,4 +49,4 @@ class MarbleRail(RailSource):
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"MarbleRail {line_name} has {len(stations)} stations")
+            

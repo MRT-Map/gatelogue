@@ -53,4 +53,4 @@ class SEAT(RailSource):
             else:
                 RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"SEAT Line {line_name} has {len(stations)} stations")
+            

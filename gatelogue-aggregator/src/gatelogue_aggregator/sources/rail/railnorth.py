@@ -40,4 +40,4 @@ class RailNorth(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-            rich.print(RESULT + f"{line_name} has {len(stations)} stations")
+            

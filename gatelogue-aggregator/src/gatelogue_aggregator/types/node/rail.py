@@ -16,7 +16,14 @@ if TYPE_CHECKING:
 
 
 class RailSource(Source):
-    pass
+    @classmethod
+    @override
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
+        return (
+            (RailCompany,)
+            if cls.__name__.startswith("Dynmap") or cls.__name__.endswith("Warp")
+            else (RailCompany, RailLine)
+        )
 
 
 class RailCompany(gt.RailCompany, Node, kw_only=True, tag=True):
@@ -84,13 +91,9 @@ class RailCompany(gt.RailCompany, Node, kw_only=True, tag=True):
     def report(self, src: RailSource):
         num_lines = len(list(self.get_all(src, RailLine)))
         num_stations = len(list(self.get_all(src, RailStation)))
-        colour = ERROR if num_lines == 0 or num_stations == 0 else RESULT
-        rich.print(
-            colour
-            + type(self).__name__
-            + " "
-            + self.str_src(src)
-            + f" has {num_lines} lines and {num_stations} stations"
+        colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stations == 0 else RESULT
+        self.print_report(src, colour,
+            f"has {num_lines} lines and {num_stations} stations"
         )
 
 
@@ -186,7 +189,7 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
             ]
         )
         colour = ERROR if num_stations == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stations} stations")
+        self.print_report(src, colour, f"has {num_stations} stations")
 
 
 class RailStation(gt.RailStation, LocatedNode, kw_only=True, tag=True):
@@ -267,7 +270,7 @@ class RailStation(gt.RailStation, LocatedNode, kw_only=True, tag=True):
         super().report(src)
         num_connections = len(list(self.get_all(src, RailStation, RailConnection)))
         if num_connections == 0:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no connections")
+            self.print_report(src, ERROR, "has no connections")
 
 
 class RailConnection(Connection[RailLine]):
