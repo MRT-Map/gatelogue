@@ -13,14 +13,14 @@
 
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mrt-map/gatelogue/dist?label=last%20data%20update)
 
-`gatelogue-types` (python):
+[`gatelogue-types` (python)](https://pypi.org/project/gatelogue-types/):
 ![PyPI - Version](https://img.shields.io/pypi/v/gatelogue-types)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gatelogue-types)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=docs&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs%2F_autosummary%2Fgatelogue_types.html)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/gatelogue-types)
 ![Pepy Total Downlods](https://img.shields.io/pepy/dt/gatelogue-types)
 
-`gatelogue-types` (rust):
+[`gatelogue-types` (rust)](https://crates.io/crates/gatelogue-types):
 ![Crates.io Version](https://img.shields.io/crates/v/gatelogue-types)
 ![Crates.io MSRV](https://img.shields.io/crates/msrv/gatelogue-types)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=local%20docs&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs%2Frs)
@@ -28,13 +28,13 @@
 ![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/gatelogue-types)
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/gatelogue-types)
 
-`gatelogue-types` (ts, npm):
+[`gatelogue-types` (ts, npm)](https://www.npmjs.com/package/gatelogue-types):
 ![NPM Version](https://img.shields.io/npm/v/gatelogue-types)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=typedoc&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs%2Fts)
 ![NPM Downloads](https://img.shields.io/npm/dw/gatelogue-types?label=downloads%20(week))
 ![NPM Downloads](https://img.shields.io/npm/dy/gatelogue-types?label=downloads%20(year))
 
-`gatelogue-types` (ts, jsr):
+[`gatelogue-types` (ts, jsr)](https://jsr.io/@mrt-map/gatelogue-types):
 ![JSR Version](https://img.shields.io/jsr/v/@mrt-map/gatelogue-types)
 
 Database of air, rail, sea, bus routes on the [Minecart Rapid Transit server](https://minecartrapidtransit.net).
