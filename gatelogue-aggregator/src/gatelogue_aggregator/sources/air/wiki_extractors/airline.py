@@ -5,10 +5,8 @@ import re
 from typing import TYPE_CHECKING
 
 import pandas as pd
-import rich
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
@@ -64,7 +62,6 @@ def intra_air(src: WikiAirline, config):
     airline_name = "IntraAir"
     airline = src.extract_get_airline(airline_name, "IntraAir/Flight List")
 
-    result = 0
     for table in html("table"):
         for tr in table("tr")[1::4]:
             if len(tr("td")) < 7:  # noqa: PLR2004
@@ -86,9 +83,6 @@ def intra_air(src: WikiAirline, config):
             g2 = None if g2 == "?" else g2
             s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None  # noqa: PLR2004
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
-            result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -97,7 +91,6 @@ def fli_high(src: WikiAirline, config):
     airline_name = "FliHigh Airlines"
     airline = src.extract_get_airline(airline_name, airline_name)
 
-    result = 0
     for table in html("table"):
         if table.find(string="Flight #") is None:
             continue
@@ -114,9 +107,6 @@ def fli_high(src: WikiAirline, config):
             if "idk" in g2 or "CHECK WIKI" in g2:
                 g2 = None
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
-            result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -161,7 +151,6 @@ def fly_creeper(src: WikiAirline, config):
     airline_name = "FlyCreeper"
     airline = src.extract_get_airline(airline_name, airline_name)
 
-    result = 0
     for table in html("table"):
         if "Flight No" not in str(table):
             continue
@@ -182,9 +171,6 @@ def fly_creeper(src: WikiAirline, config):
             g1 = next(iter(tr("td")[4].strings))
             g2 = list(tr("td")[4].strings)[1]
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
-            result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -324,7 +310,6 @@ def arctic_air(src: WikiAirline, config):
 
     d = list(zip(df["Flight"], df["Departure"], df["Arrival"], df["D. Gate"], df["A. Gate"], strict=False))
 
-    result = 0
     for flight, a1, a2, g1, g2 in d[::2]:
         if str(flight).strip() in ("13", "14"):
             continue
@@ -339,9 +324,6 @@ def arctic_air(src: WikiAirline, config):
         src.extract_get_flight(
             airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" not in g1 else None, g2=g2 if "*" not in g2 else None
         )
-        result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -361,7 +343,6 @@ def sandstone_airr(src: WikiAirline, config):
 
     d = list(zip(df["Unnamed: 1"], df["Airport"], df["Gate"], strict=False))
 
-    result = 0
     for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
         if not a1 or str(a1) == "nan":
             continue
@@ -379,9 +360,6 @@ def sandstone_airr(src: WikiAirline, config):
             g1=g1 if "*" not in g1 else None,
             g2=g2 if "*" not in g2 else None,
         )
-        result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -416,7 +394,6 @@ def lilyflower_airlines(src: WikiAirline, config):
 
     d = list(zip(df["Flight"], df["IATA"], df["Gate"], df["IATA.1"], df["Gate.1"], strict=False))
 
-    result = 0
     for flight, a1, g1, a2, g2 in d:
         if not a1 or str(a1) == "nan":
             continue
@@ -428,9 +405,6 @@ def lilyflower_airlines(src: WikiAirline, config):
             g1=g1,
             g2=g2,
         )
-        result += 1
-
-    
 
 
 @_EXTRACTORS.append

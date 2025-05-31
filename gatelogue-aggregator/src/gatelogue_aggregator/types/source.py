@@ -170,7 +170,7 @@ class Source(metaclass=SourceMeta):
 
     @classmethod
     def reported_nodes(cls) -> tuple[type[Node], ...]:
-        return tuple()
+        return ()
 
     def report(self):
         if self.g.num_nodes() == 0:

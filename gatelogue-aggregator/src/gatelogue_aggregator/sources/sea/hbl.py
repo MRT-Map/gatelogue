@@ -1,8 +1,5 @@
 import re
 
-import rich
-
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
@@ -35,5 +32,3 @@ class HBL(SeaSource):
                     continue
 
                 SeaLineBuilder(self, line).matrix(*stops)
-
-                

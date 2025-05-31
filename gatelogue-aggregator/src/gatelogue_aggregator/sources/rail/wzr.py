@@ -1,8 +1,5 @@
 import re
 
-import rich
-
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
@@ -50,7 +47,6 @@ class WZR(RailSource):
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
-            
 
         for line_code, line_name in (
             ("2", "Northmist Line"),
@@ -73,7 +69,6 @@ class WZR(RailSource):
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
-            
 
         wiki = get_wiki_text("Ismael Line", config)
         line = RailLine.new(self, code="8", name="Ismael Line", company=company, colour="#aa0000")
@@ -88,4 +83,3 @@ class WZR(RailSource):
             stations.append(station)
 
         RailLineBuilder(self, line).connect(*stations)
-        

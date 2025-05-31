@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
-import rich
 
 from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection

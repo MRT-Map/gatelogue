@@ -2,10 +2,7 @@ import difflib
 import re
 import uuid
 
-import rich
-
 from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
@@ -34,8 +31,6 @@ class SeabeastRail(RailSource):
             stations.append(station)
 
         RailLineBuilder(self, line).connect(*stations)
-
-        
 
         ###
 

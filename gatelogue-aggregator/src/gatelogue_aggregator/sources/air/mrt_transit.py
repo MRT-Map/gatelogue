@@ -1,3 +1,5 @@
+from typing import override
+
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
@@ -11,7 +13,9 @@ class MRTTransit(AirSource):
     name = "MRT Transit (Air)"
     priority = 2
 
-    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+    @classmethod
+    @override
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
         return (AirAirline, AirAirport)
 
     def build(self, config: Config):

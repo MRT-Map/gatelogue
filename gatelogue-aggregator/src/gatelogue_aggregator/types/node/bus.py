@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
-import rich
 
 from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection
@@ -19,11 +18,7 @@ class BusSource(Source):
     @classmethod
     @override
     def reported_nodes(cls) -> tuple[type[Node], ...]:
-        return (
-            (BusCompany,)
-            if cls.is_warp_source()
-            else (BusCompany, BusLine)
-        )
+        return (BusCompany,) if cls.is_warp_source() else (BusCompany, BusLine)
 
 
 class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):

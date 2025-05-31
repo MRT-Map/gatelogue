@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
-import rich.progress
-
-from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
+from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
@@ -16,13 +13,16 @@ if TYPE_CHECKING:
     from re import Pattern
 
     from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.types.node.base import Node
 
 
 class WikiAirline(AirSource):
     name = "MRT Wiki (Airline)"
     priority = 1
 
-    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+    @classmethod
+    @override
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
         return (AirAirline,)
 
     def build(self, config: Config):
@@ -39,13 +39,11 @@ class WikiAirline(AirSource):
     ) -> AirAirline:
         wikitext = get_wiki_text(page_name, config)
         airline = self.extract_get_airline(airline_name, page_name)
-        result = 0
         for match in search_all(regex, wikitext):
             matches = match.groupdict()
             if size is not None:
                 matches["s"] = size if isinstance(size, str) else size(matches)
             self.extract_get_flight(airline, **matches)
-            result += 1
         return airline
 
     def extract_get_airline(self, airline_name: str, page_name: str) -> AirAirline:

@@ -1,6 +1,3 @@
-import rich
-
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
@@ -48,5 +45,3 @@ class MarbleRail(RailSource):
                 RailLineBuilder(self, line).connect(*stations, between=("Tung Wan", None))
             else:
                 RailLineBuilder(self, line).connect(*stations)
-
-            

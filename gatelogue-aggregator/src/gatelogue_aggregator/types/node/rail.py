@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
-import rich
 
 from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection
@@ -92,9 +91,7 @@ class RailCompany(gt.RailCompany, Node, kw_only=True, tag=True):
         num_lines = len(list(self.get_all(src, RailLine)))
         num_stations = len(list(self.get_all(src, RailStation)))
         colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stations == 0 else RESULT
-        self.print_report(src, colour,
-            f"has {num_lines} lines and {num_stations} stations"
-        )
+        self.print_report(src, colour, f"has {num_lines} lines and {num_stations} stations")
 
 
 class RailLine(gt.RailLine, Node, kw_only=True, tag=True):

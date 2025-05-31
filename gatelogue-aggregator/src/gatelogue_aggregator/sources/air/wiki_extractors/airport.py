@@ -4,10 +4,8 @@ import re
 from typing import TYPE_CHECKING
 
 import pandas as pd
-import rich
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 if TYPE_CHECKING:
@@ -122,7 +120,6 @@ def dje(src: WikiAirport, config):
     html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
     airport = src.extract_get_airport(airport_code, "Deadbush Johnston-Euphorial Airport")
 
-    result = 0
     for table in html("table"):
         if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
             continue
@@ -134,7 +131,6 @@ def dje(src: WikiAirport, config):
                 airline = airline.a.string if airline.a is not None else airline.string
                 airline = airline if airline is not None and airline.strip() != "" else None
                 src.extract_get_gate(airport, code=code, size=size, airline=airline)
-                result += 1
         elif caption == "Terminal 2":
             concourse = ""
             for tr in table("tr")[1:]:
@@ -147,9 +143,6 @@ def dje(src: WikiAirport, config):
                 airline = airline.a.string if airline.a is not None else airline.string
                 airline = airline if airline is not None and airline.strip() != "" else None
                 src.extract_get_gate(airport, code=code, size=size, airline=airline)
-                result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -191,7 +184,6 @@ def dbi(src: WikiAirport, config):
     airport_code = "DBI"
     airport = src.extract_get_airport(airport_code, "Deadbush International Airport")
 
-    result = 0
     for table in html("table"):
         if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
             continue
@@ -209,9 +201,6 @@ def dbi(src: WikiAirport, config):
             airline = tr("td")[2]
             airline = airline.a.string if airline.a is not None else airline.string
             src.extract_get_gate(airport, code=code, size=size, airline=airline)
-            result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -318,7 +307,6 @@ def aix(src: WikiAirport, config):
 
     d = list(zip(df["Gate ID"], df["Gate Size"], df["Company"], strict=False))
 
-    result = 0
     old_gate_size = None
     for gate_code, gate_size, airline in d:
         if str(gate_size) == "nan":
@@ -332,9 +320,6 @@ def aix(src: WikiAirport, config):
             airline=airline if str(airline) != "nan" and airline != "Unavailable" else None,
             size=gate_size,
         )
-        result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -354,7 +339,6 @@ def lar(src: WikiAirport, config):
 
     d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
-    result = 0
     for gate_code, size, airline, _status in d:
         src.extract_get_gate(
             airport=airport,
@@ -362,9 +346,6 @@ def lar(src: WikiAirport, config):
             size=size,
             airline=airline if str(airline) != "nan" and airline != "?" else None,
         )
-        result += 1
-
-    
 
 
 @_EXTRACTORS.append
@@ -384,7 +365,6 @@ def lfa(src: WikiAirport, config):
 
     d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
-    result = 0
     for gate_code, size, airline, _status in d:
         src.extract_get_gate(
             airport=airport,
@@ -392,6 +372,3 @@ def lfa(src: WikiAirport, config):
             size=size,
             airline=airline if str(airline) != "nan" and airline != "?" else None,
         )
-        result += 1
-
-    

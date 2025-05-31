@@ -1,10 +1,7 @@
 import json
 import re
 
-import rich
-
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
@@ -88,5 +85,3 @@ class BluRail(RailSource):
                 RailLineBuilder(self, line).connect(*stations, between=("Segav Sal", None))
             else:
                 RailLineBuilder(self, line).connect(*stations)
-
-            

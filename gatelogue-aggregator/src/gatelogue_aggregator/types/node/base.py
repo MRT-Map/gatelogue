@@ -172,6 +172,7 @@ class Node(gt.Node, Mergeable, msgspec.Struct, kw_only=True):
 
     def print_report(self, src: Source, level: str, msg: str):
         from gatelogue_aggregator.types.gatelogue_data import GatelogueData
+
         src_name = "" if isinstance(src, GatelogueData) else (src.name + ": ")
         rich.print(level + src_name + type(self).__name__ + " " + self.str_src(src) + " " + msg)
 
@@ -253,6 +254,7 @@ class LocatedNode(gt.LocatedNode, Node, kw_only=True):
     @override
     def report(self, src: Source):
         from gatelogue_aggregator.types.gatelogue_data import GatelogueData
+
         if not isinstance(src, GatelogueData):
             return
         if self.coordinates is None:

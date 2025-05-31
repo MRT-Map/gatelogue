@@ -1,11 +1,9 @@
 import re
 
 import msgspec
-import rich
-import rich.progress
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.logging import INFO3, RESULT, track
+from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
 
@@ -43,7 +41,7 @@ class DynmapMRT(RailSource):
                 continue
             if (result := re.search(r"\[(?P<code>.*?)] (?P<name>.*)", v["label"])) is None:
                 continue
-            line_code = result.group("code").strip()
+            result.group("code").strip()
 
             for k, vv in v["markers"].items():
                 code = k.upper()
@@ -56,11 +54,9 @@ class DynmapMRT(RailSource):
                 if name is not None:
                     name = name.strip().removesuffix("Station")
                 RailStation.new(self, codes={code}, company=company, coordinates=coordinates, name=name, world="New")
-            
 
         for k, v in json2["old"]["markers"].items():
             code = "Old-" + k.upper()
             coordinates = (v["x"], v["z"])
             name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1).strip()
             RailStation.new(self, codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
-        

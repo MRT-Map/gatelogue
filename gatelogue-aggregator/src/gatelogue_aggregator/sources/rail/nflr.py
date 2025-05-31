@@ -1,10 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
-import rich
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
@@ -171,8 +169,6 @@ class NFLR(RailSource):
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
-            
-
             if w:
                 line_name = "W" + line_name[1:] if line_name.startswith("R") else line_name + " Rapid"  # noqa: PLW2901
                 w_line = RailLine.new(
@@ -192,5 +188,3 @@ class NFLR(RailSource):
                     RailLineBuilder(self, w_line).connect(*w_stations, between=("Weston East", None))
                 else:
                     RailLineBuilder(self, w_line).connect(*w_stations)
-
-                

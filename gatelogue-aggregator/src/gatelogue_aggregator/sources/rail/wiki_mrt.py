@@ -1,8 +1,5 @@
 import re
 
-import rich
-
-from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import (
@@ -85,5 +82,3 @@ class WikiMRT(RailSource):
                 RailLineBuilder(self, line).connect(
                     *stations, forward_label=forward_label, backward_label=backward_label
                 )
-
-            

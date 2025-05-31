@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from gatelogue_aggregator.downloader import get_url
@@ -10,7 +12,9 @@ class DynmapAirports(AirSource):
     name = "MRT Dynmap (Air)"
     priority = 0
 
-    def reported_nodes(_cls) -> tuple[type[Node], ...]:
+    @classmethod
+    @override
+    def reported_nodes(cls) -> tuple[type[Node], ...]:
         return (AirAirport,)
 
     def build(self, config: Config):

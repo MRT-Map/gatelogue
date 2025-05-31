@@ -4,7 +4,6 @@ import itertools
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
-import rich
 
 from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.hardcode import (
@@ -420,11 +419,14 @@ class AirAirline(gt.AirAirline, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: AirSource):
-        from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
         from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
+        from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
+
         num_flights = len(list(self.get_all(src, AirFlight)))
         num_gates = len(list(self.get_all(src, AirGate)))
-        colour = ERROR if num_flights == 0 or (num_gates == 0 and not isinstance(src, (WikiAirline, MRTTransit))) else RESULT
+        colour = (
+            ERROR if num_flights == 0 or (num_gates == 0 and not isinstance(src, WikiAirline | MRTTransit)) else RESULT
+        )
         self.print_report(src, colour, f"has {num_flights} flights and {num_gates} gates")
 
     @staticmethod
