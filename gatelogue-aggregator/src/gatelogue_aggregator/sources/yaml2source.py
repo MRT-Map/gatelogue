@@ -8,7 +8,6 @@ import msgspec
 import rich
 
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import (
     RailCompany,
@@ -61,8 +60,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
     B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
 
     def __init__(self, config: Config):
-        BaseContext.__init__(self)
-        Source.__init__(self, config)
+        Source.__init__(self)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return

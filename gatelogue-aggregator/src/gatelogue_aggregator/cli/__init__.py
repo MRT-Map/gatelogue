@@ -14,7 +14,7 @@ from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN,
 from gatelogue_aggregator.logging import INFO1, PROGRESS
 from gatelogue_aggregator.sources import SOURCES
 from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.context.context import Context
+from gatelogue_aggregator.types.gatelogue_data import GatelogueData
 from gatelogue_aggregator.types.source import Source
 
 
@@ -135,15 +135,15 @@ def run(
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(config), sources))
 
-    ctx = Context.from_sources(result)
+    src = GatelogueData.from_sources(result)
 
     if graph is not None:
         task = PROGRESS.add_task(INFO1 + f"Outputting graph to {graph}... ", total=None)
-        ctx.graph(graph)
+        src.graph(graph)
         PROGRESS.remove_task(task)
 
     task = PROGRESS.add_task(INFO1 + "Exporting to JSON... ", total=None)
-    j = msgspec.json.encode(ctx.export(), enc_hook=_enc_hook)
+    j = msgspec.json.encode(src.export(), enc_hook=_enc_hook)
     PROGRESS.remove_task(task)
     if fmt:
         rich.print(INFO1 + f"Writing to {output} (formatted)")

@@ -22,8 +22,8 @@ _EXTRACTORS: list[Callable[[WikiAirline, Config], None]] = []
 
 
 @_EXTRACTORS.append
-def astrella(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def astrella(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Astrella",
         "Astrella",
         re.compile(
@@ -34,8 +34,8 @@ def astrella(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def turbula(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def turbula(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Turbula",
         "Template:TurbulaFlightList",
         re.compile(
@@ -47,8 +47,8 @@ def turbula(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def blu_air(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def blu_air(src: WikiAirline, config):
+    src.regex_extract_airline(
         "BluAir",
         "List of BluAir flights",
         re.compile(
@@ -59,10 +59,10 @@ def blu_air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def intra_air(ctx: WikiAirline, config):
+def intra_air(src: WikiAirline, config):
     html = get_wiki_html("IntraAir/Flight List", config)
     airline_name = "IntraAir"
-    airline = ctx.extract_get_airline(airline_name, "IntraAir/Flight List")
+    airline = src.extract_get_airline(airline_name, "IntraAir/Flight List")
 
     result = 0
     for table in html("table"):
@@ -85,7 +85,7 @@ def intra_air(ctx: WikiAirline, config):
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
             s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None  # noqa: PLR2004
-            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
+            src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
             result += 1
 
     if not result:
@@ -95,10 +95,10 @@ def intra_air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def fli_high(ctx: WikiAirline, config):
+def fli_high(src: WikiAirline, config):
     html = get_wiki_html("FliHigh Airlines", config)
     airline_name = "FliHigh Airlines"
-    airline = ctx.extract_get_airline(airline_name, airline_name)
+    airline = src.extract_get_airline(airline_name, airline_name)
 
     result = 0
     for table in html("table"):
@@ -116,7 +116,7 @@ def fli_high(ctx: WikiAirline, config):
                 g1 = None
             if "idk" in g2 or "CHECK WIKI" in g2:
                 g2 = None
-            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
             result += 1
 
     if not result:
@@ -126,8 +126,8 @@ def fli_high(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def air_mesa(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def air_mesa(src: WikiAirline, config):
+    src.regex_extract_airline(
         "AirMesa",
         "AirMesa",
         re.compile(
@@ -138,8 +138,8 @@ def air_mesa(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def air(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def air(src: WikiAirline, config):
+    src.regex_extract_airline(
         "air",
         "Template:Air",
         re.compile(
@@ -150,8 +150,8 @@ def air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def berryessa(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def berryessa(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Berryessa Airlines",
         "Berryessa Airlines",
         re.compile(
@@ -162,10 +162,10 @@ def berryessa(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def fly_creeper(ctx: WikiAirline, config):
+def fly_creeper(src: WikiAirline, config):
     html = get_wiki_html("FlyCreeper", config)
     airline_name = "FlyCreeper"
-    airline = ctx.extract_get_airline(airline_name, airline_name)
+    airline = src.extract_get_airline(airline_name, airline_name)
 
     result = 0
     for table in html("table"):
@@ -187,7 +187,7 @@ def fly_creeper(ctx: WikiAirline, config):
                 a2 = None
             g1 = next(iter(tr("td")[4].strings))
             g2 = list(tr("td")[4].strings)[1]
-            ctx.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
+            src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2)
             result += 1
 
     if not result:
@@ -197,8 +197,8 @@ def fly_creeper(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def continental(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def continental(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Continental Airlines",
         "Continental Airlines",
         re.compile(
@@ -209,8 +209,8 @@ def continental(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def air_kanata(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def air_kanata(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Air Kanata",
         "Air Kanata",
         re.compile(
@@ -221,8 +221,8 @@ def air_kanata(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def jiffy_air(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def jiffy_air(src: WikiAirline, config):
+    src.regex_extract_airline(
         "JiffyAir",
         "JiffyAir",
         re.compile(
@@ -233,8 +233,8 @@ def jiffy_air(ctx: WikiAirline, config):
 
 
 # @_EXTRACTORS.append
-# def jiffy_air2(ctx: WikiAirline, config):
-#     ctx.regex_extract_airline(
+# def jiffy_air2(src: WikiAirline, config):
+#     src.regex_extract_airline(
 #         "JiffyAir",
 #         "JiffyAir",
 #         re.compile(
@@ -255,8 +255,8 @@ def jiffy_air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def raiko(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def raiko(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Raiko Airlines",
         "Raiko Airlines",
         re.compile(
@@ -272,8 +272,8 @@ def raiko(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def rainer_airways(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def rainer_airways(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Rainer Airways",
         "Rainer Airways",
         re.compile(
@@ -290,8 +290,8 @@ def rainer_airways(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def marble(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def marble(src: WikiAirline, config):
+    src.regex_extract_airline(
         "MarbleAir",
         "MarbleAir",
         re.compile(r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"),
@@ -300,8 +300,8 @@ def marble(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def amber_air(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def amber_air(src: WikiAirline, config):
+    src.regex_extract_airline(
         "AmberAir",
         "AmberAir",
         re.compile(r"""\|-
@@ -317,10 +317,10 @@ def amber_air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def arctic_air(ctx: WikiAirline, config):
+def arctic_air(src: WikiAirline, config):
     cache = config.cache_dir / "arctic_air"
     airline_name = "ArcticAir"
-    airline = ctx.extract_get_airline(airline_name, airline_name)
+    airline = src.extract_get_airline(airline_name, airline_name)
 
     get_url(
         "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=0",
@@ -345,7 +345,7 @@ def arctic_air(ctx: WikiAirline, config):
         if str(a2).strip() not in DUPLICATE_GATE_NUM:
             g2 = re.sub(r"T. ", "", str(g2))  # noqa: PLW2901
 
-        ctx.extract_get_flight(
+        src.extract_get_flight(
             airline, code=str(flight), a1=a1, a2=a2, g1=g1 if "*" not in g1 else None, g2=g2 if "*" not in g2 else None
         )
         result += 1
@@ -357,10 +357,10 @@ def arctic_air(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def sandstone_airr(ctx: WikiAirline, config):
+def sandstone_airr(src: WikiAirline, config):
     cache = config.cache_dir / "sandstone_airr"
     airline_name = "Sandstone Airr"
-    airline = ctx.extract_get_airline(airline_name, airline_name)
+    airline = src.extract_get_airline(airline_name, airline_name)
 
     get_url(
         "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=3084051",
@@ -383,7 +383,7 @@ def sandstone_airr(ctx: WikiAirline, config):
         if str(a2).strip() not in DUPLICATE_GATE_NUM:
             g2 = re.sub(r"T. ", "", str(g2))  # noqa: PLW2901
 
-        ctx.extract_get_flight(
+        src.extract_get_flight(
             airline,
             code=str(int(flight)),
             a1=a1,
@@ -400,8 +400,8 @@ def sandstone_airr(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def michigana(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def michigana(src: WikiAirline, config):
+    src.regex_extract_airline(
         "Michigana",
         "Template:Michigana",
         re.compile(r"""\|\|<font size="4">'''MI(?P<code>.*?)'''</font>
@@ -415,10 +415,10 @@ def michigana(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def lilyflower_airlines(ctx: WikiAirline, config):
+def lilyflower_airlines(src: WikiAirline, config):
     cache = config.cache_dir / "lilyflower"
     airline_name = "Lilyflower Airlines"
-    airline = ctx.extract_get_airline(airline_name, airline_name)
+    airline = src.extract_get_airline(airline_name, airline_name)
 
     get_url(
         "https://docs.google.com/spreadsheets/d/1B-fSerCAQAtaW-kAfv1npdjpGt-N1PrB1iUOmUBX5HI/export?format=csv&gid=1864111212",
@@ -435,7 +435,7 @@ def lilyflower_airlines(ctx: WikiAirline, config):
     for flight, a1, g1, a2, g2 in d:
         if not a1 or str(a1) == "nan":
             continue
-        ctx.extract_get_flight(
+        src.extract_get_flight(
             airline,
             code=str(int(flight)),
             a1=a1,
@@ -452,8 +452,8 @@ def lilyflower_airlines(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def rodbla(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def rodbla(src: WikiAirline, config):
+    src.regex_extract_airline(
         "RodBla Heli",
         "RodBla Heli",
         re.compile(r"\|RB(?P<code>.*?)\n\|Active\n\|(?P<a1>.*?)-(?P<a2>.*?)\n"),
@@ -463,7 +463,7 @@ def rodbla(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def mylesheli(ctx: WikiAirline, config):
+def mylesheli(src: WikiAirline, config):
     def _hack(matches):
         if matches["a1"] == "GSA":
             matches["a1"] = "GSAH"
@@ -471,7 +471,7 @@ def mylesheli(ctx: WikiAirline, config):
             matches["a2"] = "GSAH"
         return "H"
 
-    ctx.regex_extract_airline(
+    src.regex_extract_airline(
         "MylesHeli",
         "MylesHeli/Flights",
         re.compile(r"{{mylesh\|MY(?P<code>.*?)\|t\|(?P<a1>.*?)\|.*?\|.*?\|(?P<a2>.*?)\|.*?\|.*?}}"),
@@ -481,8 +481,8 @@ def mylesheli(ctx: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def aero(ctx: WikiAirline, config):
-    ctx.regex_extract_airline(
+def aero(src: WikiAirline, config):
+    src.regex_extract_airline(
         "aero",
         "Aero",
         re.compile(r"""\|\|<font size="4">'''ae(?P<code>.*?)'''.*?

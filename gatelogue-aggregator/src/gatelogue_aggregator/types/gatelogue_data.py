@@ -7,8 +7,6 @@ import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.logging import INFO1, INFO2, track
-from gatelogue_aggregator.types.context.proximity import ProximityContext
-from gatelogue_aggregator.types.context.shared_facility import SharedFacility, SharedFacilityContext
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
@@ -16,6 +14,8 @@ from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSour
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
 from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
 from gatelogue_aggregator.types.node.town import Town, TownSource
+from gatelogue_aggregator.types.proximity import ProximitySource
+from gatelogue_aggregator.types.shared_facility import SharedFacility, SharedFacilitySource
 from gatelogue_aggregator.types.source import Sourced
 
 if TYPE_CHECKING:
@@ -23,15 +23,17 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-class Context(
-    AirSource, RailSource, SeaSource, BusSource, TownSource, SpawnWarpSource, ProximityContext, SharedFacilityContext
+class GatelogueData(
+    AirSource, RailSource, SeaSource, BusSource, TownSource, SpawnWarpSource, ProximitySource, SharedFacilitySource
 ):
     name = "Gatelogue"
     priority = 0
 
     @classmethod
     def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
-        self = cls()
+        self = cls.__new__(cls)
+        self.g = rx.PyGraph()
+
         for source in track(sources, description=INFO1 + "Merging sources", remove=False):
             source.sanitise_strings(self.g)
             self.g = rx.graph_union(self.g, source.g)
@@ -70,8 +72,8 @@ class Context(
 
     def update(self):
         AirSource.update(self)
-        ProximityContext.update(self)
-        SharedFacilityContext.update(self)
+        ProximitySource.update(self)
+        SharedFacilitySource.update(self)
 
     def export(self) -> gt.GatelogueData:
         return gt.GatelogueData(
@@ -89,8 +91,8 @@ class Context(
         def node_fn(node: Node):
             d = {
                 "style": "filled",
-                "tooltip": replace(Node.str_ctx(node, self)),
-                "label": replace(node.str_ctx(self)),
+                "tooltip": replace(Node.str_src(node, self)),
+                "label": replace(node.str_src(self)),
             }
             for ty, col in (
                 (AirFlight, "#ff8080"),
@@ -121,9 +123,9 @@ class Context(
             edge_data = edge.v if isinstance(edge, Sourced) else edge
             d = {}
             if edge_data is None:
-                d["tooltip"] = replace(f"({u.str_ctx(self)} -- {v.str_ctx(self)})")
+                d["tooltip"] = replace(f"({u.str_src(self)} -- {v.str_src(self)})")
             else:
-                d["tooltip"] = replace(f"{edge_data} ({u.str_ctx(self)} -- {v.str_ctx(self)})")
+                d["tooltip"] = replace(f"{edge_data} ({u.str_src(self)} -- {v.str_src(self)})")
             if isinstance(edge_data, gt.Proximity):
                 d["color"] = '"#ff00ff"'
                 return d

@@ -13,7 +13,7 @@ class IntraBus(BusSource):
 
     def __init__(self, config: Config):
         BusSource.__init__(self)
-        Source.__init__(self, config)
+        Source.__init__(self)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return

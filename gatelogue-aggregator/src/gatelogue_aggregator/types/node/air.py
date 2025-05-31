@@ -12,7 +12,6 @@ from gatelogue_aggregator.sources.air.hardcode import (
     DIRECTIONAL_FLIGHT_AIRLINES,
     GATE_ALIASES,
 )
-from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
 from gatelogue_aggregator.types.source import Source, Sourced
 
@@ -20,14 +19,14 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class AirSource(BaseContext, Source):
+class AirSource(Source):
     def update(self):
         for node in track(self.g.nodes(), description=INFO2 + "Updating air nodes", remove=False):
             if isinstance(node, AirFlight | AirAirport):
                 node.update(self)
 
 
-class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
+class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirline,)
 
@@ -35,41 +34,41 @@ class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
     @classmethod
     def new(
         cls,
-        ctx: AirSource,
+        src: AirSource,
         *,
         codes: set[str],
         airline: AirAirline,
         mode: gt.PlaneMode | None = None,
         gates: Iterable[AirGate] | None = None,
     ):
-        self = super().new(ctx, codes=codes)
-        self.connect_one(ctx, airline)
+        self = super().new(src, codes=codes)
+        self.connect_one(src, airline)
         if mode is not None:
-            self.mode = ctx.source(mode)
+            self.mode = src.source(mode)
         if gates is not None:
             for gate in gates:
-                self.connect(ctx, gate)
+                self.connect(src, gate)
         return self
 
     @override
-    def str_ctx(self, ctx: AirSource) -> str:
-        airline_name = self.get_one(ctx, AirAirline).name
+    def str_src(self, src: AirSource) -> str:
+        airline_name = self.get_one(src, AirAirline).name
         code = "/".join(self.codes)
         return f"{airline_name} {code}"
 
     @override
-    def equivalent(self, ctx: AirSource, other: Self) -> bool:
-        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, AirAirline).equivalent(
-            ctx, other.get_one(ctx, AirAirline)
+    def equivalent(self, src: AirSource, other: Self) -> bool:
+        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(src, AirAirline).equivalent(
+            src, other.get_one(src, AirAirline)
         )
 
     @override
-    def merge_attrs(self, ctx: AirSource, other: Self):
+    def merge_attrs(self, src: AirSource, other: Self):
         self.codes.update(other.codes)
 
     @override
-    def merge_key(self, ctx: AirSource) -> str:
-        return self.get_one(ctx, AirAirline).merge_key(ctx)
+    def merge_key(self, src: AirSource) -> str:
+        return self.get_one(src, AirAirline).merge_key(src)
 
     @override
     def sanitise_strings(self):
@@ -78,31 +77,31 @@ class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
             self.mode.v = str(self.mode.v).strip()
 
     @override
-    def export(self, ctx: AirSource) -> gt.AirFlight:
-        return gt.AirFlight(**self._as_dict(ctx))
+    def export(self, src: AirSource) -> gt.AirFlight:
+        return gt.AirFlight(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: AirSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "gates": self.get_all_id(ctx, AirGate),
-            "airline": self.get_one_id(ctx, AirAirline),
+    def _as_dict(self, src: AirSource) -> dict:
+        return super()._as_dict(src) | {
+            "gates": self.get_all_id(src, AirGate),
+            "airline": self.get_one_id(src, AirAirline),
         }
 
     @override
-    def ref(self, ctx: AirSource) -> NodeRef[Self]:
+    def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
-        return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(ctx, AirAirline).name)
+        return NodeRef(AirFlight, codes=self.codes, airline=self.get_one(src, AirAirline).name)
 
-    def update(self, ctx: AirSource):
+    def update(self, src: AirSource):
         processed_gates: list[AirGate] = []
-        gates = list(self.get_all(ctx, AirGate))
+        gates = list(self.get_all(src, AirGate))
         for gate in gates:
             if (
                 existing := next(
                     (
                         a
                         for a in processed_gates
-                        if a.get_one(ctx, AirAirport).equivalent(ctx, gate.get_one(ctx, AirAirport))
+                        if a.get_one(src, AirAirport).equivalent(src, gate.get_one(src, AirAirport))
                     ),
                     None,
                 )
@@ -110,18 +109,18 @@ class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
                 processed_gates.append(gate)
             elif existing.code is None and gate.code is not None:
                 processed_gates.remove(existing)
-                self.get_edge(ctx, gate).source(self.get_edge(ctx, existing))
-                self.disconnect(ctx, existing)
+                self.get_edge(src, gate).source(self.get_edge(src, existing))
+                self.disconnect(src, existing)
                 processed_gates.append(gate)
             elif existing.code is not None and gate.code is None:
-                self.get_edge(ctx, existing).source(self.get_edge(ctx, gate))
-                self.disconnect(ctx, gate)
+                self.get_edge(src, existing).source(self.get_edge(src, gate))
+                self.disconnect(src, gate)
             elif existing.code == gate.code:
-                existing.merge(ctx, gate)
+                existing.merge(src, gate)
 
         if self.mode is None:
-            size = {a.size.v for a in self.get_all(ctx, AirGate) if a.size is not None}
-            sources = set(itertools.chain(*(a.size.s for a in self.get_all(ctx, AirGate) if a.size is not None)))
+            size = {a.size.v for a in self.get_all(src, AirGate) if a.size is not None}
+            sources = set(itertools.chain(*(a.size.s for a in self.get_all(src, AirGate) if a.size is not None)))
             if size == {"SP"}:
                 self.mode = Sourced("seaplane", sources)
             elif size == {"H"}:
@@ -144,14 +143,14 @@ class AirFlight(gt.AirFlight, Node[AirSource], kw_only=True, tag=True):
         return {s, str(int(s) + 1)}
 
 
-class AirAirport(gt.AirAirport, LocatedNode[AirSource], kw_only=True, tag=True):
+class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)
 
     # noinspection PyMethodOverriding
     @classmethod
     def new(
         cls,
-        ctx: AirSource,
+        src: AirSource,
         *,
         code: str,
         name: str | None = None,
@@ -161,35 +160,35 @@ class AirAirport(gt.AirAirport, LocatedNode[AirSource], kw_only=True, tag=True):
         world: gt.World | None = None,
         coordinates: tuple[float, float] | None = None,
     ):
-        self = super().new(ctx, code=code, world=world, coordinates=coordinates)
+        self = super().new(src, code=code, world=world, coordinates=coordinates)
         if name is not None:
-            self.name = ctx.source(name)
+            self.name = src.source(name)
         if link is not None:
-            self.link = ctx.source(link)
+            self.link = src.source(link)
         if modes is not None:
-            self.modes = ctx.source(modes)
+            self.modes = src.source(modes)
         if gates is not None:
             for gate in gates:
-                self.connect(ctx, gate)
+                self.connect(src, gate)
         return self
 
     @override
-    def str_ctx(self, ctx: AirSource) -> str:
+    def str_src(self, src: AirSource) -> str:
         return self.code
 
     @override
-    def equivalent(self, ctx: AirSource, other: Self) -> bool:
+    def equivalent(self, src: AirSource, other: Self) -> bool:
         return self.code == other.code
 
     @override
-    def merge_attrs(self, ctx: AirSource, other: Self):
-        super().merge_attrs(ctx, other)
-        self._merge_sourced(ctx, other, "name")
-        self._merge_sourced(ctx, other, "link")
-        self._merge_sourced(ctx, other, "modes")
+    def merge_attrs(self, src: AirSource, other: Self):
+        super().merge_attrs(src, other)
+        self._merge_sourced(src, other, "name")
+        self._merge_sourced(src, other, "link")
+        self._merge_sourced(src, other, "modes")
 
     @override
-    def merge_key(self, ctx: AirSource) -> str:
+    def merge_key(self, src: AirSource) -> str:
         return self.code
 
     @override
@@ -204,45 +203,45 @@ class AirAirport(gt.AirAirport, LocatedNode[AirSource], kw_only=True, tag=True):
             self.modes.v = {str(a).strip() for a in self.modes.v}
 
     @override
-    def export(self, ctx: AirSource) -> gt.AirAirport:
-        return gt.AirAirport(**self._as_dict(ctx))
+    def export(self, src: AirSource) -> gt.AirAirport:
+        return gt.AirAirport(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: AirSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "gates": self.get_all_id(ctx, AirGate),
+    def _as_dict(self, src: AirSource) -> dict:
+        return super()._as_dict(src) | {
+            "gates": self.get_all_id(src, AirGate),
         }
 
     @override
-    def ref(self, ctx: AirSource) -> NodeRef[Self]:
+    def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(AirAirport, code=self.code)
 
-    def update(self, ctx: AirSource):
-        if (none_gate := next((a for a in self.get_all(ctx, AirGate) if a.code is None), None)) is None:
+    def update(self, src: AirSource):
+        if (none_gate := next((a for a in self.get_all(src, AirGate) if a.code is None), None)) is None:
             return
-        for flight in list(none_gate.get_all(ctx, AirFlight)):
+        for flight in list(none_gate.get_all(src, AirFlight)):
             possible_gates = []
-            for possible_gate in self.get_all(ctx, AirGate):
+            for possible_gate in self.get_all(src, AirGate):
                 if possible_gate.code is None:
                     continue
-                if (airline := possible_gate.get_one(ctx, AirAirline)) is None:
+                if (airline := possible_gate.get_one(src, AirAirline)) is None:
                     continue
-                if airline.equivalent(ctx, flight.get_one(ctx, AirAirline)):
+                if airline.equivalent(src, flight.get_one(src, AirAirline)):
                     possible_gates.append(possible_gate)
             if len(possible_gates) == 1:
                 new_gate = possible_gates[0]
-                sources = {s for a in none_gate.get_edges(ctx, flight) for s in a.s} | {
-                    s for a in new_gate.get_edges(ctx, flight) for s in a.s
+                sources = {s for a in none_gate.get_edges(src, flight) for s in a.s} | {
+                    s for a in new_gate.get_edges(src, flight) for s in a.s
                 }
-                flight.disconnect(ctx, none_gate)
-                flight.connect(ctx, new_gate, source=sources)
+                flight.disconnect(src, none_gate)
+                flight.connect(src, new_gate, source=sources)
 
         if self.modes is not None and self.modes.v == {"seaplane"}:
-            for gate in self.get_all(ctx, AirGate):
+            for gate in self.get_all(src, AirGate):
                 gate.size = Sourced("SP", self.modes.s)
         if self.modes is not None and self.modes.v == {"helicopter"}:
-            for gate in self.get_all(ctx, AirGate):
+            for gate in self.get_all(src, AirGate):
                 gate.size = Sourced("H", self.modes.s)
 
     @staticmethod
@@ -257,7 +256,7 @@ class AirAirport(gt.AirAirport, LocatedNode[AirSource], kw_only=True, tag=True):
         return s
 
 
-class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
+class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight,)
     acceptable_single_node_types: ClassVar = lambda: (AirAirport, AirAirline)
 
@@ -265,7 +264,7 @@ class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
     @classmethod
     def new(
         cls,
-        ctx: AirSource,
+        src: AirSource,
         *,
         code: str | None,
         airport: AirAirport,
@@ -273,33 +272,33 @@ class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
         flights: Iterable[AirFlight] | None = None,
         airline: AirAirline | None = None,
     ):
-        self = super().new(ctx, code=code)
-        self.connect_one(ctx, airport)
+        self = super().new(src, code=code)
+        self.connect_one(src, airport)
         if size is not None:
-            self.size = ctx.source(size)
+            self.size = src.source(size)
         if flights is not None:
             for flight in flights:
-                self.connect(ctx, flight)
+                self.connect(src, flight)
         if airline is not None:
-            self.connect_one(ctx, airline)
+            self.connect_one(src, airline)
         return self
 
     @override
-    def str_ctx(self, ctx: AirSource) -> str:
-        airport = self.get_one(ctx, AirAirport).code
+    def str_src(self, src: AirSource) -> str:
+        airport = self.get_one(src, AirAirport).code
         code = self.code
         return f"{airport} {code}"
 
     @override
-    def equivalent(self, ctx: AirSource, other: Self) -> bool:
-        return self.code == other.code and self.get_one(ctx, AirAirport).equivalent(ctx, other.get_one(ctx, AirAirport))
+    def equivalent(self, src: AirSource, other: Self) -> bool:
+        return self.code == other.code and self.get_one(src, AirAirport).equivalent(src, other.get_one(src, AirAirport))
 
     @override
-    def merge_attrs(self, ctx: AirSource, other: Self):
-        self._merge_sourced(ctx, other, "size")
+    def merge_attrs(self, src: AirSource, other: Self):
+        self._merge_sourced(src, other, "size")
 
     @override
-    def merge_key(self, ctx: AirSource) -> str:
+    def merge_key(self, src: AirSource) -> str:
         return self.code
 
     @override
@@ -310,21 +309,21 @@ class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
             self.size.v = str(self.size.v).strip()
 
     @override
-    def export(self, ctx: AirSource) -> gt.AirGate:
-        return gt.AirGate(**self._as_dict(ctx))
+    def export(self, src: AirSource) -> gt.AirGate:
+        return gt.AirGate(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: AirSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "flights": self.get_all_id(ctx, AirFlight),
-            "airport": self.get_one_id(ctx, AirAirport),
-            "airline": self.get_one_id(ctx, AirAirline),
+    def _as_dict(self, src: AirSource) -> dict:
+        return super()._as_dict(src) | {
+            "flights": self.get_all_id(src, AirFlight),
+            "airport": self.get_one_id(src, AirAirport),
+            "airline": self.get_one_id(src, AirAirline),
         }
 
     @override
-    def ref(self, ctx: AirSource) -> NodeRef[Self]:
+    def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
-        return NodeRef(AirGate, code=self.code, airport=self.get_one(ctx, AirAirport).code)
+        return NodeRef(AirGate, code=self.code, airport=self.get_one(src, AirAirport).code)
 
     @staticmethod
     def process_code[T: (str, None)](s: T, airline_name: str | None = None, airport_code: str | None = None) -> T:
@@ -336,45 +335,45 @@ class AirGate(gt.AirGate, Node[AirSource], kw_only=True, tag=True):
         return s
 
 
-class AirAirline(gt.AirAirline, Node[AirSource], kw_only=True, tag=True):
+class AirAirline(gt.AirAirline, Node, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirFlight, AirGate)
 
     # noinspection PyMethodOverriding
     @classmethod
     def new(
         cls,
-        ctx: AirSource,
+        src: AirSource,
         *,
         name: str,
         link: str | None = None,
         flights: Iterable[AirFlight] | None = None,
         gates: Iterable[AirGate] | None = None,
     ):
-        self = super().new(ctx, name=name)
+        self = super().new(src, name=name)
         if link is not None:
-            self.link = ctx.source(link)
+            self.link = src.source(link)
         if flights is not None:
             for flight in flights:
-                self.connect(ctx, flight)
+                self.connect(src, flight)
         if gates is not None:
             for gate in gates:
-                self.connect(ctx, gate)
+                self.connect(src, gate)
         return self
 
     @override
-    def str_ctx(self, ctx: AirSource) -> str:
+    def str_src(self, src: AirSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: AirSource, other: Self) -> bool:
+    def equivalent(self, src: AirSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: AirSource, other: Self):
-        self._merge_sourced(ctx, other, "link")
+    def merge_attrs(self, src: AirSource, other: Self):
+        self._merge_sourced(src, other, "link")
 
     @override
-    def merge_key(self, ctx: AirSource) -> str:
+    def merge_key(self, src: AirSource) -> str:
         return self.name
 
     @override
@@ -384,18 +383,18 @@ class AirAirline(gt.AirAirline, Node[AirSource], kw_only=True, tag=True):
             self.link.v = str(self.link.v).strip()
 
     @override
-    def export(self, ctx: AirSource) -> gt.AirAirline:
-        return gt.AirAirline(**self._as_dict(ctx))
+    def export(self, src: AirSource) -> gt.AirAirline:
+        return gt.AirAirline(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: AirSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "flights": self.get_all_id(ctx, AirFlight),
-            "gates": self.get_all_id(ctx, AirGate),
+    def _as_dict(self, src: AirSource) -> dict:
+        return super()._as_dict(src) | {
+            "flights": self.get_all_id(src, AirFlight),
+            "gates": self.get_all_id(src, AirGate),
         }
 
     @override
-    def ref(self, ctx: AirSource) -> NodeRef[Self]:
+    def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(AirAirline, name=self.name)
 

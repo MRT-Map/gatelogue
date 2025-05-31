@@ -19,7 +19,7 @@ class DynmapMRT(RailSource):
         cache1 = config.cache_dir / "dynmap-markers-new"
         cache2 = config.cache_dir / "dynmap-markers-old"
         RailSource.__init__(self)
-        Source.__init__(self, config)
+        Source.__init__(self)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return

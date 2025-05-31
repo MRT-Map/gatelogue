@@ -4,10 +4,10 @@ import gatelogue_types as gt
 import rustworkx as rx
 
 from gatelogue_aggregator.logging import INFO2, track
-from gatelogue_aggregator.types.base import BaseContext
+from gatelogue_aggregator.types.source import Source
 
 
-class ProximityContext(BaseContext):
+class ProximitySource(Source):
     name = "Gatelogue"
     priority = 0
 

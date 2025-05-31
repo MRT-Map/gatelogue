@@ -6,16 +6,15 @@ from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar
 import gatelogue_types as gt
 import msgspec
 import rich
+import rustworkx as rx
 
 from gatelogue_aggregator.logging import ERROR, INFO1
 from gatelogue_aggregator.sources import SOURCES
-from gatelogue_aggregator.types.base import BaseContext, Mergeable
+from gatelogue_aggregator.types.mergeable import Mergeable
 
 if TYPE_CHECKING:
-    import rustworkx as rx
-
     from gatelogue_aggregator.types.config import Config
-    from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.types.node.base import Node, NodeRef
 
 T = TypeVar("T")
 
@@ -39,10 +38,10 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
             return self
         raise NotImplementedError(source)
 
-    def equivalent(self, ctx: BaseContext, other: Self) -> bool:
-        return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
+    def equivalent(self, src: Source, other: Self) -> bool:
+        return self.v.equivalent(src, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
 
-    def merge(self, ctx: BaseContext, other: Self, log_ctx: tuple[Node, str] | None = None):
+    def merge(self, src: Source, other: Self, log_src: tuple[Node, str] | None = None):
         if self.v == other.v:
             self.source(other)
             return
@@ -50,7 +49,7 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
             self.v.update(other.v)
             self.s.update(other.s)
             return
-        if isinstance(self.v, Mergeable) and self.v.merge_if_equivalent(ctx, other.v):
+        if isinstance(self.v, Mergeable) and self.v.merge_if_equivalent(src, other.v):
             self.s.update(other.s)
             return
 
@@ -58,12 +57,15 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
             return next(a for a in SOURCES() if a.name == x).priority
 
         def log(outdated: Self, new: Self):
-            if isinstance(log_ctx[0], gt.LocatedNode) and log_ctx[1] == "coordinates":
+            if isinstance(log_src[0], gt.LocatedNode) and log_src[1] == "coordinates":
                 return
 
-            log_ctx_str = "" if log_ctx is None else f"{type(log_ctx[0]).__name__} {log_ctx[0].str_ctx(ctx)}: attr {log_ctx[1]}: "
+            log_src_str = (
+                "" if log_src is None else f"{type(log_src[0]).__name__} {log_src[0].str_src(src)}: attr {log_src[1]}: "
+            )
             rich.print(
-                ERROR + log_ctx_str
+                ERROR
+                + log_src_str
                 + f"{', '.join(outdated.s)} reported outdated data {outdated.v}. {', '.join(new.s)} has updated data {new.v}"
             )
 
@@ -74,9 +76,9 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
         else:
             log(other, self)
 
-    def export(self, ctx: BaseContext) -> gt.Sourced[T]:
+    def export(self, src: Source) -> gt.Sourced[T]:
         if hasattr(self.v, "export"):
-            return gt.Sourced(self.v.export(ctx), self.s)
+            return gt.Sourced(self.v.export(src), self.s)
         return gt.Sourced(self.v, self.s)
 
 
@@ -100,9 +102,27 @@ class SourceMeta(type):
 class Source(metaclass=SourceMeta):
     name: ClassVar[str]
     priority: ClassVar[float | int]
+    g: rx.PyGraph
 
-    def __init__(self, _: Config):
+    def __init__(self):
+        self.g = rx.PyGraph()
         rich.print(INFO1 + f"Retrieving from {self.name}")
+
+    def find_by_ref[R: NodeRef, N: Node](self, v: R) -> N | None:
+        indices = self.g.filter_nodes(lambda a: v.refs(self, a))
+        if len(indices) == 0:
+            return None
+        return self.g[indices[0]]
+
+    # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
+    def find_by_ref_or_index[R: NodeRef, N: Node](self, v: R | int) -> N | None:
+        from gatelogue_aggregator.types.node.base import NodeRef
+
+        if isinstance(v, NodeRef):
+            return self.find_by_ref(v)
+        if isinstance(v, int):
+            return self.g[v]
+        raise TypeError(type(v))
 
     @classmethod
     def retrieve_from_cache(cls, config: Config) -> rx.PyGraph | None:
@@ -112,7 +132,10 @@ class Source(metaclass=SourceMeta):
         if not cache_file.exists():
             return None
         rich.print(INFO1 + f"Retrieving from cache {cache_file}")
-        return pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
+        g = pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
+        if g.num_nodes() == 0:
+            rich.print(ERROR + f"{cls.__name__} yielded no results")
+        return g
 
     @classmethod
     def save_to_cache(cls, config: Config, g: rx.PyGraph):

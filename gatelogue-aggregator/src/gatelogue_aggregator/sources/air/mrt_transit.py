@@ -16,7 +16,7 @@ class MRTTransit(AirSource):
         cache2 = config.cache_dir / "mrt-transit2"
         cache3 = config.cache_dir / "mrt-transit3"
         AirSource.__init__(self)
-        Source.__init__(self, config)
+        Source.__init__(self)
         if (g := self.retrieve_from_cache(config)) is not None:
             self.g = g
             return

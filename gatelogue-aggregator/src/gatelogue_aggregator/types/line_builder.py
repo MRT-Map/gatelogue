@@ -3,20 +3,20 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING, ClassVar
 
-from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection, Direction
 
 if TYPE_CHECKING:
     from collections.abc import Container
 
     from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.types.source import Source
 
 
-class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
+class LineBuilder[L: Node, S: Node]:
     CnT: ClassVar[type[Connection]]
 
-    def __init__(self, ctx: CTX, line: L):
-        self.ctx = ctx
+    def __init__(self, src: Source, line: L):
+        self.src = src
         self.line = line
 
     def connect(
@@ -53,7 +53,7 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
         if exclude is not None:
             stations = [s for s in stations if s.name.v not in exclude]
 
-        self.line.connect_one(self.ctx, stations[0])
+        self.line.connect_one(self.src, stations[0])
         forward_label = forward_label or "towards " + (
             a.v if (a := stations[-1].name) is not None else next(iter(stations[-1].codes))
         )
@@ -62,12 +62,12 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
         )
         for s1, s2 in itertools.pairwise(stations):
             s1.connect(
-                self.ctx,
+                self.src,
                 s2,
                 value=type(self).CnT(
-                    line=self.line.ref(self.ctx),
+                    line=self.line.ref(self.src),
                     direction=Direction(
-                        direction=s2.ref(self.ctx),
+                        direction=s2.ref(self.src),
                         forward_label=forward_label,
                         backward_label=backward_label,
                         one_way=one_way,
@@ -97,17 +97,17 @@ class LineBuilder[CTX: BaseContext, L: Node, S: Node]:
     def matrix(self, *stations: S):
         if len(stations) == 0:
             return
-        self.line.connect_one(self.ctx, stations[0])
+        self.line.connect_one(self.src, stations[0])
         for s1, s2 in itertools.combinations(stations, 2):
             forward_label = "towards " + (a.v if (a := s2.name) is not None else next(iter(s2.codes)))
             backward_label = "towards " + (a.v if (a := s1.name) is not None else next(iter(s1.codes)))
             s1.connect(
-                self.ctx,
+                self.src,
                 s2,
                 value=type(self).CnT(
-                    line=self.line.ref(self.ctx),
+                    line=self.line.ref(self.src),
                     direction=Direction(
-                        direction=s2.ref(self.ctx),
+                        direction=s2.ref(self.src),
                         forward_label=forward_label,
                         backward_label=backward_label,
                     ),

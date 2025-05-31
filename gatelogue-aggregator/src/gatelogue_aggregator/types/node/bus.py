@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
 
-from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.connections import Connection
 from gatelogue_aggregator.types.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
@@ -14,47 +13,47 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class BusSource(BaseContext, Source):
+class BusSource(Source):
     pass
 
 
-class BusCompany(gt.BusCompany, Node[BusSource], kw_only=True, tag=True):
+class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusLine, BusStop)
 
     # noinspection PyMethodOverriding
     @classmethod
     def new(
         cls,
-        ctx: BusSource,
+        src: BusSource,
         *,
         name: str,
         lines: Iterable[BusLine] | None = None,
         stops: Iterable[BusStop] | None = None,
         local: bool = False,
     ):
-        self = super().new(ctx, name=name, local=local)
+        self = super().new(src, name=name, local=local)
         if lines is not None:
             for line in lines:
-                self.connect(ctx, line)
+                self.connect(src, line)
         if stops is not None:
             for stop in stops:
-                self.connect(ctx, stop)
+                self.connect(src, stop)
         return self
 
     @override
-    def str_ctx(self, ctx: BusSource) -> str:
+    def str_src(self, src: BusSource) -> str:
         return self.name
 
     @override
-    def equivalent(self, ctx: BusSource, other: Self) -> bool:
+    def equivalent(self, src: BusSource, other: Self) -> bool:
         return self.name == other.name
 
     @override
-    def merge_attrs(self, ctx: BusSource, other: Self):
+    def merge_attrs(self, src: BusSource, other: Self):
         self.local = self.local or other.local
 
     @override
-    def merge_key(self, ctx: BusSource) -> str:
+    def merge_key(self, src: BusSource) -> str:
         return self.name
 
     @override
@@ -62,30 +61,30 @@ class BusCompany(gt.BusCompany, Node[BusSource], kw_only=True, tag=True):
         self.name = str(self.name).strip()
 
     @override
-    def export(self, ctx: BusSource) -> gt.BusCompany:
-        return gt.BusCompany(**self._as_dict(ctx))
+    def export(self, src: BusSource) -> gt.BusCompany:
+        return gt.BusCompany(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: BusSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "lines": self.get_all_id(ctx, BusLine),
-            "stops": self.get_all_id(ctx, BusStop),
+    def _as_dict(self, src: BusSource) -> dict:
+        return super()._as_dict(src) | {
+            "lines": self.get_all_id(src, BusLine),
+            "stops": self.get_all_id(src, BusStop),
         }
 
     @override
-    def ref(self, ctx: BusSource) -> NodeRef[Self]:
+    def ref(self, src: BusSource) -> NodeRef[Self]:
         self.sanitise_strings()
         return NodeRef(BusCompany, name=self.name)
 
 
-class BusLine(gt.BusLine, Node[BusSource], kw_only=True, tag=True):
+class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
     acceptable_single_node_types: ClassVar = lambda: (BusCompany, BusStop)
 
     # noinspection PyMethodOverriding
     @classmethod
     def new(
         cls,
-        ctx: BusSource,
+        src: BusSource,
         *,
         code: str,
         company: BusCompany,
@@ -93,33 +92,33 @@ class BusLine(gt.BusLine, Node[BusSource], kw_only=True, tag=True):
         colour: str | None = None,
         ref_stop: BusStop | None = None,
     ):
-        self = super().new(ctx, code=code)
-        self.connect_one(ctx, company)
+        self = super().new(src, code=code)
+        self.connect_one(src, company)
         if name is not None:
-            self.name = ctx.source(name)
+            self.name = src.source(name)
         if colour is not None:
-            self.colour = ctx.source(colour)
+            self.colour = src.source(colour)
         if ref_stop is not None:
-            self.connect_one(ctx, ref_stop)
+            self.connect_one(src, ref_stop)
         return self
 
     @override
-    def str_ctx(self, ctx: BusSource) -> str:
+    def str_src(self, src: BusSource) -> str:
         code = self.code
-        company = self.get_one(ctx, BusCompany).name
+        company = self.get_one(src, BusCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: BusSource, other: Self) -> bool:
-        return self.code == other.code and self.get_one(ctx, BusCompany).equivalent(ctx, other.get_one(ctx, BusCompany))
+    def equivalent(self, src: BusSource, other: Self) -> bool:
+        return self.code == other.code and self.get_one(src, BusCompany).equivalent(src, other.get_one(src, BusCompany))
 
     @override
-    def merge_attrs(self, ctx: BusSource, other: Self):
-        self._merge_sourced(ctx, other, "name")
-        self._merge_sourced(ctx, other, "colour")
+    def merge_attrs(self, src: BusSource, other: Self):
+        self._merge_sourced(src, other, "name")
+        self._merge_sourced(src, other, "colour")
 
     @override
-    def merge_key(self, ctx: BusSource) -> str:
+    def merge_key(self, src: BusSource) -> str:
         return self.code
 
     @override
@@ -131,23 +130,23 @@ class BusLine(gt.BusLine, Node[BusSource], kw_only=True, tag=True):
             self.colour.v = str(self.colour.v).strip()
 
     @override
-    def export(self, ctx: BusSource) -> gt.BusLine:
-        return gt.BusLine(**self._as_dict(ctx))
+    def export(self, src: BusSource) -> gt.BusLine:
+        return gt.BusLine(**self._as_dict(src))
 
     @override
-    def _as_dict(self, ctx: BusSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "company": self.get_one_id(ctx, BusCompany),
-            "ref_stop": self.get_one_id(ctx, BusStop),
+    def _as_dict(self, src: BusSource) -> dict:
+        return super()._as_dict(src) | {
+            "company": self.get_one_id(src, BusCompany),
+            "ref_stop": self.get_one_id(src, BusStop),
         }
 
     @override
-    def ref(self, ctx: BusSource) -> NodeRef[Self]:
+    def ref(self, src: BusSource) -> NodeRef[Self]:
         self.sanitise_strings()
-        return NodeRef(BusLine, code=self.code, company=self.get_one(ctx, BusCompany).name)
+        return NodeRef(BusLine, code=self.code, company=self.get_one(src, BusCompany).name)
 
 
-class BusStop(gt.BusStop, LocatedNode[BusSource], kw_only=True, tag=True):
+class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (BusStop, BusLine, LocatedNode)
     acceptable_single_node_types: ClassVar = lambda: (BusCompany,)
 
@@ -155,7 +154,7 @@ class BusStop(gt.BusStop, LocatedNode[BusSource], kw_only=True, tag=True):
     @classmethod
     def new(
         cls,
-        ctx: BusSource,
+        src: BusSource,
         *,
         codes: set[str],
         company: BusCompany,
@@ -163,33 +162,33 @@ class BusStop(gt.BusStop, LocatedNode[BusSource], kw_only=True, tag=True):
         world: gt.World | None = None,
         coordinates: tuple[float, float] | None = None,
     ):
-        self = super().new(ctx, world=world, coordinates=coordinates, codes=codes)
-        self.connect_one(ctx, company)
+        self = super().new(src, world=world, coordinates=coordinates, codes=codes)
+        self.connect_one(src, company)
         if name is not None:
-            self.name = ctx.source(name)
+            self.name = src.source(name)
         return self
 
     @override
-    def str_ctx(self, ctx: BusSource) -> str:
+    def str_src(self, src: BusSource) -> str:
         code = "/".join(self.codes) if (code := self.name) is None else code.v
-        company = self.get_one(ctx, BusCompany).name
+        company = self.get_one(src, BusCompany).name
         return f"{company} {code}"
 
     @override
-    def equivalent(self, ctx: BusSource, other: Self) -> bool:
-        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(ctx, BusCompany).equivalent(
-            ctx, other.get_one(ctx, BusCompany)
+    def equivalent(self, src: BusSource, other: Self) -> bool:
+        return len(self.codes.intersection(other.codes)) != 0 and self.get_one(src, BusCompany).equivalent(
+            src, other.get_one(src, BusCompany)
         )
 
     @override
-    def merge_attrs(self, ctx: BusSource, other: Self):
-        super().merge_attrs(ctx, other)
+    def merge_attrs(self, src: BusSource, other: Self):
+        super().merge_attrs(src, other)
         self.codes.update(other.codes)
-        self._merge_sourced(ctx, other, "name")
+        self._merge_sourced(src, other, "name")
 
     @override
-    def merge_key(self, ctx: BusSource) -> str:
-        return self.get_one(ctx, BusCompany).name
+    def merge_key(self, src: BusSource) -> str:
+        return self.get_one(src, BusCompany).name
 
     @override
     def sanitise_strings(self):
@@ -199,30 +198,30 @@ class BusStop(gt.BusStop, LocatedNode[BusSource], kw_only=True, tag=True):
             self.name.v = str(self.name.v).strip()
 
     @override
-    def export(self, ctx: BusSource) -> gt.BusStop:
+    def export(self, src: BusSource) -> gt.BusStop:
         return gt.BusStop(
-            **self._as_dict(ctx),
+            **self._as_dict(src),
         )
 
     @override
-    def _as_dict(self, ctx: BusSource) -> dict:
-        return super()._as_dict(ctx) | {
-            "company": self.get_one_id(ctx, BusCompany),
+    def _as_dict(self, src: BusSource) -> dict:
+        return super()._as_dict(src) | {
+            "company": self.get_one_id(src, BusCompany),
             "connections": {
-                node.i: [a.export(ctx) for a in self.get_edges(ctx, node, BusConnection)]
-                for node in self.get_all(ctx, BusStop)
+                node.i: [a.export(src) for a in self.get_edges(src, node, BusConnection)]
+                for node in self.get_all(src, BusStop)
             },
         }
 
     @override
-    def ref(self, ctx: BusSource) -> NodeRef[Self]:
+    def ref(self, src: BusSource) -> NodeRef[Self]:
         self.sanitise_strings()
-        return NodeRef(BusStop, codes=self.codes, company=self.get_one(ctx, BusCompany).name)
+        return NodeRef(BusStop, codes=self.codes, company=self.get_one(src, BusCompany).name)
 
 
-class BusConnection(Connection[BusSource, BusLine]):
+class BusConnection(Connection[BusLine]):
     pass
 
 
-class BusLineBuilder(LineBuilder[BusSource, BusLine, BusStop]):
+class BusLineBuilder(LineBuilder[BusLine, BusStop]):
     CnT = BusConnection

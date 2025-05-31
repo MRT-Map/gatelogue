@@ -4,7 +4,6 @@ import msgspec
 import rich
 
 from gatelogue_aggregator.logging import ERROR
-from gatelogue_aggregator.types.base import BaseContext
 from gatelogue_aggregator.types.source import Source
 
 
@@ -12,7 +11,7 @@ class SharedFacility(msgspec.Struct):
     pass
 
 
-class SharedFacilityContext(BaseContext, Source):
+class SharedFacilitySource(Source):
     name = "Gatelogue"
     priority = 0
 
