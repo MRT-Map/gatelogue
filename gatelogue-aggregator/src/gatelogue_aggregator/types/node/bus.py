@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import gatelogue_types as gt
 import rich
 
-import gatelogue_types as gt
 from gatelogue_aggregator.logging import ERROR, RESULT
-
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
@@ -84,7 +83,9 @@ class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):
         num_lines = len(list(self.get_all(src, BusLine)))
         num_stops = len(list(self.get_all(src, BusStop)))
         colour = ERROR if num_lines == 0 or num_stops == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stops} stops")
+        rich.print(
+            colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stops} stops"
+        )
 
 
 class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
@@ -157,11 +158,17 @@ class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: BusSource):
-        num_stops = len([stn for stn in self.get_one(src, BusCompany).get_all(src, BusStop) if any(
-            conn.v.line.refs(src, self)
-            for node in stn.get_all(src, BusStop, BusConnection)
-            for conn in stn.get_edges(src, node, BusConnection)
-        )])
+        num_stops = len(
+            [
+                stn
+                for stn in self.get_one(src, BusCompany).get_all(src, BusStop)
+                if any(
+                    conn.v.line.refs(src, self)
+                    for node in stn.get_all(src, BusStop, BusConnection)
+                    for conn in stn.get_edges(src, node, BusConnection)
+                )
+            ]
+        )
         colour = ERROR if num_stops == 0 else RESULT
         rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stops} stops")
 
@@ -190,7 +197,8 @@ class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: BusSource) -> str:
-        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
+        codes = "/".join(self.codes)
+        code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
         company = self.get_one(src, BusCompany).name
         return f"{company} {code}"
 
@@ -243,7 +251,7 @@ class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
         super().report(src)
         num_connections = len(list(self.get_all(src, BusStop, BusConnection)))
         if num_connections == 0:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has no connections")
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no connections")
 
 
 class BusConnection(Connection[BusLine]):

@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import gatelogue_types as gt
 import rich
 
-import gatelogue_types as gt
-from gatelogue_aggregator.logging import RESULT, ERROR
-
+from gatelogue_aggregator.logging import ERROR, RESULT
 from gatelogue_aggregator.types.edge.connections import Connection
 from gatelogue_aggregator.types.edge.line_builder import LineBuilder
 from gatelogue_aggregator.types.node.base import LocatedNode, Node, NodeRef
@@ -86,7 +85,13 @@ class RailCompany(gt.RailCompany, Node, kw_only=True, tag=True):
         num_lines = len(list(self.get_all(src, RailLine)))
         num_stations = len(list(self.get_all(src, RailStation)))
         colour = ERROR if num_lines == 0 or num_stations == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_lines} lines and {num_stations} stations")
+        rich.print(
+            colour
+            + type(self).__name__
+            + " "
+            + self.str_src(src)
+            + f" has {num_lines} lines and {num_stations} stations"
+        )
 
 
 class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
@@ -169,11 +174,17 @@ class RailLine(gt.RailLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: RailSource):
-        num_stations = len([stn for stn in self.get_one(src, RailCompany).get_all(src, RailStation) if any(
-            conn.v.line.refs(src, self)
-            for node in stn.get_all(src, RailStation, RailConnection)
-            for conn in stn.get_edges(src, node, RailConnection)
-        )])
+        num_stations = len(
+            [
+                stn
+                for stn in self.get_one(src, RailCompany).get_all(src, RailStation)
+                if any(
+                    conn.v.line.refs(src, self)
+                    for node in stn.get_all(src, RailStation, RailConnection)
+                    for conn in stn.get_edges(src, node, RailConnection)
+                )
+            ]
+        )
         colour = ERROR if num_stations == 0 else RESULT
         rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_stations} stations")
 
@@ -202,7 +213,8 @@ class RailStation(gt.RailStation, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: RailSource) -> str:
-        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
+        codes = "/".join(self.codes)
+        code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
         company = self.get_one(src, RailCompany).name
         return f"{company} {code}"
 
@@ -255,7 +267,7 @@ class RailStation(gt.RailStation, LocatedNode, kw_only=True, tag=True):
         super().report(src)
         num_connections = len(list(self.get_all(src, RailStation, RailConnection)))
         if num_connections == 0:
-            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has no connections")
+            rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + " has no connections")
 
 
 class RailConnection(Connection[RailLine]):

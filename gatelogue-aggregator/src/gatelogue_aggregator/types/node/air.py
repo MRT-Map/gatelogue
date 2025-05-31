@@ -3,11 +3,10 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
+import gatelogue_types as gt
 import rich
 
-import gatelogue_types as gt
-
-from gatelogue_aggregator.logging import INFO2, track, RESULT, ERROR
+from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.hardcode import (
     AIRLINE_ALIASES,
     AIRPORT_ALIASES,
@@ -341,7 +340,7 @@ class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
     @override
     def report(self, src: AirSource):
         num_flights = len(list(self.get_all(src, AirFlight)))
-        if num_flights > 6 and self.code is not None:
+        if num_flights > 6 and self.code is not None:  # noqa: PLR2004
             rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights")
 
     @staticmethod
@@ -422,7 +421,9 @@ class AirAirline(gt.AirAirline, Node, kw_only=True, tag=True):
         num_flights = len(list(self.get_all(src, AirFlight)))
         num_gates = len(list(self.get_all(src, AirGate)))
         colour = ERROR if num_flights == 0 or num_gates == 0 else RESULT
-        rich.print(colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights and {num_gates} gates")
+        rich.print(
+            colour + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights and {num_gates} gates"
+        )
 
     @staticmethod
     def process_airline_name[T: (str, None)](s: T) -> T:

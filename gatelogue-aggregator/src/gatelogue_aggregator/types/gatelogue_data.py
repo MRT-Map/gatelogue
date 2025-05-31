@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Self
 
-import rich
-
 import gatelogue_types as gt
+import rich
 import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
 
@@ -46,7 +45,10 @@ class GatelogueData(
             processed: dict[type[Node], dict[str, list[Node]]] = {}
             to_merge: list[tuple[Node, Node]] = []
             for i in track(
-                self.g.node_indices(), INFO2, description=f"Finding equivalent nodes (pass {pass_})", nonlinear=True,
+                self.g.node_indices(),
+                INFO2,
+                description=f"Finding equivalent nodes (pass {pass_})",
+                nonlinear=True,
             ):
                 n = self.g[i]
                 n.i = i

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import rich
-
 import gatelogue_types as gt
 import rustworkx as rx
 
@@ -59,7 +57,9 @@ class ProximitySource(Source):
             if len(isolated) == 0:
                 break
             for component in track(
-                isolated, INFO2, description=f"Ensuring all located nodes are connected (pass {pass_})",
+                isolated,
+                INFO2,
+                description=f"Ensuring all located nodes are connected (pass {pass_})",
             ):
                 for this in component:
                     nearest = min(located_nodes, key=lambda n: dist_sq(n, this, component))

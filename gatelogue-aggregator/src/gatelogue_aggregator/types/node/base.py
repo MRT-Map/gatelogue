@@ -4,10 +4,9 @@ import re
 from collections.abc import Callable  # noqa: TCH003
 from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
-import rich
-
 import gatelogue_types as gt
 import msgspec
+import rich
 import rustworkx as rx
 
 from gatelogue_aggregator.logging import ERROR
