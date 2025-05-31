@@ -21,6 +21,7 @@
       ~WZFWarp.build
       ~WZFWarp.find_by_ref
       ~WZFWarp.find_by_ref_or_index
+      ~WZFWarp.report
       ~WZFWarp.retrieve_from_cache
       ~WZFWarp.sanitise_strings
       ~WZFWarp.save_to_cache

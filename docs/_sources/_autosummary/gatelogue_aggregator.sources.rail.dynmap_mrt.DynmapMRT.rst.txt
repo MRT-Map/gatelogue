@@ -21,6 +21,7 @@
       ~DynmapMRT.build
       ~DynmapMRT.find_by_ref
       ~DynmapMRT.find_by_ref_or_index
+      ~DynmapMRT.report
       ~DynmapMRT.retrieve_from_cache
       ~DynmapMRT.sanitise_strings
       ~DynmapMRT.save_to_cache

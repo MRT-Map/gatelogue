@@ -21,6 +21,7 @@
       ~RedTrainWarp.build
       ~RedTrainWarp.find_by_ref
       ~RedTrainWarp.find_by_ref_or_index
+      ~RedTrainWarp.report
       ~RedTrainWarp.retrieve_from_cache
       ~RedTrainWarp.sanitise_strings
       ~RedTrainWarp.save_to_cache

@@ -22,6 +22,7 @@
       ~NSC.custom_routing
       ~NSC.find_by_ref
       ~NSC.find_by_ref_or_index
+      ~NSC.report
       ~NSC.retrieve_from_cache
       ~NSC.sanitise_strings
       ~NSC.save_to_cache

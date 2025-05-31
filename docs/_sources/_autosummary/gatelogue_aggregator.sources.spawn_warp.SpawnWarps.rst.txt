@@ -21,6 +21,7 @@
       ~SpawnWarps.build
       ~SpawnWarps.find_by_ref
       ~SpawnWarps.find_by_ref_or_index
+      ~SpawnWarps.report
       ~SpawnWarps.retrieve_from_cache
       ~SpawnWarps.sanitise_strings
       ~SpawnWarps.save_to_cache

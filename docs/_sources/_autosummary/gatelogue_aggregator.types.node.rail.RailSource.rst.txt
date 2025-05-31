@@ -21,6 +21,7 @@
       ~RailSource.build
       ~RailSource.find_by_ref
       ~RailSource.find_by_ref_or_index
+      ~RailSource.report
       ~RailSource.retrieve_from_cache
       ~RailSource.sanitise_strings
       ~RailSource.save_to_cache

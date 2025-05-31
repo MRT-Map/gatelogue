@@ -22,6 +22,7 @@
       ~FLRSheng.custom_routing
       ~FLRSheng.find_by_ref
       ~FLRSheng.find_by_ref_or_index
+      ~FLRSheng.report
       ~FLRSheng.retrieve_from_cache
       ~FLRSheng.sanitise_strings
       ~FLRSheng.save_to_cache

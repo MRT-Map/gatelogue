@@ -21,6 +21,7 @@
       ~IntraBusOmegaBus.build
       ~IntraBusOmegaBus.find_by_ref
       ~IntraBusOmegaBus.find_by_ref_or_index
+      ~IntraBusOmegaBus.report
       ~IntraBusOmegaBus.retrieve_from_cache
       ~IntraBusOmegaBus.sanitise_strings
       ~IntraBusOmegaBus.save_to_cache

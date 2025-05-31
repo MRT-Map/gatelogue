@@ -21,6 +21,7 @@
       ~AirSource.build
       ~AirSource.find_by_ref
       ~AirSource.find_by_ref_or_index
+      ~AirSource.report
       ~AirSource.retrieve_from_cache
       ~AirSource.sanitise_strings
       ~AirSource.save_to_cache

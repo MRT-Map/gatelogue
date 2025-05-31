@@ -21,6 +21,7 @@
       ~RaiLinQ.build
       ~RaiLinQ.find_by_ref
       ~RaiLinQ.find_by_ref_or_index
+      ~RaiLinQ.report
       ~RaiLinQ.retrieve_from_cache
       ~RaiLinQ.sanitise_strings
       ~RaiLinQ.save_to_cache

@@ -21,6 +21,7 @@
       ~HBL.build
       ~HBL.find_by_ref
       ~HBL.find_by_ref_or_index
+      ~HBL.report
       ~HBL.retrieve_from_cache
       ~HBL.sanitise_strings
       ~HBL.save_to_cache

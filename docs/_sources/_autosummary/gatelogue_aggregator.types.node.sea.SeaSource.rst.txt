@@ -21,6 +21,7 @@
       ~SeaSource.build
       ~SeaSource.find_by_ref
       ~SeaSource.find_by_ref_or_index
+      ~SeaSource.report
       ~SeaSource.retrieve_from_cache
       ~SeaSource.sanitise_strings
       ~SeaSource.save_to_cache

@@ -21,6 +21,7 @@
       ~SharedFacilitySource.build
       ~SharedFacilitySource.find_by_ref
       ~SharedFacilitySource.find_by_ref_or_index
+      ~SharedFacilitySource.report
       ~SharedFacilitySource.retrieve_from_cache
       ~SharedFacilitySource.sanitise_strings
       ~SharedFacilitySource.save_to_cache

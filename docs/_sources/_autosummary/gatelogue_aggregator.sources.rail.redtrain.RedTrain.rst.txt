@@ -21,6 +21,7 @@
       ~RedTrain.build
       ~RedTrain.find_by_ref
       ~RedTrain.find_by_ref_or_index
+      ~RedTrain.report
       ~RedTrain.retrieve_from_cache
       ~RedTrain.sanitise_strings
       ~RedTrain.save_to_cache

@@ -21,6 +21,7 @@
       ~IntraRailWarp.build
       ~IntraRailWarp.find_by_ref
       ~IntraRailWarp.find_by_ref_or_index
+      ~IntraRailWarp.report
       ~IntraRailWarp.retrieve_from_cache
       ~IntraRailWarp.sanitise_strings
       ~IntraRailWarp.save_to_cache

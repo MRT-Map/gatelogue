@@ -21,6 +21,7 @@
       ~SpawnWarpSource.build
       ~SpawnWarpSource.find_by_ref
       ~SpawnWarpSource.find_by_ref_or_index
+      ~SpawnWarpSource.report
       ~SpawnWarpSource.retrieve_from_cache
       ~SpawnWarpSource.sanitise_strings
       ~SpawnWarpSource.save_to_cache

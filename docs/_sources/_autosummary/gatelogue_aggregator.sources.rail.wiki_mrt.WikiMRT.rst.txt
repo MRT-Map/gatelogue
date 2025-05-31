@@ -21,6 +21,7 @@
       ~WikiMRT.build
       ~WikiMRT.find_by_ref
       ~WikiMRT.find_by_ref_or_index
+      ~WikiMRT.report
       ~WikiMRT.retrieve_from_cache
       ~WikiMRT.sanitise_strings
       ~WikiMRT.save_to_cache

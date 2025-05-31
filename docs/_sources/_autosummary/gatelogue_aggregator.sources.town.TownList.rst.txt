@@ -21,6 +21,7 @@
       ~TownList.build
       ~TownList.find_by_ref
       ~TownList.find_by_ref_or_index
+      ~TownList.report
       ~TownList.retrieve_from_cache
       ~TownList.sanitise_strings
       ~TownList.save_to_cache

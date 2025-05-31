@@ -21,6 +21,7 @@
       ~NSCWarp.build
       ~NSCWarp.find_by_ref
       ~NSCWarp.find_by_ref_or_index
+      ~NSCWarp.report
       ~NSCWarp.retrieve_from_cache
       ~NSCWarp.sanitise_strings
       ~NSCWarp.save_to_cache

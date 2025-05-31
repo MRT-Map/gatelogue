@@ -21,6 +21,7 @@
       ~SEAT.build
       ~SEAT.find_by_ref
       ~SEAT.find_by_ref_or_index
+      ~SEAT.report
       ~SEAT.retrieve_from_cache
       ~SEAT.sanitise_strings
       ~SEAT.save_to_cache

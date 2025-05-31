@@ -21,6 +21,7 @@
       ~AquaLinQWarp.build
       ~AquaLinQWarp.find_by_ref
       ~AquaLinQWarp.find_by_ref_or_index
+      ~AquaLinQWarp.report
       ~AquaLinQWarp.retrieve_from_cache
       ~AquaLinQWarp.sanitise_strings
       ~AquaLinQWarp.save_to_cache

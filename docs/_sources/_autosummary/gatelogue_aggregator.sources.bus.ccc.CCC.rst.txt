@@ -21,6 +21,7 @@
       ~CCC.build
       ~CCC.find_by_ref
       ~CCC.find_by_ref_or_index
+      ~CCC.report
       ~CCC.retrieve_from_cache
       ~CCC.sanitise_strings
       ~CCC.save_to_cache

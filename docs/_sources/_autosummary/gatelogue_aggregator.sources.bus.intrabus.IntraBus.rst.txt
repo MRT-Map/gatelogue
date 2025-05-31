@@ -21,6 +21,7 @@
       ~IntraBus.build
       ~IntraBus.find_by_ref
       ~IntraBus.find_by_ref_or_index
+      ~IntraBus.report
       ~IntraBus.retrieve_from_cache
       ~IntraBus.sanitise_strings
       ~IntraBus.save_to_cache

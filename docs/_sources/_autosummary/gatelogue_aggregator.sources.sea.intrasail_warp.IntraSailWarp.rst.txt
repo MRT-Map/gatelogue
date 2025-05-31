@@ -21,6 +21,7 @@
       ~IntraSailWarp.build
       ~IntraSailWarp.find_by_ref
       ~IntraSailWarp.find_by_ref_or_index
+      ~IntraSailWarp.report
       ~IntraSailWarp.retrieve_from_cache
       ~IntraSailWarp.sanitise_strings
       ~IntraSailWarp.save_to_cache

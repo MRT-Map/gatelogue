@@ -21,6 +21,7 @@
       ~Source.build
       ~Source.find_by_ref
       ~Source.find_by_ref_or_index
+      ~Source.report
       ~Source.retrieve_from_cache
       ~Source.sanitise_strings
       ~Source.save_to_cache

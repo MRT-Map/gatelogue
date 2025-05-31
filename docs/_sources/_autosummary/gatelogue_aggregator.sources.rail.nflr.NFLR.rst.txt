@@ -21,6 +21,7 @@
       ~NFLR.build
       ~NFLR.find_by_ref
       ~NFLR.find_by_ref_or_index
+      ~NFLR.report
       ~NFLR.retrieve_from_cache
       ~NFLR.sanitise_strings
       ~NFLR.save_to_cache

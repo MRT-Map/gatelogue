@@ -24,6 +24,7 @@
       ~GatelogueData.find_by_ref_or_index
       ~GatelogueData.from_sources
       ~GatelogueData.graph
+      ~GatelogueData.report
       ~GatelogueData.retrieve_from_cache
       ~GatelogueData.sanitise_strings
       ~GatelogueData.save_to_cache

@@ -21,6 +21,7 @@
       ~RailNorthWarp.build
       ~RailNorthWarp.find_by_ref
       ~RailNorthWarp.find_by_ref_or_index
+      ~RailNorthWarp.report
       ~RailNorthWarp.retrieve_from_cache
       ~RailNorthWarp.sanitise_strings
       ~RailNorthWarp.save_to_cache

@@ -21,6 +21,7 @@
       ~WZF.build
       ~WZF.find_by_ref
       ~WZF.find_by_ref_or_index
+      ~WZF.report
       ~WZF.retrieve_from_cache
       ~WZF.sanitise_strings
       ~WZF.save_to_cache

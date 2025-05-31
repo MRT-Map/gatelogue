@@ -21,6 +21,7 @@
       ~MRTTransit.build
       ~MRTTransit.find_by_ref
       ~MRTTransit.find_by_ref_or_index
+      ~MRTTransit.report
       ~MRTTransit.retrieve_from_cache
       ~MRTTransit.sanitise_strings
       ~MRTTransit.save_to_cache

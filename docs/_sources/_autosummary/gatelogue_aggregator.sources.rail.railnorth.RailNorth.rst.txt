@@ -21,6 +21,7 @@
       ~RailNorth.build
       ~RailNorth.find_by_ref
       ~RailNorth.find_by_ref_or_index
+      ~RailNorth.report
       ~RailNorth.retrieve_from_cache
       ~RailNorth.sanitise_strings
       ~RailNorth.save_to_cache

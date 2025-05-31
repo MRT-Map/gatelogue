@@ -21,6 +21,7 @@
       ~TownSource.build
       ~TownSource.find_by_ref
       ~TownSource.find_by_ref_or_index
+      ~TownSource.report
       ~TownSource.retrieve_from_cache
       ~TownSource.sanitise_strings
       ~TownSource.save_to_cache

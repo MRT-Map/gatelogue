@@ -24,6 +24,7 @@
       ~WikiAirline.find_by_ref
       ~WikiAirline.find_by_ref_or_index
       ~WikiAirline.regex_extract_airline
+      ~WikiAirline.report
       ~WikiAirline.retrieve_from_cache
       ~WikiAirline.sanitise_strings
       ~WikiAirline.save_to_cache

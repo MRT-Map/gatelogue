@@ -21,6 +21,7 @@
       ~CFC.build
       ~CFC.find_by_ref
       ~CFC.find_by_ref_or_index
+      ~CFC.report
       ~CFC.retrieve_from_cache
       ~CFC.sanitise_strings
       ~CFC.save_to_cache

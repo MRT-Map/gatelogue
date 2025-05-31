@@ -21,6 +21,7 @@
       ~AquaLinQ.build
       ~AquaLinQ.find_by_ref
       ~AquaLinQ.find_by_ref_or_index
+      ~AquaLinQ.report
       ~AquaLinQ.retrieve_from_cache
       ~AquaLinQ.sanitise_strings
       ~AquaLinQ.save_to_cache

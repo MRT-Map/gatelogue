@@ -21,6 +21,7 @@
       ~RaiLinQWarp.build
       ~RaiLinQWarp.find_by_ref
       ~RaiLinQWarp.find_by_ref_or_index
+      ~RaiLinQWarp.report
       ~RaiLinQWarp.retrieve_from_cache
       ~RaiLinQWarp.sanitise_strings
       ~RaiLinQWarp.save_to_cache

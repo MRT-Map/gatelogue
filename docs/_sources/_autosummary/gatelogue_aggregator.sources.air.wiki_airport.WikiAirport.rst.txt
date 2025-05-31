@@ -24,6 +24,7 @@
       ~WikiAirport.find_by_ref
       ~WikiAirport.find_by_ref_or_index
       ~WikiAirport.regex_extract_airport
+      ~WikiAirport.report
       ~WikiAirport.retrieve_from_cache
       ~WikiAirport.sanitise_strings
       ~WikiAirport.save_to_cache

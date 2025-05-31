@@ -22,6 +22,7 @@
       ~FredRail.custom_routing
       ~FredRail.find_by_ref
       ~FredRail.find_by_ref_or_index
+      ~FredRail.report
       ~FredRail.retrieve_from_cache
       ~FredRail.sanitise_strings
       ~FredRail.save_to_cache
