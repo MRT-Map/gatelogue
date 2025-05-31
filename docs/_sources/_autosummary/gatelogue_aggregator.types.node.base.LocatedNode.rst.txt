@@ -40,8 +40,9 @@
       ~LocatedNode.new
       ~LocatedNode.process_code
       ~LocatedNode.ref
+      ~LocatedNode.report
       ~LocatedNode.sanitise_strings
-      ~LocatedNode.str_ctx
+      ~LocatedNode.str_src
    
    
 

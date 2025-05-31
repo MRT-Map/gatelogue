@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.types.edge.shared\_facility.SharedFacilitySource
+======================================================================
+
+.. currentmodule:: gatelogue_aggregator.types.edge.shared_facility
+
+.. autoclass:: SharedFacilitySource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SharedFacilitySource.__init__
+      ~SharedFacilitySource.build
+      ~SharedFacilitySource.find_by_ref
+      ~SharedFacilitySource.find_by_ref_or_index
+      ~SharedFacilitySource.retrieve_from_cache
+      ~SharedFacilitySource.sanitise_strings
+      ~SharedFacilitySource.save_to_cache
+      ~SharedFacilitySource.source
+      ~SharedFacilitySource.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SharedFacilitySource.name
+      ~SharedFacilitySource.priority
+      ~SharedFacilitySource.g
+   
+   

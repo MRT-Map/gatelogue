@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WZR.__init__
+      ~WZR.build
       ~WZR.find_by_ref
       ~WZR.find_by_ref_or_index
       ~WZR.retrieve_from_cache

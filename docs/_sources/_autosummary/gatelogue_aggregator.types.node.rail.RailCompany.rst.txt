@@ -40,8 +40,9 @@
       ~RailCompany.new
       ~RailCompany.process_code
       ~RailCompany.ref
+      ~RailCompany.report
       ~RailCompany.sanitise_strings
-      ~RailCompany.str_ctx
+      ~RailCompany.str_src
    
    
 

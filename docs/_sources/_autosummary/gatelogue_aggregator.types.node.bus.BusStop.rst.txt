@@ -40,8 +40,9 @@
       ~BusStop.new
       ~BusStop.process_code
       ~BusStop.ref
+      ~BusStop.report
       ~BusStop.sanitise_strings
-      ~BusStop.str_ctx
+      ~BusStop.str_src
    
    
 

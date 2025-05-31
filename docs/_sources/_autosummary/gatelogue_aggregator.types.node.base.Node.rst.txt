@@ -40,8 +40,9 @@
       ~Node.new
       ~Node.process_code
       ~Node.ref
+      ~Node.report
       ~Node.sanitise_strings
-      ~Node.str_ctx
+      ~Node.str_src
    
    
 

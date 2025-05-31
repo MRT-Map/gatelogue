@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RedTrainWarp.__init__
+      ~RedTrainWarp.build
       ~RedTrainWarp.find_by_ref
       ~RedTrainWarp.find_by_ref_or_index
       ~RedTrainWarp.retrieve_from_cache

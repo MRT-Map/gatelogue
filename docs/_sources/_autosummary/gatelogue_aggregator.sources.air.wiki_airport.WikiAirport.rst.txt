@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WikiAirport.__init__
+      ~WikiAirport.build
       ~WikiAirport.extract_get_airport
       ~WikiAirport.extract_get_gate
       ~WikiAirport.find_by_ref

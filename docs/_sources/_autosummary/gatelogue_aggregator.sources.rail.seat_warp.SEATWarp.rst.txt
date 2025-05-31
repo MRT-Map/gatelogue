@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~SEATWarp.__init__
+      ~SEATWarp.build
       ~SEATWarp.custom_routing
       ~SEATWarp.find_by_ref
       ~SEATWarp.find_by_ref_or_index

@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WikiMRT.__init__
+      ~WikiMRT.build
       ~WikiMRT.find_by_ref
       ~WikiMRT.find_by_ref_or_index
       ~WikiMRT.retrieve_from_cache

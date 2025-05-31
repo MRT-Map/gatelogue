@@ -40,8 +40,9 @@
       ~AirAirport.new
       ~AirAirport.process_code
       ~AirAirport.ref
+      ~AirAirport.report
       ~AirAirport.sanitise_strings
-      ~AirAirport.str_ctx
+      ~AirAirport.str_src
       ~AirAirport.update
    
    

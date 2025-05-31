@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~AquaLinQ.__init__
+      ~AquaLinQ.build
       ~AquaLinQ.find_by_ref
       ~AquaLinQ.find_by_ref_or_index
       ~AquaLinQ.retrieve_from_cache

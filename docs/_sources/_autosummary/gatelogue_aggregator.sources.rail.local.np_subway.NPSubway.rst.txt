@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NPSubway.__init__
+      ~NPSubway.build
       ~NPSubway.custom_routing
       ~NPSubway.find_by_ref
       ~NPSubway.find_by_ref_or_index

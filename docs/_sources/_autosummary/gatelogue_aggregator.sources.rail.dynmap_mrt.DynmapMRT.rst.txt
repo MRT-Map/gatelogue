@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~DynmapMRT.__init__
+      ~DynmapMRT.build
       ~DynmapMRT.find_by_ref
       ~DynmapMRT.find_by_ref_or_index
       ~DynmapMRT.retrieve_from_cache

@@ -1,7 +1,7 @@
-﻿gatelogue\_aggregator.types.base.Mergeable
-==========================================
+﻿gatelogue\_aggregator.types.mergeable.Mergeable
+===============================================
 
-.. currentmodule:: gatelogue_aggregator.types.base
+.. currentmodule:: gatelogue_aggregator.types.mergeable
 
 .. autoclass:: Mergeable
    :members:

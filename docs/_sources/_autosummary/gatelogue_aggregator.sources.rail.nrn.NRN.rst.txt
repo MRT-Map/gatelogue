@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NRN.__init__
+      ~NRN.build
       ~NRN.custom_routing
       ~NRN.find_by_ref
       ~NRN.find_by_ref_or_index

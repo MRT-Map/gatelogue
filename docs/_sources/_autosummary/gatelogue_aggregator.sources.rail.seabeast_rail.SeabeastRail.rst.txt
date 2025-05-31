@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~SeabeastRail.__init__
+      ~SeabeastRail.build
       ~SeabeastRail.find_by_ref
       ~SeabeastRail.find_by_ref_or_index
       ~SeabeastRail.retrieve_from_cache

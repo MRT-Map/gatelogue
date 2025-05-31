@@ -1,7 +1,7 @@
-﻿gatelogue\_aggregator.types.context.shared\_facility.SharedFacility
-===================================================================
+﻿gatelogue\_aggregator.types.edge.shared\_facility.SharedFacility
+================================================================
 
-.. currentmodule:: gatelogue_aggregator.types.context.shared_facility
+.. currentmodule:: gatelogue_aggregator.types.edge.shared_facility
 
 .. autoclass:: SharedFacility
    :members:

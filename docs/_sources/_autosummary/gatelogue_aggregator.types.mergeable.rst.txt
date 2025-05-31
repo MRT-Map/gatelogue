@@ -1,7 +1,7 @@
-gatelogue\_aggregator.types.context.shared\_facility
-====================================================
+gatelogue\_aggregator.types.mergeable
+=====================================
 
-.. automodule:: gatelogue_aggregator.types.context.shared_facility
+.. automodule:: gatelogue_aggregator.types.mergeable
   
    
    
@@ -19,8 +19,7 @@ gatelogue\_aggregator.types.context.shared\_facility
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      SharedFacility
-      SharedFacilityContext
+      Mergeable
    
    
 

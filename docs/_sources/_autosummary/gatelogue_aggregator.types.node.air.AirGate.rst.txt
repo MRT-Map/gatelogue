@@ -40,8 +40,9 @@
       ~AirGate.new
       ~AirGate.process_code
       ~AirGate.ref
+      ~AirGate.report
       ~AirGate.sanitise_strings
-      ~AirGate.str_ctx
+      ~AirGate.str_src
    
    
 

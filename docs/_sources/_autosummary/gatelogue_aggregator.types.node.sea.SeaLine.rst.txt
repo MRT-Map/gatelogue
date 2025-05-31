@@ -40,8 +40,9 @@
       ~SeaLine.new
       ~SeaLine.process_code
       ~SeaLine.ref
+      ~SeaLine.report
       ~SeaLine.sanitise_strings
-      ~SeaLine.str_ctx
+      ~SeaLine.str_src
    
    
 

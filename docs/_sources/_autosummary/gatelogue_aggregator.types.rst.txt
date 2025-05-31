@@ -28,11 +28,10 @@ gatelogue\_aggregator.types
    :template: custom-module-template.rst                 
    :recursive:
 
-   base
    config
-   connections
-   context
-   line_builder
+   edge
+   gatelogue_data
+   mergeable
    node
    source
 

@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~IntraRail.__init__
+      ~IntraRail.build
       ~IntraRail.find_by_ref
       ~IntraRail.find_by_ref_or_index
       ~IntraRail.retrieve_from_cache

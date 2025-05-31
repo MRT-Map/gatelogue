@@ -40,8 +40,9 @@
       ~AirFlight.new
       ~AirFlight.process_code
       ~AirFlight.ref
+      ~AirFlight.report
       ~AirFlight.sanitise_strings
-      ~AirFlight.str_ctx
+      ~AirFlight.str_src
       ~AirFlight.update
    
    

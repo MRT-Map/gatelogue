@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~FLRKaze.__init__
+      ~FLRKaze.build
       ~FLRKaze.custom_routing
       ~FLRKaze.find_by_ref
       ~FLRKaze.find_by_ref_or_index

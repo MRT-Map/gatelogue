@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WikiAirline.__init__
+      ~WikiAirline.build
       ~WikiAirline.extract_get_airline
       ~WikiAirline.extract_get_flight
       ~WikiAirline.find_by_ref

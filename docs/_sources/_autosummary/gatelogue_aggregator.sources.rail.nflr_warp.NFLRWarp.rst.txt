@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NFLRWarp.__init__
+      ~NFLRWarp.build
       ~NFLRWarp.find_by_ref
       ~NFLRWarp.find_by_ref_or_index
       ~NFLRWarp.retrieve_from_cache

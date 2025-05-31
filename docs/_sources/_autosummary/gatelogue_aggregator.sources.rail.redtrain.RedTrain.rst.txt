@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RedTrain.__init__
+      ~RedTrain.build
       ~RedTrain.find_by_ref
       ~RedTrain.find_by_ref_or_index
       ~RedTrain.retrieve_from_cache

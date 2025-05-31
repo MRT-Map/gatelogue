@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~BluRail.__init__
+      ~BluRail.build
       ~BluRail.find_by_ref
       ~BluRail.find_by_ref_or_index
       ~BluRail.retrieve_from_cache

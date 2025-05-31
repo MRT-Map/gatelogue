@@ -40,8 +40,9 @@
       ~BusCompany.new
       ~BusCompany.process_code
       ~BusCompany.ref
+      ~BusCompany.report
       ~BusCompany.sanitise_strings
-      ~BusCompany.str_ctx
+      ~BusCompany.str_src
    
    
 

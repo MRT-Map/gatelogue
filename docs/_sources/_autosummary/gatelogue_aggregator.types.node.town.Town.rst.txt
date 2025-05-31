@@ -40,8 +40,9 @@
       ~Town.new
       ~Town.process_code
       ~Town.ref
+      ~Town.report
       ~Town.sanitise_strings
-      ~Town.str_ctx
+      ~Town.str_src
    
    
 

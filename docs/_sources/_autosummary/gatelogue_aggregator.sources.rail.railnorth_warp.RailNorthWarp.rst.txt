@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RailNorthWarp.__init__
+      ~RailNorthWarp.build
       ~RailNorthWarp.find_by_ref
       ~RailNorthWarp.find_by_ref_or_index
       ~RailNorthWarp.retrieve_from_cache

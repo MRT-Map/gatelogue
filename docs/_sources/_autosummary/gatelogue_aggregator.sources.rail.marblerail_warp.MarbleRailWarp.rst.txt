@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~MarbleRailWarp.__init__
+      ~MarbleRailWarp.build
       ~MarbleRailWarp.find_by_ref
       ~MarbleRailWarp.find_by_ref_or_index
       ~MarbleRailWarp.retrieve_from_cache

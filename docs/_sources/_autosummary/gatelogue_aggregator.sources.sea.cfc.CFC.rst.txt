@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~CFC.__init__
+      ~CFC.build
       ~CFC.find_by_ref
       ~CFC.find_by_ref_or_index
       ~CFC.retrieve_from_cache

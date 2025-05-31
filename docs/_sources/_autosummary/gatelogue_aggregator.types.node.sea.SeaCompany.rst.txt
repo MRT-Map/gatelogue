@@ -40,8 +40,9 @@
       ~SeaCompany.new
       ~SeaCompany.process_code
       ~SeaCompany.ref
+      ~SeaCompany.report
       ~SeaCompany.sanitise_strings
-      ~SeaCompany.str_ctx
+      ~SeaCompany.str_src
    
    
 

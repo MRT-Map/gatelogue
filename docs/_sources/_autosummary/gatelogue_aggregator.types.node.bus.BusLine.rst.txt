@@ -40,8 +40,9 @@
       ~BusLine.new
       ~BusLine.process_code
       ~BusLine.ref
+      ~BusLine.report
       ~BusLine.sanitise_strings
-      ~BusLine.str_ctx
+      ~BusLine.str_src
    
    
 

@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~AquaLinQWarp.__init__
+      ~AquaLinQWarp.build
       ~AquaLinQWarp.find_by_ref
       ~AquaLinQWarp.find_by_ref_or_index
       ~AquaLinQWarp.retrieve_from_cache

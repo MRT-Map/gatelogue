@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~SeabeastBuses.__init__
+      ~SeabeastBuses.build
       ~SeabeastBuses.find_by_ref
       ~SeabeastBuses.find_by_ref_or_index
       ~SeabeastBuses.retrieve_from_cache

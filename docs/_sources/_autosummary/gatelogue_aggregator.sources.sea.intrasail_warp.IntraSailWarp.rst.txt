@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~IntraSailWarp.__init__
+      ~IntraSailWarp.build
       ~IntraSailWarp.find_by_ref
       ~IntraSailWarp.find_by_ref_or_index
       ~IntraSailWarp.retrieve_from_cache

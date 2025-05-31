@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~Pacifica.__init__
+      ~Pacifica.build
       ~Pacifica.find_by_ref
       ~Pacifica.find_by_ref_or_index
       ~Pacifica.retrieve_from_cache

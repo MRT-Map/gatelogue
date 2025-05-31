@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.types.gatelogue\_data.GatelogueData
+=========================================================
+
+.. currentmodule:: gatelogue_aggregator.types.gatelogue_data
+
+.. autoclass:: GatelogueData
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~GatelogueData.__init__
+      ~GatelogueData.build
+      ~GatelogueData.export
+      ~GatelogueData.find_by_ref
+      ~GatelogueData.find_by_ref_or_index
+      ~GatelogueData.from_sources
+      ~GatelogueData.graph
+      ~GatelogueData.retrieve_from_cache
+      ~GatelogueData.sanitise_strings
+      ~GatelogueData.save_to_cache
+      ~GatelogueData.source
+      ~GatelogueData.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~GatelogueData.name
+      ~GatelogueData.priority
+      ~GatelogueData.g
+   
+   

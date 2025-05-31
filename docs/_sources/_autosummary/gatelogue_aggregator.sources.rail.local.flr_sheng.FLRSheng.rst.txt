@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~FLRSheng.__init__
+      ~FLRSheng.build
       ~FLRSheng.custom_routing
       ~FLRSheng.find_by_ref
       ~FLRSheng.find_by_ref_or_index

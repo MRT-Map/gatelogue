@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~AirSource.__init__
+      ~AirSource.build
       ~AirSource.find_by_ref
       ~AirSource.find_by_ref_or_index
       ~AirSource.retrieve_from_cache
@@ -34,8 +35,8 @@
 
    .. autosummary::
    
-      ~AirSource.g
       ~AirSource.name
       ~AirSource.priority
+      ~AirSource.g
    
    

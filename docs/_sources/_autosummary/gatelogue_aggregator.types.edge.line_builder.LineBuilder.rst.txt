@@ -1,7 +1,7 @@
-﻿gatelogue\_aggregator.types.line\_builder.LineBuilder
-=====================================================
+﻿gatelogue\_aggregator.types.edge.line\_builder.LineBuilder
+==========================================================
 
-.. currentmodule:: gatelogue_aggregator.types.line_builder
+.. currentmodule:: gatelogue_aggregator.types.edge.line_builder
 
 .. autoclass:: LineBuilder
    :members:

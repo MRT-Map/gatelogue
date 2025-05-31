@@ -40,8 +40,9 @@
       ~SeaStop.new
       ~SeaStop.process_code
       ~SeaStop.ref
+      ~SeaStop.report
       ~SeaStop.sanitise_strings
-      ~SeaStop.str_ctx
+      ~SeaStop.str_src
    
    
 

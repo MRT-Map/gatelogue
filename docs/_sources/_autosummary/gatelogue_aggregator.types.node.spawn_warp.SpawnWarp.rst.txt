@@ -40,8 +40,9 @@
       ~SpawnWarp.new
       ~SpawnWarp.process_code
       ~SpawnWarp.ref
+      ~SpawnWarp.report
       ~SpawnWarp.sanitise_strings
-      ~SpawnWarp.str_ctx
+      ~SpawnWarp.str_src
    
    
 

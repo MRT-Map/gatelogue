@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~FLRForesne.__init__
+      ~FLRForesne.build
       ~FLRForesne.custom_routing
       ~FLRForesne.find_by_ref
       ~FLRForesne.find_by_ref_or_index

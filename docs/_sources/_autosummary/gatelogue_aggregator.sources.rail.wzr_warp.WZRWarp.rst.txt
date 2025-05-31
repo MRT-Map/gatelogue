@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WZRWarp.__init__
+      ~WZRWarp.build
       ~WZRWarp.find_by_ref
       ~WZRWarp.find_by_ref_or_index
       ~WZRWarp.retrieve_from_cache

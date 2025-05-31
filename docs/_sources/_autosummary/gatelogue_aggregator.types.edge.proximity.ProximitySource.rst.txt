@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.types.edge.proximity.ProximitySource
+==========================================================
+
+.. currentmodule:: gatelogue_aggregator.types.edge.proximity
+
+.. autoclass:: ProximitySource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ProximitySource.__init__
+      ~ProximitySource.build
+      ~ProximitySource.find_by_ref
+      ~ProximitySource.find_by_ref_or_index
+      ~ProximitySource.retrieve_from_cache
+      ~ProximitySource.sanitise_strings
+      ~ProximitySource.save_to_cache
+      ~ProximitySource.source
+      ~ProximitySource.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ProximitySource.name
+      ~ProximitySource.priority
+      ~ProximitySource.g
+   
+   

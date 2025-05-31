@@ -56,11 +56,10 @@
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.base.html">gatelogue_aggregator.types.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.config.html">gatelogue_aggregator.types.config</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.connections.html">gatelogue_aggregator.types.connections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.context.html">gatelogue_aggregator.types.context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.line_builder.html">gatelogue_aggregator.types.line_builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.edge.html">gatelogue_aggregator.types.edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.gatelogue_data.html">gatelogue_aggregator.types.gatelogue_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.mergeable.html">gatelogue_aggregator.types.mergeable</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.node.html">gatelogue_aggregator.types.node</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.types.source.html">gatelogue_aggregator.types.source</a></li>
 </ul>
@@ -105,29 +104,38 @@
 <h1>gatelogue_aggregator.types.source.Source<a class="headerlink" href="#gatelogue-aggregator-types-source-source" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.source.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.types.source.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.__init__" title="gatelogue_aggregator.types.source.Source.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(_)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.__init__" title="gatelogue_aggregator.types.source.Source.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.retrieve_from_cache" title="gatelogue_aggregator.types.source.Source.retrieve_from_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_from_cache</span></code></a>(config)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.build" title="gatelogue_aggregator.types.source.Source.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.sanitise_strings" title="gatelogue_aggregator.types.source.Source.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>(g)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.find_by_ref" title="gatelogue_aggregator.types.source.Source.find_by_ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.save_to_cache" title="gatelogue_aggregator.types.source.Source.save_to_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_to_cache</span></code></a>(config, g)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.find_by_ref_or_index" title="gatelogue_aggregator.types.source.Source.find_by_ref_or_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref_or_index</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.source" title="gatelogue_aggregator.types.source.Source.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.retrieve_from_cache" title="gatelogue_aggregator.types.source.Source.retrieve_from_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_from_cache</span></code></a>(config)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.sanitise_strings" title="gatelogue_aggregator.types.source.Source.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.save_to_cache" title="gatelogue_aggregator.types.source.Source.save_to_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_to_cache</span></code></a>(config)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.source" title="gatelogue_aggregator.types.source.Source.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -141,8 +149,31 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.priority" title="gatelogue_aggregator.types.source.Source.priority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.source.Source.g" title="gatelogue_aggregator.types.source.Source.g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g</span></code></a></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.build" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.find_by_ref">
+<span class="sig-name descname"><span class="pre">find_by_ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">N</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.find_by_ref" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.find_by_ref_or_index">
+<span class="sig-name descname"><span class="pre">find_by_ref_or_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">R</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">N</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.find_by_ref_or_index" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.g">
+<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://www.rustworkx.org/apiref/rustworkx.PyGraph.html#rustworkx.PyGraph" title="(in rustworkx v0.16)"><span class="pre">PyGraph</span></a></em><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.g" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.name" title="Link to this definition"></a></dt>
@@ -155,17 +186,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.retrieve_from_cache">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_from_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">rx.PyGraph</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.retrieve_from_cache" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_from_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">rx.PyGraph</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.retrieve_from_cache" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.sanitise_strings">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sanitise_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">rx.PyGraph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.sanitise_strings" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sanitise_strings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.sanitise_strings" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.source.Source.save_to_cache">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_to_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">rx.PyGraph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.save_to_cache" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_to_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.source.Source.save_to_cache" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

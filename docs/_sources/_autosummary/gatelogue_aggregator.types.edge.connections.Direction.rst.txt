@@ -1,7 +1,7 @@
-﻿gatelogue\_aggregator.types.connections.Direction
-=================================================
+﻿gatelogue\_aggregator.types.edge.connections.Direction
+======================================================
 
-.. currentmodule:: gatelogue_aggregator.types.connections
+.. currentmodule:: gatelogue_aggregator.types.edge.connections
 
 .. autoclass:: Direction
    :members:

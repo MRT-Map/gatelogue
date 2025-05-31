@@ -1,7 +1,7 @@
-gatelogue\_aggregator.types.context
-===================================
+gatelogue\_aggregator.types.edge
+================================
 
-.. automodule:: gatelogue_aggregator.types.context
+.. automodule:: gatelogue_aggregator.types.edge
   
    
    
@@ -28,7 +28,8 @@ gatelogue\_aggregator.types.context
    :template: custom-module-template.rst                 
    :recursive:
 
-   context
+   connections
+   line_builder
    proximity
    shared_facility
 

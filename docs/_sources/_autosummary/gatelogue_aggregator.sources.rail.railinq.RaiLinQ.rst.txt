@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RaiLinQ.__init__
+      ~RaiLinQ.build
       ~RaiLinQ.find_by_ref
       ~RaiLinQ.find_by_ref_or_index
       ~RaiLinQ.retrieve_from_cache

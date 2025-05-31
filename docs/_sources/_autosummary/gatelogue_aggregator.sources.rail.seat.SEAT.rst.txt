@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~SEAT.__init__
+      ~SEAT.build
       ~SEAT.find_by_ref
       ~SEAT.find_by_ref_or_index
       ~SEAT.retrieve_from_cache

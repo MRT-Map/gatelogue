@@ -1,7 +1,7 @@
-gatelogue\_aggregator.types.context.proximity
-=============================================
+gatelogue\_aggregator.types.edge.shared\_facility
+=================================================
 
-.. automodule:: gatelogue_aggregator.types.context.proximity
+.. automodule:: gatelogue_aggregator.types.edge.shared_facility
   
    
    
@@ -19,7 +19,8 @@ gatelogue\_aggregator.types.context.proximity
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      ProximityContext
+      SharedFacility
+      SharedFacilitySource
    
    
 

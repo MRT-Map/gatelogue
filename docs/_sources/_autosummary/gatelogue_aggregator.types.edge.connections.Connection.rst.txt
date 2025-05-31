@@ -1,7 +1,7 @@
-﻿gatelogue\_aggregator.types.connections.Connection
-==================================================
+﻿gatelogue\_aggregator.types.edge.connections.Connection
+=======================================================
 
-.. currentmodule:: gatelogue_aggregator.types.connections
+.. currentmodule:: gatelogue_aggregator.types.edge.connections
 
 .. autoclass:: Connection
    :members:

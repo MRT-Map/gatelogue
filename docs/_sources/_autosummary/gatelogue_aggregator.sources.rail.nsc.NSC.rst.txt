@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NSC.__init__
+      ~NSC.build
       ~NSC.custom_routing
       ~NSC.find_by_ref
       ~NSC.find_by_ref_or_index

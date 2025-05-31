@@ -56,11 +56,10 @@
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.base.html">gatelogue_aggregator.types.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.config.html">gatelogue_aggregator.types.config</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.connections.html">gatelogue_aggregator.types.connections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.context.html">gatelogue_aggregator.types.context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.line_builder.html">gatelogue_aggregator.types.line_builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.edge.html">gatelogue_aggregator.types.edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.gatelogue_data.html">gatelogue_aggregator.types.gatelogue_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.mergeable.html">gatelogue_aggregator.types.mergeable</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.types.node.html">gatelogue_aggregator.types.node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.types.source.html">gatelogue_aggregator.types.source</a></li>
 </ul>
@@ -119,7 +118,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.NodeRef.__init__" title="gatelogue_aggregator.types.node.base.NodeRef.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(t, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.NodeRef.refs" title="gatelogue_aggregator.types.node.base.NodeRef.refs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refs</span></code></a>(ctx, node)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.NodeRef.refs" title="gatelogue_aggregator.types.node.base.NodeRef.refs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refs</span></code></a>(src, node)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -142,7 +141,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.node.base.NodeRef.refs">
-<span class="sig-name descname"><span class="pre">refs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.base.BaseContext.html#gatelogue_aggregator.types.base.BaseContext" title="gatelogue_aggregator.types.base.BaseContext"><span class="pre">BaseContext</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.base.NodeRef.refs" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">refs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.source.Source.html#gatelogue_aggregator.types.source.Source" title="gatelogue_aggregator.types.source.Source"><span class="pre">Source</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.base.NodeRef.refs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

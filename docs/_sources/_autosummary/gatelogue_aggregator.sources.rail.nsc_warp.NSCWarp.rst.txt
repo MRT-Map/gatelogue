@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NSCWarp.__init__
+      ~NSCWarp.build
       ~NSCWarp.find_by_ref
       ~NSCWarp.find_by_ref_or_index
       ~NSCWarp.retrieve_from_cache

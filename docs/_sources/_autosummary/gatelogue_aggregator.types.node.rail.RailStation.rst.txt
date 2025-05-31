@@ -40,8 +40,9 @@
       ~RailStation.new
       ~RailStation.process_code
       ~RailStation.ref
+      ~RailStation.report
       ~RailStation.sanitise_strings
-      ~RailStation.str_ctx
+      ~RailStation.str_src
    
    
 

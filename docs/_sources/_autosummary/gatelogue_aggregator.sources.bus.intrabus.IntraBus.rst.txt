@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~IntraBus.__init__
+      ~IntraBus.build
       ~IntraBus.find_by_ref
       ~IntraBus.find_by_ref_or_index
       ~IntraBus.retrieve_from_cache

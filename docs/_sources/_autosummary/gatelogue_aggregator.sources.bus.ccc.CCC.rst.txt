@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~CCC.__init__
+      ~CCC.build
       ~CCC.find_by_ref
       ~CCC.find_by_ref_or_index
       ~CCC.retrieve_from_cache

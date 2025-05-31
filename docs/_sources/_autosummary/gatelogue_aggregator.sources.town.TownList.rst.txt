@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~TownList.__init__
+      ~TownList.build
       ~TownList.find_by_ref
       ~TownList.find_by_ref_or_index
       ~TownList.retrieve_from_cache

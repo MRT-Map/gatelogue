@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~NFLR.__init__
+      ~NFLR.build
       ~NFLR.find_by_ref
       ~NFLR.find_by_ref_or_index
       ~NFLR.retrieve_from_cache

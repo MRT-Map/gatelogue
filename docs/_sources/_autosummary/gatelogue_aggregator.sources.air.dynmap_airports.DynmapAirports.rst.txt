@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~DynmapAirports.__init__
+      ~DynmapAirports.build
       ~DynmapAirports.find_by_ref
       ~DynmapAirports.find_by_ref_or_index
       ~DynmapAirports.retrieve_from_cache

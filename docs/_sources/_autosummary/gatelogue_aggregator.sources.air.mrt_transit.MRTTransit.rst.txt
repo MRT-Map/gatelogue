@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~MRTTransit.__init__
+      ~MRTTransit.build
       ~MRTTransit.find_by_ref
       ~MRTTransit.find_by_ref_or_index
       ~MRTTransit.retrieve_from_cache

@@ -1,7 +1,7 @@
-gatelogue\_aggregator.types.line\_builder
-=========================================
+gatelogue\_aggregator.types.gatelogue\_data
+===========================================
 
-.. automodule:: gatelogue_aggregator.types.line_builder
+.. automodule:: gatelogue_aggregator.types.gatelogue_data
   
    
    
@@ -19,7 +19,7 @@ gatelogue\_aggregator.types.line\_builder
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      LineBuilder
+      GatelogueData
    
    
 

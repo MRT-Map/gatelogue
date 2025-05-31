@@ -1,7 +1,7 @@
-gatelogue\_aggregator.types.base
-================================
+gatelogue\_aggregator.types.edge.proximity
+==========================================
 
-.. automodule:: gatelogue_aggregator.types.base
+.. automodule:: gatelogue_aggregator.types.edge.proximity
   
    
    
@@ -19,8 +19,7 @@ gatelogue\_aggregator.types.base
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      BaseContext
-      Mergeable
+      ProximitySource
    
    
 

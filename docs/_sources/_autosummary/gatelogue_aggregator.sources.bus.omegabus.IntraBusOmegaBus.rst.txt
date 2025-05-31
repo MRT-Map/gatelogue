@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~IntraBusOmegaBus.__init__
+      ~IntraBusOmegaBus.build
       ~IntraBusOmegaBus.find_by_ref
       ~IntraBusOmegaBus.find_by_ref_or_index
       ~IntraBusOmegaBus.retrieve_from_cache

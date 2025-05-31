@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~SpawnWarps.__init__
+      ~SpawnWarps.build
       ~SpawnWarps.find_by_ref
       ~SpawnWarps.find_by_ref_or_index
       ~SpawnWarps.retrieve_from_cache

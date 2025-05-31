@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~WZF.__init__
+      ~WZF.build
       ~WZF.find_by_ref
       ~WZF.find_by_ref_or_index
       ~WZF.retrieve_from_cache

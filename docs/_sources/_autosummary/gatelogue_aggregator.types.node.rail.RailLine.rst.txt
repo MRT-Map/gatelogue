@@ -40,8 +40,9 @@
       ~RailLine.new
       ~RailLine.process_code
       ~RailLine.ref
+      ~RailLine.report
       ~RailLine.sanitise_strings
-      ~RailLine.str_ctx
+      ~RailLine.str_src
    
    
 

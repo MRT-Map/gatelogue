@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RaiLinQWarp.__init__
+      ~RaiLinQWarp.build
       ~RaiLinQWarp.find_by_ref
       ~RaiLinQWarp.find_by_ref_or_index
       ~RaiLinQWarp.retrieve_from_cache

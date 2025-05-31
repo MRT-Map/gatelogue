@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~HBLWarp.__init__
+      ~HBLWarp.build
       ~HBLWarp.find_by_ref
       ~HBLWarp.find_by_ref_or_index
       ~HBLWarp.retrieve_from_cache

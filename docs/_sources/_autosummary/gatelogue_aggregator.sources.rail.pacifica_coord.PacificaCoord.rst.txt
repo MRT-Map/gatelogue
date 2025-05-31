@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~PacificaCoord.__init__
+      ~PacificaCoord.build
       ~PacificaCoord.custom_routing
       ~PacificaCoord.find_by_ref
       ~PacificaCoord.find_by_ref_or_index

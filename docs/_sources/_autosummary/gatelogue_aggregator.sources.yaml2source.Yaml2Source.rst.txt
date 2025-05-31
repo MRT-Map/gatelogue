@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~Yaml2Source.__init__
+      ~Yaml2Source.build
       ~Yaml2Source.custom_routing
       ~Yaml2Source.find_by_ref
       ~Yaml2Source.find_by_ref_or_index

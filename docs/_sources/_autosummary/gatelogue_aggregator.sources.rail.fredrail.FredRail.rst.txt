@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~FredRail.__init__
+      ~FredRail.build
       ~FredRail.custom_routing
       ~FredRail.find_by_ref
       ~FredRail.find_by_ref_or_index

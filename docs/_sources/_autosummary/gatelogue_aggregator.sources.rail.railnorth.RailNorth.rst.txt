@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~RailNorth.__init__
+      ~RailNorth.build
       ~RailNorth.find_by_ref
       ~RailNorth.find_by_ref_or_index
       ~RailNorth.retrieve_from_cache

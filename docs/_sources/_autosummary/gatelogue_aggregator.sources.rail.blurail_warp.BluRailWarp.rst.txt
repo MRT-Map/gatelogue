@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~BluRailWarp.__init__
+      ~BluRailWarp.build
       ~BluRailWarp.find_by_ref
       ~BluRailWarp.find_by_ref_or_index
       ~BluRailWarp.retrieve_from_cache

@@ -18,6 +18,7 @@
    .. autosummary::
    
       ~HBL.__init__
+      ~HBL.build
       ~HBL.find_by_ref
       ~HBL.find_by_ref_or_index
       ~HBL.retrieve_from_cache
