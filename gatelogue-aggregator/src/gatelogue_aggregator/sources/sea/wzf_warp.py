@@ -3,7 +3,6 @@ import uuid
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 
 class WZFWarp(SeaSource):
@@ -22,4 +21,3 @@ class WZFWarp(SeaSource):
                 continue
             SeaStop.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)
-        

@@ -12,7 +12,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
 

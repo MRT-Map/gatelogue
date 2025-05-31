@@ -3,7 +3,6 @@ import msgspec
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirport, AirSource
-from gatelogue_aggregator.types.source import Source
 
 
 class DynmapAirports(AirSource):

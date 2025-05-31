@@ -13,7 +13,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     import bs4
@@ -102,4 +101,3 @@ class IntraRail(RailSource):
             rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling
-        

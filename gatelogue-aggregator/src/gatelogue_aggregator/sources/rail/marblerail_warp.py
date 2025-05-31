@@ -7,7 +7,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class MarbleRailWarp(RailSource):
@@ -36,4 +35,3 @@ class MarbleRailWarp(RailSource):
                 coordinates=(warp["x"], warp["z"]),
             )
             codes.append(code)
-        

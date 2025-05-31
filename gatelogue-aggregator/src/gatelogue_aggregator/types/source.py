@@ -165,5 +165,3 @@ class Source(metaclass=SourceMeta):
         for edge in self.g.edges():
             if hasattr(edge.v, "sanitise_strings"):
                 edge.v.sanitise_strings()
-
-

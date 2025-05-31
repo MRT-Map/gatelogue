@@ -4,7 +4,6 @@ import uuid
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
-from gatelogue_aggregator.types.source import Source
 
 
 class BluRailWarp(RailSource):
@@ -40,4 +39,3 @@ class BluRailWarp(RailSource):
                 self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)
-        

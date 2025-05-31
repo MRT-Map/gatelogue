@@ -7,7 +7,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class NFLRWarp(RailSource):
@@ -55,4 +54,3 @@ class NFLRWarp(RailSource):
                 else warp["welcomeMessage"].split("|")[0].split("]")[1].strip(),
             )
             codes.append(code)
-        

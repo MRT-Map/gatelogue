@@ -9,7 +9,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class RaiLinQWarp(RailSource):
@@ -59,4 +58,3 @@ class RaiLinQWarp(RailSource):
                 self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)
-        

@@ -8,7 +8,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class IntraRailWarp(RailSource):
@@ -52,4 +51,3 @@ class IntraRailWarp(RailSource):
                 self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)
-        

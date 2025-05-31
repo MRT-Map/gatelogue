@@ -4,7 +4,6 @@ import uuid
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 
 class IntraSailWarp(SeaSource):
@@ -40,4 +39,3 @@ class IntraSailWarp(SeaSource):
 
             SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
-        

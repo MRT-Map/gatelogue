@@ -10,7 +10,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class NSC(RailSource):
@@ -52,4 +51,3 @@ class NSC(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"NSC {line_name} has {len(stations)} stations")
-        

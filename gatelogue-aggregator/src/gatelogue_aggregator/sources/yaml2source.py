@@ -17,7 +17,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailStation,
 )
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -59,7 +58,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
     S: type[RailStation | BusStop | SeaStop]
     B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
 
-    def build(self, config: Config):
+    def build(self, _config: Config):
         with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 

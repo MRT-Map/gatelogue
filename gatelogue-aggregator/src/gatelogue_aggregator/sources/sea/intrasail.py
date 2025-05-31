@@ -7,7 +7,6 @@ from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     import bs4
@@ -52,4 +51,3 @@ class IntraSail(SeaSource):
             rich.print(RESULT + f"IntraSail Line {line_code} has {len(stops)} stops")
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling
-        

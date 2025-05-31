@@ -7,7 +7,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class RedTrainWarp(RailSource):
@@ -33,4 +32,3 @@ class RedTrainWarp(RailSource):
                 coordinates=(warp["x"], warp["z"]),
             )
             codes.append(code)
-        

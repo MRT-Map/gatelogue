@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Generic, Literal, Self, TypeVar
 
 import msgspec
 
-from gatelogue_types.__about__ import __version__, __data_version__
+from gatelogue_types.__about__ import __data_version__
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

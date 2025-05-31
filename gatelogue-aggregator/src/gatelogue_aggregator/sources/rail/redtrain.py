@@ -10,7 +10,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class RedTrain(RailSource):
@@ -43,4 +42,3 @@ class RedTrain(RailSource):
             RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"RedTrain has {len(stations)} stations")
-        

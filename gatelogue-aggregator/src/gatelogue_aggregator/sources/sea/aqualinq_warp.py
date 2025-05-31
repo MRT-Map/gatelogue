@@ -5,7 +5,6 @@ import pandas as pd
 from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 
 class AquaLinQWarp(SeaSource):

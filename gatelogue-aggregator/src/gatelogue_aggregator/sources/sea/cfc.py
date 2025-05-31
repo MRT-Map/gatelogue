@@ -8,7 +8,6 @@ from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
-from gatelogue_aggregator.types.source import Source
 
 
 class CFC(SeaSource):

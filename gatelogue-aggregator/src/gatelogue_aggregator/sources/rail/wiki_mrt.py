@@ -12,7 +12,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
 
@@ -88,4 +87,3 @@ class WikiMRT(RailSource):
                 )
 
             rich.print(RESULT + f"MRT {line_code} has {len(stations)} stations")
-        

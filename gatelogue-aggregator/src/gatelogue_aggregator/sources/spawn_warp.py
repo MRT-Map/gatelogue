@@ -4,7 +4,6 @@ from gatelogue_aggregator.downloader import all_warps
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
-from gatelogue_aggregator.types.source import Source
 
 
 class SpawnWarps(SpawnWarpSource):

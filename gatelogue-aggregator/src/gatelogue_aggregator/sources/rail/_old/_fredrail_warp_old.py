@@ -1,13 +1,12 @@
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
-from gatelogue_aggregator.types.source import Source
 
 
 class FredRailWarp(RailSource):
     name = "Gatelogue (Rail, Fred Rail)"
     priority = 0
 
-    def build(self, config: Config):
+    def build(self, _config: Config):
         company = RailCompany.new(self, name="Fred Rail")
 
         for station, x, z in (
@@ -97,4 +96,3 @@ class FredRailWarp(RailSource):
         #         coordinates=(warp["x"], warp["z"]),
         #     )
         #     names.append(name)
-        

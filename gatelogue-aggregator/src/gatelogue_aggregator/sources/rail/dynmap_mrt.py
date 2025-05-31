@@ -8,7 +8,6 @@ from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, RESULT, track
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
-from gatelogue_aggregator.types.source import Source
 
 
 class DynmapMRT(RailSource):
@@ -65,4 +64,3 @@ class DynmapMRT(RailSource):
             name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1).strip()
             RailStation.new(self, codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
         rich.print(RESULT + f"Old world has {len(json2['old']['markers'])} stations")
-        

@@ -8,7 +8,6 @@ from gatelogue_aggregator.logging import ERROR, INFO2, RESULT, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
@@ -25,7 +24,6 @@ class WikiAirline(AirSource):
     def build(self, config: Config):
         for airline in track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
             airline(self, config)
-        
 
     def regex_extract_airline(
         self,

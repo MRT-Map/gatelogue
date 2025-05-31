@@ -7,7 +7,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class WZRWarp(RailSource):
@@ -26,4 +25,3 @@ class WZRWarp(RailSource):
                 continue
             RailStation.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)
-        

@@ -6,14 +6,13 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class NSC(RailSource):
     name = "Gatelogue (Rail, Network South Central)"
     priority = 1
 
-    def build(self, config: Config):
+    def build(self, _config: Config):
         company = RailCompany.new(self, name="Network South Central")
         line_colour = "#cc0000"
 

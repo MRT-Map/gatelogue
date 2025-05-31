@@ -4,7 +4,6 @@ from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
-from gatelogue_aggregator.types.source import Source
 
 
 class IntraBusOmegaBus(BusSource):
@@ -35,4 +34,3 @@ class IntraBusOmegaBus(BusSource):
             BusLineBuilder(self, line).connect(*stops)
 
             rich.print(RESULT + f"IntraBus OmegaBus Line {line_code} has {len(stops)} stops")
-        

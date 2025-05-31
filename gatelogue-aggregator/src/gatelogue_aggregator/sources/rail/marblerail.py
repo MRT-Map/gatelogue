@@ -10,7 +10,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class MarbleRail(RailSource):
@@ -51,4 +50,3 @@ class MarbleRail(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"MarbleRail {line_name} has {len(stations)} stations")
-        

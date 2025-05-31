@@ -12,7 +12,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 
 
 class IntraRailLocal(RailSource):
@@ -46,4 +45,3 @@ class IntraRailLocal(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
                 rich.print(RESULT + f"IntraRail Local Line {line_code} has {len(stations)} stations")
-        

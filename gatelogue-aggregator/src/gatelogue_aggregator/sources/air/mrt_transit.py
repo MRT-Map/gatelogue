@@ -4,7 +4,6 @@ from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.source import Source
 
 
 class MRTTransit(AirSource):

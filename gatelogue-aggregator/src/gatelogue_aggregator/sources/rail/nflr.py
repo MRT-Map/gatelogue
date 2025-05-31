@@ -13,7 +13,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
-from gatelogue_aggregator.types.source import Source
 from gatelogue_aggregator.utils import get_stn
 
 
@@ -195,4 +194,3 @@ class NFLR(RailSource):
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
                 rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
-        
