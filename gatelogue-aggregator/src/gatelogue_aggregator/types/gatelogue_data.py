@@ -40,22 +40,31 @@ class GatelogueData(
             source.sanitise_strings()
             self.g = rx.graph_union(self.g, source.g)
 
-        processed: dict[type[Node], dict[str, list[Node]]] = {}
-        to_merge: list[tuple[Node, Node]] = []
-        for i in track(
-            self.g.node_indices(), description=INFO2 + "Finding equivalent nodes", nonlinear=True, remove=False
-        ):
-            n = self.g[i]
-            n.i = i
-            key = n.merge_key(self)
-            ty = type(n)
-            filtered_processed = processed.get(ty, {}).get(key, [])
-            if (equiv := next((a for a in filtered_processed if n.equivalent(self, a)), None)) is None:
-                processed.setdefault(ty, {}).setdefault(key, []).append(n)
-                continue
-            to_merge.append((equiv, n))
-        for equiv, n in track(to_merge, description=INFO2 + "Merging equivalent nodes", remove=False):
-            equiv.merge(self, n)
+        prev_length: int | None = None
+
+        for pass_ in range(1, 10):
+            processed: dict[type[Node], dict[str, list[Node]]] = {}
+            to_merge: list[tuple[Node, Node]] = []
+            for i in track(
+                self.g.node_indices(), description=INFO2 + f"Finding equivalent nodes (pass {pass_})", nonlinear=True,
+            ):
+                n = self.g[i]
+                n.i = i
+                key = n.merge_key(self)
+                ty = type(n)
+                filtered_processed = processed.get(ty, {}).get(key, [])
+                if (equiv := next((a for a in filtered_processed if n.equivalent(self, a)), None)) is None:
+                    processed.setdefault(ty, {}).setdefault(key, []).append(n)
+                    continue
+                to_merge.append((equiv, n))
+
+            for equiv, n in track(to_merge, description=INFO2 + f"Merging equivalent nodes (pass {pass_})"):
+                equiv.merge(self, n)
+
+            if self.g.num_nodes() == prev_length:
+                break
+            prev_length = self.g.num_nodes()
+        rich.print("Found and merged equivalent nodes")
 
         edges: dict[tuple[float, float], list[Sourced[Any]]] = {}
         for i in track(self.g.edge_indices(), description=INFO2 + "Merging edges", remove=False):

@@ -185,7 +185,7 @@ class BusStop(gt.BusStop, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: BusSource) -> str:
-        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"[{codes}] {name.v}"
+        codes = "/".join(self.codes); code = codes if (name := self.name) is None or name.v in codes else f"{name.v} ({codes})"
         company = self.get_one(src, BusCompany).name
         return f"{company} {code}"
 

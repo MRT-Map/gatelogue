@@ -341,7 +341,7 @@ class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
     @override
     def report(self, src: AirSource):
         num_flights = len(list(self.get_all(src, AirFlight)))
-        if num_flights > 6:
+        if num_flights > 6 and self.code is not None:
             rich.print(ERROR + type(self).__name__ + " " + self.str_src(src) + f" has {num_flights} flights")
 
     @staticmethod
