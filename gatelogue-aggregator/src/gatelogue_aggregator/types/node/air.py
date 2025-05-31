@@ -224,7 +224,7 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     @override
     def report(self, src: AirSource):
         super().report(src)
-        if src.is_warp_source():
+        if src.is_coord_source():
             return
         num_gates = len(list(self.get_all(src, AirGate)))
         colour = ERROR if num_gates == 0 else RESULT

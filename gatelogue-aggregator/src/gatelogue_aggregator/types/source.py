@@ -114,8 +114,8 @@ class Source(metaclass=SourceMeta):
         self.save_to_cache(config)
 
     @classmethod
-    def is_warp_source(cls) -> bool:
-        return cls.__name__.startswith("Dynmap") or cls.__name__.endswith("Warp")
+    def is_coord_source(cls) -> bool:
+        return cls.__name__.startswith("Dynmap") or cls.__name__.endswith(("Warp", "Coord"))
 
     def build(self, config: Config):
         raise NotImplementedError

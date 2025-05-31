@@ -90,7 +90,7 @@ class SeaCompany(gt.SeaCompany, Node, kw_only=True, tag=True):
     def report(self, src: SeaSource):
         num_lines = len(list(self.get_all(src, SeaLine)))
         num_stops = len(list(self.get_all(src, SeaStop)))
-        colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stops == 0 else RESULT
+        colour = ERROR if (num_lines == 0 and not src.is_coord_source()) or num_stops == 0 else RESULT
         self.print_report(src, colour, f"has {num_lines} lines and {num_stops} stops")
 
 

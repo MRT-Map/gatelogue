@@ -18,7 +18,7 @@ class BusSource(Source):
     @classmethod
     @override
     def reported_nodes(cls) -> tuple[type[Node], ...]:
-        return (BusCompany,) if cls.is_warp_source() else (BusCompany, BusLine)
+        return (BusCompany,) if cls.is_coord_source() else (BusCompany, BusLine)
 
 
 class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):
@@ -84,7 +84,7 @@ class BusCompany(gt.BusCompany, Node, kw_only=True, tag=True):
     def report(self, src: BusSource):
         num_lines = len(list(self.get_all(src, BusLine)))
         num_stops = len(list(self.get_all(src, BusStop)))
-        colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stops == 0 else RESULT
+        colour = ERROR if (num_lines == 0 and not src.is_coord_source()) or num_stops == 0 else RESULT
         self.print_report(src, colour, f"has {num_lines} lines and {num_stops} stops")
 
 

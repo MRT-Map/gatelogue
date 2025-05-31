@@ -90,7 +90,7 @@ class RailCompany(gt.RailCompany, Node, kw_only=True, tag=True):
     def report(self, src: RailSource):
         num_lines = len(list(self.get_all(src, RailLine)))
         num_stations = len(list(self.get_all(src, RailStation)))
-        colour = ERROR if (num_lines == 0 and not src.is_warp_source()) or num_stations == 0 else RESULT
+        colour = ERROR if (num_lines == 0 and not src.is_coord_source()) or num_stations == 0 else RESULT
         self.print_report(src, colour, f"has {num_lines} lines and {num_stations} stations")
 
 
