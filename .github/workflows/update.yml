@@ -11,6 +11,7 @@ permissions:
 
 env:
   FORCE_COLOR: "1"
+  NO_PROGRESS_BAR: "1"
 
 concurrency:
   group: ${{ github.workflow }}

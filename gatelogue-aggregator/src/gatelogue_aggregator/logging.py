@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from collections.abc import Iterable, Sized
 
 import rich.progress
@@ -17,11 +18,15 @@ ERROR = "[bold red]"
 def track[T](
     it: Iterable[T], level: str, *, description: str, nonlinear: bool = False, total: int | None = None
 ) -> Iterable[T]:
-    total = total or (((len(it) ** 2) / 2 if nonlinear else len(it)) if isinstance(it, Sized) else None)
-    t = PROGRESS.add_task(level + description, total=total)
-    for i, o in enumerate(it):
-        yield o
-        PROGRESS.advance(t, i + 1 if nonlinear else 1)
+    if os.getenv("NO_PROGRESS_BAR"):
+        rich.print(level + description)
+        yield from it
+    else:
+        total = total or (((len(it) ** 2) / 2 if nonlinear else len(it)) if isinstance(it, Sized) else None)
+        t = PROGRESS.add_task(level + description, total=total)
+        for i, o in enumerate(it):
+            yield o
+            PROGRESS.advance(t, i + 1 if nonlinear else 1)
+        PROGRESS.remove_task(t)
 
-    PROGRESS.remove_task(t)
     rich.print(level + description + " done")
