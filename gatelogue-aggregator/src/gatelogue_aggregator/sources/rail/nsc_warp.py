@@ -29,7 +29,6 @@ class NSCWarp(RailSource):
             if warp["name"].startswith("NSC") and not warp["welcomeMessage"].startswith("Welcome"):
                 continue
             if (match := re.search(r"(?i)^This is ([^.]*)\.", warp["welcomeMessage"])) is None:
-                # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
             name = match.group(1)
             if name in names:

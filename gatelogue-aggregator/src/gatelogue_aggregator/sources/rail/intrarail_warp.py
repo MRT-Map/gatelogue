@@ -42,7 +42,6 @@ class IntraRailWarp(RailSource):
                     warp["welcomeMessage"],
                 )
             ) is None:
-                # rich.print(ERROR+"Unknown warp message format:", warp['welcomeMessage'])
                 continue
             name = match.group(1) or match.group(2) or match.group(3)
             name = {

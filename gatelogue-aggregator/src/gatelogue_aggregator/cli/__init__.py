@@ -4,11 +4,11 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import click
+import gatelogue_types as gt
 import msgspec.json
 import rich
 import rich.progress
 
-import gatelogue_types as gt
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1, PROGRESS
@@ -129,7 +129,9 @@ def run(
     ]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
-    config = Config(cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers)
+    config = Config(
+        cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
+    )
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         result = list(executor.map(lambda s: s(config), sources))
 

@@ -31,12 +31,7 @@ class Node[CTX: BaseContext | Source](gt.Node, Mergeable[CTX], msgspec.Struct, k
         return self
 
     def str_ctx(self, _ctx: CTX) -> str:
-        return (
-            type(self).__name__
-            + "("
-            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-            + ")"
-        )
+        return str(self)
 
     def connect(
         self,
@@ -152,7 +147,7 @@ class Node[CTX: BaseContext | Source](gt.Node, Mergeable[CTX], msgspec.Struct, k
             case (None, _):
                 setattr(self, attr, other_attr)
             case (_, _):
-                self_attr.merge(ctx, other_attr)
+                self_attr.merge(ctx, other_attr, log_ctx=(self, attr))
 
     def merge_attrs(self, ctx: CTX, other: Self):
         raise NotImplementedError

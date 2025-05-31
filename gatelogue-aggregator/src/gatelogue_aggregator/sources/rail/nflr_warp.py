@@ -58,7 +58,7 @@ class NFLRWarp(RailSource):
                 coordinates=(warp["x"], warp["z"]),
                 name=None
                 if warp["welcomeMessage"].startswith("Welcome")
-                else warp["welcomeMessage"].split("|")[0].strip(),
+                else warp["welcomeMessage"].split("|")[0].split("]")[1].strip(),
             )
             codes.append(code)
         self.save_to_cache(config, self.g)

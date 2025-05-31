@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     import rustworkx as rx
 
     from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.types.node.base import Node
 
 T = TypeVar("T")
 
@@ -41,7 +42,7 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
     def equivalent(self, ctx: BaseContext, other: Self) -> bool:
         return self.v.equivalent(ctx, other.v) if isinstance(self.v, Mergeable) else self.v == other.v
 
-    def merge(self, ctx: BaseContext, other: Self):
+    def merge(self, ctx: BaseContext, other: Self, log_ctx: tuple[Node, str] | None = None):
         if self.v == other.v:
             self.source(other)
             return
@@ -56,15 +57,22 @@ class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
         def key(x):
             return next(a for a in SOURCES() if a.name == x).priority
 
-        # TODO: also print node ref
+        def log(outdated: Self, new: Self):
+            if isinstance(log_ctx[0], gt.LocatedNode) and log_ctx[1] == "coordinates":
+                return
+
+            log_ctx_str = "" if log_ctx is None else f"{type(log_ctx[0]).__name__} {log_ctx[0].str_ctx(ctx)}: attr {log_ctx[1]}: "
+            rich.print(
+                ERROR + log_ctx_str
+                + f"{', '.join(outdated.s)} reported outdated data {outdated.v}. {', '.join(new.s)} has updated data {new.v}"
+            )
+
         if max(self.s, key=key) < max(other.s, key=key):
+            log(self, other)
             self.v = other.v
             self.s = other.s
-            rich.print(ERROR + f"{', '.join(self.s)} reported outdated data {self.v}")
-            rich.print(ERROR + f"{', '.join(other.s)} has updated data {other.v}")
         else:
-            rich.print(ERROR + f"{', '.join(other.s)} reported outdated data {other.v}")
-            rich.print(ERROR + f"{', '.join(self.s)} has updated data {self.v}")
+            log(other, self)
 
     def export(self, ctx: BaseContext) -> gt.Sourced[T]:
         if hasattr(self.v, "export"):

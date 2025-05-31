@@ -35,7 +35,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "bs4": ("https://www.crummy.com/software/BeautifulSoup/bs4/doc/", None),
     "rustworkx": ("https://www.rustworkx.org/", None),
-    "msgspec": ("https://jcristharif.com/msgspec/", None)
+    "msgspec": ("https://jcristharif.com/msgspec/", None),
 }
 html_baseurl = "https://mrt-map.github.io/gatelogue/docs"
 

@@ -45,6 +45,8 @@ class Town(gt.Town, LocatedNode[TownSource], kw_only=True, tag=True):
 
     @override
     def equivalent(self, ctx: TownSource, other: Self) -> bool:
+        if self.world.v is not None and other.world.v is not None and self.world.v != other.world.v:
+            return False
         return self.name == other.name
 
     @override
