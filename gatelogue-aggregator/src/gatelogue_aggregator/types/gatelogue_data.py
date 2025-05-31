@@ -36,7 +36,7 @@ class GatelogueData(
         self = cls.__new__(cls)
         self.g = rx.PyGraph()
 
-        for source in track(sources, description=INFO1 + "Merging sources", remove=False):
+        for source in track(sources, INFO1, description="Merging sources"):
             source.sanitise_strings()
             self.g = rx.graph_union(self.g, source.g)
 
@@ -46,7 +46,7 @@ class GatelogueData(
             processed: dict[type[Node], dict[str, list[Node]]] = {}
             to_merge: list[tuple[Node, Node]] = []
             for i in track(
-                self.g.node_indices(), description=INFO2 + f"Finding equivalent nodes (pass {pass_})", nonlinear=True,
+                self.g.node_indices(), INFO2, description=f"Finding equivalent nodes (pass {pass_})", nonlinear=True,
             ):
                 n = self.g[i]
                 n.i = i
@@ -58,16 +58,15 @@ class GatelogueData(
                     continue
                 to_merge.append((equiv, n))
 
-            for equiv, n in track(to_merge, description=INFO2 + f"Merging equivalent nodes (pass {pass_})"):
+            for equiv, n in track(to_merge, INFO2, description=f"Merging equivalent nodes (pass {pass_})"):
                 equiv.merge(self, n)
 
             if self.g.num_nodes() == prev_length:
                 break
             prev_length = self.g.num_nodes()
-        rich.print("Found and merged equivalent nodes")
 
         edges: dict[tuple[float, float], list[Sourced[Any]]] = {}
-        for i in track(self.g.edge_indices(), description=INFO2 + "Merging edges", remove=False):
+        for i in track(self.g.edge_indices(), INFO2, description="Merging edges"):
             u, v = self.g.get_edge_endpoints_by_index(i)
             k = self.g.get_edge_data_by_index(i)
 
@@ -94,7 +93,7 @@ class GatelogueData(
 
     def export(self) -> gt.GatelogueData:
         return gt.GatelogueData(
-            nodes={a.i: a.export(self) for a in track(self.g.nodes(), description=INFO2 + "Exporting", remove=False)}
+            nodes={a.i: a.export(self) for a in track(self.g.nodes(), INFO1, description="Exporting")}
         )
 
     def graph(self, path: Path):

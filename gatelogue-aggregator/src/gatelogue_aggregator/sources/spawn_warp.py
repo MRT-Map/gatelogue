@@ -106,7 +106,7 @@ class SpawnWarps(SpawnWarpSource):
             },
         }
 
-        for warp in track(all_warps(config), description=INFO3 + "Searching all warps for spawn warps", total=35000):
+        for warp in track(all_warps(config), INFO3, description="Searching all warps for spawn warps", total=35000):
             for ty, search_list in search_dict.items():
                 for search_warp in search_list:
                     if isinstance(search_warp, tuple):

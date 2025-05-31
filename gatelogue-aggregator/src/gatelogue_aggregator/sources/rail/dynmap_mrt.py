@@ -38,7 +38,7 @@ class DynmapMRT(RailSource):
         except Exception as e:
             raise ValueError(response1[:100], response2[:100]) from e
 
-        for v in track(json1.values(), description=INFO3 + "Extracting from markers"):
+        for v in track(json1.values(), INFO3, description="Extracting from markers"):
             if len(v["markers"]) == 0:
                 continue
             if (result := re.search(r"\[(?P<code>.*?)] (?P<name>.*)", v["label"])) is None:

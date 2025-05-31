@@ -22,7 +22,7 @@ class WikiAirline(AirSource):
     priority = 1
 
     def build(self, config: Config):
-        for airline in track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
+        for airline in track(_EXTRACTORS, INFO2, description="Extracting data from wikipages"):
             airline(self, config)
 
     def regex_extract_airline(

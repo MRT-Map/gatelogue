@@ -18,7 +18,7 @@ class ProximitySource(Source):
         from gatelogue_aggregator.types.node.base import LocatedNode
 
         processed = []
-        for node in track(self.g.nodes(), description=INFO2 + "Linking close nodes", nonlinear=True, remove=False):
+        for node in track(self.g.nodes(), INFO2, description="Linking close nodes", nonlinear=True):
             if not isinstance(node, LocatedNode) or node.coordinates is None:
                 continue
             node_coordinates = node.coordinates.v
@@ -59,7 +59,7 @@ class ProximitySource(Source):
             if len(isolated) == 0:
                 break
             for component in track(
-                isolated, description=INFO2 + f"Ensuring all located nodes are connected (pass {pass_})",
+                isolated, INFO2, description=f"Ensuring all located nodes are connected (pass {pass_})",
             ):
                 for this in component:
                     nearest = min(located_nodes, key=lambda n: dist_sq(n, this, component))
@@ -69,4 +69,3 @@ class ProximitySource(Source):
                         gt.Proximity(dist_sq(nearest, this, component) ** 0.5),
                         source=this.world.s | this.coordinates.s | nearest.world.s | nearest.coordinates.s,
                     )
-        rich.print(INFO2 + f"Ensured all located nodes are connected")

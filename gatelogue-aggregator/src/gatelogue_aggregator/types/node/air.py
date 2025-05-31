@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 class AirSource(Source):
     def update(self):
-        for node in track(self.g.nodes(), description=INFO2 + "Updating air nodes", remove=False):
+        for node in track(self.g.nodes(), INFO2, description="Updating air nodes"):
             if isinstance(node, AirFlight | AirAirport):
                 node.update(self)
 

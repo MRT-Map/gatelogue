@@ -143,9 +143,7 @@ def run(
         src.graph(graph)
         PROGRESS.remove_task(task)
 
-    task = PROGRESS.add_task(INFO1 + "Exporting to JSON... ", total=None)
     j = msgspec.json.encode(src.export(), enc_hook=_enc_hook)
-    PROGRESS.remove_task(task)
     if fmt:
         rich.print(INFO1 + f"Writing to {output} (formatted)")
         output.write_text(msgspec.json.format(j.decode("utf-8")))
