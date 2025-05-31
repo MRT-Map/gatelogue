@@ -13,7 +13,7 @@ INFO1 = "[yellow]"
 INFO2 = "[green]  "
 INFO3 = "[dim green]    "
 RESULT = "[cyan]  "
-ERROR = "[bold red]"
+ERROR = "[bold red]!!! "
 
 
 def track[T](
