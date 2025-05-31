@@ -13,13 +13,7 @@ class WZF(SeaSource):
     name = "MRT Wiki (Sea, West Zeta Ferry)"
     priority = 1
 
-    def __init__(self, config: Config):
-        SeaSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = SeaCompany.new(self, name="West Zeta Ferry")
 
         html = get_wiki_html("West Zeta Ferry", config)
@@ -55,4 +49,4 @@ class WZF(SeaSource):
             SeaLineBuilder(self, line).connect(*stops)
 
             rich.print(RESULT + f"WZF Line {line_code} has {len(stops)} stations")
-        self.save_to_cache(config, self.g)
+        

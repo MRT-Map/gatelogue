@@ -35,7 +35,7 @@ class GatelogueData(
         self.g = rx.PyGraph()
 
         for source in track(sources, description=INFO1 + "Merging sources", remove=False):
-            source.sanitise_strings(self.g)
+            source.sanitise_strings()
             self.g = rx.graph_union(self.g, source.g)
 
         processed: dict[type[Node], dict[str, list[Node]]] = {}

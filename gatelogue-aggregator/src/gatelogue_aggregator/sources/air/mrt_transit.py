@@ -11,15 +11,10 @@ class MRTTransit(AirSource):
     name = "MRT Transit (Air)"
     priority = 2
 
-    def __init__(self, config: Config):
+    def build(self, config: Config):
         cache1 = config.cache_dir / "mrt-transit1"
         cache2 = config.cache_dir / "mrt-transit2"
         cache3 = config.cache_dir / "mrt-transit3"
-        AirSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
@@ -113,5 +108,3 @@ class MRTTransit(AirSource):
                     )
                     flight.connect_one(self, airline)
                     flight.connect(self, gate)
-
-        self.save_to_cache(config, self.g)

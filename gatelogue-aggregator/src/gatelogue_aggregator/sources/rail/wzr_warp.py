@@ -14,13 +14,7 @@ class WZRWarp(RailSource):
     name = "MRT Warp API (Rail, West Zeta Rail)"
     priority = 0
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="West Zeta Rail")
 
         codes = []
@@ -32,4 +26,4 @@ class WZRWarp(RailSource):
                 continue
             RailStation.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)
-        self.save_to_cache(config, self.g)
+        

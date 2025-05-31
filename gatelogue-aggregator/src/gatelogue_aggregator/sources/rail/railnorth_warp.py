@@ -14,13 +14,7 @@ class RailNorthWarp(RailSource):
     name = "MRT Warp API (Rail, RailNorth)"
     priority = 0
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="RailNorth")
 
         codes = []
@@ -38,4 +32,4 @@ class RailNorthWarp(RailSource):
                 coordinates=(warp["x"], warp["z"]),
             )
             codes.append(code)
-        self.save_to_cache(config, self.g)
+        

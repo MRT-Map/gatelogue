@@ -17,13 +17,7 @@ class NSC(RailSource):
     name = "MRT Wiki (Rail, Network South Central)"
     priority = 0
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="Network South Central")
 
         html = get_wiki_html("Network South Central", config)
@@ -58,4 +52,4 @@ class NSC(RailSource):
                 RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"NSC {line_name} has {len(stations)} stations")
-        self.save_to_cache(config, self.g)
+        

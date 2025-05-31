@@ -59,12 +59,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
     S: type[RailStation | BusStop | SeaStop]
     B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
 
-    def __init__(self, config: Config):
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 
@@ -127,8 +122,6 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
                 st1.connect(self, st2, gt.Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
-
-        self.save_to_cache(config, self.g)
 
     def custom_routing(
         self,

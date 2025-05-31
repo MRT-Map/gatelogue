@@ -13,13 +13,7 @@ class NSC(RailSource):
     name = "Gatelogue (Rail, Network South Central)"
     priority = 1
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="Network South Central")
         line_colour = "#cc0000"
 
@@ -243,5 +237,3 @@ class NSC(RailSource):
         ]
         stations = [RailStation.new(self, codes={s}, name=s, company=company) for s in stations]
         RailLineBuilder(self, line).circle(*stations)
-
-        self.save_to_cache(config, self.g)

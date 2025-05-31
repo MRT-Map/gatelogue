@@ -10,14 +10,9 @@ class TownList(TownSource):
     name = "MRT Town List"
     priority = 0
 
-    def __init__(self, config: Config):
+    def build(self, config: Config):
         cache1 = config.cache_dir / "town-list1"
         cache2 = config.cache_dir / "town-list2"
-        TownSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=0",
@@ -62,5 +57,3 @@ class TownList(TownSource):
             world="New",
             coordinates=(0, 0),
         )
-
-        self.save_to_cache(config, self.g)

@@ -17,13 +17,7 @@ class IntraSail(SeaSource):
     name = "MRT Wiki (Sea, IntraSail)"
     priority = 1
 
-    def __init__(self, config: Config):
-        SeaSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = SeaCompany.new(self, name="IntraSail")
 
         html = get_wiki_html("IntraSail", config)
@@ -58,4 +52,4 @@ class IntraSail(SeaSource):
             rich.print(RESULT + f"IntraSail Line {line_code} has {len(stops)} stops")
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling
-        self.save_to_cache(config, self.g)
+        

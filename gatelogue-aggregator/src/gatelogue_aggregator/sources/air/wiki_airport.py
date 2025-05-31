@@ -22,15 +22,10 @@ class WikiAirport(AirSource):
     name = "MRT Wiki (Airport)"
     priority = 3
 
-    def __init__(self, config: Config):
-        AirSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
+    def build(self, config: Config):
         for airline in track(_EXTRACTORS, description=INFO2 + "Extracting data from wikipages"):
             airline(self, config)
-        self.save_to_cache(config, self.g)
+        
 
     def regex_extract_airport(
         self,

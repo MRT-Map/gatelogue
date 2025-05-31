@@ -11,13 +11,7 @@ class SpawnWarps(SpawnWarpSource):
     name = "Gatelogue"
     priority = 0
 
-    def __init__(self, config: Config):
-        SpawnWarpSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         search_dict: dict[Literal["premier", "terminus", "misc"], set] = {
             "premier": {
                 "Achowalogen",
@@ -134,5 +128,3 @@ class SpawnWarps(SpawnWarpSource):
 
         SpawnWarp.new(self, name="Old World", warp_type="portal", world="Old", coordinates=(0, 0))
         SpawnWarp.new(self, name="Space World", warp_type="portal", world="Space", coordinates=(0, 0))
-
-        self.save_to_cache(config, self.g)

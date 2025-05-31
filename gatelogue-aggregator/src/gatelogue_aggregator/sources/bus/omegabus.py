@@ -11,13 +11,7 @@ class IntraBusOmegaBus(BusSource):
     name = "MRT Wiki (Bus, IntraBus OmegaBus)"
     priority = 1
 
-    def __init__(self, config: Config):
-        BusSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = BusCompany.new(self, name="IntraBus")
 
         html = get_wiki_html("OMEGAbus!", config)
@@ -41,4 +35,4 @@ class IntraBusOmegaBus(BusSource):
             BusLineBuilder(self, line).connect(*stops)
 
             rich.print(RESULT + f"IntraBus OmegaBus Line {line_code} has {len(stops)} stops")
-        self.save_to_cache(config, self.g)
+        

@@ -104,9 +104,17 @@ class Source(metaclass=SourceMeta):
     priority: ClassVar[float | int]
     g: rx.PyGraph
 
-    def __init__(self):
+    def __init__(self, config: Config):
         self.g = rx.PyGraph()
         rich.print(INFO1 + f"Retrieving from {self.name}")
+
+        if self.retrieve_from_cache(config) is not None:
+            return
+        self.build(config)
+        self.save_to_cache(config)
+
+    def build(self, config: Config):
+        raise NotImplementedError
 
     def find_by_ref[R: NodeRef, N: Node](self, v: R) -> N | None:
         indices = self.g.filter_nodes(lambda a: v.refs(self, a))
@@ -125,38 +133,37 @@ class Source(metaclass=SourceMeta):
         raise TypeError(type(v))
 
     @classmethod
-    def retrieve_from_cache(cls, config: Config) -> rx.PyGraph | None:
-        if cls.__name__ in config.cache_exclude:
+    def source[T](cls, v: T) -> Sourced[T]:
+        return Sourced(v, s={cls.name})
+
+    def retrieve_from_cache(self, config: Config) -> rx.PyGraph | None:
+        if type(self).__name__ in config.cache_exclude:
             return None
-        cache_file = config.cache_dir / "network-cache" / cls.__name__
+        cache_file = config.cache_dir / "network-cache" / type(self).__name__
         if not cache_file.exists():
             return None
         rich.print(INFO1 + f"Retrieving from cache {cache_file}")
-        g = pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
-        if g.num_nodes() == 0:
-            rich.print(ERROR + f"{cls.__name__} yielded no results")
-        return g
+        self.g = pickle.loads(cache_file.read_bytes(), encoding="utf-8")  # noqa: S301
+        if self.g.num_nodes() == 0:
+            rich.print(ERROR + f"{type(self).__name__} yielded no results")
+        return self.g
 
-    @classmethod
-    def save_to_cache(cls, config: Config, g: rx.PyGraph):
-        if g.num_nodes() == 0:
-            rich.print(ERROR + f"{cls.__name__} yielded no results")
-        cls.sanitise_strings(g)
+    def save_to_cache(self, config: Config):
+        if self.g.num_nodes() == 0:
+            rich.print(ERROR + f"{self.__name__} yielded no results")
+        self.sanitise_strings()
 
-        cache_file = config.cache_dir / "network-cache" / cls.__name__
+        cache_file = config.cache_dir / "network-cache" / type(self).__name__
         rich.print(INFO1 + f"Saving to cache {cache_file}")
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         cache_file.touch()
-        cache_file.write_bytes(pickle.dumps(g))
+        cache_file.write_bytes(pickle.dumps(self.g))
 
-    @classmethod
-    def sanitise_strings(cls, g: rx.PyGraph):
-        for node in g.nodes():
+    def sanitise_strings(self):
+        for node in self.g.nodes():
             node.sanitise_strings()
-        for edge in g.edges():
+        for edge in self.g.edges():
             if hasattr(edge.v, "sanitise_strings"):
                 edge.v.sanitise_strings()
 
-    @classmethod
-    def source[T](cls, v: T) -> Sourced[T]:
-        return Sourced(v, s={cls.name})
+

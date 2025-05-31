@@ -15,14 +15,9 @@ class DynmapMRT(RailSource):
     name = "MRT Dynmap (Rail, MRT)"
     priority = 1
 
-    def __init__(self, config: Config):
+    def build(self, config: Config):
         cache1 = config.cache_dir / "dynmap-markers-new"
         cache2 = config.cache_dir / "dynmap-markers-old"
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
 
         company = RailCompany.new(self, name="MRT")
 
@@ -70,4 +65,4 @@ class DynmapMRT(RailSource):
             name = None if (result := re.search(r"(.*) \((.*?)\)", v["label"])) is None else result.group(1).strip()
             RailStation.new(self, codes={code}, company=company, coordinates=coordinates, name=name, world="Old")
         rich.print(RESULT + f"Old world has {len(json2['old']['markers'])} stations")
-        self.save_to_cache(config, self.g)
+        

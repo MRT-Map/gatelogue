@@ -13,13 +13,7 @@ class HBL(SeaSource):
     name = "MRT Wiki (Sea, Hummingbird Boat Lines)"
     priority = 1
 
-    def __init__(self, config: Config):
-        SeaSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = SeaCompany.new(self, name="Hummingbird Boat Lines")
 
         html = get_wiki_html("Hummingbird Boat Lines", config)
@@ -44,4 +38,4 @@ class HBL(SeaSource):
                 SeaLineBuilder(self, line).matrix(*stops)
 
                 rich.print(RESULT + f"HBL Line {line_code} has {len(stops)} stops")
-        self.save_to_cache(config, self.g)
+        

@@ -17,13 +17,7 @@ class RedTrain(RailSource):
     name = "MRT Wiki (Rail, RedTrain)"
     priority = 1
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="RedTrain")
 
         html = get_wiki_html("RedTrain", config)
@@ -49,4 +43,4 @@ class RedTrain(RailSource):
             RailLineBuilder(self, line).connect(*stations)
 
             rich.print(RESULT + f"RedTrain has {len(stations)} stations")
-        self.save_to_cache(config, self.g)
+        

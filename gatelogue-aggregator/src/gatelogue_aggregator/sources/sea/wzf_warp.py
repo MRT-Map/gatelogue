@@ -10,13 +10,7 @@ class WZFWarp(SeaSource):
     name = "MRT Warp API (Sea, West Zeta Ferry)"
     priority = 0
 
-    def __init__(self, config: Config):
-        SeaSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = SeaCompany.new(self, name="West Zeta Ferry")
 
         codes = []
@@ -28,4 +22,4 @@ class WZFWarp(SeaSource):
                 continue
             SeaStop.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)
-        self.save_to_cache(config, self.g)
+        

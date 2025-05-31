@@ -11,13 +11,7 @@ class BluRailWarp(RailSource):
     name = "MRT Warp API (Rail, BluRail)"
     priority = 0
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="BluRail")
 
         names = ["Titsensaki Palm Shores", "Sunshine Coast Docks", "Cornwall", "South Paixton"]
@@ -46,4 +40,4 @@ class BluRailWarp(RailSource):
                 self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)
-        self.save_to_cache(config, self.g)
+        

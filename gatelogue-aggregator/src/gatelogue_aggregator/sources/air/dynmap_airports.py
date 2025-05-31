@@ -10,14 +10,9 @@ class DynmapAirports(AirSource):
     name = "MRT Dynmap (Air)"
     priority = 0
 
-    def __init__(self, config: Config):
+    def build(self, config: Config):
         cache1 = config.cache_dir / "dynmap-markers-new"
         cache2 = config.cache_dir / "dynmap-markers-old"
-        AirSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
 
         response1 = get_url(
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json",
@@ -47,5 +42,3 @@ class DynmapAirports(AirSource):
                     coordinates=(v["x"], v["z"]),
                     name=name,
                 )
-
-        self.save_to_cache(config, self.g)

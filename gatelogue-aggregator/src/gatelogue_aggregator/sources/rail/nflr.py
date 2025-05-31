@@ -21,13 +21,8 @@ class NFLR(RailSource):
     name = "MRT Wiki (Rail, nFLR)"
     priority = 1
 
-    def __init__(self, config: Config):
+    def build(self, config: Config):
         cache = config.cache_dir / "nflr"
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
 
         company = RailCompany.new(self, name="nFLR")
 
@@ -200,4 +195,4 @@ class NFLR(RailSource):
                     RailLineBuilder(self, w_line).connect(*w_stations)
 
                 rich.print(RESULT + f"nFLR Line {line_name} has {len(w_stations)} stations")
-        self.save_to_cache(config, self.g)
+        

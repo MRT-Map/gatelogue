@@ -17,13 +17,7 @@ class IntraRail(RailSource):
     name = "MRT Wiki (Rail, IntraRail)"
     priority = 1
 
-    def __init__(self, config: Config):
-        RailSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = RailCompany.new(self, name="IntraRail")
 
         html = get_wiki_html("IntraRail", config)
@@ -89,5 +83,3 @@ class IntraRail(RailSource):
                 )
 
             rich.print(RESULT + f"IntraRail Line {line_code} has {len(stations)} stations")
-
-        self.save_to_cache(config, self.g)

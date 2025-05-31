@@ -132,13 +132,7 @@ class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
     priority = 0
 
-    def __init__(self, config: Config):
-        SeaSource.__init__(self)
-        Source.__init__(self)
-        if (g := self.retrieve_from_cache(config)) is not None:
-            self.g = g
-            return
-
+    def build(self, config: Config):
         company = SeaCompany.new(self, name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
@@ -172,4 +166,4 @@ class HBLWarp(SeaSource):
         names.remove("Kenthurst")
         if names:
             rich.print(ERROR + f"Not found: {', '.join(names)}")
-        self.save_to_cache(config, self.g)
+        
