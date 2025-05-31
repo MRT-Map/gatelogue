@@ -38,6 +38,7 @@
       ~SeaCompany.merge_key
       ~SeaCompany.merge_lists
       ~SeaCompany.new
+      ~SeaCompany.print_report
       ~SeaCompany.process_code
       ~SeaCompany.ref
       ~SeaCompany.report

@@ -21,7 +21,9 @@
       ~RaiLinQ.build
       ~RaiLinQ.find_by_ref
       ~RaiLinQ.find_by_ref_or_index
+      ~RaiLinQ.is_warp_source
       ~RaiLinQ.report
+      ~RaiLinQ.reported_nodes
       ~RaiLinQ.retrieve_from_cache
       ~RaiLinQ.sanitise_strings
       ~RaiLinQ.save_to_cache

@@ -38,6 +38,7 @@
       ~BusLine.merge_key
       ~BusLine.merge_lists
       ~BusLine.new
+      ~BusLine.print_report
       ~BusLine.process_code
       ~BusLine.ref
       ~BusLine.report
@@ -57,7 +58,7 @@
       ~BusLine.company
       ~BusLine.i
       ~BusLine.name
-      ~BusLine.ref_stop
       ~BusLine.source
+      ~BusLine.stops
    
    

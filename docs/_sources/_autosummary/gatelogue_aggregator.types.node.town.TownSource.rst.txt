@@ -21,7 +21,9 @@
       ~TownSource.build
       ~TownSource.find_by_ref
       ~TownSource.find_by_ref_or_index
+      ~TownSource.is_warp_source
       ~TownSource.report
+      ~TownSource.reported_nodes
       ~TownSource.retrieve_from_cache
       ~TownSource.sanitise_strings
       ~TownSource.save_to_cache

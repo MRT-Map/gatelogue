@@ -38,6 +38,7 @@
       ~SeaStop.merge_key
       ~SeaStop.merge_lists
       ~SeaStop.new
+      ~SeaStop.print_report
       ~SeaStop.process_code
       ~SeaStop.ref
       ~SeaStop.report

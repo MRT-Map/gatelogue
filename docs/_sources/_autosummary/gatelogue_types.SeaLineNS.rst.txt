@@ -34,7 +34,7 @@
       ~SeaLineNS.i
       ~SeaLineNS.mode
       ~SeaLineNS.name
-      ~SeaLineNS.ref_stop
       ~SeaLineNS.source
+      ~SeaLineNS.stops
    
    

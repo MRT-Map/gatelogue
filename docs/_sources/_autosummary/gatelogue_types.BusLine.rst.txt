@@ -32,7 +32,7 @@
       ~BusLine.colour
       ~BusLine.company
       ~BusLine.name
-      ~BusLine.ref_stop
+      ~BusLine.stops
       ~BusLine.i
       ~BusLine.source
    

@@ -38,6 +38,7 @@
       ~RailLine.merge_key
       ~RailLine.merge_lists
       ~RailLine.new
+      ~RailLine.print_report
       ~RailLine.process_code
       ~RailLine.ref
       ~RailLine.report
@@ -58,7 +59,7 @@
       ~RailLine.i
       ~RailLine.mode
       ~RailLine.name
-      ~RailLine.ref_station
       ~RailLine.source
+      ~RailLine.stations
    
    

@@ -21,7 +21,9 @@
       ~SeabeastRail.build
       ~SeabeastRail.find_by_ref
       ~SeabeastRail.find_by_ref_or_index
+      ~SeabeastRail.is_warp_source
       ~SeabeastRail.report
+      ~SeabeastRail.reported_nodes
       ~SeabeastRail.retrieve_from_cache
       ~SeabeastRail.sanitise_strings
       ~SeabeastRail.save_to_cache

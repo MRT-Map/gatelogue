@@ -33,7 +33,7 @@
       ~SeaLine.company
       ~SeaLine.mode
       ~SeaLine.name
-      ~SeaLine.ref_stop
+      ~SeaLine.stops
       ~SeaLine.i
       ~SeaLine.source
    

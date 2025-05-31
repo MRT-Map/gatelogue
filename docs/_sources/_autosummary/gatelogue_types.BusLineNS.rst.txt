@@ -33,7 +33,7 @@
       ~BusLineNS.company
       ~BusLineNS.i
       ~BusLineNS.name
-      ~BusLineNS.ref_stop
       ~BusLineNS.source
+      ~BusLineNS.stops
    
    

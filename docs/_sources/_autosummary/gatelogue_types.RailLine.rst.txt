@@ -33,7 +33,7 @@
       ~RailLine.company
       ~RailLine.mode
       ~RailLine.name
-      ~RailLine.ref_station
+      ~RailLine.stations
       ~RailLine.i
       ~RailLine.source
    

@@ -38,6 +38,7 @@
       ~BusCompany.merge_key
       ~BusCompany.merge_lists
       ~BusCompany.new
+      ~BusCompany.print_report
       ~BusCompany.process_code
       ~BusCompany.ref
       ~BusCompany.report

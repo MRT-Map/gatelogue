@@ -21,7 +21,9 @@
       ~IntraBus.build
       ~IntraBus.find_by_ref
       ~IntraBus.find_by_ref_or_index
+      ~IntraBus.is_warp_source
       ~IntraBus.report
+      ~IntraBus.reported_nodes
       ~IntraBus.retrieve_from_cache
       ~IntraBus.sanitise_strings
       ~IntraBus.save_to_cache

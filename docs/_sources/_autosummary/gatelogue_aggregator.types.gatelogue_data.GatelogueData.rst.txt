@@ -24,7 +24,9 @@
       ~GatelogueData.find_by_ref_or_index
       ~GatelogueData.from_sources
       ~GatelogueData.graph
+      ~GatelogueData.is_warp_source
       ~GatelogueData.report
+      ~GatelogueData.reported_nodes
       ~GatelogueData.retrieve_from_cache
       ~GatelogueData.sanitise_strings
       ~GatelogueData.save_to_cache

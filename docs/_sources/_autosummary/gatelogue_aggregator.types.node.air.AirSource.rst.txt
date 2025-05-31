@@ -21,7 +21,9 @@
       ~AirSource.build
       ~AirSource.find_by_ref
       ~AirSource.find_by_ref_or_index
+      ~AirSource.is_warp_source
       ~AirSource.report
+      ~AirSource.reported_nodes
       ~AirSource.retrieve_from_cache
       ~AirSource.sanitise_strings
       ~AirSource.save_to_cache

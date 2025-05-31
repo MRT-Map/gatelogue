@@ -38,6 +38,7 @@
       ~LocatedNode.merge_key
       ~LocatedNode.merge_lists
       ~LocatedNode.new
+      ~LocatedNode.print_report
       ~LocatedNode.process_code
       ~LocatedNode.ref
       ~LocatedNode.report

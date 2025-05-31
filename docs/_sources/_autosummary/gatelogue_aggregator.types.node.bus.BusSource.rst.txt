@@ -21,7 +21,9 @@
       ~BusSource.build
       ~BusSource.find_by_ref
       ~BusSource.find_by_ref_or_index
+      ~BusSource.is_warp_source
       ~BusSource.report
+      ~BusSource.reported_nodes
       ~BusSource.retrieve_from_cache
       ~BusSource.sanitise_strings
       ~BusSource.save_to_cache

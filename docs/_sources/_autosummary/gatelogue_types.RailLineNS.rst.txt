@@ -34,7 +34,7 @@
       ~RailLineNS.i
       ~RailLineNS.mode
       ~RailLineNS.name
-      ~RailLineNS.ref_station
       ~RailLineNS.source
+      ~RailLineNS.stations
    
    

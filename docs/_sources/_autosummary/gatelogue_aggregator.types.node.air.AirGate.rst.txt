@@ -38,6 +38,7 @@
       ~AirGate.merge_key
       ~AirGate.merge_lists
       ~AirGate.new
+      ~AirGate.print_report
       ~AirGate.process_code
       ~AirGate.ref
       ~AirGate.report

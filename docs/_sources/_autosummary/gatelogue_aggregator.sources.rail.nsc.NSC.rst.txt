@@ -22,7 +22,9 @@
       ~NSC.custom_routing
       ~NSC.find_by_ref
       ~NSC.find_by_ref_or_index
+      ~NSC.is_warp_source
       ~NSC.report
+      ~NSC.reported_nodes
       ~NSC.retrieve_from_cache
       ~NSC.sanitise_strings
       ~NSC.save_to_cache

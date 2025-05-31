@@ -38,6 +38,7 @@
       ~AirAirport.merge_key
       ~AirAirport.merge_lists
       ~AirAirport.new
+      ~AirAirport.print_report
       ~AirAirport.process_code
       ~AirAirport.ref
       ~AirAirport.report

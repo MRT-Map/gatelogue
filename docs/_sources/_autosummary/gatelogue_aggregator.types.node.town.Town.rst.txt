@@ -38,6 +38,7 @@
       ~Town.merge_key
       ~Town.merge_lists
       ~Town.new
+      ~Town.print_report
       ~Town.process_code
       ~Town.ref
       ~Town.report

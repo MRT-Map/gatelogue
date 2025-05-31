@@ -21,7 +21,9 @@
       ~WZFWarp.build
       ~WZFWarp.find_by_ref
       ~WZFWarp.find_by_ref_or_index
+      ~WZFWarp.is_warp_source
       ~WZFWarp.report
+      ~WZFWarp.reported_nodes
       ~WZFWarp.retrieve_from_cache
       ~WZFWarp.sanitise_strings
       ~WZFWarp.save_to_cache

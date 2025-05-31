@@ -14,6 +14,7 @@ gatelogue\_aggregator.logging
    .. autosummary::
       :toctree:                                          
    
+      progress_bar
       track
    
    

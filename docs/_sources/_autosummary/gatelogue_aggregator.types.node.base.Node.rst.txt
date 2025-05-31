@@ -38,6 +38,7 @@
       ~Node.merge_key
       ~Node.merge_lists
       ~Node.new
+      ~Node.print_report
       ~Node.process_code
       ~Node.ref
       ~Node.report

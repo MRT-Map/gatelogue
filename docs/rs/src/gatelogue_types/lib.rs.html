@@ -355,7 +355,7 @@
 <a href=#355 id=355 data-nosnippet>355</a>    <span class="kw">pub </span>name: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#356 id=356 data-nosnippet>356</a>    <span class="kw">pub </span>colour: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#357 id=357 data-nosnippet>357</a>    <span class="kw">pub </span>company: Sourced&lt;ID&gt;,
-<a href=#358 id=358 data-nosnippet>358</a>    <span class="kw">pub </span>ref_stop: <span class="prelude-ty">Option</span>&lt;Sourced&lt;ID&gt;&gt;,
+<a href=#358 id=358 data-nosnippet>358</a>    <span class="kw">pub </span>stops: Vec&lt;Sourced&lt;ID&gt;&gt;,
 <a href=#359 id=359 data-nosnippet>359</a>    <span class="attr">#[serde(flatten)]
 <a href=#360 id=360 data-nosnippet>360</a>    </span><span class="kw">pub </span>common: NodeCommon,
 <a href=#361 id=361 data-nosnippet>361</a>}
@@ -399,7 +399,7 @@
 <a href=#399 id=399 data-nosnippet>399</a>    <span class="kw">pub </span>name: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#400 id=400 data-nosnippet>400</a>    <span class="kw">pub </span>colour: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#401 id=401 data-nosnippet>401</a>    <span class="kw">pub </span>company: Sourced&lt;ID&gt;,
-<a href=#402 id=402 data-nosnippet>402</a>    <span class="kw">pub </span>ref_stop: <span class="prelude-ty">Option</span>&lt;Sourced&lt;ID&gt;&gt;,
+<a href=#402 id=402 data-nosnippet>402</a>    <span class="kw">pub </span>stations: Vec&lt;Sourced&lt;ID&gt;&gt;,
 <a href=#403 id=403 data-nosnippet>403</a>    <span class="attr">#[serde(flatten)]
 <a href=#404 id=404 data-nosnippet>404</a>    </span><span class="kw">pub </span>common: NodeCommon,
 <a href=#405 id=405 data-nosnippet>405</a>}
@@ -431,7 +431,7 @@
 <a href=#431 id=431 data-nosnippet>431</a>    <span class="kw">pub </span>name: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#432 id=432 data-nosnippet>432</a>    <span class="kw">pub </span>colour: <span class="prelude-ty">Option</span>&lt;Sourced&lt;String&gt;&gt;,
 <a href=#433 id=433 data-nosnippet>433</a>    <span class="kw">pub </span>company: Sourced&lt;ID&gt;,
-<a href=#434 id=434 data-nosnippet>434</a>    <span class="kw">pub </span>ref_stop: <span class="prelude-ty">Option</span>&lt;Sourced&lt;ID&gt;&gt;,
+<a href=#434 id=434 data-nosnippet>434</a>    <span class="kw">pub </span>stops: Vec&lt;Sourced&lt;ID&gt;&gt;,
 <a href=#435 id=435 data-nosnippet>435</a>    <span class="attr">#[serde(flatten)]
 <a href=#436 id=436 data-nosnippet>436</a>    </span><span class="kw">pub </span>common: NodeCommon,
 <a href=#437 id=437 data-nosnippet>437</a>}

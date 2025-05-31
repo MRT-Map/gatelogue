@@ -38,6 +38,7 @@
       ~RailStation.merge_key
       ~RailStation.merge_lists
       ~RailStation.new
+      ~RailStation.print_report
       ~RailStation.process_code
       ~RailStation.ref
       ~RailStation.report

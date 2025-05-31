@@ -38,6 +38,7 @@
       ~SeaLine.merge_key
       ~SeaLine.merge_lists
       ~SeaLine.new
+      ~SeaLine.print_report
       ~SeaLine.process_code
       ~SeaLine.ref
       ~SeaLine.report
@@ -58,7 +59,7 @@
       ~SeaLine.i
       ~SeaLine.mode
       ~SeaLine.name
-      ~SeaLine.ref_stop
       ~SeaLine.source
+      ~SeaLine.stops
    
    

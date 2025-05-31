@@ -38,6 +38,7 @@
       ~AirAirline.merge_key
       ~AirAirline.merge_lists
       ~AirAirline.new
+      ~AirAirline.print_report
       ~AirAirline.process_airline_name
       ~AirAirline.process_code
       ~AirAirline.ref

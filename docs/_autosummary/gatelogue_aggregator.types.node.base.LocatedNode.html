@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_aggregator.types.node.base.LocatedNode &mdash; gatelogue-aggregator 2.0.2 documentation</title>
+  <title>gatelogue_aggregator.types.node.base.LocatedNode &mdash; gatelogue-aggregator 2.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.types.node.base.LocatedNode.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c2377ec0"></script>
+      <script src="../_static/documentation_options.js?v=664ffad9"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -178,19 +178,22 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.new" title="gatelogue_aggregator.types.node.base.LocatedNode.new"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new</span></code></a>(src, *[, world, coordinates])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.process_code" title="gatelogue_aggregator.types.node.base.LocatedNode.process_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_code</span></code></a>(s)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.print_report" title="gatelogue_aggregator.types.node.base.LocatedNode.print_report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_report</span></code></a>(src, level, msg)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.ref" title="gatelogue_aggregator.types.node.base.LocatedNode.ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ref</span></code></a>(src)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.process_code" title="gatelogue_aggregator.types.node.base.LocatedNode.process_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_code</span></code></a>(s)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.report" title="gatelogue_aggregator.types.node.base.LocatedNode.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(src)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.ref" title="gatelogue_aggregator.types.node.base.LocatedNode.ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ref</span></code></a>(src)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.sanitise_strings" title="gatelogue_aggregator.types.node.base.LocatedNode.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.report" title="gatelogue_aggregator.types.node.base.LocatedNode.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(src)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.str_src" title="gatelogue_aggregator.types.node.base.LocatedNode.str_src"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_src</span></code></a>(_src)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.sanitise_strings" title="gatelogue_aggregator.types.node.base.LocatedNode.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.types.node.base.LocatedNode.str_src" title="gatelogue_aggregator.types.node.base.LocatedNode.str_src"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_src</span></code></a>(_src)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -328,6 +331,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.types.node.base.LocatedNode.new">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.source.Source.html#gatelogue_aggregator.types.source.Source" title="gatelogue_aggregator.types.source.Source"><span class="pre">Source</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">World</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Self" title="(in Python v3.13)"><span class="pre">Self</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.types.node.base.LocatedNode.new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.types.node.base.LocatedNode.print_report">
+<span class="sig-name descname"><span class="pre">print_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.source.Source.html#gatelogue_aggregator.types.source.Source" title="gatelogue_aggregator.types.source.Source"><span class="pre">Source</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.types.node.base.LocatedNode.print_report" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

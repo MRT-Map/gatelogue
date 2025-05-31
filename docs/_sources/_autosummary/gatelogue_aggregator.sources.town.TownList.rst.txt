@@ -21,7 +21,9 @@
       ~TownList.build
       ~TownList.find_by_ref
       ~TownList.find_by_ref_or_index
+      ~TownList.is_warp_source
       ~TownList.report
+      ~TownList.reported_nodes
       ~TownList.retrieve_from_cache
       ~TownList.sanitise_strings
       ~TownList.save_to_cache

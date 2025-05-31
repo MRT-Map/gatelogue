@@ -21,7 +21,9 @@
       ~BluRail.build
       ~BluRail.find_by_ref
       ~BluRail.find_by_ref_or_index
+      ~BluRail.is_warp_source
       ~BluRail.report
+      ~BluRail.reported_nodes
       ~BluRail.retrieve_from_cache
       ~BluRail.sanitise_strings
       ~BluRail.save_to_cache

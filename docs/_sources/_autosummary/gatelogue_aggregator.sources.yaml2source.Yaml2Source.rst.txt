@@ -22,7 +22,9 @@
       ~Yaml2Source.custom_routing
       ~Yaml2Source.find_by_ref
       ~Yaml2Source.find_by_ref_or_index
+      ~Yaml2Source.is_warp_source
       ~Yaml2Source.report
+      ~Yaml2Source.reported_nodes
       ~Yaml2Source.retrieve_from_cache
       ~Yaml2Source.sanitise_strings
       ~Yaml2Source.save_to_cache

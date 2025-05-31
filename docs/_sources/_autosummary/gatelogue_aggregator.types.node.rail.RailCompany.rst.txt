@@ -38,6 +38,7 @@
       ~RailCompany.merge_key
       ~RailCompany.merge_lists
       ~RailCompany.new
+      ~RailCompany.print_report
       ~RailCompany.process_code
       ~RailCompany.ref
       ~RailCompany.report

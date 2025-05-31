@@ -1,0 +1,6 @@
+gatelogue\_aggregator.logging.progress\_bar
+===========================================
+
+.. currentmodule:: gatelogue_aggregator.logging
+
+.. autofunction:: progress_bar

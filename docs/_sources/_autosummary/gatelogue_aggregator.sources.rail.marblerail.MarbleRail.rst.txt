@@ -21,7 +21,9 @@
       ~MarbleRail.build
       ~MarbleRail.find_by_ref
       ~MarbleRail.find_by_ref_or_index
+      ~MarbleRail.is_warp_source
       ~MarbleRail.report
+      ~MarbleRail.reported_nodes
       ~MarbleRail.retrieve_from_cache
       ~MarbleRail.sanitise_strings
       ~MarbleRail.save_to_cache

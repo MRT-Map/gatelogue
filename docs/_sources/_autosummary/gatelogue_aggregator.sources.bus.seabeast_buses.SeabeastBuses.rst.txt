@@ -21,7 +21,9 @@
       ~SeabeastBuses.build
       ~SeabeastBuses.find_by_ref
       ~SeabeastBuses.find_by_ref_or_index
+      ~SeabeastBuses.is_warp_source
       ~SeabeastBuses.report
+      ~SeabeastBuses.reported_nodes
       ~SeabeastBuses.retrieve_from_cache
       ~SeabeastBuses.sanitise_strings
       ~SeabeastBuses.save_to_cache

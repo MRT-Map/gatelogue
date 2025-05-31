@@ -38,6 +38,7 @@
       ~BusStop.merge_key
       ~BusStop.merge_lists
       ~BusStop.new
+      ~BusStop.print_report
       ~BusStop.process_code
       ~BusStop.ref
       ~BusStop.report

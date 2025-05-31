@@ -22,7 +22,9 @@
       ~FLRForesne.custom_routing
       ~FLRForesne.find_by_ref
       ~FLRForesne.find_by_ref_or_index
+      ~FLRForesne.is_warp_source
       ~FLRForesne.report
+      ~FLRForesne.reported_nodes
       ~FLRForesne.retrieve_from_cache
       ~FLRForesne.sanitise_strings
       ~FLRForesne.save_to_cache

@@ -38,6 +38,7 @@
       ~SpawnWarp.merge_key
       ~SpawnWarp.merge_lists
       ~SpawnWarp.new
+      ~SpawnWarp.print_report
       ~SpawnWarp.process_code
       ~SpawnWarp.ref
       ~SpawnWarp.report

@@ -38,6 +38,7 @@
       ~AirFlight.merge_key
       ~AirFlight.merge_lists
       ~AirFlight.new
+      ~AirFlight.print_report
       ~AirFlight.process_code
       ~AirFlight.ref
       ~AirFlight.report
