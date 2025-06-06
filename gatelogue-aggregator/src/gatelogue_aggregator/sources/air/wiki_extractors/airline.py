@@ -179,7 +179,8 @@ def continental(src: WikiAirline, config):
         "Continental Airlines",
         "Continental Airlines",
         re.compile(
-            r"\|-\n\|CO(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}"
+            r"\|-\n\|.*?\n\|(?:CO)?(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}",
+            re.IGNORECASE,
         ),
         config,
     )
@@ -232,12 +233,12 @@ def jiffy_air(src: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def raiko(src: WikiAirline, config):
+def tennoji(src: WikiAirline, config):
     src.regex_extract_airline(
-        "Raiko Airlines",
-        "Raiko Airlines",
+        "Tennoji Airways",
+        "Tennoji Airways",
         re.compile(
-            r"\|-\n\|RK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+            r"\|-\n\|TA(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
         config,
         size=lambda matches: "H"

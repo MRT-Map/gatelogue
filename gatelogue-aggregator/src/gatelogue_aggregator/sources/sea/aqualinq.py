@@ -27,8 +27,12 @@ class AquaLinQ(SeaSource):
             p: bs4.Tag = h3.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling
 
             stops = []
-            for b in p.find_all("b"):
-                stop = SeaStop.new(self, codes={b.string}, name=b.string, company=company)
+            for b in (
+                (a.strip() for a in p.strings if a.strip())
+                if line_code == "AQ1800"
+                else (b.string for b in p.find_all("b"))
+            ):
+                stop = SeaStop.new(self, codes={b}, name=b, company=company)
                 stops.append(stop)
 
             if len(stops) == 0:

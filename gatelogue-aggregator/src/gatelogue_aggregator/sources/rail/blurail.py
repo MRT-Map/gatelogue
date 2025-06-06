@@ -51,6 +51,8 @@ class BluRail(RailSource):
             stations = []
             for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
                 code = result.group("code").upper()
+                if code.startswith("BLUTRAIN"):
+                    continue
                 if code == "BCH" and line_code in ("1", "18"):
                     code += "1"
                 elif code == "MCN" and line_code in ("11", "6", "20"):

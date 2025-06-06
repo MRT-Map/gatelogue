@@ -31,9 +31,17 @@ class IntraSailWarp(SeaSource):
                 "Shahai": "Shahai Ferry Terminal",
                 "Auburn": "Auburn Marina",
                 "the Port of Ilirea": "Port of Ilirea",
+                "Ilirea Port of Ilirea": "Port of Ilirea",
                 "Xandar-Vekta Ferry Terminal": "Xandar-Vekta Transfer Station",
                 "Weezerville": "Deadbush Port of Weezerville",
+                "New Southport Port of New Southport": "Port of New Southport",
+                "New Singapore Port of New Singapore": "Port of New Singapore",
+                "Deadbush Port of Deadbush": "Port of Deadbush",
+                "Whitechapel South Whitechapel Ferry Terminal": "South Whitechapel Ferry Terminal",
+                "Alexandriasburg Island of Alexandriasburg Port of Call": "Alexandriasburg Island of Alexandria Port of Call",
             }.get(name, name)
+            if "%warp%" in name:
+                continue
             if name in names:
                 continue
 

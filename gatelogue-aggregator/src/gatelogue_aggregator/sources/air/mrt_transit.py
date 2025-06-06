@@ -1,12 +1,16 @@
-from typing import override
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, override
 
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
-from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.node.base import Node
+
+if TYPE_CHECKING:
+    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.types.node.base import Node
 
 
 class MRTTransit(AirSource):

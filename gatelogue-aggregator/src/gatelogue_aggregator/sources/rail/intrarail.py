@@ -49,6 +49,7 @@ class IntraRail(RailSource):
                 if (big2 := big.find("big")) is None:
                     continue
                 name = " ".join(big2.stripped_strings)
+                name = {"Plage Rouge Seki City": "Plage Rouge-Seki City"}.get(name, name)
 
                 station = RailStation.new(self, company=company, codes={name}, name=name)
                 stations.append(station)

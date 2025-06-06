@@ -50,6 +50,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "NextTrain": "NextPlane",
     "OLA": "Oceanic Langus Airways",
     "RedWave Airways": "RedWave",
+    "Raiko Airlines": "Tennoji Airways",
     "rosa": "Rosa",
     "Sandstone Air": "ArcticAir",
     "Sandstone Airr": "ArcticAir",
@@ -72,6 +73,7 @@ AIRPORT_ALIASES: dict[str, str] = {
     "TTL": "MWT",
     "LTN": "LNT",
     "KAZ": "KAO",
+    "CBH": "CHH",
 }
 
 GATE_ALIASES: dict[str, dict[str | tuple[str, str], str | None]] = {

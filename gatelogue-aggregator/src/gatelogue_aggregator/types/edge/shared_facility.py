@@ -18,20 +18,24 @@ class SharedFacilitySource(Source):
     def update(self):
         from gatelogue_aggregator.types.node.rail import RailCompany, RailStation
 
-        blu = "BluRail"
-        fr = "Fred Rail"
-        intra = "IntraRail"
-        mrt = "MRT"
-        mtc = "MarbleRail"
-        nflr = "nFLR"
-        redtrain = "RedTrain"
-        rn = "RailNorth"
-        rlq = "RaiLinQ"
-        wzr = "West Zeta Rail"
-        seat = "SEAT"
-        pac = "Pacifica"
-        flrk = "FLR Kazeshima/Shui Chau"
-        flrf = "FLR Foresne/Commuter"
+        def get_company_id(name: str) -> int:
+            ls = self.g.filter_nodes(lambda a: isinstance(a, RailCompany) and a.name == name)
+            return ls[0] if ls else None
+
+        blu = get_company_id("BluRail")
+        fr = get_company_id("Fred Rail")
+        intra = get_company_id("IntraRail")
+        mrt = get_company_id("MRT")
+        mtc = get_company_id("MarbleRail")
+        nflr = get_company_id("nFLR")
+        redtrain = get_company_id("RedTrain")
+        rn = get_company_id("RailNorth")
+        rlq = get_company_id("RaiLinQ")
+        wzr = get_company_id("West Zeta Rail")
+        seat = get_company_id("SEAT")
+        pac = get_company_id("Pacifica")
+        flrk = get_company_id("FLR Kazeshima/Shui Chau")
+        flrf = get_company_id("FLR Foresne/Commuter")
 
         for company1, station1_name, company2, station2_name in (
             (nflr, "Dand Grand Central", intra, "Dand Grand Central"),
@@ -234,6 +238,8 @@ class SharedFacilitySource(Source):
             (flrf, "Cinnameadow", nflr, "New Foresne Cinnameadow"),
             (flrk, "Tsukihama", nflr, "Tsukihama"),
         ):
+            if company1 is None or company2 is None:
+                continue
 
             def is_desired_station(a, company, station_name):
                 return (
@@ -243,7 +249,7 @@ class SharedFacilitySource(Source):
                         if isinstance(station_name, list)
                         else (a.name is not None and a.name.v.strip() == station_name)
                     )
-                    and a.get_one(self, RailCompany).name == company
+                    and a.get_one(self, RailCompany).i == company
                 )
 
             station1 = next((a for a in self.g.nodes() if is_desired_station(a, company1, station1_name)), None)

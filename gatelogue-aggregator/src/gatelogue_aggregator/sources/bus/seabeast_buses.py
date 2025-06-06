@@ -58,7 +58,14 @@ class SeabeastBuses(BusSource):
                 continue
 
             warp_name = warp["name"][6:]
-            name = {"HEN": "Hendon Coach Station", "HAM": "Hamblin Municipal Airport"}.get(
+            name = {
+                "HEN": "Hendon Coach Station",
+                "HAM": "Hamblin Municipal Airport",
+                "DPH": "Deadbush Pioneer-Howard Airport",
+                "BAY": "Bay Point",
+                "PXL": "Pixl Vinayaka International Airport",
+                "CAR": "Caravaca-Juan Carlos I Airfield",
+            }.get(
                 warp_name,
                 next(iter(difflib.get_close_matches(warp_name, stop_names.get(warp["name"][3:6], []), 1, 0.0)), None),
             )

@@ -21,6 +21,7 @@ class WikiMRT(RailSource):
 
         for line_code, line_name, line_colour in (
             ("A", "MRT Arctic Line", "#00FFFF"),
+            ("B", "MRT Beach Line", "#EEDB95"),
             ("C", "MRT Circle Line", "#5E5E5E"),
             ("D", "MRT Desert Line", "#9437FF"),
             ("E", "MRT Eastern Line", "#10D20F"),

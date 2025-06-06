@@ -142,19 +142,21 @@ class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
         return gt.BusLine(**self._as_dict(src))
 
     def _stops(self, src: BusSource) -> Iterator[BusStop]:
-        return (stn
-                for stn in self.get_one(src, BusCompany).get_all(src, BusStop)
-                if any(
-            conn.v.line.refs(src, self)
-            for node in stn.get_all(src, BusStop, BusConnection)
-            for conn in stn.get_edges(src, node, BusConnection)
-        ))
+        return (
+            stn
+            for stn in self.get_one(src, BusCompany).get_all(src, BusStop)
+            if any(
+                conn.v.line.refs(src, self)
+                for node in stn.get_all(src, BusStop, BusConnection)
+                for conn in stn.get_edges(src, node, BusConnection)
+            )
+        )
 
     @override
     def _as_dict(self, src: BusSource) -> dict:
         return super()._as_dict(src) | {
             "company": self.get_one_id(src, BusCompany),
-            "stops": [Sourced(a.i) for a in self._stops(src)],  # TODO sources
+            "stops": [Sourced(a.i) for a in self._stops(src)],  # TODO: sources
         }
 
     @override
@@ -164,9 +166,7 @@ class BusLine(gt.BusLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: BusSource):
-        num_stops = len(
-            list(self._stops(src))
-        )
+        num_stops = len(list(self._stops(src)))
         colour = ERROR if num_stops == 0 else RESULT
         self.print_report(src, colour, f"has {num_stops} stops")
 

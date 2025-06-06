@@ -45,6 +45,8 @@ class IntraRailWarp(RailSource):
                 "Murrville Arcadia International Airport": "Murrville-Arcadia International Airport",
                 "Fortaleza": "Fortaleza Marina",
             }.get(name, name)
+            if warp["name"] == "ItR213-Anthro-SB":
+                name = "Anthro Island City Hall"
             if name in names:
                 continue
             RailStation.new(

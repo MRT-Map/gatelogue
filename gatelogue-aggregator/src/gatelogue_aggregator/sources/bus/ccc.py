@@ -34,6 +34,8 @@ class CCC(BusSource):
             stops = []
             for stn in ln.removeprefix(line_code).split("--"):
                 name = stn.split("(")[0].strip()
+                if not name:
+                    continue
                 stop_names.append(name)
                 stop = BusStop.new(self, codes={name}, name=name, company=company)
                 stops.append(stop)

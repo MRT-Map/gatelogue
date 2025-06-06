@@ -1,11 +1,15 @@
-from typing import override
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, override
 
 import msgspec
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.air import AirAirport, AirSource
-from gatelogue_aggregator.types.node.base import Node
+
+if TYPE_CHECKING:
+    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.types.node.base import Node
 
 
 class DynmapAirports(AirSource):

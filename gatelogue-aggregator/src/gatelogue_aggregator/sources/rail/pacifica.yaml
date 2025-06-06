@@ -24,8 +24,8 @@ coords:
   Arbor: [-3480, 967]
   Kenthurst: [-3012, -55]
   Vermilion - Victory Square: [-4666, -953]
-  Whitechapel - Sky Harbor: [-2985, -2187]
-  Serena - Union: [-2135, -1840]
+  Whitechapel Sky Harbor: [-2985, -2187]
+  Serena Union: [-2135, -1840]
   Corrigan Northern: [-3542, -2468]
   Laclede: [-2004, -3466]
   Laclede East: [-1592, -3461]
@@ -47,3 +47,4 @@ coords:
   Blackberry City: [-9766, -4104]
   Bean City: [-12876, -4061]
   Lanatam Airport: [-14461, -7558]
+# TODO find cc stations (beltway, park)

@@ -154,19 +154,21 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
         )
 
     def _stops(self, src: SeaSource) -> Iterator[SeaStop]:
-        return (stn
-                for stn in self.get_one(src, SeaCompany).get_all(src, SeaStop)
-                if any(
-            conn.v.line.refs(src, self)
-            for node in stn.get_all(src, SeaStop, SeaConnection)
-            for conn in stn.get_edges(src, node, SeaConnection)
-        ))
+        return (
+            stn
+            for stn in self.get_one(src, SeaCompany).get_all(src, SeaStop)
+            if any(
+                conn.v.line.refs(src, self)
+                for node in stn.get_all(src, SeaStop, SeaConnection)
+                for conn in stn.get_edges(src, node, SeaConnection)
+            )
+        )
 
     @override
     def _as_dict(self, src: SeaSource) -> dict:
         return super()._as_dict(src) | {
             "company": self.get_one_id(src, SeaCompany),
-            "stops": [Sourced(a.i) for a in self._stops(src)],  # TODO sources
+            "stops": [Sourced(a.i) for a in self._stops(src)],  # TODO: sources
         }
 
     @override
@@ -176,9 +178,7 @@ class SeaLine(gt.SeaLine, Node, kw_only=True, tag=True):
 
     @override
     def report(self, src: SeaSource):
-        num_stops = len(
-            list(self._stops(src))
-        )
+        num_stops = len(list(self._stops(src)))
         colour = ERROR if num_stops == 0 else RESULT
         self.print_report(src, colour, f"has {num_stops} stops")
 

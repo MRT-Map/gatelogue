@@ -23,5 +23,6 @@ class WZRWarp(RailSource):
             code = warp["name"].split("-")[-1]
             if code in codes:
                 continue
-            RailStation.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            codes_ = {"PEA", "PBA"} if code == "PBA" else {code}
+            RailStation.new(self, codes=codes_, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             codes.append(code)
