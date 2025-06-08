@@ -33,8 +33,7 @@ class RedTrain(RailSource):
                     continue
                 name = " ".join(tr("td")[2].strings).strip().removesuffix(" £")
                 code = tr("td")[1].string
-                codes = {"WH", "WHT"} if code == "WH" else {code}
-                station = RailStation.new(self, codes=codes, name=name, company=company)
+                station = RailStation.new(self, codes={code}, name=name, company=company)
                 stations.append(station)
 
             RailLineBuilder(self, line).connect(*stations)
