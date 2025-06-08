@@ -40,7 +40,7 @@ class AquaLinQWarp(SeaSource):
         d["AQ1600TWEEB"] = "Tweebuffelsmeteenskootmorsdoodgeskietfontein"
         d["AQ1300CARDS"] = "Cardinal Bay"
         d["AQ900ONEM"] = "Onemalu Moku Uopa Regional Pier"
-        d["AQ1600MORN"] = "Moramoa Central Station"
+        d["AQ1600MORA"] = "Moramoa Central"
         d["AQ1000NIWEN"] = "Niwen"
 
         names = []
