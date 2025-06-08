@@ -79,11 +79,4 @@ class BluRail(RailSource):
                 station = RailStation.new(self, codes=codes, name=name, company=company)
                 stations.append(station)
 
-            if line_code == "2":
-                RailLineBuilder(self, line).connect(*stations, between=(None, "Bay Point"))
-                RailLineBuilder(self, line).connect(*stations, between=("Whitecliff Central", None))
-            elif line_code == "2X":
-                RailLineBuilder(self, line).connect(*stations, between=(None, "Pine Mountain Airfield"))
-                RailLineBuilder(self, line).connect(*stations, between=("Segav Sal", None))
-            else:
-                RailLineBuilder(self, line).connect(*stations)
+            RailLineBuilder(self, line).connect(*stations)
