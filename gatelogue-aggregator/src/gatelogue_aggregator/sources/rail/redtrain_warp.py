@@ -23,7 +23,7 @@ class RedTrainWarp(RailSource):
             code = warp["name"].split("_")[1].upper()
             if code in codes:
                 continue
-            code = {"RITO": "ITO", "VEN": "VN", "MTH": "MSN"}.get(code, code)
+            code = {"RITO": "ITO", "VEN": "VN", "MTH": "MSN", "WHT": "WH"}.get(code, code)
             RailStation.new(
                 self,
                 codes={code},
