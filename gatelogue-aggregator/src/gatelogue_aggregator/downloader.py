@@ -4,6 +4,7 @@ import contextlib
 import tempfile
 import time
 from pathlib import Path
+from threading import Lock
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
@@ -25,6 +26,8 @@ DEFAULT_COOLDOWN = 15
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
 SESSION = cloudscraper.create_scraper()
+
+COOLDOWN_LOCK = Lock()
 COOLDOWN: dict[str, float] = {}
 
 
@@ -35,15 +38,19 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int
 
     with progress_bar(INFO3, f"  Downloading {url}"):
         netloc = urlparse(url).netloc
+        COOLDOWN_LOCK.acquire()
         if netloc in COOLDOWN and time.time() < (cool := COOLDOWN[netloc]):
+            COOLDOWN_LOCK.release()
             rich.print(INFO3 + f"Waiting for {url} cooldown")
             time.sleep(abs(cool - time.time()))
+        COOLDOWN_LOCK.release()
 
         response = SESSION.get(url, timeout=timeout)
         if response.status_code >= 400:  # noqa: PLR2004
             rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
             if response.status_code in (408, 429):
-                COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
+                with COOLDOWN_LOCK:
+                    COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
                 rich.print(ERROR + f"Will try {url} again in 15s")
                 return get_url(url, cache, timeout, cooldown)
 
