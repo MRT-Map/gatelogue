@@ -38,7 +38,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int
 
     with progress_bar(INFO3, f"  Downloading {url}"):
         netloc = urlparse(url).netloc
-        with COOLDOWN_LOC:
+        with COOLDOWN_LOCK:
             cond = netloc in COOLDOWN and time.time() < (cool := COOLDOWN[netloc])
         if cond:
             rich.print(INFO3 + f"Waiting for {url} cooldown")
