@@ -238,7 +238,7 @@ def tennoji(src: WikiAirline, config):
         "Tennoji Airways",
         "Tennoji Airways",
         re.compile(
-            r"\|-\n\|TA(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+            r"\|-\n\|(?:TA|RK)(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
         config,
         size=lambda matches: "H"
