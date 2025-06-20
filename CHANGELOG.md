@@ -4,7 +4,7 @@
 * `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
 
-# v2.0.4+10 (20250621)
+## v2.0.4+10 (20250621)
 * `gatelogue-aggregator`: temporary blank `code` field for `AirAirport`s
 * **Data v10**
   * `AirAirport` `name` field changed to `names` so that multiple names can be attached to one code
