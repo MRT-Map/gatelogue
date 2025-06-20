@@ -146,6 +146,25 @@ def berryessa(src: WikiAirline, config):
 
 
 @_EXTRACTORS.append
+def air_net(src: WikiAirline, config):
+    html = get_wiki_html("AirNet", config)
+    airline_name = "AirNet"
+    airline = src.extract_get_airline(airline_name, airline_name)
+
+    table = next(a for a in html("table") if "Number" in str(a))
+    for tr in table.tbody("tr")[1:]:
+        if "Boarding" not in str(tr("td")[3]):
+            continue
+        code = next(tr("td")[0].strings)
+        ng1 = "".join(tr("td")[1].strings)
+        ng2 = "".join(tr("td")[2].strings)
+        n1, g1 = ng1.split("|")
+        n2, g2 = ng2.split("|")
+
+        src.extract_get_flight(airline, code=code, n1=n1, n2=n2, g1=g1, g2=g2)
+
+
+@_EXTRACTORS.append
 def fly_creeper(src: WikiAirline, config):
     html = get_wiki_html("FlyCreeper", config)
     airline_name = "FlyCreeper"

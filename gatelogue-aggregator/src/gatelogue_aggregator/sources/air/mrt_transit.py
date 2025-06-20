@@ -49,7 +49,7 @@ class MRTTransit(AirSource):
 
         df1["Raiko Airlines"] = [
             (", ".join("S" + b.strip() for b in str(a).split(",")) if str(a) != "nan" else "nan")
-            for a in df1["Raiko Airlines"]
+            for a in df1["Tennoji Airways"]
         ]
 
         get_url(
@@ -97,7 +97,7 @@ class MRTTransit(AirSource):
                 airport = AirAirport.new(self, code=AirAirport.process_code(airport_code), modes={mode})
 
                 if str(airport_name) != "nan":
-                    airport.name = self.source(airport_name)
+                    airport.names = self.source({str(airport_name).split("(")[0]})
                 if str(airport_world) != "nan":
                     airport.world = self.source(airport_world)
 

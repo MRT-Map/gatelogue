@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, override
 
+from pandas.core.base import NoNewAttributesMixin
+
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
@@ -60,12 +62,19 @@ class WikiAirline(AirSource):
         a12: str | None = None,
         a22: str | None = None,
         a32: str | None = None,
+        n1: str | None = None,
+        n2: str | None = None,
+        n3: str | None = None,
         g1: str | None = None,
         g2: str | None = None,
         g3: str | None = None,
         s: str | None = None,
         **_,
     ) -> AirFlight:
+        if (a1 is a12 is None) and n1 is None:
+            raise ValueError("Provide either code or name for airport 1")
+        if (a2 is a22 is None) and n2 is None:
+            raise ValueError("Provide either code or name for airport 2")
         f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
 
         airport1 = AirAirport.process_code(a1 or a12)
@@ -73,7 +82,7 @@ class WikiAirline(AirSource):
         gate1 = AirGate.new(
             self,
             code=gate_code1,
-            airport=AirAirport.new(self, code=airport1),
+            airport=AirAirport.new(self, code=airport1, names={n1} if n1 is not None else None),
             size=str(s) if s is not None and gate_code1 is not None else None,
         )
         f.connect(self, gate1)
@@ -85,7 +94,7 @@ class WikiAirline(AirSource):
         gate2 = AirGate.new(
             self,
             code=gate_code2,
-            airport=AirAirport.new(self, code=airport2),
+            airport=AirAirport.new(self, code=airport2, names={n2} if n2 is not None else None),
             size=str(s) if s is not None and gate_code2 is not None else None,
         )
         f.connect(
@@ -95,13 +104,13 @@ class WikiAirline(AirSource):
         if gate_code2 is not None:
             airline.connect(self, gate2)
 
-        if (a3 is not None or a32 is not None) and g3 is not None:
+        if ((a3 is not None or a32 is not None) or n3 is not None) and g3 is not None:
             airport3 = AirAirport.process_code(a3 or a32)
             gate_code3 = AirGate.process_code(g3, airline.name, airport3)
             gate3 = AirGate.new(
                 self,
                 code=gate_code3,
-                airport=AirAirport.new(self, code=airport3),
+                airport=AirAirport.new(self, code=airport3, names={n3} if n3 is not None else None),
                 size=str(s) if s is not None and gate_code3 is not None else None,
             )
             f.connect(self, gate3)

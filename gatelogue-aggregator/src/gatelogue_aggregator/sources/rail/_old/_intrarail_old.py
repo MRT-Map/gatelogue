@@ -52,8 +52,8 @@ class IntraRail(RailSource):
                 stations.append(station)
 
             if line_code == "54":
-                forward_label = "towards " + stations[-1].name.v
-                backward_label = "towards " + stations[0].name.v
+                forward_label = "towards " + stations[-1].names.v
+                backward_label = "towards " + stations[0].names.v
                 RailLineBuilder(self, line).connect(
                     *stations[0:2],
                     forward_label=forward_label,
@@ -80,7 +80,7 @@ class IntraRail(RailSource):
                 stations2 = [
                     s
                     for s in stations
-                    if s.name
+                    if s.names
                     not in (
                         "Aurora",
                         "Lazure",

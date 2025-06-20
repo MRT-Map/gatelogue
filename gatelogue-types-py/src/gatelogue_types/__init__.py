@@ -242,8 +242,8 @@ class AirFlightNS(AirFlight, NodeNS, kw_only=True, tag=AirFlight.__name__):
 class AirAirport(LocatedNode, kw_only=True, tag=True):
     code: str
     """Unique 3 (sometimes 4)-letter code"""
-    name: Sourced[str] | None = None
-    """Name of the airport"""
+    names: Sourced[set[str]] | None = None
+    """Name(s) of the airport"""
     link: Sourced[str] | None = None
     """Link to the MRT Wiki page for the airport"""
     modes: Sourced[set[PlaneMode]] | None = None
@@ -258,7 +258,7 @@ class AirAirport(LocatedNode, kw_only=True, tag=True):
 
 
 class AirAirportNS(AirAirport, LocatedNodeNS, kw_only=True, tag=AirAirport.__name__):
-    name: str | None = None
+    names: set[str] | None = None
     link: str | None = None
     modes: set[PlaneMode] | None = None
     gates: list[ID] = msgspec.field(default_factory=list)

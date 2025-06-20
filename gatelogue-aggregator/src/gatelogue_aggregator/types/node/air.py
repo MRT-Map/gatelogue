@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import difflib
 import itertools
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
@@ -149,6 +150,7 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
 
 class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     acceptable_list_node_types: ClassVar = lambda: (AirGate, AirAirport, LocatedNode)
+    code: str | None
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -156,17 +158,19 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
         cls,
         src: AirSource,
         *,
-        code: str,
-        name: str | None = None,
+        code: str | None,
+        names: set[str] | None = None,
         link: str | None = None,
         modes: set[gt.PlaneMode] | None = None,
         gates: Iterable[AirGate] | None = None,
         world: gt.World | None = None,
         coordinates: tuple[float, float] | None = None,
     ):
+        if code is names is None:
+            raise ValueError("`code` and `names` cannot both be `None`")
         self = super().new(src, code=code, world=world, coordinates=coordinates)
-        if name is not None:
-            self.name = src.source(name)
+        if names is not None:
+            self.names = src.source(names)
         if link is not None:
             self.link = src.source(link)
         if modes is not None:
@@ -178,29 +182,30 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
 
     @override
     def str_src(self, src: AirSource) -> str:
-        return self.code
+        return self.code or f"`{self.names}`"
 
     @override
     def equivalent(self, src: AirSource, other: Self) -> bool:
-        return self.code == other.code
+        return (self.code == other.code) if None not in (self.code, other.code) else len(self.names.v.intersection(other.names.v)) != 0 if None not in (self.names, other.names) else False
 
     @override
     def merge_attrs(self, src: AirSource, other: Self):
         super().merge_attrs(src, other)
-        self._merge_sourced(src, other, "name")
+        self._merge_sourced(src, other, "names")
         self._merge_sourced(src, other, "link")
         self._merge_sourced(src, other, "modes")
 
     @override
-    def merge_key(self, src: AirSource) -> str:
+    def merge_key(self, src: AirSource) -> str | None:
         return self.code
 
     @override
     def sanitise_strings(self):
         super().sanitise_strings()
-        self.code = str(self.code).strip()
-        if self.name is not None:
-            self.name.v = str(self.name.v).strip()
+        if self.code is not None:
+            self.code = str(self.code).strip()
+        if self.names is not None:
+            self.names.v = {str(a).strip() for a in self.names.v}
         if self.link is not None:
             self.link.v = str(self.link.v).strip()
         if self.modes is not None:
@@ -208,6 +213,8 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
 
     @override
     def export(self, src: AirSource) -> gt.AirAirport:
+        if self.code is None:
+            raise ValueError(f"`{'`/`'.join(self.names.v)}`: `code` cannot be `None` when exporting")
         return gt.AirAirport(**self._as_dict(src))
 
     @override
@@ -219,7 +226,9 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     @override
     def ref(self, src: AirSource) -> NodeRef[Self]:
         self.sanitise_strings()
-        return NodeRef(AirAirport, code=self.code)
+        if self.code is not None:
+            return NodeRef(AirAirport, code=self.code)
+        return NodeRef(AirAirport, names=self.names)
 
     @override
     def report(self, src: AirSource):
@@ -229,6 +238,24 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
         num_gates = len(list(self.get_all(src, AirGate)))
         colour = ERROR if num_gates == 0 else RESULT
         self.print_report(src, colour, f"has {num_gates} gates")
+
+    def find_equiv_from_name(self, src: AirSource, node_list: list[Node] | None = None) -> Self | None:
+        if self.code is not None:
+            return None
+        other_airports = [
+            a
+            for a in (node_list or src.g.nodes())
+            if isinstance(a, AirAirport) and a is not self and a.code is not None and a.names is not None
+        ]
+        if not other_airports:
+            return None
+        if (
+            best_name := next(
+                iter(difflib.get_close_matches(next(iter(self.names.v)), [b for a in other_airports for b in a.names.v], 1, 0.0)), None
+            )
+        ) is None:
+            return None
+        return next(a for a in other_airports if best_name in a.names.v)
 
     def update(self, src: AirSource):
         if (none_gate := next((a for a in self.get_all(src, AirGate) if a.code is None), None)) is None:

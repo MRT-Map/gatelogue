@@ -51,5 +51,5 @@ class DynmapAirports(AirSource):
                     code=AirAirport.process_code(next(reversed(k.split("-")))),
                     world=world,
                     coordinates=(v["x"], v["z"]),
-                    name=name,
+                    names={name},
                 )
