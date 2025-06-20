@@ -312,7 +312,7 @@ def arctic_air(src: WikiAirline, config):
     d = list(zip(df["Flight"], df["Departure"], df["Arrival"], df["D. Gate"], df["A. Gate"], strict=False))
 
     for flight, a1, a2, g1, g2 in d[::2]:
-        if str(flight).strip() in ("13", "14"):
+        if str(flight).strip() in ("227", "228", "239", "240"):
             continue
         if not a1 or str(a1) == "nan":
             continue
