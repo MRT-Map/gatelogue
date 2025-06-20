@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, override
 
-from pandas.core.base import NoNewAttributesMixin
-
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.sources.air.wiki_extractors.airline import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
@@ -72,9 +70,11 @@ class WikiAirline(AirSource):
         **_,
     ) -> AirFlight:
         if (a1 is a12 is None) and n1 is None:
-            raise ValueError("Provide either code or name for airport 1")
+            msg = "Provide either code or name for airport 1"
+            raise ValueError(msg)
         if (a2 is a22 is None) and n2 is None:
-            raise ValueError("Provide either code or name for airport 2")
+            msg = "Provide either code or name for airport 2"
+            raise ValueError(msg)
         f = AirFlight.new(self, codes=AirFlight.process_code(code, airline.name), airline=airline)
 
         airport1 = AirAirport.process_code(a1 or a12)

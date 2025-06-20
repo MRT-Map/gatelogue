@@ -167,7 +167,8 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
         coordinates: tuple[float, float] | None = None,
     ):
         if code is names is None:
-            raise ValueError("`code` and `names` cannot both be `None`")
+            msg = "`code` and `names` cannot both be `None`"
+            raise ValueError(msg)
         self = super().new(src, code=code, world=world, coordinates=coordinates)
         if names is not None:
             self.names = src.source(names)
@@ -186,7 +187,13 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
 
     @override
     def equivalent(self, src: AirSource, other: Self) -> bool:
-        return (self.code == other.code) if None not in (self.code, other.code) else len(self.names.v.intersection(other.names.v)) != 0 if None not in (self.names, other.names) else False
+        return (
+            (self.code == other.code)
+            if None not in (self.code, other.code)
+            else len(self.names.v.intersection(other.names.v)) != 0
+            if None not in (self.names, other.names)
+            else False
+        )
 
     @override
     def merge_attrs(self, src: AirSource, other: Self):
@@ -214,7 +221,8 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
     @override
     def export(self, src: AirSource) -> gt.AirAirport:
         if self.code is None:
-            raise ValueError(f"`{'`/`'.join(self.names.v)}`: `code` cannot be `None` when exporting")
+            msg = f"`{'`/`'.join(self.names.v)}`: `code` cannot be `None` when exporting"
+            raise ValueError(msg)
         return gt.AirAirport(**self._as_dict(src))
 
     @override
@@ -251,7 +259,12 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
             return None
         if (
             best_name := next(
-                iter(difflib.get_close_matches(next(iter(self.names.v)), [b for a in other_airports for b in a.names.v], 1, 0.0)), None
+                iter(
+                    difflib.get_close_matches(
+                        next(iter(self.names.v)), [b for a in other_airports for b in a.names.v], 1, 0.0
+                    )
+                ),
+                None,
             )
         ) is None:
             return None

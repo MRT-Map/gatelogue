@@ -4,13 +4,17 @@
 * `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
 
+# v2.0.4+10 (20250621)
+* `gatelogue-aggregator`: temporary blank `code` field for `AirAirport`s
+* **Data v10**
+  * `AirAirport` `name` field changed to `names` so that multiple names can be attached to one code
+
 ## v2.0.3+9 (20250601)
 * various refactors inside `gatelogue-aggregator`
 * `gatelogue-types` (ts): fix `stops` field inside `RailCompany`
-
-### Data v9
-* `ref_stop`, `ref_station` removed from `BusLine`, `RailLine`, `SeaLine`
-* they have been replaced with `stops` and `stations` which are all the stops/stations the line stops at
+* **Data v9**
+  * `ref_stop`, `ref_station` removed from `BusLine`, `RailLine`, `SeaLine`
+  * they have been replaced with `stops` and `stations` which are all the stops/stations the line stops at
 
 ## v2.0.2+8 (20250505)
 * `gatelogue-types` (rs): fix `local` field missing in `SeaCompany` and extra in `AirAirline`

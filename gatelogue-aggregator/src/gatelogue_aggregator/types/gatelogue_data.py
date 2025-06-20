@@ -7,7 +7,7 @@ import rich
 import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
 
-from gatelogue_aggregator.logging import INFO1, INFO2, track, RESULT
+from gatelogue_aggregator.logging import INFO1, INFO2, RESULT, track
 from gatelogue_aggregator.types.edge.proximity import ProximitySource
 from gatelogue_aggregator.types.edge.shared_facility import SharedFacility, SharedFacilitySource
 from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
@@ -65,9 +65,9 @@ class GatelogueData(
             to_merge.clear()
 
             for n in track(
-                    [a for a in self.g.nodes() if isinstance(a, AirAirport)],
-                    INFO2,
-                    description=f"Merging airports (pass {pass_})",
+                [a for a in self.g.nodes() if isinstance(a, AirAirport)],
+                INFO2,
+                description=f"Merging airports (pass {pass_})",
             ):
                 if (equiv := n.find_equiv_from_name(self)) is not None:
                     rich.print(RESULT + f"AirAirport of name `{'`/`'.join(n.names.v)}` found code `{equiv.code}`")

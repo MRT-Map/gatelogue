@@ -310,7 +310,7 @@ pub struct AirAirline {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AirAirport {
     pub code: String,
-    pub name: Option<Sourced<String>>,
+    pub names: Option<Sourced<Vec<String>>,
     pub link: Option<Sourced<String>>,
     pub modes: Option<Sourced<Vec<AirMode>>>,
     pub gates: Vec<Sourced<ID>>,

@@ -91,7 +91,7 @@ export interface AirFlight<S extends boolean = true> extends Node {
 
 export interface AirAirport<S extends boolean = true> extends Located {
   code: string;
-  name: Sourced<string, S> | null;
+  names: Sourced<string[], S> | null;
   link: Sourced<string, S> | null;
   gates: Sourced<IntID<AirGate<S>>, S>[];
 }
