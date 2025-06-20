@@ -34,7 +34,7 @@
       ~AirAirportNS.i
       ~AirAirportNS.link
       ~AirAirportNS.modes
-      ~AirAirportNS.name
+      ~AirAirportNS.names
       ~AirAirportNS.proximity
       ~AirAirportNS.shared_facility
       ~AirAirportNS.source

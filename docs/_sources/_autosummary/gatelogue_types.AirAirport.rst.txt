@@ -32,7 +32,7 @@
       ~AirAirport.gates
       ~AirAirport.link
       ~AirAirport.modes
-      ~AirAirport.name
+      ~AirAirport.names
       ~AirAirport.coordinates
       ~AirAirport.i
       ~AirAirport.proximity

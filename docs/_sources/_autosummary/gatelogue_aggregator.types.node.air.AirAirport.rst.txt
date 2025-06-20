@@ -26,6 +26,7 @@
       ~AirAirport.disconnect
       ~AirAirport.equivalent
       ~AirAirport.export
+      ~AirAirport.find_equiv_from_name
       ~AirAirport.get_all
       ~AirAirport.get_all_id
       ~AirAirport.get_edge
@@ -60,7 +61,7 @@
       ~AirAirport.i
       ~AirAirport.link
       ~AirAirport.modes
-      ~AirAirport.name
+      ~AirAirport.names
       ~AirAirport.proximity
       ~AirAirport.shared_facility
       ~AirAirport.source
