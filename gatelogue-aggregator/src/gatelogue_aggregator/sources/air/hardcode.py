@@ -11,7 +11,7 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Direction | list[tuple[range | None, Dire
         (range(2960, 2962), "even-odd"),
         (range(6646, 6648), "even-odd"),
         (range(4554, 4556), "even-odd"),
-        (None, "odd-even")
+        (None, "odd-even"),
     ],
     "ArcticAir": [
         (range(1000), "odd-even"),
@@ -24,7 +24,7 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Direction | list[tuple[range | None, Dire
     "Astrella": "odd-even",
     "Caelus Airlines": [
         (range(100), "odd-even"),
-         (None, "even-odd"),
+        (None, "even-odd"),
     ],
     "CaelusLink": "even-odd",
     "ikeda": "even-odd",

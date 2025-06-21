@@ -143,7 +143,14 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
         if not s.isdigit() or direction_config is None:
             return {s}
 
-        direction = direction_config if isinstance(direction_config, str) else next((d for r, d in direction_config if r is not None and str(s) in r), next((d for r, d in direction_config if r is None), None))
+        direction = (
+            direction_config
+            if isinstance(direction_config, str)
+            else next(
+                (d for r, d in direction_config if r is not None and str(s) in r),
+                next((d for r, d in direction_config if r is None), None),
+            )
+        )
         if direction is None:
             return {s}
 

@@ -260,9 +260,7 @@ def tennoji(src: WikiAirline, config):
             r"\|-\n\|(?:TA|RK)(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
         ),
         config,
-        size=lambda matches: "H"
-        if matches["code"].startswith("H")
-        else None,
+        size=lambda matches: "H" if matches["code"].startswith("H") else None,
     )
 
 
@@ -508,13 +506,13 @@ def utopiair(src: WikiAirline, config):
 
     for table in (a for a in html("table") if "Flight" in str(a)):
         for tr in table.tbody("tr")[1:]:
-            if len(tr("td")) > 3 and "ON TIME" not in str(tr("td")[3]):
+            if len(tr("td")) > 3 and "ON TIME" not in str(tr("td")[3]):  # noqa: PLR2004
                 continue
             code = tr("td")[0].string
             n1 = "".join(tr("td")[1].strings)
             n2 = "".join(tr("td")[2].strings)
 
-            src.extract_get_flight(airline, code=code, n1=n1, n2=n2, s="SP" if int(code) >= 500 else None)
+            src.extract_get_flight(airline, code=code, n1=n1, n2=n2, s="SP" if int(code) >= 500 else None)  # noqa: PLR2004
 
 
 @_EXTRACTORS.append
@@ -575,7 +573,7 @@ def caelus2(src: WikiAirline, config):
         if "CaelusAirlines_Boarding.png" not in str(tr("td")[4]):
             continue
         codes = set(tr("td")[1].string.removeprefix("Flight ").split("/"))
-        a1, a2 = [b.string for b in tr("td")[2]("b")]
+        a1, a2 = (b.string for b in tr("td")[2]("b"))
         src.extract_get_flight(airline, code=codes, a1=a1, a2=a2)
 
 
@@ -592,3 +590,13 @@ def caelus_link(src: WikiAirline, config):
         codes = set(tr("td")[1].string.removeprefix("Flight ").split("/"))
         n1, n2 = tr("td")[2].strings
         src.extract_get_flight(airline, code=codes, n1=n1, n2=n2)
+
+
+@_EXTRACTORS.append
+def cbc(src: WikiAirline, config):
+    src.regex_extract_airline(
+        "Caravacan Biplane Company",
+        "Caravacan Biplane Company",
+        re.compile(r"""(?P<code>.*?)\. (?P<a1>.*?) --- (?P<a2>.*?) /"""),
+        config,
+    )
