@@ -521,9 +521,9 @@ def southeastern_airways(src: WikiAirline, config):
         "Southeastern Airways",
         "Template:Southeastern Airways Flight List",
         re.compile(r"""\|\|.*?'''(?P<code>.*?)'''.*?
-\|\|.*?'''(?:\[\[.*?\|)?(?P<a1>.*?)(?:]])?'''.*?
+\|\|.*?'''(?:\[\[.*?\||\[\[)?(?P<a1>.*?)(?:]])?'''.*?
 \|\|.*?
-\|\|.*?'''(?:\[\[.*?\|)?(?P<a2>.*?)(?:]])?'''.*?
+\|\|.*?'''(?:\[\[.*?\||\[\[)?(?P<a2>.*?)(?:]])?'''.*?
 \|\|\[\[File:Eastern Active\.gif"""),
         config,
     )

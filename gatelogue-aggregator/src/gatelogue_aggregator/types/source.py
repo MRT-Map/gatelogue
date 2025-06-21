@@ -21,7 +21,7 @@ T = TypeVar("T")
 
 class Sourced(gt.Sourced, msgspec.Struct, Mergeable, Generic[T]):
     def __str__(self):
-        s = " / ".join(self.v) if isinstance(self.v, (list, set)) else str(self.v)
+        s = " / ".join(self.v) if isinstance(self.v, list | set) else str(self.v)
         if len(self.s) != 0:
             s += " (" + ", ".join(str(a) for a in self.s) + ")"
         return s
