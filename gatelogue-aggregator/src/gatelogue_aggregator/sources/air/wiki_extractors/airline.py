@@ -530,24 +530,8 @@ def southeastern_airways(src: WikiAirline, config):
 
 
 @_EXTRACTORS.append
-def ikeda(src: WikiAirline, config):
-    src.regex_extract_airline(
-        "ikeda",
-        "Template:ICAG 100 Series Flights",
-        re.compile(r"""(?s)\|-
-! .*?
-! .*?CL (?P<code>.*?)<.*?
-! .*?'''(?P<a1>.*?)'''.*?
-! .*?'''(?P<a2>.*?)'''.*?
-! .*?
-! .*?CaelusAirlines_Boarding\.png"""),
-        config,
-    )
-
-
-@_EXTRACTORS.append
 def caelus1(src: WikiAirline, config):
-    for series in ("0", "2", "7"):
+    for series in ("0", "1", "2", "7"):
         src.regex_extract_airline(
             "Caelus Airlines",
             f"Template:ICAG {series}00 Series Flights",

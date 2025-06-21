@@ -27,7 +27,6 @@ DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Direction | list[tuple[range | None, Dire
         (None, "even-odd"),
     ],
     "CaelusLink": "even-odd",
-    "ikeda": "even-odd",
 }
 
 DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT", "NMW")
