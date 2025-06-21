@@ -5,7 +5,6 @@ import re
 from typing import TYPE_CHECKING
 
 import pandas as pd
-from rustworkx import graph_vf2_mapping
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
@@ -628,7 +627,9 @@ def waviation1(src: WikiAirline, config):
     airline = src.extract_get_airline(airline_name, airline_name)
 
     for table in html("table"):
-        if (caption := table.find("caption")) is None or ("(000s)" not in str(caption) and "(1000s)" not in str(caption)):
+        if (caption := table.find("caption")) is None or (
+            "(000s)" not in str(caption) and "(1000s)" not in str(caption)
+        ):
             continue
         for tr in table.tbody("tr")[1:]:
             if "N/A" not in str(tr("td")[7]):
@@ -638,9 +639,12 @@ def waviation1(src: WikiAirline, config):
             g1 = tr("td")[2].string
             a2 = tr("td")[3].b.string
             g2 = tr("td")[4].string
-            if "XX" in g1: g1 = None
-            if "XX" in g2: g2 = None
+            if "XX" in g1:
+                g1 = None
+            if "XX" in g2:
+                g2 = None
             src.extract_get_flight(airline, code=codes, a1=a1, a2=a2, g1=g1, g2=g2)
+
 
 @_EXTRACTORS.append
 def waviation2(src: WikiAirline, config):
@@ -652,7 +656,17 @@ def waviation2(src: WikiAirline, config):
         if (caption := table.find("caption")) is None or "(000s)" in str(caption) or "(1000s)" in str(caption):
             continue
 
-        a1 = "AIX" if "(300s)" in str(caption) else "LNT" if "(400s)" in str(caption) else "DJE" if "(500s)" in str(caption) else "NPR" if "(600s)" in str(caption) else None
+        a1 = (
+            "AIX"
+            if "(300s)" in str(caption)
+            else "LNT"
+            if "(400s)" in str(caption)
+            else "DJE"
+            if "(500s)" in str(caption)
+            else "NPR"
+            if "(600s)" in str(caption)
+            else None
+        )
         if a1 is None:
             continue
 
@@ -663,7 +677,8 @@ def waviation2(src: WikiAirline, config):
             g1 = tr("td")[1].string
             a2 = tr("td")[2].b.string
             g2 = tr("td")[3].string
-            if "XX" in g1: g1 = None
-            if "XX" in g2: g2 = None
-            print(g1, g2)
+            if "XX" in g1:
+                g1 = None
+            if "XX" in g2:
+                g2 = None
             src.extract_get_flight(airline, code=codes, a1=a1, a2=a2, g1=g1, g2=g2)
