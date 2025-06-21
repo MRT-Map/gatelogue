@@ -2,15 +2,30 @@ from __future__ import annotations
 
 from typing import Literal
 
-DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
-    "MRT Airlines": "odd-even",  # TODO
-    "ArcticAir": "odd-even",
+type Direction = Literal["even-odd", "odd-even"]
+
+DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Direction | list[tuple[range | None, Direction]]] = {
+    "MRT Airlines": [
+        (range(1294, 1296), "even-odd"),
+        (range(8392, 8394), "even-odd"),
+        (range(2960, 2962), "even-odd"),
+        (range(6646, 6648), "even-odd"),
+        (range(4554, 4556), "even-odd"),
+        (None, "odd-even")
+    ],
+    "ArcticAir": [
+        (range(1000), "odd-even"),
+        (None, "even-odd"),
+    ],
     "MarbleAir": "odd-even",
     "CampLines": "odd-even",
     "Rainer Airways": "odd-even",
     "AmberAir": "odd-even",
     "Astrella": "odd-even",
-    "Caelus Airlines": "even-odd",  # TODO
+    "Caelus Airlines": [
+        (range(100), "odd-even"),
+         (None, "even-odd"),
+    ],
     "CaelusLink": "even-odd",
     "ikeda": "even-odd",
 }

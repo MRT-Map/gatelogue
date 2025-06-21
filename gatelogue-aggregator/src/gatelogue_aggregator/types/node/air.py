@@ -138,9 +138,15 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
         if isinstance(s, set):
             return {sss for ss in s for sss in AirFlight.process_code(ss, airline_name)}
         s = Node.process_code(s)
-        direction = DIRECTIONAL_FLIGHT_AIRLINES.get(airline_name)
-        if not s.isdigit() or direction is None:
+
+        direction_config = DIRECTIONAL_FLIGHT_AIRLINES.get(airline_name)
+        if not s.isdigit() or direction_config is None:
             return {s}
+
+        direction = direction_config if isinstance(direction_config, str) else next((d for r, d in direction_config if r is not None and str(s) in r), next((d for r, d in direction_config if r is None), None))
+        if direction is None:
+            return {s}
+
         if direction == "odd-even":
             if int(s) % 2 == 1:
                 return {s, str(int(s) + 1)}
