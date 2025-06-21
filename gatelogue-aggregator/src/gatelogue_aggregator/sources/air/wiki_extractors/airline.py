@@ -81,7 +81,7 @@ def intra_air(src: WikiAirline, config):
 
             g1 = None if g1 == "?" else g1
             g2 = None if g2 == "?" else g2
-            s = "H" if 1400 <= int(code) <= 1799 else "SP" if int(code) >= 1800 else None  # noqa: PLR2004
+            s = "H" if 1400 <= int(code) <= 1799 else "SP" if 1800 <= int(code) >= 2000 else None  # noqa: PLR2004
             src.extract_get_flight(airline, code=code, a1=a1, a2=a2, g1=g1, g2=g2, s=s)
 
 
