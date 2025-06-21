@@ -39,12 +39,12 @@ class MRTTransit(AirSource):
             columns={
                 "Unnamed: 0": "Name",
                 "Unnamed: 1": "Code",
-                "Unnamed: 2": "Operator",
+                "Unnamed: 2": "World",
+                "Unnamed: 3": "Operator",
             },
             inplace=True,
         )
         df1.drop(df1.tail(66).index, inplace=True)
-        df1["World"] = "New"
         df1["Mode"] = "seaplane"
 
         get_url(

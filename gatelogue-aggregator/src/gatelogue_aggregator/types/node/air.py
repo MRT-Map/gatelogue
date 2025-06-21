@@ -134,7 +134,9 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
                 self.mode = Sourced("warp plane", sources)
 
     @staticmethod
-    def process_code[T: (str, None)](s: T, airline_name: str | None = None) -> set[T]:
+    def process_code[T: (str, None)](s: T | set[str], airline_name: str | None = None) -> set[T]:
+        if isinstance(s, set):
+            return {sss for ss in s for sss in AirFlight.process_code(ss, airline_name)}
         s = Node.process_code(s)
         direction = DIRECTIONAL_FLIGHT_AIRLINES.get(airline_name)
         if not s.isdigit() or direction is None:

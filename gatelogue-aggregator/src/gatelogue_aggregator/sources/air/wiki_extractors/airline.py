@@ -265,6 +265,7 @@ def tennoji(src: WikiAirline, config):
         else None,
     )
 
+
 @_EXTRACTORS.append
 def yousoro(src: WikiAirline, config):
     src.regex_extract_airline(
@@ -276,6 +277,7 @@ def yousoro(src: WikiAirline, config):
         config,
         size="SP",
     )
+
 
 @_EXTRACTORS.append
 def rainer_airways(src: WikiAirline, config):
@@ -479,3 +481,114 @@ def aero(src: WikiAirline, config):
 \|\|.*?\[\[File:Eastern Active\.gif\|50px]]"""),
         config,
     )
+
+
+@_EXTRACTORS.append
+def south_weast(src: WikiAirline, config):
+    html = get_wiki_html("South Weast Airlines", config)
+    airline_name = "South Weast Airlines"
+    airline = src.extract_get_airline(airline_name, airline_name)
+
+    table = next(a for a in html("table") if "Flight Number" in str(a))
+    for tr in table.tbody("tr")[1:]:
+        if "ON TIME" not in str(tr("td")[4]):
+            continue
+        code = tr("td")[0].string
+        n1 = "".join(tr("td")[2].strings)
+        n2 = "".join(tr("td")[3].strings)
+
+        src.extract_get_flight(airline, code=code, n1=n1, n2=n2, s="H" if code.startswith("H") else None)
+
+
+@_EXTRACTORS.append
+def utopiair(src: WikiAirline, config):
+    html = get_wiki_html("UtopiAir", config)
+    airline_name = "UtopiAir"
+    airline = src.extract_get_airline(airline_name, airline_name)
+
+    for table in (a for a in html("table") if "Flight" in str(a)):
+        for tr in table.tbody("tr")[1:]:
+            if len(tr("td")) > 3 and "ON TIME" not in str(tr("td")[3]):
+                continue
+            code = tr("td")[0].string
+            n1 = "".join(tr("td")[1].strings)
+            n2 = "".join(tr("td")[2].strings)
+
+            src.extract_get_flight(airline, code=code, n1=n1, n2=n2, s="SP" if int(code) >= 500 else None)
+
+
+@_EXTRACTORS.append
+def southeastern_airways(src: WikiAirline, config):
+    src.regex_extract_airline(
+        "Southeastern Airways",
+        "Template:Southeastern Airways Flight List",
+        re.compile(r"""\|\|.*?'''(?P<code>.*?)'''.*?
+\|\|.*?'''(?:\[\[.*?\|)?(?P<a1>.*?)(?:]])?'''.*?
+\|\|.*?
+\|\|.*?'''(?:\[\[.*?\|)?(?P<a2>.*?)(?:]])?'''.*?
+\|\|\[\[File:Eastern Active\.gif"""),
+        config,
+    )
+
+
+@_EXTRACTORS.append
+def caelus1(src: WikiAirline, config):
+    src.regex_extract_airline(
+        "ikeda",
+        "Template:ICAG 100 Series Flights",
+        re.compile(r"""(?s)\|-
+! .*?
+! .*?CL (?P<code>.*?)<.*?
+! .*?'''(?P<a1>.*?)'''.*?
+! .*?'''(?P<a2>.*?)'''.*?
+! .*?
+! .*?CaelusAirlines_Boarding\.png"""),
+        config,
+    )
+
+
+for series in ("0", "2", "7"):
+    @_EXTRACTORS.append
+    def caelus1(src: WikiAirline, config):
+        src.regex_extract_airline(
+            "Caelus Airlines",
+            f"Template:ICAG {series}00 Series Flights",
+            re.compile(r"""(?s)\|-
+! .*?
+! .*?CL (?P<code>.*?)<.*?
+! .*?'''(?P<a1>.*?)'''.*?
+! .*?'''(?P<a2>.*?)'''.*?
+! .*?
+! .*?CaelusAirlines_Boarding\.png"""),
+            config,
+        )
+
+
+@_EXTRACTORS.append
+def caelus2(src: WikiAirline, config):
+    html = get_wiki_html("Template:ICAG 300 Series Flights", config)
+    airline_name = "Caelus Airlines"
+    airline = src.extract_get_airline(airline_name, airline_name)
+
+    table = next(a for a in html("table") if "Operated by" in str(a))
+    for tr in table.tbody("tr")[1:]:
+        if "CaelusAirlines_Boarding.png" not in str(tr("td")[4]):
+            continue
+        codes = set(tr("td")[1].string.removeprefix("Flight ").split("/"))
+        a1, a2 = [b.string for b in tr("td")[2]("b")]
+        src.extract_get_flight(airline, code=codes, a1=a1, a2=a2)
+
+
+@_EXTRACTORS.append
+def caelus_link(src: WikiAirline, config):
+    html = get_wiki_html("Template:ICAG 400 Series Flights", config)
+    airline_name = "CaelusLink"
+    airline = src.extract_get_airline(airline_name, airline_name)
+
+    table = next(a for a in html("table") if "Operated by" in str(a))
+    for tr in table.tbody("tr")[1:]:
+        if "CaelusAirlines_Boarding.png" not in str(tr("td")[4]):
+            continue
+        codes = set(tr("td")[1].string.removeprefix("Flight ").split("/"))
+        n1, n2 = tr("td")[2].strings
+        src.extract_get_flight(airline, code=codes, n1=n1, n2=n2)

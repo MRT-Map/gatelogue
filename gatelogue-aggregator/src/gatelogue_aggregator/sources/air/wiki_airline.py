@@ -53,7 +53,7 @@ class WikiAirline(AirSource):
         self,
         airline: AirAirline,
         *,
-        code: str,
+        code: str | set[str],
         a1: str | None = None,
         a2: str | None = None,
         a3: str | None = None,

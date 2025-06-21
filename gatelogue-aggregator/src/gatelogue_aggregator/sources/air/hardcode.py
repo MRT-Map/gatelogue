@@ -3,13 +3,16 @@ from __future__ import annotations
 from typing import Literal
 
 DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Literal["even-odd", "odd-even"]] = {
-    "MRT Airlines": "odd-even",
+    "MRT Airlines": "odd-even",  # TODO
     "ArcticAir": "odd-even",
     "MarbleAir": "odd-even",
     "CampLines": "odd-even",
     "Rainer Airways": "odd-even",
     "AmberAir": "odd-even",
     "Astrella": "odd-even",
+    "Caelus Airlines": "even-odd",  # TODO
+    "CaelusLink": "even-odd",
+    "ikeda": "even-odd",
 }
 
 DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT", "NMW")
