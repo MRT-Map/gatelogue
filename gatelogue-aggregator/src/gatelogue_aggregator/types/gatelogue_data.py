@@ -70,7 +70,10 @@ class GatelogueData(
                 description=f"Merging airports (pass {pass_})",
             ):
                 if (equiv := n.find_equiv_from_name(self)) is not None:
-                    rich.print(RESULT + f"AirAirport of name `{'`/`'.join(n.names.v)}` found code `{equiv.code}`")
+                    rich.print(
+                        RESULT
+                        + f"AirAirport of name `{n.names}` found code `{equiv.code}` with similar name `{equiv.names}`"
+                    )
                     equiv.merge(self, n)
 
             if self.g.num_nodes() == prev_length:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, override
 
 import pandas as pd
@@ -92,7 +93,14 @@ class MRTTransit(AirSource):
                 airport = AirAirport.new(self, code=AirAirport.process_code(airport_code), modes={mode})
 
                 if str(airport_name) != "nan":
-                    airport.names = self.source({str(airport_name).split("(")[0]})
+                    if "(" in airport_name:
+                        matches = re.search(r"(.*?) \((.*?)\)", str(airport_name))
+                        names = {matches.group(2) + " " + matches.group(1), airport_name}
+                    else:
+                        names = {airport_name}
+                    if airport_code == "CWI":
+                        names.update({"UCWT International Airport", "UCWTIA"})
+                    airport.names = self.source(names)
                 if str(airport_world) != "nan":
                     airport.world = self.source(airport_world)
 

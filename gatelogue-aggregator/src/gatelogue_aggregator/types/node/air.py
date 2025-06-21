@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import itertools
+import re
 from typing import TYPE_CHECKING, ClassVar, Self, override
 
 import gatelogue_types as gt
@@ -286,6 +287,19 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
         return next(a for a in other_airports if best_name in a.names.v)
 
     def update(self, src: AirSource):
+        if self.names is not None:
+            new_names = set()
+            for name in sorted(self.names.v, key=len, reverse=True):
+                if not any(
+                    (
+                        name in existing
+                        or sorted(re.sub(r"[^\w\s]", "", name).split())
+                        == sorted(re.sub(r"[^\w\s]", "", existing).split())
+                    )
+                    for existing in new_names
+                ):
+                    new_names.add(name)
+            self.names.v = new_names
         if (none_gate := next((a for a in self.get_all(src, AirGate) if a.code is None), None)) is None:
             return
         for flight in list(none_gate.get_all(src, AirFlight)):
