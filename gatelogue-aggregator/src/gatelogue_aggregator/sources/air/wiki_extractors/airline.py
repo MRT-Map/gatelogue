@@ -520,7 +520,7 @@ def southeastern_airways(src: WikiAirline, config):
     src.regex_extract_airline(
         "Southeastern Airways",
         "Template:Southeastern Airways Flight List",
-        re.compile(r"""\|\|.*?'''(?P<code>.*?)'''.*?
+        re.compile(r"""\|\|.*?'''SE(?P<code>.*?)'''.*?
 \|\|.*?'''(?:\[\[.*?\||\[\[)?(?P<a1>.*?)(?:]])?'''.*?
 \|\|.*?
 \|\|.*?'''(?:\[\[.*?\||\[\[)?(?P<a2>.*?)(?:]])?'''.*?
