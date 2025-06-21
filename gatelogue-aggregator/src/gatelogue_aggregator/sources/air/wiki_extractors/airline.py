@@ -155,7 +155,7 @@ def air_net(src: WikiAirline, config):
     for tr in table.tbody("tr")[1:]:
         if "Boarding" not in str(tr("td")[3]):
             continue
-        code = next(tr("td")[0].strings)
+        code = next(tr("td")[0].strings).removeprefix("AN")
         ng1 = "".join(tr("td")[1].strings)
         ng2 = "".join(tr("td")[2].strings)
         n1, g1 = ng1.split("|")
