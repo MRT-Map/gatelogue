@@ -47,11 +47,6 @@ class MRTTransit(AirSource):
         df1["World"] = "New"
         df1["Mode"] = "seaplane"
 
-        df1["Raiko Airlines"] = [
-            (", ".join("S" + b.strip() for b in str(a).split(",")) if str(a) != "nan" else "nan")
-            for a in df1["Tennoji Airways"]
-        ]
-
         get_url(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
             cache2,

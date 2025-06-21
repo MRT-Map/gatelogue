@@ -262,11 +262,20 @@ def tennoji(src: WikiAirline, config):
         config,
         size=lambda matches: "H"
         if matches["code"].startswith("H")
-        else "SP"
-        if matches["code"].startswith("S")
         else None,
     )
 
+@_EXTRACTORS.append
+def yousoro(src: WikiAirline, config):
+    src.regex_extract_airline(
+        "Yousoro!",
+        "Yousoro!",
+        re.compile(
+            r"\|-\n\|RKS(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        ),
+        config,
+        size="SP",
+    )
 
 @_EXTRACTORS.append
 def rainer_airways(src: WikiAirline, config):
