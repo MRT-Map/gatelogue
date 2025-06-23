@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "gatelogue-types": "link:../gatelogue-types-ts",
-    "vue": "^3.5.15",
+    "vue": "^3.5.17",
     "vue-json-pretty": "^2.4.0",
     "vue-router": "^4.5.1",
     "vue-tippy": "^6.7.1"
