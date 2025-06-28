@@ -93,7 +93,7 @@ AIRPORT_ALIASES: dict[str, str] = {
     "CBH": "CHH",
     "FQR": "FQA",
     "VEG": "VCA",
-    "LMN", "LLM",
+    "LMN": "LLM",
 }
 
 GATE_ALIASES: dict[str, dict[str | tuple[str, str], str | None]] = {
