@@ -148,7 +148,7 @@ class AirFlight(gt.AirFlight, Node, kw_only=True, tag=True):
             direction_config
             if isinstance(direction_config, str)
             else next(
-                (d for r, d in direction_config if r is not None and str(s) in r),
+                (d for r, d in direction_config if r is not None and int(s) in r),
                 next((d for r, d in direction_config if r is None), None),
             )
         )
