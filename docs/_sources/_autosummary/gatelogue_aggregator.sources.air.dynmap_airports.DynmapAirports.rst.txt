@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.air.dynmap\_airports.DynmapAirports
+=================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.air.dynmap_airports
+
+.. autoclass:: DynmapAirports
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DynmapAirports.__init__
+      ~DynmapAirports.build
+      ~DynmapAirports.find_by_ref
+      ~DynmapAirports.find_by_ref_or_index
+      ~DynmapAirports.is_coord_source
+      ~DynmapAirports.report
+      ~DynmapAirports.reported_nodes
+      ~DynmapAirports.retrieve_from_cache
+      ~DynmapAirports.sanitise_strings
+      ~DynmapAirports.save_to_cache
+      ~DynmapAirports.source
+      ~DynmapAirports.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DynmapAirports.name
+      ~DynmapAirports.priority
+      ~DynmapAirports.g
+   
+   

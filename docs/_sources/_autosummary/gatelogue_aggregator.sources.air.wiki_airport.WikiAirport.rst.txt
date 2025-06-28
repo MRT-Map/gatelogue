@@ -1,0 +1,48 @@
+﻿gatelogue\_aggregator.sources.air.wiki\_airport.WikiAirport
+===========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.air.wiki_airport
+
+.. autoclass:: WikiAirport
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WikiAirport.__init__
+      ~WikiAirport.build
+      ~WikiAirport.extract_get_airport
+      ~WikiAirport.extract_get_gate
+      ~WikiAirport.find_by_ref
+      ~WikiAirport.find_by_ref_or_index
+      ~WikiAirport.is_coord_source
+      ~WikiAirport.regex_extract_airport
+      ~WikiAirport.report
+      ~WikiAirport.reported_nodes
+      ~WikiAirport.retrieve_from_cache
+      ~WikiAirport.sanitise_strings
+      ~WikiAirport.save_to_cache
+      ~WikiAirport.source
+      ~WikiAirport.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WikiAirport.name
+      ~WikiAirport.priority
+      ~WikiAirport.g
+   
+   

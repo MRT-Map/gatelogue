@@ -1,0 +1,35 @@
+gatelogue\_aggregator.types.node.air
+====================================
+
+.. automodule:: gatelogue_aggregator.types.node.air
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      AirAirline
+      AirAirport
+      AirFlight
+      AirGate
+      AirSource
+   
+   
+
+   
+   
+   
+
+
+

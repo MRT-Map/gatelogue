@@ -1,0 +1,31 @@
+gatelogue\_aggregator.types.gatelogue\_data
+===========================================
+
+.. automodule:: gatelogue_aggregator.types.gatelogue_data
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      GatelogueData
+   
+   
+
+   
+   
+   
+
+
+
