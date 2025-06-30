@@ -11,7 +11,8 @@ documentation = "https://mrt-map.github.io/gatelogue/docs/rs"
 keywords = ["gatelogue", "mrt"]
 categories = ["games"]
 authors = ["MRT Mapping Services", "7d <61975820+iiiii7d@users.noreply.github.com>"]
-rust-version = "1.78"
+rust-version = "1.65"
+
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
