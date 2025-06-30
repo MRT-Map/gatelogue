@@ -8,4 +8,4 @@ jobs:
     uses: iiiii7d/cargo-msrv-upgrade-workflow/.github/workflows/workflow.yml@main
     defaults:
       run:
-        working-directory: gatelogue-types-rs
+        working-directory: ./gatelogue-types-rs
