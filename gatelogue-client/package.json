@@ -40,6 +40,6 @@
     "vite": "^6.3.5",
     "vite-plugin-vue-devtools": "^7.7.6",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.0.1"
   }
 }
