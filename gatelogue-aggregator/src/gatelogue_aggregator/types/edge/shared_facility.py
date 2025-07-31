@@ -99,6 +99,7 @@ class SharedFacilitySource(Source):
             (fr, "Central City Beltway Terminal North", intra, "Central City Beltway Terminal North"),
             (blu, "Utopia - AFK", intra, "Utopia Anthony Fokker Transit Hub"),
             (fr, "Utopia AFK", intra, "Utopia Anthony Fokker Transit Hub"),
+            (pac, "Utopia - AFK Transit Hub", intra, "Utopia Anthony Fokker Transit Hub"),
             (blu, "Venceslo", intra, "Venceslo Union Station"),
             (redtrain, "Venceslo", intra, "Venceslo Union Station"),
             (blu, "Laclede Central", intra, "Laclede Central"),
@@ -111,6 +112,7 @@ class SharedFacilitySource(Source):
             (blu, "Waterville Union Station", intra, "Waterville Union Station"),
             (blu, "Fort Yaxier Central", intra, "Fort Yaxier Central"),
             (blu, "Sunshine Coast Máspalmas Terminal", intra, "Sunshine Coast Máspalmas Terminal"),
+            (blu, "Sunshine Coast Máspalmas International Airport", intra, "Sunshine Coast Máspalmas International Airport"),
             (blu, "Murrville Central", intra, "Murrville Central"),
             (blu, "BirchView Central", intra, "BirchView Central"),
             (rlq, "Birchview Central", intra, "BirchView Central"),
@@ -139,6 +141,7 @@ class SharedFacilitySource(Source):
             (mtc, "Tung Wan", nflr, "Tung Wan"),
             (mtc, "Edwardsburg", nflr, "Edwardsburg"),
             (blu, "Musique", mrt, "Musique"),
+            (pac, "Musique", mrt, "Musique"),
             (blu, "Elecna Bay North", intra, "Elecna Bay North"),
             (rlq, "Elecna Bay North", intra, "Elecna Bay North"),
             (rlq, "Outer Solarion", intra, "Achowalogen Takachsin Outer Solarion"),
@@ -159,6 +162,7 @@ class SharedFacilitySource(Source):
             (blu, "Pilmont", intra, "Pilmont"),
             (rn, "Pilmont", intra, "Pilmont"),
             (rn, "New Acreadium", intra, "New Acreadium Central District"),
+            (blu, "New Acreadium Central District", intra, "New Acreadium Central District"),
             (blu, "Schiphol International Airport", intra, "New Acreadium Schiphol Airport"),
             (rn, "New Acreadium Schiphol Int'l", intra, "New Acreadium Schiphol Airport"),
             (blu, "Antioch Union Station", intra, "Antioch Union Station"),
@@ -237,6 +241,8 @@ class SharedFacilitySource(Source):
             (flrf, "Solstinox Zoo", nflr, "Foresne Solstinox"),
             (flrf, "Cinnameadow", nflr, "New Foresne Cinnameadow"),
             (flrk, "Tsukihama", nflr, "Tsukihama"),
+            (intra, "Kelvinside Central", blu, "Kelvinside Central"),
+            (intra, "Wythern Transit Hub", fr, "Wythern"),
         ):
             if company1 is None or company2 is None:
                 continue
