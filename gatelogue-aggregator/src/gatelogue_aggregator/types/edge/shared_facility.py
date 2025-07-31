@@ -241,7 +241,7 @@ class SharedFacilitySource(Source):
             (flrf, "Solstinox Zoo", nflr, "Foresne Solstinox"),
             (flrf, "Cinnameadow", nflr, "New Foresne Cinnameadow"),
             (flrk, "Tsukihama", nflr, "Tsukihama"),
-            (intra, "Kelvinside Central", blu, "Kelvinside Central"),
+            (intra, "Elecna Bay Kelvinside Central", blu, "Kelvinside Central"),
             (intra, "Wythern Transit Hub", fr, "Wythern"),
         ):
             if company1 is None or company2 is None:
