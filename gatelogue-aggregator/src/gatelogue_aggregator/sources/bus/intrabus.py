@@ -1,6 +1,7 @@
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
+from gatelogue_aggregator.utils import get_stn
 
 
 class IntraBus(BusSource):
@@ -23,7 +24,9 @@ class IntraBus(BusSource):
 
                 stops = []
                 for li in tr("td")[1 + shift]("li"):
-                    name = li.find("b").string
+                    if (name := li.find("b")) is None:
+                        continue
+                    name = name.string
                     if (more := li.find("i")) is not None:
                         name += " " + more.string.strip()
                     stop = BusStop.new(self, codes={name}, name=name, company=company)
@@ -32,4 +35,9 @@ class IntraBus(BusSource):
                 if len(stops) == 0:
                     continue
 
-                BusLineBuilder(self, line).connect(*stops)
+                if line_code == "419":
+                    BusLineBuilder(self, line).connect(*stops, between=(None, "Shenghua Michigan Avenue"))
+                    BusLineBuilder(self, line).connect(*stops, between=("Shenghua Michigan Avenue", None), one_way=True)
+                    BusLineBuilder(self, line).connect(stops[-1], get_stn(stops, "Shenghua Michigan Avenue"), one_way=True)
+                else:
+                    BusLineBuilder(self, line).connect(*stops)
