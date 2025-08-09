@@ -1,3 +1,2 @@
-var srcIndex = new Map(JSON.parse('[["gatelogue_types",["",[],["lib.rs"]]]]'));
-createSrcSidebar();
-//{"start":36,"fragment_lengths":[38]}
+createSrcSidebar('[["gatelogue_types",["",[],["lib.rs"]]]]');
+//{"start":19,"fragment_lengths":[38]}
