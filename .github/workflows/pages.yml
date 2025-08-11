@@ -89,19 +89,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         name: client
         path: dist
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         name: docs-py
         path: dist/docs
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         name: docs-rs
         path: dist/docs/rs
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         name: docs-ts
         path: dist/docs/ts
