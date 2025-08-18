@@ -12,8 +12,22 @@ updates:
       time: "00:00"
     versioning-strategy: "increase"
     target-branch: "main"
+  - package-ecosystem: "pip"
+    directory: "/gatelogue-types-py"
+    schedule:
+      interval: "weekly"
+      time: "00:00"
+    versioning-strategy: "increase"
+    target-branch: "main"
   - package-ecosystem: "npm"
     directory: "/gatelogue-client"
+    schedule:
+      interval: "weekly"
+      time: "00:00"
+    versioning-strategy: "increase"
+    target-branch: "main"
+  - package-ecosystem: "npm"
+    directory: "/gatelogue-types-ts"
     schedule:
       interval: "weekly"
       time: "00:00"
