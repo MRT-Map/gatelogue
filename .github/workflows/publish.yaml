@@ -14,7 +14,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}+${{ steps.version.outputs.data_version }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: version
         run: |
           cd gatelogue-aggregator/src
@@ -43,7 +43,7 @@ jobs:
         working-directory: gatelogue-types-py
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: pypa/hatch@install
     - run: hatch build
     - uses: actions/upload-artifact@v4
@@ -58,7 +58,7 @@ jobs:
         working-directory: gatelogue-types-rs
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
@@ -76,7 +76,7 @@ jobs:
         working-directory: gatelogue-types-ts
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
           version: latest
@@ -140,7 +140,7 @@ jobs:
     needs: [ build-rs, tests ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -157,7 +157,7 @@ jobs:
     needs: [ build-ts, tests ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
           version: latest
@@ -182,7 +182,7 @@ jobs:
 
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
           version: latest
@@ -209,7 +209,7 @@ jobs:
     needs: [ build-ts, tests ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
           version: latest
