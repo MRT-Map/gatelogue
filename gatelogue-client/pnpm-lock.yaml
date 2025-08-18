@@ -32,13 +32,13 @@ importers:
         version: 22.0.2
       '@types/node':
         specifier: ^24.2.1
-        version: 24.2.1
+        version: 24.3.0
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
-        version: 6.0.1(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2))
+        version: 6.0.1(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2))
       '@vue/tsconfig':
-        specifier: ^0.7.0
-        version: 0.7.0(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))
       eslint:
         specifier: ^9.27.0
         version: 9.33.0
@@ -68,10 +68,10 @@ importers:
         version: 8.32.1(eslint@9.33.0)(typescript@5.9.2)
       vite:
         specifier: ^7.0.6
-        version: 7.1.1(@types/node@24.2.1)
+        version: 7.1.2(@types/node@24.3.0)
       vite-plugin-vue-devtools:
         specifier: ^8.0.0
-        version: 8.0.0(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2))
+        version: 8.0.0(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2))
       vue-eslint-parser:
         specifier: ^10.2.0
         version: 10.2.0(eslint@9.33.0)
@@ -596,8 +596,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@24.2.1':
-    resolution: {integrity: sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ==}
+  '@types/node@24.3.0':
+    resolution: {integrity: sha512-aPTXCrfwnDLj4VvXrm+UUCQjNEvJgNA8s5F1cvwQU+3KNltTOkBm1j30uNLyqqPNe7gE3KFzImYoZEfLhp4Yow==}
 
   '@typescript-eslint/eslint-plugin@8.32.1':
     resolution: {integrity: sha512-6u6Plg9nP/J1GRpe/vcjjabo6Uc5YQPAMxsgQyGC/I0RuukiG1wIe3+Vtg3IrSCVJDmqK3j8adrtzXSENRtFgg==}
@@ -732,8 +732,8 @@ packages:
   '@vue/shared@3.5.18':
     resolution: {integrity: sha512-cZy8Dq+uuIXbxCZpuLd2GJdeSO/lIzIspC2WtkqIpje5QyFbvLaI5wZtdUjLHjGZrlVX6GilejatWwVYYRc8tA==}
 
-  '@vue/tsconfig@0.7.0':
-    resolution: {integrity: sha512-ku2uNz5MaZ9IerPPUyOHzyjhXoX2kVJaVf7hL315DC17vS6IiZRmmCPfggNbU16QTvM80+uYYy3eYJB59WCtvg==}
+  '@vue/tsconfig@0.8.0':
+    resolution: {integrity: sha512-HqJDMjxk9D3mbXAcO9IxqKPeKlVnRWvzyHtgY35L/VoLKubqn7zX80UeiD3jfS/gf+qS7ZlO5KmfXMUrsQtOeQ==}
     peerDependencies:
       typescript: 5.x
       vue: ^3.4.0
@@ -1508,8 +1508,8 @@ packages:
     peerDependencies:
       vite: ^3.0.0-0 || ^4.0.0-0 || ^5.0.0-0 || ^6.0.0-0 || ^7.0.0-0
 
-  vite@7.1.1:
-    resolution: {integrity: sha512-yJ+Mp7OyV+4S+afWo+QyoL9jFWD11QFH0i5i7JypnfTcA1rmgxCbiA8WwAICDEtZ1Z1hzrVhN8R8rGTqkTY8ZQ==}
+  vite@7.1.2:
+    resolution: {integrity: sha512-J0SQBPlQiEXAF7tajiH+rUooJPo0l8KQgyg4/aMunNtrOa7bwuZJsJbDWzeljqQpgftxuq5yNJxQ91O9ts29UQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -2059,7 +2059,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@24.2.1':
+  '@types/node@24.3.0':
     dependencies:
       undici-types: 7.10.0
 
@@ -2140,10 +2140,10 @@ snapshots:
       '@typescript-eslint/types': 8.32.1
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-vue@6.0.1(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2))':
+  '@vitejs/plugin-vue@6.0.1(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.29
-      vite: 7.1.1(@types/node@24.2.1)
+      vite: 7.1.2(@types/node@24.3.0)
       vue: 3.5.18(typescript@5.9.2)
 
   '@volar/language-core@2.4.22':
@@ -2224,14 +2224,14 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/devtools-core@8.0.0(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2))':
+  '@vue/devtools-core@8.0.0(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2))':
     dependencies:
       '@vue/devtools-kit': 8.0.0
       '@vue/devtools-shared': 8.0.0
       mitt: 3.0.1
       nanoid: 5.1.5
       pathe: 2.0.3
-      vite-hot-client: 2.1.0(vite@7.1.1(@types/node@24.2.1))
+      vite-hot-client: 2.1.0(vite@7.1.2(@types/node@24.3.0))
       vue: 3.5.18(typescript@5.9.2)
     transitivePeerDependencies:
       - vite
@@ -2287,7 +2287,7 @@ snapshots:
 
   '@vue/shared@3.5.18': {}
 
-  '@vue/tsconfig@0.7.0(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))':
+  '@vue/tsconfig@0.8.0(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))':
     optionalDependencies:
       typescript: 5.9.2
       vue: 3.5.18(typescript@5.9.2)
@@ -2973,17 +2973,17 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite-dev-rpc@1.1.0(vite@7.1.1(@types/node@24.2.1)):
+  vite-dev-rpc@1.1.0(vite@7.1.2(@types/node@24.3.0)):
     dependencies:
       birpc: 2.5.0
-      vite: 7.1.1(@types/node@24.2.1)
-      vite-hot-client: 2.1.0(vite@7.1.1(@types/node@24.2.1))
+      vite: 7.1.2(@types/node@24.3.0)
+      vite-hot-client: 2.1.0(vite@7.1.2(@types/node@24.3.0))
 
-  vite-hot-client@2.1.0(vite@7.1.1(@types/node@24.2.1)):
+  vite-hot-client@2.1.0(vite@7.1.2(@types/node@24.3.0)):
     dependencies:
-      vite: 7.1.1(@types/node@24.2.1)
+      vite: 7.1.2(@types/node@24.3.0)
 
-  vite-plugin-inspect@11.3.2(vite@7.1.1(@types/node@24.2.1)):
+  vite-plugin-inspect@11.3.2(vite@7.1.2(@types/node@24.3.0)):
     dependencies:
       ansis: 4.1.0
       debug: 4.4.1
@@ -2993,27 +2993,27 @@ snapshots:
       perfect-debounce: 1.0.0
       sirv: 3.0.1
       unplugin-utils: 0.2.4
-      vite: 7.1.1(@types/node@24.2.1)
-      vite-dev-rpc: 1.1.0(vite@7.1.1(@types/node@24.2.1))
+      vite: 7.1.2(@types/node@24.3.0)
+      vite-dev-rpc: 1.1.0(vite@7.1.2(@types/node@24.3.0))
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-devtools@8.0.0(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2)):
+  vite-plugin-vue-devtools@8.0.0(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2)):
     dependencies:
-      '@vue/devtools-core': 8.0.0(vite@7.1.1(@types/node@24.2.1))(vue@3.5.18(typescript@5.9.2))
+      '@vue/devtools-core': 8.0.0(vite@7.1.2(@types/node@24.3.0))(vue@3.5.18(typescript@5.9.2))
       '@vue/devtools-kit': 8.0.0
       '@vue/devtools-shared': 8.0.0
       execa: 9.6.0
       sirv: 3.0.1
-      vite: 7.1.1(@types/node@24.2.1)
-      vite-plugin-inspect: 11.3.2(vite@7.1.1(@types/node@24.2.1))
-      vite-plugin-vue-inspector: 5.3.2(vite@7.1.1(@types/node@24.2.1))
+      vite: 7.1.2(@types/node@24.3.0)
+      vite-plugin-inspect: 11.3.2(vite@7.1.2(@types/node@24.3.0))
+      vite-plugin-vue-inspector: 5.3.2(vite@7.1.2(@types/node@24.3.0))
     transitivePeerDependencies:
       - '@nuxt/kit'
       - supports-color
       - vue
 
-  vite-plugin-vue-inspector@5.3.2(vite@7.1.1(@types/node@24.2.1)):
+  vite-plugin-vue-inspector@5.3.2(vite@7.1.2(@types/node@24.3.0)):
     dependencies:
       '@babel/core': 7.28.0
       '@babel/plugin-proposal-decorators': 7.28.0(@babel/core@7.28.0)
@@ -3024,11 +3024,11 @@ snapshots:
       '@vue/compiler-dom': 3.5.18
       kolorist: 1.8.0
       magic-string: 0.30.17
-      vite: 7.1.1(@types/node@24.2.1)
+      vite: 7.1.2(@types/node@24.3.0)
     transitivePeerDependencies:
       - supports-color
 
-  vite@7.1.1(@types/node@24.2.1):
+  vite@7.1.2(@types/node@24.3.0):
     dependencies:
       esbuild: 0.25.8
       fdir: 6.4.6(picomatch@4.0.3)
@@ -3037,7 +3037,7 @@ snapshots:
       rollup: 4.46.2
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 24.2.1
+      '@types/node': 24.3.0
       fsevents: 2.3.3
 
   vscode-uri@3.1.0: {}
