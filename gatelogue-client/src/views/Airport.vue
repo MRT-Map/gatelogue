@@ -49,7 +49,7 @@ const maxGateFlightsLength = computed(() =>
   <main>
     <b class="code">{{ airport.code }}</b
     ><br />
-    <a :href="airport.link?.v">
+    <a :href="airport.link?.v ?? ''">
       <Sourced :sourced="airport.names">
         <b class="name">{{ airport.names?.v.join(" / ") ?? "" }}</b>
       </Sourced> </a

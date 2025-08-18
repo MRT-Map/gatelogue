@@ -59,7 +59,7 @@ const gates = computed(() =>
 
 <template>
   <main>
-    <a :href="airline.link?.v">
+    <a :href="airline.link?.v ?? ''">
       <b class="name">{{ airline.name }}</b></a
     ><br />
     <table>

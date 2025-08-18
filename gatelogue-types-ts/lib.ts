@@ -31,7 +31,7 @@
  * @packageDocumentation
  */
 
-/* eslint-disable no-use-before-define,@typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 export type StringID<_ extends Node> = string;
 export type IntID<_ extends Node> = number;
@@ -326,5 +326,19 @@ export class GD<S extends boolean = true> {
   }
   get busStops(): BusStop<S>[] {
     return this.nodes.filter((a) => a.type === "BusStop") as never;
+  }
+
+  spawnWarp(id: StringID<SpawnWarp<S>>): SpawnWarp<S> | undefined {
+    return this.node(id) as never;
+  }
+  get spawnWarps(): SpawnWarp<S>[] {
+    return this.nodes.filter((a) => a.type === "SpawnWarp") as never;
+  }
+
+  town(id: StringID<Town<S>>): Town<S> | undefined {
+    return this.node(id) as never;
+  }
+  get towns(): Town<S>[] {
+    return this.nodes.filter((a) => a.type === "Town") as never;
   }
 }

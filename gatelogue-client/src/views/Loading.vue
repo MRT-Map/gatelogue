@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="/gat2-light.png" />
+    <img src="/gat2-light.png" alt="logo" />
   </div>
 </template>
 

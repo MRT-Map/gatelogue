@@ -2,6 +2,7 @@
 import type { AirAirline, StringID } from "gatelogue-types";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
+import { RouterLink } from "vue-router";
 
 const props = defineProps<{
   airline?: AirAirline;

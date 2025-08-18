@@ -38,7 +38,7 @@ const airlinePanel: Panel<AirAirline> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const panels: Panel<any>[] = [airlinePanel, airportPanel] as const;
 
-const selPanel = ref(panels[0]);
+const selPanel = ref(panels[0]!);
 const sortedObjects = computed(() =>
   selPanel.value.getter().sort((a, b) => {
     if (a[selPanel.value.objDisplay] === null) return 100;
@@ -52,7 +52,7 @@ const sortedObjects = computed(() =>
 
 <template>
   <nav>
-    <RouterLink to="/"><img src="/gat2-light.png" /></RouterLink>
+    <RouterLink to="/"><img src="/gat2-light.png" alt="logo" /></RouterLink>
     <hr />
     <template v-for="p in panels" :key="p.cat">
       <div

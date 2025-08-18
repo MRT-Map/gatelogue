@@ -19,7 +19,7 @@ const airline = computed(() => {
     gate.value.code !== "?" &&
     gate.value.flights.length > 0
   )
-    return gd.value!.airFlight(gate.value.flights[0].v.toString())!.airline;
+    return gd.value!.airFlight(gate.value.flights[0]!.v.toString())!.airline;
   return undefined;
 });
 </script>
