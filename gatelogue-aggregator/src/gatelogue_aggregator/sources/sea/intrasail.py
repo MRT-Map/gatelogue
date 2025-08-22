@@ -18,12 +18,12 @@ class IntraSail(SeaSource):
 
         html = get_wiki_html("IntraSail", config)
 
-        cursor: bs4.Tag = html.find("span", "mw-headline", string="[ 1 ] Nansei Gintra").parent
+        cursor: bs4.Tag = html.find("span", "mw-headline", string="1 Nansei Gintra").parent
 
-        while cursor and (line_code_name := cursor.find(class_="mw-headline").string).startswith("["):
-            result = re.search(r"\[ (?P<code>.*) ] (?P<name>[^|]*)", line_code_name)
-            line_code = result.group("code").strip()
-            line_name = result.group("name").strip()
+        while cursor:
+            line_code, line_name = cursor.find(class_="mw-headline").string.split(" ", 1)
+            line_code = line_code.strip()
+            line_name = line_name.strip()
 
             line_colour = "#C74EBD" if line_code.endswith("X") else "#3AB3DA" if line_code[-1].isdigit() else "#B02E26"
             line = SeaLine.new(self, code=line_code, name=line_name, company=company, mode="ferry", colour=line_colour)
