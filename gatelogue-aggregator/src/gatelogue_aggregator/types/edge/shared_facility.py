@@ -66,6 +66,7 @@ class SharedFacilitySource(Source):
             (blu, "New Gensokyo Hakurei Shrine", intra, "New Gensokyo Hakurei Shrine"),
             (blu, "New Gensokyo Regional Airport", intra, "New Gensokyo Regional Airport"),
             (blu, "Shark Town", intra, "Shark Town"),
+            (blu, "Filipowice", intra, "Filipowice"),
             (blu, "Bechtel", intra, "Bechtel"),
             (blu, "Niwen", intra, "Niwen Train Station"),
             (blu, "Risima", intra, "Risima"),
