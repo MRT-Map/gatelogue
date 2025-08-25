@@ -20,8 +20,8 @@ class IntraSail(SeaSource):
 
         cursor: bs4.Tag = html.find("span", "mw-headline", string="1 Nansei Gintra").parent
 
-        while cursor and (line_code_name := cursor.find(class_="mw-headline").string) is not None:
-            line_code, line_name = line_code_name.split(" ", 1)
+        while cursor and (line_code_name := cursor.find(class_="mw-headline")) is not None:
+            line_code, line_name = line_code_name.string.split(" ", 1)
             line_code = line_code.strip()
             line_name = line_name.strip()
 
