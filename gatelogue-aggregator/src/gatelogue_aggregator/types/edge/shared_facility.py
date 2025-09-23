@@ -34,6 +34,7 @@ class SharedFacilitySource(Source):
         wzr = get_company_id("West Zeta Rail")
         seat = get_company_id("SEAT")
         pac = get_company_id("Pacifica")
+        breeze = get_company_id("BreezeRail")
         flrk = get_company_id("FLR Kazeshima/Shui Chau")
         flrf = get_company_id("FLR Foresne/Commuter")
 
@@ -249,6 +250,9 @@ class SharedFacilitySource(Source):
             (flrk, "Tsukihama", nflr, "Tsukihama"),
             (intra, "Elecna Bay Kelvinside Central", blu, "Kelvinside Central"),
             (intra, "Wythern Transit Hub", fr, "Wythern"),
+            (blu, "Tranquil Forest Central", breeze, "Tranquil Forest Central"),
+            (blu, "Silent Plains Central", breeze, "Silent Plains Central"),
+
         ):
             if company1 is None or company2 is None:
                 continue
