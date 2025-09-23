@@ -1,4 +1,3 @@
-import re
 from typing import TYPE_CHECKING
 
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html

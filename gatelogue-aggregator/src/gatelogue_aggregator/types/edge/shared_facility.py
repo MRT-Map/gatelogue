@@ -113,7 +113,12 @@ class SharedFacilitySource(Source):
             (blu, "Waterville Union Station", intra, "Waterville Union Station"),
             (blu, "Fort Yaxier Central", intra, "Fort Yaxier Central"),
             (blu, "Sunshine Coast Máspalmas Terminal", intra, "Sunshine Coast Máspalmas Terminal"),
-            (blu, "Sunshine Coast Máspalmas International Airport", intra, "Sunshine Coast Máspalmas International Airport"),
+            (
+                blu,
+                "Sunshine Coast Máspalmas International Airport",
+                intra,
+                "Sunshine Coast Máspalmas International Airport",
+            ),
             (blu, "Murrville Central", intra, "Murrville Central"),
             (blu, "BirchView Central", intra, "BirchView Central"),
             (rlq, "Birchview Central", intra, "BirchView Central"),

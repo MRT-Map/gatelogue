@@ -38,6 +38,8 @@ class IntraBus(BusSource):
                 if line_code == "419":
                     BusLineBuilder(self, line).connect(*stops, between=(None, "Shenghua Michigan Avenue"))
                     BusLineBuilder(self, line).connect(*stops, between=("Shenghua Michigan Avenue", None), one_way=True)
-                    BusLineBuilder(self, line).connect(stops[-1], get_stn(stops, "Shenghua Michigan Avenue"), one_way=True)
+                    BusLineBuilder(self, line).connect(
+                        stops[-1], get_stn(stops, "Shenghua Michigan Avenue"), one_way=True
+                    )
                 else:
                     BusLineBuilder(self, line).connect(*stops)

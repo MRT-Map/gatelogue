@@ -31,7 +31,14 @@ COOLDOWN_LOCK = Lock()
 COOLDOWN: dict[str, float] = {}
 
 
-def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int = DEFAULT_COOLDOWN) -> str:
+def get_url(
+    url: str,
+    cache: Path,
+    timeout: int = DEFAULT_TIMEOUT,
+    cooldown: int = DEFAULT_COOLDOWN,
+    *,
+    empty_is_error: bool = False,
+) -> str:
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
@@ -45,7 +52,7 @@ def get_url(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int
             time.sleep(abs(cool - time.time()))
 
         response = SESSION.get(url, timeout=timeout)
-        if response.status_code >= 400:  # noqa: PLR2004
+        if response.status_code >= 400 or (empty_is_error and response.text == ""):  # noqa: PLR2004
             rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
             if response.status_code in (408, 429):
                 with COOLDOWN_LOCK:
@@ -68,7 +75,13 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
     link = f"https://api.minecartrapidtransit.net/api/v2/warps?player={player}"
     offset = 0
     ls: list[dict] = msgspec.json.decode(
-        get_url(link, config.cache_dir / "mrt-api" / str(player) / str(offset), config.timeout, config.cooldown)
+        get_url(
+            link,
+            config.cache_dir / "mrt-api" / str(player) / str(offset),
+            config.timeout,
+            config.cooldown,
+            empty_is_error=True,
+        )
     )["result"]
     while len(ls) != 0:
         yield from ls
@@ -79,6 +92,7 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
                 config.cache_dir / "mrt-api" / str(player) / str(offset),
                 config.timeout,
                 config.cooldown,
+                empty_is_error=True,
             )
         )["result"]
 
