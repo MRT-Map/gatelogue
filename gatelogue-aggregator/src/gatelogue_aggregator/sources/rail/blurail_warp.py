@@ -17,7 +17,7 @@ class BluRailWarp(RailSource):
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
             if not warp["name"].startswith("BLU") and not warp["name"].startswith("BR"):
                 continue
-            if (match := re.search(r"(?i)^This is ([^.]*)\.|^→ ([^|]*?) *\|", warp["welcomeMessage"])) is None:
+            if (match := re.search(r"(?i)^This is ([^.]*)\.|^[→✈] ([^|]*?) *\|", warp["welcomeMessage"])) is None:
                 continue
 
             name = match.group(1) or match.group(2)

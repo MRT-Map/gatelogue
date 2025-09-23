@@ -54,7 +54,7 @@ class WikiMRT(RailSource):
 
             stations = []
             for match in search_all(
-                re.compile(r"{{station\|open\|[^|]*?\|(?P<code>[^|]*?)\|(?P<transfers>.*?)}}\s*\n"), text
+                re.compile(r"{{station\|open\|[^|]*?\|(?:c=white\|)?(?P<code>[^|]*?)\|(?P<transfers>.*?)}}\s*\n"), text
             ):
                 codes = {match.group("code")}
                 for match2 in search_all(
