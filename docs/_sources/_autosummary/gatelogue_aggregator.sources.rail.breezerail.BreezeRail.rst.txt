@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.breezerail.BreezeRail
+========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.breezerail
+
+.. autoclass:: BreezeRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BreezeRail.__init__
+      ~BreezeRail.build
+      ~BreezeRail.find_by_ref
+      ~BreezeRail.find_by_ref_or_index
+      ~BreezeRail.is_coord_source
+      ~BreezeRail.report
+      ~BreezeRail.reported_nodes
+      ~BreezeRail.retrieve_from_cache
+      ~BreezeRail.sanitise_strings
+      ~BreezeRail.save_to_cache
+      ~BreezeRail.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BreezeRail.name
+      ~BreezeRail.priority
+      ~BreezeRail.g
+   
+   

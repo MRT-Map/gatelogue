@@ -30,6 +30,8 @@ gatelogue\_aggregator.sources.rail
 
    blurail
    blurail_warp
+   breezerail
+   breezerail_warp
    dynmap_mrt
    fredrail
    intrarail
