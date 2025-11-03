@@ -1,0 +1,1 @@
+rd_("ogatelogue_types")
