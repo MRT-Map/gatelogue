@@ -27,7 +27,7 @@ jobs:
           ref: dist
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.13'
+          python-version: '3.14'
       - uses: pypa/hatch@install
       
       - uses: awalsh128/cache-apt-pkgs-action@latest
