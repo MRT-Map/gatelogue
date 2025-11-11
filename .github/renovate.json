@@ -2,5 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>mrt-map/renovate-config:no-dev"
+  ],
+  "packageRules": [
+    {
+      "matchFileNames": ["gatelogue-client/**", "gatelogue-aggregator/**"],
+      "extends": [":pinAllExceptPeerDependencies"]
+    },
+    {
+      "matchFileNames": ["gatelogue-types-*/**"],
+      "extends": [":pinOnlyDevDependencies"]
+    }
   ]
 }
