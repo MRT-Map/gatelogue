@@ -11,12 +11,6 @@
     {
       "matchFileNames": ["gatelogue-types-*/**"],
       "extends": [":pinOnlyDevDependencies"]
-    },
-    {
-      "matchDepTypes": [
-        "action"
-      ],
-      "pinDigests": false
     }
   ],
   "customManagers": [
