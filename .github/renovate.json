@@ -12,7 +12,7 @@
       "matchFileNames": ["gatelogue-types-*/**"],
       "extends": [":pinOnlyDevDependencies"]
     }
-  ]
+  ],
   "customManagers": [
     {
       "customType": "regex",
