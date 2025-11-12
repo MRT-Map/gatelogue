@@ -22,9 +22,7 @@ class BreezeRail(RailSource):
             if (line_code_name := h3.find("span", class_="mw-headline")) is None:
                 continue
             line_code, line_name = line_code_name.string.split(" - ", 1)
-            line = RailLine.new(
-                self, code=line_code, name=line_name, company=company, colour="#00c3ff"
-            )
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#00c3ff")
 
             stations = []
             for tr in h3.next_sibling.next_sibling.find_all("tr")[1:]:
@@ -32,10 +30,7 @@ class BreezeRail(RailSource):
                     continue
                 name = next(tr("td")[2].strings)
                 code = tr("td")[1].span.string
-                if code == "SP":
-                    code = {"SP", "SPC"}
-                else:
-                    code = {code}
+                code = {"SP", "SPC"} if code == "SP" else {code}
 
                 station = RailStation.new(self, codes=code, name=name, company=company)
                 stations.append(station)

@@ -252,7 +252,6 @@ class SharedFacilitySource(Source):
             (intra, "Wythern Transit Hub", fr, "Wythern"),
             (blu, "Tranquil Forest Central", breeze, "Tranquil Forest Central"),
             (blu, "Silent Plains Central", breeze, "Silent Plains Central"),
-
         ):
             if company1 is None or company2 is None:
                 continue

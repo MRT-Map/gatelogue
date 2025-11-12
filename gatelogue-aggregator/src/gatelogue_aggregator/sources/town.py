@@ -38,7 +38,11 @@ class TownList(TownSource):
             Town.new(
                 self,
                 name=row["Town Name"],
-                rank=row["Town Rank"] if row["Town Name"] != "Arisa" else "Unranked" if str(row["Town Rank"]) == "nan" else "Premier",
+                rank=row["Town Rank"]
+                if row["Town Name"] != "Arisa"
+                else "Unranked"
+                if str(row["Town Rank"]) == "nan"
+                else "Premier",
                 mayor=row["Mayor"] if str(row["Mayor"]) != "nan" else "MRT Staff",
                 deputy_mayor=None
                 if not row["Deputy Mayor"] or str(row["Deputy Mayor"]) == "nan"

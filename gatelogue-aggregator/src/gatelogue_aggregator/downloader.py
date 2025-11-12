@@ -70,12 +70,8 @@ def get_url(
     rich.print(INFO3 + f"Downloaded {url} to {cache}")
     return text
 
-def get_json(
-    url: str,
-    cache: Path,
-    timeout: int = DEFAULT_TIMEOUT,
-    cooldown: int = DEFAULT_COOLDOWN
-) -> dict:
+
+def get_json(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int = DEFAULT_COOLDOWN) -> dict:
     text = get_url(url, cache, timeout, cooldown, empty_is_error=True)
     try:
         return msgspec.json.decode(text)
@@ -85,6 +81,7 @@ def get_json(
             COOLDOWN[urlparse(url).netloc] = time.time() + DEFAULT_COOLDOWN
         rich.print(ERROR + f"Will try {url} again in 15s")
         return get_json(url, cache, timeout, cooldown)
+
 
 def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
     link = f"https://api.minecartrapidtransit.net/api/v2/warps?player={player}"
