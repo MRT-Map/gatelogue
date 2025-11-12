@@ -14,6 +14,11 @@
     {
       "matchFileNames": ["gatelogue-types-*/**"],
       "extends": [":pinOnlyDevDependencies"]
+    },
+    {
+      "matchFileNames": ["gatelogue-aggregator/**"],
+      "matchDepTypes": ["tool.hatch.envs.types", "requires-python"],
+      "extends": [":preserveSemverRanges"]
     }
   ]
 }
