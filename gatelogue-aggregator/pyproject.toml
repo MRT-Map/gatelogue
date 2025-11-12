@@ -29,16 +29,16 @@ classifiers = [
 ]
 dependencies = [
   "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
-  "click",
-  "msgspec",
-  "pandas",
-  "rich",
-  "cloudscraper",
-  "BeautifulSoup4",
-  "rustworkx",
-  "pydot",
-  "pillow",
-  "pyyaml"
+  "click==8.3.0",
+  "msgspec==0.19.0",
+  "pandas==2.3.3",
+  "rich==14.2.0",
+  "cloudscraper==1.2.71",
+  "BeautifulSoup4==4.14.2",
+  "rustworkx==0.17.1",
+  "pydot==4.0.1",
+  "pillow==12.0.0",
+  "pyyaml==6.0.3"
 ]
 
 [project.urls]
@@ -62,10 +62,10 @@ allow-direct-references = true
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx",
-  "sphinxcontrib-programoutput",
-  "sphinx-codeautolink",
-  "sphinx_rtd_theme",
+  "sphinx", # renovate
+  "sphinxcontrib-programoutput", # renovate
+  "sphinx-codeautolink", # renovate
+  "sphinx_rtd_theme", # renovate
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
