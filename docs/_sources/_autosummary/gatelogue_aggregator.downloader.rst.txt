@@ -15,6 +15,7 @@ gatelogue\_aggregator.downloader
       :toctree:                                          
    
       all_warps
+      get_json
       get_url
       warps
    
