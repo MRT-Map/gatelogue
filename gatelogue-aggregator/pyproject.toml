@@ -62,10 +62,10 @@ allow-direct-references = true
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx", # renovate
-  "sphinxcontrib-programoutput", # renovate
-  "sphinx-codeautolink", # renovate
-  "sphinx_rtd_theme", # renovate
+  "sphinx==8.2.3", # renovate
+  "sphinxcontrib-programoutput==0.18", # renovate
+  "sphinx-codeautolink==0.17.5", # renovate
+  "sphinx_rtd_theme==3.0.2", # renovate
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
