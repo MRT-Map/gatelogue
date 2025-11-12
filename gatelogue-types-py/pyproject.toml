@@ -53,9 +53,9 @@ extra-dependencies = ["gatelogue-types[all]"]
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx", # renovate
-  "sphinx-codeautolink", # renovate
-  "sphinx_rtd_theme", # renovate
+  "sphinx==8.2.3", # renovate
+  "sphinx-codeautolink==0.17.5", # renovate
+  "sphinx_rtd_theme==3.0.2", # renovate
 ]
 [tool.hatch.envs.docs.scripts]
 build = "cd docs; make html; cd .."
