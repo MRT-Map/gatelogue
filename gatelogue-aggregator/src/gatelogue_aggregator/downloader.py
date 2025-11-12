@@ -70,29 +70,42 @@ def get_url(
     rich.print(INFO3 + f"Downloaded {url} to {cache}")
     return text
 
+def get_json(
+    url: str,
+    cache: Path,
+    timeout: int = DEFAULT_TIMEOUT,
+    cooldown: int = DEFAULT_COOLDOWN
+) -> dict:
+    text = get_url(url, cache, timeout, cooldown, empty_is_error=True)
+    try:
+        return msgspec.json.decode(text)
+    except msgspec.DecodeError as e:
+        rich.print(ERROR + f"Received invalid JSON from {url}:\n{e}\n{text}")
+        with COOLDOWN_LOCK:
+            COOLDOWN[urlparse(url).netloc] = time.time() + DEFAULT_COOLDOWN
+        rich.print(ERROR + f"Will try {url} again in 15s")
+        return get_json(url, cache, timeout, cooldown)
 
 def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
     link = f"https://api.minecartrapidtransit.net/api/v2/warps?player={player}"
     offset = 0
-    ls: list[dict] = msgspec.json.decode(
-        get_url(
+    ls: list[dict] = (
+        get_json(
             link,
             config.cache_dir / "mrt-api" / str(player) / str(offset),
             config.timeout,
             config.cooldown,
-            empty_is_error=True,
         )
     )["result"]
     while len(ls) != 0:
         yield from ls
         offset += len(ls)
-        ls = msgspec.json.decode(
-            get_url(
+        ls = (
+            get_json(
                 link + f"&offset={offset}",
                 config.cache_dir / "mrt-api" / str(player) / str(offset),
                 config.timeout,
                 config.cooldown,
-                empty_is_error=True,
             )
         )["result"]
 
@@ -100,14 +113,14 @@ def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
 def all_warps(config: Config) -> Iterator[dict]:
     link = "https://api.minecartrapidtransit.net/api/v2/warps"
     offset = 0
-    ls: list[dict] = msgspec.json.decode(
-        get_url(link, config.cache_dir / "mrt-api" / "all" / str(offset), config.timeout, config.cooldown)
+    ls: list[dict] = (
+        get_json(link, config.cache_dir / "mrt-api" / "all" / str(offset), config.timeout, config.cooldown)
     )["result"]
     while len(ls) != 0:
         yield from ls
         offset += len(ls)
-        ls = msgspec.json.decode(
-            get_url(
+        ls = (
+            get_json(
                 link + f"?offset={offset}",
                 config.cache_dir / "mrt-api" / "all" / str(offset),
                 config.timeout,
