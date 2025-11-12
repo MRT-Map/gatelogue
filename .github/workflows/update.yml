@@ -22,15 +22,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           ref: dist
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6
         with:
           python-version: '3.14'
       - uses: pypa/hatch@install
       
-      - uses: awalsh128/cache-apt-pkgs-action@v1.6.0
+      - uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05 # v1.6.0
         with:
           packages: graphviz libgraphviz-dev
           version: 1.0
@@ -48,7 +48,7 @@ jobs:
           default_author: github_actions
           message: ${{ env.message }}
 
-      - uses: peter-evans/repository-dispatch@v4
+      - uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f # v4
         with:
           token: ${{ secrets.PAT }}
           repository: mrt-map/transit-map

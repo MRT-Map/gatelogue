@@ -13,7 +13,7 @@ jobs:
         working-directory: gatelogue-types-py
   
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pypa/hatch@install
       - run: hatch test --all
 
@@ -24,7 +24,7 @@ jobs:
         working-directory: gatelogue-types-rs
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
         with:
           toolchain: stable
