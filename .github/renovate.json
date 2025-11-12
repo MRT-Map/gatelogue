@@ -12,5 +12,15 @@
       "matchFileNames": ["gatelogue-types-*/**"],
       "extends": [":pinOnlyDevDependencies"]
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/pyproject.toml/"],
+      "matchStrings": [
+        "\"(?<packageName>[A-Z0-9a-z_-]*)(?<currentValue>.*)\", # renovate"
+      ],
+      "datasourceTemplate": "pypi"
+    }
   ]
 }

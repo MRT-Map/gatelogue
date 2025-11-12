@@ -14,7 +14,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}+${{ steps.version.outputs.data_version }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - id: version
         run: |
           cd gatelogue-aggregator/src
@@ -43,10 +43,10 @@ jobs:
         working-directory: gatelogue-types-py
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
     - uses: pypa/hatch@install
     - run: hatch build
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
       with:
         name: dist-py
         path: gatelogue-types-py/dist
@@ -58,13 +58,13 @@ jobs:
         working-directory: gatelogue-types-rs
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
     - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
       with:
         toolchain: stable
     - run: cargo update
     - run: cargo package
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
       with:
         name: dist-rs
         path: gatelogue-types-rs/target/package/*.crate
@@ -76,17 +76,17 @@ jobs:
         working-directory: gatelogue-types-ts
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
         with:
           version: latest
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
           registry-url: https://registry.npmjs.org/
       - run: pnpm i
       - run: pnpm pack
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: dist-ts
           path: gatelogue-types-ts/gatelogue-types-*.tgz
@@ -98,15 +98,15 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: dist-py
           path: dist
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: dist-rs
           path: dist
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: dist-ts
           path: dist
@@ -126,7 +126,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: dist-py
           path: dist
@@ -140,7 +140,7 @@ jobs:
     needs: [ build-rs, tests ]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
         with:
           toolchain: stable
@@ -157,11 +157,11 @@ jobs:
     needs: [ build-ts, tests ]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
         with:
           version: latest
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
           registry-url: https://registry.npmjs.org/
@@ -182,11 +182,11 @@ jobs:
 
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
         with:
           version: latest
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
           registry-url: https://npm.pkg.github.com/
@@ -209,11 +209,11 @@ jobs:
     needs: [ build-ts, tests ]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
         with:
           version: latest
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
       - run: mv ../README.md .

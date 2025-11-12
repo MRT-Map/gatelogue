@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
@@ -25,7 +25,7 @@ jobs:
       - run: |
           cd gatelogue-client/dist
           echo > .nojekyll
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: client
           path: gatelogue-client/dist
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: pypa/hatch@install
       - run: |
           sudo apt-get update
@@ -42,7 +42,7 @@ jobs:
       - run: |
           cd gatelogue-aggregator
           hatch run docs:build
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: docs-py
           path: gatelogue-aggregator/docs/_build/html/
@@ -51,13 +51,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
       - run: |
           cd gatelogue-types-rs
           cargo doc --no-deps
       - run: cp .github/docs-rs-redirect.html gatelogue-types-rs/target/doc/index.html
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: docs-rs
           path: gatelogue-types-rs/target/doc/
@@ -66,8 +66,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
@@ -77,7 +77,7 @@ jobs:
           cd gatelogue-types-ts
           pnpm install --no-frozen-lockfile
           pnpm run doc
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: docs-ts
           path: gatelogue-types-ts/docs
@@ -88,25 +88,25 @@ jobs:
     needs: [ build-client, build-docs-py, build-docs-rs, build-docs-ts ]
 
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v6
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+    - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: client
         path: dist
-    - uses: actions/download-artifact@v6
+    - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: docs-py
         path: dist/docs
-    - uses: actions/download-artifact@v6
+    - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: docs-rs
         path: dist/docs/rs
-    - uses: actions/download-artifact@v6
+    - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: docs-ts
         path: dist/docs/ts
     - name: Deploy
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: dist
