@@ -333,7 +333,7 @@ class AirAirport(gt.AirAirport, LocatedNode, kw_only=True, tag=True):
             return None
         s = str(s).upper()
         s = AIRPORT_ALIASES.get(s.strip(), s)
-        if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
+        if len(s) == 4 and s[3] == "T":
             return s[:3]
         return s
 
@@ -410,7 +410,7 @@ class AirGate(gt.AirGate, Node, kw_only=True, tag=True):
     @override
     def report(self, src: AirSource):
         num_flights = len(list(self.get_all(src, AirFlight)))
-        if num_flights > 6 and self.code is not None:  # noqa: PLR2004
+        if num_flights > 6 and self.code is not None:
             self.print_report(src, ERROR, f"has {num_flights} flights")
 
     @staticmethod

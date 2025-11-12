@@ -26,7 +26,7 @@ class RailNorth(RailSource):
 
             stations = []
             for tr in table.find_all("tr"):
-                if len(tr("td")) != 4:  # noqa: PLR2004
+                if len(tr("td")) != 4:
                     continue
                 if tr("td")[0].find("a", href="/index.php/File:Dynmap_Green_Flag.png") is None:
                     continue

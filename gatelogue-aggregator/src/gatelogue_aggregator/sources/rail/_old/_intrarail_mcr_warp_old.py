@@ -33,7 +33,7 @@ class IntraRailMCRWarp(RailSource):
                 continue
 
             for tr in table.find_all("tr"):
-                if len(tr("td")) != 4:  # noqa: PLR2004
+                if len(tr("td")) != 4:
                     continue
                 code = tr("td")[1].span.span.string
                 name = "".join(tr("td")[2].strings).strip()
@@ -46,7 +46,7 @@ class IntraRailMCRWarp(RailSource):
             warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config),
             warps(uuid.UUID("5cc70692-7282-4fd5-8d89-11c08535bb11"), config),
         ):
-            if not warp["name"].startswith("MCR") or len(warp["name"].split("_")) < 2:  # noqa: PLR2004
+            if not warp["name"].startswith("MCR") or len(warp["name"].split("_")) < 2:
                 continue
             code = warp["name"].split("_")[1]
             code = {

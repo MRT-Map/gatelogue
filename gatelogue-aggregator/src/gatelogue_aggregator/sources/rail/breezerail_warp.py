@@ -18,7 +18,7 @@ class BreezeRailWarp(RailSource):
 
         codes = []
         for warp in warps(uuid.UUID("07f82b2e-75d0-4fec-98c8-472cc1621e7d"), config):
-            if len(warp["name"].split("_")) < 3 or not warp["name"].split("_")[0].startswith("BZ"):  # noqa: PLR2004
+            if len(warp["name"].split("_")) < 3 or not warp["name"].split("_")[0].startswith("BZ"):
                 continue
             code = warp["name"].split("_")[1].upper()
             if code in codes:

@@ -20,7 +20,7 @@ class CFC(SeaSource):
             if ". " not in ln:
                 continue
             line_code, line_stations = ln.split(". ")
-            if len(line_code) > 3:  # noqa: PLR2004
+            if len(line_code) > 3:
                 continue
             line = SeaLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
 

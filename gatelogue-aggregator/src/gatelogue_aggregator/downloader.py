@@ -52,7 +52,7 @@ def get_url(
             time.sleep(abs(cool - time.time()))
 
         response = SESSION.get(url, timeout=timeout)
-        if response.status_code >= 400 or (empty_is_error and response.text == ""):  # noqa: PLR2004
+        if response.status_code >= 400 or (empty_is_error and response.text == ""):
             rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
             if response.status_code in (408, 429):
                 with COOLDOWN_LOCK:

@@ -39,9 +39,9 @@ def mwt(src: WikiAirport, config):
         size=lambda matches: "XS"
         if (code := matches["code"].removesuffix("A")).startswith("P")
         else "S"
-        if int(code) <= 60  # noqa: PLR2004
+        if int(code) <= 60
         else "M"
-        if int(code) <= 82  # noqa: PLR2004
+        if int(code) <= 82
         else "H",
     )
 
@@ -53,7 +53,7 @@ def kek(src: WikiAirport, config):
         "KEK",
         re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
         config,
-        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",  # noqa: PLR2004
+        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",
     )
 
 
@@ -126,7 +126,7 @@ def dje(src: WikiAirport, config):
         if caption == "Terminal 1":
             for tr in table("tr")[1:]:
                 code = tr("td")[0].string
-                size = "MS" if 1 <= int(code) <= 10 else "S"  # noqa: PLR2004
+                size = "MS" if 1 <= int(code) <= 10 else "S"
                 airline = tr("td")[1]
                 airline = airline.a.string if airline.a is not None else airline.string
                 airline = airline if airline is not None and airline.strip() != "" else None

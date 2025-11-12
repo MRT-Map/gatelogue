@@ -37,7 +37,7 @@ class WZR(RailSource):
 
             stations = []
             for tr in table.find_all("tr"):
-                if len(tr("td")) != 4:  # noqa: PLR2004
+                if len(tr("td")) != 4:
                     continue
                 if tr("td")[3].string.strip() == "Planned":
                     continue

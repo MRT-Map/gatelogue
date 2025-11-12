@@ -33,7 +33,7 @@ class IntraRailLocal(RailSource):
 
                 stations = []
                 for tr in table.find_all("tr"):
-                    if len(tr("td")) != 4:  # noqa: PLR2004
+                    if len(tr("td")) != 4:
                         continue
                     name = tr("td")[2].string
                     station = RailStation.new(self, codes={name}, name=name, company=company)

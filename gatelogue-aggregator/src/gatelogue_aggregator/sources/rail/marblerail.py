@@ -27,7 +27,7 @@ class MarbleRail(RailSource):
 
             stations = []
             for tr in line_table.find_all("tr"):
-                if len(tr("td")) != 5:  # noqa: PLR2004
+                if len(tr("td")) != 5:
                     continue
                 if tr("td")[4].string.strip() != "Opened":
                     continue
