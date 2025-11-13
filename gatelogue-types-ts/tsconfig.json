@@ -1,8 +1,7 @@
 {
   "include": ["lib.ts"],
   "extends": [
-    "@total-typescript/tsconfig/tsc/no-dom/library-monorepo",
+    "@total-typescript/tsconfig/tsc/dom/library-monorepo",
     "@tsconfig/strictest"
-  ],
-  "compilerOptions": { "lib": ["es2022", "DOM"] }
+  ]
 }

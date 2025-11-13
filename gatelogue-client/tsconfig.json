@@ -1,5 +1,5 @@
 {
-  "include": ["@tsconfig/strictest/tsconfig.json"],
+  "include": [],
   "files": [],
   "references": [
     {

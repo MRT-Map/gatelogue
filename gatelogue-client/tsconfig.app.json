@@ -11,6 +11,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "lib": ["esnext", "DOM", "DOM.Iterable"]
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    
+    "noPropertyAccessFromIndexSignature": false
   }
 }
