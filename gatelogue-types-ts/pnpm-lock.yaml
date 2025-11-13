@@ -12,10 +12,10 @@ importers:
         specifier: 9.39.1
         version: 9.39.1
       '@total-typescript/tsconfig':
-        specifier: ^1.0.4
+        specifier: 1.0.4
         version: 1.0.4
       '@tsconfig/strictest':
-        specifier: ^2.0.8
+        specifier: 2.0.8
         version: 2.0.8
       eslint:
         specifier: 9.39.1
