@@ -43,8 +43,15 @@ export type PlaneMode =
   | "seaplane"
   | "warp plane"
   | "traincarts plane";
-export type WarpType = "premier" | "terminus" | "portal" | "misc"
-export type Rank =  "Unranked" | "Councillor" | "Mayor" | "Senator" | "Governor" | "Premier" | "Community"
+export type WarpType = "premier" | "terminus" | "portal" | "misc";
+export type Rank =
+  | "Unranked"
+  | "Councillor"
+  | "Mayor"
+  | "Senator"
+  | "Governor"
+  | "Premier"
+  | "Community";
 
 export type Sourced<T, S extends boolean = true> = S extends true
   ? { v: T; s: string[] }
@@ -189,15 +196,15 @@ export interface BusStop<S extends boolean = true> extends Located<S> {
 }
 
 export interface SpawnWarp<S extends boolean = true> extends Located<S> {
-    name: string;
-    warp_type: WarpType
+  name: string;
+  warp_type: WarpType;
 }
 
 export interface Town<S extends boolean = true> extends Located<S> {
-    name: string;
-    rank: Sourced<Rank, S>;
-    mayor: Sourced<string, S>;
-    deputy_mayor: Sourced<string | null, S>;
+  name: string;
+  rank: Sourced<Rank, S>;
+  mayor: Sourced<string, S>;
+  deputy_mayor: Sourced<string | null, S>;
 }
 
 export interface GatelogueData {
