@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~Connection.NS
       ~Connection.__init__
       ~Connection.export
       ~Connection.get_line

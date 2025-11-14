@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaStopNS.NS
       ~SeaStopNS.__init__
    
    

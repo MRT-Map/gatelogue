@@ -134,7 +134,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_types.AirFlight">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">AirFlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*,</span> <span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">codes:</span> <span class="pre">set[str],</span> <span class="pre">mode:</span> <span class="pre">~gatelogue_types.Sourced[PlaneMode]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">gates:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">airline:</span> <span class="pre">~gatelogue_types.Sourced[ID]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirFlight" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_types.Node.html#gatelogue_types.Node" title="gatelogue_types.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.Node.html#gatelogue_types.Node" title="gatelogue_types.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_AirFlight</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.AirFlight.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirFlight.__init__" title="Link to this definition"></a></dt>
@@ -143,10 +143,7 @@
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.NS" title="gatelogue_types.AirFlight.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.__init__" title="gatelogue_types.AirFlight.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.__init__" title="gatelogue_types.AirFlight.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -163,22 +160,17 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.gates" title="gatelogue_types.AirFlight.gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gates</span></code></a></p></td>
 <td><p>List of IDs of <a class="reference internal" href="gatelogue_types.AirGate.html#gatelogue_types.AirGate" title="gatelogue_types.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> s that the flight goes to.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.mode" title="gatelogue_types.AirFlight.mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mode</span></code></a></p></td>
-<td><p>Type of air vehicle or technology used on the flight</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.i" title="gatelogue_types.AirFlight.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.i" title="gatelogue_types.AirFlight.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
 <td><p>The ID of the node</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.mode" title="gatelogue_types.AirFlight.mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mode</span></code></a></p></td>
+<td><p>Type of air vehicle or technology used on the flight</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.AirFlight.source" title="gatelogue_types.AirFlight.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
 <td><p>All sources that prove the node's existence</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_types.AirFlight.NS">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.AirFlight.NS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_types.AirFlight.airline">
 <span class="sig-name descname"><span class="pre">airline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_types.Sourced.html#gatelogue_types.Sourced" title="gatelogue_types.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gatelogue_types.AirFlight.airline" title="Link to this definition"></a></dt>

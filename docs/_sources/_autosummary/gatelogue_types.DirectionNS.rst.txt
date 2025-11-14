@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~DirectionNS.NS
       ~DirectionNS.__init__
    
    

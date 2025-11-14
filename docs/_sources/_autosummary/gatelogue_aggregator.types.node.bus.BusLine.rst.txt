@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusLine.NS
       ~BusLine.__init__
       ~BusLine.acceptable_list_node_types
       ~BusLine.acceptable_single_node_types

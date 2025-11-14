@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailCompany.NS
       ~RailCompany.__init__
       ~RailCompany.acceptable_list_node_types
       ~RailCompany.acceptable_single_node_types

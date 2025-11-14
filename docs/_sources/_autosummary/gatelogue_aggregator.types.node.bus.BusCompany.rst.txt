@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusCompany.NS
       ~BusCompany.__init__
       ~BusCompany.acceptable_list_node_types
       ~BusCompany.acceptable_single_node_types

@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~NodeNS.NS
       ~NodeNS.__init__
    
    

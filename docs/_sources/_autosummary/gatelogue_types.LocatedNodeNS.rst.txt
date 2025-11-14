@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~LocatedNodeNS.NS
       ~LocatedNodeNS.__init__
    
    

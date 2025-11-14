@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaLine.NS
       ~SeaLine.__init__
       ~SeaLine.acceptable_list_node_types
       ~SeaLine.acceptable_single_node_types

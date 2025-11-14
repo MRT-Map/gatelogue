@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusStop.NS
       ~BusStop.__init__
       ~BusStop.acceptable_list_node_types
       ~BusStop.acceptable_single_node_types

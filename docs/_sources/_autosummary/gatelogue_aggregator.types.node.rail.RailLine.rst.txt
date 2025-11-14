@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailLine.NS
       ~RailLine.__init__
       ~RailLine.acceptable_list_node_types
       ~RailLine.acceptable_single_node_types

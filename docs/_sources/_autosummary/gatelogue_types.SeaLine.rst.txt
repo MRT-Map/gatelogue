@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaLine.NS
       ~SeaLine.__init__
    
    
@@ -31,10 +30,10 @@
       ~SeaLine.code
       ~SeaLine.colour
       ~SeaLine.company
+      ~SeaLine.i
       ~SeaLine.mode
       ~SeaLine.name
-      ~SeaLine.stops
-      ~SeaLine.i
       ~SeaLine.source
+      ~SeaLine.stops
    
    

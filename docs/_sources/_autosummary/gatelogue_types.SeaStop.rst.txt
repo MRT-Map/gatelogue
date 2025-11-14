@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaStop.NS
       ~SeaStop.__init__
    
    
@@ -31,9 +30,9 @@
       ~SeaStop.codes
       ~SeaStop.company
       ~SeaStop.connections
-      ~SeaStop.name
       ~SeaStop.coordinates
       ~SeaStop.i
+      ~SeaStop.name
       ~SeaStop.proximity
       ~SeaStop.shared_facility
       ~SeaStop.source

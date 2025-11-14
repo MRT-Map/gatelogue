@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusLineNS.NS
       ~BusLineNS.__init__
    
    

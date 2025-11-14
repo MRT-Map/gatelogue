@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SpawnWarp.NS
       ~SpawnWarp.__init__
    
    
@@ -28,13 +27,13 @@
 
    .. autosummary::
    
-      ~SpawnWarp.name
-      ~SpawnWarp.warp_type
       ~SpawnWarp.coordinates
       ~SpawnWarp.i
+      ~SpawnWarp.name
       ~SpawnWarp.proximity
       ~SpawnWarp.shared_facility
       ~SpawnWarp.source
+      ~SpawnWarp.warp_type
       ~SpawnWarp.world
    
    

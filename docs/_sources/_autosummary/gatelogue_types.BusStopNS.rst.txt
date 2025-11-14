@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusStopNS.NS
       ~BusStopNS.__init__
    
    

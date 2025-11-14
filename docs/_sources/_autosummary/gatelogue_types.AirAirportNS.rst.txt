@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirAirportNS.NS
       ~AirAirportNS.__init__
    
    

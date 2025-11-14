@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusCompanyNS.NS
       ~BusCompanyNS.__init__
    
    

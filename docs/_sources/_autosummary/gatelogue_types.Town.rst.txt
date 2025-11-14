@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~Town.NS
       ~Town.__init__
    
    
@@ -28,13 +27,13 @@
 
    .. autosummary::
    
+      ~Town.coordinates
       ~Town.deputy_mayor
+      ~Town.i
       ~Town.mayor
       ~Town.name
-      ~Town.rank
-      ~Town.coordinates
-      ~Town.i
       ~Town.proximity
+      ~Town.rank
       ~Town.shared_facility
       ~Town.source
       ~Town.world

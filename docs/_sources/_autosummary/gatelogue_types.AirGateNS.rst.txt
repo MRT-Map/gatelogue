@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirGateNS.NS
       ~AirGateNS.__init__
    
    

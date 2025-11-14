@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~Node.NS
       ~Node.__init__
    
    

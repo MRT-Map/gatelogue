@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailLine.NS
       ~RailLine.__init__
    
    
@@ -31,10 +30,10 @@
       ~RailLine.code
       ~RailLine.colour
       ~RailLine.company
+      ~RailLine.i
       ~RailLine.mode
       ~RailLine.name
-      ~RailLine.stations
-      ~RailLine.i
       ~RailLine.source
+      ~RailLine.stations
    
    

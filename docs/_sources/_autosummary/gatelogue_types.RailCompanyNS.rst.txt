@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailCompanyNS.NS
       ~RailCompanyNS.__init__
    
    

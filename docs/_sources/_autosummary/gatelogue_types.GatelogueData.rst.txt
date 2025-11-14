@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~GatelogueData.NS
       ~GatelogueData.__init__
       ~GatelogueData.aiohttp_get
       ~GatelogueData.get

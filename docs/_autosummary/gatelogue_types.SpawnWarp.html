@@ -133,8 +133,8 @@
 <h1>gatelogue_types.SpawnWarp<a class="headerlink" href="#gatelogue-types-spawnwarp" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_types.SpawnWarp">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">SpawnWarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity:</span> <span class="pre">dict[ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warp_type:</span> <span class="pre">WarpType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.SpawnWarp" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocatedNode</span></code></a></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">SpawnWarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity:</span> <span class="pre">dict[ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warp_type:</span> <span class="pre">WarpType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.SpawnWarp" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocatedNode</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_SpawnWarp</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.SpawnWarp.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.SpawnWarp.__init__" title="Link to this definition"></a></dt>
@@ -143,10 +143,7 @@
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.NS" title="gatelogue_types.SpawnWarp.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.__init__" title="gatelogue_types.SpawnWarp.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.__init__" title="gatelogue_types.SpawnWarp.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -154,37 +151,32 @@
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.name" title="gatelogue_types.SpawnWarp.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
-<td><p>Name of the spawn warp</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.warp_type" title="gatelogue_types.SpawnWarp.warp_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warp_type</span></code></a></p></td>
-<td><p>The type of warp</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.coordinates" title="gatelogue_types.SpawnWarp.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code></a></p></td>
 <td><p>Coordinates of the object</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.i" title="gatelogue_types.SpawnWarp.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
 <td><p>The ID of the node</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.proximity" title="gatelogue_types.SpawnWarp.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.name" title="gatelogue_types.SpawnWarp.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Name of the spawn warp</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.proximity" title="gatelogue_types.SpawnWarp.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
 <td><p>References all objects that are near (within walking distance of) this object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.shared_facility" title="gatelogue_types.SpawnWarp.shared_facility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_facility</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.shared_facility" title="gatelogue_types.SpawnWarp.shared_facility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_facility</span></code></a></p></td>
 <td><p>References all objects that this object shares the same facility with (same building, station, hub etc)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.source" title="gatelogue_types.SpawnWarp.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.source" title="gatelogue_types.SpawnWarp.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
 <td><p>All sources that prove the node's existence</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.warp_type" title="gatelogue_types.SpawnWarp.warp_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warp_type</span></code></a></p></td>
+<td><p>The type of warp</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.SpawnWarp.world" title="gatelogue_types.SpawnWarp.world"><code class="xref py py-obj docutils literal notranslate"><span class="pre">world</span></code></a></p></td>
 <td><p>Whether the object is in the New or Old world</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_types.SpawnWarp.NS">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.SpawnWarp.NS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_types.SpawnWarp.coordinates">
 <span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_types.Sourced.html#gatelogue_types.Sourced" title="gatelogue_types.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#gatelogue_types.SpawnWarp.coordinates" title="Link to this definition"></a></dt>

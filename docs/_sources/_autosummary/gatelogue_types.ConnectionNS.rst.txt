@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~ConnectionNS.NS
       ~ConnectionNS.__init__
    
    

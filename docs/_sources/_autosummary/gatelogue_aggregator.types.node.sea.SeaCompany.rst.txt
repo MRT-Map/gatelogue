@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaCompany.NS
       ~SeaCompany.__init__
       ~SeaCompany.acceptable_list_node_types
       ~SeaCompany.acceptable_single_node_types

@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~LocatedNode.NS
       ~LocatedNode.__init__
       ~LocatedNode.acceptable_list_node_types
       ~LocatedNode.acceptable_single_node_types

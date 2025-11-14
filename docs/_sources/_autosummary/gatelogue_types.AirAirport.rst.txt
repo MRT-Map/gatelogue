@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirAirport.NS
       ~AirAirport.__init__
    
    
@@ -29,12 +28,12 @@
    .. autosummary::
    
       ~AirAirport.code
+      ~AirAirport.coordinates
       ~AirAirport.gates
+      ~AirAirport.i
       ~AirAirport.link
       ~AirAirport.modes
       ~AirAirport.names
-      ~AirAirport.coordinates
-      ~AirAirport.i
       ~AirAirport.proximity
       ~AirAirport.shared_facility
       ~AirAirport.source

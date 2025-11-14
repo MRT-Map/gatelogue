@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaCompany.NS
       ~SeaCompany.__init__
    
    
@@ -28,11 +27,11 @@
 
    .. autosummary::
    
+      ~SeaCompany.i
       ~SeaCompany.lines
       ~SeaCompany.local
       ~SeaCompany.name
-      ~SeaCompany.stops
-      ~SeaCompany.i
       ~SeaCompany.source
+      ~SeaCompany.stops
    
    

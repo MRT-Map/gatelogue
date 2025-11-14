@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirFlight.NS
       ~AirFlight.__init__
       ~AirFlight.acceptable_list_node_types
       ~AirFlight.acceptable_single_node_types

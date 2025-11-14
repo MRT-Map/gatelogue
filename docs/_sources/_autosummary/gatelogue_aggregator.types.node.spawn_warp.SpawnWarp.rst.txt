@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SpawnWarp.NS
       ~SpawnWarp.__init__
       ~SpawnWarp.acceptable_list_node_types
       ~SpawnWarp.acceptable_single_node_types

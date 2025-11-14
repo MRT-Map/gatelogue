@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirAirline.NS
       ~AirAirline.__init__
       ~AirAirline.acceptable_list_node_types
       ~AirAirline.acceptable_single_node_types

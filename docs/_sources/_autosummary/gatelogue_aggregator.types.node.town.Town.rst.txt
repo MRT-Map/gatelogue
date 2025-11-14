@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~Town.NS
       ~Town.__init__
       ~Town.acceptable_list_node_types
       ~Town.acceptable_single_node_types

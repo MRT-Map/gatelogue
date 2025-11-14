@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailCompany.NS
       ~RailCompany.__init__
    
    
@@ -28,11 +27,11 @@
 
    .. autosummary::
    
+      ~RailCompany.i
       ~RailCompany.lines
       ~RailCompany.local
       ~RailCompany.name
-      ~RailCompany.stations
-      ~RailCompany.i
       ~RailCompany.source
+      ~RailCompany.stations
    
    

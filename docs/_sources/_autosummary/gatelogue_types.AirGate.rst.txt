@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirGate.NS
       ~AirGate.__init__
    
    
@@ -32,8 +31,8 @@
       ~AirGate.airport
       ~AirGate.code
       ~AirGate.flights
-      ~AirGate.size
       ~AirGate.i
+      ~AirGate.size
       ~AirGate.source
    
    

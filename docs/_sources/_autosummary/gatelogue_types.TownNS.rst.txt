@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~TownNS.NS
       ~TownNS.__init__
    
    

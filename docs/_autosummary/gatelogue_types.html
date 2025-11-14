@@ -136,10 +136,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.AirAirlineNS.html#gatelogue_types.AirAirlineNS" title="gatelogue_types.AirAirlineNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirAirlineNS</span></code></a>(*, i, source, name, link, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.AirAirport.html#gatelogue_types.AirAirport" title="gatelogue_types.AirAirport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirAirport</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.AirAirport.html#gatelogue_types.AirAirport" title="gatelogue_types.AirAirport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirAirport</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.AirAirportNS.html#gatelogue_types.AirAirportNS" title="gatelogue_types.AirAirportNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirAirportNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.AirAirportNS.html#gatelogue_types.AirAirportNS" title="gatelogue_types.AirAirportNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirAirportNS</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.AirFlight.html#gatelogue_types.AirFlight" title="gatelogue_types.AirFlight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AirFlight</span></code></a>(*, i, source, codes, mode, gates, ...)</p></td>
@@ -166,13 +166,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.BusLineNS.html#gatelogue_types.BusLineNS" title="gatelogue_types.BusLineNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BusLineNS</span></code></a>(*, i, source, code, name, colour, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.BusStop.html#gatelogue_types.BusStop" title="gatelogue_types.BusStop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BusStop</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.BusStop.html#gatelogue_types.BusStop" title="gatelogue_types.BusStop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BusStop</span></code></a>(*, i, source, coordinates, world, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.BusStopNS.html#gatelogue_types.BusStopNS" title="gatelogue_types.BusStopNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BusStopNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.BusStopNS.html#gatelogue_types.BusStopNS" title="gatelogue_types.BusStopNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BusStopNS</span></code></a>(*, i, source, coordinates, world, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.Connection.html#gatelogue_types.Connection" title="gatelogue_types.Connection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Connection</span></code></a>(line[, direction])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.Connection.html#gatelogue_types.Connection" title="gatelogue_types.Connection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Connection</span></code></a>(line, *[, direction])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.ConnectionNS.html#gatelogue_types.ConnectionNS" title="gatelogue_types.ConnectionNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConnectionNS</span></code></a>(line, *[, direction])</p></td>
@@ -184,16 +184,16 @@
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.DirectionNS.html#gatelogue_types.DirectionNS" title="gatelogue_types.DirectionNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DirectionNS</span></code></a>(direction, forward_label, ...[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.GatelogueData.html#gatelogue_types.GatelogueData" title="gatelogue_types.GatelogueData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatelogueData</span></code></a>(*, nodes, Nodes], timestamp, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.GatelogueData.html#gatelogue_types.GatelogueData" title="gatelogue_types.GatelogueData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatelogueData</span></code></a>(nodes, Nodes], *, timestamp, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.GatelogueDataNS.html#gatelogue_types.GatelogueDataNS" title="gatelogue_types.GatelogueDataNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatelogueDataNS</span></code></a>(*, nodes, NodesNS], ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.GatelogueDataNS.html#gatelogue_types.GatelogueDataNS" title="gatelogue_types.GatelogueDataNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatelogueDataNS</span></code></a>(nodes, NodesNS], *, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocatedNode</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocatedNode</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.LocatedNodeNS.html#gatelogue_types.LocatedNodeNS" title="gatelogue_types.LocatedNodeNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocatedNodeNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.LocatedNodeNS.html#gatelogue_types.LocatedNodeNS" title="gatelogue_types.LocatedNodeNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocatedNodeNS</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.Node.html#gatelogue_types.Node" title="gatelogue_types.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>(*, i, source)</p></td>
@@ -217,10 +217,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.RailLineNS.html#gatelogue_types.RailLineNS" title="gatelogue_types.RailLineNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RailLineNS</span></code></a>(*, i, source, code, name, colour, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.RailStation.html#gatelogue_types.RailStation" title="gatelogue_types.RailStation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RailStation</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.RailStation.html#gatelogue_types.RailStation" title="gatelogue_types.RailStation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RailStation</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.RailStationNS.html#gatelogue_types.RailStationNS" title="gatelogue_types.RailStationNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RailStationNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.RailStationNS.html#gatelogue_types.RailStationNS" title="gatelogue_types.RailStationNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RailStationNS</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.SeaCompany.html#gatelogue_types.SeaCompany" title="gatelogue_types.SeaCompany"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaCompany</span></code></a>(*, i, source, name, lines, stops, ...)</p></td>
@@ -235,25 +235,25 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.SeaLineNS.html#gatelogue_types.SeaLineNS" title="gatelogue_types.SeaLineNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaLineNS</span></code></a>(*, i, source, code, name, colour, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.SeaStop.html#gatelogue_types.SeaStop" title="gatelogue_types.SeaStop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaStop</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.SeaStop.html#gatelogue_types.SeaStop" title="gatelogue_types.SeaStop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaStop</span></code></a>(*, i, source, coordinates, world, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.SeaStopNS.html#gatelogue_types.SeaStopNS" title="gatelogue_types.SeaStopNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaStopNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.SeaStopNS.html#gatelogue_types.SeaStopNS" title="gatelogue_types.SeaStopNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeaStopNS</span></code></a>(*, i, source, coordinates, world, ...)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.Sourced.html#gatelogue_types.Sourced" title="gatelogue_types.Sourced"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sourced</span></code></a>(v, s)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.SpawnWarp.html#gatelogue_types.SpawnWarp" title="gatelogue_types.SpawnWarp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpawnWarp</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.SpawnWarp.html#gatelogue_types.SpawnWarp" title="gatelogue_types.SpawnWarp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpawnWarp</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.SpawnWarpNS.html#gatelogue_types.SpawnWarpNS" title="gatelogue_types.SpawnWarpNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpawnWarpNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.SpawnWarpNS.html#gatelogue_types.SpawnWarpNS" title="gatelogue_types.SpawnWarpNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpawnWarpNS</span></code></a>(coordinates, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.Town.html#gatelogue_types.Town" title="gatelogue_types.Town"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Town</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_types.Town.html#gatelogue_types.Town" title="gatelogue_types.Town"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Town</span></code></a>(coordinates, float]] | None = None, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.TownNS.html#gatelogue_types.TownNS" title="gatelogue_types.TownNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TownNS</span></code></a>(*, i, source, coordinates, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_types.TownNS.html#gatelogue_types.TownNS" title="gatelogue_types.TownNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TownNS</span></code></a>(coordinates, float] | None = None, ...)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

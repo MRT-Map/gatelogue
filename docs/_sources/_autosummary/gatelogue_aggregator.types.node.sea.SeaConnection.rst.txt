@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaConnection.NS
       ~SeaConnection.__init__
       ~SeaConnection.export
       ~SeaConnection.get_line

@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusStop.NS
       ~BusStop.__init__
    
    
@@ -31,9 +30,9 @@
       ~BusStop.codes
       ~BusStop.company
       ~BusStop.connections
-      ~BusStop.name
       ~BusStop.coordinates
       ~BusStop.i
+      ~BusStop.name
       ~BusStop.proximity
       ~BusStop.shared_facility
       ~BusStop.source

@@ -133,8 +133,8 @@
 <h1>gatelogue_types.Town<a class="headerlink" href="#gatelogue-types-town" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_types.Town">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">Town</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*,</span> <span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float,</span> <span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">proximity:</span> <span class="pre">dict[ID,</span> <span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">name:</span> <span class="pre">str,</span> <span class="pre">rank:</span> <span class="pre">~gatelogue_types.Sourced[Rank],</span> <span class="pre">mayor:</span> <span class="pre">~gatelogue_types.Sourced[str],</span> <span class="pre">deputy_mayor:</span> <span class="pre">~gatelogue_types.Sourced[str</span> <span class="pre">|</span> <span class="pre">None]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.Town" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocatedNode</span></code></a></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">Town</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float,</span> <span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">proximity:</span> <span class="pre">dict[ID,</span> <span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">*,</span> <span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">name:</span> <span class="pre">str,</span> <span class="pre">rank:</span> <span class="pre">~gatelogue_types.Sourced[Rank],</span> <span class="pre">mayor:</span> <span class="pre">~gatelogue_types.Sourced[str],</span> <span class="pre">deputy_mayor:</span> <span class="pre">~gatelogue_types.Sourced[str</span> <span class="pre">|</span> <span class="pre">None]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.Town" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.LocatedNode.html#gatelogue_types.LocatedNode" title="gatelogue_types.LocatedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocatedNode</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_Town</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.Town.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.Town.__init__" title="Link to this definition"></a></dt>
@@ -143,10 +143,7 @@
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.NS" title="gatelogue_types.Town.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.__init__" title="gatelogue_types.Town.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.__init__" title="gatelogue_types.Town.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -154,8 +151,14 @@
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.deputy_mayor" title="gatelogue_types.Town.deputy_mayor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deputy_mayor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.coordinates" title="gatelogue_types.Town.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code></a></p></td>
+<td><p>Coordinates of the object</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.deputy_mayor" title="gatelogue_types.Town.deputy_mayor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deputy_mayor</span></code></a></p></td>
 <td><p>Deputy Mayor of the town</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.i" title="gatelogue_types.Town.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<td><p>The ID of the node</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.mayor" title="gatelogue_types.Town.mayor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayor</span></code></a></p></td>
 <td><p>Mayor of the town</p></td>
@@ -163,17 +166,11 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.name" title="gatelogue_types.Town.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
 <td><p>Name of the town</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.rank" title="gatelogue_types.Town.rank"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rank</span></code></a></p></td>
-<td><p>Rank of the town</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.coordinates" title="gatelogue_types.Town.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code></a></p></td>
-<td><p>Coordinates of the object</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.i" title="gatelogue_types.Town.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
-<td><p>The ID of the node</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.proximity" title="gatelogue_types.Town.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.proximity" title="gatelogue_types.Town.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
 <td><p>References all objects that are near (within walking distance of) this object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.Town.rank" title="gatelogue_types.Town.rank"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rank</span></code></a></p></td>
+<td><p>Rank of the town</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.Town.shared_facility" title="gatelogue_types.Town.shared_facility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_facility</span></code></a></p></td>
 <td><p>References all objects that this object shares the same facility with (same building, station, hub etc)</p></td>
@@ -186,11 +183,6 @@
 </tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_types.Town.NS">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.Town.NS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_types.Town.coordinates">
 <span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_types.Sourced.html#gatelogue_types.Sourced" title="gatelogue_types.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#gatelogue_types.Town.coordinates" title="Link to this definition"></a></dt>

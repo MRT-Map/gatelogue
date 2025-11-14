@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusLine.NS
       ~BusLine.__init__
    
    
@@ -31,9 +30,9 @@
       ~BusLine.code
       ~BusLine.colour
       ~BusLine.company
-      ~BusLine.name
-      ~BusLine.stops
       ~BusLine.i
+      ~BusLine.name
       ~BusLine.source
+      ~BusLine.stops
    
    

@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~LocatedNode.NS
       ~LocatedNode.__init__
    
    
@@ -29,10 +28,10 @@
    .. autosummary::
    
       ~LocatedNode.coordinates
+      ~LocatedNode.i
       ~LocatedNode.proximity
       ~LocatedNode.shared_facility
-      ~LocatedNode.world
-      ~LocatedNode.i
       ~LocatedNode.source
+      ~LocatedNode.world
    
    

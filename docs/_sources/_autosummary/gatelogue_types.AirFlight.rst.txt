@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirFlight.NS
       ~AirFlight.__init__
    
    
@@ -31,8 +30,8 @@
       ~AirFlight.airline
       ~AirFlight.codes
       ~AirFlight.gates
-      ~AirFlight.mode
       ~AirFlight.i
+      ~AirFlight.mode
       ~AirFlight.source
    
    

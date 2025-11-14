@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaStop.NS
       ~SeaStop.__init__
       ~SeaStop.acceptable_list_node_types
       ~SeaStop.acceptable_single_node_types

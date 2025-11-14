@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailStation.NS
       ~RailStation.__init__
    
    
@@ -31,9 +30,9 @@
       ~RailStation.codes
       ~RailStation.company
       ~RailStation.connections
-      ~RailStation.name
       ~RailStation.coordinates
       ~RailStation.i
+      ~RailStation.name
       ~RailStation.proximity
       ~RailStation.shared_facility
       ~RailStation.source

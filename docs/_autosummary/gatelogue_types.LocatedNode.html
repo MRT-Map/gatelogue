@@ -133,8 +133,8 @@
 <h1>gatelogue_types.LocatedNode<a class="headerlink" href="#gatelogue-types-locatednode" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_types.LocatedNode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">LocatedNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity:</span> <span class="pre">dict[ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.LocatedNode" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_types.Node.html#gatelogue_types.Node" title="gatelogue_types.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">LocatedNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~gatelogue_types.Sourced[tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world:</span> <span class="pre">~gatelogue_types.Sourced[World]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity:</span> <span class="pre">dict[ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~gatelogue_types.Sourced[~gatelogue_types.Proximity]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_facility:</span> <span class="pre">list[~gatelogue_types.Sourced[ID]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i:</span> <span class="pre">ID</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source:</span> <span class="pre">set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.LocatedNode" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_types.Node.html#gatelogue_types.Node" title="gatelogue_types.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_LocatedNode</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.LocatedNode.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.LocatedNode.__init__" title="Link to this definition"></a></dt>
@@ -143,10 +143,7 @@
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.NS" title="gatelogue_types.LocatedNode.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.__init__" title="gatelogue_types.LocatedNode.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.__init__" title="gatelogue_types.LocatedNode.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -157,28 +154,23 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.coordinates" title="gatelogue_types.LocatedNode.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code></a></p></td>
 <td><p>Coordinates of the object</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.proximity" title="gatelogue_types.LocatedNode.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.i" title="gatelogue_types.LocatedNode.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<td><p>The ID of the node</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.proximity" title="gatelogue_types.LocatedNode.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a></p></td>
 <td><p>References all objects that are near (within walking distance of) this object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.shared_facility" title="gatelogue_types.LocatedNode.shared_facility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_facility</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.shared_facility" title="gatelogue_types.LocatedNode.shared_facility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_facility</span></code></a></p></td>
 <td><p>References all objects that this object shares the same facility with (same building, station, hub etc)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.source" title="gatelogue_types.LocatedNode.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
+<td><p>All sources that prove the node's existence</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.world" title="gatelogue_types.LocatedNode.world"><code class="xref py py-obj docutils literal notranslate"><span class="pre">world</span></code></a></p></td>
 <td><p>Whether the object is in the New or Old world</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.i" title="gatelogue_types.LocatedNode.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
-<td><p>The ID of the node</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.LocatedNode.source" title="gatelogue_types.LocatedNode.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
-<td><p>All sources that prove the node's existence</p></td>
-</tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_types.LocatedNode.NS">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.LocatedNode.NS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_types.LocatedNode.coordinates">
 <span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_types.Sourced.html#gatelogue_types.Sourced" title="gatelogue_types.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#gatelogue_types.LocatedNode.coordinates" title="Link to this definition"></a></dt>

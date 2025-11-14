@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaLineNS.NS
       ~SeaLineNS.__init__
    
    

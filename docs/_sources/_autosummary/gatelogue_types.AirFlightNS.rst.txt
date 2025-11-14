@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirFlightNS.NS
       ~AirFlightNS.__init__
    
    

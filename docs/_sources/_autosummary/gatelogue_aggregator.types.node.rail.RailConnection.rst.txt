@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~RailConnection.NS
       ~RailConnection.__init__
       ~RailConnection.export
       ~RailConnection.get_line

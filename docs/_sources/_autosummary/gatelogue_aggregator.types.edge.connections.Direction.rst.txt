@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~Direction.NS
       ~Direction.__init__
       ~Direction.export
       ~Direction.get_direction

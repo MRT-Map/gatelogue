@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirGate.NS
       ~AirGate.__init__
       ~AirGate.acceptable_list_node_types
       ~AirGate.acceptable_single_node_types

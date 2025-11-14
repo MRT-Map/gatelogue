@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirAirport.NS
       ~AirAirport.__init__
       ~AirAirport.acceptable_list_node_types
       ~AirAirport.acceptable_single_node_types

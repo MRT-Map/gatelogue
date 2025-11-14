@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~AirAirline.NS
       ~AirAirline.__init__
    
    
@@ -30,9 +29,9 @@
    
       ~AirAirline.flights
       ~AirAirline.gates
+      ~AirAirline.i
       ~AirAirline.link
       ~AirAirline.name
-      ~AirAirline.i
       ~AirAirline.source
    
    

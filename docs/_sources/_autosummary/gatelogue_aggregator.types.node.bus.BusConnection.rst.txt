@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~BusConnection.NS
       ~BusConnection.__init__
       ~BusConnection.export
       ~BusConnection.get_line

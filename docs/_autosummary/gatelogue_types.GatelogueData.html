@@ -133,8 +133,8 @@
 <h1>gatelogue_types.GatelogueData<a class="headerlink" href="#gatelogue-types-gateloguedata" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_types.GatelogueData">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">GatelogueData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*,</span> <span class="pre">nodes:</span> <span class="pre">dict[ID,</span> <span class="pre">Nodes],</span> <span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.GatelogueData" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://jcristharif.com/msgspec/api.html#msgspec.Struct" title="(in msgspec)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gatelogue_types.</span></span><span class="sig-name descname"><span class="pre">GatelogueData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nodes:</span> <span class="pre">dict[ID,</span> <span class="pre">Nodes],</span> <span class="pre">*,</span> <span class="pre">timestamp:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">version:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.GatelogueData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_GatelogueData</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.GatelogueData.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.GatelogueData.__init__" title="Link to this definition"></a></dt>
@@ -143,16 +143,13 @@
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.NS" title="gatelogue_types.GatelogueData.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.__init__" title="gatelogue_types.GatelogueData.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.__init__" title="gatelogue_types.GatelogueData.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.aiohttp_get" title="gatelogue_types.GatelogueData.aiohttp_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aiohttp_get</span></code></a>([session])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.aiohttp_get" title="gatelogue_types.GatelogueData.aiohttp_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aiohttp_get</span></code></a>([session])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.get" title="gatelogue_types.GatelogueData.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.GatelogueData.get" title="gatelogue_types.GatelogueData.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(*args, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -171,11 +168,6 @@
 </tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_types.GatelogueData.NS">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.GatelogueData.NS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_types.GatelogueData.aiohttp_get">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aiohttp_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">aiohttp.ClientSession</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#gatelogue_types.GatelogueData.aiohttp_get" title="Link to this definition"></a></dt>

@@ -17,7 +17,6 @@
 
    .. autosummary::
    
-      ~SeaCompanyNS.NS
       ~SeaCompanyNS.__init__
    
    
