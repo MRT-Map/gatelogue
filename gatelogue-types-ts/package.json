@@ -13,7 +13,7 @@
     }
   ],
   "description": "Types for loading and reading Gatelogue data",
-  "repository": "github:mrt-map/gatelogue",
+  "repository": "github:MRT-Map/gatelogue",
   "homepage": "https://mrt-map.github.io/gatelogue",
   "bugs": "https://github.com/mrt-map/gatelogue/issues",
   "readme": "README.md",
