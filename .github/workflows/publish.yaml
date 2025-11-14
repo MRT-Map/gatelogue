@@ -154,6 +154,9 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-ts
+    permissions:
+      id-token: write
+      contents: read
     needs: [ build-ts, tests ]
 
     steps:
@@ -167,8 +170,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: pnpm i
       - run: pnpm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish-gpr:
     runs-on: ubuntu-latest
