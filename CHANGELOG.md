@@ -4,6 +4,10 @@
 * `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
 
+## v2.0.5+10 (20251115)
+* `gatelogue-types` (py): redo classing to fix inheritance lints
+* `gatelogue-aggregator`: improved downloader detects incomplete/empty files
+
 ## v2.0.4+10 (20250621)
 * `gatelogue-aggregator`: temporary blank `code` field for `AirAirport`s
 * **Data v10**
