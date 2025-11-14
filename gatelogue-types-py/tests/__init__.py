@@ -1,4 +1,4 @@
-from gatelogue_types import GatelogueData
+from gatelogue_types import GatelogueData, GatelogueDataNS
 
 
 def test_with_sources():
@@ -7,5 +7,5 @@ def test_with_sources():
 
 
 def test_no_sources():
-    GatelogueData.NS().get()
+    GatelogueDataNS.get()
     assert True
