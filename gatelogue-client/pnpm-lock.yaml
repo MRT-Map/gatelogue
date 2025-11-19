@@ -28,8 +28,8 @@ importers:
         specifier: 9.39.1
         version: 9.39.1
       '@tsconfig/node24':
-        specifier: 24.0.2
-        version: 24.0.2
+        specifier: 24.0.3
+        version: 24.0.3
       '@tsconfig/strictest':
         specifier: 2.0.8
         version: 2.0.8
@@ -585,8 +585,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@tsconfig/node24@24.0.2':
-    resolution: {integrity: sha512-CNeOLUPI9PjbBc1DSIqb3GF/u+3kX/TDe9DKCzoI62mYI4dEDrMQ0r/9+SfYACP4UNMbiTlz7n8H7Rx/xTisQg==}
+  '@tsconfig/node24@24.0.3':
+    resolution: {integrity: sha512-vcERKtKQKHgzt/vfS3Gjasd8SUI2a0WZXpgJURdJsMySpS5+ctgbPfuLj2z/W+w4lAfTWxoN4upKfu2WzIRYnw==}
 
   '@tsconfig/strictest@2.0.8':
     resolution: {integrity: sha512-XnQ7vNz5HRN0r88GYf1J9JJjqtZPiHt2woGJOo2dYqyHGGcd6OLGqSlBB6p1j9mpzja6Oe5BoPqWmeDx6X9rLw==}
@@ -2000,7 +2000,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.53.2':
     optional: true
 
-  '@tsconfig/node24@24.0.2': {}
+  '@tsconfig/node24@24.0.3': {}
 
   '@tsconfig/strictest@2.0.8': {}
 
