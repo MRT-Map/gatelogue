@@ -21,7 +21,7 @@ jobs:
       - run: |
           cd gatelogue-client
           pnpm install --no-frozen-lockfile
-          NODE_OPTIONS="--no-webstorage" pnpm run build
+          pnpm run build
       - run: |
           cd gatelogue-client/dist
           echo > .nojekyll
