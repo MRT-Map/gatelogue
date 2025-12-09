@@ -63,7 +63,7 @@ build = "cd docs; make html; cd .."
 [tool.hatch.envs.types]
 extra-dependencies = [
     "gatelogue-types[all]",
-    "pyrefly==0.44.2",
+    "pyrefly==0.45.1",
 ]
 [tool.hatch.envs.types.scripts]
 check = "pyrefly check {args}"
