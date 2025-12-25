@@ -1,4 +1,5 @@
 import difflib
+import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
@@ -16,35 +17,26 @@ class CCC(BusSource):
         stop_names = []
 
         text = get_wiki_text("Caravacan Caravan Company", config)
-        started = False
         line = None
+        stops = []
 
         for ln in text.split("\n"):
-            if not started:
-                if "Routes" in ln:
-                    started = True
-                continue
-            if ln.strip() == "":
-                continue
-
-            line_code = ln.split(" ")[0]
-            if line_code.isdigit():
+            if (match := re.search(r"'''Line (.*?)'''", ln)) is not None:
+                line_code = match.group(1)
                 line = BusLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
-
-            stops = []
-            for stn in ln.removeprefix(line_code).split("--"):
-                name = stn.split("(")[0].strip()
-                if not name:
-                    continue
-                stop_names.append(name)
-                stop = BusStop.new(self, codes={name}, name=name, company=company)
-                stops.append(stop)
-
-            if len(stops) == 0:
+                continue
+            elif ln.strip() == "" and line is not None:
+                if len(stops) != 0:
+                    BusLineBuilder(self, line).connect(*stops)
+                line = None
+                stops = []
                 continue
 
-            BusLineBuilder(self, line).connect(*stops)
-
+            name = ln.removeprefix("* ")
+            stop = BusStop.new(self, codes={name}, name=name, company=company)
+            stops.append(stop)
+            stop_names.append(name)
+                
         ###
 
         names = []
