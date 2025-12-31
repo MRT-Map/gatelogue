@@ -1,60 +1,15 @@
-import uuid
+from pathlib import Path
 
-import pandas as pd
-
-from gatelogue_aggregator.downloader import get_url, warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source
+from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
 
 
-class RaiLinQWarp(RailSource):
-    name = "MRT Warp API (Rail, RaiLinQ)"
-    priority = 0
+class RaiLinQWarp(Yaml2Source, RailSource):
+    name = "Gatelogue (Rail, RaiLinQ)"
+    priority = 1
 
-    def build(self, config: Config):
-        company = RailCompany.new(self, name="RaiLinQ")
-
-        get_url(
-            "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=0",
-            config.cache_dir / "railinq",
-            timeout=config.timeout,
-            cooldown=config.cooldown,
-        )
-        df = pd.read_csv(config.cache_dir / "railinq", header=1)
-        df.rename(
-            columns={
-                "Unnamed: 1": "Name",
-                "Unnamed: 2": "Warp",
-            },
-            inplace=True,
-        )
-
-        d = dict(zip(df["Warp"], df["Name"], strict=False))
-
-        rename = {
-            "AT Western Transportation Hub": "Achowalogen Takachsin Western Transportation Hub",
-            "Downtown AT/Covina": "Downtown Achowalogen Takachsin/Covina",
-            "AT Suburb": "Achowalogen Takachsin Suburb",
-            "Vekta & Xandar": "Vekta And Xandar",
-            "Espil North/East": "Espil North-East",
-            "Summerville-Ulfthorp": "Summerville - Ulfthorp",
-            "Ilirea Cascadia": "Ilirea ITC",
-            "Verdantium Fenwick Square": "Fenwick Central",
-            "Vergil IKEA": "Covina IKEA",
-            "savacaci": "Savacaci",
-            "Orio&Waterville": "Orio & Waterville",
-        }
-
-        names = ["Amestris West", "Washingcube East", "Washingcube West"]
-        for warp in warps(uuid.UUID("489221f4edcf4a51a9929c46d72c9c6e"), config):
-            if warp["name"] not in d or (name := rename.get(d[warp["name"]], d[warp["name"]])) in names:
-                continue
-
-            RailStation.new(
-                self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
-            )
-            names.append(name)
+    file_path = Path(__file__).parent / "railinq.yaml"
+    C = RailCompany
+    L = RailLine
+    S = RailStation
+    B = RailLineBuilder

@@ -26,9 +26,11 @@ class WikiMRT(RailSource):
             ("D", "MRT Desert Line", "#9437FF"),
             ("E", "MRT Eastern Line", "#10D20F"),
             ("F", "MRT Forest Line", "#0096FF"),
+            ("G", "MRT Garden Line", "#8A9A5B"),
             ("H", "MRT Savannah Line", "#5B7F00"),
             ("I", "MRT Island Line", "#FF40FF"),
             ("J", "MRT Jungle Line", "#4C250D"),
+            ("K", "MRT Knight Line", "#74A181"),
             ("L", "MRT Lakeshore Line", "#9B95BC"),
             ("M", "MRT Mesa Line", "#FF8000"),
             ("N", "MRT Northern Line", "#0433FF"),
@@ -42,6 +44,7 @@ class WikiMRT(RailSource):
             ("W", "MRT Western Line", "#FF0000"),
             ("X", "MRT Expo Line", "#000000"),
             ("XM", "MRT Marina Shuttle", "#000000"),
+            ("Y", "MRT Yeti Line", "#ADD8E6"),
             ("Z", "MRT Zephyr Line", "#EEEEEE"),
             ("Old-R", "MRT Red Line", "#FF0000"),
             ("Old-B", "MRT Blue Line", "#0000FF"),
@@ -71,11 +74,13 @@ class WikiMRT(RailSource):
             else:
                 forward_label, backward_label = (
                     ("eastbound", "westbound")
-                    if line_code in ("X", "S", "N", "E")
+                    if line_code in ("X", "S", "N", "E", "R")
                     else ("westbound", "eastbound")
-                    if line_code in ("L", "W")
+                    if line_code in ("L", "O", "W", "Y")
                     else ("southbound", "northbound")
                     if line_code in ("Z", "B", "E", "S", "J", "H")
+                    else ("northbound", "southbound")
+                    if line_code in ("K",)
                     else ("outbound", "inbound")
                     if not line_code.startswith("Old")
                     else (None, None)

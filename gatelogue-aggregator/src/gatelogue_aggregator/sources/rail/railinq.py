@@ -23,6 +23,8 @@ class RaiLinQ(RailSource):
             if line_table.find("th") is None:
                 continue
             line_code = line_table.find("th").find_all("span", style="color:white;")[0].b.string
+            if line_code in ("IC 0300", "ST 3100", "ST 2000"):
+                continue
             line_name = line_table.find("th").find_all("span", style="color:white;")[1].i.string
 
             line_colour = "#ff5500" if line_code.startswith("IC") else "#ffaa00"
