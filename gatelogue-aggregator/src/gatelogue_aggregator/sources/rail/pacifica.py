@@ -32,15 +32,15 @@ class Pacifica(RailSource):
 
             stations = []
             for name in match.group("stations").split("\n|-\n"):
-                if "No Station" in name:
+                if "No Station" in name or "(planned)" in name:
                     continue
                 name = name.removeprefix("|")  # noqa: PLW2901
                 if "*" in name:
                     name = name.strip("*'")  # noqa: PLW2901
+                if name.strip() == "":
+                    continue
 
                 name = {  # noqa: PLW2901
-                    "Janghwa": "Janghwa Northern Union",
-                    "Janghwa Northern": "Janghwa Northern Union",
                     "Utopia": "Utopia - AFK Transit Hub",
                     "Espil": "Espil - Ricola Terminal",
                     "Espil - Atvix Centre": "Espil - Ricola Terminal",
@@ -51,6 +51,8 @@ class Pacifica(RailSource):
                     "Ilirea - SunrisePark - South": "Ilirea - Sunrise Park - South",
                     "Pasadena - Voltsphere Union Sta.": "Pasadena - Voltsphere Union",
                     "Blueberry City": "Blackberry City",
+                    "Central City - Park Terminal (Spawn)": "Central City - Park Terminal",
+                    "Blackfriars": "Blackfriars - Huxley Square",
                 }.get(name, name)
 
                 station = RailStation.new(self, codes={name}, name=name, company=company)

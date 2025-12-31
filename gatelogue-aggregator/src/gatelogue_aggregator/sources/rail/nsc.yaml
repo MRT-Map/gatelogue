@@ -4,17 +4,17 @@ colour: "#cc0000"
 lines:
   - name: Intercity 1
     stations: [
-    "Kolpino",
-    "Utopia",
-    "Matheson - Old Street",
-    "Siletz",
-    "Royal Ferry Victoria",
-    "Oakley - Exchange",
-    "Segville - International",
-    "Musique East",
-    "Musique West",
-    "Aprix",
-    "Glenbrook",
+      "Kolpino",
+      "Utopia",
+      "Matheson - Old Street",
+      "Siletz",
+      "Royal Ferry Victoria",
+      "Oakley - Exchange",
+      "Segville - International",
+      "Musique East",
+      "Musique West",
+      "Aprix",
+      "Glenbrook",
     ]
 
   - name: Intercity 2
@@ -30,8 +30,8 @@ lines:
     ]
   - name: Intercity 2
     stations: [
-    "Royal Ferry Victoria",
-    "Siletz",
+      "Royal Ferry Victoria",
+      "Siletz",
     ]
 
   - name: Intercity 2N

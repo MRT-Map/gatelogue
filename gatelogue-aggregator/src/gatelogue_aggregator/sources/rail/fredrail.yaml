@@ -34,10 +34,10 @@ lines:
     ]
 
   - name: Richville Shuttle
-    stations: ["Tranquil Forest Central", "Richville"]
+    stations: [ "Tranquil Forest Central", "Richville" ]
 
   - name: Fort Yaxier Shuttle
-    stations: ["Utopia", "Utopia AFK"]
+    stations: [ "Utopia", "Utopia AFK" ]
 
   - name: Southern Central
     stations: [
@@ -57,7 +57,7 @@ lines:
     ]
 
   - name: Lochminehead Limited
-    stations: ["Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lochminehead"]
+    stations: [ "Utopia", "Matheson", "Far Matheson", "San Dzobiak", "Siletz", "Dabecco", "Lochminehead" ]
 
   - name: New Jerseyan
     custom_routing: true
@@ -77,7 +77,7 @@ lines:
     ]
 
   - name: Blue Water
-    stations: ["New Mackinaw Union Station", "Oparia Airport"]
+    stations: [ "New Mackinaw Union Station", "Oparia Airport" ]
 
   - name: Grand Central Limited
     stations: [
@@ -99,7 +99,7 @@ lines:
     ]
 
   - name: Crescent Service
-    stations: ["Bakersville Grand Central", "Woodsdale", "Mihama", "Heights City", "Quiris"]
+    stations: [ "Bakersville Grand Central", "Woodsdale", "Mihama", "Heights City", "Quiris" ]
 
 coords:
   Bakersville Grand Central: [ -366, -4180 ]
