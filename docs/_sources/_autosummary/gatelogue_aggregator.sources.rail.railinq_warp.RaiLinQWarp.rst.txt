@@ -19,6 +19,7 @@
    
       ~RaiLinQWarp.__init__
       ~RaiLinQWarp.build
+      ~RaiLinQWarp.custom_routing
       ~RaiLinQWarp.find_by_ref
       ~RaiLinQWarp.find_by_ref_or_index
       ~RaiLinQWarp.is_coord_source
@@ -37,6 +38,7 @@
 
    .. autosummary::
    
+      ~RaiLinQWarp.file_path
       ~RaiLinQWarp.name
       ~RaiLinQWarp.priority
       ~RaiLinQWarp.g

@@ -109,7 +109,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.rail.railinq_warp.</span></span><span class="sig-name descname"><span class="pre">RaiLinQWarp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailSource.html#gatelogue_aggregator.types.node.rail.RailSource" title="gatelogue_aggregator.types.node.rail.RailSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailSource</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.Yaml2Source.html#gatelogue_aggregator.sources.yaml2source.Yaml2Source" title="gatelogue_aggregator.sources.yaml2source.Yaml2Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Yaml2Source</span></code></a>, <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailSource.html#gatelogue_aggregator.types.node.rail.RailSource" title="gatelogue_aggregator.types.node.rail.RailSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailSource</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.__init__" title="Link to this definition"></a></dt>
@@ -121,34 +121,37 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.__init__" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(config)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(_config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.custom_routing" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.custom_routing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_routing</span></code></a>(line_node, stations, line_yaml)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref_or_index" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref_or_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref_or_index</span></code></a>(v)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.is_coord_source" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.is_coord_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_coord_source</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref_or_index" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.find_by_ref_or_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref_or_index</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.report" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.is_coord_source" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.is_coord_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_coord_source</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.reported_nodes" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.reported_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reported_nodes</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.report" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.retrieve_from_cache" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.retrieve_from_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_from_cache</span></code></a>(config)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.reported_nodes" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.reported_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reported_nodes</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.sanitise_strings" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.retrieve_from_cache" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.retrieve_from_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_from_cache</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.save_to_cache" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.save_to_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_to_cache</span></code></a>(config)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.sanitise_strings" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.source" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.save_to_cache" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.save_to_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_to_cache</span></code></a>(config)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.source" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a>(v)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -156,20 +159,57 @@
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.file_path" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.file_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_path</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g" title="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.B">
+<span class="sig-name descname"><span class="pre">B</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.B" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLineBuilder.html#gatelogue_aggregator.types.node.rail.RailLineBuilder" title="gatelogue_aggregator.types.node.rail.RailLineBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLineBuilder</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.C">
+<span class="sig-name descname"><span class="pre">C</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.C" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailCompany.html#gatelogue_aggregator.types.node.rail.RailCompany" title="gatelogue_aggregator.types.node.rail.RailCompany"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailCompany</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.L">
+<span class="sig-name descname"><span class="pre">L</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.L" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLine.html#gatelogue_aggregator.types.node.rail.RailLine" title="gatelogue_aggregator.types.node.rail.RailLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLine</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.S">
+<span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.S" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailStation.html#gatelogue_aggregator.types.node.rail.RailStation" title="gatelogue_aggregator.types.node.rail.RailStation"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailStation</span></code></a></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.build" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.custom_routing">
+<span class="sig-name descname"><span class="pre">custom_routing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLine.html#gatelogue_aggregator.types.node.rail.RailLine" title="gatelogue_aggregator.types.node.rail.RailLine"><span class="pre">RailLine</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.bus.BusLine.html#gatelogue_aggregator.types.node.bus.BusLine" title="gatelogue_aggregator.types.node.bus.BusLine"><span class="pre">BusLine</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.sea.SeaLine.html#gatelogue_aggregator.types.node.sea.SeaLine" title="gatelogue_aggregator.types.node.sea.SeaLine"><span class="pre">SeaLine</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">stations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailStation.html#gatelogue_aggregator.types.node.rail.RailStation" title="gatelogue_aggregator.types.node.rail.RailStation"><span class="pre">RailStation</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.bus.BusStop.html#gatelogue_aggregator.types.node.bus.BusStop" title="gatelogue_aggregator.types.node.bus.BusStop"><span class="pre">BusStop</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.sea.SeaStop.html#gatelogue_aggregator.types.node.sea.SeaStop" title="gatelogue_aggregator.types.node.sea.SeaStop"><span class="pre">SeaStop</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.YamlLine.html#gatelogue_aggregator.sources.yaml2source.YamlLine" title="gatelogue_aggregator.sources.yaml2source.YamlLine"><span class="pre">YamlLine</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.custom_routing" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.file_path">
+<span class="sig-name descname"><span class="pre">file_path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/gatelogue/gatelogue/gatelogue-aggregator/src/gatelogue_aggregator/sources/rail/railinq.yaml')</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.file_path" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -184,7 +224,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g">
-<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://www.rustworkx.org/apiref/rustworkx.PyGraph.html#rustworkx.PyGraph" title="(in rustworkx v0.17)"><span class="pre">PyGraph</span></a></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">g</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.g" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -194,12 +234,12 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MRT</span> <span class="pre">Warp</span> <span class="pre">API</span> <span class="pre">(Rail,</span> <span class="pre">RaiLinQ)'</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Gatelogue</span> <span class="pre">(Rail,</span> <span class="pre">RaiLinQ)'</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority">
-<span class="sig-name descname"><span class="pre">priority</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">priority</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.railinq_warp.RaiLinQWarp.priority" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
