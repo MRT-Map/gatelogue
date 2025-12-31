@@ -50,7 +50,6 @@ class WZR(RailSource):
 
         for line_code, line_name in (
             ("2", "Northmist Line"),
-            ("4", "Genso Line"),
             ("10", "Centrale Line"),
         ):
             wiki = get_wiki_text(line_name, config)
@@ -70,16 +69,21 @@ class WZR(RailSource):
 
             RailLineBuilder(self, line).connect(*stations)
 
-        wiki = get_wiki_text("Ismael Line", config)
-        line = RailLine.new(self, code="8", name="Ismael Line", company=company, colour="#aa0000")
-
-        stations = []
-        for result in search_all(
-            re.compile(r"\[\[(?:[^|]*\|)?(?P<name>[^|]*)]] *\|\| *(?P<code>\w\w\w) .*\|\|.*\|\|(?! *Planned)"), wiki
+        for line_code, line_name in (
+                ("3", "Aurora Line"),
+                ("4", "Genso Line"),
+                ("8", "Ismael Line"),
         ):
-            code = result.group("code").upper()
-            name = result.group("name").strip()
-            station = RailStation.new(self, codes={code}, name=name, company=company)
-            stations.append(station)
+            wiki = get_wiki_text(line_name, config)
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
 
-        RailLineBuilder(self, line).connect(*stations)
+            stations = []
+            for result in search_all(
+                re.compile(r"\[\[(?:[^|]*\|)?(?P<name>[^|]*)]] *\|\| *(?P<code>\w\w\w) .*\|\|.*\|\|(?! *Planned)"), wiki
+            ):
+                code = result.group("code").upper()
+                name = result.group("name").strip()
+                station = RailStation.new(self, codes={code}, name=name, company=company)
+                stations.append(station)
+
+            RailLineBuilder(self, line).connect(*stations)

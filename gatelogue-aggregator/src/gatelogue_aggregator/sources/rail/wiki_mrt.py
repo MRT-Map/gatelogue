@@ -63,6 +63,8 @@ class WikiMRT(RailSource):
                 for match2 in search_all(
                     re.compile(r"{{st/n\|[^}]*\|([^}]*)}}|{{s\|([^}]*)\|[^}]*}}"), match.group("transfers")
                 ):
+                    if codes == "L3X":
+                        continue
                     codes.add(match2.group(1) or match2.group(2))
                 if line_code.startswith("Old"):
                     codes = {"Old-" + a for a in codes}
