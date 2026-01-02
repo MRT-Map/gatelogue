@@ -35,6 +35,7 @@
 
 export type StringID<_ extends Node> = string;
 export type IntID<_ extends Node> = number;
+export type ID<T extends Node> = StringID<T> | IntID<T>
 export type World = "Old" | "New" | "Space";
 export type RailMode = "warp" | "cart" | "traincarts" | "vehicles";
 export type SeaMode = "ferry" | "cruise";
@@ -140,7 +141,7 @@ export interface RailStation<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<RailCompany<S>>, S>;
   connections: Record<
     StringID<RailStation<S>>,
-    Sourced<Connection<RailLine, RailStation, S>>[]
+    Sourced<Connection<RailLine, RailStation, S>, S>[]
   >;
 }
 
@@ -166,7 +167,7 @@ export interface SeaStop<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<SeaCompany<S>>, S>;
   connections: Record<
     StringID<SeaStop<S>>,
-    Sourced<Connection<SeaLine, SeaStop, S>>[]
+    Sourced<Connection<SeaLine, SeaStop, S>, S>[]
   >;
 }
 
@@ -191,7 +192,7 @@ export interface BusStop<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<BusCompany<S>>, S>;
   connections: Record<
     StringID<BusStop<S>>,
-    Sourced<Connection<BusLine, BusStop, S>>[]
+    Sourced<Connection<BusLine, BusStop, S>, S>[]
   >;
 }
 
@@ -237,112 +238,112 @@ export class GD<S extends boolean = true> {
     );
   }
 
-  node(id: StringID<Node>): Node | undefined {
-    return this.data.nodes[id] as never;
+  node(id: ID<Node>): Node | undefined {
+    return this.data.nodes[typeof id === "string" ? id : id.toString()] as never;
   }
   get nodes(): Node[] {
     return Object.values(this.data.nodes);
   }
 
-  airFlight(id: StringID<AirFlight<S>>): AirFlight<S> | undefined {
+  airFlight(id: ID<AirFlight<S>>): AirFlight<S> | undefined {
     return this.node(id) as never;
   }
   get airFlights(): AirFlight<S>[] {
     return this.nodes.filter((a) => a.type === "AirFlight") as never;
   }
 
-  airAirport(id: StringID<AirAirport<S>>): AirAirport<S> | undefined {
+  airAirport(id: ID<AirAirport<S>>): AirAirport<S> | undefined {
     return this.node(id) as never;
   }
   get airAirports(): AirAirport<S>[] {
     return this.nodes.filter((a) => a.type === "AirAirport") as never;
   }
 
-  airGate(id: StringID<AirGate<S>>): AirGate<S> | undefined {
+  airGate(id: ID<AirGate<S>>): AirGate<S> | undefined {
     return this.node(id) as never;
   }
   get airGates(): AirGate<S>[] {
     return this.nodes.filter((a) => a.type === "AirGate") as never;
   }
 
-  airAirline(id: StringID<AirAirline<S>>): AirAirline<S> | undefined {
+  airAirline(id: ID<AirAirline<S>>): AirAirline<S> | undefined {
     return this.node(id) as never;
   }
   get airAirlines(): AirAirline<S>[] {
     return this.nodes.filter((a) => a.type === "AirAirline") as never;
   }
 
-  railCompany(id: StringID<RailCompany<S>>): RailCompany<S> | undefined {
+  railCompany(id: ID<RailCompany<S>>): RailCompany<S> | undefined {
     return this.node(id) as never;
   }
   get railCompanies(): RailCompany<S>[] {
     return this.nodes.filter((a) => a.type === "RailCompany") as never;
   }
 
-  railLine(id: StringID<RailLine<S>>): RailLine<S> | undefined {
+  railLine(id: ID<RailLine<S>>): RailLine<S> | undefined {
     return this.node(id) as never;
   }
   get railLines(): RailLine<S>[] {
     return this.nodes.filter((a) => a.type === "RailLine") as never;
   }
 
-  railStation(id: StringID<RailStation<S>>): RailStation<S> | undefined {
+  railStation(id: ID<RailStation<S>>): RailStation<S> | undefined {
     return this.node(id) as never;
   }
   get railStations(): RailStation<S>[] {
     return this.nodes.filter((a) => a.type === "RailStation") as never;
   }
 
-  seaCompany(id: StringID<SeaCompany<S>>): SeaCompany<S> | undefined {
+  seaCompany(id: ID<SeaCompany<S>>): SeaCompany<S> | undefined {
     return this.node(id) as never;
   }
   get seaCompanies(): SeaCompany<S>[] {
     return this.nodes.filter((a) => a.type === "SeaCompany") as never;
   }
 
-  seaLine(id: StringID<SeaLine<S>>): SeaLine<S> | undefined {
+  seaLine(id: ID<SeaLine<S>>): SeaLine<S> | undefined {
     return this.node(id) as never;
   }
   get seaLines(): SeaLine<S>[] {
     return this.nodes.filter((a) => a.type === "SeaLine") as never;
   }
 
-  seaStop(id: StringID<SeaStop<S>>): SeaStop<S> | undefined {
+  seaStop(id: ID<SeaStop<S>>): SeaStop<S> | undefined {
     return this.node(id) as never;
   }
   get seaStops(): SeaStop<S>[] {
     return this.nodes.filter((a) => a.type === "SeaStop") as never;
   }
 
-  busCompany(id: StringID<BusCompany<S>>): BusCompany<S> | undefined {
+  busCompany(id: ID<BusCompany<S>>): BusCompany<S> | undefined {
     return this.node(id) as never;
   }
   get busCompanies(): BusCompany<S>[] {
     return this.nodes.filter((a) => a.type === "BusCompany") as never;
   }
 
-  busLine(id: StringID<BusLine<S>>): BusLine<S> | undefined {
+  busLine(id: ID<BusLine<S>>): BusLine<S> | undefined {
     return this.node(id) as never;
   }
   get busLines(): BusLine<S>[] {
     return this.nodes.filter((a) => a.type === "BusLine") as never;
   }
 
-  busStop(id: StringID<BusStop<S>>): BusStop<S> | undefined {
+  busStop(id: ID<BusStop<S>>): BusStop<S> | undefined {
     return this.node(id) as never;
   }
   get busStops(): BusStop<S>[] {
     return this.nodes.filter((a) => a.type === "BusStop") as never;
   }
 
-  spawnWarp(id: StringID<SpawnWarp<S>>): SpawnWarp<S> | undefined {
+  spawnWarp(id: ID<SpawnWarp<S>>): SpawnWarp<S> | undefined {
     return this.node(id) as never;
   }
   get spawnWarps(): SpawnWarp<S>[] {
     return this.nodes.filter((a) => a.type === "SpawnWarp") as never;
   }
 
-  town(id: StringID<Town<S>>): Town<S> | undefined {
+  town(id: ID<Town<S>>): Town<S> | undefined {
     return this.node(id) as never;
   }
   get towns(): Town<S>[] {
