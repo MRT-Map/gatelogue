@@ -31,6 +31,8 @@ class CCC(BusSource):
                 line = None
                 stops = []
                 continue
+            if line is None:
+                continue
 
             name = ln.removeprefix("* ")
             stop = BusStop.new(self, codes={name}, name=name, company=company)
