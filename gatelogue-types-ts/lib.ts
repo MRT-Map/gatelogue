@@ -66,12 +66,12 @@ export interface Node {
 
 export interface Located<S extends boolean = true> extends Node {
   world: Sourced<World, S> | null;
-  coordinates: Sourced<[number, number]> | null;
+  coordinates: Sourced<[number, number], S> | null;
   proximity: Record<
     StringID<Located>,
-    Sourced<{ distance: number; explicit: boolean }>
+    Sourced<{ distance: number; explicit: boolean }, S>
   >;
-  shared_facility: Sourced<IntID<Located>>[];
+  shared_facility: Sourced<IntID<Located>, S>[];
 }
 
 export interface Direction<St extends Located, S extends boolean = true> {

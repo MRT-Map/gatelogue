@@ -4,6 +4,9 @@
 * `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
 
+## v2.0.7+10 (20260102)
+* `gatelogue-types` (ts): fix more `Sourced` types
+* 
 ## v2.0.6+10 (20260102)
 * `gatelogue-types` (ts): fix connection types
 * `gatelogue-types` (ts): accept `number` ID in parameters
