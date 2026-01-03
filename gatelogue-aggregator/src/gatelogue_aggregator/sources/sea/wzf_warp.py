@@ -17,6 +17,7 @@ class WZFWarp(SeaSource):
             if not warp["name"].startswith("WZF") and not warp["name"].startswith("ZF"):
                 continue
             code = warp["name"].split("-")[-1]
+            code = {"PBA": "PEA"}.get(code, code)
             if code in codes:
                 continue
             SeaStop.new(self, codes={code}, company=company, world="New", coordinates=(warp["x"], warp["z"]))

@@ -33,7 +33,7 @@ class WZR(RailSource):
                 continue
             line_name = result.group("name") or result.group("name2")
             line_code = result.group("code") or line_name
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")
 
             stations = []
             for tr in table.find_all("tr"):
@@ -53,7 +53,7 @@ class WZR(RailSource):
             ("10", "Centrale Line"),
         ):
             wiki = get_wiki_text(line_name, config)
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")
 
             stations = []
             for result in search_all(
@@ -75,7 +75,7 @@ class WZR(RailSource):
                 ("8", "Ismael Line"),
         ):
             wiki = get_wiki_text(line_name, config)
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, colour="#aa0000")
+            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")
 
             stations = []
             for result in search_all(

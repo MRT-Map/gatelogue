@@ -13,7 +13,7 @@ class BluRailWarp(RailSource):
     def build(self, config: Config):
         company = RailCompany.new(self, name="BluRail")
 
-        names = ["Titsensaki Palm Shores", "Sunshine Coast Docks", "Cornwall", "South Paixton"]
+        names = ["Sunshine Coast Docks", "Cornwall", "South Paixton", "Seoland North", "Titsensaki BluRail Station", "Titsensaki", "Titsensaki Transfer"]
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
             if not warp["name"].startswith("BLU") and not warp["name"].startswith("BR"):
                 continue
@@ -26,15 +26,19 @@ class BluRailWarp(RailSource):
             if (match := re.search(r"(\d*)_(...)_", warp["name"])) is None:
                 continue
 
-            code = match.group(2)
-            if code == "BCH" and match.group(1) in ("1", "18"):
-                code += "1"
-            elif code == "MCN" and (match.group(1) == "11" or match.group(1) == "6" or match.group(1) == "20"):
-                code += "11"
-            elif code == "STE" and match.group(1) == "2":
-                code = "SNE"
-            elif code == "ROS" and match.group(1) == "12":
-                code = "RLN"
+            code = {
+                "Rosslyn": "RLN",
+                "Murrville Central": "MUR",
+                "Zaquar Tanzanite Station": "ZQT",
+                "Spruce Neck": "FDR",
+                "Chalxior Femtoprism Airfield": "CFA",
+                "Ilirea Transit Center": "ITC",
+                "Elecna Bay North": "EBN",
+                "Utopia - IKEA": "UIK",
+                "Seoland Powell Street": "SPS",
+                "Titsensaki Palm Shores": "TPS",
+                "Washingcube Airfield": "WCA",
+            }.get(name, match.group(2))
             RailStation.new(
                 self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )

@@ -64,11 +64,13 @@ class SeabeastBuses(BusSource):
                 "DPH": "Deadbush Pioneer-Howard Airport",
                 "BAY": "Bay Point",
                 "PXL": "Pixl Vinayaka International Airport",
-                "CAR": "Caravaca-Juan Carlos I Airfield",
+                "CAR": "Carnoustie" if warp["name"] == "SBB023CAR" else "Caravaca-Juan Carlos I Airfield",
+                "THR": "thrive"
             }.get(
                 warp_name,
                 next(iter(difflib.get_close_matches(warp_name, stop_names.get(warp["name"][3:6], []), 1, 0.0)), None),
             )
+            print(warp_name, name)
             if name in names or name is None:
                 continue
 

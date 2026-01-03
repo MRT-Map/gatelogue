@@ -32,7 +32,7 @@ class WZF(SeaSource):
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:
                     continue
-                code = tr("td")[1].string
+                code = next(tr("td")[1].strings)
                 name = "".join(tr("td")[2].strings)
                 if "planned" in name:
                     continue

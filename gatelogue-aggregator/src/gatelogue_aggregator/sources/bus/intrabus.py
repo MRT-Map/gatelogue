@@ -17,13 +17,13 @@ class IntraBus(BusSource):
                 continue
             shift = 1 if "Replacement For" in table.strings else 0
             for tr in table("tr")[1::2]:
-                if tr("td")[3 + shift].find("a", href="/index.php/File:Rsz_open.png") is None:
-                    continue
                 line_code = tr("td")[0].find("span").string
                 line = BusLine.new(self, code=line_code, company=company)
 
                 stops = []
                 for li in tr("td")[1 + shift]("li"):
+                    if li.find("s") is not None:
+                        continue
                     if (name := li.find("b")) is None:
                         continue
                     name = name.string

@@ -32,7 +32,7 @@ class RedTrain(RailSource):
                 if tr("td")[0].find("a", href="/index.php/File:Dynmap_Green_Flag.png") is None:
                     continue
                 name = " ".join(tr("td")[2].strings).strip().removesuffix(" £")
-                code = tr("td")[1].string
+                code = next(tr("td")[1].strings)
                 station = RailStation.new(self, codes={code}, name=name, company=company)
                 stations.append(station)
 

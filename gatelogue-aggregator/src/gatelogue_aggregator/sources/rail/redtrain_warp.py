@@ -21,9 +21,9 @@ class RedTrainWarp(RailSource):
             if not warp["name"].startswith("RT"):
                 continue
             code = warp["name"].split("_")[1].upper()
+            code = {"RITO": "ITO", "VEN": "VN", "MTH": "MSN", "WHT": "WH"}.get(code, code)
             if code in codes:
                 continue
-            code = {"RITO": "ITO", "VEN": "VN", "MTH": "MSN", "WHT": "WH"}.get(code, code)
             RailStation.new(
                 self,
                 codes={code},

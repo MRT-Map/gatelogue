@@ -53,7 +53,7 @@ class WikiMRT(RailSource):
             ("Old-O", "MRT Orange Line", "#FF8000"),
         ):
             text = get_wiki_text(line_name, config)
-            line = RailLine.new(self, code=line_code, company=company, name=line_name, colour=line_colour)
+            line = RailLine.new(self, code=line_code, company=company, name=line_name, colour=line_colour, mode="cart")
 
             stations = []
             for match in search_all(

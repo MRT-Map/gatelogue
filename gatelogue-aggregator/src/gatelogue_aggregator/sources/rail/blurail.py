@@ -53,27 +53,10 @@ class BluRail(RailSource):
                 code = result.group("code").upper()
                 if code.startswith("BLUTRAIN"):
                     continue
-                if code == "BCH" and line_code in ("1", "18"):
-                    code += "1"
-                elif code == "MCN" and line_code in ("11", "6", "20"):
-                    code += "11"
                 codes = {
-                    "ILI": {"ILI", "ITC"},
-                    "ITC": {"ILI", "ITC"},
-                    "SEA": {"SLC", "SEA"},
-                    "SLC": {"SLC", "SEA"},
-                    "IKA": {"UIK", "IKA"},
-                    "UIK": {"UIK", "IKA"},
-                    "EGN": {"EBN", "EGN"},
-                    "EBN": {"EBN", "EGN"},
-                    "SPN": {"FDR", "SPN"},
-                    "FDR": {"FDR", "SPN"},
-                    "WCA": {"WCA", "WAI"},
-                    "WAI": {"WCA", "WAI"},
-                    "CFA": {"CFA", "CHA"},
-                    "CHA": {"CFA", "CHA"},
-                    "NSE": {"SPS", "NSE"},
-                    "SPS": {"SPS", "NSE"},
+                    "IKA": {"UIK"},
+                    "SPN": {"FDR"},
+                    "ILI": {"ITC"}
                 }.get(code, {code})
                 name = result.group("name").strip()
                 if name == "":

@@ -1,6 +1,7 @@
 company_name: SEAT
 
 coords:
+  Alexandria Bay: [ 8915, 15666 ]
   Arcadia: [ 13507, 16280 ]
   Boston Waterloo: [ 663, 10809 ]
   Central City Warp Terminal: [ 156, -1060 ]
@@ -29,4 +30,4 @@ coords:
   Transit Centre: [ -9911, -8869 ]
   UCWTIA: [ -1671, 946 ]
   Victoria Main: [ 5277, 16094 ]
-  Willow Alexandria Bay: [ 8915, 15666 ]
+  Willow Transit Centre: [-9911, -8869]

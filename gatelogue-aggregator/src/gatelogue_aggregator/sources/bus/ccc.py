@@ -47,9 +47,16 @@ class CCC(BusSource):
                 continue
 
             warp_name = warp["name"].split("_")[1]
-            name = {"JuanCarlosI": "Caravaca Airport", "MWAirport2": "Miu Wan Airport Terminal 2"}.get(
+            name = {
+                "JuanCarlosI": "Caravaca - Juan Carlos I",
+                "MWAirport": "Miu Wan TTL T1",
+                "MWAirport2": "Miu Wan TTL T2",
+                "EFAirfield": "Ellerton Fosby Airport",
+                "ottia": "Ottia Islands",
+            }.get(
                 warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0]
             )
+            print(warp_name, name)
             if name in names:
                 continue
 

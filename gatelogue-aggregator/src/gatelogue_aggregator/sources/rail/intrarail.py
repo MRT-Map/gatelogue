@@ -7,6 +7,7 @@ from gatelogue_aggregator.types.node.rail import (
     RailSource,
     RailStation,
 )
+from gatelogue_aggregator.utils import get_stn
 
 
 class IntraRail(RailSource):
@@ -66,15 +67,15 @@ class IntraRail(RailSource):
 
             if line_code == "2X":
                 RailLineBuilder(self, line).connect(
-                    *stations,
-                    between=("Formosa Northern", "UCWT International Airport East"),
-                    exclude=["Danielston Paisley Place Transportation Center"],
+                    get_stn(stations, "Formosa Northern"),
+                    get_stn(stations, "UCWT International Airport East"),
                     forward_label="to Siletz Salvador Station",
-                    backward_label="Whitechapel Border",
+                    backward_label="to Whitechapel Border",
                 )
                 RailLineBuilder(self, line).connect(
-                    *stations,
-                    between=("Central City Warp Rail Terminal", "Siletz Salvador Station"),
-                    exclude=["Rochshire", "Woodsbane"],
-                    backward_label="Whitechapel Border",
+                    get_stn(stations, "Central City Warp Rail Terminal"),
+                    get_stn(stations, "Achowalogen Takachsin-Covina International Airport"),
+                    get_stn(stations, "Siletz Salvador Station"),
+                    forward_label="to Siletz Salvador Station",
+                    backward_label="to Whitechapel Border",
                 )
