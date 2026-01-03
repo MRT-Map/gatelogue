@@ -74,7 +74,7 @@ export interface Located<S extends boolean = true> extends Node {
   shared_facility: Sourced<IntID<Located>, S>[];
 }
 
-export interface Direction<St extends Located, S extends boolean = true> {
+export interface Direction<St extends Located<S>, S extends boolean = true> {
   direction: IntID<St>;
   forward_label: string | null;
   backward_label: string | null;
@@ -83,7 +83,7 @@ export interface Direction<St extends Located, S extends boolean = true> {
 
 export interface Connection<
   L extends Node,
-  St extends Located,
+  St extends Located<S>,
   S extends boolean = true,
 > {
   line: IntID<L>;
@@ -97,7 +97,7 @@ export interface AirFlight<S extends boolean = true> extends Node {
   airline: Sourced<IntID<AirAirline<S>>, S>;
 }
 
-export interface AirAirport<S extends boolean = true> extends Located {
+export interface AirAirport<S extends boolean = true> extends Located<S> {
   code: string;
   names: Sourced<string[], S> | null;
   link: Sourced<string, S> | null;
@@ -141,7 +141,7 @@ export interface RailStation<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<RailCompany<S>>, S>;
   connections: Record<
     StringID<RailStation<S>>,
-    Sourced<Connection<RailLine, RailStation, S>, S>[]
+    Sourced<Connection<RailLine, RailStation<S>, S>, S>[]
   >;
 }
 
@@ -167,7 +167,7 @@ export interface SeaStop<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<SeaCompany<S>>, S>;
   connections: Record<
     StringID<SeaStop<S>>,
-    Sourced<Connection<SeaLine, SeaStop, S>, S>[]
+    Sourced<Connection<SeaLine, SeaStop<S>, S>, S>[]
   >;
 }
 
@@ -192,7 +192,7 @@ export interface BusStop<S extends boolean = true> extends Located<S> {
   company: Sourced<IntID<BusCompany<S>>, S>;
   connections: Record<
     StringID<BusStop<S>>,
-    Sourced<Connection<BusLine, BusStop, S>, S>[]
+    Sourced<Connection<BusLine, BusStop<S>, S>, S>[]
   >;
 }
 
