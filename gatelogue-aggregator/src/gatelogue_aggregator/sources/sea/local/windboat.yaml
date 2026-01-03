@@ -1,0 +1,118 @@
+company_name: Windboat
+mode: "ferry"
+local: true
+
+lines:
+  - name: Shui Chau Route
+    code: SC
+    colour: "#888"
+    forward_label: towards Tsukihama
+    backward_label: towards Shui Chau
+    stations:
+      - Shui Chau
+      - Tsukihama
+  - name: Eumi Route
+    code: EU
+    colour: "#888"
+    forward_label: towards St Helena
+    backward_label: towards Setsuritsuchō
+    stations:
+      - Setsuritsuchō
+      - Kazeshima Ferry Terminal
+      - Konaemachi
+      - Macece Island
+      - Henkyōchō
+      - St Helena
+  - name: Far Islands Route
+    code: FI
+    colour: "#888"
+    forward_label: towards Kazeshima Ferry Terminal
+    backward_label: towards Far Islet 7
+    stations:
+      - Kazeshima Ferry Terminal
+      - Far Islet 1
+      - Far Islet 3
+      - Far Islet 4
+      - Far Islet 6
+      - Far Islet 7
+  - name: Setsuritsu Route
+    code: SS
+    colour: "#888"
+    forward_label: towards Setsuritsu Islet 6
+    backward_label: towards Setsuritsuchō
+    stations:
+      - Setsuritsuchō
+      - Setsuritsu Islet 4
+      - Setsuritsu Islet 6
+  - name: Konaemachi Route
+    code: KN
+    colour: "#888"
+    forward_label: towards Wenyanga/Macece Island
+    backward_label: towards Konaemachi
+    stations:
+      - Konaemachi
+      - Minami-kengiguntō
+      - Kita-kengiguntō
+      - Anseijima
+      - Wenyanga
+      - Triangle Archipelago
+      - Macece Island
+  - name: Etamachi Route
+    code: ET
+    colour: "#888"
+    forward_label: towards Kazeshima Ferry Terminal
+    backward_label: towards Etamachi
+    stations:
+      - Etamachi
+      - Meiwakuchō
+      - Kazeshima Ferry Terminal
+  - name: Macquarie Route
+    code: MQ
+    colour: "#888"
+    forward_label: towards St Helena
+    backward_label: towards Henkyōchō
+    stations:
+      - Henkyōchō
+      - Macquarie Island
+      - St Helena
+  - name: St Helena Route
+    code: HE
+    colour: "#888"
+    forward_label: Clockwise
+    backward_label: Anticlockwise
+    stations:
+      - St Helena
+      - Tristan de Cunha
+      - Isla de Mona
+      - Ascension Island
+      - Guano Island
+      - Rose Island
+coords:
+  Setsuritsuchō: [-26325, 16423]
+  Setsuritsu Islet 4: [-26287, 16468]
+  Setsuritsu Islet 6: [-26245, 16494]
+  Kazeshima Ferry Terminal: [-25534, 16322]
+  Far Islet 1: [-25385, 16465]
+  Far Islet 3: [-25454, 16756]
+  Far Islet 4: [-25927, 16737]
+  Far Islet 6: [-26157, 16725]
+  Far Islet 7: [-25953, 17590]
+  Meiwakuchō: [-24825, 16826]
+  Etamachi: [-25172, 17036]
+  Konaemachi: [-24620, 16384]
+  Minami-kengiguntō: [-24612, 16188]
+  Kita-kengiguntō: [-24685, 15733]
+  Anseijima: [-25248, 15338]
+  Wenyanga: [-24680, 15051]
+  Triangle Archipelago: [-24067, 15536]
+  Macece Island: [-23574, 15602]
+  Henkyōchō: [-21946, 15378]
+  Macquarie Island: [-22340, 15102]
+  St Helena: [-23484, 14530]
+  Tristan de Cunha: [-23822, 14490]
+  Isla de Mona: [-23912, 13996]
+  Ascension Island: [-23593, 13997]
+  Guano Island: [-23252, 14161]
+  Rose Island: [-23084, 14433]
+  Tsukihama: [-26880, 16500]
+  Shui Chau: [-27864, 16148]

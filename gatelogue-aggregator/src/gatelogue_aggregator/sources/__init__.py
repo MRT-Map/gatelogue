@@ -56,6 +56,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
     from gatelogue_aggregator.sources.sea.intrasail import IntraSail
     from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
+    from gatelogue_aggregator.sources.sea.local.windboat import Windboat
     from gatelogue_aggregator.sources.sea.wzf import WZF
     from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
     from gatelogue_aggregator.sources.spawn_warp import SpawnWarps
@@ -111,6 +112,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         WikiAirline,
         WikiAirport,
         WikiMRT,
+        Windboat,
         WZF,
         WZFWarp,
         WZR,
