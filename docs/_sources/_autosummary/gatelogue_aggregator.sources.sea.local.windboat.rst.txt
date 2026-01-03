@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.sea.local.windboat
+================================================
+
+.. automodule:: gatelogue_aggregator.sources.sea.local.windboat
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Windboat
+   
+   
+
+   
+   
+   
+
+
+

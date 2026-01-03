@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.local.erzlink\_trams.ErzLinkTrams
+====================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.erzlink_trams
+
+.. autoclass:: ErzLinkTrams
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ErzLinkTrams.__init__
+      ~ErzLinkTrams.build
+      ~ErzLinkTrams.custom_routing
+      ~ErzLinkTrams.find_by_ref
+      ~ErzLinkTrams.find_by_ref_or_index
+      ~ErzLinkTrams.is_coord_source
+      ~ErzLinkTrams.report
+      ~ErzLinkTrams.reported_nodes
+      ~ErzLinkTrams.retrieve_from_cache
+      ~ErzLinkTrams.sanitise_strings
+      ~ErzLinkTrams.save_to_cache
+      ~ErzLinkTrams.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ErzLinkTrams.file_path
+      ~ErzLinkTrams.name
+      ~ErzLinkTrams.priority
+      ~ErzLinkTrams.g
+   
+   

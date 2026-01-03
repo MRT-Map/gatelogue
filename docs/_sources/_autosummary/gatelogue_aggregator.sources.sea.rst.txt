@@ -35,6 +35,7 @@ gatelogue\_aggregator.sources.sea
    hbl_warp
    intrasail
    intrasail_warp
+   local
    wzf
    wzf_warp
 

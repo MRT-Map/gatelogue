@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.sea.local.windboat.Windboat
+=========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.local.windboat
+
+.. autoclass:: Windboat
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Windboat.__init__
+      ~Windboat.build
+      ~Windboat.custom_routing
+      ~Windboat.find_by_ref
+      ~Windboat.find_by_ref_or_index
+      ~Windboat.is_coord_source
+      ~Windboat.report
+      ~Windboat.reported_nodes
+      ~Windboat.retrieve_from_cache
+      ~Windboat.sanitise_strings
+      ~Windboat.save_to_cache
+      ~Windboat.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Windboat.file_path
+      ~Windboat.name
+      ~Windboat.priority
+      ~Windboat.g
+   
+   

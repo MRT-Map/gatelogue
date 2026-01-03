@@ -28,6 +28,7 @@ gatelogue\_aggregator.sources.rail.local
    :template: custom-module-template.rst                 
    :recursive:
 
+   erzlink_trams
    flr_foresne
    flr_kaze
    flr_sheng

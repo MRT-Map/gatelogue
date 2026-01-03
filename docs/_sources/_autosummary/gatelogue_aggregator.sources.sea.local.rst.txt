@@ -1,0 +1,32 @@
+gatelogue\_aggregator.sources.sea.local
+=======================================
+
+.. automodule:: gatelogue_aggregator.sources.sea.local
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   windboat
+
