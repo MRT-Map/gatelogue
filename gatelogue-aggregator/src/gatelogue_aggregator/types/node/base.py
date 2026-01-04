@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Callable  # noqa: TCH003
+from collections.abc import Callable  # noqa: TC003
 from typing import TYPE_CHECKING, Any, ClassVar, Self, override
 
 import gatelogue_types as gt

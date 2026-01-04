@@ -25,7 +25,7 @@ class CCC(BusSource):
                 line_code = match.group(1)
                 line = BusLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
                 continue
-            elif ln.strip() == "" and line is not None:
+            if ln.strip() == "" and line is not None:
                 if len(stops) != 0:
                     BusLineBuilder(self, line).connect(*stops)
                 line = None
@@ -38,7 +38,7 @@ class CCC(BusSource):
             stop = BusStop.new(self, codes={name}, name=name, company=company)
             stops.append(stop)
             stop_names.append(name)
-                
+
         ###
 
         names = []

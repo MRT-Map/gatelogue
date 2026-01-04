@@ -1,0 +1,167 @@
+company_name: ErzLink Metro
+mode: "traincarts"
+local: true
+
+lines:
+  - name: Core Line
+    code: "1"
+    colour: "#268d85"
+    stations:
+      - Carnigary
+      - Erzville Central
+      - Zetstone
+      - Larnwick
+      - Prohampton Hospital Link
+      - Lakeside
+      - Repentigny
+      - Anthracite Valley
+      - Rutland
+      - Boofar
+      - Noboribetsu
+      - San Francisco Midway International Airport
+      - San Francisco City Airport
+      - San Francisco Union
+  - name: Core Line Express
+    code: "1 Express"
+    colour: "#268d85"
+    mode: warp
+    stations:
+      - Erzville Central
+      - Prohampton Hospital Link
+      - Repentigny
+      - San Francisco Midway International Airport
+      - San Francisco Union
+
+  - name: Odralia Line
+    code: "2"
+    colour: "#59c4e9"
+    forward_label: Clockwise
+    backward_label: Anticlockwise
+    stations:
+      - Esperance Harbour
+      - Erzville Central
+      - Cremorne
+      - Daygon
+  - name: Odralia Line Express
+    code: "2 Express"
+    colour: "#59c4e9"
+    forward_label: Clockwise
+    backward_label: Anticlockwise
+    stations:
+      - Erzville Central
+      - Daygon
+
+  - name: Crosstown Line
+    code: "3"
+    colour: "#abaaaa"
+    stations:
+      - Robloxia
+      - Stockton
+      - Vannahelm
+      - Erzgard International Airport
+      - Parkville
+      - Erzville Central
+      - Golden South
+      - New Erzville
+      - Artarmon
+      - Calico
+      - Prisma Falls
+      - Cardinal Bay
+      - Oxeyeburg
+      - Oparia Downtown
+      - Oparia LeTourneau International Airport
+  - name: Crosstown Line Express
+    code: "3 Express"
+    colour: "#abaaaa"
+    stations:
+      - Robloxia
+      - Stockton
+      - Vannahelm
+      - Erzgard International Airport
+      - Erzville Central
+      - New Erzville
+      - Artarmon
+      - Cardinal Bay
+      - Oparia LeTourneau International Airport
+
+  - name: Kananook Line
+    code: "4"
+    colour: "#765d58"
+    forward_label: Clockwise
+    backward_label: Anticlockwise
+    stations:
+      - Scalia City
+      - Robloxia
+
+  - name: Ordonia Line
+    code: "5"
+    colour: "#535faa"
+    stations:
+      - New Erzville
+      - Cyrago
+
+  - name: Overgrove Line
+    code: "6"
+    colour: "#98cd8c"
+    stations:
+      - Whitecliff
+      - Newington
+      - Essex Central
+      - Stone
+      - Riverdane
+      - Crowood
+      - Golden South
+      - Erzbourne
+      - New Erzville
+      - Artarmon
+  - name: Overgrove Line Express
+    code: "6 Express"
+    colour: "#98cd8c"
+    stations:
+      - Whitecliff
+      - Essex Central
+      - New Erzville
+      - Artarmon
+
+
+coords:
+  Carnigary: [ -3151, -27176 ]
+  Erzville Central: [ -3149, -26876 ]
+  Zetstone: [ -3152, -26411 ]
+  Larnwick: [ -3801, -25357 ]
+  Prohampton Hospital Link: [ -4833, -25365 ]
+  Lakeside: [ -6518, -24984 ]
+  Repentigny: [ -9588, -25093 ]
+  Anthracite Valley: [ -11300, -25200 ]
+  Rutland: [ -12432, -25056 ]
+  Boofar: [ -15272, -25160 ]
+  Noboribetsu: [ -16792, -24796 ]
+  San Francisco Midway International Airport: [ -18274, -25925 ]
+  San Francisco City Airport: [ -18894, -25398 ]
+  San Francisco Union: [ -19428, -25659 ]
+  Esperance Harbour: [ -3344, -27107 ]
+  Cremorne: [ -3267, -26543 ]
+  Daygon: [ -3407, -26268 ]
+  Parkville: [ -3267, -27300 ]
+  Erzgard International Airport: [ -3325, -27513 ]
+  Vannahelm: [ -4059, -27877 ]
+  Stockton: [ -4390, -28500 ]
+  Robloxia: [ -4922, -28204 ]
+  Scalia City: [ -5198, -27642 ]
+  Golden South: [ -3052, -26543 ]
+  Crowood: [ -3022, -26302 ]
+  Erzbourne: [ -2931, -26753 ]
+  New Erzville: [ -2831, -26751 ]
+  Artarmon: [ -2551, -26527 ]
+  Cyrago: [ -2795, -26335 ]
+  Calico: [ -1421, -26310 ]
+  Prisma Falls: [ -1037, -24914 ]
+  Cardinal Bay: [ -847, -22776 ]
+  Oxeyeburg: [ -817, -22298 ]
+  Oparia Downtown: [ 1082, -20428 ]
+  Oparia LeTourneau International Airport: [ 1179, -20053 ]
+  Whitecliff: [ -496, -16945 ]
+  Newington: [ -1229, -17912 ]
+  Essex Central: [ -1036, -19795 ]
+  Stone: [ -27940, -21344 ]
+  Riverdane: [ -3064, -23972 ]
