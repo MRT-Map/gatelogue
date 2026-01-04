@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.local.erzlink\_metro.ErzLinkMetro
+====================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.erzlink_metro
+
+.. autoclass:: ErzLinkMetro
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ErzLinkMetro.__init__
+      ~ErzLinkMetro.build
+      ~ErzLinkMetro.custom_routing
+      ~ErzLinkMetro.find_by_ref
+      ~ErzLinkMetro.find_by_ref_or_index
+      ~ErzLinkMetro.is_coord_source
+      ~ErzLinkMetro.report
+      ~ErzLinkMetro.reported_nodes
+      ~ErzLinkMetro.retrieve_from_cache
+      ~ErzLinkMetro.sanitise_strings
+      ~ErzLinkMetro.save_to_cache
+      ~ErzLinkMetro.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ErzLinkMetro.file_path
+      ~ErzLinkMetro.name
+      ~ErzLinkMetro.priority
+      ~ErzLinkMetro.g
+   
+   
