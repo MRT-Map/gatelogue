@@ -63,9 +63,10 @@ class WikiMRT(RailSource):
                 for match2 in search_all(
                     re.compile(r"{{st/n\|[^}]*\|([^}]*)}}|{{s\|([^}]*)\|[^}]*}}"), match.group("transfers")
                 ):
-                    if codes == "L3X":
+                    new_code = match2.group(1) or match2.group(2)
+                    if new_code == "L3X":
                         continue
-                    codes.add(match2.group(1) or match2.group(2))
+                    codes.add(new_code)
                 if line_code.startswith("Old"):
                     codes = {"Old-" + a for a in codes}
                 station = RailStation.new(self, codes=codes, company=company)
