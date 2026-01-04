@@ -534,8 +534,8 @@ lines:
       - Palmate Beach
       - Scalia City Town Hall
   - name: Euneva
-    code: "#c699c4"
-    colour: "#a00"
+    code: "U1"
+    colour: "#c699c4"
     stations:
       - Euneva Central
       - Bayfront
