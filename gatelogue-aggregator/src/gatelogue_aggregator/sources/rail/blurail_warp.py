@@ -39,6 +39,8 @@ class BluRailWarp(RailSource):
                 "Titsensaki Palm Shores": "TPS",
                 "Washingcube Airfield": "WCA",
             }.get(name, match.group(2))
+            if code == "MCN" and match.group(1) == "12:
+                code = "MUR"
             RailStation.new(
                 self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
