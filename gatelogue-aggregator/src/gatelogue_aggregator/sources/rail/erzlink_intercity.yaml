@@ -1,0 +1,97 @@
+company_name: ErzLink Intercity
+mode: "traincarts"
+
+lines:
+  - name: Erzgard Eagle
+    code: EE
+    colour: "#66c3bd"
+    stations:
+      - Eñe
+      - Stockton
+      - Vannahelm
+      - Erzgard International Airport
+      - New Erzville
+      - Oparia LeTourneau International Airport
+      - Miu Wan Tseng Tsz Leng International Airport
+      - Miu Wan Central
+  - name: Northern Raven
+    code: NR
+    colour: "#5f4e49"
+    stations:
+      - Erzgard International Airport
+      - New Erzville
+      - Oparia LeTourneau International Airport
+      - Tres Rios
+      - Whitecliff
+      - Segav Sal
+      - Northlend
+      - Rank Resort
+      - Risima
+      - Niwen Airport
+      - Bechtel
+      - Filipowice
+  - name: Northern Gryphon
+    code: NG
+    colour: "#975c4d"
+    stations:
+      - Erzgard International Airport
+      - New Erzville
+      - Oparia LeTourneau International Airport
+      - Whitecliff
+      - Rank Resort
+      - Niwen Airport
+      - Filipowice
+  - name: Hibernal Leopard
+    code: HL
+    colour: "#7c9990"
+    stations:
+      - Nibel Airport
+      - Niwen Airport
+      - Risima
+      - Rank Resort
+      - Dogwood
+      - Nordhoff
+      - Arcadium
+      - Ngau Ling
+      - Kwai Tin Ha Shan-Kwai Tin Airport
+      - Miu Wan Tseng Tsz Leng International Airport
+      - Miu Wan Central
+      - Miu Wan South
+  - name: Hibernal Dragon
+    code: HD
+    colour: "#aed7c9"
+    stations:
+      - Nibel Airport
+      - Niwen Airport
+      - Rank Resort
+      - Dogwood
+      - Kwai Tin Ha Shan-Kwai Tin Airport
+      - Miu Wan Tseng Tsz Leng International Airport
+      - Miu Wan Central
+      - Miu Wan South
+
+coords:
+  Erzgard International Airport: [ -3325, -27513 ]
+  Vannahelm: [ -4059, -27877 ]
+  Stockton: [ -4390, -28500 ]
+  New Erzville: [ -2831, -26751 ]
+  Oparia LeTourneau International Airport: [ 1179, -20053 ]
+  Whitecliff: [ -496, -16945 ]
+  Eñe: [ -4383, -29947 ]
+  Tres Rios: [1150, -18186]
+  Segav Sal: [-1256, -16884]
+  Northlend: [-2343, -16228]
+  Rank Resort: [-4383, -16324]
+  Risima: [-7716, -17470]
+  Niwen Airport: [-8758, -17680]
+  Nibel Airport: [-10053, -19107]
+  Bechtel: [-10125, -17676]
+  Filipowice: [-10828, -17672]
+  Dogwood: [-3902, -15486]
+  Nordhoff: [-4377, -14301]
+  Arcadium: [-4120, -11312]
+  Ngau Ling: [-4242, -9860]
+  Kwai Tin Ha Shan-Kwai Tin Airport: [-4527, -9606]
+  Miu Wan Tseng Tsz Leng International Airport: [-3555, -9268]
+  Miu Wan Central: [-2382, -9450]
+  Miu Wan South: [-2558, -8945]

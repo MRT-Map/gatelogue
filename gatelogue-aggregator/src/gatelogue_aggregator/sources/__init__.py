@@ -21,6 +21,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.breezerail import BreezeRail
     from gatelogue_aggregator.sources.rail.breezerail_warp import BreezeRailWarp
     from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
+    from gatelogue_aggregator.sources.rail.erzlink_intercity import ErzLinkIntercity
     from gatelogue_aggregator.sources.rail.fredrail import FredRail
     from gatelogue_aggregator.sources.rail.intrarail import IntraRail
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
@@ -77,6 +78,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         DynmapMRT,
         ErzLinkMetro,
         ErzLinkTrams,
+        ErzLinkIntercity,
         FLRForesne,
         FLRKaze,
         FLRSheng,
