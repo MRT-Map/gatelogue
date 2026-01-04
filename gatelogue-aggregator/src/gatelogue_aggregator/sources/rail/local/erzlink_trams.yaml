@@ -5,7 +5,7 @@ local: true
 lines:
   - name: City Circle
     code: "0"
-    colour: "#a00"
+    colour: "#a0a0a0"
     forwards_label: Clockwise
     backwards_label: Anticlockwise
     stations:
@@ -17,7 +17,7 @@ lines:
       - Federation Square
   - name: Central
     code: "1"
-    colour: "#a00"
+    colour: "#66c2b1"
     stations:
       - Parkville East
       - Carnigary Corner
@@ -39,7 +39,7 @@ lines:
       - Artarmon Border
   - name: Erzgard Circle
     code: "2"
-    colour: "#a00"
+    colour: "#eae7b7"
     forwards_label: Clockwise
     backwards_label: Anticlockwise
     stations:
@@ -60,7 +60,7 @@ lines:
       - Erzville Passenger Seaport
   - name: Docklands
     code: "2a"
-    colour: "#a00"
+    colour: "#eae7b7"
     stations:
       - Guardian Bridge
       - Erzville Plaza
@@ -70,7 +70,7 @@ lines:
       - Folou Gate Bridge North
   - name: Southern
     code: "3"
-    colour: "#a00"
+    colour: "#4c5faa"
     stations:
       - Overland Interchange
       - Southern Interchange
@@ -106,7 +106,7 @@ lines:
       - Osprey Interchange
   - name: Frox
     code: "4"
-    colour: "#a00"
+    colour: "#c3e2e6"
     stations:
       - Silverbird Crossing North
       - Ashburn
@@ -129,7 +129,7 @@ lines:
       - Artarmon Border
   - name: Vexter
     code: "5"
-    colour: "#a00"
+    colour: "#b4dab0"
     stations:
       - Esperance Harbour
       - Esperance West
@@ -154,7 +154,7 @@ lines:
       - Osprey Interchange
   - name: Kepler
     code: "6"
-    colour: "#a00"
+    colour: "#b88cbd"
     stations:
       - Erzville Passenger Seaport
       - Erzgard International Airport
@@ -183,7 +183,7 @@ lines:
       - Artarmon Beach
   - name: Tizoc
     code: "7"
-    colour: "#a00"
+    colour: "#c74d29"
     stations:
       - Cremorne Rocks
       - Acland Street
@@ -197,7 +197,7 @@ lines:
       - Eaglehead Park
   - name: Kananook
     code: "8"
-    colour: "#a00"
+    colour: "#4b6b5a"
     stations:
       - Carnigary Corner
       - Hospital Precinct
@@ -208,7 +208,7 @@ lines:
       - West Kananook
   - name: Apollo
     code: "9"
-    colour: "#a00"
+    colour: "#434444"
     stations:
       - Westgate Beach
       - Folou Gate Bridge South
@@ -230,7 +230,7 @@ lines:
       - Artarmon Border
   - name: Gawler
     code: "10"
-    colour: "#a00"
+    colour: "#808c7e"
     stations:
       - Parkville East
       - Derwent Cross
@@ -242,7 +242,7 @@ lines:
       - Gawler Interchange
   - name: University
     code: "10a"
-    colour: "#a00"
+    colour: "#808c7e"
     stations:
       - Science Precinct
       - Kobold University South
@@ -251,7 +251,7 @@ lines:
       - Carnigary Plaza
   - name: Zetland
     code: "11"
-    colour: "#a00"
+    colour: "#a9a8a8"
     stations:
       - Daygon Pier Head
       - Sentry Bridge
@@ -271,7 +271,7 @@ lines:
       - Artarmon Border
   - name: Gryphon
     code: "12"
-    colour: "#a00"
+    colour: "#633c21"
     stations:
       - Daygon Pier End
       - Daygon Pier Head
@@ -286,7 +286,7 @@ lines:
       - Zetland Distribution Terminal
   - name: Azoltham
     code: "13"
-    colour: "#a00"
+    colour: "#ca6d1e"
     stations:
       - Azoltham South
       - Mountain Gate
@@ -304,7 +304,7 @@ lines:
       - Spiral Tower
   - name: Falco
     code: "14"
-    colour: "#a00"
+    colour: "#2c79b6"
     stations:
       - Folou Gate Bridge South
       - Sentry Bridge
@@ -322,7 +322,7 @@ lines:
       - Artarmon Border
   - name: Ringo
     code: "15"
-    colour: "#a00"
+    colour: "#663f89"
     stations:
       - Hemble Park North
       - Hemble Park West
@@ -343,7 +343,7 @@ lines:
       - Osprey Interchange
   - name: Hawlugia
     code: "16"
-    colour: "#a00"
+    colour: "#7586bc"
     stations:
       - SkyPeak Observatory
       - Kaiman-Buraun Statue
@@ -358,7 +358,7 @@ lines:
       - Artarmon Seafood Market
   - name: Kaiphek
     code: "17"
-    colour: "#a00"
+    colour: "#3d4838"
     stations:
       - Carnigary Corner
       - Sports Precinct
@@ -370,7 +370,7 @@ lines:
 
   - name: Gateway Region
     code: "X1"
-    colour: "#a00"
+    colour: "#485ba0"
     stations:
       - Erzville Passenger Seaport
       - Erzgard International Airport
@@ -381,7 +381,7 @@ lines:
       - Overland Interchange
   - name: Erzgard Region
     code: "X2"
-    colour: "#a00"
+    colour: "#62b2a3"
     stations:
       - East Promenade
       - Cuboid Walk
@@ -402,7 +402,7 @@ lines:
       - Artarmon Border
   - name: Stockton
     code: "S1"
-    colour: "#a00"
+    colour: "#62b2a3"
     stations:
       - Stockton Junction
       - Whitechapel Cross
@@ -410,7 +410,7 @@ lines:
       - Stockton Pier
   - name: Odralia Region
     code: "X3"
-    colour: "#a00"
+    colour: "#4a6b59"
     stations:
       - Carnigary Corner
       - Carnigary Junction
@@ -421,7 +421,7 @@ lines:
       - Prohampton Junction
   - name: Lakeland Region
     code: "X6"
-    colour: "#a00"
+    colour: "#4a6b59"
     stations:
       - Odralia Junction
       - West Odral Interchange
@@ -430,7 +430,7 @@ lines:
       - Westlake
   - name: Overland Region
     code: "X4"
-    colour: "#a00"
+    colour: "#58734a"
     stations:
       - Larnwick Town Hall
       - Larnwick Station
@@ -438,14 +438,14 @@ lines:
       - Lakedale Pier
   - name: Lakedale
     code: "LD1"
-    colour: "#a00"
+    colour: "#58734a"
     stations:
       - Lakedale Pier
       - Signal Hill
       - Sycamore
   - name: South Region
     code: "X5"
-    colour: "#a00"
+    colour: "#1b9eb1"
     stations:
       - Larnwick Town Hall
       - Bullington North
@@ -456,7 +456,7 @@ lines:
       - Ember City
   - name: West Region
     code: "X7"
-    colour: "#a00"
+    colour: "#1c3387"
     stations:
       - Robloxia Junction
       - Robloxia Downtown
@@ -464,7 +464,7 @@ lines:
       - Stockton Exchange
   - name: Scalia Region
     code: "X8"
-    colour: "#a00"
+    colour: "#7b271d"
     stations:
       - Euneva West
       - Euneva Central
@@ -473,7 +473,7 @@ lines:
       - West Odral Interchange
   - name: Trig Valley Region
     code: "X9"
-    colour: "#a00"
+    colour: "#625351"
     stations:
       - Scalia City Pier
       - Scalia City Town Hall
@@ -485,7 +485,7 @@ lines:
       - Kananook Junction
   - name: Kargorok
     code: "K1"
-    colour: "#a00"
+    colour: "#625351"
     stations:
       - West Vannahelm
       - Kasadie
@@ -498,7 +498,7 @@ lines:
       - Kananook Junction
   - name: Prohampton
     code: "P1"
-    colour: "#a00"
+    colour: "#625351"
     stations:
       - Prohampton Hospital Link
       - Prohampton Bus Interchange
@@ -506,7 +506,7 @@ lines:
       - Prohampton Shopping Centre
   - name: Plymouth
     code: "PY1"
-    colour: "#a00"
+    colour: "#6d80a5"
     stations:
       - Plymouth Waterside
       - Plymouth Central
@@ -514,7 +514,7 @@ lines:
       - Lake Plymouth Picnic Ground
   - name: Cuboid North
     code: "R1"
-    colour: "#a00"
+    colour: "#994871"
     stations:
       - Erts Town Hall
       - Erts Promenade
@@ -522,19 +522,19 @@ lines:
       - East Promenade
   - name: Cuboid South
     code: "R2"
-    colour: "#a00"
+    colour: "#994871"
     stations:
       - Erts Town Hall
       - Erts Promenade
       - Cuboid Park
   - name: Scalia City
     code: "SC1"
-    colour: "#a00"
+    colour: "#7ea9b6"
     stations:
       - Palmate Beach
       - Scalia City Town Hall
   - name: Euneva
-    code: "U1"
+    code: "#c699c4"
     colour: "#a00"
     stations:
       - Euneva Central
@@ -542,7 +542,7 @@ lines:
       - Montclair Front
   - name: Nochamika
     code: "V1"
-    colour: "#a00"
+    colour: "#73424a"
     stations:
       - Aurorus
       - Kepler Circle
@@ -550,239 +550,239 @@ lines:
       - Vannahelm Park and Ride
 
 coords:
-  Grove Park: [-3099, -27005]
-  Eastside: [-3057, -26933]
-  Justice Precinct: [-3055, -26890]
-  Golden Arch: [-3075, -26803]
-  Erzville Central: [-3134, -26865]
-  Federation Square: [-3136, -26922]
-  Parkville East: [-3098, -27405]
-  Carnigary Corner: [-3095, -27307]
-  Gleneb North: [-3096, -27181]
-  Gleneb South: [-3096, -27089]
-  Erzland Cross: [-3097, -26953]
-  Town Hall: [-3098, -26890]
-  Vexteria Garden-Museum: [-3095, -26737]
-  KanaCorp Tower: [-3096, -26686]
-  Golden Cross: [-3016, -26614]
-  Exchange Junction: [-2966, -26592]
-  Glaucous Bridge: [-2899, -26588]
-  Spire of New Domain: [-2801, -26587]
-  Teal Bridge: [-2724, -26589]
-  Shrine-Kargorok Bridge: [-2610, -26587]
-  Artarmon Park East: [-2542, -26587]
-  Artarmon Border: [-2391, -26527]
-  Sports Precinct: [-2967, -27288]
-  One Tree Hill: [-2964, -27226]
-  Hemble Park South: [-2964, -27172]
-  Hemble Market: [-2963, -27091]
-  Flagstaff Circle: [-2964, -27023]
-  Guardian Bridge: [-3157, -26955]
-  Esperance-Restaurant Precinct: [-3209, -27001]
-  Upper Esperance: [-3211, -27073]
-  Carnigary Central: [-3208, -27161]
-  Hospital Precinct: [-3208, -27267]
+  Acland Street: [-3365, -26552]
   Agora Walk: [-3210, -27324]
-  Derwent Cross: [-3209, -27388]
-  Erzgard International Airport: [-3271, -27535]
-  Erzville Passenger Seaport: [-3212, -27668]
-  Overland Interchange: [-3264, -26021]
-  Southern Interchange: [-3269, -26143]
-  Gryphon Cross: [-3269, -26230]
-  Swadestone Park: [-3269, -26283]
-  Five Ways: [-3264, -26358]
-  Zetland West: [-3264, -26427]
-  Cremorne South: [-3265, -26508]
-  Talon Cross: [-3267, -26579]
-  Cremorne Market: [-3262, -26629]
-  Brewery District: [-3215, -26651]
-  Southgate Junction: [-3205, -26734]
-  Artarmon Square-Heliport: [-3172, -26791]
-  Stillwater Circle: [-3031, -26810]
-  Erzbourne Park: [-2975, -26805]
-  Azuris: [-2907, -26761]
-  Almono: [-2835, -26760]
-  Atrium North: [-2800, -26737]
-  Atrium West: [-2833, -26692]
-  Atrium East: [-2765, -26690]
-  Atrium South: [-2801, -26640]
-  Elkite-Federation Gate: [-2801, -26539]
-  Zetstone-Federation Gate: [-2802, -26454]
-  Cyrago Circle: [-2800, -26357]
-  South Quarters: [-2801, -26311]
-  Glenolie: [-2802, -26227]
-  Osprey Interchange: [-2801, -26132]
-  Silverbird Crossing North: [-3020, -26131]
-  Ashburn: [-3018, -26227]
-  Crowood Central: [-3019, -26278]
-  Crowood Junction: [-3017, -26359]
-  Artemis: [-3020, -26450]
-  Golden Plaza: [-3018, -26551]
-  East Vexteria: [-3017, -26692]
-  Erzbourne North: [-3016, -26782]
   Alimar: [-2964, -26868]
-  West Zenith: [-2900, -26845]
-  Capital Plaza: [-2804, -26832]
-  Essence Falls: [-2739, -26831]
-  Cerulean Ridge: [-2688, -26806]
-  Arts Centre: [-2736, -26743]
+  Almono: [-2835, -26760]
   Aquarium: [-2734, -26681]
-  EIT-Violet Bridge: [-2735, -26527]
-  South Wharf-ECEC: [-2736, -26454]
-  South Wharf-Zetstone Tower: [-2734, -26351]
-  Zetland Distribution Terminal: [-2736, -26227]
-  Gateway Junction: [-3272, -27385]
-  Kobold University: [-3266, -27322]
+  Artarmon Beach: [-2463, -26380]
+  Artarmon Border Heliport: [-2475, -26490]
+  Artarmon Border: [-2391, -26527]
+  Artarmon Depot: [-2425, -26463]
+  Artarmon Junction: [-2539, -26456]
+  Artarmon Park East: [-2542, -26587]
+  Artarmon Park West: [-2676, -26535]
+  Artarmon Seafood Market: [-2530, -26296]
+  Artarmon Shrine-Main Gate: [-2608, -26451]
+  Artarmon Square-Heliport: [-3172, -26791]
+  Artemis: [-3020, -26450]
+  Arts Centre: [-2736, -26743]
+  Ashburn: [-3018, -26227]
+  Atrium East: [-2765, -26690]
+  Atrium North: [-2800, -26737]
+  Atrium South: [-2801, -26640]
+  Atrium West: [-2833, -26692]
+  Aurorus: [-3987, -28051]
+  Azoltham South: [-2890, -27169]
+  Azuris: [-2907, -26761]
+  Bayfront: [-5295, -29048]
+  Brewery District: [-3215, -26651]
+  Bullington North: [-4443, -25145]
+  Buraun City Medical Centre: [-2439, -26688]
+  Capital Plaza: [-2804, -26832]
+  Carnigary Central: [-3208, -27161]
+  Carnigary Corner: [-3095, -27307]
   Carnigary Junction: [-3270, -27252]
   Carnigary Plaza: [-3268, -27172]
-  Fern Crossing: [-3271, -27113]
-  Esperance Middle: [-3265, -27075]
-  Lower Esperance: [-3270, -27003]
-  Erzville Plaza: [-3269, -26955]
-  Sinter Street: [-3345, -26953]
-  Erzbourne South: [-2966, -26690]
-  Folou Street Mall West: [-2913, -26689]
-  Indigo Gate: [-2714, -26687]
-  Folou Street Mall East: [-2644, -26693]
   Castlereagh Lane: [-2571, -26690]
-  Artarmon Junction: [-2539, -26456]
-  Coatldale: [-2503, -26419]
-  Artarmon Beach: [-2463, -26380]
-  Cremorne Rocks: [-3365, -26552]
-  Acland Street: [-3365, -26552]
-  Cremorne Park: [-3195, -26578]
-  Ikerfort: [-3137, -26549]
-  Currawong Park: [-3096, -26453]
-  Falcon Cross: [-3096, -26357]
-  Crothern Place: [-3101, -26304]
-  Griffith Peak: [-3100, -26231]
-  Eaglehead Park: [-3099, -26112]
-  Scholar Lane: [-3361, -27222]
-  Kobold University South: [-3453, -27190]
-  Kananook Junction: [-3882, -27184]
-  West Kananook: [-4056, -27180]
-  Westgate Beach: [-3471, -26485]
-  Folou Gate Bridge South: [-3450, -26548]
-  Kooragos: [-3411, -26505]
-  Westgate Central: [-3387, -26427]
-  Zetstone Gardens: [-3335, -26374]
-  Perch Street-Library: [-3194, -26356]
-  Flamingo Estate: [-2958, -26354]
-  West Cyrago: [-2901, -26357]
-  Port Annex Plaza: [-2689, -26371]
-  Keystone Park: [-2635, -26399]
-  Artarmon Border Heliport: [-2475, -26490]
-  Kobuld Hall: [-3355, -27387]
-  Engineering Quarter: [-3435, -27384]
-  Science Precinct: [-3510, -27318]
-  North Kananook: [-3881, -27411]
-  Gawler Interchange: [-3885, -27533]
-  West Carnigary: [-3415, -27162]
-  Erzquire Lane: [-3342, -27164]
-  Daygon Pier Head: [-3473, -26258]
-  Sentry Bridge: [-3370, -26336]
-  Daygon Dock: [-3310, -26392]
-  Zetstone Central: [-3182, -26416]
-  Rialto Square: [-2961, -26453]
-  Cyragon Plaza: [-2903, -26452]
-  Erz Court: [-2668, -26451]
-  Artarmon Shrine-Main Gate: [-2608, -26451]
-  Daygon Pier End: [-3605, -26238]
-  Finter Street: [-3399, -26225]
   Cedar Bridge: [-3334, -26232]
-  Zetland Hills: [-3187, -26226]
-  North Osprey: [-2902, -26225]
-  Spiral Tower: [-2901, -26103]
-  Exchange East: [-2900, -26531]
-  Viridian Gate: [-2900, -26686]
-  Harkaway Ridge: [-2890, -26901]
-  Sedona: [-2883, -26954]
-  Flagstaff Hill: [-2890, -27022]
-  Mountain Gate: [-2888, -27089]
-  Azoltham South: [-2890, -27169]
-  Vamux Place: [-3341, -26179]
-  Jagaz Street: [-3316, -26110]
-  Artarmon Seafood Market: [-2530, -26296]
-  Artarmon Depot: [-2425, -26463]
-  Hemble Park North: [-3029, -27227]
-  Hemble Park West: [-3026, -27142]
-  Mayoral Corner: [-3029, -27102]
-  Nihill Street: [-2963, -26946]
-  EIT-Palace Corner: [-2963, -26744]
-  Exchange Plaza: [-2963, -26547]
-  Crowood Chase Shopping Centre: [-2962, -26290]
-  Nolan Bridge: [-2883, -26239]
+  Cerulean Ridge: [-2688, -26806]
   Coatl Street: [-2594, -26349]
-  Artarmon Park West: [-2676, -26535]
-  Teal Bridge East: [-2677, -26600]
-  Kaiman Pass Entrance: [-2515, -26736]
-  Kaiman-Buraun Statue: [-2446, -26754]
-  SkyPeak Observatory: [-2424, -26830]
-  Tremont Ridge: [-2588, -26739]
-  Buraun City Medical Centre: [-2439, -26688]
-  Harkaway: [-2847, -26898]
-  Toorak Row: [-3073, -27079]
-  Fishermen's Market: [-3167, -27078]
-  Esperance West: [-3355, -27079]
-  Esperance Harbour: [-3456, -27012]
-  Dight Falls: [-2800, -27275]
-  Kerong Village: [-2725, -27247]
-  Fernshaw Lodge: [-2666, -27068]
-  Kerong Rapids Picnic Ground: [-2537, -27016]
-  Vannahelm Junction: [-3885, -27699]
-  Vannahelm Park and Ride: [-4007, -27758]
-  West Vannahelm: [-4263, -28038]
-  Stockton Junction: [-4353, -28361]
-  Stockton West: [-4497, -28477]
-  Eñe: [-4121, -29903]
-  Erts Ferry Terminal: [-2729, -29329]
-  Cuboid Walk: [-2648, -29357]
-  East Promenade: [-2564, -29375]
-  Whitechapel Cross: [-4348, -28465]
-  Stockton Central: [-4399, -28502]
-  Stockton Pier: [-4391, -28595]
-  Odralia Junction: [-4419, -27094]
-  Prohampton Bus Interchange: [-4631, -25281]
-  Prohampton Junction: [-4628, -25134]
-  West Odral Interchange: [-5139, -27116]
-  Plymouth Interchange: [-5542, -26799]
-  Plymouth Central: [-5615, -26827]
-  Westlake: [-5727, -26754]
-  Larnwick Station: [-3791, -25358]
-  Larnwick Town Hall: [-3789, -25256]
-  Lakedale Pier: [-2492, -25739]
-  Signal Hill: [-2527, -25709]
-  Sycamore: [-2574, -25707]
-  Bullington North: [-4443, -25145]
-  Prohampton Shopping Centre: [-4704, -25104]
-  Lakeside Station: [-6509, -24988]
-  Lakeside Park: [-6648, -25030]
-  Ember City: [-7907, -23527]
-  Stockton Exchange: [-4453, -28546] # todo
-  Robloxia Downtown: [-4915, -28215]
-  Robloxia Junction: [-4972, -28219]
-  Euneva Central: [-5294, -29077]
-  Euneva West: [-5364, -29078]
-  Scalia City Transit Centre: [-5196, -27651]
-  Scalia City Town Hall: [-5338, -27652]
-  Scalia City Pier: [-5424, -27642]
-  Kasadie: [-4068, -28048]
-  Aurorus: [-3987, -28051]
-  Vannahelm Pier: [-3918, -28020]
-  Old Town: [-3881, -27926]
-  Prohampton High Street: [-4682, -25237]
-  Prohampton Hospital Link: [-4830, -25319]
-  Plymouth Waterside: [-5607, -26919]
-  Lake Plymouth Picnic Ground: [-5528, -26739]
-  Palmate Beach: [-5405, -27877]
-  Kepler Circle: [-3989, -27984]
-  Vannahelm Station: [-4039, -27850]
-  Erts Town Hall: [-2678, -29433]
-  Erts Promenade: [-2687, -29341]
+  Coatldale: [-2503, -26419]
+  Cremorne Market: [-3262, -26629]
+  Cremorne Park: [-3195, -26578]
+  Cremorne Rocks: [-3365, -26552]
+  Cremorne South: [-3265, -26508]
+  Crothern Place: [-3101, -26304]
+  Crowood Central: [-3019, -26278]
+  Crowood Chase Shopping Centre: [-2962, -26290]
+  Crowood Junction: [-3017, -26359]
   Cuboid Park: [-2652, -29314]
-  Bayfront: [-5295, -29048]
-  Montclair Front: [-5344, -29024]
-  Folou Gate Bridge North: [-3456, -26697]
-  Docklands South: [-3402, -26711]
+  Cuboid Walk: [-2648, -29357]
+  Currawong Park: [-3096, -26453]
+  Cyrago Circle: [-2800, -26357]
+  Cyragon Plaza: [-2903, -26452]
+  Daygon Dock: [-3310, -26392]
+  Daygon Pier End: [-3605, -26238]
+  Daygon Pier Head: [-3473, -26258]
+  Derwent Cross: [-3209, -27388]
+  Dight Falls: [-2800, -27275]
   Docklands Central: [-3338, -26769]
   Docklands North: [-3300, -26827]
+  Docklands South: [-3402, -26711]
+  Eaglehead Park: [-3099, -26112]
+  East Promenade: [-2564, -29375]
+  East Vexteria: [-3017, -26692]
+  Eastside: [-3057, -26933]
+  EIT-Palace Corner: [-2963, -26744]
+  EIT-Violet Bridge: [-2735, -26527]
+  Elkite-Federation Gate: [-2801, -26539]
+  Ember City: [-7907, -23527]
+  Engineering Quarter: [-3435, -27384]
+  Erts Ferry Terminal: [-2729, -29329]
+  Erts Promenade: [-2687, -29341]
+  Erts Town Hall: [-2678, -29433]
+  Erz Court: [-2668, -26451]
+  Erzbourne North: [-3016, -26782]
+  Erzbourne Park: [-2975, -26805]
+  Erzbourne South: [-2966, -26690]
+  Erzgard International Airport: [-3271, -27535]
+  Erzland Cross: [-3097, -26953]
+  Erzquire Lane: [-3342, -27164]
+  Erzville Central: [-3134, -26865]
+  Erzville Passenger Seaport: [-3212, -27668]
+  Erzville Plaza: [-3269, -26955]
+  Esperance Harbour: [-3456, -27012]
+  Esperance Middle: [-3265, -27075]
+  Esperance West: [-3355, -27079]
+  Esperance-Restaurant Precinct: [-3209, -27001]
+  Essence Falls: [-2739, -26831]
+  Euneva Central: [-5294, -29077]
+  Euneva West: [-5364, -29078]
+  Exchange East: [-2900, -26531]
+  Exchange Junction: [-2966, -26592]
+  Exchange Plaza: [-2963, -26547]
+  Eñe: [-4121, -29903]
+  Falcon Cross: [-3096, -26357]
+  Federation Square: [-3136, -26922]
+  Fern Crossing: [-3271, -27113]
+  Fernshaw Lodge: [-2666, -27068]
+  Finter Street: [-3399, -26225]
+  Fishermen's Market: [-3167, -27078]
+  Five Ways: [-3264, -26358]
+  Flagstaff Circle: [-2964, -27023]
+  Flagstaff Hill: [-2890, -27022]
+  Flamingo Estate: [-2958, -26354]
+  Folou Gate Bridge North: [-3456, -26697]
+  Folou Gate Bridge South: [-3450, -26548]
+  Folou Street Mall East: [-2644, -26693]
+  Folou Street Mall West: [-2913, -26689]
+  Gateway Junction: [-3272, -27385]
+  Gawler Interchange: [-3885, -27533]
+  Glaucous Bridge: [-2899, -26588]
+  Gleneb North: [-3096, -27181]
+  Gleneb South: [-3096, -27089]
+  Glenolie: [-2802, -26227]
+  Golden Arch: [-3075, -26803]
+  Golden Cross: [-3016, -26614]
+  Golden Plaza: [-3018, -26551]
+  Griffith Peak: [-3100, -26231]
+  Grove Park: [-3099, -27005]
+  Gryphon Cross: [-3269, -26230]
+  Guardian Bridge: [-3157, -26955]
+  Harkaway Ridge: [-2890, -26901]
+  Harkaway: [-2847, -26898]
+  Hemble Market: [-2963, -27091]
+  Hemble Park North: [-3029, -27227]
+  Hemble Park South: [-2964, -27172]
+  Hemble Park West: [-3026, -27142]
+  Hospital Precinct: [-3208, -27267]
+  Ikerfort: [-3137, -26549]
+  Indigo Gate: [-2714, -26687]
+  Jagaz Street: [-3316, -26110]
+  Justice Precinct: [-3055, -26890]
+  Kaiman Pass Entrance: [-2515, -26736]
+  Kaiman-Buraun Statue: [-2446, -26754]
+  KanaCorp Tower: [-3096, -26686]
+  Kananook Junction: [-3882, -27184]
+  Kasadie: [-4068, -28048]
+  Kepler Circle: [-3989, -27984]
+  Kerong Rapids Picnic Ground: [-2537, -27016]
+  Kerong Village: [-2725, -27247]
+  Keystone Park: [-2635, -26399]
+  Kobold University South: [-3453, -27190]
+  Kobold University: [-3266, -27322]
+  Kobuld Hall: [-3355, -27387]
+  Kooragos: [-3411, -26505]
+  Lake Plymouth Picnic Ground: [-5528, -26739]
+  Lakedale Pier: [-2492, -25739]
+  Lakeside Park: [-6648, -25030]
+  Lakeside Station: [-6509, -24988]
+  Larnwick Station: [-3791, -25358]
+  Larnwick Town Hall: [-3789, -25256]
+  Lower Esperance: [-3270, -27003]
+  Mayoral Corner: [-3029, -27102]
+  Montclair Front: [-5344, -29024]
+  Mountain Gate: [-2888, -27089]
+  Nihill Street: [-2963, -26946]
+  Nolan Bridge: [-2883, -26239]
+  North Kananook: [-3881, -27411]
+  North Osprey: [-2902, -26225]
+  Odralia Junction: [-4419, -27094]
+  Old Town: [-3881, -27926]
+  One Tree Hill: [-2964, -27226]
+  Osprey Interchange: [-2801, -26132]
+  Overland Interchange: [-3264, -26021]
+  Palmate Beach: [-5405, -27877]
+  Parkville East: [-3098, -27405]
+  Perch Street-Library: [-3194, -26356]
+  Plymouth Central: [-5615, -26827]
+  Plymouth Interchange: [-5542, -26799]
+  Plymouth Waterside: [-5607, -26919]
+  Port Annex Plaza: [-2689, -26371]
+  Prohampton Bus Interchange: [-4631, -25281]
+  Prohampton High Street: [-4682, -25237]
+  Prohampton Hospital Link: [-4830, -25319]
+  Prohampton Junction: [-4628, -25134]
+  Prohampton Shopping Centre: [-4704, -25104]
+  Rialto Square: [-2961, -26453]
+  Robloxia Downtown: [-4915, -28215]
+  Robloxia Junction: [-4972, -28219]
+  Scalia City Pier: [-5424, -27642]
+  Scalia City Town Hall: [-5338, -27652]
+  Scalia City Transit Centre: [-5196, -27651]
+  Scholar Lane: [-3361, -27222]
+  Science Precinct: [-3510, -27318]
+  Sedona: [-2883, -26954]
+  Sentry Bridge: [-3370, -26336]
+  Shrine-Kargorok Bridge: [-2610, -26587]
+  Signal Hill: [-2527, -25709]
+  Silverbird Crossing North: [-3020, -26131]
+  Sinter Street: [-3345, -26953]
+  SkyPeak Observatory: [-2424, -26830]
+  South Quarters: [-2801, -26311]
+  South Wharf-ECEC: [-2736, -26454]
+  South Wharf-Zetstone Tower: [-2734, -26351]
+  Southern Interchange: [-3269, -26143]
+  Southgate Junction: [-3205, -26734]
+  Spiral Tower: [-2901, -26103]
+  Spire of New Domain: [-2801, -26587]
+  Sports Precinct: [-2967, -27288]
+  Stillwater Circle: [-3031, -26810]
+  Stockton Central: [-4399, -28502]
+  Stockton Exchange: [-4453, -28546] # todo
+  Stockton Junction: [-4353, -28361]
+  Stockton Pier: [-4391, -28595]
+  Stockton West: [-4497, -28477]
+  Swadestone Park: [-3269, -26283]
+  Sycamore: [-2574, -25707]
+  Talon Cross: [-3267, -26579]
+  Teal Bridge East: [-2677, -26600]
+  Teal Bridge: [-2724, -26589]
+  Toorak Row: [-3073, -27079]
+  Town Hall: [-3098, -26890]
+  Tremont Ridge: [-2588, -26739]
+  Upper Esperance: [-3211, -27073]
+  Vamux Place: [-3341, -26179]
+  Vannahelm Junction: [-3885, -27699]
+  Vannahelm Park and Ride: [-4007, -27758]
+  Vannahelm Pier: [-3918, -28020]
+  Vannahelm Station: [-4039, -27850]
+  Vexteria Garden-Museum: [-3095, -26737]
+  Viridian Gate: [-2900, -26686]
+  West Carnigary: [-3415, -27162]
+  West Cyrago: [-2901, -26357]
+  West Kananook: [-4056, -27180]
+  West Odral Interchange: [-5139, -27116]
+  West Vannahelm: [-4263, -28038]
+  West Zenith: [-2900, -26845]
+  Westgate Beach: [-3471, -26485]
+  Westgate Central: [-3387, -26427]
+  Westlake: [-5727, -26754]
+  Whitechapel Cross: [-4348, -28465]
+  Zetland Distribution Terminal: [-2736, -26227]
+  Zetland Hills: [-3187, -26226]
+  Zetland West: [-3264, -26427]
+  Zetstone Central: [-3182, -26416]
+  Zetstone Gardens: [-3335, -26374]
+  Zetstone-Federation Gate: [-2802, -26454]
