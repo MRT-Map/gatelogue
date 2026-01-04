@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.blurail\_warp.BluRailWarp
+============================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.blurail_warp
+
+.. autoclass:: BluRailWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BluRailWarp.__init__
+      ~BluRailWarp.build
+      ~BluRailWarp.find_by_ref
+      ~BluRailWarp.find_by_ref_or_index
+      ~BluRailWarp.is_coord_source
+      ~BluRailWarp.report
+      ~BluRailWarp.reported_nodes
+      ~BluRailWarp.retrieve_from_cache
+      ~BluRailWarp.sanitise_strings
+      ~BluRailWarp.save_to_cache
+      ~BluRailWarp.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BluRailWarp.name
+      ~BluRailWarp.priority
+      ~BluRailWarp.g
+   
+   
