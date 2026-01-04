@@ -33,6 +33,7 @@ gatelogue\_aggregator.sources.rail
    breezerail
    breezerail_warp
    dynmap_mrt
+   erzlink_intercity
    fredrail
    intrarail
    intrarail_warp

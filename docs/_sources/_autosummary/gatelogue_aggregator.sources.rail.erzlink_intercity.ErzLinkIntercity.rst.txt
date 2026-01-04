@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.erzlink\_intercity.ErzLinkIntercity
+======================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.erzlink_intercity
+
+.. autoclass:: ErzLinkIntercity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ErzLinkIntercity.__init__
+      ~ErzLinkIntercity.build
+      ~ErzLinkIntercity.custom_routing
+      ~ErzLinkIntercity.find_by_ref
+      ~ErzLinkIntercity.find_by_ref_or_index
+      ~ErzLinkIntercity.is_coord_source
+      ~ErzLinkIntercity.report
+      ~ErzLinkIntercity.reported_nodes
+      ~ErzLinkIntercity.retrieve_from_cache
+      ~ErzLinkIntercity.sanitise_strings
+      ~ErzLinkIntercity.save_to_cache
+      ~ErzLinkIntercity.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ErzLinkIntercity.file_path
+      ~ErzLinkIntercity.name
+      ~ErzLinkIntercity.priority
+      ~ErzLinkIntercity.g
+   
+   
