@@ -24,24 +24,32 @@ class ErzLinkTrams(Yaml2Source, RailSource):
             )
         elif line_node.code == "3":
             self.B(self, line_node).connect(
-                *stations, between=(None, "Atrium North"), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=(None, "Atrium North"),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
-                *stations, between=("Atrium South", None), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=("Atrium South", None),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 get_stn(stations, "Atrium North"),
                 get_stn(stations, "Atrium East"),
                 get_stn(stations, "Atrium South"),
                 one_way=True,
-                forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 get_stn(stations, "Atrium South"),
                 get_stn(stations, "Atrium West"),
                 get_stn(stations, "Atrium North"),
                 one_way=True,
-                forward_label=line_yaml.backward_label, backward_label=line_yaml.forward_label
+                forward_label=line_yaml.backward_label,
+                backward_label=line_yaml.forward_label,
             )
         else:
             raise NotImplementedError

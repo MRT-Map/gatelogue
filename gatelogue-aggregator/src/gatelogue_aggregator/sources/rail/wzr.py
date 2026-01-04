@@ -70,9 +70,9 @@ class WZR(RailSource):
             RailLineBuilder(self, line).connect(*stations)
 
         for line_code, line_name in (
-                ("3", "Aurora Line"),
-                ("4", "Genso Line"),
-                ("8", "Ismael Line"),
+            ("3", "Aurora Line"),
+            ("4", "Genso Line"),
+            ("8", "Ismael Line"),
         ):
             wiki = get_wiki_text(line_name, config)
             line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")

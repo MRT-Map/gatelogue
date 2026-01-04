@@ -65,7 +65,7 @@ class SeabeastBuses(BusSource):
                 "BAY": "Bay Point",
                 "PXL": "Pixl Vinayaka International Airport",
                 "CAR": "Carnoustie" if warp["name"] == "SBB023CAR" else "Caravaca-Juan Carlos I Airfield",
-                "THR": "thrive"
+                "THR": "thrive",
             }.get(
                 warp_name,
                 next(iter(difflib.get_close_matches(warp_name, stop_names.get(warp["name"][3:6], []), 1, 0.0)), None),

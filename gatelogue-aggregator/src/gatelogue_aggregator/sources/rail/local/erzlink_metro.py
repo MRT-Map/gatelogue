@@ -19,17 +19,29 @@ class ErzLinkMetro(Yaml2Source, RailSource):
     def custom_routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
         if line_node.code == "6":
             self.B(self, line_node).connect(
-                *stations, between=(None, "Riverdane"), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=(None, "Riverdane"),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
-                *stations, between=("Crowood", None), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=("Crowood", None),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
         elif line_node.code == "6 Express":
             self.B(self, line_node).connect(
-                *stations, between=(None, "Essex Central"), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=(None, "Essex Central"),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
-                *stations, between=("New Erzville", None), forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
+                *stations,
+                between=("New Erzville", None),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
             )
         else:
             raise NotImplementedError

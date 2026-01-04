@@ -53,9 +53,7 @@ class CCC(BusSource):
                 "MWAirport2": "Miu Wan TTL T2",
                 "EFAirfield": "Ellerton Fosby Airport",
                 "ottia": "Ottia Islands",
-            }.get(
-                warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0]
-            )
+            }.get(warp_name, difflib.get_close_matches(warp_name, stop_names, 1, 0.0)[0])
             print(warp_name, name)
             if name in names:
                 continue

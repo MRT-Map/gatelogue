@@ -13,7 +13,15 @@ class BluRailWarp(RailSource):
     def build(self, config: Config):
         company = RailCompany.new(self, name="BluRail")
 
-        names = ["Sunshine Coast Docks", "Cornwall", "South Paixton", "Seoland North", "Titsensaki BluRail Station", "Titsensaki", "Titsensaki Transfer"]
+        names = [
+            "Sunshine Coast Docks",
+            "Cornwall",
+            "South Paixton",
+            "Seoland North",
+            "Titsensaki BluRail Station",
+            "Titsensaki",
+            "Titsensaki Transfer",
+        ]
         for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
             if not warp["name"].startswith("BLU") and not warp["name"].startswith("BR"):
                 continue
