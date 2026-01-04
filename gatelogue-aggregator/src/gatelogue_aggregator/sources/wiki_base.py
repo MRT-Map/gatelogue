@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
-    cache = config.cache_dir / "wiki-text" / (page if old_id is None else str(old_id))
+    cache = config.cache_dir / "wiki-text" / (page.replace("/", "") if old_id is None else str(old_id))
     if old_id is None:
         url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page={page}"
     else:
@@ -25,7 +25,7 @@ def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
 
 
 def get_wiki_html(page: str, config: Config, old_id: int | None = None) -> BeautifulSoup:
-    cache = config.cache_dir / "wiki-html" / (page if old_id is None else str(old_id))
+    cache = config.cache_dir / "wiki-html" / (page.replace("/", "") if old_id is None else str(old_id))
     if old_id is None:
         url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
     else:
