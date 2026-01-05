@@ -204,15 +204,14 @@
 - { c1: ErzLink Intercity, s1: Erzgard International Airport, c2: MRT, s2: Erzgard International Airport }
 - { c1: ErzLink Metro, s1: Erzgard International Airport, c2: MRT, s2: Erzgard International Airport }
 - { c1: ErzLink Trams, s1: Erzgard International Airport, c2: MRT, s2: Erzgard International Airport }
-- { c1: ErzLink Metro, s1: New Erzville, c2: ErzLink Trams, s2: New Erzville }
 - { c1: ErzLink Metro, s1: Artarmon, c2: MRT, s2: New Erzville-Artarmon }
 - { c1: ErzLink Metro, s1: Vannahelm, c2: ErzLink Trams, s2: Vannahelm Station }
 - { c1: ErzLink Intercity, s1: Vannahelm, c2: ErzLink Trams, s2: Vannahelm Station }
 - { c1: BluRail, s1: Vannahelm, c2: ErzLink Trams, s2: Vannahelm Station }
 - { c1: MRT, s1: Vannahelm, c2: ErzLink Trams, s2: Vannahelm Station }
-- { c1: ErzLink Metro, s1: Vannahelm, c2: ErzLink Trams, s2: Stockton Central }
-- { c1: ErzLink Intercity, s1: Vannahelm, c2: ErzLink Trams, s2: Stockton Central }
-- { c1: BluRail, s1: Vannahelm, c2: ErzLink Trams, s2: Stockton Central }
+- { c1: ErzLink Metro, s1: Stockton, c2: ErzLink Trams, s2: Stockton Central }
+- { c1: ErzLink Intercity, s1: Stockton, c2: ErzLink Trams, s2: Stockton Central }
+- { c1: BluRail, s1: Stockton, c2: ErzLink Trams, s2: Stockton Central }
 - { c1: ErzLink Metro, s1: Scalia City, c2: ErzLink Trams, s2: Scalia City Transit Centre }
 - { c1: ErzLink Intercity, s1: Oparia LeTourneau International Airport, c2: ErzLink Metro, s2: Oparia LeTourneau International Airport }
 - { c1: ErzLink Intercity, s1: Whitecliff, c2: ErzLink Metro, s2: Whitecliff }
