@@ -34,7 +34,7 @@ class SEAT(RailSource):
 
             stations = []
             for tr in line_table("tr")[1:]:
-                if "Open" not in next(tr("td")[3].strings):
+                if all("Open" not in a for a in tr("td")[3].strings):
                     continue
                 name = tr("td")[1].string.strip().removesuffix(" Station")
 
