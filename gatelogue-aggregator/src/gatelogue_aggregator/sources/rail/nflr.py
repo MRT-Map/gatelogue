@@ -148,10 +148,7 @@ class NFLR(RailSource):
                     forward_label="to Sansvikk IKEA",
                     backward_label="to mainline",
                 )
-            elif line_name == "R2":
-                RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Totem Beach Transit Center"))
-                RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
-            elif line_name == "R4":
+            if line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Oceanside Bayfront", None))
             elif line_name == "R5":
@@ -165,7 +162,7 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Fort Torbay", None))
             elif line_name == "R25":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Norwrick"))
-                RailLineBuilder(self, r_line).connect(*r_stations, between=("Paralia", None))
+                RailLineBuilder(self, r_line).connect(*r_stations, between=("Totem Beach Transit Center", None))
             else:
                 RailLineBuilder(self, r_line).connect(*r_stations)
 
@@ -180,10 +177,7 @@ class NFLR(RailSource):
                     colour=line_colour,
                 )
 
-                if line_name == "W2":
-                    RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "Totem Beach Transit Center"))
-                    RailLineBuilder(self, w_line).connect(*w_stations, between=("Southbank", None))
-                elif line_name == "W5":
+                if line_name == "W5":
                     RailLineBuilder(self, w_line).connect(*w_stations, between=(None, "Xterium North"))
                     RailLineBuilder(self, w_line).connect(*w_stations, between=("Weston East", None))
                 else:
