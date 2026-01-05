@@ -21,6 +21,7 @@ gatelogue\_aggregator.types.edge.shared\_facility
    
       SharedFacility
       SharedFacilitySource
+      Yaml
    
    
 
