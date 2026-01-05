@@ -452,6 +452,7 @@ pub struct SeaStop {
 pub enum SpawnWarpType {
     Premier,
     Terminus,
+    Traincarts,
     Portal,
     Misc,
 }

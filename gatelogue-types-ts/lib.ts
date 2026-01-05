@@ -44,7 +44,7 @@ export type PlaneMode =
   | "seaplane"
   | "warp plane"
   | "traincarts plane";
-export type WarpType = "premier" | "terminus" | "portal" | "misc";
+export type WarpType = "premier" | "terminus" | "traincarts" | "portal" | "misc";
 export type Rank =
   | "Unranked"
   | "Councillor"

@@ -631,7 +631,7 @@ class SpawnWarpNS(LocatedNodeNS, _SpawnWarp, kw_only=True, tag=_SpawnWarp.__name
     pass
 
 
-type WarpType = Literal["premier", "terminus", "portal", "misc"]
+type WarpType = Literal["premier", "terminus", "traincarts", "portal", "misc"]
 
 
 class _Town(_LocatedNode, kw_only=True, tag=True):

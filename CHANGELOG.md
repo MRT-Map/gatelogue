@@ -4,6 +4,10 @@
 * `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
 
+## v2.0.9+11 (20250105)
+* **Data v11**
+  * `SpawnWarp` new type: `traincarts`
+
 ## v2.0.8+10 (20260103)
 * `gatelogue-types` (ts): fix even more `Sourced` types
 * 
