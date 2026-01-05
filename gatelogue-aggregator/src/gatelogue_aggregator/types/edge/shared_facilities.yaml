@@ -1,0 +1,200 @@
+- { c1: nFLR, s1: Dand Grand Central, c2: IntraRail, s2: Dand Grand Central }
+- { c1: BluRail, s1: Dand Central, c2: IntraRail, s2: Dand Grand Central }
+- { c1: IntraRail, s1: Foresne Liveray, c2: nFLR, s2: Foresne Liveray }
+- { c1: IntraRail, s1: Tembok Railway Station, c2: nFLR, s2: Tembok }
+- { c1: West Zeta Rail, s1: Tembok, c2: nFLR, s2: Tembok }
+- { c1: nFLR, s1: Tembok, c2: MRT, s2: Tembok }
+- { c1: BluRail, s1: Heampstead Kings Cross, c2: IntraRail, s2: Deadbush Heampstead Kings Cross Railway Terminal }
+- { c1: Fred Rail, s1: Kings Cross Railway Terminal, c2: IntraRail, s2: Deadbush Heampstead Kings Cross Railway Terminal }
+- { c1: BluRail, s1: Schillerton Maple Street, c2: IntraRail, s2: Schillerton Maple Street }
+- { c1: BluRail, s1: Boston Waterloo, c2: IntraRail, s2: Boston Waterloo Station }
+- { c1: MarbleRail, s1: Boston Waterloo, c2: IntraRail, s2: Boston Waterloo Station }
+- { c1: Fred Rail, s1: Boston Waterloo, c2: IntraRail, s2: Boston Waterloo Station }
+- { c1: MarbleRail, s1: Boston Clapham Junction, c2: Fred Rail, s2: Boston Clapham Junction }
+- { c1: IntraRail, s1: Boston Clapham Junction, c2: Fred Rail, s2: Boston Clapham Junction }
+- { c1: BluRail, s1: Zaquar Tanzanite Station, c2: IntraRail, s2: Zaquar Tanzanite Station }
+- { c1: BluRail, s1: San Dzobiak Union Station, c2: IntraRail, s2: San Dzobiak Union Square }
+- { c1: RedTrain, s1: San Dzobiak Union Square, c2: IntraRail, s2: San Dzobiak Union Square }
+- { c1: Fred Rail, s1: San Dzobiak, c2: IntraRail, s2: San Dzobiak Union Square }
+- { c1: BluRail, s1: Siletz Salvador Station, c2: IntraRail, s2: Siletz Salvador Station }
+- { c1: Fred Rail, s1: Siletz, c2: IntraRail, s2: Siletz Salvador Station }
+- { c1: RedTrain, s1: Siletz Salvador Station, c2: IntraRail, s2: Siletz Salvador Station }
+- { c1: Fred Rail, s1: Lochminehead, c2: IntraRail, s2: Lochminehead Trijunction }
+- { c1: BluRail, s1: Los Angeles-Farwater Union Station, c2: IntraRail, s2: Los Angeles-Farwater Union Station }
+- { c1: BluRail, s1: Valemount, c2: IntraRail, s2: Valemount }
+- { c1: BluRail, s1: Ravenna Union Station, c2: IntraRail, s2: Ravenna Union Station }
+- { c1: BluRail, s1: New Gensokyo Hakurei Shrine, c2: IntraRail, s2: New Gensokyo Hakurei Shrine }
+- { c1: BluRail, s1: New Gensokyo Regional Airport, c2: IntraRail, s2: New Gensokyo Regional Airport }
+- { c1: BluRail, s1: Shark Town, c2: IntraRail, s2: Shark Town }
+- { c1: BluRail, s1: Filipowice, c2: IntraRail, s2: Filipowice }
+- { c1: BluRail, s1: Bechtel, c2: IntraRail, s2: Bechtel }
+- { c1: BluRail, s1: Niwen, c2: IntraRail, s2: Niwen Train Station }
+- { c1: BluRail, s1: Risima, c2: IntraRail, s2: Risima }
+- { c1: BluRail, s1: Rank Resort Central, c2: IntraRail, s2: Rank Resort Central }
+- { c1: BluRail, s1: Whitecliff Central, c2: IntraRail, s2: Whitecliff Central }
+- { c1: RaiLinQ, s1: Whitecliff Central, c2: IntraRail, s2: Whitecliff Central }
+- { c1: BluRail, s1: Segav Sal, c2: IntraRail, s2: Segav Sal }
+- { c1: BluRail, s1: Northlend, c2: IntraRail, s2: Northlend Union Station }
+- { c1: RaiLinQ, s1: Northlend Union, c2: IntraRail, s2: Northlend Union Station }
+- { c1: RaiLinQ, s1: Vegeta Junction, c2: IntraRail, s2: Vegeta Junction }
+- { c1: BluRail, s1: Broxbourne, c2: IntraRail, s2: Broxbourne }
+- { c1: BluRail, s1: Ilirea Transit Center, c2: IntraRail, s2: Ilirea Transit Center }
+- { c1: RaiLinQ, s1: Ilirea ITC, c2: IntraRail, s2: Ilirea Transit Center }
+- { c1: IntraRail, s1: Ilirea Airport Station, c2: BluRail, s2: Ilirea Midcity Airport }
+- { c1: RaiLinQ, s1: Ilirea Airport, c2: BluRail, s2: Ilirea Midcity Airport }
+- { c1: BluRail, s1: Waverly, c2: IntraRail, s2: Waverly Edinburgh Station }
+- { c1: BluRail, s1: UCWT International Airport West, c2: IntraRail, s2: UCWT International Airport West }
+- { c1: Fred Rail, s1: UCWTIA, c2: IntraRail, s2: UCWT International Airport West }
+- { c1: BluRail, s1: Sealane Central, c2: IntraRail, s2: Sealane Central }
+- { c1: RaiLinQ, s1: Sealane Central, c2: IntraRail, s2: Sealane Central }
+- { c1: BluRail, s1: Central City Warp Rail Terminal, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: RaiLinQ, s1: Central City Warp Rail Terminal, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: SEAT, s1: Central City Warp Terminal, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: Fred Rail, s1: Central City, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: SEAT, s1: Central City Warp Terminal, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: RedTrain, s1: Central City Warp Rail Terminal, c2: IntraRail, s2: Central City Warp Rail Terminal }
+- { c1: Fred Rail, s1: Sealane New Forest Station, c2: IntraRail, s2: Sealane New Forest Terminal }
+- { c1: Fred Rail, s1: Central City Beltway Terminal North, c2: IntraRail, s2: Central City Beltway Terminal North }
+- { c1: RaiLinQ, s1: Central City Beltway Terminal North, c2: IntraRail, s2: Central City Beltway Terminal North }
+- { c1: BluRail, s1: Utopia - AFK, c2: IntraRail, s2: Utopia Anthony Fokker Transit Hub }
+- { c1: Fred Rail, s1: Utopia AFK, c2: IntraRail, s2: Utopia Anthony Fokker Transit Hub }
+- { c1: Pacifica, s1: Utopia - AFK Transit Hub, c2: IntraRail, s2: Utopia Anthony Fokker Transit Hub }
+- { c1: BluRail, s1: Venceslo, c2: IntraRail, s2: Venceslo Union Station }
+- { c1: RedTrain, s1: Venceslo, c2: IntraRail, s2: Venceslo Union Station }
+- { c1: BluRail, s1: Laclede Central, c2: IntraRail, s2: Laclede Central }
+- { c1: RaiLinQ, s1: Laclede Central, c2: IntraRail, s2: Laclede Central }
+- { c1: BluRail, s1: Vermilion, c2: IntraRail, s2: Vermilion Victory Square }
+- { c1: BluRail, s1: Bakersville Grand Central, c2: IntraRail, s2: Bakersville Grand Central }
+- { c1: Fred Rail, s1: Bakersville Grand Central, c2: IntraRail, s2: Bakersville Grand Central }
+- { c1: Fred Rail, s1: Westchester Junction, c2: IntraRail, s2: Bakersville Westchester Junction - Canal Works }
+- { c1: BluRail, s1: Whitechapel Border, c2: IntraRail, s2: Whitechapel Border }
+- { c1: BluRail, s1: Waterville Union Station, c2: IntraRail, s2: Waterville Union Station }
+- { c1: BluRail, s1: Fort Yaxier Central, c2: IntraRail, s2: Fort Yaxier Central }
+- { c1: BluRail, s1: Sunshine Coast Máspalmas Terminal, c2: IntraRail, s2: Sunshine Coast Máspalmas Terminal }
+- { c1: BluRail, s1: Sunshine Coast Máspalmas International Airport, c2: IntraRail, s2: Sunshine Coast Máspalmas International Airport }
+- { c1: BluRail, s1: Murrville Central, c2: IntraRail, s2: Murrville Central }
+- { c1: BluRail, s1: BirchView Central, c2: IntraRail, s2: BirchView Central }
+- { c1: RaiLinQ, s1: Birchview Central, c2: IntraRail, s2: BirchView Central }
+- { c1: RaiLinQ, s1: Titsensaki, c2: BluRail, s2: Titsensaki North City }
+- { c1: RaiLinQ, s1: East Mesa, c2: IntraRail, s2: East Mesa M. Bubbles Station }
+- { c1: RaiLinQ, s1: Mons Pratus, c2: IntraRail, s2: Mons Pratus Transportation Hub }
+- { c1: RaiLinQ, s1: Segville International, c2: IntraRail, s2: Segville International Airport }
+- { c1: BluRail, s1: Segville International, c2: IntraRail, s2: Segville International Airport }
+- { c1: Fred Rail, s1: Segville International Airport, c2: IntraRail, s2: Segville International Airport }
+- { c1: RaiLinQ, s1: Utopia Central, c2: BluRail, s2: Utopia Central }
+- { c1: RaiLinQ, s1: Utopia Stephenson, c2: BluRail, s2: Utopia Stephenson }
+- { c1: RaiLinQ, s1: Utopia IKEA, c2: BluRail, s2: Utopia - IKEA }
+- { c1: BluRail, s1: Saint Roux, c2: IntraRail, s2: Saint Roux Gare Orsay }
+- { c1: RaiLinQ, s1: Saint Roux Gare Orsay, c2: IntraRail, s2: Saint Roux Gare Orsay }
+- { c1: nFLR, s1: Port of Porton, c2: MRT, s2: Porton }
+- { c1: nFLR, s1: Uacam Beach, c2: MRT, s2: Uacam Beach East }
+- { c1: nFLR, s1: M90 Theme Park, c2: MRT, code2: "M90" }
+- { c1: nFLR, s1: Castlehill, c2: MRT, code2: "U126" }
+- { c1: nFLR, s1: Lilygrove Union, c2: MRT, s2: Lilygrove Union Station/Heliport }
+- { c1: nFLR, s1: Dewford City Lometa, c2: West Zeta Rail, s2: Dewford City Lometa Station }
+- { c1: MarbleRail, s1: Cape Cambridge John Glenn, c2: nFLR, s2: Cape Cambridge John Glenn Transit Centre }
+- { c1: MarbleRail, s1: Port Sonder, c2: nFLR, s2: Port Sonder }
+- { c1: MarbleRail, s1: Sandfield, c2: nFLR, s2: Sandfield }
+- { c1: MarbleRail, s1: Seolho Midwest, c2: nFLR, s2: Seolho Midwest }
+- { c1: MarbleRail, s1: Oceanside Bayfront, c2: nFLR, s2: Oceanside Bayfront }
+- { c1: MarbleRail, s1: Tung Wan, c2: nFLR, s2: Tung Wan }
+- { c1: MarbleRail, s1: Edwardsburg, c2: nFLR, s2: Edwardsburg }
+- { c1: BluRail, s1: Musique, c2: MRT, s2: Musique }
+- { c1: Pacifica, s1: Musique, c2: MRT, s2: Musique }
+- { c1: BluRail, s1: Elecna Bay North, c2: IntraRail, s2: Elecna Bay North }
+- { c1: RaiLinQ, s1: Elecna Bay North, c2: IntraRail, s2: Elecna Bay North }
+- { c1: RaiLinQ, s1: Outer Solarion, c2: IntraRail, s2: Achowalogen Takachsin Solarion }
+- { c1: RaiLinQ, s1: Downtown Solarion, c2: IntraRail, s2: Achowalogen Takachsin Orion }
+- { c1: RaiLinQ, s1: Achowalogen Takachsin Suburb, c2: IntraRail, s2: Achowalogen Takachsin Suburb }
+- { c1: RaiLinQ, s1: Downtown Achowalogen Takachsin/Covina, c2: IntraRail, s2: Achowalogen Takachsin-Covina Downtown }
+- { c1: RaiLinQ, s1: Achowalogen Takachsin Western Transportation Hub, c2: IntraRail, s2: Achowalogen Takachsin West }
+- { c1: BluRail, s1: Achowalogen Takachsin West, c2: IntraRail, s2: Achowalogen Takachsin West }
+- { c1: BluRail, s1: Achowalogen Takachsin-Covina International Airport, c2: IntraRail, s2: Achowalogen Takachsin-Covina International Airport }
+- { c1: RaiLinQ, s1: ATC International Airport, c2: IntraRail, s2: Achowalogen Takachsin-Covina International Airport }
+- { c1: BluRail, s1: Chalxior Femtoprism Airfield, c2: IntraRail, s2: Chalxior Femtoprism Airfield }
+- { c1: RailNorth, s1: Chalxior, c2: IntraRail, s2: Chalxior Femtoprism Airfield }
+- { c1: BluRail, s1: Pilmont, c2: IntraRail, s2: Pilmont }
+- { c1: RailNorth, s1: Pilmont, c2: IntraRail, s2: Pilmont }
+- { c1: RailNorth, s1: New Acreadium, c2: IntraRail, s2: New Acreadium Central District }
+- { c1: BluRail, s1: New Acreadium Central District, c2: IntraRail, s2: New Acreadium Central District }
+- { c1: BluRail, s1: Schiphol International Airport, c2: IntraRail, s2: New Acreadium Schiphol Airport }
+- { c1: RailNorth, s1: New Acreadium Schiphol Int'l, c2: IntraRail, s2: New Acreadium Schiphol Airport }
+- { c1: BluRail, s1: Antioch Union Station, c2: IntraRail, s2: Antioch Union Station }
+- { c1: RaiLinQ, s1: Antioch, c2: IntraRail, s2: Antioch Union Station }
+- { c1: RailNorth, s1: Antioch, c2: IntraRail, s2: Antioch Union Station }
+- { c1: BluRail, s1: Antioch Regional Airfield, c2: IntraRail, s2: Antioch Regional Airfield }
+- { c1: RaiLinQ, s1: Moramoa Wyndham Street, c2: BluRail, s2: Moramoa Wyndham Street }
+- { c1: RaiLinQ, s1: Moramoa Central, c2: BluRail, s2: Moramoa Central }
+- { c1: IntraRail, s1: Seuland, c2: BluRail, s2: Seuland }
+- { c1: IntraRail, s1: Whiteley Turing Square, c2: RaiLinQ, s2: Whiteley Turing Square }
+- { c1: Fred Rail, s1: Whiteley Turing Square, c2: RaiLinQ, s2: Whiteley Turing Square }
+- { c1: BluRail, s1: Whiteley College Park, c2: RaiLinQ, s2: Whiteley College Park }
+- { c1: RailNorth, s1: Kappen, c2: MRT, s2: Kappen Hauptbahnhof }
+- { c1: IntraRail, s1: Royalston, c2: MRT, code2: "V14" }
+- { c1: IntraRail, s1: Tranquil Forest Central, c2: Fred Rail, s2: Tranquil Forest Central }
+- { c1: BluRail, s1: Tranquil Forest Central, c2: Fred Rail, s2: Tranquil Forest Central }
+- { c1: BluRail, s1: Sesby MRT Warptrain Museum, c2: RaiLinQ, s2: Sesby MRT Warptrain Museum }
+- { c1: BluRail, s1: Sesby Central, c2: RaiLinQ, s2: Sesby Central }
+- { c1: BluRail, s1: Airchester Central, c2: RaiLinQ, s2: Airchester Central }
+- { c1: BluRail, s1: Accerton, c2: RaiLinQ, s2: Accerton }
+- { c1: nFLR, s1: West Mesa International Airport / Blackwater, c2: IntraRail, s2: Deadbush Blackwater / WMI }
+- { c1: BluRail, s1: Oparia Downtown, c2: IntraRail, s2: Oparia Downtown }
+- { c1: RaiLinQ, s1: Oparia Downtown, c2: IntraRail, s2: Oparia Downtown }
+- { c1: RailNorth, s1: Oparia Downtown, c2: IntraRail, s2: Oparia Downtown }
+- { c1: MRT, s1: Oparia Downtown, c2: IntraRail, s2: Oparia Downtown }
+- { c1: BluRail, s1: Oparia LeTourneau International Airport, c2: IntraRail, s2: Oparia LeTourneau International Airport }
+- { c1: RailNorth, s1: Oparia LeTourneau International Airport, c2: IntraRail, s2: Oparia LeTourneau International Airport }
+- { c1: BluRail, s1: Woodsdale, c2: Fred Rail, s2: Woodsdale }
+- { c1: BluRail, s1: Kaloro City Sports Park, c2: IntraRail, s2: Kaloro City Sports Park }
+- { c1: BluRail, s1: Kaloro City Central, c2: IntraRail, s2: Kaloro City Central }
+- { c1: BluRail, s1: Dogwood Madison Beach Station, c2: IntraRail, s2: Dogwood Madison Beach Station }
+- { c1: BluRail, s1: Sand Central, c2: IntraRail, s2: Sand Central }
+- { c1: BluRail, s1: Laarbroek, c2: IntraRail, s2: Laarbroek }
+- { c1: BluRail, s1: Arcadium, c2: IntraRail, s2: Arcadium }
+- { c1: BluRail, s1: Miu Wan Tseng Tsz Leng International Airport Terminal 1, c2: IntraRail, s2: Miu Wan Tseng Tsz Leng International Airport Terminal 1 }
+- { c1: BluRail, s1: Miu Wan Tseng Tsz Leng International Airport Terminal 2, c2: IntraRail, s2: Miu Wan Tseng Tsz Leng International Airport Terminal 2 }
+- { c1: BluRail, s1: Miu Sai, c2: IntraRail, s2: Miu Sai }
+- { c1: BluRail, s1: Kwai Tin, c2: IntraRail, s2: Kwai Tin }
+- { c1: BluRail, s1: Snowtopic Outskirts, c2: IntraRail, s2: Snowtopic Outskirts }
+- { c1: BluRail, s1: Snowtopic Industrial, c2: IntraRail, s2: Snowtopic Boulevard }
+- { c1: BluRail, s1: Hytown Union, c2: IntraRail, s2: Hytown Union }
+- { c1: BluRail, s1: Miu Wan Kau Heung Airport, c2: IntraRail, s2: Miu Wan Kau Heung Airport }
+- { c1: SEAT, s1: Central City Warp Terminal, c2: RaiLinQ, s2: Central City Warp Rail Terminal }
+- { c1: SEAT, s1: UCWTIA, c2: Fred Rail, s2: UCWTIA }
+- { c1: SEAT, s1: Willow Transit Centre, c2: IntraRail, s2: Willow Unrealistic Transport Terminal }
+- { c1: MRT, s1: Larkspur - LAR Airport, c2: BluRail, s2: Larkspur Lilyflower International Airport }
+- { c1: IntraRail, s1: Larkspur Lilyflower International Airport, c2: BluRail, s2: Larkspur Lilyflower International Airport }
+- { c1: RaiLinQ, s1: Larkspur Lilyflower, c2: BluRail, s2: Larkspur Lilyflower International Airport }
+- { c1: SEAT, s1: Larkspur LRT Airport, c2: BluRail, s2: Larkspur Lilyflower International Airport }
+- { c1: nFLR, s1: New Genisys, c2: SEAT, s2: New Genisys }
+- { c1: nFLR, s1: Foresne Liveray, c2: SEAT, s2: Foresne Liveray }
+- { c1: nFLR, s1: New Izumo, c2: SEAT, s2: New Izumo }
+- { c1: nFLR, s1: Peacopolis, c2: SEAT, s2: Peacopolis }
+- { c1: nFLR, s1: Seolho Midwest, c2: SEAT, s2: Seolho Midwest }
+- { c1: BluRail, s1: Boston Waterloo, c2: SEAT, s2: Boston Waterloo }
+- { c1: MRT, s1: Bean City, c2: Pacifica, s2: Bean City }
+- { c1: RaiLinQ, s1: Janghwa City, c2: Pacifica, s2: Blackfriars - Janghwa Northern }
+- { c1: IntraRail, s1: Birdhall Transit Hub, c2: Pacifica, s2: Birdhall }
+- { c1: nFLR, s1: Deadbush International Airport, c2: Pacifica, s2: Deadbush International Airport }
+- { c1: MRT, s1: New Chandigarh West, c2: Pacifica, s2: New Chandigarh }
+- { c1: FLR Kazeshima/Shui Chau, s1: Dirtia Bridge, c2: nFLR, s2: Dirtia Bridge }
+- { c1: FLR Kazeshima/Shui Chau, s1: Chūōkochō, c2: nFLR, s2: Chūōkochō }
+- { c1: FLR Kazeshima/Shui Chau, s1: Sakyūchō, c2: nFLR, s2: Sakyūchō }
+- { c1: FLR Kazeshima/Shui Chau, s1: Aomi, c2: nFLR, s2: Aomi }
+- { c1: FLR Foresne/Commuter, s1: Liveray, c2: nFLR, s2: Foresne Liveray }
+- { c1: FLR Foresne/Commuter, s1: Solstinox Zoo, c2: nFLR, s2: Foresne Solstinox }
+- { c1: FLR Foresne/Commuter, s1: Cinnameadow, c2: nFLR, s2: New Foresne Cinnameadow }
+- { c1: FLR Kazeshima/Shui Chau, s1: Tsukihama, c2: nFLR, s2: Tsukihama }
+- { c1: IntraRail, s1: Elecna Bay Kelvinside Central, c2: BluRail, s2: Kelvinside Central }
+- { c1: IntraRail, s1: Wythern Transit Hub, c2: Fred Rail, s2: Wythern }
+- { c1: BluRail, s1: Tranquil Forest Central, c2: BreezeRail, s2: Tranquil Forest Central }
+- { c1: BluRail, s1: Silent Plains Central, c2: BreezeRail, s2: Silent Plains Central }
+- { c1: Pacifica, s1: Refuge, c2: IntraRail, s2: Refuge Central Station }
+- { c1: West Zeta Rail, s1: Refuge Central Station, c2: IntraRail, s2: Refuge Central Station }
+- { c1: IntraRail, s1: Skogheim Central, c2: RaiLinQ, s2: Skogheim Central }
+- { c1: IntraRail, s1: Firewood City Airport, c2: RaiLinQ, s2: Firewood City Airfield }
+- { c1: IntraRail, s1: Lanatam, c2: RaiLinQ, s2: Lanatam }
+- { c1: IntraRail, s1: Mojang Town Transit Hub, c2: RaiLinQ, s2: Mojang Town Transit Hub }
+- { c1: nFLR, s1: Mojang Town Transit Hub, c2: RaiLinQ, s2: Mojang Town Transit Hub }
+- { c1: nFLR, s1: Weston Main, c2: IntraRail, s2: Weston Main Station }
+- { c1: BluRail, s1: Bristol Downtown, c2: IntraRail, s2: Bristol Downtown }
