@@ -217,3 +217,5 @@
 - { c1: ErzLink Intercity, s1: Whitecliff, c2: ErzLink Metro, s2: Whitecliff }
 - { c1: BluRail, s1: Stone, c2: ErzLink Metro, s2: Stone }
 - { c1: BluRail, s1: Riverdane, c2: ErzLink Metro, s2: Riverdane }
+- { c1: BluRail, s1: Paixton Central, c2: IntraRail, s2: Paixton Central }
+- { c1: BluRail, s1: Itomori West, c2: IntraRail, s2: Itomori West }
