@@ -275,7 +275,7 @@ lines:
     stations:
       - Daygon Pier End
       - Daygon Pier Head
-      - Finter Street
+      - Finnter Street
       - Cedar Bridge
       - Gryphon Cross
       - Zetland Hills
@@ -288,6 +288,7 @@ lines:
     code: "13"
     colour: "#ca6d1e"
     stations:
+      # ???
       - Azoltham South
       - Mountain Gate
       - Flagstaff Hill
@@ -345,6 +346,8 @@ lines:
     code: "16"
     colour: "#7586bc"
     stations:
+      - Kaiphek Central
+      - Areboretum Road
       - SkyPeak Observatory
       - Kaiman-Buraun Statue
       - Kaiman Pass Entrance
@@ -358,14 +361,19 @@ lines:
       - Artarmon Seafood Market
   - name: Kaiphek
     code: "17"
-    colour: "#3d4838"
+    colour: "#6d7b63"
     stations:
       - Carnigary Corner
+      # ???
       - Sports Precinct
+      # ???
       - Dight Falls
       - Kerong Village
       - Fernshaw Lodge
       - Kerong Rapids Picnic Ground
+      # ???
+      - Kaiphek Central
+      - Kaiphek Public School
 
 
   - name: Gateway Region
@@ -386,7 +394,8 @@ lines:
       - East Promenade
       - Cuboid Walk
       - Erts Ferry Terminal
-      - Eñe
+      - Iron Square
+      - Eñe Bahía
       - Stockton West
       - Stockton Junction
       - West Vannahelm
@@ -496,6 +505,32 @@ lines:
       - Gawler Interchange
       - North Kananook
       - Kananook Junction
+  - name: Ordon Region
+    code: "X10"
+    colour: "#575959"
+    stations:
+      - Carnigary Corner
+      - Erzland Cross
+      - Golden Cross
+      - Crowood Junction
+  - name: Kaelor Region
+    code: "X11"
+    colour: "#146e78"
+    stations: 
+      - Carnigary Corner
+      - Erzland Cross
+      - Golden Cross
+      - Spire of New Domain
+      - South Wharf-Zetstone Tower
+      - Osprey Interchange
+  - name: Zetstone Region
+    code: "X12"
+    colour: "#653d22"
+    stations:
+      - Finnter Street
+      - Zetland West
+      - Crowood Junction
+      - South Wharf-Zetstone Tower
   - name: Prohampton
     code: "P1"
     colour: "#625351"
@@ -642,12 +677,13 @@ coords:
   Exchange East: [ -2900, -26531 ]
   Exchange Junction: [ -2966, -26592 ]
   Exchange Plaza: [ -2963, -26547 ]
-  Eñe: [ -4121, -29903 ]
+  Eñe Bahía: [ -4122, -29898 ]
+  Iron Square: [ -3999, -29880 ]
   Falcon Cross: [ -3096, -26357 ]
   Federation Square: [ -3136, -26922 ]
   Fern Crossing: [ -3271, -27113 ]
   Fernshaw Lodge: [ -2666, -27068 ]
-  Finter Street: [ -3399, -26225 ]
+  Finnter Street: [ -3399, -26225 ]
   Fishermen's Market: [ -3167, -27078 ]
   Five Ways: [ -3264, -26358 ]
   Flagstaff Circle: [ -2964, -27023 ]
@@ -786,3 +822,6 @@ coords:
   Zetstone Central: [ -3182, -26416 ]
   Zetstone Gardens: [ -3335, -26374 ]
   Zetstone-Federation Gate: [ -2802, -26454 ]
+  Kaiphek Central: [ -2346, -27024 ]
+  Kaiphek Public School: [ -2260, -27036 ]
+  Areboretum Road: [ -2394, -26902 ]
