@@ -1,0 +1,16 @@
+company_name: Lava Rail
+colour: "#ffa500"
+mode: warp
+
+lines:
+  - name: Line 1
+    code: "1"
+    stations:
+      - Lava Bay
+      - Peach Bay
+      - Meeperopi
+
+coords:
+  Lava Bay: [ 22977, 25623 ]
+  Peach Bay: [ 22977, 26598 ]
+  Meeperopi: [ 22977, 27710 ]

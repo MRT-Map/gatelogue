@@ -25,6 +25,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.fredrail import FredRail
     from gatelogue_aggregator.sources.rail.intrarail import IntraRail
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
+    from gatelogue_aggregator.sources.rail.lava_rail import LavaRail
     from gatelogue_aggregator.sources.rail.local.erzlink_metro import ErzLinkMetro
     from gatelogue_aggregator.sources.rail.local.erzlink_trams import ErzLinkTrams
     from gatelogue_aggregator.sources.rail.local.flr_foresne import FLRForesne
@@ -92,6 +93,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         IntraRailWarp,
         IntraSail,
         IntraSailWarp,
+        LavaRail,
         MarbleRail,
         MarbleRailWarp,
         MRTTransit,
