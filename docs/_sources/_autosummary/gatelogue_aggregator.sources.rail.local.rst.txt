@@ -34,4 +34,5 @@ gatelogue\_aggregator.sources.rail.local
    flr_kaze
    flr_sheng
    np_subway
+   refuge_streetcar
 

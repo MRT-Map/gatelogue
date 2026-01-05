@@ -37,6 +37,7 @@ gatelogue\_aggregator.sources.rail
    fredrail
    intrarail
    intrarail_warp
+   lava_rail
    local
    marblerail
    marblerail_warp

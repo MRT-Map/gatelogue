@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.local.refuge\_streetcar.RefugeStreetcar
+==========================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.refuge_streetcar
+
+.. autoclass:: RefugeStreetcar
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RefugeStreetcar.__init__
+      ~RefugeStreetcar.build
+      ~RefugeStreetcar.custom_routing
+      ~RefugeStreetcar.find_by_ref
+      ~RefugeStreetcar.find_by_ref_or_index
+      ~RefugeStreetcar.is_coord_source
+      ~RefugeStreetcar.report
+      ~RefugeStreetcar.reported_nodes
+      ~RefugeStreetcar.retrieve_from_cache
+      ~RefugeStreetcar.sanitise_strings
+      ~RefugeStreetcar.save_to_cache
+      ~RefugeStreetcar.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RefugeStreetcar.file_path
+      ~RefugeStreetcar.name
+      ~RefugeStreetcar.priority
+      ~RefugeStreetcar.g
+   
+   

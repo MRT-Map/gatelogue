@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.rail.local.refuge\_streetcar
+==========================================================
+
+.. automodule:: gatelogue_aggregator.sources.rail.local.refuge_streetcar
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      RefugeStreetcar
+   
+   
+
+   
+   
+   
+
+
+

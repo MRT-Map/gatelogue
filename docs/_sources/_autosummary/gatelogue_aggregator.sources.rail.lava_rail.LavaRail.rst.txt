@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.lava\_rail.LavaRail
+======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.lava_rail
+
+.. autoclass:: LavaRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LavaRail.__init__
+      ~LavaRail.build
+      ~LavaRail.custom_routing
+      ~LavaRail.find_by_ref
+      ~LavaRail.find_by_ref_or_index
+      ~LavaRail.is_coord_source
+      ~LavaRail.report
+      ~LavaRail.reported_nodes
+      ~LavaRail.retrieve_from_cache
+      ~LavaRail.sanitise_strings
+      ~LavaRail.save_to_cache
+      ~LavaRail.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LavaRail.file_path
+      ~LavaRail.name
+      ~LavaRail.priority
+      ~LavaRail.g
+   
+   
