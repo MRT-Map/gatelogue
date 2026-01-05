@@ -1,0 +1,119 @@
+company_name: Refuge Streetcar
+mode: "traincarts"
+local: true
+
+lines:
+  - name: Island Loop
+    colour: "#33f"
+    stations:
+      - Great Guava
+      - Lower Tangerine
+      - Island Boatstop
+      - Cherimoya Park
+      - Cranberry Green
+      - North Train Station
+      - East Train Station
+      - Great Bridges
+      - Appleton Lower
+      - Cherry
+      - South City Hall
+      - Seaport Overlook
+      - Pier
+      - Seaside
+      - Mandarin Court
+      - Apricot Point
+  - name: Government Loop
+    colour: "#a3a"
+    stations:
+      - Pier
+      - North City Hall
+      - South Central
+      - East Government
+      - South City Hall
+      - Banking
+  - name: Downtown Loop
+    colour: "#8c0"
+    stations:
+      - Downtown North
+      - North Train Station
+      - East Train Station
+      - Train Station Under
+      - Downtown East
+      - East Government
+      - East City Hall
+      - South Central
+      - Central Plaza
+  - name: North Island Loop
+    colour: "#fa3"
+    stations:
+      - Mandarin Court
+      - Apricot Point
+      - Sato Plaza West
+      - Sato Plaza South
+      - Cherimoya Park
+      - 2nd Avenue
+      - 1st Avenue
+  - name: North/South Loop
+    colour: "#f33"
+    stations:
+      - Cranberry Green
+      - Cherimoya Park
+      - Sato Plaza South
+      - Sato Plaza North
+      - Great Guava
+      - 3rd Street
+      - 2nd Street
+      - Downtown North
+      - West Train Station
+      - Hilltop
+      - South Hill
+      - Refuge Airfield North
+      - Refuge Airfield West
+      - Industrial East
+      - Iserlohn Avenue East
+      - University South
+
+
+coords:
+  Great Guava: [-20614, -14622]
+  Lower Tangerine: [-20538, -14623]
+  Island Boatstop: [-20450, -14555]
+  Cherimoya Park: [-20556, -14471]
+  Cranberry Green: [-20557, -14378]
+  North Train Station: [-20515, -14327]
+  East Train Station: [-20475, -14294]
+  Great Bridges: [-20510, -14167]
+  Appleton Lower: [-20591, -14124]
+  Cherry: [-20646, -14143]
+  South City Hall: [-20707, -14167]
+  Seaport Overlook: [-20787, -14167]
+  Pier: [-20764, -14239]
+  Seaside: [-20757, -14306]
+  Mandarin Court: [-20743, -14461]
+  Apricot Point: [-20678, -14559]
+  1st Avenue: [-20658, -14407]
+  2nd Avenue: [-20602, -14407]
+  Sato Plaza West: [-20590, -14573]
+  North City Hall: [-20708, -14246]
+  Banking: [-20755, -14181]
+  East City Hall: [-20682, -14215]
+  South Central: [-20644, -14256]
+  Central Plaza: [-20618, -14287]
+  Downtown North: [-20580, -14326]
+  Train Station Under: [-20513, -14262]
+  Downtown East: [-20571, -14262]
+  East Government: [-20634, -14204]
+  Sato Plaza North: [-20558, -14614]
+  3rd Street: [-20618, -14508]
+  2nd Street: [-20618, -14393]
+  West Train Station: [-20557, -14247]
+  Hilltop: [-20570, -14182]
+  South Hill: [-20595, -14022]
+  University South: [-20521, -13915]
+  Iserlohn Avenue East: [-20430, -13848]
+  Industrial East: [-20590, -13763]
+  Refuge Airfield West: [-20694, -13859]
+  Refuge Airfield North: [-20640, -13914]
+  Sato Plaza South: [-20557, -14532]
+
+
