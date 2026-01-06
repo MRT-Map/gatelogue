@@ -30,6 +30,7 @@ lines:
       - Niwen Airport
       - Bechtel
       - Filipowice
+      - New Gensokyo Regional Airport
   - name: Northern Gryphon
     code: NG
     colour: "#975c4d"
@@ -41,6 +42,7 @@ lines:
       - Rank Resort
       - Niwen Airport
       - Filipowice
+      - New Gensokyo Regional Airport
   - name: Hibernal Leopard
     code: HL
     colour: "#7c9990"
@@ -95,3 +97,4 @@ coords:
   Miu Wan Tseng Tsz Leng International Airport: [-3555, -9268]
   Miu Wan Central: [-2382, -9450]
   Miu Wan South: [-2558, -8945]
+  New Gensokyo Regional Airport: [-12787, -17418]
