@@ -148,7 +148,7 @@ class NFLR(RailSource):
                     forward_label="to Sansvikk IKEA",
                     backward_label="to mainline",
                 )
-            if line_name == "R4":
+            elif line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))
                 RailLineBuilder(self, r_line).connect(*r_stations, between=("Oceanside Bayfront", None))
             elif line_name == "R5":
