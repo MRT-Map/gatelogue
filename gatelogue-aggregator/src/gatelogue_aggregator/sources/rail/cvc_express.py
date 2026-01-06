@@ -22,8 +22,7 @@ class CVCExpress(RailSource):
             line_code, line_name = line_code_name.split(" -- ")
             line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="traincarts", colour="#c00")
 
-            ul = h3.find_next_sibling("ul")
-            print(ul)
+            ul = h3.find_next("ul")
             stations = []
             for li in ul.find_all("li"):
                 name = li.string.strip()
