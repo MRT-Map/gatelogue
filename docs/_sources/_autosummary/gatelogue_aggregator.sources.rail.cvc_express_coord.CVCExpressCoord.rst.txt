@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.cvc\_express\_coord.CVCExpressCoord
+======================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.cvc_express_coord
+
+.. autoclass:: CVCExpressCoord
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CVCExpressCoord.__init__
+      ~CVCExpressCoord.build
+      ~CVCExpressCoord.custom_routing
+      ~CVCExpressCoord.find_by_ref
+      ~CVCExpressCoord.find_by_ref_or_index
+      ~CVCExpressCoord.is_coord_source
+      ~CVCExpressCoord.report
+      ~CVCExpressCoord.reported_nodes
+      ~CVCExpressCoord.retrieve_from_cache
+      ~CVCExpressCoord.sanitise_strings
+      ~CVCExpressCoord.save_to_cache
+      ~CVCExpressCoord.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CVCExpressCoord.file_path
+      ~CVCExpressCoord.name
+      ~CVCExpressCoord.priority
+      ~CVCExpressCoord.g
+   
+   
