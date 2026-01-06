@@ -21,6 +21,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.breezerail import BreezeRail
     from gatelogue_aggregator.sources.rail.breezerail_warp import BreezeRailWarp
     from gatelogue_aggregator.sources.rail.cvc_express import CVCExpress
+    from gatelogue_aggregator.sources.rail.cvc_express_coord import CVCExpressCoord
     from gatelogue_aggregator.sources.rail.dynmap_mrt import DynmapMRT
     from gatelogue_aggregator.sources.rail.erzlink_intercity import ErzLinkIntercity
     from gatelogue_aggregator.sources.rail.fredrail import FredRail
@@ -78,6 +79,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         CCC,
         CFC,
         CVCExpress,
+        CVCExpressCoord,
         DynmapAirports,
         DynmapMRT,
         ErzLinkMetro,
