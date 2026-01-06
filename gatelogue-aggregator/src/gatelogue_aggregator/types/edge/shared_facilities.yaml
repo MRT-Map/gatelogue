@@ -219,7 +219,7 @@
 - { c1: BluRail, s1: Riverdane, c2: ErzLink Metro, s2: Riverdane }
 - { c1: BluRail, s1: Paixton Central, c2: IntraRail, s2: Paixton Central }
 - { c1: BluRail, s1: Itomori West, c2: IntraRail, s2: Itomori West }
-- { c1: CVCExpress, s1: Eñe, c2: ErzLink Metro, s2: Eñe }
+- { c1: CVCExpress, s1: Eñe, c2: ErzLink Intercity, s2: Eñe }
 - { c1: CVCExpress, s1: Stockton, c2: ErzLink Intercity, s2: Stockton }
 - { c1: CVCExpress, s1: Vannahelm, c2: ErzLink Intercity, s2: Vannahelm }
 - { c1: CVCExpress, s1: Erzgard International Airport, c2: ErzLink Intercity, s2: Erzgard International Airport }
