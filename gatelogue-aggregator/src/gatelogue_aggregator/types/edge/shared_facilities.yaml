@@ -219,3 +219,16 @@
 - { c1: BluRail, s1: Riverdane, c2: ErzLink Metro, s2: Riverdane }
 - { c1: BluRail, s1: Paixton Central, c2: IntraRail, s2: Paixton Central }
 - { c1: BluRail, s1: Itomori West, c2: IntraRail, s2: Itomori West }
+- { c1: CVCExpress, s1: Eñe, c2: ErzLink Metro, s2: Eñe }
+- { c1: CVCExpress, s1: Stockton, c2: ErzLink Intercity, s2: Stockton }
+- { c1: CVCExpress, s1: Vannahelm, c2: ErzLink Intercity, s2: Vannahelm }
+- { c1: CVCExpress, s1: Erzgard International Airport, c2: ErzLink Intercity, s2: Erzgard International Airport }
+- { c1: CVCExpress, s1: New Erzville, c2: ErzLink Intercity, s2: New Erzville }
+- { c1: CVCExpress, s1: Cardinal Bay, c2: ErzLink Metro, s2: Cardinal Bay }
+- { c1: CVCExpress, s1: Oparia LeTorneau International Airport, c2: ErzLink Intercity, s2: Oparia LeTourneau International Airport }
+- { c1: CVCExpress, s1: Nordhoff, c2: ErzLink Intercity, s2: Nordhoff }
+- { c1: CVCExpress, s1: Ha Shan - Kwai Tin International Airport, c2: ErzLink Intercity, s2: Kwai Tin Ha Shan-Kwai Tin Airport }
+- { c1: CVCExpress, s1: Miu Wan Tseng Tsz Leng International Airport, c2: ErzLink Intercity, s2: Miu Wan Tseng Tsz Leng International Airport }
+- { c1: CVCExpress, s1: Miu Wan Central, c2: ErzLink Intercity, s2: Miu Wan Central }
+- { c1: Pacifica, s1: Miu Wan - Central, c2: ErzLink Intercity, s2: Miu Wan Central }
+- { c1: Pacifica, s1: Miu Wan - South, c2: ErzLink Intercity, s2: Miu Wan South }
