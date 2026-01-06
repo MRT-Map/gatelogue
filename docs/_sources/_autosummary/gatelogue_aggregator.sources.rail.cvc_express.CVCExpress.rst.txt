@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.cvc\_express.CVCExpress
+==========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.cvc_express
+
+.. autoclass:: CVCExpress
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CVCExpress.__init__
+      ~CVCExpress.build
+      ~CVCExpress.find_by_ref
+      ~CVCExpress.find_by_ref_or_index
+      ~CVCExpress.is_coord_source
+      ~CVCExpress.report
+      ~CVCExpress.reported_nodes
+      ~CVCExpress.retrieve_from_cache
+      ~CVCExpress.sanitise_strings
+      ~CVCExpress.save_to_cache
+      ~CVCExpress.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CVCExpress.name
+      ~CVCExpress.priority
+      ~CVCExpress.g
+   
+   
