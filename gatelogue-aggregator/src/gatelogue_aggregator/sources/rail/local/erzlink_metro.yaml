@@ -64,7 +64,7 @@ lines:
       - Golden South
       - New Erzville
       - Artarmon
-      - Calico
+      # - Calico
       - Prisma Falls
       - Cardinal Bay
       - Oxeyeburg
@@ -154,7 +154,7 @@ coords:
   New Erzville: [ -2831, -26751 ]
   Artarmon: [ -2551, -26527 ]
   Cyrago: [ -2795, -26335 ]
-  Calico: [ -1421, -26310 ]
+  # Calico: [ -1421, -26310 ]
   Prisma Falls: [ -1037, -24914 ]
   Cardinal Bay: [ -847, -22776 ]
   Oxeyeburg: [ -817, -22298 ]

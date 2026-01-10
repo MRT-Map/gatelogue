@@ -51,5 +51,18 @@ class ErzLinkTrams(Yaml2Source, RailSource):
                 forward_label=line_yaml.backward_label,
                 backward_label=line_yaml.forward_label,
             )
+        elif line_node.code == "X2a":
+            self.B(self, line_node).connect(
+                *stations,
+                between=(None, "Euneva Interchange"),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
+            )
+            self.B(self, line_node).connect(
+                *stations,
+                between=("Shellwater Plaza", None),
+                forward_label=line_yaml.forward_label,
+                backward_label=line_yaml.backward_label,
+            )
         else:
             raise NotImplementedError

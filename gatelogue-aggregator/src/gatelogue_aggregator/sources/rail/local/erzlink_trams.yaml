@@ -371,7 +371,7 @@ lines:
       - Kerong Village
       - Fernshaw Lodge
       - Kerong Rapids Picnic Ground
-      # ???
+      - Solitude Hill Cemetery
       - Kaiphek Central
       - Kaiphek Public School
 
@@ -396,6 +396,7 @@ lines:
       - Erts Ferry Terminal
       - Iron Square
       - Eñe Bahía
+      - Longhorn Forest
       - Stockton West
       - Stockton Junction
       - West Vannahelm
@@ -409,6 +410,15 @@ lines:
       - Spire of New Domain
       - Artarmon Park East
       - Artarmon Border
+  - name: Sharkland Region
+    code: "X2a"
+    colour: "#62b2a3"
+    stations:
+      - Longhorn Forest
+      - Longhorn Gulch
+      - Euneva Interchange
+      - Shellwater Plaza
+      - Patchy's Landing
   - name: Stockton
     code: "S1"
     colour: "#62b2a3"
@@ -429,7 +439,7 @@ lines:
       - Prohampton Bus Interchange
       - Prohampton Junction
   - name: Lakeland Region
-    code: "X6"
+    code: "X3a"
     colour: "#4a6b59"
     stations:
       - Odralia Junction
@@ -437,8 +447,18 @@ lines:
       - Plymouth Interchange
       - Plymouth Central
       - Westlake
-  - name: Overland Region
+  - name: Scalia Region
     code: "X4"
+    colour: "#58734a"
+    stations:
+      - Euneva West
+      - Euneva Central
+      - Euneva Interchange
+      - Robloxia Junction
+      - Scalia City Transit Centre
+      - West Odral Interchange
+  - name: Overland Region
+    code: "X4a"
     colour: "#58734a"
     stations:
       - Larnwick Town Hall
@@ -464,26 +484,20 @@ lines:
       - Lakeside Park
       - Ember City
   - name: West Region
-    code: "X7"
+    code: "X6"
     colour: "#1c3387"
     stations:
       - Robloxia Junction
       - Robloxia Downtown
       - Stockton West
       - Stockton Exchange
-  - name: Scalia Region
-    code: "X8"
-    colour: "#7b271d"
-    stations:
-      - Euneva West
-      - Euneva Central
-      - Robloxia Junction
-      - Scalia City Transit Centre
-      - West Odral Interchange
+  # #7b271d
   - name: Trig Valley Region
     code: "X9"
     colour: "#625351"
     stations:
+      - Cape Hognose
+      - Copperhead Bay Village
       - Scalia City Pier
       - Scalia City Town Hall
       - Scalia City Transit Centre
@@ -566,12 +580,17 @@ lines:
     code: "SC1"
     colour: "#7ea9b6"
     stations:
+      - Wrunnwell Lighthouse
       - Palmate Beach
       - Scalia City Town Hall
+      - Scalia City Mall
+      - Scalia Sports Centre
+      - Scalia City Pier
   - name: Euneva
     code: "U1"
     colour: "#c699c4"
     stations:
+      - Euneva Public School
       - Euneva Central
       - Bayfront
       - Montclair Front
@@ -682,7 +701,7 @@ coords:
   Falcon Cross: [ -3096, -26357 ]
   Federation Square: [ -3136, -26922 ]
   Fern Crossing: [ -3271, -27113 ]
-  Fernshaw Lodge: [ -2666, -27068 ]
+  Fernshaw Lodge: [ -2693, -27150 ]
   Finnter Street: [ -3399, -26225 ]
   Fishermen's Market: [ -3167, -27078 ]
   Five Ways: [ -3264, -26358 ]
@@ -723,7 +742,7 @@ coords:
   Kananook Junction: [ -3882, -27184 ]
   Kasadie: [ -4068, -28048 ]
   Kepler Circle: [ -3989, -27984 ]
-  Kerong Rapids Picnic Ground: [ -2537, -27016 ]
+  Kerong Rapids Picnic Ground: [ -2663, -27064 ]
   Kerong Village: [ -2725, -27247 ]
   Keystone Park: [ -2635, -26399 ]
   Kobold University South: [ -3453, -27190 ]
@@ -825,3 +844,15 @@ coords:
   Kaiphek Central: [ -2346, -27024 ]
   Kaiphek Public School: [ -2260, -27036 ]
   Areboretum Road: [ -2394, -26902 ]
+  Solitude Hill Cemetery: [ -2536, -27018 ]
+  Longhorn Forest: [ -4583, -28917 ]
+  Longhorn Gulch: [ -4825, -28945 ]
+  Euneva Interchange: [ -5061, -29027 ]
+  Shellwater Plaza: [ -5268, -29915 ]
+  Patchy's Landing: [ -5210, -29899 ]
+  Euneva Public School: [ -5294, -29139 ]
+  Cape Hognose: [ -5815, -27501 ]
+  Copperhead Bay Village: [ -5629, -27467 ]
+  Wrunnwell Lighthouse: [ -5511, -27984 ]
+  Scalia City Mall: [ -5336, -27597 ]
+  Scalia Sports Centre: [ -5419, -27586 ]
