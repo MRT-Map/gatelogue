@@ -47,7 +47,7 @@ class IntraRail(RailSource):
 
             stations = []
             for big in h4.find_next("p").find_all("big", recursive=False):
-                if (big2 := big.find("big")) is None:
+                if (big2 := big.find("big")) is None or big.find("s") is not None:
                     continue
                 name = " ".join(big2.stripped_strings)
                 name = {"Plage Rouge Seki City": "Plage Rouge-Seki City"}.get(name, name)
