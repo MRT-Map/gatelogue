@@ -436,6 +436,7 @@ lines:
       - Kananook Junction
       - West Kananook
       - Odralia Junction
+      - Oosterhaven Ferry Terminal
       - Prohampton Bus Interchange
       - Prohampton Junction
   - name: Lakeland Region
@@ -856,3 +857,4 @@ coords:
   Wrunnwell Lighthouse: [ -5511, -27984 ]
   Scalia City Mall: [ -5336, -27597 ]
   Scalia Sports Centre: [ -5419, -27586 ]
+  Oosterhaven Ferry Terminal: [ -4480, -26247 ]
