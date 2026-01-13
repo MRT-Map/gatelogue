@@ -1,0 +1,28 @@
+company_name: Metro de Eñe
+mode: "traincarts"
+local: true
+
+lines:
+  - name: Linea A
+    code: A
+    colour: "#00c"
+    stations:
+      - Estación de Tren
+      - Puerto
+      - Bahía
+      - Centro
+  - name: Linea B
+    code: B
+    colour: "#0c0"
+    stations:
+      - Estación de Tren
+      - Puerto
+      - Bahía
+      - Calle Caravaca
+
+coords:
+  Estación de Tren: [ -4390, -29992 ]
+  Puerto: [ -4242, -29992 ]
+  Bahía: [ -4111, -29982 ]
+  Calle Caravaca: [ -4121, -29892 ]
+  Centro: [ -4009, -29940 ]
