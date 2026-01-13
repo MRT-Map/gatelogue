@@ -9,57 +9,57 @@ lines:
     forward_label: Westbound
     backward_label: Eastbound
     stations:
-      - [K100, Setsuritsuchō]
-      - [K101, Konranchō]
-      - [K102, Owomachi]
-      - [K103, Sakyūchō]
+      - Setsuritsuchō @ K100
+      - Konranchō @ K101
+      - Owomachi @ K102
+      - Sakyūchō @ K103
   - name: Line K2
     code: K2
     colour: "#f80"
     forward_label: Southbound
     backward_label: Northbound
     stations:
-      - [K200, Chūōkochō]
-      - [K201, Tōkochō]
-      - [K202, Takimachi]
-      - [K203, Takagawaramachi]
-      - [K204, Sonzaishinaimachi]
-      - [K205, Nekotoinumachi]
+      - Chūōkochō @ K200
+      - Tōkochō @ K201
+      - Takimachi @ K202
+      - Takagawaramachi @ K203
+      - Sonzaishinaimachi @ K204
+      - Nekotoinumachi @ K205
   - name: Line K3
     code: K3
     colour: "#fc0"
     forward_label: Southbound
     backward_label: Northbound
     stations:
-      - [K302, Aomi]
-      - [K303, Saikochō]
-      - [K304, Daremachi]
-      - [K305, Sakyūchō]
-      - [K306, Tsukihama]
-      - [K307, Nekotoinumachi]
-      - [K308, Sonzaishinaimachi]
-      - [K309, Takebashi]
-      - [K310, Kuzuhamachi]
-      - [K311, Kuzuha Airport]
+      - Aomi @ K302
+      - Saikochō @ K303
+      - Daremachi @ K304
+      - Sakyūchō @ K305
+      - Tsukihama @ K306
+      - Nekotoinumachi @ K307
+      - Sonzaishinaimachi @ K308
+      - Takebashi @ K309
+      - Kuzuhamachi @ K310
+      - Kuzuha Airport @ K311
   - name: Line K6
     code: K6
     colour: "#f5c"
     forward_label: Westbound
     backward_label: Eastbound
     stations:
-      - [K603, Kazetera]
-      - [K604, Hakobori]
-      - [K607, Sha Tsui]
-      - [K608, Dirtia Bridge]
+      - Kazetera @ K603
+      - Hakobori @ K604
+      - Sha Tsui @ K607
+      - Dirtia Bridge @ K608
   - name: Line C1
     code: C1
     colour: "#808"
     forward_label: Northbound
     backward_label: Southbound
     stations:
-      - [C100, Sha Tsui]
-      - [C101A, Ho Kok West]
-      - [C101, Ho Kok]
+      - Sha Tsui @ C100
+      - Ho Kok West @ C101A
+      - Ho Kok @ C101
 
 coords:
   K100: [-26414, 16426]
