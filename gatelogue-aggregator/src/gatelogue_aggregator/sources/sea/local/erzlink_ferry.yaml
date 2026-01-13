@@ -1,0 +1,185 @@
+company_name: ErzLink Ferry
+mode: "ferry"
+colour: "#0aa"
+local: true
+
+lines:
+  - name: System A
+    code: A
+    stations:
+      - - Lakedale Pier
+        - South Wharf
+        - Daygon Beach/Pier
+        - Cremorne Pier
+        - Erzville Central
+        - Esperance Harbour
+        - Vannahelm Central
+        - Stockton
+        - Eñe
+        - Erts
+        - Erzville Passenger Seaport
+        - Esperance Harbour
+      - - Vannahelm Central
+        - Esperance Harbour
+      - - Daygon Beach/Pier
+        - Lakedale Pier
+  - name: System B
+    code: B
+    stations:
+      - Erzville Central
+      - Oosterhaven Ferry Terminal
+      - Plymouth Pier
+      - Scalia City Pier
+      - Euneva Pier
+      - Euroa Pier
+      - Eñe
+  - name: System W
+    code: W
+    stations:
+      - Derwent Cross (East)
+      - Kobold University North
+  - name: System X
+    code: X
+    stations:
+      - West Carnigary
+      - Esperance Harbour
+  - name: System Y
+    code: Y
+    stations:
+      - - Erzville Central
+        - Docklands North
+        - Cremorne Pier
+        - Docklands South
+        - Cremorne Rocks
+        - Daygon Dock
+        - Westgate Central
+        - Westgate Beach
+        - Daygon Beach/Pier
+        - Southern Interchange
+
+      - - Cremorne Pier
+        - Cremorne Park
+        - Golden Plaza
+        - Zetland Cliff
+        - Daygon Dock
+      
+      - - Golden Plaza
+        - Artemis
+        - Exchange Plaza
+        - South Axylion
+        - Federation Gate
+        - South Wharf
+        - Port Annex Centre
+        - Artarmon Seafood Market
+      
+      - - South Wharf
+        - Teal Bridge
+        - Indigo Gate
+      - - Teal Bridge
+        - Kargorok Bridge
+
+      - - South Axylion
+        - Glaucous Bridge
+        - Viridian Gate
+        - North Axylion
+        - Capital Gate
+        - Buraun City
+        - Indigo Gate
+        - Kargorok Bridge
+        - Border Park
+        - Coatldale
+  - name: System Z
+    code: Z
+    # traincarts
+    stations:
+      - - Erzville Central
+        - Fishermen's Market
+        - Grove Park
+        - Gleneb Hills
+        - Erzbourne Park
+        - North Axylion
+
+      - - Fishermen's Market
+        - Carnigary Plaza
+        - Esperance West
+        - Esperance Harbour
+      - - Carnigary Plaza
+        - Gleneb Plaza
+
+      - - Fishermen's Market
+        - Gleneb Plaza
+        - Carnigary Station
+        - Agora Walk
+        - Derwent Cross (West)
+        - Erzville Passenger Seaport
+      - - Agora Walk
+        - Hemble Park North
+
+      - - Carnigary Station
+        - Hemble Park North
+        - Hemble Park South
+      
+      - - Hemble Park North
+        - Baxter Main Dock
+        - Kenoorong Park
+
+coords:
+  Kobold University North: [ -3355, -27408 ]
+  Derwent Cross (East): [ -3162, -27407 ]
+  West Carnigary: [ -3490, -27122 ]
+  Esperance Harbour: [ -3441, -27064 ]
+  Erzville Central: [ -3206, -26852 ]
+  Docklands North: [ -3286, -26821 ]
+  Docklands South: [ -3389, -26701 ]
+  Cremorne Pier: [ -3340, -26642 ]
+  Cremorne Rocks: [ -3372, -26535 ]
+  Daygon Dock: [ -3318, -26430 ]
+  Westgate Central: [ -3378, -26414 ]
+  Westgate Beach: [ -3520, -26376 ]
+  Daygon Beach/Pier: [ -3603, -26220 ]
+  Southern Interchange: [ -3250, -26094 ]
+  Zetland Cliff: [ -3213, -26510 ]
+  Golden Plaza: [ -3120, -26571 ]
+  Cremorne Park: [ -3179, -26636 ]
+  Artemis: [ -3034, -26500 ]
+  Exchange Plaza: [ -2959, -26515 ]
+  South Axylion: [ -2875, -26505 ]
+  South Wharf: [ -2722, -26474 ]
+  Port Annex Centre: [ -2653, -26359 ]
+  Artarmon Seafood Market: [ -2559, -26291 ]
+  Teal Bridge: [ -2712, -26614 ]
+  Kargorok Bridge: [ -2611, -26632 ]
+  Border Park: [ -2508, -26498 ]
+  Coatldale: [ -2483, -26430 ]
+  Indigo Gate: [ -2710, -26701 ]
+  Buraun City: [ -2701, -26744 ]
+  Capital Gate: [ -2786, -26781 ]
+  North Axylion: [ -2870, -26796 ]
+  Viridian Gate: [ -2871, -26708 ]
+  Glaucous Bridge: [ -2883, -26612 ]
+  Fishermen's Market: [ -3158, -27075 ]
+  Grove Park: [ -3083, -27032 ]
+  Gleneb Hills: [ -2985, -26962 ]
+  Erzbourne Park: [ -2945, -26828 ]
+  Carnigary Plaza: [ -3257, -27119 ]
+  Esperance West: [ -3339, -27106 ]
+  Gleneb Plaza: [ -3148, -27148 ]
+  Carnigary Station: [ -3158, -27209 ]
+  Agora Walk: [ -3182, -27296 ]
+  Derwent Cross (West): [ -3195, -27368 ]
+  Erzville Passenger Seaport: [ -3168, -27721 ]
+  Hemble Park North: [ -3047, -27221 ]
+  Baxter Main Dock: [ -3077, -27271 ]
+  Kenoorong Park: [ -3061, -27371 ]
+  Hemble Park South: [ -2981, -27180 ]
+  Lakedale Pier: [ -2422, -25750 ]
+  Vannahelm Central: [ -3888, -28020 ]
+  Stockton: [ -4382, -28640 ]
+  Eñe: [ -4275, -29945 ]
+  Erts: [ -2722, -29242 ]
+  Oosterhaven Ferry Terminal: [ -4406, -26228 ]
+  Plymouth Pier: [ -5634, -26948 ]
+  Scalia City Pier: [ -5456, -27648 ]
+  Euneva Pier: [ -5272, -29000 ]
+  Euroa Pier: [ -5188, -29882 ]
+  Federation Gate: [ -2801, -26518 ]

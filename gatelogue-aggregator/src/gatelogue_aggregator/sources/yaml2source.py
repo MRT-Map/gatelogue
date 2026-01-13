@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 class YamlLine(msgspec.Struct):
     name: str
-    stations: list[str | tuple[str, str]]
+    stations: list[str | list[str]]
 
     forward_label: str | None = None
     backward_label: str | None = None
@@ -87,21 +87,22 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                     if file.mode is not None
                     else None
                 )
-            stations = [
-                self.S.new(
-                    self,
-                    codes={a[0] if isinstance(a, tuple) else a},
-                    name=a[1] if isinstance(a, tuple) else a,
-                    company=company,
-                )
-                for a in line.stations
-            ]
-            try:
-                self.custom_routing(line_node, stations, line)
-            except NotImplementedError:
-                self.B(self, line_node).connect(
-                    *stations, forward_label=line.forward_label, backward_label=line.backward_label
-                )
+            for station_list in (line.stations if isinstance(line.stations[0], list) else (line.stations,)):
+                stations = [
+                    self.S.new(
+                        self,
+                        codes={a.split("@")[-1].strip()},
+                        name=a.split("@")[0].strip(),
+                        company=company,
+                    )
+                    for a in station_list
+                ]
+                try:
+                    self.custom_routing(line_node, stations, line)
+                except NotImplementedError:
+                    self.B(self, line_node).connect(
+                        *stations, forward_label=line.forward_label, backward_label=line.backward_label
+                    )
 
             rich.print(RESULT + f"{file.company_name} {line.code or line.name} has {len(stations)} stations")
 
