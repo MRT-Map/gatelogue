@@ -33,6 +33,7 @@ gatelogue\_aggregator.sources.rail.local
    flr_foresne
    flr_kaze
    flr_sheng
+   metro_de_ene
    np_subway
    refuge_streetcar
 

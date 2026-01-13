@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.local.metro\_de\_ene.MetroDeEne
+==================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.local.metro_de_ene
+
+.. autoclass:: MetroDeEne
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MetroDeEne.__init__
+      ~MetroDeEne.build
+      ~MetroDeEne.custom_routing
+      ~MetroDeEne.find_by_ref
+      ~MetroDeEne.find_by_ref_or_index
+      ~MetroDeEne.is_coord_source
+      ~MetroDeEne.report
+      ~MetroDeEne.reported_nodes
+      ~MetroDeEne.retrieve_from_cache
+      ~MetroDeEne.sanitise_strings
+      ~MetroDeEne.save_to_cache
+      ~MetroDeEne.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~MetroDeEne.file_path
+      ~MetroDeEne.name
+      ~MetroDeEne.priority
+      ~MetroDeEne.g
+   
+   

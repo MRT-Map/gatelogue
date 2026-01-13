@@ -28,5 +28,6 @@ gatelogue\_aggregator.sources.sea.local
    :template: custom-module-template.rst                 
    :recursive:
 
+   erzlink_ferry
    windboat
 

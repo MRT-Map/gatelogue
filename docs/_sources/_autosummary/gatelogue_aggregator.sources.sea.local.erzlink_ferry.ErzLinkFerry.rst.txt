@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.sea.local.erzlink\_ferry.ErzLinkFerry
+===================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.local.erzlink_ferry
+
+.. autoclass:: ErzLinkFerry
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ErzLinkFerry.__init__
+      ~ErzLinkFerry.build
+      ~ErzLinkFerry.custom_routing
+      ~ErzLinkFerry.find_by_ref
+      ~ErzLinkFerry.find_by_ref_or_index
+      ~ErzLinkFerry.is_coord_source
+      ~ErzLinkFerry.report
+      ~ErzLinkFerry.reported_nodes
+      ~ErzLinkFerry.retrieve_from_cache
+      ~ErzLinkFerry.sanitise_strings
+      ~ErzLinkFerry.save_to_cache
+      ~ErzLinkFerry.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ErzLinkFerry.file_path
+      ~ErzLinkFerry.name
+      ~ErzLinkFerry.priority
+      ~ErzLinkFerry.g
+   
+   

@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.sea.local.erzlink\_ferry
+======================================================
+
+.. automodule:: gatelogue_aggregator.sources.sea.local.erzlink_ferry
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      ErzLinkFerry
+   
+   
+
+   
+   
+   
+
+
+

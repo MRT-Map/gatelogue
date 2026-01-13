@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.rail.local.metro\_de\_ene
+=======================================================
+
+.. automodule:: gatelogue_aggregator.sources.rail.local.metro_de_ene
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      MetroDeEne
+   
+   
+
+   
+   
+   
+
+
+
