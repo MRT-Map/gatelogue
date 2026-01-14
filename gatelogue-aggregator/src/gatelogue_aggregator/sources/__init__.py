@@ -37,7 +37,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.local.np_subway import NPSubway
     from gatelogue_aggregator.sources.rail.local.refuge_streetcar import RefugeStreetcar
     from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
-    from gatelogue_aggregator.sources.rail.marblerail_warp import MarbleRailWarp
+    from gatelogue_aggregator.sources.rail.marblerail_coord import MarbleRailCoord
     from gatelogue_aggregator.sources.rail.nflr import NFLR
     from gatelogue_aggregator.sources.rail.nflr_warp import NFLRWarp
     from gatelogue_aggregator.sources.rail.nrn import NRN
@@ -103,7 +103,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
         IntraSailWarp,
         LavaRail,
         MarbleRail,
-        MarbleRailWarp,
+        MarbleRailCoord,
         MetroDeEne,
         MRTTransit,
         NFLR,
