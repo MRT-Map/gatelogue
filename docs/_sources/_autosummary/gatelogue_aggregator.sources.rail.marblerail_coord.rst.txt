@@ -1,7 +1,7 @@
-gatelogue\_aggregator.sources.rail.marblerail\_warp
-===================================================
+gatelogue\_aggregator.sources.rail.marblerail\_coord
+====================================================
 
-.. automodule:: gatelogue_aggregator.sources.rail.marblerail_warp
+.. automodule:: gatelogue_aggregator.sources.rail.marblerail_coord
   
    
    
@@ -19,7 +19,7 @@ gatelogue\_aggregator.sources.rail.marblerail\_warp
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      MarbleRailWarp
+      MarbleRailCoord
    
    
 

@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.marblerail\_coord.MarbleRailCoord
+====================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.marblerail_coord
+
+.. autoclass:: MarbleRailCoord
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MarbleRailCoord.__init__
+      ~MarbleRailCoord.build
+      ~MarbleRailCoord.custom_routing
+      ~MarbleRailCoord.find_by_ref
+      ~MarbleRailCoord.find_by_ref_or_index
+      ~MarbleRailCoord.is_coord_source
+      ~MarbleRailCoord.report
+      ~MarbleRailCoord.reported_nodes
+      ~MarbleRailCoord.retrieve_from_cache
+      ~MarbleRailCoord.sanitise_strings
+      ~MarbleRailCoord.save_to_cache
+      ~MarbleRailCoord.source
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~MarbleRailCoord.file_path
+      ~MarbleRailCoord.name
+      ~MarbleRailCoord.priority
+      ~MarbleRailCoord.g
+   
+   
