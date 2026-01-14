@@ -88,6 +88,14 @@ class WikiMRT(RailSource):
                     if not line_code.startswith("Old")
                     else (None, None)
                 )
-                RailLineBuilder(self, line).connect(
-                    *stations, forward_label=forward_label, backward_label=backward_label
-                )
+                if line_code == "R":
+                    RailLineBuilder(self, line).connect(
+                        *stations[:5], forward_label=forward_label, backward_label=backward_label
+                    )
+                    RailLineBuilder(self, line).connect(
+                        *stations[7:], forward_label=forward_label, backward_label=backward_label
+                    )
+                else:
+                    RailLineBuilder(self, line).connect(
+                        *stations, forward_label=forward_label, backward_label=backward_label
+                    )
