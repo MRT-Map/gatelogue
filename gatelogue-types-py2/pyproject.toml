@@ -1,0 +1,94 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gatelogue-types"
+dynamic = ["version"]
+description = "Types for loading and reading Gatelogue data"
+readme = "../README.md"
+requires-python = ">=3.12"
+license = "GPL-3.0-only"
+keywords = ["gatelogue", "mrt", "minecart rapid transit"]
+authors = [
+  { name = "MRT Mapping Services" },
+  { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  # "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Games/Entertainment",
+  "Typing :: Typed",
+]
+dependencies = [
+  "msgspec~=0.19",
+]
+[optional-dependencies]
+requests = ["requests~=2.32"]
+niquests = ["niquests~=3.15"]
+httpx = ["httpx~=0.28"]
+urllib3 = ["urllib3~=2.5"]
+aiohttp = ["aiohttp~=3.13"]
+all = ["requests~=2.32", "niquests~=3.15", "httpx~=0.28", "urllib3~=2.5", "aiohttp~=3.13"]
+
+[project.urls]
+Documentation = "https://mrt-map.github.io/gatelogue/docs"
+Issues = "https://github.com/mrt-map/gatelogue/issues"
+Source = "https://github.com/mrt-map/gatelogue"
+Changelog = "https://github.com/MRT-Map/gatelogue/blob/main/CHANGELOG.md"
+Homepage = "https://mrt-map.github.io/gatelogue"
+
+[tool.hatch.version]
+path = "src/gatelogue_types/__about__.py"
+
+[tool.hatch.envs.default]
+extra-dependencies = ["gatelogue-types[all]"]
+#python = "3.12"
+
+[tool.hatch.envs.docs]
+extra-dependencies = [
+  "sphinx==9.1.0", 
+  "sphinx-codeautolink==0.17.5", 
+  "sphinx_rtd_theme==3.1.0", 
+]
+[tool.hatch.envs.docs.scripts]
+build = "cd docs; make html; cd .."
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+    "gatelogue-types[all]",
+    "pyrefly==0.48.2",
+]
+[tool.hatch.envs.types.scripts]
+check = "pyrefly check {args}"
+
+[tool.coverage.run]
+source_pkgs = ["gatelogue_types", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/gatelogue_types/__about__.py",
+]
+
+[tool.coverage.paths]
+gatelogue_types = ["src/gatelogue_types", "*/gatelogue-types/src/gatelogue_types"]
+tests = ["tests", "*/gatelogue-types/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.envs.hatch-test]
+default-args = ["tests/__init__.py"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13", "3.12"]
