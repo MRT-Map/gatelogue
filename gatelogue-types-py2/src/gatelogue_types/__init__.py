@@ -526,7 +526,7 @@ class BusBerth(Node):
         return (
             BusLine(self.conn, i)
             for (i,) in self.conn.execute(
-                'SELECT DISTINCT BusConnection.line FROM BusConnection '
+                "SELECT DISTINCT BusConnection.line FROM BusConnection "
                 'WHERE BusConnection."from" = :i OR BusConnection."to" = :i',
                 dict(i=self.i),
             ).fetchall()
@@ -558,6 +558,535 @@ class BusConnection(Node):
         )
         cur.execute(
             "INSERT INTO BusConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
+class SeaCompany(Node):
+    name = _Column[str]("name", "SeaCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO SeaCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO SeaCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM SeaLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[SeaStop]:
+        return (
+            SeaStop(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM SeaStop WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.i "
+                "FROM (SELECT i FROM SeaStop WHERE company = :i) A "
+                "LEFT JOIN SeaDock on A.i = SeaDock.stop",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaLine(Node):
+    code = _Column[str]("code", "SeaLine")
+    company = _FKColumn(SeaCompany, "company", "SeaLine")
+    name = _Column[str | None]("name", "SeaLine", sourced=True)
+    colour = _Column[str | None]("colour", "SeaLine", sourced=True)
+    mode = _Column[str | None]("mode", "SeaLine", sourced=True)
+    local = _Column[bool | None]("name", "SeaLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: SeaCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: str | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SeaLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO SeaLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.i "
+                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
+                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[SeaStop]:
+        return (
+            SeaStop(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.stop "
+                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
+                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaStop(LocatedNode):
+    codes = _SetAttr[str]("SeaStopCodes", "codes")
+    company = _FKColumn(SeaCompany, "company", "SeaStop")
+    name = _Column[str | None]("name", "SeaStop", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: SeaCompany,
+        name: str | None = None,
+        world: str | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SeaStop (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO SeaStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO SeaStopSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM SeaDock WHERE stop = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.i "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.i "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.line "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from" OR A.i = SeaConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaDock(Node):
+    code = _Column[str | None]("code", "SeaDock")
+    stop = _FKColumn(SeaStop, "stop", "SeaStop")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        stop: SeaStop,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO SeaDock (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
+        cur.execute("INSERT INTO SeaDockSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.line FROM SeaConnection "
+                'WHERE SeaConnection."from" = :i OR SeaConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaConnection(Node):
+    line = _FKColumn(SeaLine, "line", "SeaConnection")
+    from_ = _FKColumn(SeaDock, "from", "SeaConnection")
+    to = _FKColumn(SeaDock, "to", "SeaConnection")
+    direction = _Column[str | None]("direction", "SeaConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: SeaLine,
+        from_: SeaDock,
+        to: SeaDock,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO SeaConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO SeaConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
+class RailCompany(Node):
+    name = _Column[str]("name", "RailCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO RailCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO RailCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM RailLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stations(self) -> Iterator[RailStation]:
+        return (
+            RailStation(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM RailStation WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.i "
+                "FROM (SELECT i FROM RailStation WHERE company = :i) A "
+                "LEFT JOIN RailPlatform on A.i = RailPlatform.station",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailLine(Node):
+    code = _Column[str]("code", "RailLine")
+    company = _FKColumn(RailCompany, "company", "RailLine")
+    name = _Column[str | None]("name", "RailLine", sourced=True)
+    colour = _Column[str | None]("colour", "RailLine", sourced=True)
+    mode = _Column[str | None]("mode", "RailLine", sourced=True)
+    local = _Column[bool | None]("name", "RailLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: RailCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: str | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO RailLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.i "
+                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
+                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stations(self) -> Iterator[RailStation]:
+        return (
+            RailStation(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.station "
+                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
+                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailStation(LocatedNode):
+    codes = _SetAttr[str]("RailStationCodes", "codes")
+    company = _FKColumn(RailCompany, "company", "RailStation")
+    name = _Column[str | None]("name", "RailStation", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: RailCompany,
+        name: str | None = None,
+        world: str | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailStation (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO RailStationCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO RailStationSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM RailPlatform WHERE station = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.i "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.i "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.line "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."from" OR A.i = RailConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailPlatform(Node):
+    code = _Column[str | None]("code", "RailPlatform")
+    station = _FKColumn(RailStation, "station", "RailStation")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        station: RailStation,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailPlatform (i, code, station) VALUES (:i, :code, :station)",
+            dict(i=i, code=code, station=station.i),
+        )
+        cur.execute("INSERT INTO RailPlatformSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.line FROM RailConnection "
+                'WHERE RailConnection."from" = :i OR RailConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailConnection(Node):
+    line = _FKColumn(RailLine, "line", "RailConnection")
+    from_ = _FKColumn(RailPlatform, "from", "RailConnection")
+    to = _FKColumn(RailPlatform, "to", "RailConnection")
+    direction = _Column[str | None]("direction", "RailConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: RailLine,
+        from_: RailPlatform,
+        to: RailPlatform,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO RailConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO RailConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
             dict(i=i, source=src, direction=direction is not None),
         )
         return cls(conn, i)
