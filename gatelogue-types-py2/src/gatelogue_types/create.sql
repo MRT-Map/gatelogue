@@ -62,19 +62,19 @@ CREATE TABLE AirAirport
 ) STRICT;
 CREATE TABLE AirAirportNames
 (
-    i    INTEGER NOT NULL REFERENCES AirAirline (i),
+    i    INTEGER NOT NULL REFERENCES AirAirport (i),
     name TEXT    NOT NULL,
     UNIQUE (i, name)
 ) STRICT;
 CREATE TABLE AirAirportModes
 (
-    i    INTEGER NOT NULL REFERENCES AirAirline (i),
+    i    INTEGER NOT NULL REFERENCES AirAirport (i),
     mode TEXT    NOT NULL CHECK ( mode IN ('helicopter', 'seaplane', 'warp plane', 'traincarts plane') ),
     UNIQUE (i, mode)
 ) STRICT;
 CREATE TABLE AirAirportSource
 (
-    i      INTEGER NOT NULL REFERENCES AirAirline (i),
+    i      INTEGER NOT NULL REFERENCES AirAirport (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
     names  INTEGER NOT NULL CHECK ( names IN (0, 1) ),
     link   INTEGER NOT NULL CHECK ( link IN (0, 1) ),
