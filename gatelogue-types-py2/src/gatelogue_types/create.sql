@@ -166,7 +166,7 @@ CREATE TABLE BusStopCodes
 ) STRICT;
 CREATE TABLE BusStopSource
 (
-    i      INTEGER NOT NULL REFERENCES BusLine (i),
+    i      INTEGER NOT NULL REFERENCES BusStop (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
     name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
     PRIMARY KEY (i, source)
@@ -196,7 +196,7 @@ CREATE TABLE BusConnection
 ) STRICT;
 CREATE TABLE BusConnectionSource
 (
-    i         INTEGER NOT NULL REFERENCES BusLine (i),
+    i         INTEGER NOT NULL REFERENCES BusConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
     PRIMARY KEY (i, source)
@@ -250,7 +250,7 @@ CREATE TABLE SeaStopCodes
 ) STRICT;
 CREATE TABLE SeaStopSource
 (
-    i      INTEGER NOT NULL REFERENCES SeaLine (i),
+    i      INTEGER NOT NULL REFERENCES SeaStop (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
     name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
     PRIMARY KEY (i, source)
@@ -280,7 +280,7 @@ CREATE TABLE SeaConnection
 ) STRICT;
 CREATE TABLE SeaConnectionSource
 (
-    i         INTEGER NOT NULL REFERENCES SeaLine (i),
+    i         INTEGER NOT NULL REFERENCES SeaConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
     PRIMARY KEY (i, source)
@@ -334,7 +334,7 @@ CREATE TABLE RailStationCodes
 ) STRICT;
 CREATE TABLE RailStationSource
 (
-    i      INTEGER NOT NULL REFERENCES RailLine (i),
+    i      INTEGER NOT NULL REFERENCES RailStation (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
     name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
     PRIMARY KEY (i, source)
@@ -364,7 +364,7 @@ CREATE TABLE RailConnection
 ) STRICT;
 CREATE TABLE RailConnectionSource
 (
-    i         INTEGER NOT NULL REFERENCES RailLine (i),
+    i         INTEGER NOT NULL REFERENCES RailConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
     PRIMARY KEY (i, source)

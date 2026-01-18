@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Self, LiteralString, Iterator, Iterable, Literal
 
 
-
 class GD:
     def __init__(self):
         sqlite3.threadsafety = 3
@@ -154,24 +153,22 @@ class AirAirline(Node):
     def flights(self) -> Iterator[AirFlight]:
         return (
             AirFlight(self.conn, i)
-            for i in self.conn.execute("SELECT i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
         )
 
     @property
     def gates(self) -> Iterator[AirGate]:
         return (
             AirGate(self.conn, i)
-            for i in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i", dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i", dict(i=self.i)).fetchall()
         )
 
     @property
     def airports(self) -> Iterator[AirAirport]:
         return (
             AirAirport(self.conn, i)
-            for i in self.conn.execute(
-                "SELECT DISTINCT AirAirport.i "
-                "FROM AirGate LEFT JOIN AirAirport on AirAirport.i = AirGate.airport "
-                "WHERE AirGate.airline = :i",
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT airport FROM AirGate WHERE airline = :i",
                 dict(i=self.i),
             ).fetchall()
         )
@@ -215,7 +212,7 @@ class AirAirport(LocatedNode):
     def gates(self) -> Iterator[AirGate]:
         return (
             AirGate(self.conn, i)
-            for i in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
         )
 
 
@@ -256,14 +253,14 @@ class AirGate(Node):
     def flights_from_here(self) -> Iterator[AirFlight]:
         return (
             AirFlight(self.conn, i)
-            for i in self.conn.execute('SELECT i FROM AirFlight WHERE "from" = :i', dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "from" = :i', dict(i=self.i)).fetchall()
         )
 
     @property
     def flights_to_here(self) -> Iterator[AirFlight]:
         return (
             AirFlight(self.conn, i)
-            for i in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
         )
 
 
@@ -303,9 +300,268 @@ class AirFlight(Node):
         return cls(conn, i)
 
 
+class BusCompany(Node):
+    name = _Column[str]("name", "BusCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO BusCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO BusCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM BusLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[BusStop]:
+        return (
+            BusStop(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM BusStop WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.i "
+                "FROM (SELECT i FROM BusStop WHERE company = :i) A "
+                "LEFT JOIN BusBerth on A.i = BusBerth.stop",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusLine(Node):
+    code = _Column[str]("code", "BusLine")
+    company = _FKColumn(BusCompany, "company", "BusLine")
+    name = _Column[str | None]("name", "BusLine", sourced=True)
+    colour = _Column[str | None]("colour", "BusLine", sourced=True)
+    mode = _Column[str | None]("mode", "BusLine", sourced=True)
+    local = _Column[bool | None]("name", "BusLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: BusCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: str | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO BusLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO BusLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.i "
+                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
+                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[BusStop]:
+        return (
+            BusStop(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.stop "
+                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
+                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusStop(LocatedNode):
+    codes = _SetAttr[str]("BusStopCodes", "codes")
+    company = _FKColumn(BusCompany, "company", "BusStop")
+    name = _Column[str | None]("name", "BusStop", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: BusCompany,
+        name: str | None = None,
+        world: str | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO BusStop (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO BusStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO BusStopSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM BusBerth WHERE stop = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.i "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.i "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.line "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."from" OR A.i = BusConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusBerth(Node):
+    code = _Column[str | None]("code", "BusBerth")
+    stop = _FKColumn(BusStop, "stop", "BusStop")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        stop: BusStop,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO BusBerth (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
+        cur.execute("INSERT INTO BusBerthSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT DISTINCT BusConnection.line FROM BusConnection '
+                'WHERE BusConnection."from" = :i OR BusConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusConnection(Node):
+    line = _FKColumn(BusLine, "line", "BusConnection")
+    from_ = _FKColumn(BusBerth, "from", "BusConnection")
+    to = _FKColumn(BusBerth, "to", "BusConnection")
+    direction = _Column[str | None]("direction", "BusConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: BusLine,
+        from_: BusBerth,
+        to: BusBerth,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO BusConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO BusConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
 if __name__ == "__main__":
     gd = GD.create(["Temp"])
-    airline = AirAirline.create(gd.conn, 0, name="a")
-    airport = AirAirport.create(gd.conn, 0, code="AAA")
-    gate = AirGate.create(gd.conn, 0, airport=airport, code="A")
-    flight = AirFlight.create(gd.conn, 0, airline=airline, code="B", from_=gate, to=gate)
