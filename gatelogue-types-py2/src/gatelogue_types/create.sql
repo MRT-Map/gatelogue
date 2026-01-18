@@ -50,7 +50,6 @@ CREATE TABLE AirAirlineSource
 (
     i      INTEGER NOT NULL REFERENCES AirAirline (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
     link   INTEGER NOT NULL CHECK ( link IN (0, 1) ),
     PRIMARY KEY (i, source)
 ) STRICT;
