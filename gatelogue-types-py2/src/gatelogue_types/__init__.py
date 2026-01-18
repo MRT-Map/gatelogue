@@ -1092,5 +1092,57 @@ class RailConnection(Node):
         return cls(conn, i)
 
 
+class SpawnWarp(LocatedNode):
+    name = _Column[str]("name", "SpawnWarp")
+    warp_type = _Column[str]("warpType", "SpawnWarp")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        name: str,
+        warp_type: str,
+        world: str | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SpawnWarp (i, name, warpType) VALUES (:i, :name, :warp_type)",
+            dict(i=i, name=name, warp_type=warp_type),
+        )
+        return cls(conn, i)
+
+
+class Town(LocatedNode):
+    name = _Column[str]("name", "Town")
+    rank = _Column[str]("rank", "Town")
+    mayor = _Column[str]("mayor", "Town")
+    deputy_mayor = _Column[str | None]("deputyMayor", "Town")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        name: str,
+        rank: str,
+        mayor: str,
+        deputy_mayor: str | None,
+        world: str | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Town (i, name, rank, mayor, deputyMayor) VALUES (:i, :name, :rank, :mayor, :deputy_mayor)",
+            dict(i=i, name=name, rank=rank, mayor=mayor, deputy_mayor=deputy_mayor),
+        )
+        return cls(conn, i)
+
+
 if __name__ == "__main__":
     gd = GD.create(["Temp"])
