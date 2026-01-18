@@ -43,7 +43,7 @@ class _Column[T]:
             )
 
 
-class _FKColumn[T: Node]:
+class _FKColumn[T: Node | None]:
     def __init__(self, ty: type[T], name: LiteralString, table: LiteralString, sourced: bool = False):
         self.name = name
         self.table = table
@@ -222,7 +222,7 @@ class AirAirport(LocatedNode):
 class AirGate(Node):
     code = _Column[str | None]("code", "AirGate")
     airport = _FKColumn(AirAirport, "airport", "AirGate")
-    airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirAirline")
+    airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate")
     size = _Column[str | None]("size", "AirGate")
     mode = _Column[str | None]("mode", "AirGate")
 
