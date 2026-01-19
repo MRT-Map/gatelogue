@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Self, LiteralString, Iterator, Iterable, Literal
+from typing import Self, LiteralString, Iterator, Iterable
 
 
 class GD:
@@ -29,8 +29,9 @@ class _Column[T]:
         self.sourced = sourced
 
     def __get__(self, instance: Node, owner: type[Node]) -> T:
-        cur = instance.conn.cursor()
-        return cur.execute(f"SELECT {self.name} FROM {self.table} WHERE i = :i", dict(i=instance.i)).fetchone()[0]
+        return instance.conn.execute(
+            f"SELECT {self.name} FROM {self.table} WHERE i = :i", dict(i=instance.i)
+        ).fetchone()[0]
 
     def __set__(self, instance: Node, value: T):
         cur = instance.conn.cursor()
@@ -65,10 +66,9 @@ class _SetAttr[T]:
         self.table_column = table_column
 
     def __get__(self, instance: Node, owner: type[Node]) -> set[T]:
-        cur = instance.conn.cursor()
         return {
             v
-            for (v,) in cur.execute(
+            for (v,) in instance.conn.execute(
                 f"SELECT {self.table_column} FROM {self.table} WHERE i = :i", dict(i=instance.i)
             ).fetchall()
         }
@@ -132,6 +132,102 @@ class LocatedNode(Node):
             dict(i=i, source=src, world=world is not None, coordinates=coordinates is not None),
         )
         return i
+
+    @property
+    def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
+        return (
+            (LocatedNode(self.conn, j if self.i == i else i), Proximity(self.conn, i, j))
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
+    @property
+    def shared_facility(self) -> Iterable[LocatedNode]:
+        return (
+            LocatedNode(self.conn, j if self.i == i else i)
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
+
+class Proximity:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @property
+    def distance(self):
+        return self.conn.execute(
+            f"SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @distance.setter
+    def distance(self, value: float):
+        cur = self.conn.cursor()
+        cur.execute(
+            f"UPDATE Proximity set distance = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @property
+    def explicit(self):
+        return self.conn.execute(
+            f"SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @explicit.setter
+    def explicit(self, value: bool):
+        cur = self.conn.cursor()
+        cur.execute(
+            f"UPDATE Proximity set explicit = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        srcs: Iterable[int],
+        *,
+        node1: LocatedNode,
+        node2: LocatedNode,
+        distance: float,
+        explicit: bool = False,
+    ) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit)",
+            dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
+        )
+        cur.execute(
+            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source )",
+            [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
+        )
+        return cls(conn, node1, node2)
+
+
+class SharedFacility:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, *, node1: LocatedNode, node2: LocatedNode) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2)", dict(node1=node1.i, node2=node2.i)
+        )
+        return cls(conn, node1, node2)
 
 
 class AirAirline(Node):
