@@ -34,18 +34,32 @@ class SharedFacilitySource(Source):
 
         nonexistent_companies = set()
         for entry in file:
-            station1 = next((a for a in self.g.nodes() if isinstance(a, RailStation)
-                             and (
-                                     (entry.code1 is not None and entry.code1 in a.codes)
-                                     or (a.name is not None and a.name.v.strip() == entry.s1)
-                             )
-                             and a.get_one(self, RailCompany).name == entry.c1), None)
-            station2 = next((a for a in self.g.nodes() if isinstance(a, RailStation)
-                             and (
-                                     (entry.code2 is not None and entry.code2 in a.codes)
-                                     or (a.name is not None and a.name.v.strip() == entry.s2)
-                             )
-                             and a.get_one(self, RailCompany).name == entry.c2), None)
+            station1 = next(
+                (
+                    a
+                    for a in self.g.nodes()
+                    if isinstance(a, RailStation)
+                    and (
+                        (entry.code1 is not None and entry.code1 in a.codes)
+                        or (a.name is not None and a.name.v.strip() == entry.s1)
+                    )
+                    and a.get_one(self, RailCompany).name == entry.c1
+                ),
+                None,
+            )
+            station2 = next(
+                (
+                    a
+                    for a in self.g.nodes()
+                    if isinstance(a, RailStation)
+                    and (
+                        (entry.code2 is not None and entry.code2 in a.codes)
+                        or (a.name is not None and a.name.v.strip() == entry.s2)
+                    )
+                    and a.get_one(self, RailCompany).name == entry.c2
+                ),
+                None,
+            )
 
             if station1 is None:
                 if entry.c1 in nonexistent_companies:

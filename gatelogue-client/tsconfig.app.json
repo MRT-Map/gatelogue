@@ -12,7 +12,7 @@
       "@/*": ["./src/*"]
     },
     "lib": ["esnext", "DOM", "DOM.Iterable"],
-    
+
     "noPropertyAccessFromIndexSignature": false
   }
 }

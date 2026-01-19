@@ -23,7 +23,9 @@ class MarbleRail(RailSource):
             line_name = line_table.caption.string.split("(")[0].strip()
             if line_name not in ("Meridia Line",):
                 continue
-            line = RailLine.new(self, code=line_name, name=line_name, company=company, mode="traincarts", colour="#cc00cc")
+            line = RailLine.new(
+                self, code=line_name, name=line_name, company=company, mode="traincarts", colour="#cc00cc"
+            )
 
             stations = []
             for tr in line_table.find_all("tr"):

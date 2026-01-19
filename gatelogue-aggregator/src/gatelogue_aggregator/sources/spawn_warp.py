@@ -69,7 +69,7 @@ class SpawnWarps(SpawnWarpSource):
                 "JN19",
                 "JS63",
                 "KN22",
-                "K0"
+                "K0",
                 "LW49",
                 "LE22",
                 "M1",
@@ -117,7 +117,7 @@ class SpawnWarps(SpawnWarpSource):
                 ("tc_refuge", "Refuge Streetcar"),
                 ("tc_serena", "Serena Metro (ticket required)"),
                 ("tc_treebark", "Treebark Gondola"),
-            },  
+            },
             "misc": {
                 ("CCHP", "Central City Heliport"),
                 ("CCTerminal", "Central City Warp Rail Terminal"),

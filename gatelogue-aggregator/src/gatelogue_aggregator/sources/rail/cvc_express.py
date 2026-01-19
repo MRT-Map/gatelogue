@@ -33,4 +33,3 @@ class CVCExpress(RailSource):
                 continue
 
             RailLineBuilder(self, line).connect(*stations)
-

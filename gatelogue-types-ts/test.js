@@ -1,4 +1,4 @@
-import {GD} from "./dist/lib.js";
+import { GD } from "./dist/lib.js";
 
 await GD.get();
 await GD.getNoSources();

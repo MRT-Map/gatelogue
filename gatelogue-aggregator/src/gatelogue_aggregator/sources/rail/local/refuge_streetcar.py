@@ -20,16 +20,10 @@ class RefugeStreetcar(Yaml2Source, RailSource):
     def custom_routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
         if line_node.code == "North/South Loop":
             self.B(self, line_node).connect(
-                get_stn(stations, "West Train Station"),
-                stations[0],
-                forward_label="Anticlockwise",
-                one_way=True
+                get_stn(stations, "West Train Station"), stations[0], forward_label="Anticlockwise", one_way=True
             )
             self.B(self, line_node).connect(
-                *stations,
-                between=(None, "West Train Station"),
-                forward_label="Anticlockwise",
-                one_way=True
+                *stations, between=(None, "West Train Station"), forward_label="Anticlockwise", one_way=True
             )
             self.B(self, line_node).connect(
                 *stations,

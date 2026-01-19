@@ -87,7 +87,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                     if file.mode is not None
                     else None
                 )
-            for station_list in (line.stations if isinstance(line.stations[0], list) else (line.stations,)):
+            for station_list in line.stations if isinstance(line.stations[0], list) else (line.stations,):
                 stations = [
                     self.S.new(
                         self,

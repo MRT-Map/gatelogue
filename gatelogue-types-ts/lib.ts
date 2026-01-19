@@ -35,7 +35,7 @@
 
 export type StringID<_ extends Node> = string;
 export type IntID<_ extends Node> = number;
-export type ID<T extends Node> = StringID<T> | IntID<T>
+export type ID<T extends Node> = StringID<T> | IntID<T>;
 export type World = "Old" | "New" | "Space";
 export type RailMode = "warp" | "cart" | "traincarts" | "vehicles";
 export type SeaMode = "ferry" | "cruise";
@@ -44,7 +44,12 @@ export type PlaneMode =
   | "seaplane"
   | "warp plane"
   | "traincarts plane";
-export type WarpType = "premier" | "terminus" | "traincarts" | "portal" | "misc";
+export type WarpType =
+  | "premier"
+  | "terminus"
+  | "traincarts"
+  | "portal"
+  | "misc";
 export type Rank =
   | "Unranked"
   | "Councillor"
@@ -239,7 +244,9 @@ export class GD<S extends boolean = true> {
   }
 
   node(id: ID<Node>): Node | undefined {
-    return this.data.nodes[typeof id === "string" ? id : id.toString()] as never;
+    return this.data.nodes[
+      typeof id === "string" ? id : id.toString()
+    ] as never;
   }
   get nodes(): Node[] {
     return Object.values(this.data.nodes);

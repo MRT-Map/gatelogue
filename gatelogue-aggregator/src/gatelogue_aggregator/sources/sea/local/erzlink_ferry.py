@@ -16,5 +16,3 @@ class ErzLinkFerry(Yaml2Source, SeaSource):
     L = SeaLine
     S = SeaStop
     B = SeaLineBuilder
-
-         
