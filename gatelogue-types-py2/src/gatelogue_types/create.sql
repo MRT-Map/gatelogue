@@ -76,10 +76,24 @@ CREATE TABLE AirAirportSource
 (
     i      INTEGER NOT NULL REFERENCES AirAirport (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    names  INTEGER NOT NULL CHECK ( names IN (0, 1) ),
     link   INTEGER NOT NULL CHECK ( link IN (0, 1) ),
-    modes  INTEGER NOT NULL CHECK ( modes IN (0, 1) ),
     PRIMARY KEY (i, source)
+) STRICT;
+CREATE TABLE AirAirportNamesSource
+(
+    i INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    source INTEGER NOT NULL REFERENCES Source (priority),
+    FOREIGN KEY (i, name) REFERENCES AirAirportNames (i, name),
+    UNIQUE (i, name, source)
+) STRICT;
+CREATE TABLE AirAirportModesSource
+(
+    i INTEGER NOT NULL,
+    mode TEXT NOT NULL,
+    source INTEGER NOT NULL REFERENCES Source (priority),
+    FOREIGN KEY (i, mode) REFERENCES AirAirportModes (i, mode),
+    UNIQUE (i, mode, source)
 ) STRICT;
 
 CREATE TABLE AirFlight
@@ -176,8 +190,7 @@ CREATE TABLE BusBerth
 (
     i    INTEGER PRIMARY KEY REFERENCES Node (i),
     code TEXT,
-    stop INTEGER NOT NULL REFERENCES BusStop
-
+    stop INTEGER NOT NULL REFERENCES BusStop (i)
 ) STRICT;
 CREATE TABLE BusBerthSource
 (
@@ -260,7 +273,7 @@ CREATE TABLE SeaDock
 (
     i    INTEGER PRIMARY KEY REFERENCES Node (i),
     code TEXT,
-    stop INTEGER NOT NULL REFERENCES SeaStop
+    stop INTEGER NOT NULL REFERENCES SeaStop (i)
 
 ) STRICT;
 CREATE TABLE SeaDockSource
@@ -344,7 +357,7 @@ CREATE TABLE RailPlatform
 (
     i       INTEGER PRIMARY KEY REFERENCES Node (i),
     code    TEXT,
-    station INTEGER NOT NULL REFERENCES RailStation
+    station INTEGER NOT NULL REFERENCES RailStation (i)
 
 ) STRICT;
 CREATE TABLE RailPlatformSource

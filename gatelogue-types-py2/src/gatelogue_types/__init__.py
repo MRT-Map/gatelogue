@@ -38,7 +38,7 @@ class _Column[T]:
         cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
         if self.sourced:
             cur.execute(
-                f"UPDATE {self.table + 'Sourced'} SET {self.name} = :bool WHERE i = :i AND source = :source",
+                f"UPDATE {self.table + 'Source'} SET {self.name} = :bool WHERE i = :i AND source = :source",
                 dict(bool=value is not None, i=instance.i, source=instance.source),
             )
 
@@ -61,9 +61,10 @@ class _FKColumn[T: Node | None]:
 
 
 class _SetAttr[T]:
-    def __init__(self, table: LiteralString, table_column: LiteralString):
+    def __init__(self, table: LiteralString, table_column: LiteralString, sourced: bool = False):
         self.table = table
         self.table_column = table_column
+        self.sourced = sourced
 
     def __get__(self, instance: Node, owner: type[Node]) -> set[T]:
         return {
@@ -73,6 +74,44 @@ class _SetAttr[T]:
             ).fetchall()
         }
 
+    def __set__(self, instance: Node, values: set[T]):
+        cur = instance.conn.cursor()
+        if self.sourced:
+            existing_values = {
+                v
+                for (v,) in cur.execute(
+                    f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source = :source",
+                    dict(i=instance.i, source=instance.source),
+                ).fetchall()
+            }
+            for new_value in values - existing_values:
+                cur.execute(
+                    f"INSERT OR IGNORE INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                    dict(i=instance.i, value=new_value),
+                )
+            for old_value in existing_values - values:
+                cur.execute(
+                    f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source = :source",
+                    dict(i=instance.i, value=old_value, source=instance.source),
+                )
+                if (
+                    cur.execute(
+                        f"SELECT count(i) FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value",
+                        dict(i=instance.i, value=old_value),
+                    ).fetchone()[0]
+                    == 0
+                ):
+                    cur.execute(
+                        f"DELETE FROM {self.table} WHERE i = :i AND {self.table_column} = :value",
+                        dict(i=instance.i, value=old_value),
+                    )
+        else:
+            cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))
+            cur.executemany(
+                f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                [dict(i=instance.i, value=value) for value in values],
+            )
+
 
 class Node:
     def __init__(self, conn: sqlite3.Connection, i: int):
@@ -80,7 +119,18 @@ class Node:
         self.i = i
 
     type = _Column[str]("type", "Node")
-    source = _Column[int]("source", "NodeSource")
+    # source = _Column[int]("source", "NodeSource")
+    sources = _SetAttr[int]("NodeSource", "source")
+
+    @property
+    def source(self) -> int:
+        sources = self.sources
+        assert len(sources) == 1, "Expected only one source"
+        return next(iter(sources))
+
+    @source.setter
+    def source(self, value: int):
+        self.sources = {value}
 
     @classmethod
     def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
@@ -272,9 +322,9 @@ class AirAirline(Node):
 
 class AirAirport(LocatedNode):
     code = _Column[str]("code", "AirAirport")
-    names = _SetAttr[str]("AirAirportNames", "name")
+    names = _SetAttr[str]("AirAirportNames", "name", sourced=True)
     link = _Column[str | None]("link", "AirAirport", sourced=True)
-    modes = _SetAttr[str]("AirAirportModes", "mode")
+    modes = _SetAttr[str]("AirAirportModes", "mode", sourced=True)
 
     @classmethod
     def create(
@@ -299,8 +349,14 @@ class AirAirport(LocatedNode):
         cur.executemany("INSERT INTO AirAirportNames (i, name) VALUES (?, ?)", [(i, name) for name in names])
         cur.executemany("INSERT INTO AirAirportModes (i, mode) VALUES (?, ?)", [(i, mode) for mode in modes])
         cur.execute(
-            "INSERT INTO AirAirportSource (i, source, names, link, modes) VALUES (:i, :source, :names, :link, :modes)",
-            dict(i=i, source=src, names=len(names) > 0, link=link is not None, modes=len(modes) > 0),
+            "INSERT INTO AirAirportSource (i, source, link) VALUES (:i, :source, :link)",
+            dict(i=i, source=src, link=link is not None),
+        )
+        cur.executemany(
+            "INSERT INTO AirAirportNamesSource (i, name, source) VALUES (?, ?, ?)", [(i, name, src) for name in names]
+        )
+        cur.executemany(
+            "INSERT INTO AirAirportModesSource (i, mode, source) VALUES (?, ?, ?)", [(i, mode, src) for mode in modes]
         )
         return cls(conn, i)
 
@@ -1239,6 +1295,3 @@ class Town(LocatedNode):
         )
         return cls(conn, i)
 
-
-if __name__ == "__main__":
-    gd = GD.create(["Temp"])
