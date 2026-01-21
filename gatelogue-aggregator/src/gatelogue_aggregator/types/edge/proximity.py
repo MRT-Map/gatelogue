@@ -12,7 +12,7 @@ class ProximitySource(Source):
     priority = 0
 
     def update(self):
-        from gatelogue_aggregator.types.node.air import AirAirport
+        from gatelogue_aggregator.types.node._air import AirAirport
         from gatelogue_aggregator.types.node.base import LocatedNode
 
         processed = []

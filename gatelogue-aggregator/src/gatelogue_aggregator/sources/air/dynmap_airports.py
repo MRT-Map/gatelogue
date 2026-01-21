@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, override
 import msgspec
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.types.node.air import AirAirport, AirSource
+from gatelogue_aggregator.types.node._air import AirAirport, AirSource
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config

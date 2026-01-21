@@ -41,6 +41,6 @@ def progress_bar(level: str, description: str):
         yield
     else:
         t = PROGRESS.add_task(level + description, total=None)
-        yield
+        yield t
         PROGRESS.remove_task(t)
     rich.print(level + description + " done")

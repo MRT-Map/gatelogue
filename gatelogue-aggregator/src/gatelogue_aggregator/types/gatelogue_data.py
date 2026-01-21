@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, Self
 
 import gatelogue_types as gt
@@ -7,109 +8,79 @@ import rich
 import rustworkx as rx
 from rustworkx.visualization.graphviz import graphviz_draw
 
-from gatelogue_aggregator.logging import INFO1, INFO2, RESULT, track
+from gatelogue_aggregator.logging import INFO1, INFO2, RESULT, track, progress_bar
+from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.edge.proximity import ProximitySource
 from gatelogue_aggregator.types.edge.shared_facility import SharedFacility, SharedFacilitySource
-from gatelogue_aggregator.types.node.air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.types.node._air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
 from gatelogue_aggregator.types.node.base import Node
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
 from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
 from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
 from gatelogue_aggregator.types.node.town import Town, TownSource
-from gatelogue_aggregator.types.source import Sourced
+from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
     from pathlib import Path
 
 
-class GatelogueData(
-    AirSource, RailSource, SeaSource, BusSource, TownSource, SpawnWarpSource, ProximitySource, SharedFacilitySource
-):
-    name = "Gatelogue"
-    priority = 0
+class GatelogueData:
+    def __init__(self, config: Config, sources: Iterable[type[Source]], database=":memory:"):
+        self.config = config
+        for i, source in enumerate(sources):
+            source.priority = i
+        self.gd = gt.GD.create([a.__name__ for a in sources], database)
 
-    @classmethod
-    def from_sources(cls, sources: Iterable[AirSource | RailSource | SeaSource | BusSource | TownSource]) -> Self:
-        self = cls.__new__(cls)
-        self.g = rx.PyGraph()
-
-        for source in track(sources, INFO1, description="Merging sources"):
-            source.sanitise_strings()
-            self.g = rx.graph_union(self.g, source.g)
+        with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
+            list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
 
         prev_length: int | None = None
 
         for pass_ in range(1, 10):
-            processed: dict[type[Node], dict[str | None, list[Node]]] = {}
-            to_merge: list[tuple[Node, Node]] = []
-            for i in track(
-                self.g.node_indices(),
+            # processed: dict[type[Node], dict[str | None, list[Node]]] = {}
+            # to_merge: list[tuple[Node, Node]] = []
+            merged: set[int] = set()
+            for n in track(
+                self.gd.nodes(),
                 INFO2,
-                description=f"Finding equivalent nodes (pass {pass_})",
-                nonlinear=True,
+                description=f"Merging equivalent nodes (pass {pass_})",
             ):
-                n = self.g[i]
-                n.i = i
-                key = n.merge_key(self)
-                ty = type(n)
-                filtered_processed = processed.get(ty, {}).get(key, [])
-                if (equiv := next((a for a in filtered_processed if n.equivalent(self, a)), None)) is not None:
-                    to_merge.append((equiv, n))
+                if n.i in merged:
                     continue
-                processed.setdefault(ty, {}).setdefault(key, []).append(n)
-
-            for equiv, n in track(to_merge, INFO2, description=f"Merging equivalent nodes (pass {pass_})"):
-                equiv.merge(self, n)
-            to_merge.clear()
+                for equiv in n.equivalent_nodes():
+                    n.merge(equiv)
+                    merged.add(equiv.i)
 
             for n in track(
-                [a for a in self.g.nodes() if isinstance(a, AirAirport)],
+                self.gd.nodes(gt.AirAirport),
                 INFO2,
                 description=f"Merging airports (pass {pass_})",
             ):
+                if not n.code.startswith("NOCODE"):
+                    continue
                 if (equiv := n.find_equiv_from_name(self)) is not None:
                     rich.print(
                         RESULT
                         + f"AirAirport of name `{n.names}` found code `{equiv.code}` with similar name `{equiv.names}`"
                     )
-                    equiv.merge(self, n)
+                    n.code = equiv.code
+                    equiv.merge(n)
 
-            if self.g.num_nodes() == prev_length:
+            if len(self.gd) == prev_length:
                 break
-            prev_length = self.g.num_nodes()
+            prev_length = len(self.gd)
 
-        edges: dict[tuple[float, float], list[Sourced[Any]]] = {}
-        for i in track(self.g.edge_indices(), INFO2, description="Merging edges"):
-            u, v = self.g.get_edge_endpoints_by_index(i)
-            k = self.g.get_edge_data_by_index(i)
-
-            edge_list = edges.setdefault((u, v), [])
-            if (existing := next((a for a in edge_list if a.v == k.v), None)) is not None:
-                existing.source(k)
-                self.g.remove_edge_from_index(i)
-            else:
-                edge_list.append(k)
-
-        self.update()
-        return self
-
-    def update(self):
         AirSource.update(self)
         ProximitySource.update(self)
         SharedFacilitySource.update(self)
 
     def report(self):
         rich.print(INFO1 + "Below is a final report of all nodes collected")
-        for node in self.g.nodes():
+        for node in self.gd.nodes():
             node.report(self)
         rich.print(INFO1 + "End of report")
-
-    def export(self) -> gt.GatelogueData:
-        return gt.GatelogueData(
-            nodes={a.i: a.export(self) for a in track(self.g.nodes(), INFO1, description="Exporting")}
-        )
 
     def graph(self, path: Path):
         g = self.g.copy()

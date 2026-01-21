@@ -30,12 +30,10 @@ classifiers = [
 dependencies = [
   "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
   "click==8.3.1",
-  "msgspec==0.20.0",
   "pandas==2.3.3",
   "rich==14.2.0",
   "cloudscraper==1.2.71",
   "BeautifulSoup4==4.14.3",
-  "rustworkx==0.17.1",
   "pydot==4.0.1",
   "pillow==12.1.0",
   "pyyaml==6.0.3"
