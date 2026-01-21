@@ -5,13 +5,15 @@ import datetime
 import sqlite3
 import urllib.request
 from pathlib import Path
-from typing import Self, LiteralString, Iterator, Iterable, Literal, TYPE_CHECKING
+from typing import Self, LiteralString, Iterator, Iterable, Literal, TYPE_CHECKING, ParamSpec
 
 from gatelogue_types.__about__ import __data_version__
 
 if TYPE_CHECKING:
     # pyrefly: ignore [missing-import]
     import aiohttp
+
+URL: str = "???"
 
 class GD:
     def __init__(self):
@@ -50,7 +52,7 @@ class GD:
     def get(cls, *args, **kwargs) -> Self:
         self = cls()
         data = cls._get_url(
-            "???", *args, **kwargs
+            URL, *args, **kwargs
         )
         self.conn.deserialize(data)
         return self
@@ -61,7 +63,7 @@ class GD:
         import aiohttp
 
         session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
-        async with session as session, session.get(url) as response:  # pyrefly: ignore [missing-attribute]
+        async with session as session, session.get(URL) as response:  # pyrefly: ignore [missing-attribute]
             self = cls()
             data = response.bytes()
             self.conn.deserialize(data)
@@ -69,14 +71,17 @@ class GD:
 
     @property
     def timestamp(self):
+        """Time that the aggregation of the data was done"""
         return self.conn.execute("SELECT timestamp FROM Metadata").fetchone()[0]
 
     @property
     def version(self):
+        """Version number of the database format"""
         return self.conn.execute("SELECT version FROM Metadata").fetchone()[0]
 
     @classmethod
     def create(cls, sources: list[str]) -> Self:
+        """Create a new Gatelogue database"""
         self = cls()
         cur = self.conn.cursor()
         with open(Path(__file__).parent / "create.sql") as f:
@@ -88,6 +93,9 @@ class GD:
         )
         self.conn.commit()
         return self
+
+    def get_node[T: Node](self, ty: type[T], i: int):
+        return ty(self.conn, i)
 
 
 class _Column[T]:
@@ -194,10 +202,12 @@ class Node:
     def __init__(self, conn: sqlite3.Connection, i: int):
         self.conn = conn
         self.i = i
+        """The ID of the node"""
 
     type = _Column[str]("type", "Node")
-    # source = _Column[int]("source", "NodeSource")
+    """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
+    """All sources that prove the node's existence"""
 
     @property
     def source(self) -> int:
@@ -219,12 +229,16 @@ class Node:
 
 
 class LocatedNode(Node):
-    world = _Column[str | None]("world", "LocatedNode")
-    _x = _Column[int | None]("x", "LocatedNode")
-    _y = _Column[int | None]("y", "LocatedNode")
+    world = _Column[str | None]("world", "LocatedNode", sourced=True)
+    """The world the node is in"""
+    _x = _Column[int | None]("x", "LocatedNode", sourced=True)
+    """The x-coordinate of the node"""
+    _y = _Column[int | None]("y", "LocatedNode", sourced=True)
+    """The y-coordinate of the node"""
 
     @property
     def coordinates(self) -> tuple[int, int] | None:
+        """The coordinates of the object"""
         if (x := self._x) is None:
             return None
         if (y := self._y) is None:
@@ -262,6 +276,11 @@ class LocatedNode(Node):
 
     @property
     def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
+        """
+        References all nodes that are near (within walking distance of) this object.
+
+        :return: Pairs of nodes in proximity as well as proximity data (:py:class:`Proximity`).
+        """
         return (
             (LocatedNode(self.conn, j if self.i == i else i), Proximity(self.conn, i, j))
             for i, j in self.conn.execute(
@@ -271,6 +290,7 @@ class LocatedNode(Node):
 
     @property
     def shared_facility(self) -> Iterable[LocatedNode]:
+        """References all nodes that this object shares the same facility with (same building, station, hub etc)"""
         return (
             LocatedNode(self.conn, j if self.i == i else i)
             for i, j in self.conn.execute(
@@ -289,6 +309,7 @@ class Proximity:
 
     @property
     def distance(self):
+        """Distance between the two objects in blocks"""
         return self.conn.execute(
             f"SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
             dict(node1=self.node1, node2=self.node2),
@@ -304,6 +325,7 @@ class Proximity:
 
     @property
     def explicit(self):
+        """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
         return self.conn.execute(
             f"SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
             dict(node1=self.node1, node2=self.node2),
@@ -359,7 +381,9 @@ class SharedFacility:
 
 class AirAirline(Node):
     name = _Column[str]("name", "AirAirline")
+    """Name of the airline"""
     link = _Column[str | None]("link", "AirAirline", sourced=True)
+    """Link to the MRT Wiki page for the airline"""
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, *, name: str, link: str | None = None) -> Self:
@@ -374,6 +398,7 @@ class AirAirline(Node):
 
     @property
     def flights(self) -> Iterator[AirFlight]:
+        """List of all :py:class:`AirFlight` s the airline operates"""
         return (
             AirFlight(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
@@ -381,6 +406,7 @@ class AirAirline(Node):
 
     @property
     def gates(self) -> Iterator[AirGate]:
+        """List of all :py:class:`AirGate` s the airline owns or operates"""
         return (
             AirGate(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i", dict(i=self.i)).fetchall()
@@ -388,6 +414,7 @@ class AirAirline(Node):
 
     @property
     def airports(self) -> Iterator[AirAirport]:
+        """List of all :py:class:`AirAirports` s the airline flies to or has gates in"""
         return (
             AirAirport(self.conn, i)
             for (i,) in self.conn.execute(
@@ -399,9 +426,13 @@ class AirAirline(Node):
 
 class AirAirport(LocatedNode):
     code = _Column[str]("code", "AirAirport")
+    """Unique 3 (sometimes 4)-letter code"""
     names = _SetAttr[str]("AirAirportNames", "name", sourced=True)
+    """Name(s) of the airport"""
     link = _Column[str | None]("link", "AirAirport", sourced=True)
-    modes = _SetAttr[str]("AirAirportModes", "mode", sourced=True)
+    """Link to the MRT Wiki page for the airport"""
+    modes = _SetAttr[AirMode]("AirAirportModes", "mode", sourced=True)
+    """Types of air vehicle or technology the airport supports"""
 
     @classmethod
     def create(
@@ -439,6 +470,7 @@ class AirAirport(LocatedNode):
 
     @property
     def gates(self) -> Iterator[AirGate]:
+        """List of :py:class:`AirGate` s"""
         return (
             AirGate(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
@@ -447,10 +479,15 @@ class AirAirport(LocatedNode):
 
 class AirGate(Node):
     code = _Column[str | None]("code", "AirGate")
+    """Unique gate code. If ``None``, code is not known"""
     airport = _FKColumn(AirAirport, "airport", "AirGate")
+    """The :py:class:`AirAirport`"""
     airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate")
+    """The :py:class:`Airline` that owns this gate"""
     size = _Column[str | None]("size", "AirGate")
-    mode = _Column[str | None]("mode", "AirGate")
+    """Abbreviated size of the gate (eg. ``S``, ``M``)"""
+    mode = _Column[AirMode | None]("mode", "AirGate")
+    """Type of air vehicle or technology the gate supports"""
 
     @classmethod
     def create(
@@ -480,6 +517,7 @@ class AirGate(Node):
 
     @property
     def flights_from_here(self) -> Iterator[AirFlight]:
+        """List of IDs of all :py:class:`AirFlight` s that depart from this gate"""
         return (
             AirFlight(self.conn, i)
             for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "from" = :i', dict(i=self.i)).fetchall()
@@ -487,6 +525,7 @@ class AirGate(Node):
 
     @property
     def flights_to_here(self) -> Iterator[AirFlight]:
+        """List of IDs of all :py:class:`AirFlight` s that arrive at this gate"""
         return (
             AirFlight(self.conn, i)
             for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
@@ -495,10 +534,15 @@ class AirGate(Node):
 
 class AirFlight(Node):
     airline = _FKColumn(AirAirline, "airline", "AirFlight")
+    """The :py:class:`AirAirline` the flight is operated by"""
     code = _Column[str]("code", "AirFlight")
+    """Flight code. May be duplicated if the return flight uses the same code as this flight. **2-letter airline prefix not included**"""
     from_ = _FKColumn(AirGate, "from", "AirFlight")
+    """The :py:class:`AirGate` this flight departs from"""
     to = _FKColumn(AirGate, "to", "AirFlight")
+    """The :py:class:`AirGate` this flight arrives at"""
     mode = _Column[str | None]("mode", "AirFlight")
+    """Type of air vehicle or technology used on the flight"""
 
     @classmethod
     def create(
@@ -531,6 +575,7 @@ class AirFlight(Node):
 
 class BusCompany(Node):
     name = _Column[str]("name", "BusCompany")
+    """Name of the bus company"""
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
@@ -542,6 +587,7 @@ class BusCompany(Node):
 
     @property
     def lines(self) -> Iterator[BusLine]:
+        """List of all :py:class:`BusLine` s the company operates"""
         return (
             BusLine(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM BusLine WHERE company = :i", dict(i=self.i)).fetchall()
@@ -549,6 +595,7 @@ class BusCompany(Node):
 
     @property
     def stops(self) -> Iterator[BusStop]:
+        """List of all :py:class:`BusStop` s the company's lines stop at"""
         return (
             BusStop(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM BusStop WHERE company = :i", dict(i=self.i)).fetchall()
@@ -556,6 +603,7 @@ class BusCompany(Node):
 
     @property
     def berths(self) -> Iterator[BusBerth]:
+        """List of all :py:class:`BusBerth` s the company's lines stop at"""
         return (
             BusBerth(self.conn, i)
             for (i,) in self.conn.execute(
@@ -569,11 +617,17 @@ class BusCompany(Node):
 
 class BusLine(Node):
     code = _Column[str]("code", "BusLine")
+    """Unique code identifying the bus line"""
     company = _FKColumn(BusCompany, "company", "BusLine")
+    """The :py:class:`BusCompany` that operates the line"""
     name = _Column[str | None]("name", "BusLine", sourced=True)
+    """Name of the line"""
     colour = _Column[str | None]("colour", "BusLine", sourced=True)
+    """Colour of the line (on a map)"""
     mode = _Column[str | None]("mode", "BusLine", sourced=True)
+    """Type of bus vehicle or technology the line uses"""
     local = _Column[bool | None]("name", "BusLine", sourced=True)
+    """Whether the line operates within the city, e.g. a local bus service"""
 
     @classmethod
     def create(
@@ -611,6 +665,7 @@ class BusLine(Node):
 
     @property
     def berths(self) -> Iterator[BusBerth]:
+        """List of all :py:class:`BusBerths` s the line stops at"""
         return (
             BusBerth(self.conn, i)
             for (i,) in self.conn.execute(
@@ -623,6 +678,7 @@ class BusLine(Node):
 
     @property
     def stops(self) -> Iterator[BusStop]:
+        """List of all :py:class:`BusStop` s the line stops at"""
         return (
             BusStop(self.conn, i)
             for (i,) in self.conn.execute(
@@ -636,8 +692,11 @@ class BusLine(Node):
 
 class BusStop(LocatedNode):
     codes = _SetAttr[str]("BusStopCodes", "codes")
+    """Unique code(s) identifying the bus stop. May also be the same as the name"""
     company = _FKColumn(BusCompany, "company", "BusStop")
+    """The :py:class:`BusCompany` that owns this stop"""
     name = _Column[str | None]("name", "BusStop", sourced=True)
+    """Name of the stop"""
 
     @classmethod
     def create(
@@ -666,6 +725,7 @@ class BusStop(LocatedNode):
 
     @property
     def berths(self) -> Iterator[BusBerth]:
+        """List of :py:class:`BusBerths` s this stop has"""
         return (
             BusBerth(self.conn, i)
             for (i,) in self.conn.execute(
@@ -676,6 +736,7 @@ class BusStop(LocatedNode):
 
     @property
     def connections_from_here(self) -> Iterator[BusConnection]:
+        """List of all :py:class:`BusConnections` s departing from this stop"""
         return (
             BusConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -688,6 +749,7 @@ class BusStop(LocatedNode):
 
     @property
     def connections_to_here(self) -> Iterator[BusConnection]:
+        """List of all :py:class:`BusConnections` s arriving at this stop"""
         return (
             BusConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -700,6 +762,7 @@ class BusStop(LocatedNode):
 
     @property
     def lines(self) -> Iterator[BusLine]:
+        """List of all :py:class:`BusLines` s at this stop"""
         return (
             BusLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -713,7 +776,9 @@ class BusStop(LocatedNode):
 
 class BusBerth(Node):
     code = _Column[str | None]("code", "BusBerth")
+    """Unique code identifying the berth. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
     stop = _FKColumn(BusStop, "stop", "BusStop")
+    """The :py:class:`BusStop` of the berth"""
 
     @classmethod
     def create(
@@ -732,6 +797,7 @@ class BusBerth(Node):
 
     @property
     def connections_from_here(self) -> Iterator[BusConnection]:
+        """List of all :py:class:`BusConnections` s departing from this berth"""
         return (
             BusConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -742,6 +808,7 @@ class BusBerth(Node):
 
     @property
     def connections_to_here(self) -> Iterator[BusConnection]:
+        """List of all :py:class:`BusConnections` s arriving at this berth"""
         return (
             BusConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -752,6 +819,7 @@ class BusBerth(Node):
 
     @property
     def lines(self) -> Iterator[BusLine]:
+        """List of all :py:class:`BusLines` s at this stop"""
         return (
             BusLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -764,9 +832,13 @@ class BusBerth(Node):
 
 class BusConnection(Node):
     line = _FKColumn(BusLine, "line", "BusConnection")
+    """The :py:class:`BusLine` that the connection is made on"""
     from_ = _FKColumn(BusBerth, "from", "BusConnection")
+    """The :py:class:`BusBerth` the connection departs from"""
     to = _FKColumn(BusBerth, "to", "BusConnection")
+    """The :py:class:`BusBerth` the connection arrives at"""
     direction = _Column[str | None]("direction", "BusConnection", sourced=True)
+    """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
 
     @classmethod
     def create(
@@ -794,6 +866,7 @@ class BusConnection(Node):
 
 class SeaCompany(Node):
     name = _Column[str]("name", "SeaCompany")
+    """Name of the sea company"""
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
@@ -805,6 +878,7 @@ class SeaCompany(Node):
 
     @property
     def lines(self) -> Iterator[SeaLine]:
+        """List of all :py:class:`SeaLine` s the company operates"""
         return (
             SeaLine(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM SeaLine WHERE company = :i", dict(i=self.i)).fetchall()
@@ -812,6 +886,7 @@ class SeaCompany(Node):
 
     @property
     def stops(self) -> Iterator[SeaStop]:
+        """List of all :py:class:`SeaStop` s the company's lines stop at"""
         return (
             SeaStop(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM SeaStop WHERE company = :i", dict(i=self.i)).fetchall()
@@ -819,6 +894,7 @@ class SeaCompany(Node):
 
     @property
     def docks(self) -> Iterator[SeaDock]:
+        """List of all :py:class:`SeaDock` s the company's lines stop at"""
         return (
             SeaDock(self.conn, i)
             for (i,) in self.conn.execute(
@@ -832,11 +908,17 @@ class SeaCompany(Node):
 
 class SeaLine(Node):
     code = _Column[str]("code", "SeaLine")
+    """Unique code identifying the sea line"""
     company = _FKColumn(SeaCompany, "company", "SeaLine")
+    """The :py:class:`SeaCompany` that operates the line"""
     name = _Column[str | None]("name", "SeaLine", sourced=True)
+    """Name of the line"""
     colour = _Column[str | None]("colour", "SeaLine", sourced=True)
+    """Colour of the line (on a map)"""
     mode = _Column[str | None]("mode", "SeaLine", sourced=True)
+    """Type of sea vehicle or technology the line uses"""
     local = _Column[bool | None]("name", "SeaLine", sourced=True)
+    """Whether the company operates within the city, e.g. a local ferry service"""
 
     @classmethod
     def create(
@@ -874,6 +956,7 @@ class SeaLine(Node):
 
     @property
     def docks(self) -> Iterator[SeaDock]:
+        """List of all :py:class:`SeaDocks` s the line stops at"""
         return (
             SeaDock(self.conn, i)
             for (i,) in self.conn.execute(
@@ -886,6 +969,7 @@ class SeaLine(Node):
 
     @property
     def stops(self) -> Iterator[SeaStop]:
+        """List of all :py:class:`SeaStop` s the line stops at"""
         return (
             SeaStop(self.conn, i)
             for (i,) in self.conn.execute(
@@ -899,8 +983,11 @@ class SeaLine(Node):
 
 class SeaStop(LocatedNode):
     codes = _SetAttr[str]("SeaStopCodes", "codes")
+    """Unique code(s) identifying the sea stop. May also be the same as the name"""
     company = _FKColumn(SeaCompany, "company", "SeaStop")
+    """The :py:class:`SeaCompany` that owns this stop"""
     name = _Column[str | None]("name", "SeaStop", sourced=True)
+    """Name of the stop"""
 
     @classmethod
     def create(
@@ -929,6 +1016,7 @@ class SeaStop(LocatedNode):
 
     @property
     def docks(self) -> Iterator[SeaDock]:
+        """List of :py:class:`SeaDock` s this stop has"""
         return (
             SeaDock(self.conn, i)
             for (i,) in self.conn.execute(
@@ -939,6 +1027,7 @@ class SeaStop(LocatedNode):
 
     @property
     def connections_from_here(self) -> Iterator[SeaConnection]:
+        """List of all :py:class:`SeaConnections` s departing from this stop"""
         return (
             SeaConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -951,6 +1040,7 @@ class SeaStop(LocatedNode):
 
     @property
     def connections_to_here(self) -> Iterator[SeaConnection]:
+        """List of all :py:class:`SeaConnections` s arriving at this stop"""
         return (
             SeaConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -963,6 +1053,7 @@ class SeaStop(LocatedNode):
 
     @property
     def lines(self) -> Iterator[SeaLine]:
+        """List of all :py:class:`SeaLines` s at this stop"""
         return (
             SeaLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -976,7 +1067,9 @@ class SeaStop(LocatedNode):
 
 class SeaDock(Node):
     code = _Column[str | None]("code", "SeaDock")
+    """Unique code identifying the dock. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
     stop = _FKColumn(SeaStop, "stop", "SeaStop")
+    """The :py:class:`SeaStop` of the dock"""
 
     @classmethod
     def create(
@@ -995,6 +1088,7 @@ class SeaDock(Node):
 
     @property
     def connections_from_here(self) -> Iterator[SeaConnection]:
+        """List of all :py:class:`SeaConnection` s departing from this dock"""
         return (
             SeaConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1005,6 +1099,7 @@ class SeaDock(Node):
 
     @property
     def connections_to_here(self) -> Iterator[SeaConnection]:
+        """List of all :py:class:`SeaConnection` s arriving at this dock"""
         return (
             SeaConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1015,6 +1110,7 @@ class SeaDock(Node):
 
     @property
     def lines(self) -> Iterator[SeaLine]:
+        """List of all :py:class:`SeaLine` s at this dock"""
         return (
             SeaLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1027,9 +1123,13 @@ class SeaDock(Node):
 
 class SeaConnection(Node):
     line = _FKColumn(SeaLine, "line", "SeaConnection")
+    """The :py:class:`SeaLine` that the connection is made on"""
     from_ = _FKColumn(SeaDock, "from", "SeaConnection")
+    """The :py:class:`SeaDock` the connection departs from"""
     to = _FKColumn(SeaDock, "to", "SeaConnection")
+    """The :py:class:`SeaDock` the connection arrives at"""
     direction = _Column[str | None]("direction", "SeaConnection", sourced=True)
+    """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
 
     @classmethod
     def create(
@@ -1057,6 +1157,7 @@ class SeaConnection(Node):
 
 class RailCompany(Node):
     name = _Column[str]("name", "RailCompany")
+    """Name of the rail company"""
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
@@ -1068,6 +1169,7 @@ class RailCompany(Node):
 
     @property
     def lines(self) -> Iterator[RailLine]:
+        """List of all :py:class:`RailLine` s the company operates"""
         return (
             RailLine(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM RailLine WHERE company = :i", dict(i=self.i)).fetchall()
@@ -1075,6 +1177,7 @@ class RailCompany(Node):
 
     @property
     def stations(self) -> Iterator[RailStation]:
+        """List of all :py:class:`RailStation` s the company's lines stop at"""
         return (
             RailStation(self.conn, i)
             for (i,) in self.conn.execute("SELECT i FROM RailStation WHERE company = :i", dict(i=self.i)).fetchall()
@@ -1082,6 +1185,7 @@ class RailCompany(Node):
 
     @property
     def platforms(self) -> Iterator[RailPlatform]:
+        """List of all :py:class:`RailPltaform` s the company's lines stop at"""
         return (
             RailPlatform(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1095,11 +1199,17 @@ class RailCompany(Node):
 
 class RailLine(Node):
     code = _Column[str]("code", "RailLine")
+    """Unique code identifying the rail line"""
     company = _FKColumn(RailCompany, "company", "RailLine")
+    """The :py:class:`RailCompany` that operates the line"""
     name = _Column[str | None]("name", "RailLine", sourced=True)
+    """Name of the line"""
     colour = _Column[str | None]("colour", "RailLine", sourced=True)
+    """Colour of the line (on a map)"""
     mode = _Column[str | None]("mode", "RailLine", sourced=True)
+    """Type of rail vehicle or technology the line uses"""
     local = _Column[bool | None]("name", "RailLine", sourced=True)
+    """Whether the company operates within the city, e.g. a local ferry service"""
 
     @classmethod
     def create(
@@ -1137,6 +1247,7 @@ class RailLine(Node):
 
     @property
     def platforms(self) -> Iterator[RailPlatform]:
+        """List of all :py:class:`RailPlatform` s the line stops at"""
         return (
             RailPlatform(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1149,6 +1260,7 @@ class RailLine(Node):
 
     @property
     def stations(self) -> Iterator[RailStation]:
+        """List of all :py:class:`RailStation` s the line stops at"""
         return (
             RailStation(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1162,8 +1274,11 @@ class RailLine(Node):
 
 class RailStation(LocatedNode):
     codes = _SetAttr[str]("RailStationCodes", "codes")
+    """Unique code(s) identifying the rail station. May also be the same as the name"""
     company = _FKColumn(RailCompany, "company", "RailStation")
+    """The :py:class:`RailCompany` that owns this stop"""
     name = _Column[str | None]("name", "RailStation", sourced=True)
+    """Name of the station"""
 
     @classmethod
     def create(
@@ -1192,6 +1307,7 @@ class RailStation(LocatedNode):
 
     @property
     def platforms(self) -> Iterator[RailPlatform]:
+        """List of :py:class:`RailPlatform` s this stop has"""
         return (
             RailPlatform(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1202,6 +1318,7 @@ class RailStation(LocatedNode):
 
     @property
     def connections_from_here(self) -> Iterator[RailConnection]:
+        """List of all :py:class:`RailConnection` s departing from this station"""
         return (
             RailConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1214,6 +1331,7 @@ class RailStation(LocatedNode):
 
     @property
     def connections_to_here(self) -> Iterator[RailConnection]:
+        """List of all :py:class:`RailConnection` s arriving at this station"""
         return (
             RailConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1226,6 +1344,7 @@ class RailStation(LocatedNode):
 
     @property
     def lines(self) -> Iterator[RailLine]:
+        """List of all :py:class:`RailLine` s at this stop"""
         return (
             RailLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1239,7 +1358,9 @@ class RailStation(LocatedNode):
 
 class RailPlatform(Node):
     code = _Column[str | None]("code", "RailPlatform")
+    """Unique code identifying the platform. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
     station = _FKColumn(RailStation, "station", "RailStation")
+    """The :py:class:`RailPlatform` of the dock"""
 
     @classmethod
     def create(
@@ -1261,6 +1382,7 @@ class RailPlatform(Node):
 
     @property
     def connections_from_here(self) -> Iterator[RailConnection]:
+        """List of all :py:class:`RailConnection` s departing from this platform"""
         return (
             RailConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1271,6 +1393,7 @@ class RailPlatform(Node):
 
     @property
     def connections_to_here(self) -> Iterator[RailConnection]:
+        """List of all :py:class:`RailConnection` s arriving at this platform"""
         return (
             RailConnection(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1281,6 +1404,7 @@ class RailPlatform(Node):
 
     @property
     def lines(self) -> Iterator[RailLine]:
+        """List of all :py:class:`RailLine` s at this platform"""
         return (
             RailLine(self.conn, i)
             for (i,) in self.conn.execute(
@@ -1293,9 +1417,13 @@ class RailPlatform(Node):
 
 class RailConnection(Node):
     line = _FKColumn(RailLine, "line", "RailConnection")
+    """The :py:class:`RailLine` that the connection is made on"""
     from_ = _FKColumn(RailPlatform, "from", "RailConnection")
+    """The :py:class:`RailLine` the connection departs from"""
     to = _FKColumn(RailPlatform, "to", "RailConnection")
+    """The :py:class:`RailLine` the connection arrives at"""
     direction = _Column[str | None]("direction", "RailConnection", sourced=True)
+    """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
 
     @classmethod
     def create(
@@ -1323,7 +1451,9 @@ class RailConnection(Node):
 
 class SpawnWarp(LocatedNode):
     name = _Column[str]("name", "SpawnWarp")
+    """Name of the spawn warp"""
     warp_type = _Column[str]("warpType", "SpawnWarp")
+    """The type of the spawn warp"""
 
     @classmethod
     def create(
@@ -1347,9 +1477,13 @@ class SpawnWarp(LocatedNode):
 
 class Town(LocatedNode):
     name = _Column[str]("name", "Town")
+    """Name of the town"""
     rank = _Column[str]("rank", "Town")
+    """Rank of the town"""
     mayor = _Column[str]("mayor", "Town")
+    """Mayor of the town"""
     deputy_mayor = _Column[str | None]("deputyMayor", "Town")
+    """Deputy Mayor of the town"""
 
     @classmethod
     def create(
