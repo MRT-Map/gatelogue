@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 URL: str = "???"
 
+
 class GD:
     def __init__(self):
         sqlite3.threadsafety = 3
@@ -51,9 +52,7 @@ class GD:
     @classmethod
     def get(cls, *args, **kwargs) -> Self:
         self = cls()
-        data = cls._get_url(
-            URL, *args, **kwargs
-        )
+        data = cls._get_url(URL, *args, **kwargs)
         self.conn.deserialize(data)
         return self
 
@@ -100,7 +99,7 @@ class GD:
 
 class _Column[T]:
     def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
-        self.name = name
+        self.name = f'"{name}"'
         self.table = table
         self.sourced = sourced
 
@@ -109,14 +108,49 @@ class _Column[T]:
             f"SELECT {self.name} FROM {self.table} WHERE i = :i", dict(i=instance.i)
         ).fetchone()[0]
 
-    def __set__(self, instance: Node, value: T):
+    def __set__(self, instance: Node, value: T | tuple[set[int], T]):
+        srcs, value = value if isinstance(value, tuple) else (instance.sources, value)
         cur = instance.conn.cursor()
         cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
-        if self.sourced:
+        if not self.sourced:
+            return
+        for src in srcs:
             cur.execute(
-                f"UPDATE {self.table + 'Source'} SET {self.name} = :bool WHERE i = :i AND source = :source",
-                dict(bool=value is not None, i=instance.i, source=instance.source),
+                f"INSERT INTO {self.table + 'Source'} (i, source, {self.name}) VALUES (:i, :source, :bool) ON CONFLICT (i, source) DO UPDATE SET {self.name} = :bool",
+                dict(bool=value is not None, i=instance.i, source=src),
             )
+
+    def sources(self, instance: Node) -> set[int]:
+        return {
+            src
+            for (src,) in instance.conn.execute(
+                f"SELECT DISTINCT source FROM {self.table + 'Source'} WHERE {self.name} = true"
+            ).fetchall()
+        }
+
+    def _merge(self, instance1: Node, instance2: Node):
+        self_v = self.__get__(instance1, type(instance1))
+        other_v = self.__get__(instance2, type(instance2))
+        if not self.sourced:
+            # TODO warning for mismatch
+            assert self_v == other_v
+            return
+        match (self_v, other_v):
+            case (None, None):
+                pass
+            case (_, None):
+                pass
+            case (None, _):
+                sources = self.sources(instance2)
+                self.__set__(instance1, (sources, other_v))
+            case (_, _) if self_v != other_v:
+                # TODO warning for override
+                self_sources = self.sources(instance1)
+                other_sources = self.sources(instance2)
+                if min(self_sources) >= min(other_sources):
+                    self.__set__(instance2, None)
+                else:
+                    self.__set__(instance1, (other_sources, other_v))
 
 
 class _FKColumn[T: Node | None]:
@@ -132,8 +166,11 @@ class _FKColumn[T: Node | None]:
             return None
         return self.ty(instance.conn, target_i)
 
-    def __set__(self, instance: Node, value: T):
+    def __set__(self, instance: Node, value: T | tuple[int, T]):
         _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
+
+    def _merge(self, instance1: Node, instance2: Node):
+        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2)
 
 
 class _SetAttr[T]:
@@ -150,43 +187,60 @@ class _SetAttr[T]:
             ).fetchall()
         }
 
-    def __set__(self, instance: Node, values: set[T]):
+    def __set__(self, instance: Node, values: set[T] | tuple[set[int], set[T]]):
+        srcs, values = values if isinstance(values, tuple) else (instance.sources, values)
         cur = instance.conn.cursor()
-        if self.sourced:
-            existing_values = {
-                v
-                for (v,) in cur.execute(
-                    f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source = :source",
-                    dict(i=instance.i, source=instance.source),
-                ).fetchall()
-            }
-            for new_value in values - existing_values:
-                cur.execute(
-                    f"INSERT OR IGNORE INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
-                    dict(i=instance.i, value=new_value),
-                )
-            for old_value in existing_values - values:
-                cur.execute(
-                    f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source = :source",
-                    dict(i=instance.i, value=old_value, source=instance.source),
-                )
-                if (
-                    cur.execute(
-                        f"SELECT count(i) FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value",
-                        dict(i=instance.i, value=old_value),
-                    ).fetchone()[0]
-                    == 0
-                ):
-                    cur.execute(
-                        f"DELETE FROM {self.table} WHERE i = :i AND {self.table_column} = :value",
-                        dict(i=instance.i, value=old_value),
-                    )
-        else:
+        if not self.sourced:
             cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))
             cur.executemany(
                 f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
                 [dict(i=instance.i, value=value) for value in values],
             )
+            return
+        existing_values = {
+            v
+            for (v,) in cur.execute(
+                f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source IN :sources",
+                dict(i=instance.i, sources=srcs),
+            ).fetchall()
+        }
+        for new_value in values - existing_values:
+            cur.execute(
+                f"INSERT OR IGNORE INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                dict(i=instance.i, value=new_value),
+            )
+            cur.executemany(
+                f"INSERT OR IGNORE INTO {self.table + 'Source'} (i, {self.table_column}, source) VALUES (:i, :value, :source)",
+                [dict(i=instance.i, value=new_value, source=src) for src in srcs],
+            )
+        for old_value in existing_values - values:
+            cur.execute(
+                f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source IN :sources",
+                dict(i=instance.i, value=old_value, sources=srcs),
+            )
+            if (
+                cur.execute(
+                    f"SELECT count(i) FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value",
+                    dict(i=instance.i, value=old_value),
+                ).fetchone()[0]
+                == 0
+            ):
+                cur.execute(
+                    f"DELETE FROM {self.table} WHERE i = :i AND {self.table_column} = :value",
+                    dict(i=instance.i, value=old_value),
+                )
+
+    def _merge(self, instance1: Node, instance2: Node):
+        cur = instance1.conn.cursor()
+        cur.execute(
+            f"INSERT INTO {self.table} (i, {self.table_column}) SELECT :i1, {self.table_column} FROM {self.table} WHERE i = :i2 ON CONFLICT (i, {self.table_column}) DO NOTHING",
+            dict(i1=instance1.i, i2=instance2.i),
+        )
+        cur.execute(
+            f"UPDATE OR IGNORE {self.table + 'Sourced'} SET i = :i1 WHERE i = :i2",
+            dict(i1=instance1.i, i2=instance2.i),
+        )
+        cur.execute(f"DELETE FROM {self.table} WHERE i = :i2", dict(i1=instance1.i, i2=instance2.i))
 
 
 type World = Literal["New", "Old", "Space"]
@@ -226,6 +280,30 @@ class Node:
         (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = :rowid", dict(rowid=cur.lastrowid)).fetchone()
         cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
         return i
+
+    def __eq__(self, other: Self) -> bool:
+        return self.i == other.i
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        raise NotImplementedError
+
+    def _merge(self, other: Self):
+        raise NotImplementedError
+
+    def merge(self, other: Self):
+        for name, attr in type(self).__dict__.items():
+            if isinstance(attr, (_Column, _FKColumn, _SetAttr)):
+                attr._merge(self, other)
+
+        self._merge(other)
+
+        cur = self.conn.cursor()
+        cur.execute(
+            "DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i)
+        )
+        cur.execute(
+            "DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i)
+        )
 
 
 class LocatedNode(Node):
@@ -297,6 +375,22 @@ class LocatedNode(Node):
                 "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
             ).fetchall()
         )
+
+    def _merge(self, other: Self):
+        # TODO handle merging of Proximity
+        cur = self.conn.cursor()
+        cur.execute("UPDATE OR IGNORE SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR IGNORE SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("INSERT INTO Proximity SELECT :i1, node2, distance, explicit FROM Proximity "
+                    "WHERE node1 = :i2 ON CONFLICT (node1, node2) DO NOTHING", dict(i1=self.i, i2=other.i))
+        cur.execute("INSERT INTO Proximity SELECT node1, :i1, distance, explicit FROM Proximity "
+                    "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR IGNORE ProximitySource SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR IGNORE ProximitySource SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class Proximity:
@@ -423,6 +517,20 @@ class AirAirline(Node):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(f"SELECT i FROM AirAirline WHERE name = ?", (self.name,)).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE AirGate SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE AirFlight SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirAirlineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirAirline WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class AirAirport(LocatedNode):
     code = _Column[str]("code", "AirAirport")
@@ -476,17 +584,30 @@ class AirAirport(LocatedNode):
             for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(f"SELECT i FROM AirAirport WHERE code = ?", (self.code,)).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE AirGate SET airport = :i1 WHERE airport = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirAirportSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirAirport WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class AirGate(Node):
     code = _Column[str | None]("code", "AirGate")
     """Unique gate code. If ``None``, code is not known"""
     airport = _FKColumn(AirAirport, "airport", "AirGate")
     """The :py:class:`AirAirport`"""
-    airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate")
+    airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate", sourced=True)
     """The :py:class:`Airline` that owns this gate"""
-    size = _Column[str | None]("size", "AirGate")
+    size = _Column[str | None]("size", "AirGate", sourced=True)
     """Abbreviated size of the gate (eg. ``S``, ``M``)"""
-    mode = _Column[AirMode | None]("mode", "AirGate")
+    mode = _Column[AirMode | None]("mode", "AirGate", sourced=True)
     """Type of air vehicle or technology the gate supports"""
 
     @classmethod
@@ -531,17 +652,43 @@ class AirGate(Node):
             for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if (code := self.code) is None:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM AirGate WHERE airport = ? AND code = ?", (self.airport.i, code)
+            ).fetchall()
+        )
+
+    def merge(self, other: Self):
+        if self.code is None and other.code is not None:
+            self.code = other.code
+        elif self.code is not None and other.code is None:
+            other.code = self.code
+        super().merge(other)
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute('UPDATE AirFlight SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute('UPDATE AirFlight SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirGateSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirGate WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class AirFlight(Node):
     airline = _FKColumn(AirAirline, "airline", "AirFlight")
     """The :py:class:`AirAirline` the flight is operated by"""
     code = _Column[str]("code", "AirFlight")
-    """Flight code. May be duplicated if the return flight uses the same code as this flight. **2-letter airline prefix not included**"""
+    """Flight code. May be duplicated if the return flight uses the same code as this flight.
+    **2-letter airline prefix not included**"""
     from_ = _FKColumn(AirGate, "from", "AirFlight")
     """The :py:class:`AirGate` this flight departs from"""
     to = _FKColumn(AirGate, "to", "AirFlight")
     """The :py:class:`AirGate` this flight arrives at"""
-    mode = _Column[str | None]("mode", "AirFlight")
+    mode = _Column[str | None]("mode", "AirFlight", sourced=True)
     """Type of air vehicle or technology used on the flight"""
 
     @classmethod
@@ -571,6 +718,28 @@ class AirFlight(Node):
             ),
         )
         return cls(conn, i)
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f'SELECT i FROM AirFlight WHERE airline = ? AND (code = ? OR ("from" = ? AND "to" = ?))',
+                (self.airline.i, self.code, self.from_, self.to),
+            ).fetchall()
+        )
+
+    def merge(self, other: Self):
+        if self.from_.code is None or other.from_.code is None:
+            self.from_.merge(other.from_)
+        if self.to.code is None or other.to.code is None:
+            self.to.merge(other.to)
+        super().merge(other)
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM AirFlightSource WHERE i = :i2;", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM AirFlight WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class BusCompany(Node):
@@ -613,6 +782,20 @@ class BusCompany(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(f"SELECT i FROM BusCompany WHERE name = ?", (self.name,)).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE BusLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE BusStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class BusLine(Node):
@@ -688,6 +871,21 @@ class BusLine(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM BusLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE BusConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class BusStop(LocatedNode):
@@ -773,6 +971,29 @@ class BusStop(LocatedNode):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if len(codes := self.codes) == 0:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT DISTINCT BusStop.i "
+                f"FROM BusStop LEFT JOIN BusStopCodes ON BusStop.i = BusStopCodes.i "
+                f"WHERE company = ? AND BusStopCodes.code IN ?",
+                (
+                    self.company.i,
+                    codes,
+                ),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE BusBerth SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class BusBerth(Node):
     code = _Column[str | None]("code", "BusBerth")
@@ -829,6 +1050,24 @@ class BusBerth(Node):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if (code := self.code) is None:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM BusBerth WHERE stop = ? AND code = ?", (self.stop, code)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute('UPDATE BusConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute('UPDATE BusConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusBerthSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusBerth WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class BusConnection(Node):
     line = _FKColumn(BusLine, "line", "BusConnection")
@@ -862,6 +1101,21 @@ class BusConnection(Node):
             dict(i=i, source=src, direction=direction is not None),
         )
         return cls(conn, i)
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f'SELECT i FROM BusConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                (self.line.i, self.from_.i, self.to.i),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM BusConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM BusConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class SeaCompany(Node):
@@ -904,6 +1158,20 @@ class SeaCompany(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(f"SELECT i FROM SeaCompany WHERE name = ?", (self.name,)).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE SeaLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE SeaStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class SeaLine(Node):
@@ -979,6 +1247,21 @@ class SeaLine(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM SeaLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE SeaConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class SeaStop(LocatedNode):
@@ -1064,6 +1347,29 @@ class SeaStop(LocatedNode):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if len(codes := self.codes) == 0:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT DISTINCT SeaStop.i FROM SeaStop "
+                f"LEFT JOIN SeaStopCodes ON SeaStop.i = SeaStopCodes.i "
+                f"WHERE company = ? AND SeaStopCodes.code IN ?",
+                (
+                    self.company.i,
+                    codes,
+                ),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE SeaDock SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class SeaDock(Node):
     code = _Column[str | None]("code", "SeaDock")
@@ -1120,6 +1426,24 @@ class SeaDock(Node):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if (code := self.code) is None:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM SeaDock WHERE stop = ? AND code = ?", (self.stop, code)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute('UPDATE SeaConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute('UPDATE SeaConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaDockSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaDock WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class SeaConnection(Node):
     line = _FKColumn(SeaLine, "line", "SeaConnection")
@@ -1153,6 +1477,21 @@ class SeaConnection(Node):
             dict(i=i, source=src, direction=direction is not None),
         )
         return cls(conn, i)
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f'SELECT i FROM SeaConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                (self.line.i, self.from_.i, self.to.i),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM SeaConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM SeaConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class RailCompany(Node):
@@ -1195,6 +1534,20 @@ class RailCompany(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(f"SELECT i FROM RailCompany WHERE name = ?", (self.name,)).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE RailLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE RailStation SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class RailLine(Node):
@@ -1270,6 +1623,21 @@ class RailLine(Node):
                 dict(i=self.i),
             ).fetchall()
         )
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM RailLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE RailConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class RailStation(LocatedNode):
@@ -1355,10 +1723,34 @@ class RailStation(LocatedNode):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if len(codes := self.codes) == 0:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT DISTINCT RailStation.i FROM RailStation "
+                f"LEFT JOIN RailStationCodes ON RailStation.i = RailStationCodes.i "
+                f"WHERE company = ? AND RailStationCodes.code IN ?",
+                (
+                    self.company.i,
+                    codes,
+                ),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("UPDATE RailPlatform SET station = :i1 WHERE station = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailStationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailStation WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class RailPlatform(Node):
     code = _Column[str | None]("code", "RailPlatform")
-    """Unique code identifying the platform. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
+    """Unique code identifying the platform. May not necessarily be the same as the code ingame.
+    If ``None``, code is unspecified"""
     station = _FKColumn(RailStation, "station", "RailStation")
     """The :py:class:`RailPlatform` of the dock"""
 
@@ -1414,6 +1806,24 @@ class RailPlatform(Node):
             ).fetchall()
         )
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        if (code := self.code) is None:
+            return iter(())
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM RailPlatform WHERE station = ? AND code = ?", (self.station, code)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute('UPDATE RailConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute('UPDATE RailConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailPlatformSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailPlatform WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class RailConnection(Node):
     line = _FKColumn(RailLine, "line", "RailConnection")
@@ -1448,6 +1858,21 @@ class RailConnection(Node):
         )
         return cls(conn, i)
 
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f'SELECT i FROM RailConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                (self.line.i, self.from_.i, self.to.i),
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM RailConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM RailConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
+
 
 class SpawnWarp(LocatedNode):
     name = _Column[str]("name", "SpawnWarp")
@@ -1473,6 +1898,18 @@ class SpawnWarp(LocatedNode):
             dict(i=i, name=name, warp_type=warp_type),
         )
         return cls(conn, i)
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM SpawnWarp WHERE name = ? and warpType = ?", (self.name, self.warp_type)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        self.conn.execute("DELETE FROM SpawnWarp WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
 
 
 class Town(LocatedNode):
@@ -1505,3 +1942,15 @@ class Town(LocatedNode):
             dict(i=i, name=name, rank=rank, mayor=mayor, deputy_mayor=deputy_mayor),
         )
         return cls(conn, i)
+
+    def equivalent(self, other: Self) -> Iterator[Self]:
+        return (
+            type(self)(self.conn, i)
+            for (i,) in self.conn.execute(
+                f"SELECT i FROM Town WHERE name = ? and mayor = ?", (self.name, self.mayor)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        self.conn.execute("DELETE FROM SpawnWarp WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        
