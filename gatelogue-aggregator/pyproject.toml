@@ -31,7 +31,7 @@ dependencies = [
   "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
   "click==8.3.1",
   "msgspec==0.20.0",
-  "pandas==2.3.3",
+  "pandas==3.0.0",
   "rich==14.2.0",
   "cloudscraper==1.2.71",
   "BeautifulSoup4==4.14.3",
