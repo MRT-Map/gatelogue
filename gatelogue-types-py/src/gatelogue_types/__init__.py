@@ -4,8 +4,9 @@ import contextlib
 import datetime
 import sqlite3
 import urllib.request
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Self, LiteralString, Iterator, Iterable, Literal, TYPE_CHECKING, ParamSpec
+from typing import TYPE_CHECKING, Literal, LiteralString, ParamSpec, Self
 
 from gatelogue_types.__about__ import __data_version__
 
@@ -87,7 +88,7 @@ class GD:
             cur.executescript(f.read())
         cur.executemany("INSERT INTO Source (priority, name) VALUES (?, ?)", list(enumerate(sources)))
         cur.execute(
-            f"INSERT INTO Metadata (version, timestamp) VALUES (:version, :timestamp)",
+            "INSERT INTO Metadata (version, timestamp) VALUES (:version, :timestamp)",
             dict(version=__data_version__, timestamp=datetime.datetime.now().isoformat()),
         )
         self.conn.commit()
@@ -206,11 +207,13 @@ class _SetAttr[T]:
         }
         for new_value in values - existing_values:
             cur.execute(
-                f"INSERT OR IGNORE INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value) "
+                f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
                 dict(i=instance.i, value=new_value),
             )
             cur.executemany(
-                f"INSERT OR IGNORE INTO {self.table + 'Source'} (i, {self.table_column}, source) VALUES (:i, :value, :source)",
+                f"INSERT INTO {self.table + 'Source'} (i, {self.table_column}, source) VALUES (:i, :value, :source) "
+                f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
                 [dict(i=instance.i, value=new_value, source=src) for src in srcs],
             )
         for old_value in existing_values - values:
@@ -233,13 +236,16 @@ class _SetAttr[T]:
     def _merge(self, instance1: Node, instance2: Node):
         cur = instance1.conn.cursor()
         cur.execute(
-            f"INSERT INTO {self.table} (i, {self.table_column}) SELECT :i1, {self.table_column} FROM {self.table} WHERE i = :i2 ON CONFLICT (i, {self.table_column}) DO NOTHING",
+            f"INSERT INTO {self.table} (i, {self.table_column}) "
+            f"SELECT :i1, {self.table_column} FROM {self.table} WHERE i = :i2 "
+            f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
             dict(i1=instance1.i, i2=instance2.i),
         )
-        cur.execute(
-            f"UPDATE OR IGNORE {self.table + 'Sourced'} SET i = :i1 WHERE i = :i2",
-            dict(i1=instance1.i, i2=instance2.i),
-        )
+        if self.sourced:
+            cur.execute(
+                f"UPDATE OR FAIL {self.table + 'Source'} SET i = :i1 WHERE i = :i2",
+                dict(i1=instance1.i, i2=instance2.i),
+            )
         cur.execute(f"DELETE FROM {self.table} WHERE i = :i2", dict(i1=instance1.i, i2=instance2.i))
 
 
@@ -298,12 +304,8 @@ class Node:
         self._merge(other)
 
         cur = self.conn.cursor()
-        cur.execute(
-            "DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i)
-        )
-        cur.execute(
-            "DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i)
-        )
+        cur.execute("DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class LocatedNode(Node):
@@ -379,18 +381,23 @@ class LocatedNode(Node):
     def _merge(self, other: Self):
         # TODO handle merging of Proximity
         cur = self.conn.cursor()
-        cur.execute("UPDATE OR IGNORE SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("UPDATE OR IGNORE SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("INSERT INTO Proximity SELECT :i1, node2, distance, explicit FROM Proximity "
-                    "WHERE node1 = :i2 ON CONFLICT (node1, node2) DO NOTHING", dict(i1=self.i, i2=other.i))
-        cur.execute("INSERT INTO Proximity SELECT node1, :i1, distance, explicit FROM Proximity "
-                    "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING", dict(i1=self.i, i2=other.i))
-        cur.execute("UPDATE OR IGNORE ProximitySource SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("UPDATE OR IGNORE ProximitySource SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute(
+            "INSERT INTO Proximity SELECT :i1, node2, distance, explicit FROM Proximity "
+            "WHERE node1 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
+            dict(i1=self.i, i2=other.i),
+        )
+        cur.execute(
+            "INSERT INTO Proximity SELECT node1, :i1, distance, explicit FROM Proximity "
+            "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
+            dict(i1=self.i, i2=other.i),
+        )
+        cur.execute("UPDATE OR FAIL ProximitySource SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL ProximitySource SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class Proximity:
@@ -405,7 +412,7 @@ class Proximity:
     def distance(self):
         """Distance between the two objects in blocks"""
         return self.conn.execute(
-            f"SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            "SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
             dict(node1=self.node1, node2=self.node2),
         ).fetchone()[0]
 
@@ -413,7 +420,7 @@ class Proximity:
     def distance(self, value: float):
         cur = self.conn.cursor()
         cur.execute(
-            f"UPDATE Proximity set distance = :value WHERE node1 = :node1 AND node2 = :node2",
+            "UPDATE Proximity set distance = :value WHERE node1 = :node1 AND node2 = :node2",
             dict(value=value, node1=self.node1, node2=self.node2),
         )
 
@@ -421,7 +428,7 @@ class Proximity:
     def explicit(self):
         """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
         return self.conn.execute(
-            f"SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            "SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
             dict(node1=self.node1, node2=self.node2),
         ).fetchone()[0]
 
@@ -429,7 +436,7 @@ class Proximity:
     def explicit(self, value: bool):
         cur = self.conn.cursor()
         cur.execute(
-            f"UPDATE Proximity set explicit = :value WHERE node1 = :node1 AND node2 = :node2",
+            "UPDATE Proximity set explicit = :value WHERE node1 = :node1 AND node2 = :node2",
             dict(value=value, node1=self.node1, node2=self.node2),
         )
 
@@ -520,7 +527,7 @@ class AirAirline(Node):
     def equivalent(self, other: Self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute(f"SELECT i FROM AirAirline WHERE name = ?", (self.name,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirAirline WHERE name = ?", (self.name,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -529,7 +536,6 @@ class AirAirline(Node):
         cur.execute("UPDATE AirFlight SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirAirlineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirAirline WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class AirAirport(LocatedNode):
@@ -587,7 +593,7 @@ class AirAirport(LocatedNode):
     def equivalent(self, other: Self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute(f"SELECT i FROM AirAirport WHERE code = ?", (self.code,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirAirport WHERE code = ?", (self.code,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -595,7 +601,7 @@ class AirAirport(LocatedNode):
         cur.execute("UPDATE AirGate SET airport = :i1 WHERE airport = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirAirportSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirAirport WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
 
 
 class AirGate(Node):
@@ -658,7 +664,7 @@ class AirGate(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM AirGate WHERE airport = ? AND code = ?", (self.airport.i, code)
+                "SELECT i FROM AirGate WHERE airport = ? AND code = ?", (self.airport.i, code)
             ).fetchall()
         )
 
@@ -675,7 +681,6 @@ class AirGate(Node):
         cur.execute('UPDATE AirFlight SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirGateSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirGate WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class AirFlight(Node):
@@ -723,8 +728,8 @@ class AirFlight(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f'SELECT i FROM AirFlight WHERE airline = ? AND (code = ? OR ("from" = ? AND "to" = ?))',
-                (self.airline.i, self.code, self.from_, self.to),
+                'SELECT i FROM AirFlight WHERE airline = ? AND (code = ? OR ("from" = ? AND "to" = ?))',
+                (self.airline.i, self.code, self.from_.i, self.to.i),
             ).fetchall()
         )
 
@@ -739,7 +744,6 @@ class AirFlight(Node):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM AirFlightSource WHERE i = :i2;", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM AirFlight WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class BusCompany(Node):
@@ -786,7 +790,7 @@ class BusCompany(Node):
     def equivalent(self, other: Self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute(f"SELECT i FROM BusCompany WHERE name = ?", (self.name,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM BusCompany WHERE name = ?", (self.name,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -795,7 +799,6 @@ class BusCompany(Node):
         cur.execute("UPDATE BusStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class BusLine(Node):
@@ -876,7 +879,7 @@ class BusLine(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM BusLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+                "SELECT i FROM BusLine WHERE code = ? AND company = ?", (self.code, self.company.i)
             ).fetchall()
         )
 
@@ -885,11 +888,10 @@ class BusLine(Node):
         cur.execute("UPDATE BusConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class BusStop(LocatedNode):
-    codes = _SetAttr[str]("BusStopCodes", "codes")
+    codes = _SetAttr[str]("BusStopCodes", "code")
     """Unique code(s) identifying the bus stop. May also be the same as the name"""
     company = _FKColumn(BusCompany, "company", "BusStop")
     """The :py:class:`BusCompany` that owns this stop"""
@@ -974,15 +976,16 @@ class BusStop(LocatedNode):
     def equivalent(self, other: Self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
             return iter(())
+        code_params = "?, " * (len(codes) - 1) + "?"
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT DISTINCT BusStop.i "
-                f"FROM BusStop LEFT JOIN BusStopCodes ON BusStop.i = BusStopCodes.i "
-                f"WHERE company = ? AND BusStopCodes.code IN ?",
+                "SELECT DISTINCT BusStop.i "
+                "FROM BusStop LEFT JOIN BusStopCodes ON BusStop.i = BusStopCodes.i "
+                f"WHERE company = ? AND BusStopCodes.code IN ({code_params})",
                 (
                     self.company.i,
-                    codes,
+                    *codes,
                 ),
             ).fetchall()
         )
@@ -992,7 +995,7 @@ class BusStop(LocatedNode):
         cur.execute("UPDATE BusBerth SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
 
 
 class BusBerth(Node):
@@ -1056,7 +1059,7 @@ class BusBerth(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM BusBerth WHERE stop = ? AND code = ?", (self.stop, code)
+                "SELECT i FROM BusBerth WHERE stop = ? AND code = ?", (self.stop, code)
             ).fetchall()
         )
 
@@ -1066,7 +1069,6 @@ class BusBerth(Node):
         cur.execute('UPDATE BusConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusBerthSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusBerth WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class BusConnection(Node):
@@ -1106,7 +1108,7 @@ class BusConnection(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f'SELECT i FROM BusConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                'SELECT i FROM BusConnection WHERE line = ? AND "from" = ? AND "to" = ?',
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
@@ -1115,7 +1117,6 @@ class BusConnection(Node):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM BusConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM BusConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class SeaCompany(Node):
@@ -1162,7 +1163,7 @@ class SeaCompany(Node):
     def equivalent(self, other: Self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute(f"SELECT i FROM SeaCompany WHERE name = ?", (self.name,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM SeaCompany WHERE name = ?", (self.name,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -1171,7 +1172,6 @@ class SeaCompany(Node):
         cur.execute("UPDATE SeaStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class SeaLine(Node):
@@ -1252,7 +1252,7 @@ class SeaLine(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM SeaLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+                "SELECT i FROM SeaLine WHERE code = ? AND company = ?", (self.code, self.company.i)
             ).fetchall()
         )
 
@@ -1261,11 +1261,10 @@ class SeaLine(Node):
         cur.execute("UPDATE SeaConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class SeaStop(LocatedNode):
-    codes = _SetAttr[str]("SeaStopCodes", "codes")
+    codes = _SetAttr[str]("SeaStopCodes", "code")
     """Unique code(s) identifying the sea stop. May also be the same as the name"""
     company = _FKColumn(SeaCompany, "company", "SeaStop")
     """The :py:class:`SeaCompany` that owns this stop"""
@@ -1350,15 +1349,16 @@ class SeaStop(LocatedNode):
     def equivalent(self, other: Self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
             return iter(())
+        code_params = "?, " * (len(codes) - 1) + "?"
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT DISTINCT SeaStop.i FROM SeaStop "
-                f"LEFT JOIN SeaStopCodes ON SeaStop.i = SeaStopCodes.i "
-                f"WHERE company = ? AND SeaStopCodes.code IN ?",
+                "SELECT DISTINCT SeaStop.i "
+                "FROM SeaStop LEFT JOIN SeaStopCodes ON SeaStop.i = SeaStopCodes.i "
+                f"WHERE company = ? AND SeaStopCodes.code IN ({code_params})",
                 (
                     self.company.i,
-                    codes,
+                    *codes,
                 ),
             ).fetchall()
         )
@@ -1368,7 +1368,7 @@ class SeaStop(LocatedNode):
         cur.execute("UPDATE SeaDock SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
 
 
 class SeaDock(Node):
@@ -1432,7 +1432,7 @@ class SeaDock(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM SeaDock WHERE stop = ? AND code = ?", (self.stop, code)
+                "SELECT i FROM SeaDock WHERE stop = ? AND code = ?", (self.stop, code)
             ).fetchall()
         )
 
@@ -1442,7 +1442,6 @@ class SeaDock(Node):
         cur.execute('UPDATE SeaConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaDockSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaDock WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class SeaConnection(Node):
@@ -1482,7 +1481,7 @@ class SeaConnection(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f'SELECT i FROM SeaConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                'SELECT i FROM SeaConnection WHERE line = ? AND "from" = ? AND "to" = ?',
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
@@ -1491,7 +1490,6 @@ class SeaConnection(Node):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM SeaConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM SeaConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class RailCompany(Node):
@@ -1538,7 +1536,7 @@ class RailCompany(Node):
     def equivalent(self, other: Self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute(f"SELECT i FROM RailCompany WHERE name = ?", (self.name,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM RailCompany WHERE name = ?", (self.name,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -1547,7 +1545,6 @@ class RailCompany(Node):
         cur.execute("UPDATE RailStation SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class RailLine(Node):
@@ -1628,7 +1625,7 @@ class RailLine(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM RailLine WHERE code = ? AND company = ?", (self.code, self.company.i)
+                "SELECT i FROM RailLine WHERE code = ? AND company = ?", (self.code, self.company.i)
             ).fetchall()
         )
 
@@ -1637,11 +1634,10 @@ class RailLine(Node):
         cur.execute("UPDATE RailConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class RailStation(LocatedNode):
-    codes = _SetAttr[str]("RailStationCodes", "codes")
+    codes = _SetAttr[str]("RailStationCodes", "code")
     """Unique code(s) identifying the rail station. May also be the same as the name"""
     company = _FKColumn(RailCompany, "company", "RailStation")
     """The :py:class:`RailCompany` that owns this stop"""
@@ -1726,15 +1722,16 @@ class RailStation(LocatedNode):
     def equivalent(self, other: Self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
             return iter(())
+        code_params = "?, " * (len(codes) - 1) + "?"
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT DISTINCT RailStation.i FROM RailStation "
-                f"LEFT JOIN RailStationCodes ON RailStation.i = RailStationCodes.i "
-                f"WHERE company = ? AND RailStationCodes.code IN ?",
+                "SELECT DISTINCT RailStation.i "
+                "FROM RailStation LEFT JOIN RailStationCodes ON RailStation.i = RailStationCodes.i "
+                f"WHERE company = ? AND RailStationCodes.code IN ({code_params})",
                 (
                     self.company.i,
-                    codes,
+                    *codes,
                 ),
             ).fetchall()
         )
@@ -1744,7 +1741,7 @@ class RailStation(LocatedNode):
         cur.execute("UPDATE RailPlatform SET station = :i1 WHERE station = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailStationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailStation WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
 
 
 class RailPlatform(Node):
@@ -1812,7 +1809,7 @@ class RailPlatform(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM RailPlatform WHERE station = ? AND code = ?", (self.station, code)
+                "SELECT i FROM RailPlatform WHERE station = ? AND code = ?", (self.station, code)
             ).fetchall()
         )
 
@@ -1822,7 +1819,6 @@ class RailPlatform(Node):
         cur.execute('UPDATE RailConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailPlatformSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailPlatform WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class RailConnection(Node):
@@ -1862,7 +1858,7 @@ class RailConnection(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f'SELECT i FROM RailConnection WHERE line = ? AND "from" = ? AND "to" = ?',
+                'SELECT i FROM RailConnection WHERE line = ? AND "from" = ? AND "to" = ?',
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
@@ -1871,7 +1867,6 @@ class RailConnection(Node):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM RailConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM RailConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
 
 
 class SpawnWarp(LocatedNode):
@@ -1903,13 +1898,13 @@ class SpawnWarp(LocatedNode):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM SpawnWarp WHERE name = ? and warpType = ?", (self.name, self.warp_type)
+                "SELECT i FROM SpawnWarp WHERE name = ? and warpType = ?", (self.name, self.warp_type)
             ).fetchall()
         )
 
     def _merge(self, other: Self):
         self.conn.execute("DELETE FROM SpawnWarp WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
 
 
 class Town(LocatedNode):
@@ -1947,10 +1942,10 @@ class Town(LocatedNode):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                f"SELECT i FROM Town WHERE name = ? and mayor = ?", (self.name, self.mayor)
+                "SELECT i FROM Town WHERE name = ? and mayor = ?", (self.name, self.mayor)
             ).fetchall()
         )
 
     def _merge(self, other: Self):
         self.conn.execute("DELETE FROM SpawnWarp WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        
+        super()._merge(other)
