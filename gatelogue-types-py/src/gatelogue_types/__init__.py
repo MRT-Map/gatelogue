@@ -2,693 +2,1372 @@ from __future__ import annotations
 
 import contextlib
 import datetime
+import sqlite3
 import urllib.request
-from typing import TYPE_CHECKING, Any, Generic, Literal, Self, TypeVar
-
-import msgspec
+from pathlib import Path
+from typing import Self, LiteralString, Iterator, Iterable, Literal, TYPE_CHECKING
 
 from gatelogue_types.__about__ import __data_version__
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
     # pyrefly: ignore [missing-import]
     import aiohttp
 
-type ID = int
+class GD:
+    def __init__(self):
+        sqlite3.threadsafety = 3
+        self.conn = sqlite3.connect(":memory:", check_same_thread=False)
+        self.conn.execute("PRAGMA foreign_keys = true")
 
-type Nodes = (
-    AirAirline
-    | AirAirport
-    | AirFlight
-    | AirGate
-    | BusCompany
-    | BusLine
-    | BusStop
-    | SeaCompany
-    | SeaLine
-    | SeaStop
-    | RailCompany
-    | RailLine
-    | RailStation
-    | SpawnWarp
-    | Town
-)
-type NodesNS = (
-    AirAirlineNS
-    | AirAirportNS
-    | AirFlightNS
-    | AirGateNS
-    | BusCompanyNS
-    | BusLineNS
-    | BusStopNS
-    | SeaCompanyNS
-    | SeaLineNS
-    | SeaStopNS
-    | RailCompanyNS
-    | RailLineNS
-    | RailStationNS
-    | SpawnWarpNS
-    | TownNS
-)
-
-
-class _GatelogueData(msgspec.Struct, kw_only=True):
-    nodes: Any
-    """List of all nodes, along with their connections to other nodes"""
-    timestamp: str = msgspec.field(default_factory=lambda: datetime.datetime.now().isoformat())  # noqa: DTZ005
-    """Time that the aggregation of the data was done"""
-    version: int = __data_version__
-    """Version number of the database format"""
-
-    @classmethod
-    def _get(cls, url: str, *args, **kwargs) -> Self:
+    @staticmethod
+    def _get_url(url: str, *args, **kwargs) -> bytes:
         with contextlib.suppress(ImportError):
             # pyrefly: ignore [missing-import]
             import niquests
 
-            return msgspec.json.decode(niquests.get(url, *args, **kwargs).text, type=cls)
+            return niquests.get(url, *args, **kwargs).bytes
         with contextlib.suppress(ImportError):
             # pyrefly: ignore [missing-source-for-stubs]
             import requests
 
-            return msgspec.json.decode(requests.get(url, *args, **kwargs).text, type=cls)  # noqa: S113
+            return requests.get(url, *args, **kwargs).content
         with contextlib.suppress(ImportError):
             # pyrefly: ignore [missing-import]
             import httpx
 
-            return msgspec.json.decode(httpx.get(url, *args, **kwargs).text, type=cls)
+            return httpx.get(url, *args, **kwargs).bytes
         with contextlib.suppress(ImportError):
             # pyrefly: ignore [missing-import]
             import urllib3
 
-            return msgspec.json.decode(urllib3.request("GET", url, *args, **kwargs).data, type=cls)
+            return urllib3.request("GET", url, *args, **kwargs).data
         if not url.startswith("https:"):
             raise ValueError
         with urllib.request.urlopen(url, *args, **kwargs) as response:  # noqa: S310
-            return msgspec.json.decode(response.read(), type=cls)
+            return response.read()
 
     @classmethod
-    async def _aiohttp_get(cls, url: str, session: aiohttp.ClientSession | None = None) -> Self:
+    def get(cls, *args, **kwargs) -> Self:
+        self = cls()
+        data = cls._get_url(
+            "???", *args, **kwargs
+        )
+        self.conn.deserialize(data)
+        return self
+
+    @classmethod
+    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None, *args, **kwargs) -> Self:
         # pyrefly: ignore [missing-import]
         import aiohttp
 
         session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
         async with session as session, session.get(url) as response:  # pyrefly: ignore [missing-attribute]
-            return msgspec.json.decode(await response.text(), type=cls)
+            self = cls()
+            data = response.bytes()
+            self.conn.deserialize(data)
+            return self
 
+    @property
+    def timestamp(self):
+        return self.conn.execute("SELECT timestamp FROM Metadata").fetchone()[0]
 
-class GatelogueData(_GatelogueData, tag=_GatelogueData.__name__.removeprefix("_")):
-    nodes: dict[ID, Nodes]
-
-    @classmethod
-    def get(cls, *args, **kwargs) -> Self:
-        return cls._get(
-            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json", *args, **kwargs
-        )
-
-    @classmethod
-    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None) -> Self:
-        return await cls._aiohttp_get(
-            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.json", session
-        )
-
-    def __iter__(self) -> Iterator[Nodes]:
-        return iter(self.nodes.values())
-
-    def __getitem__(self, item: ID) -> Nodes:
-        return self.nodes[item]
-
-
-class GatelogueDataNS(_GatelogueData, tag=GatelogueData.__name__.removeprefix("_")):
-    nodes: dict[ID, NodesNS]
+    @property
+    def version(self):
+        return self.conn.execute("SELECT version FROM Metadata").fetchone()[0]
 
     @classmethod
-    def get(cls, *args, **kwargs) -> Self:
-        return cls._get(
-            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
-            *args,
-            **kwargs,
+    def create(cls, sources: list[str]) -> Self:
+        self = cls()
+        cur = self.conn.cursor()
+        with open(Path(__file__).parent / "create.sql") as f:
+            cur.executescript(f.read())
+        cur.executemany("INSERT INTO Source (priority, name) VALUES (?, ?)", list(enumerate(sources)))
+        cur.execute(
+            f"INSERT INTO Metadata (version, timestamp) VALUES (:version, :timestamp)",
+            dict(version=__data_version__, timestamp=datetime.datetime.now().isoformat()),
         )
-
-    @classmethod
-    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None) -> Self:
-        return await cls._aiohttp_get(
-            "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_no_sources.json",
-            session,
-        )
-
-    def __iter__(self) -> Iterator[NodesNS]:
-        return iter(self.nodes.values())
-
-    def __getitem__(self, item: ID) -> NodesNS:
-        return self.nodes[item]
+        self.conn.commit()
+        return self
 
 
-T = TypeVar("T")
+class _Column[T]:
+    def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
+        self.name = name
+        self.table = table
+        self.sourced = sourced
+
+    def __get__(self, instance: Node, owner: type[Node]) -> T:
+        return instance.conn.execute(
+            f"SELECT {self.name} FROM {self.table} WHERE i = :i", dict(i=instance.i)
+        ).fetchone()[0]
+
+    def __set__(self, instance: Node, value: T):
+        cur = instance.conn.cursor()
+        cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
+        if self.sourced:
+            cur.execute(
+                f"UPDATE {self.table + 'Source'} SET {self.name} = :bool WHERE i = :i AND source = :source",
+                dict(bool=value is not None, i=instance.i, source=instance.source),
+            )
 
 
-class Sourced(msgspec.Struct, Generic[T]):
-    v: T
-    """Actual value"""
-    s: set[str] = msgspec.field(default_factory=set)
-    """List of sources that support the value"""
+class _FKColumn[T: Node | None]:
+    def __init__(self, ty: type[T], name: LiteralString, table: LiteralString, sourced: bool = False):
+        self.name = name
+        self.table = table
+        self.sourced = sourced
+        self.ty = ty
 
-    def __str__(self):
-        s = str(self.v)
-        if len(self.s) != 0:
-            s += " (" + ", ".join(str(a) for a in self.s) + ")"
-        return s
+    def __get__(self, instance: Node, owner: type[Node]) -> T:
+        target_i = _Column(self.name, self.table, self.sourced).__get__(instance, owner)
+        if target_i is None:
+            return None
+        return self.ty(instance.conn, target_i)
+
+    def __set__(self, instance: Node, value: T):
+        _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
+
+
+class _SetAttr[T]:
+    def __init__(self, table: LiteralString, table_column: LiteralString, sourced: bool = False):
+        self.table = table
+        self.table_column = table_column
+        self.sourced = sourced
+
+    def __get__(self, instance: Node, owner: type[Node]) -> set[T]:
+        return {
+            v
+            for (v,) in instance.conn.execute(
+                f"SELECT {self.table_column} FROM {self.table} WHERE i = :i", dict(i=instance.i)
+            ).fetchall()
+        }
+
+    def __set__(self, instance: Node, values: set[T]):
+        cur = instance.conn.cursor()
+        if self.sourced:
+            existing_values = {
+                v
+                for (v,) in cur.execute(
+                    f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source = :source",
+                    dict(i=instance.i, source=instance.source),
+                ).fetchall()
+            }
+            for new_value in values - existing_values:
+                cur.execute(
+                    f"INSERT OR IGNORE INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                    dict(i=instance.i, value=new_value),
+                )
+            for old_value in existing_values - values:
+                cur.execute(
+                    f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source = :source",
+                    dict(i=instance.i, value=old_value, source=instance.source),
+                )
+                if (
+                    cur.execute(
+                        f"SELECT count(i) FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value",
+                        dict(i=instance.i, value=old_value),
+                    ).fetchone()[0]
+                    == 0
+                ):
+                    cur.execute(
+                        f"DELETE FROM {self.table} WHERE i = :i AND {self.table_column} = :value",
+                        dict(i=instance.i, value=old_value),
+                    )
+        else:
+            cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))
+            cur.executemany(
+                f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                [dict(i=instance.i, value=value) for value in values],
+            )
 
 
 type World = Literal["New", "Old", "Space"]
-
-
-class Proximity(msgspec.Struct):
-    distance: float
-    """Distance between the two objects in blocks"""
-    explicit: bool = False
-    """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
-
-
-class _Node(msgspec.Struct, kw_only=True, tag=True):
-    # pyrefly: ignore [bad-assignment]
-    i: ID = None
-    """The ID of the node"""
-    source: set[str] = msgspec.field(default_factory=set)
-    """All sources that prove the node's existence"""
-
-    def __str__(self) -> str:
-        return (
-            type(self).__name__.removeprefix("_")
-            + "("
-            + ",".join(f"{k}={v}" for k, v in msgspec.structs.asdict(self).items() if v is not None)
-            + ")"
-        )
-
-
-class Node(_Node, tag=_Node.__name__.removeprefix("_")):
-    pass
-
-
-class NodeNS(_Node, tag=_Node.__name__.removeprefix("_")):
-    pass
-
-
-class _LocatedNode(_Node, kw_only=True, tag=True):
-    coordinates: Any
-    """Coordinates of the object"""
-    world: Any
-    """Whether the object is in the New or Old world"""
-
-    proximity: Any
-    """
-    References all objects that are near (within walking distance of) this object.
-    It is represented as an inner mapping of object IDs to proximity data (:py:class:`Proximity`).
-    For example, ``{1234: <proximity>}`` means that there is an object with ID ``1234`` near this object, and ``<proximity>`` is a :py:class:`Proximity` object.
-    """
-    shared_facility: Any
-    """References all objects that this object shares the same facility with (same building, station, hub etc)"""
-
-
-class LocatedNode(Node, _LocatedNode, tag=_LocatedNode.__name__.removeprefix("_")):
-    coordinates: Sourced[tuple[float, float]] | None = None
-    world: Sourced[World] | None = None
-
-    proximity: dict[ID, Sourced[Proximity]] = msgspec.field(default_factory=dict)
-    shared_facility: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class LocatedNodeNS(NodeNS, _LocatedNode, tag=_LocatedNode.__name__.removeprefix("_")):
-    coordinates: tuple[float, float] | None = None
-    world: World | None = None
-
-    proximity: dict[ID, Proximity] = msgspec.field(default_factory=dict)
-    shared_facility: list[ID] = msgspec.field(default_factory=list)
-
-
-class _AirFlight(_Node, kw_only=True, tag=True):
-    codes: set[str]
-    """Unique flight code(s). **2-letter airline prefix not included**"""
-    mode: Any
-    """Type of air vehicle or technology used on the flight"""
-
-    gates: Any
-    """List of IDs of :py:class:`AirGate` s that the flight goes to. Should be of length 2 in most cases"""
-    airline: Any
-    """ID of the :py:class:`AirAirline` the flight is operated by"""
-
-
-class AirFlight(Node, _AirFlight, kw_only=True, tag=_AirFlight.__name__.removeprefix("_")):
-    mode: Sourced[PlaneMode] | None = None
-
-    gates: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    # pyrefly: ignore [bad-assignment]
-    airline: Sourced[ID] = None
-
-
-class AirFlightNS(NodeNS, _AirFlight, kw_only=True, tag=_AirFlight.__name__.removeprefix("_")):
-    mode: PlaneMode | None = None
-
-    gates: list[ID] = msgspec.field(default_factory=list)
-    airline: ID
-
-
-class _AirAirport(_LocatedNode, kw_only=True, tag=True):
-    code: str
-    """Unique 3 (sometimes 4)-letter code"""
-    names: Any
-    """Name(s) of the airport"""
-    link: Any
-    """Link to the MRT Wiki page for the airport"""
-    modes: Any
-    """Modes offered by the airport"""
-
-    gates: Any
-    """List of IDs of :py:class:`AirGate` s"""
-
-
-class AirAirport(LocatedNode, _AirAirport, kw_only=True, tag=_AirAirport.__name__.removeprefix("_")):
-    names: Sourced[set[str]] | None = None
-    link: Sourced[str] | None = None
-    modes: Sourced[set[PlaneMode]] | None = None
-
-    gates: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class AirAirportNS(LocatedNodeNS, _AirAirport, kw_only=True, tag=_AirAirport.__name__.removeprefix("_")):
-    names: set[str] | None = None
-    link: str | None = None
-    modes: set[PlaneMode] | None = None
-
-    gates: list[ID] = msgspec.field(default_factory=list)
-
-
-class _AirGate(_Node, kw_only=True, tag=True):
-    code: str | None
-    """Unique gate code. If ``None``, all flights under this gate do not have gate information at this airport"""
-    size: Any
-    """Abbreviated size of the gate (eg. ``S``, ``M``)"""
-
-    flights: Any
-    """List of IDs of :py:class:`AirFlight` s that stop at this gate. If ``code==None``, all flights under this gate do not have gate information at this airport"""
-    airport: Any
-    """ID of the :py:class:`AirAirport`"""
-    airline: Any
-    """ID of the :py:class:`AirAirline` that owns the gate"""
-
-
-class AirGate(Node, _AirGate, kw_only=True, tag=_AirGate.__name__.removeprefix("_")):
-    size: Sourced[str] | None = None
-
-    flights: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    # pyrefly: ignore [bad-assignment]
-    airport: Sourced[ID] = None
-    airline: Sourced[ID] | None = None
-
-
-class AirGateNS(NodeNS, _AirGate, kw_only=True, tag=_AirGate.__name__.removeprefix("_")):
-    size: str | None = None
-
-    flights: list[ID] = msgspec.field(default_factory=list)
-    airport: ID
-    airline: ID | None = None
-
-
-class _AirAirline(_Node, kw_only=True, tag=True):
-    name: str
-    """Name of the airline"""
-    link: Any
-    """Link to the MRT Wiki page for the airline"""
-
-    flights: Any
-    """List of IDs of all :py:class:`AirFlight` s the airline operates"""
-    gates: Any
-    """List of IDs of all :py:class:`AirGate` s the airline owns or operates"""
-
-
-class AirAirline(Node, _AirAirline, kw_only=True, tag=_AirAirline.__name__.removeprefix("_")):
-    link: Sourced[str] | None = None
-
-    flights: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    gates: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class AirAirlineNS(NodeNS, _AirAirline, kw_only=True, tag=_AirAirline.__name__.removeprefix("_")):
-    link: str | None = None
-
-    flights: list[ID] = msgspec.field(default_factory=list)
-    gates: list[ID] = msgspec.field(default_factory=list)
-
-
-type PlaneMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
-
-
-class _RailCompany(_Node, kw_only=True, tag=True):
-    name: str
-    """Name of the Rail company"""
-
-    lines: Any
-    """List of IDs of all :py:class:`RailLine` s the company operates"""
-    stations: Any
-    """List of all :py:class:`RailStation` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a metro system"""
-
-
-class RailCompany(Node, _RailCompany, kw_only=True, tag=_RailCompany.__name__.removeprefix("_")):
-    lines: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    stations: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class RailCompanyNS(NodeNS, _RailCompany, kw_only=True, tag=_RailCompany.__name__.removeprefix("_")):
-    lines: list[ID] = msgspec.field(default_factory=list)
-    stations: list[ID] = msgspec.field(default_factory=list)
-
-
-class _RailLine(_Node, kw_only=True, tag=True):
-    code: str
-    """Unique code identifying the Rail line"""
-    name: Any
-    """Name of the line"""
-    colour: Any
-    """Colour of the line (on a map)"""
-    mode: Any
-    """Type of rail or rail technology used on the line"""
-
-    company: Any
-    """ID of the :py:class:`RailCompany` that operates the line"""
-    stations: Any
-    """List of all :py:class:`RailStation` s the line stops at"""
-
-
-class RailLine(Node, _RailLine, kw_only=True, tag=_RailLine.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-    colour: Sourced[str] | None = None
-    mode: Sourced[RailMode] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    stations: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class RailLineNS(NodeNS, _RailLine, kw_only=True, tag=_RailLine.__name__.removeprefix("_")):
-    name: str | None = None
-    colour: str | None = None
-    mode: RailMode | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    stations: list[ID] = msgspec.field(default_factory=list)
-
-
-class _RailStation(_LocatedNode, kw_only=True, tag=True):
-    codes: set[str]
-    """Unique code(s) identifying the Rail station. May also be the same as the name"""
-    name: Any
-    """Name of the station"""
-
-    company: Any
-    """ID of the :py:class:`RailCompany` that stops here"""
-    connections: Any
-    """
-    References all next stations on the lines serving this station.
-    It is represented as a mapping of station IDs to a list of connection data (:py:class:`RailConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the station with ID ``1234`` is the next station from here on two lines.
-    """
-
-
-class RailStation(LocatedNode, _RailStation, kw_only=True, tag=_RailStation.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    connections: dict[ID, list[Sourced[Connection]]] = msgspec.field(default_factory=dict)
-
-
-class RailStationNS(LocatedNodeNS, _RailStation, kw_only=True, tag=_RailStation.__name__.removeprefix("_")):
-    name: str | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
-
-
+type AirMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
+type BusMode = Literal["warp", "traincarts"]
+type SeaMode = Literal["cruise", "warp ferry", "traincarts ferry"]
 type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]
-
-
-class _BusCompany(_Node, kw_only=True, tag=True):
-    name: str
-    """Name of the bus company"""
-
-    lines: Any
-    """List of IDs of all :py:class:`BusLine` s the company operates"""
-    stops: Any
-    """List of all :py:class:`BusStop` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a city bus network"""
-
-
-class BusCompany(Node, _BusCompany, kw_only=True, tag=_BusCompany.__name__.removeprefix("_")):
-    lines: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class BusCompanyNS(NodeNS, _BusCompany, kw_only=True, tag=_BusCompany.__name__.removeprefix("_")):
-    lines: list[ID] = msgspec.field(default_factory=list)
-    stops: list[ID] = msgspec.field(default_factory=list)
-
-
-class _BusLine(_Node, kw_only=True, tag=True):
-    code: str
-    """Unique code identifying the bus line"""
-    name: Any
-    """Name of the line"""
-    colour: Any
-    """Colour of the line (on a map)"""
-
-    company: Any
-    """ID of the :py:class:`BusCompany` that operates the line"""
-    stops: Any
-    """List of all :py:class:`BusStop` s the line stops at"""
-
-
-class BusLine(Node, _BusLine, kw_only=True, tag=_BusLine.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-    colour: Sourced[str] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class BusLineNS(NodeNS, _BusLine, kw_only=True, tag=_BusLine.__name__.removeprefix("_")):
-    name: str | None = None
-    colour: str | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    stops: list[ID] = msgspec.field(default_factory=list)
-
-
-class _BusStop(_LocatedNode, kw_only=True, tag=True):
-    codes: set[str]
-    """Unique code(s) identifying the bus stop. May also be the same as the name"""
-    name: Any
-    """Name of the stop"""
-
-    company: Any
-    """ID of the :py:class:`BusCompany` that stops here"""
-    connections: Any
-    """
-    References all next stops on the lines serving this stop.
-    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`BusConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
-    """
-
-
-class BusStop(LocatedNode, _BusStop, kw_only=True, tag=_BusStop.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    connections: dict[ID, list[Sourced[Connection]]] = msgspec.field(default_factory=dict)
-
-
-class BusStopNS(LocatedNodeNS, _BusStop, kw_only=True, tag=_BusStop.__name__.removeprefix("_")):
-    name: str | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
-
-
-class _SeaCompany(_Node, kw_only=True, tag=True):
-    name: str
-    """Name of the Sea company"""
-
-    lines: Any
-    """List of IDs of all :py:class:`SeaLine` s the company operates"""
-    stops: Any
-    """List of all :py:class:`SeaStop` s the company's lines stop at"""
-    local: bool = False
-    """Whether the company operates within the city, e.g. a local ferry line"""
-
-
-class SeaCompany(Node, _SeaCompany, kw_only=True, tag=_SeaCompany.__name__.removeprefix("_")):
-    lines: list[Sourced[ID]] = msgspec.field(default_factory=list)
-    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class SeaCompanyNS(NodeNS, _SeaCompany, kw_only=True, tag=_SeaCompany.__name__.removeprefix("_")):
-    lines: list[ID] = msgspec.field(default_factory=list)
-    stops: list[ID] = msgspec.field(default_factory=list)
-
-
-class _SeaLine(_Node, kw_only=True, tag=True):
-    code: str
-    """Unique code identifying the Sea line"""
-    name: Any
-    """Name of the line"""
-    colour: Any
-    """Colour of the line (on a map)"""
-    mode: Any
-    """Type of boat used on the line"""
-
-    company: Any
-    """ID of the :py:class:`SeaCompany` that operates the line"""
-    stops: Any
-    """List of all :py:class:`SeaStop` s the line stops at"""
-
-
-class SeaLine(Node, _SeaLine, kw_only=True, tag=_SeaLine.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-    colour: Sourced[str] | None = None
-    mode: Sourced[SeaMode] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    stops: list[Sourced[ID]] = msgspec.field(default_factory=list)
-
-
-class SeaLineNS(NodeNS, _SeaLine, kw_only=True, tag=_SeaLine.__name__.removeprefix("_")):
-    name: str | None = None
-    colour: str | None = None
-    mode: SeaMode | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    stops: list[ID] = msgspec.field(default_factory=list)
-
-
-class _SeaStop(_LocatedNode, kw_only=True, tag=True):
-    codes: set[str]
-    """Unique code(s) identifying the Sea stop. May also be the same as the name"""
-    name: Any
-    """Name of the stop"""
-
-    company: Any
-    """ID of the :py:class:`SeaCompany` that stops here"""
-    connections: Any
-    """
-    References all next stops on the lines serving this stop.
-    It is represented as a mapping of stop IDs to a list of connection data (:py:class:`SeaConnection`), each encoding line and route information.
-    For example, ``{1234: [<conn1>, <conn2>]}`` means that the stop with ID ``1234`` is the next stop from here on two lines.
-    """
-
-
-class SeaStop(LocatedNode, _SeaStop, kw_only=True, tag=_SeaStop.__name__.removeprefix("_")):
-    name: Sourced[str] | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: Sourced[ID] = None
-    connections: dict[ID, list[Sourced[Connection]]] = msgspec.field(default_factory=dict)
-
-
-class SeaStopNS(LocatedNodeNS, _SeaStop, kw_only=True, tag=_SeaStop.__name__.removeprefix("_")):
-    name: str | None = None
-
-    # pyrefly: ignore [bad-assignment]
-    company: ID = None
-    connections: dict[ID, list[ConnectionNS]] = msgspec.field(default_factory=dict)
-
-
-type SeaMode = Literal["ferry", "cruise"]
-
-
-class _SpawnWarp(_LocatedNode, kw_only=True, tag=True):
-    name: str
-    """Name of the spawn warp"""
-    warp_type: WarpType
-    """The type of warp"""
-
-
-class SpawnWarp(LocatedNode, _SpawnWarp, kw_only=True, tag=_SpawnWarp.__name__.removeprefix("_")):
-    pass
-
-
-class SpawnWarpNS(LocatedNodeNS, _SpawnWarp, kw_only=True, tag=_SpawnWarp.__name__.removeprefix("_")):
-    pass
-
-
 type WarpType = Literal["premier", "terminus", "traincarts", "portal", "misc"]
-
-
-class _Town(_LocatedNode, kw_only=True, tag=True):
-    name: str
-    """Name of the town"""
-    rank: Any
-    """Rank of the town"""
-    mayor: Any
-    """Mayor of the town"""
-    deputy_mayor: Any
-    """Deputy Mayor of the town"""
-
-
-class Town(LocatedNode, _Town, kw_only=True, tag=_Town.__name__.removeprefix("_")):
-    rank: Sourced[Rank]
-    mayor: Sourced[str]
-    deputy_mayor: Sourced[str | None]
-
-
-class TownNS(LocatedNodeNS, _Town, kw_only=True, tag=_Town.__name__.removeprefix("_")):
-    rank: Rank
-    mayor: str
-    deputy_mayor: str | None
-
-
 type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
 
 
-class _Connection(msgspec.Struct):
-    line: ID
-    """Reference to or ID of the line that the connection is made on"""
-    direction: Any
-    """Direction information"""
+class Node:
+    def __init__(self, conn: sqlite3.Connection, i: int):
+        self.conn = conn
+        self.i = i
+
+    type = _Column[str]("type", "Node")
+    # source = _Column[int]("source", "NodeSource")
+    sources = _SetAttr[int]("NodeSource", "source")
+
+    @property
+    def source(self) -> int:
+        sources = self.sources
+        assert len(sources) == 1, "Expected only one source"
+        return next(iter(sources))
+
+    @source.setter
+    def source(self, value: int):
+        self.sources = {value}
+
+    @classmethod
+    def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
+        cur = conn.cursor()
+        cur.execute("INSERT INTO Node ( type ) VALUES ( :type )", dict(type=ty))
+        (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = :rowid", dict(rowid=cur.lastrowid)).fetchone()
+        cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
+        return i
 
 
-class Connection(_Connection, kw_only=True, tag=_Connection.__name__.removeprefix("_")):
-    direction: Direction | None = None
+class LocatedNode(Node):
+    world = _Column[str | None]("world", "LocatedNode")
+    _x = _Column[int | None]("x", "LocatedNode")
+    _y = _Column[int | None]("y", "LocatedNode")
+
+    @property
+    def coordinates(self) -> tuple[int, int] | None:
+        if (x := self._x) is None:
+            return None
+        if (y := self._y) is None:
+            return None
+        return x, y
+
+    @coordinates.setter
+    def coordinates(self, value: tuple[int, int] | None):
+        x, y = (None, None) if value is None else value
+        self._x = x
+        self._y = y
+
+    @classmethod
+    def create_node_with_location(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        ty: str,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> int:
+        i = cls.create_node(conn, src, ty=ty)
+        x, y = (None, None) if coordinates is None else coordinates
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO NodeLocation (i, world, x, y) VALUES (:i, :world, :x, :y)",
+            dict(i=i, world=world, x=x, y=y),
+        )
+        cur.execute(
+            "INSERT INTO NodeLocationSource (i, source, world, coordinates) VALUES (:i, :source, :world, :coordinates)",
+            dict(i=i, source=src, world=world is not None, coordinates=coordinates is not None),
+        )
+        return i
+
+    @property
+    def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
+        return (
+            (LocatedNode(self.conn, j if self.i == i else i), Proximity(self.conn, i, j))
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
+    @property
+    def shared_facility(self) -> Iterable[LocatedNode]:
+        return (
+            LocatedNode(self.conn, j if self.i == i else i)
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
 
 
-class ConnectionNS(_Connection, kw_only=True, tag=_Connection.__name__.removeprefix("_")):
-    direction: DirectionNS | None = None
+class Proximity:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @property
+    def distance(self):
+        return self.conn.execute(
+            f"SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @distance.setter
+    def distance(self, value: float):
+        cur = self.conn.cursor()
+        cur.execute(
+            f"UPDATE Proximity set distance = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @property
+    def explicit(self):
+        return self.conn.execute(
+            f"SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @explicit.setter
+    def explicit(self, value: bool):
+        cur = self.conn.cursor()
+        cur.execute(
+            f"UPDATE Proximity set explicit = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        srcs: Iterable[int],
+        *,
+        node1: LocatedNode,
+        node2: LocatedNode,
+        distance: float,
+        explicit: bool = False,
+    ) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit)",
+            dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
+        )
+        cur.execute(
+            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source )",
+            [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
+        )
+        return cls(conn, node1, node2)
 
 
-class _Direction(msgspec.Struct):
-    direction: ID
-    """Reference to or ID of the station/stop that the other fields take with respect to. Should be either node of the connection"""
-    forward_label: str | None
-    """Describes the direction taken when travelling **towards the station/stop in** ``forward_towards_code``"""
-    backward_label: str | None
-    """Describes the direction taken when travelling **from the station/stop in** ``forward_towards_code``"""
-    one_way: Any
-    """Whether the connection is one-way, ie. travel **towards the station/stop in** ``forward_towards_code`` is possible but not the other way"""
+class SharedFacility:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, *, node1: LocatedNode, node2: LocatedNode) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2)", dict(node1=node1.i, node2=node2.i)
+        )
+        return cls(conn, node1, node2)
 
 
-class Direction(_Direction, kw_only=True, tag=_Direction.__name__.removeprefix("_")):
-    one_way: bool | Sourced[bool] = False
+class AirAirline(Node):
+    name = _Column[str]("name", "AirAirline")
+    link = _Column[str | None]("link", "AirAirline", sourced=True)
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str, link: str | None = None) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO AirAirline (i, name, link) VALUES (:i, :name, :link)", dict(i=i, name=name, link=link))
+        cur.execute(
+            "INSERT INTO AirAirlineSource (i, source, link) VALUES (:i, :source, :link)",
+            dict(i=i, source=src, link=link is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def flights(self) -> Iterator[AirFlight]:
+        return (
+            AirFlight(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def gates(self) -> Iterator[AirGate]:
+        return (
+            AirGate(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def airports(self) -> Iterator[AirAirport]:
+        return (
+            AirAirport(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT airport FROM AirGate WHERE airline = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
 
 
-class DirectionNS(_Direction, kw_only=True, tag=_Direction.__name__.removeprefix("_")):
-    one_way: bool = False
+class AirAirport(LocatedNode):
+    code = _Column[str]("code", "AirAirport")
+    names = _SetAttr[str]("AirAirportNames", "name", sourced=True)
+    link = _Column[str | None]("link", "AirAirport", sourced=True)
+    modes = _SetAttr[str]("AirAirportModes", "mode", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        names: set[str] | None = None,
+        link: str | None = None,
+        modes: set[AirMode] | None = None,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        if names is None:
+            names = set()
+        if modes is None:
+            modes = set()
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO AirAirport (i, code, link) VALUES (:i, :code, :link)", dict(i=i, code=code, link=link))
+        cur.executemany("INSERT INTO AirAirportNames (i, name) VALUES (?, ?)", [(i, name) for name in names])
+        cur.executemany("INSERT INTO AirAirportModes (i, mode) VALUES (?, ?)", [(i, mode) for mode in modes])
+        cur.execute(
+            "INSERT INTO AirAirportSource (i, source, link) VALUES (:i, :source, :link)",
+            dict(i=i, source=src, link=link is not None),
+        )
+        cur.executemany(
+            "INSERT INTO AirAirportNamesSource (i, name, source) VALUES (?, ?, ?)", [(i, name, src) for name in names]
+        )
+        cur.executemany(
+            "INSERT INTO AirAirportModesSource (i, mode, source) VALUES (?, ?, ?)", [(i, mode, src) for mode in modes]
+        )
+        return cls(conn, i)
+
+    @property
+    def gates(self) -> Iterator[AirGate]:
+        return (
+            AirGate(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
+        )
+
+
+class AirGate(Node):
+    code = _Column[str | None]("code", "AirGate")
+    airport = _FKColumn(AirAirport, "airport", "AirGate")
+    airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate")
+    size = _Column[str | None]("size", "AirGate")
+    mode = _Column[str | None]("mode", "AirGate")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        airport: AirAirport,
+        airline: AirAirline | None = None,
+        size: str | None = None,
+        mode: AirMode | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO AirGate (i, code, airport, airline, size, mode) VALUES (:i, :code, :airport, :airline, :size, :mode)",
+            dict(
+                i=i, code=code, airport=airport.i, airline=None if airline is None else airline.i, size=size, mode=mode
+            ),
+        )
+        cur.execute(
+            "INSERT INTO AirGateSource (i, source, size, mode, airline) VALUES (:i, :source, :size, :mode, :airline)",
+            dict(i=i, source=src, size=size is not None, mode=mode is not None, airline=airline is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def flights_from_here(self) -> Iterator[AirFlight]:
+        return (
+            AirFlight(self.conn, i)
+            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "from" = :i', dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def flights_to_here(self) -> Iterator[AirFlight]:
+        return (
+            AirFlight(self.conn, i)
+            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
+        )
+
+
+class AirFlight(Node):
+    airline = _FKColumn(AirAirline, "airline", "AirFlight")
+    code = _Column[str]("code", "AirFlight")
+    from_ = _FKColumn(AirGate, "from", "AirFlight")
+    to = _FKColumn(AirGate, "to", "AirFlight")
+    mode = _Column[str | None]("mode", "AirFlight")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        airline: AirAirline,
+        code: str,
+        from_: AirGate,
+        to: AirGate,
+        mode: AirMode | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO AirFlight (i, "from", "to", code, mode, airline) VALUES (:i, :from_, :to, :code, :mode, :airline)',
+            dict(i=i, from_=from_.i, to=to.i, code=code, mode=mode, airline=airline.i),
+        )
+        cur.execute(
+            "INSERT INTO AirFlightSource (i, source, mode) VALUES (:i, :source, :mode)",
+            dict(
+                i=i,
+                source=src,
+                mode=mode is not None,
+            ),
+        )
+        return cls(conn, i)
+
+
+class BusCompany(Node):
+    name = _Column[str]("name", "BusCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO BusCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO BusCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM BusLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[BusStop]:
+        return (
+            BusStop(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM BusStop WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.i "
+                "FROM (SELECT i FROM BusStop WHERE company = :i) A "
+                "LEFT JOIN BusBerth on A.i = BusBerth.stop",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusLine(Node):
+    code = _Column[str]("code", "BusLine")
+    company = _FKColumn(BusCompany, "company", "BusLine")
+    name = _Column[str | None]("name", "BusLine", sourced=True)
+    colour = _Column[str | None]("colour", "BusLine", sourced=True)
+    mode = _Column[str | None]("mode", "BusLine", sourced=True)
+    local = _Column[bool | None]("name", "BusLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: BusCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: BusMode | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO BusLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO BusLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.i "
+                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
+                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[BusStop]:
+        return (
+            BusStop(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusBerth.stop "
+                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
+                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusStop(LocatedNode):
+    codes = _SetAttr[str]("BusStopCodes", "codes")
+    company = _FKColumn(BusCompany, "company", "BusStop")
+    name = _Column[str | None]("name", "BusStop", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: BusCompany,
+        name: str | None = None,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO BusStop (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO BusStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO BusStopSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def berths(self) -> Iterator[BusBerth]:
+        return (
+            BusBerth(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM BusBerth WHERE stop = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.i "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.i "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.line "
+                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
+                'LEFT JOIN BusConnection ON A.i = BusConnection."from" OR A.i = BusConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusBerth(Node):
+    code = _Column[str | None]("code", "BusBerth")
+    stop = _FKColumn(BusStop, "stop", "BusStop")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        stop: BusStop,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO BusBerth (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
+        cur.execute("INSERT INTO BusBerthSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[BusConnection]:
+        return (
+            BusConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[BusLine]:
+        return (
+            BusLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT BusConnection.line FROM BusConnection "
+                'WHERE BusConnection."from" = :i OR BusConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class BusConnection(Node):
+    line = _FKColumn(BusLine, "line", "BusConnection")
+    from_ = _FKColumn(BusBerth, "from", "BusConnection")
+    to = _FKColumn(BusBerth, "to", "BusConnection")
+    direction = _Column[str | None]("direction", "BusConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: BusLine,
+        from_: BusBerth,
+        to: BusBerth,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO BusConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO BusConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
+class SeaCompany(Node):
+    name = _Column[str]("name", "SeaCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO SeaCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO SeaCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM SeaLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[SeaStop]:
+        return (
+            SeaStop(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM SeaStop WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.i "
+                "FROM (SELECT i FROM SeaStop WHERE company = :i) A "
+                "LEFT JOIN SeaDock on A.i = SeaDock.stop",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaLine(Node):
+    code = _Column[str]("code", "SeaLine")
+    company = _FKColumn(SeaCompany, "company", "SeaLine")
+    name = _Column[str | None]("name", "SeaLine", sourced=True)
+    colour = _Column[str | None]("colour", "SeaLine", sourced=True)
+    mode = _Column[str | None]("mode", "SeaLine", sourced=True)
+    local = _Column[bool | None]("name", "SeaLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: SeaCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: SeaMode | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SeaLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO SeaLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.i "
+                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
+                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stops(self) -> Iterator[SeaStop]:
+        return (
+            SeaStop(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaDock.stop "
+                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
+                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaStop(LocatedNode):
+    codes = _SetAttr[str]("SeaStopCodes", "codes")
+    company = _FKColumn(SeaCompany, "company", "SeaStop")
+    name = _Column[str | None]("name", "SeaStop", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: SeaCompany,
+        name: str | None = None,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SeaStop (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO SeaStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO SeaStopSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def docks(self) -> Iterator[SeaDock]:
+        return (
+            SeaDock(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM SeaDock WHERE stop = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.i "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.i "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.line "
+                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
+                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from" OR A.i = SeaConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaDock(Node):
+    code = _Column[str | None]("code", "SeaDock")
+    stop = _FKColumn(SeaStop, "stop", "SeaStop")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        stop: SeaStop,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO SeaDock (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
+        cur.execute("INSERT INTO SeaDockSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[SeaConnection]:
+        return (
+            SeaConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[SeaLine]:
+        return (
+            SeaLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT SeaConnection.line FROM SeaConnection "
+                'WHERE SeaConnection."from" = :i OR SeaConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class SeaConnection(Node):
+    line = _FKColumn(SeaLine, "line", "SeaConnection")
+    from_ = _FKColumn(SeaDock, "from", "SeaConnection")
+    to = _FKColumn(SeaDock, "to", "SeaConnection")
+    direction = _Column[str | None]("direction", "SeaConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: SeaLine,
+        from_: SeaDock,
+        to: SeaDock,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO SeaConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO SeaConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
+class RailCompany(Node):
+    name = _Column[str]("name", "RailCompany")
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, src: int, *, name: str) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO RailCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
+        cur.execute("INSERT INTO RailCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM RailLine WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def stations(self) -> Iterator[RailStation]:
+        return (
+            RailStation(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM RailStation WHERE company = :i", dict(i=self.i)).fetchall()
+        )
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.i "
+                "FROM (SELECT i FROM RailStation WHERE company = :i) A "
+                "LEFT JOIN RailPlatform on A.i = RailPlatform.station",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailLine(Node):
+    code = _Column[str]("code", "RailLine")
+    company = _FKColumn(RailCompany, "company", "RailLine")
+    name = _Column[str | None]("name", "RailLine", sourced=True)
+    colour = _Column[str | None]("colour", "RailLine", sourced=True)
+    mode = _Column[str | None]("mode", "RailLine", sourced=True)
+    local = _Column[bool | None]("name", "RailLine", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str,
+        company: RailCompany,
+        name: str | None = None,
+        colour: str | None = None,
+        mode: RailMode | None = None,
+        local: bool | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailLine (i, code, company, name, colour, mode, local) "
+            "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
+            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+        )
+        cur.execute(
+            "INSERT INTO RailLineSource (i, source, name, colour, mode, local) "
+            "VALUES (:i, :source, :name, :colour, :mode, :local)",
+            dict(
+                i=i,
+                source=src,
+                name=name is not None,
+                colour=colour is not None,
+                mode=mode is not None,
+                local=local is not None,
+            ),
+        )
+        return cls(conn, i)
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.i "
+                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
+                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def stations(self) -> Iterator[RailStation]:
+        return (
+            RailStation(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailPlatform.station "
+                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
+                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailStation(LocatedNode):
+    codes = _SetAttr[str]("RailStationCodes", "codes")
+    company = _FKColumn(RailCompany, "company", "RailStation")
+    name = _Column[str | None]("name", "RailStation", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        codes: set[str],
+        company: RailCompany,
+        name: str | None = None,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailStation (i, name, company) VALUES (:i, :name, :company)",
+            dict(i=i, name=name, company=company.i),
+        )
+        cur.executemany("INSERT INTO RailStationCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
+        cur.execute(
+            "INSERT INTO RailStationSource (i, source, name) VALUES (:i, :source, :name)",
+            dict(i=i, source=src, name=name is not None),
+        )
+        return cls(conn, i)
+
+    @property
+    def platforms(self) -> Iterator[RailPlatform]:
+        return (
+            RailPlatform(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT i FROM RailPlatform WHERE station = :i",
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_from_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.i "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."from"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.i "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.line "
+                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
+                'LEFT JOIN RailConnection ON A.i = RailConnection."from" OR A.i = RailConnection."to"',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailPlatform(Node):
+    code = _Column[str | None]("code", "RailPlatform")
+    station = _FKColumn(RailStation, "station", "RailStation")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        code: str | None,
+        station: RailStation,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO RailPlatform (i, code, station) VALUES (:i, :code, :station)",
+            dict(i=i, code=code, station=station.i),
+        )
+        cur.execute("INSERT INTO RailPlatformSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        return cls(conn, i)
+
+    @property
+    def connections_from_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."from" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def connections_to_here(self) -> Iterator[RailConnection]:
+        return (
+            RailConnection(self.conn, i)
+            for (i,) in self.conn.execute(
+                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+    @property
+    def lines(self) -> Iterator[RailLine]:
+        return (
+            RailLine(self.conn, i)
+            for (i,) in self.conn.execute(
+                "SELECT DISTINCT RailConnection.line FROM RailConnection "
+                'WHERE RailConnection."from" = :i OR RailConnection."to" = :i',
+                dict(i=self.i),
+            ).fetchall()
+        )
+
+
+class RailConnection(Node):
+    line = _FKColumn(RailLine, "line", "RailConnection")
+    from_ = _FKColumn(RailPlatform, "from", "RailConnection")
+    to = _FKColumn(RailPlatform, "to", "RailConnection")
+    direction = _Column[str | None]("direction", "RailConnection", sourced=True)
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        line: RailLine,
+        from_: RailPlatform,
+        to: RailPlatform,
+        direction: str | None = None,
+    ) -> Self:
+        i = cls.create_node(conn, src, ty=cls.__name__)
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO RailConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+        )
+        cur.execute(
+            "INSERT INTO RailConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
+            dict(i=i, source=src, direction=direction is not None),
+        )
+        return cls(conn, i)
+
+
+class SpawnWarp(LocatedNode):
+    name = _Column[str]("name", "SpawnWarp")
+    warp_type = _Column[str]("warpType", "SpawnWarp")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        name: str,
+        warp_type: str,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SpawnWarp (i, name, warpType) VALUES (:i, :name, :warp_type)",
+            dict(i=i, name=name, warp_type=warp_type),
+        )
+        return cls(conn, i)
+
+
+class Town(LocatedNode):
+    name = _Column[str]("name", "Town")
+    rank = _Column[str]("rank", "Town")
+    mayor = _Column[str]("mayor", "Town")
+    deputy_mayor = _Column[str | None]("deputyMayor", "Town")
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        *,
+        name: str,
+        rank: str,
+        mayor: str,
+        deputy_mayor: str | None,
+        world: World | None = None,
+        coordinates: tuple[int, int] | None = None,
+    ) -> Self:
+        i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Town (i, name, rank, mayor, deputyMayor) VALUES (:i, :name, :rank, :mayor, :deputy_mayor)",
+            dict(i=i, name=name, rank=rank, mayor=mayor, deputy_mayor=deputy_mayor),
+        )
+        return cls(conn, i)

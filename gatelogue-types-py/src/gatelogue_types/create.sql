@@ -1,5 +1,12 @@
 BEGIN;
 
+CREATE TABLE Metadata
+(
+    version INTEGER NOT NULL,
+    timestamp TEXT NOT NULL,
+    CHECK ( ROWID = 1 )
+) STRICT;
+
 CREATE TABLE Source
 (
     priority INTEGER PRIMARY KEY,
