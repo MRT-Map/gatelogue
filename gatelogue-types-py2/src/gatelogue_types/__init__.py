@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Self, LiteralString, Iterator, Iterable
+from typing import Self, LiteralString, Iterator, Iterable, Literal
 
 
 class GD:
@@ -112,6 +112,13 @@ class _SetAttr[T]:
                 [dict(i=instance.i, value=value) for value in values],
             )
 
+type World = Literal["New", "Old", "Space"]
+type AirMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
+type BusMode = Literal["warp", "traincarts"]
+type SeaMode = Literal["cruise", "warp ferry", "traincarts ferry"]
+type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]
+type WarpType = Literal["premier", "terminus", "traincarts", "portal", "misc"]
+type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "Premier", "Community"]
 
 class Node:
     def __init__(self, conn: sqlite3.Connection, i: int):
@@ -167,7 +174,7 @@ class LocatedNode(Node):
         src: int,
         *,
         ty: str,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> int:
         i = cls.create_node(conn, src, ty=ty)
@@ -335,8 +342,8 @@ class AirAirport(LocatedNode):
         code: str,
         names: set[str] | None = None,
         link: str | None = None,
-        modes: set[str] | None = None,
-        world: str | None = None,
+        modes: set[AirMode] | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         if names is None:
@@ -385,7 +392,7 @@ class AirGate(Node):
         airport: AirAirport,
         airline: AirAirline | None = None,
         size: str | None = None,
-        mode: str | None = None,
+        mode: AirMode | None = None,
     ) -> Self:
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -433,7 +440,7 @@ class AirFlight(Node):
         code: str,
         from_: AirGate,
         to: AirGate,
-        mode: str | None = None,
+        mode: AirMode | None = None,
     ) -> Self:
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -508,7 +515,7 @@ class BusLine(Node):
         company: BusCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: str | None = None,
+        mode: BusMode | None = None,
         local: bool | None = None,
     ) -> Self:
         i = cls.create_node(conn, src, ty=cls.__name__)
@@ -571,7 +578,7 @@ class BusStop(LocatedNode):
         codes: set[str],
         company: BusCompany,
         name: str | None = None,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
@@ -771,7 +778,7 @@ class SeaLine(Node):
         company: SeaCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: str | None = None,
+        mode: SeaMode | None = None,
         local: bool | None = None,
     ) -> Self:
         i = cls.create_node(conn, src, ty=cls.__name__)
@@ -834,7 +841,7 @@ class SeaStop(LocatedNode):
         codes: set[str],
         company: SeaCompany,
         name: str | None = None,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
@@ -1034,7 +1041,7 @@ class RailLine(Node):
         company: RailCompany,
         name: str | None = None,
         colour: str | None = None,
-        mode: str | None = None,
+        mode: RailMode | None = None,
         local: bool | None = None,
     ) -> Self:
         i = cls.create_node(conn, src, ty=cls.__name__)
@@ -1097,7 +1104,7 @@ class RailStation(LocatedNode):
         codes: set[str],
         company: RailCompany,
         name: str | None = None,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
@@ -1256,7 +1263,7 @@ class SpawnWarp(LocatedNode):
         *,
         name: str,
         warp_type: str,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)
@@ -1284,7 +1291,7 @@ class Town(LocatedNode):
         rank: str,
         mayor: str,
         deputy_mayor: str | None,
-        world: str | None = None,
+        world: World | None = None,
         coordinates: tuple[int, int] | None = None,
     ) -> Self:
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, world=world, coordinates=coordinates)

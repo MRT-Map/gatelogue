@@ -34,8 +34,8 @@ CREATE TABLE NodeLocationSource
 (
     i           INTEGER NOT NULL REFERENCES NodeLocation (i),
     source      INTEGER NOT NULL REFERENCES Source (priority),
-    world       INTEGER NOT NULL CHECK ( world IN (0, 1) ),
-    coordinates INTEGER NOT NULL CHECK ( coordinates IN (0, 1) ),
+    world       INTEGER NOT NULL CHECK ( world IN (false, true) ) DEFAULT false,
+    coordinates INTEGER NOT NULL CHECK ( coordinates IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -50,7 +50,7 @@ CREATE TABLE AirAirlineSource
 (
     i      INTEGER NOT NULL REFERENCES AirAirline (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    link   INTEGER NOT NULL CHECK ( link IN (0, 1) ),
+    link   INTEGER NOT NULL CHECK ( link IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -76,21 +76,21 @@ CREATE TABLE AirAirportSource
 (
     i      INTEGER NOT NULL REFERENCES AirAirport (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    link   INTEGER NOT NULL CHECK ( link IN (0, 1) ),
+    link   INTEGER NOT NULL CHECK ( link IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 CREATE TABLE AirAirportNamesSource
 (
-    i INTEGER NOT NULL,
-    name TEXT NOT NULL,
+    i      INTEGER NOT NULL,
+    name   TEXT    NOT NULL,
     source INTEGER NOT NULL REFERENCES Source (priority),
     FOREIGN KEY (i, name) REFERENCES AirAirportNames (i, name),
     UNIQUE (i, name, source)
 ) STRICT;
 CREATE TABLE AirAirportModesSource
 (
-    i INTEGER NOT NULL,
-    mode TEXT NOT NULL,
+    i      INTEGER NOT NULL,
+    mode   TEXT    NOT NULL,
     source INTEGER NOT NULL REFERENCES Source (priority),
     FOREIGN KEY (i, mode) REFERENCES AirAirportModes (i, mode),
     UNIQUE (i, mode, source)
@@ -109,7 +109,7 @@ CREATE TABLE AirFlightSource
 (
     i      INTEGER NOT NULL REFERENCES AirFlight (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    mode   INTEGER NOT NULL CHECK ( mode IN (0, 1) ),
+    mode   INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -126,9 +126,9 @@ CREATE TABLE AirGateSource
 (
     i       INTEGER NOT NULL REFERENCES AirGate (i),
     source  INTEGER NOT NULL REFERENCES Source (priority),
-    size    INTEGER NOT NULL CHECK ( size IN (0, 1) ),
-    mode    INTEGER NOT NULL CHECK ( mode IN (0, 1) ),
-    airline INTEGER NOT NULL CHECK ( airline IN (0, 1) ),
+    size    INTEGER NOT NULL CHECK ( size IN (false, true) ) DEFAULT false,
+    mode    INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
+    airline INTEGER NOT NULL CHECK ( airline IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -153,16 +153,16 @@ CREATE TABLE BusLine
     name    TEXT,
     colour  TEXT,
     mode    TEXT CHECK ( mode IS NULL OR mode IN ('warp', 'traincarts') ),
-    local   INTEGER CHECK ( local IS NULL OR local IN (0, 1) )
+    local   INTEGER CHECK ( local IS NULL OR local IN (false, true) )
 ) STRICT;
 CREATE TABLE BusLineSource
 (
     i      INTEGER NOT NULL REFERENCES BusLine (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
-    colour INTEGER NOT NULL CHECK ( colour IN (0, 1) ),
-    mode   INTEGER NOT NULL CHECK ( mode IN (0, 1) ),
-    local  INTEGER NOT NULL CHECK ( local IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
+    colour INTEGER NOT NULL CHECK ( colour IN (false, true) ) DEFAULT false,
+    mode   INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
+    local  INTEGER NOT NULL CHECK ( local IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -182,7 +182,7 @@ CREATE TABLE BusStopSource
 (
     i      INTEGER NOT NULL REFERENCES BusStop (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -211,7 +211,7 @@ CREATE TABLE BusConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES BusConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
-    direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
+    direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -236,16 +236,16 @@ CREATE TABLE SeaLine
     name    TEXT,
     colour  TEXT,
     mode    TEXT CHECK ( mode IS NULL OR mode IN ('cruise', 'warp ferry', 'traincarts ferry') ),
-    local   INTEGER CHECK ( local IS NULL OR local IN (0, 1) )
+    local   INTEGER CHECK ( local IS NULL OR local IN (false, true) )
 ) STRICT;
 CREATE TABLE SeaLineSource
 (
     i      INTEGER NOT NULL REFERENCES SeaLine (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
-    colour INTEGER NOT NULL CHECK ( colour IN (0, 1) ),
-    mode   INTEGER NOT NULL CHECK ( mode IN (0, 1) ),
-    local  INTEGER NOT NULL CHECK ( local IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
+    colour INTEGER NOT NULL CHECK ( colour IN (false, true) ) DEFAULT false,
+    mode   INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
+    local  INTEGER NOT NULL CHECK ( local IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -265,7 +265,7 @@ CREATE TABLE SeaStopSource
 (
     i      INTEGER NOT NULL REFERENCES SeaStop (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -295,7 +295,7 @@ CREATE TABLE SeaConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES SeaConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
-    direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
+    direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -320,16 +320,16 @@ CREATE TABLE RailLine
     name    TEXT,
     colour  TEXT,
     mode    TEXT CHECK ( mode IS NULL OR mode IN ('warp', 'cart', 'traincarts', 'vehicles') ),
-    local   INTEGER CHECK ( local IS NULL OR local IN (0, 1) )
+    local   INTEGER CHECK ( local IS NULL OR local IN (false, true) )
 ) STRICT;
 CREATE TABLE RailLineSource
 (
     i      INTEGER NOT NULL REFERENCES RailLine (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
-    colour INTEGER NOT NULL CHECK ( colour IN (0, 1) ),
-    mode   INTEGER NOT NULL CHECK ( mode IN (0, 1) ),
-    local  INTEGER NOT NULL CHECK ( local IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
+    colour INTEGER NOT NULL CHECK ( colour IN (false, true) ) DEFAULT false,
+    mode   INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
+    local  INTEGER NOT NULL CHECK ( local IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -349,7 +349,7 @@ CREATE TABLE RailStationSource
 (
     i      INTEGER NOT NULL REFERENCES RailStation (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    name   INTEGER NOT NULL CHECK ( name IN (0, 1) ),
+    name   INTEGER NOT NULL CHECK ( name IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -379,7 +379,7 @@ CREATE TABLE RailConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES RailConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
-    direction INTEGER NOT NULL CHECK ( direction IN (0, 1) ),
+    direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -388,7 +388,7 @@ CREATE TABLE SpawnWarp
 (
     i        INTEGER PRIMARY KEY REFERENCES NodeLocation (i),
     name     TEXT NOT NULL,
-    warpType TEXT NOT NULL
+    warpType TEXT NOT NULL CHECK ( warpType in ('premier', 'terminus', 'traincarts', 'portal', 'misc') )
 ) STRICT;
 
 CREATE TABLE Town
@@ -407,7 +407,7 @@ CREATE TABLE Proximity
     node1    INTEGER NOT NULL REFERENCES NodeLocation (i),
     node2    INTEGER NOT NULL REFERENCES NodeLocation (i),
     distance REAL    NOT NULL,
-    explicit INTEGER NOT NULL CHECK ( explicit IN (0, 1) ),
+    explicit INTEGER NOT NULL CHECK ( explicit IN (false, true) ),
     PRIMARY KEY (node1, node2),
     CHECK ( node1 < node2 )
 ) STRICT;

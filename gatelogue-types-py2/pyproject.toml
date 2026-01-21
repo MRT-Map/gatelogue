@@ -91,4 +91,4 @@ exclude_lines = [
 default-args = ["tests/__init__.py"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.13", "3.12"]
+python = ["3.14", "3.13", "3.12"]

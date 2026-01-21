@@ -1,11 +1,6 @@
-from gatelogue_types import GatelogueData, GatelogueDataNS
+from gatelogue_types import GD
 
 
-def test_with_sources():
-    GatelogueData.get()
-    assert True
-
-
-def test_no_sources():
-    GatelogueDataNS.get()
+def test_new_air():
+    GD(["source0", "source1"])
     assert True
