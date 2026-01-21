@@ -3,7 +3,6 @@ from __future__ import annotations
 import contextlib
 import datetime
 import sqlite3
-import urllib.request
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, LiteralString, ParamSpec, Self
@@ -23,51 +22,54 @@ class GD:
         self.conn = sqlite3.connect(":memory:", check_same_thread=False)
         self.conn.execute("PRAGMA foreign_keys = true")
 
-    @staticmethod
-    def _get_url(url: str, *args, **kwargs) -> bytes:
-        with contextlib.suppress(ImportError):
-            # pyrefly: ignore [missing-import]
-            import niquests
-
-            return niquests.get(url, *args, **kwargs).bytes
-        with contextlib.suppress(ImportError):
-            # pyrefly: ignore [missing-source-for-stubs]
-            import requests
-
-            return requests.get(url, *args, **kwargs).content
-        with contextlib.suppress(ImportError):
-            # pyrefly: ignore [missing-import]
-            import httpx
-
-            return httpx.get(url, *args, **kwargs).bytes
-        with contextlib.suppress(ImportError):
-            # pyrefly: ignore [missing-import]
-            import urllib3
-
-            return urllib3.request("GET", url, *args, **kwargs).data
-        if not url.startswith("https:"):
-            raise ValueError
-        with urllib.request.urlopen(url, *args, **kwargs) as response:  # noqa: S310
-            return response.read()
-
     @classmethod
-    def get(cls, *args, **kwargs) -> Self:
+    def from_bytes(cls, data: bytes) -> Self:
         self = cls()
-        data = cls._get_url(URL, *args, **kwargs)
         self.conn.deserialize(data)
         return self
 
     @classmethod
-    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None, *args, **kwargs) -> Self:
+    def niquests_get(cls, *args, **kwargs):
+        # pyrefly: ignore [missing-import]
+        import niquests
+        return cls.from_bytes(niquests.get(URL, *args, **kwargs).content)
+
+    @classmethod
+    def requests_get(cls, *args, **kwargs):
+        # pyrefly: ignore [missing-import,missing-source-for-stubs]
+        import requests
+
+        return cls.from_bytes(requests.get(URL, *args, **kwargs).content)
+
+    @classmethod
+    def httpx_get(cls, *args, **kwargs):
+        # pyrefly: ignore [missing-import]
+        import httpx
+
+        return cls.from_bytes(httpx.get(URL, *args, **kwargs).bytes)
+
+    @classmethod
+    def urllib3_get(cls, *args, **kwargs):
+        # pyrefly: ignore [missing-import]
+        import urllib3
+
+        return cls.from_bytes(urllib3.request("GET", URL, *args, **kwargs).data)
+
+    @classmethod
+    def urllib_get(cls, *args, **kwargs):
+        import urllib.request
+
+        with urllib.request.urlopen(URL, *args, **kwargs) as response:  # noqa: S310
+            return cls.from_bytes(response.read())
+
+    @classmethod
+    async def aiohttp_get(cls, session: aiohttp.ClientSession | None = None) -> Self:
         # pyrefly: ignore [missing-import]
         import aiohttp
 
         session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
         async with session as session, session.get(URL) as response:  # pyrefly: ignore [missing-attribute]
-            self = cls()
-            data = response.bytes()
-            self.conn.deserialize(data)
-            return self
+            return cls.from_bytes(response.bytes())
 
     @property
     def timestamp(self):
@@ -94,8 +96,13 @@ class GD:
         self.conn.commit()
         return self
 
-    def get_node[T: Node](self, ty: type[T], i: int):
+    def get_node[T: Node](self, ty: type[T], i: int) -> T:
         return ty(self.conn, i)
+
+    def nodes[T: Node](self, ty: type[T] | None = None) -> Iterator[T]:
+        if ty is None:
+            return (Node(self.conn, i) for i, in self.conn.execute("SELECT i FROM Node").fetchall())
+        return (ty(self.conn, i) for i, in self.conn.execute("SELECT i FROM Node WHERE type = :type", dict(type=ty.__name__)))
 
 
 class _Column[T]:
