@@ -368,6 +368,13 @@ class SeaConnection(Node):
         )
         return cls(conn, i)
 
+    @classmethod
+    def create2(cls, conn: sqlite3.Connection, src: int, *, direction2: str | None = None, **kwargs: Unpack[CreateParams]) -> tuple[Self, Self]:
+        kwargs2 = kwargs.copy()
+        kwargs2["from_"], kwargs2["to"] = kwargs2["to"], kwargs2["from"]
+        kwargs2["direction"] = direction2 or kwargs2["direction"]
+        return cls.create(conn, src, **kwargs), cls.create(conn, src, **kwargs2)
+
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
             type(self)(self.conn, i)
