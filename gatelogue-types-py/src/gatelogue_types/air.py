@@ -131,9 +131,11 @@ class AirAirport(LocatedNode):
         )
 
     def equivalent_nodes(self) -> Iterator[Self]:
+        if (code := self.code) == "":
+            return iter(())
         return (
             type(self)(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM AirAirport WHERE code = ?", (self.code,)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirAirport WHERE code = ?", (code,)).fetchall()
         )
 
     def _merge(self, other: Self):
@@ -230,7 +232,7 @@ class AirFlight(Node):
     """The :py:class:`AirGate` this flight departs from"""
     to = _FKColumn(AirGate, "to", "AirFlight")
     """The :py:class:`AirGate` this flight arrives at"""
-    mode = _Column[str | None]("mode", "AirFlight", sourced=True, formatter=_format_str)
+    mode = _Column[AirMode | None]("mode", "AirFlight", sourced=True, formatter=_format_str)
     """Type of air vehicle or technology used on the flight"""
     COLUMNS: ClassVar = (airline, code, from_, to, mode)
 

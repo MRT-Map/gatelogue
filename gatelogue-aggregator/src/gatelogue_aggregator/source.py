@@ -32,7 +32,7 @@ class Source:
 
     def report(self):
         nodes = [
-            node.Node.STR2TYPE[ty](self.conn, i)
+            gt.Node.auto_type(self.conn, i)
             for i, ty in self.conn.execute(
                 "SELECT Node.i, type FROM NodeSource LEFT JOIN Node on Node.i = NodeSource.i WHERE source = :priority",
                 dict(priority=self.priority),

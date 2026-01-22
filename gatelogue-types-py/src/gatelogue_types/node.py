@@ -21,6 +21,11 @@ class Node:
         self.i = i
         """The ID of the node"""
 
+    @classmethod
+    def auto_type(cls, conn: sqlite3.Connection, i: int):
+        ty, = conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()
+        return cls.STR2TYPE[ty](conn, i)
+
     type = _Column[str]("type", "Node")
     """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
@@ -47,6 +52,9 @@ class Node:
 
     def __eq__(self, other: Self) -> bool:
         return self.i == other.i
+
+    def __hash__(self):
+        return hash(self.i)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         raise NotImplementedError
@@ -103,6 +111,11 @@ class LocatedNode(Node):
     """The y-coordinate of the node"""
     COLUMNS: ClassVar = (world, _x, _y)
 
+    @classmethod
+    def auto_type(cls, conn: sqlite3.Connection, i: int) -> LocatedNode:
+        ty, = conn.execute("SELECT type FROM NodeLocation LEFT JOIN Node on Node.i = NodeLocation.i WHERE NodeLocation.i = :i", dict(i=i)).fetchone()
+        return cls.STR2TYPE[ty](conn, i)
+
     @property
     def coordinates(self) -> tuple[int, int] | None:
         """The coordinates of the object"""
@@ -139,6 +152,16 @@ class LocatedNode(Node):
         )
         return i
 
+
+    @property
+    def _nodes_in_proximity(self) -> Iterator[int]:
+        return (
+            j if self.i == i else i
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
     @property
     def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
         """
@@ -147,20 +170,26 @@ class LocatedNode(Node):
         :return: Pairs of nodes in proximity as well as proximity data (:py:class:`Proximity`).
         """
         return (
-            (LocatedNode(self.conn, j if self.i == i else i), Proximity(self.conn, i, j))
+            (o_node := LocatedNode.auto_type(self.conn, o), Proximity(self.conn, self, o_node))
+            for o in self._nodes_in_proximity
+        )
+
+
+    @property
+    def _shared_facilities(self) -> Iterator[int]:
+        return (
+            j if self.i == i else i
             for i, j in self.conn.execute(
-                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
-            ).fetchall()
+            "SELECT node1, node2 FROM SharedFacility WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+        ).fetchall()
         )
 
     @property
-    def shared_facility(self) -> Iterable[LocatedNode]:
+    def shared_facilities(self) -> Iterable[LocatedNode]:
         """References all nodes that this object shares the same facility with (same building, station, hub etc)"""
         return (
-            LocatedNode(self.conn, j if self.i == i else i)
-            for i, j in self.conn.execute(
-                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
-            ).fetchall()
+            LocatedNode.auto_type(self.conn, o)
+            for o in self._shared_facilities
         )
 
     def _merge(self, other: Self):
