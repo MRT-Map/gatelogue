@@ -3,22 +3,19 @@ from __future__ import annotations
 import difflib
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Any, Self, Literal
-
-import msgspec
+from typing import TYPE_CHECKING, Literal
 
 import gatelogue_types as gt
+import msgspec
 import rich
+from gatelogue_types import node
 
-from gatelogue_aggregator.logging import INFO1, INFO2, RESULT, track, progress_bar, ERROR
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.edge.proximity import ProximitySource
-from gatelogue_aggregator.types.edge.shared_facility import SharedFacility, SharedFacilitySource
-from gatelogue_aggregator.types.source import Source
-from gatelogue_types import node, air, LocatedNode
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import Source
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Container
+    from collections.abc import Container, Iterable
     from pathlib import Path
 
 
@@ -54,9 +51,9 @@ class GatelogueData:
     def _merge_equivalent_nodes(self, pass_: int):
         merged: set[int] = set()
         for n in track(
-                self.gd.nodes(),
-                INFO2,
-                description=f"Merging equivalent nodes (pass {pass_})",
+            self.gd.nodes(),
+            INFO2,
+            description=f"Merging equivalent nodes (pass {pass_})",
         ):
             if n.i in merged:
                 continue
@@ -65,19 +62,21 @@ class GatelogueData:
                 merged.add(equiv.i)
 
     def _merge_airports_with_unknown_code(self, pass_: int):
-        name2i = {name: i for name, i in self.gd.conn.execute("SELECT name, AirAirport.i FROM AirAirport INNER JOIN AirAirportNames on AirAirport.i = AirAirport.i = AirAirportNames.i").fetchall()}
+        name2i = {
+            name: i
+            for name, i in self.gd.conn.execute(
+                "SELECT name, AirAirport.i FROM AirAirport "
+                "INNER JOIN AirAirportNames on AirAirport.i = AirAirport.i = AirAirportNames.i"
+            ).fetchall()
+        }
 
         for n in track(
-                (gt.AirAirport(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code != ''")),
-                INFO2,
-                description=f"Merging airports (pass {pass_})",
+            (gt.AirAirport(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code != ''")),
+            INFO2,
+            description=f"Merging airports (pass {pass_})",
         ):
             best_name = next(
-                iter(
-                    difflib.get_close_matches(
-                        next(iter(n.names)), name2i.keys(), 1, 0.0
-                    )
-                ),
+                iter(difflib.get_close_matches(next(iter(n.names)), name2i.keys(), 1, 0.0)),
                 None,
             )
             if best_name is not None:
@@ -91,56 +90,73 @@ class GatelogueData:
 
     def _update_flight_mode(self):
         for n in track(
-                (gt.AirFlight(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")),
+            (gt.AirFlight(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")),
             INFO2,
-            description=f"Updating AirFlight `mode` field"
+            description="Updating AirFlight `mode` field",
         ):
             size: set[str] = n.from_.size | n.to.size
-            sources = lambda: {s for s, in self.gd.conn.execute("SELECT DISTINCT source FROM AirGateSource WHERE (i = :from_ OR i = :to) AND size = true", dict(from_=n.from_.i, to=n.to.i)).fetchall()}
+            sources = lambda: {
+                s
+                for (s,) in self.gd.conn.execute(
+                    "SELECT DISTINCT source FROM AirGateSource WHERE (i = :from_ OR i = :to) AND size = true",
+                    dict(from_=n.from_.i, to=n.to.i),
+                ).fetchall()
+            }
             if size == {"SP"}:
                 n.mode = sources(), "seaplane"
             elif size == {"H"}:
                 n.mode = sources(), "helicopter"
+
     def _dedup_airport_names(self):
-        for n in track(
-            self.gd.nodes(gt.AirAirport),
-            INFO2,
-            description=f"Deduplicating AirAirport `name` field"
-        ):
+        for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Deduplicating AirAirport `name` field"):
             names: set[str] = n.names
             ok_names = set()
             for name in sorted(names, key=len, reverse=True):
                 if any(
-                        (
-                                name in existing
-                                or sorted(re.sub(r"[^\w\s]", "", name).split()) == sorted(re.sub(r"[^\w\s]", "", existing).split())
-                        )
-                        for existing in ok_names
+                    (
+                        name in existing
+                        or sorted(re.sub(r"[^\w\s]", "", name).split())
+                        == sorted(re.sub(r"[^\w\s]", "", existing).split())
+                    )
+                    for existing in ok_names
                 ):
                     cur = self.gd.conn.cursor()
-                    cur.execute("DELETE FROM AirAirportNamesSource WHERE i = :i AND name = :name", dict(i=n.i, name=name))
+                    cur.execute(
+                        "DELETE FROM AirAirportNamesSource WHERE i = :i AND name = :name", dict(i=n.i, name=name)
+                    )
                     cur.execute("DELETE FROM AirAirportNames WHERE i = :i AND name = :name", dict(i=n.i, name=name))
                 else:
                     ok_names.add(name)
+
     def _merge_gates_without_code(self):
-        for airport in track(
-                self.gd.nodes(gt.AirAirport),
-                INFO2,
-                description=f"Merging AirGates without code"
-        ):
-            airline2gate = {airline: gt.AirGate(self.gd.conn, gate) for airline, gate in self.gd.conn.execute("SELECT airline, max(i) FROM AirGate WHERE airport = :i AND code IS NOT NULL GROUP BY airline HAVING count(i) = 1", dict(i=airport.i)).fetchall()}
-            for n in (gt.AirGate(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirGate WHERE airport = :i AND code IS NULL", dict(i=airport.i)).fetchall()):
+        for airport in track(self.gd.nodes(gt.AirAirport), INFO2, description="Merging AirGates without code"):
+            airline2gate = {
+                airline: gt.AirGate(self.gd.conn, gate)
+                for airline, gate in self.gd.conn.execute(
+                    "SELECT airline, max(i) FROM AirGate "
+                    "WHERE airport = :i AND code IS NOT NULL GROUP BY airline HAVING count(i) = 1",
+                    dict(i=airport.i),
+                ).fetchall()
+            }
+            for n in (
+                gt.AirGate(self.gd.conn, i)
+                for i in self.gd.conn.execute(
+                    "SELECT i FROM AirGate WHERE airport = :i AND code IS NULL", dict(i=airport.i)
+                ).fetchall()
+            ):
                 if (airline := n.airline) is not None and airline.i in airline2gate:
                     airline2gate[airline.i].merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
+
     def _update_gate_size(self):
-        for n in track(
-                self.gd.nodes(gt.AirAirport),
-                INFO2,
-                description=f"Updating AirGate `size` field"
-        ):
+        for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Updating AirGate `size` field"):
             if (modes := n.modes) is None:
                 continue
-            sources = lambda: {s for s, in self.gd.conn.execute("SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i", dict(i=n.i)).fetchall()}
+            sources = lambda: {
+                s
+                for (s,) in self.gd.conn.execute(
+                    "SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i", dict(i=n.i)
+                ).fetchall()
+            }
             if modes == {"seaplane"}:
                 for gate in n.gates:
                     gate.size = sources(), "SP"
@@ -167,9 +183,13 @@ class GatelogueData:
         components.remove(max(components, key=len))
         return components
 
-
     def _proximity(self):
-        nodes = {gt.LocatedNode(self.conn, i) for i, in self.gd.conn.execute("SELECT i FROM NodeLocation WHERE world IS NOT NULL AND world != 'Space' AND x IS NOT NULL and y IS NOT NULL")}
+        nodes = {
+            gt.LocatedNode(self.gd.conn, i)
+            for (i,) in self.gd.conn.execute(
+                "SELECT i FROM NodeLocation WHERE world IS NOT NULL AND world != 'Space' AND x IS NOT NULL and y IS NOT NULL"
+            )
+        }
         processed = []
         for n in track(nodes, INFO2, description="Linking close nodes", nonlinear=True):
             for existing in processed:
@@ -180,15 +200,22 @@ class GatelogueData:
                 dist_sq = (x1 - x2) ** 2 + (y1 - y2) ** 2
                 threshold = 500**2 if isinstance(existing, gt.AirAirport) or isinstance(node, gt.AirAirport) else 250**2
                 if dist_sq < threshold:
-                    srcs = {s for s, in self.gd.conn.execute(f"SELECT DISTINCT source FROM NodeLocationSource WHERE (i = :i1 OR i = :i2) AND (world IS true OR coordinates IS TRUE)", dict(i1=n.i, i2=existing.i))}
-                    gt.Proximity.create(self.conn, srcs, node1=n, node2=existing, distance=dist_sq**0.5)
+                    srcs = {
+                        s
+                        for (s,) in self.gd.conn.execute(
+                            "SELECT DISTINCT source FROM NodeLocationSource "
+                            "WHERE (i = :i1 OR i = :i2) AND (world IS true OR coordinates IS TRUE)",
+                            dict(i1=n.i, i2=existing.i),
+                        )
+                    }
+                    gt.Proximity.create(self.gd.conn, srcs, node1=n, node2=existing, distance=dist_sq**0.5)
             processed.append(node)
 
-        def dist_sq_fn(n: gt.LocatedNode, this: gt.LocatedNode, others: Container[int]):
-            if n.world != this.world or n.i in others:
+        def dist_sq_fn(n_: gt.LocatedNode, this_: gt.LocatedNode, others: Container[int]):
+            if n_.world != this_.world or n_.i in others:
                 return float("inf")
-            nx, ny = n.coordinates
-            tx, ty = this.coordinates
+            nx, ny = n_.coordinates
+            tx, ty = this_.coordinates
             return (nx - tx) ** 2 + (ny - ty) ** 2
 
         for pass_ in range(1, 10):
@@ -196,15 +223,24 @@ class GatelogueData:
             if len(isolated) == 0:
                 break
             for component in track(
-                    isolated,
-                    INFO2,
-                    description=f"Ensuring all located nodes are connected (pass {pass_})",
+                isolated,
+                INFO2,
+                description=f"Ensuring all located nodes are connected (pass {pass_})",
             ):
                 for this_i in component:
                     this = gt.LocatedNode(self.gd.conn, this_i)
-                    nearest = min(nodes, key=lambda n: dist_sq_fn(n, this, component))
-                    srcs = {s for s, in self.gd.conn.execute(f"SELECT DISTINCT source FROM NodeLocationSource WHERE (i = :i1 OR i = :i2) AND (world IS true OR coordinates IS TRUE)", dict(i1=this.i, i2=nearest.i))}
-                    gt.Proximity.create(self.conn, srcs, node1=this, node2=nearest, distance=dist_sq_fn(nearest, this, component)**0.5)
+                    nearest = min(nodes, key=lambda nr: dist_sq_fn(nr, this, component))
+                    srcs = {
+                        s
+                        for (s,) in self.gd.conn.execute(
+                            "SELECT DISTINCT source FROM NodeLocationSource "
+                            "WHERE (i = :i1 OR i = :i2) AND (world IS true OR coordinates IS TRUE)",
+                            dict(i1=this.i, i2=nearest.i),
+                        )
+                    }
+                    gt.Proximity.create(
+                        self.gd.conn, srcs, node1=this, node2=nearest, distance=dist_sq_fn(nearest, this, component) ** 0.5
+                    )
 
     def _shared_facility(self):
         class Yaml(msgspec.Struct):
@@ -225,13 +261,25 @@ class GatelogueData:
             company = None
             match mode:
                 case "Bus":
-                    if (result := self.gd.conn.execute("SELECT i FROM BusCompany WHERE name = :name", dict(name=name)).fetchone()) is not None:
+                    if (
+                        result := self.gd.conn.execute(
+                            "SELECT i FROM BusCompany WHERE name = :name", dict(name=name)
+                        ).fetchone()
+                    ) is not None:
                         company = gt.BusCompany(self.gd.conn, result[0])
                 case "Rail":
-                    if (result := self.gd.conn.execute("SELECT i FROM RailCompany WHERE name = :name", dict(name=name)).fetchone()) is not None:
+                    if (
+                        result := self.gd.conn.execute(
+                            "SELECT i FROM RailCompany WHERE name = :name", dict(name=name)
+                        ).fetchone()
+                    ) is not None:
                         company = gt.RailCompany(self.gd.conn, result[0])
                 case "Sea":
-                    if (result := self.gd.conn.execute("SELECT i FROM SeaCompany WHERE name = :name", dict(name=name)).fetchone()) is not None:
+                    if (
+                        result := self.gd.conn.execute(
+                            "SELECT i FROM SeaCompany WHERE name = :name", dict(name=name)
+                        ).fetchone()
+                    ) is not None:
                         company = gt.SeaCompany(self.gd.conn, result[0])
                 case _:
                     raise ValueError(mode)
@@ -240,28 +288,52 @@ class GatelogueData:
                 nonexistent_companies.add(name)
             return company
 
-        def get_stop(mode: str, company: gt.BusCompany | gt.RailCompany | gt.SeaCompany, name: str, code: str | None = None) -> gt.BusStop | gt.RailStation | gt.SeaStop:
+        def get_stop(
+            mode: str, company: gt.BusCompany | gt.RailCompany | gt.SeaCompany, name: str, code: str | None = None
+        ) -> gt.BusStop | gt.RailStation | gt.SeaStop:
             stop = None
             match mode:
                 case "Bus":
                     if code is None:
-                        result = self.gd.conn.execute("SELECT i FROM BusStop WHERE name = :name AND company = :ci", dict(name=name, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT i FROM BusStop WHERE name = :name AND company = :ci", dict(name=name, ci=company.i)
+                        ).fetchone()
                     else:
-                        result = self.gd.conn.execute("SELECT BusStop.i from BusStop LEFT JOIN BusStopCodes on BusStop.i = BusStopCodes.i WHERE code = :code AND company = :ci", dict(code=code, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT BusStop.i from BusStop "
+                            "LEFT JOIN BusStopCodes on BusStop.i = BusStopCodes.i "
+                            "WHERE code = :code AND company = :ci",
+                            dict(code=code, ci=company.i),
+                        ).fetchone()
                     if result is not None:
                         stop = gt.BusStop(self.gd.conn, result[0])
                 case "Rail":
                     if code is None:
-                        result = self.gd.conn.execute("SELECT i FROM RailStation WHERE name = :name AND company = :ci", dict(name=name, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT i FROM RailStation WHERE name = :name AND company = :ci",
+                            dict(name=name, ci=company.i),
+                        ).fetchone()
                     else:
-                        result = self.gd.conn.execute("SELECT RailStation.i from RailStation LEFT JOIN RailStationCodes on RailStation.i = RailStationCodes.i WHERE code = :code AND company = :ci", dict(code=code, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT RailStation.i from RailStation "
+                            "LEFT JOIN RailStationCodes on RailStation.i = RailStationCodes.i "
+                            "WHERE code = :code AND company = :ci",
+                            dict(code=code, ci=company.i),
+                        ).fetchone()
                     if result is not None:
                         stop = gt.RailStation(self.gd.conn, result[0])
                 case "Sea":
                     if code is None:
-                        result = self.gd.conn.execute("SELECT i FROM SeaStop WHERE name = :name AND company = :ci", dict(name=name, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT i FROM SeaStop WHERE name = :name AND company = :ci", dict(name=name, ci=company.i)
+                        ).fetchone()
                     else:
-                        result = self.gd.conn.execute("SELECT SeaStop.i from SeaStop LEFT JOIN SeaStopCodes on SeaStop.i = SeaStopCodes.i WHERE code = :code AND company = :ci", dict(code=code, ci=company.i)).fetchone()
+                        result = self.gd.conn.execute(
+                            "SELECT SeaStop.i from SeaStop "
+                            "LEFT JOIN SeaStopCodes on SeaStop.i = SeaStopCodes.i "
+                            "WHERE code = :code AND company = :ci",
+                            dict(code=code, ci=company.i),
+                        ).fetchone()
                     if result is not None:
                         stop = gt.SeaStop(self.gd.conn, result[0])
                 case _:

@@ -1,5 +1,3 @@
-__all__ = ()
-
 from __future__ import annotations
 
 import contextlib
@@ -12,11 +10,11 @@ from typing import (
 )
 
 from gatelogue_types.__about__ import __data_version__
-from gatelogue_types.node import Node, LocatedNode, Proximity, SharedFacility
-from gatelogue_types.air import AirAirline, AirAirport, AirGate, AirFlight
-from gatelogue_types.bus import BusCompany, BusLine, BusStop, BusBerth, BusConnection
-from gatelogue_types.sea import SeaCompany, SeaLine, SeaStop, SeaDock, SeaConnection
-from gatelogue_types.rail import RailCompany, RailLine, RailStation, RailPlatform, RailConnection
+from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate
+from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusStop
+from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility
+from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailPlatform, RailStation
+from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop
 from gatelogue_types.spawn_warp import SpawnWarp
 from gatelogue_types.town import Town
 
@@ -83,7 +81,7 @@ class GD:
 
         session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
         async with session as session, session.get(URL) as response:  # pyrefly: ignore [missing-attribute]
-            return cls.from_bytes(response.bytes())
+            return cls.from_bytes(await response.read())
 
     @property
     def timestamp(self):
@@ -113,18 +111,19 @@ class GD:
     def get_node[T: Node = Node](self, i: int, ty: type[T] | None = None) -> T:
         if ty is None or ty is Node:
             return Node.auto_type(self.conn, i)
-        elif ty is LocatedNode:
+        if ty is LocatedNode:
             return LocatedNode.auto_type(self.conn, i)
         return ty(self.conn, i)
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:
         if ty is None or ty is Node:
-            return (
-                Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i FROM Node").fetchall()
-            )
+            return (Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i FROM Node").fetchall())
         if ty is LocatedNode:
             return (
-                Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT NodeLocation.i, type FROM NodeLocation LEFT JOIN Node on Node.i = NodeLocation.i").fetchall()
+                Node.STR2TYPE[ty](self.conn, i)
+                for i, ty in self.conn.execute(
+                    "SELECT NodeLocation.i, type FROM NodeLocation LEFT JOIN Node on Node.i = NodeLocation.i"
+                ).fetchall()
             )
         return (
             ty(self.conn, i)

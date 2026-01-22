@@ -23,7 +23,7 @@ class Node:
 
     @classmethod
     def auto_type(cls, conn: sqlite3.Connection, i: int):
-        ty, = conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()
+        (ty,) = conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()
         return cls.STR2TYPE[ty](conn, i)
 
     type = _Column[str]("type", "Node")
@@ -113,7 +113,10 @@ class LocatedNode(Node):
 
     @classmethod
     def auto_type(cls, conn: sqlite3.Connection, i: int) -> LocatedNode:
-        ty, = conn.execute("SELECT type FROM NodeLocation LEFT JOIN Node on Node.i = NodeLocation.i WHERE NodeLocation.i = :i", dict(i=i)).fetchone()
+        (ty,) = conn.execute(
+            "SELECT type FROM NodeLocation LEFT JOIN Node on Node.i = NodeLocation.i WHERE NodeLocation.i = :i",
+            dict(i=i),
+        ).fetchone()
         return cls.STR2TYPE[ty](conn, i)
 
     @property
@@ -152,7 +155,6 @@ class LocatedNode(Node):
         )
         return i
 
-
     @property
     def _nodes_in_proximity(self) -> Iterator[int]:
         return (
@@ -174,26 +176,21 @@ class LocatedNode(Node):
             for o in self._nodes_in_proximity
         )
 
-
     @property
     def _shared_facilities(self) -> Iterator[int]:
         return (
             j if self.i == i else i
             for i, j in self.conn.execute(
-            "SELECT node1, node2 FROM SharedFacility WHERE node1 = :i OR node2 = :i", dict(i=self.i)
-        ).fetchall()
+                "SELECT node1, node2 FROM SharedFacility WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
         )
 
     @property
     def shared_facilities(self) -> Iterable[LocatedNode]:
         """References all nodes that this object shares the same facility with (same building, station, hub etc)"""
-        return (
-            LocatedNode.auto_type(self.conn, o)
-            for o in self._shared_facilities
-        )
+        return (LocatedNode.auto_type(self.conn, o) for o in self._shared_facilities)
 
     def _merge(self, other: Self):
-        # TODO handle merging of Proximity
         cur = self.conn.cursor()
         cur.execute("UPDATE OR FAIL SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE OR FAIL SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))

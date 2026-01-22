@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import gatelogue_types as gt
 import msgspec
 import rich
+from gatelogue_types import node
 
 from gatelogue_aggregator.logging import RESULT
 from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
@@ -17,8 +18,6 @@ from gatelogue_aggregator.types.node.rail import (
     RailStation,
 )
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
-
-from gatelogue_types import node
 
 if TYPE_CHECKING:
     from pathlib import Path

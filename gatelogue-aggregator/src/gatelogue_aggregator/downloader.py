@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     import uuid
     from collections.abc import Iterator
 
-    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.config import Config
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_COOLDOWN = 15
