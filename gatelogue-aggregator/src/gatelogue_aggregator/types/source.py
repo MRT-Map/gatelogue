@@ -5,18 +5,13 @@ import sqlite3
 from typing import TYPE_CHECKING, ClassVar, Generic, Self, TypeVar, Unpack
 
 import gatelogue_types as gt
-import msgspec
 import rich
-import rustworkx as rx
 
 from gatelogue_aggregator.logging import ERROR, INFO1
 from gatelogue_aggregator.sources import SOURCES
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.config import Config
-    from gatelogue_aggregator.types.node.base import Node, NodeRef
-
-T = TypeVar("T")
 
 
 class Source:
@@ -36,7 +31,7 @@ class Source:
 
     def report(self):
         nodes = [
-            gt.Node._STR2TYPE[ty](self.conn, i)
+            gt.Node.STR2TYPE[ty](self.conn, i)
             for i, ty in self.conn.execute(
                 "SELECT Node.i, type FROM NodeSource LEFT JOIN Node on Node.i = NodeSource.i WHERE source = :priority",
                 dict(priority=self.priority),

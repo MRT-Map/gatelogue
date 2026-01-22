@@ -5,20 +5,11 @@ from typing import TYPE_CHECKING, Any, Self
 
 import gatelogue_types as gt
 import rich
-import rustworkx as rx
-from rustworkx.visualization.graphviz import graphviz_draw
 
 from gatelogue_aggregator.logging import INFO1, INFO2, RESULT, track, progress_bar
 from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.edge.proximity import ProximitySource
 from gatelogue_aggregator.types.edge.shared_facility import SharedFacility, SharedFacilitySource
-from gatelogue_aggregator.types.node._air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
-from gatelogue_aggregator.types.node.base import Node
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusSource, BusStop
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailSource, RailStation
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaSource, SeaStop
-from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
-from gatelogue_aggregator.types.node.town import Town, TownSource
 from gatelogue_aggregator.types.source import Source
 
 if TYPE_CHECKING:

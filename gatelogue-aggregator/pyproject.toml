@@ -55,7 +55,8 @@ path = "src/gatelogue_aggregator/__about__.py"
 [tool.hatch.metadata]
 allow-direct-references = true
 
-#[tool.hatch.envs.default]
+[tool.hatch.envs.default]
+extra-dependencies = ["gatelogue-types[all]"]
 #python = "3.12"
 
 [tool.hatch.envs.docs]

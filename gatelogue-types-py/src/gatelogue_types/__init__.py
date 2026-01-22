@@ -6,8 +6,20 @@ import sqlite3
 import warnings
 from collections.abc import Iterable, Iterator, Callable
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, LiteralString, ParamSpec, Self, ClassVar, overload, TypedDict, Required, Unpack, \
-    NotRequired
+from typing import (
+    TYPE_CHECKING,
+    Literal,
+    LiteralString,
+    ParamSpec,
+    Self,
+    ClassVar,
+    overload,
+    TypedDict,
+    Required,
+    Unpack,
+    NotRequired,
+    cast,
+)
 
 from gatelogue_types.__about__ import __data_version__
 
@@ -16,6 +28,7 @@ if TYPE_CHECKING:
     import aiohttp
 
 URL: str = "???"
+
 
 class GD:
     def __init__(self, database=":memory:"):
@@ -33,6 +46,7 @@ class GD:
     def niquests_get(cls, *args, **kwargs):
         # pyrefly: ignore [missing-import]
         import niquests
+
         return cls.from_bytes(niquests.get(URL, *args, **kwargs).content)
 
     @classmethod
@@ -47,7 +61,7 @@ class GD:
         # pyrefly: ignore [missing-import]
         import httpx
 
-        return cls.from_bytes(httpx.get(URL, *args, **kwargs).bytes)
+        return cls.from_bytes(httpx.get(URL, *args, **kwargs).content)
 
     @classmethod
     def urllib3_get(cls, *args, **kwargs):
@@ -99,21 +113,18 @@ class GD:
 
     def get_node[T: Node = Node](self, i: int, ty: type[T] | None = None) -> T:
         if ty is None:
-            ty = Node._STR2TYPE[self.conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()[0]]
+            ty = Node.STR2TYPE[self.conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()[0]]
         return ty(self.conn, i)
-
-    @overload
-    def nodes(self) -> Iterator[Node]:
-        ...
-
-    @overload
-    def nodes[T: Node](self, ty: type[T]) -> Iterator[T]:
-        ...
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:
         if ty is None:
-            return (Node._STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall())
-        return (ty(self.conn, i) for i, in self.conn.execute("SELECT i FROM Node WHERE type = :type", dict(type=ty.__name__)))
+            return (
+                Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall()
+            )
+        return (
+            ty(self.conn, i)
+            for (i,) in self.conn.execute("SELECT i FROM Node WHERE type = :type", dict(type=ty.__name__))
+        )
 
     def __iter__(self) -> Iterator[Node]:
         return self.nodes()
@@ -141,7 +152,8 @@ class _Column[T]:
             return
         for src in srcs:
             cur.execute(
-                f"INSERT INTO {self.table + 'Source'} (i, source, {self.name}) VALUES (:i, :source, :bool) ON CONFLICT (i, source) DO UPDATE SET {self.name} = :bool",
+                f"INSERT INTO {self.table + 'Source'} (i, source, {self.name}) VALUES (:i, :source, :bool) "
+                f"ON CONFLICT (i, source) DO UPDATE SET {self.name} = :bool",
                 dict(bool=value is not None, i=instance.i, source=src),
             )
 
@@ -161,9 +173,17 @@ class _Column[T]:
                 self_sources = instance1.sources
                 other_sources = instance2.sources
                 if min(self_sources) >= min(other_sources):
-                    warn_fn(f"Column {self.name} in table {self.table} is different between {instance1} ({self_v}) and {instance2} ({other_v}). Former has higher priority of {self_sources} than latter which has {other_sources}")
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                    )
                 else:
-                    warn_fn(f"Column {self.name} in table {self.table} is different between {instance1} ({self_v}) and {instance2} ({other_v}). Latter has higher priority of {self_sources} than former which has {other_sources}")
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                    )
                     self.__set__(instance1, other_v)
             return
         match (self_v, other_v):
@@ -179,10 +199,18 @@ class _Column[T]:
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
                 if min(self_sources) >= min(other_sources):
-                    warn_fn(f"Column {self.name} in table {self.table} is different between {instance1} ({self_v}) and {instance2} ({other_v}). Former has higher priority of {self_sources} than latter which has {other_sources}")
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                    )
                     self.__set__(instance2, None)
                 else:
-                    warn_fn(f"Column {self.name} in table {self.table} is different between {instance1} ({self_v}) and {instance2} ({other_v}). Latter has higher priority of {self_sources} than former which has {other_sources}")
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                    )
                     self.__set__(instance1, (other_sources, other_v))
 
 
@@ -291,15 +319,15 @@ type Rank = Literal["Unranked", "Councillor", "Mayor", "Senator", "Governor", "P
 
 
 class Node:
-    _STR2TYPE: ClassVar[dict] = {}
+    STR2TYPE: ClassVar[dict] = {}
+
     def __init_subclass__(cls, **kwargs):
-        cls._STR2TYPE[cls.__name__] = cls
+        cls.STR2TYPE[cls.__name__] = cls
 
     def __init__(self, conn: sqlite3.Connection, i: int):
         self.conn = conn
         self.i = i
         """The ID of the node"""
-
 
     type = _Column[str]("type", "Node")
     """The type of the node"""
@@ -374,12 +402,7 @@ class LocatedNode(Node):
 
     @classmethod
     def create_node_with_location(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        *,
-        ty: str,
-        **kwargs: Unpack[CreateParams]
+        cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
     ) -> int:
         world, coordinates = kwargs.get("world", None), kwargs.get("coordinates", None)
         i = cls.create_node(conn, src, ty=ty)
@@ -601,13 +624,13 @@ class AirAirport(LocatedNode):
         modes: set[AirMode]
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
-        code, names, link, modes = kwargs["code"], kwargs.get("names", set()), kwargs.get("link", None), kwargs.get("modes", set())
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        code, names, link, modes = (
+            kwargs["code"],
+            kwargs.get("names", set()),
+            kwargs.get("link", None),
+            kwargs.get("modes", set()),
+        )
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
         cur.execute("INSERT INTO AirAirport (i, code, link) VALUES (:i, :code, :link)", dict(i=i, code=code, link=link))
@@ -667,13 +690,14 @@ class AirGate(Node):
         mode: AirMode | None
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
-        code, airport, airline, size, mode = kwargs["code"], kwargs["airport"], kwargs.get("airline", None), kwargs.get("size", None), kwargs.get("mode", None)
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        code, airport, airline, size, mode = (
+            kwargs["code"],
+            kwargs["airport"],
+            kwargs.get("airline", None),
+            kwargs.get("size", None),
+            kwargs.get("mode", None),
+        )
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -749,7 +773,6 @@ class AirFlight(Node):
         to: AirGate
         mode: NotRequired[AirMode | None]
 
-
     @classmethod
     def create(
         cls,
@@ -757,7 +780,13 @@ class AirFlight(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        airline, code, from_, to, mode = kwargs["airline"], kwargs["code"], kwargs["from_"], kwargs["to"], kwargs.get("mode", None)
+        airline, code, from_, to, mode = (
+            kwargs["airline"],
+            kwargs["code"],
+            kwargs["from_"],
+            kwargs["to"],
+            kwargs.get("mode", None),
+        )
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -778,10 +807,10 @@ class AirFlight(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                'SELECT AirFlight.i FROM AirFlight '
+                "SELECT AirFlight.i FROM AirFlight "
                 'LEFT JOIN AirGate AGFrom ON "from" = AGFrom.i '
                 'LEFT JOIN AirGate AGTo ON "to" = AGTo.i '
-                'WHERE AirFlight.airline = ? AND (AirFlight.code = ? OR (AGFrom.airport = ? AND AGTo.airport = ?))',
+                "WHERE AirFlight.airline = ? AND (AirFlight.code = ? OR (AGFrom.airport = ? AND AGTo.airport = ?))",
                 (self.airline.i, self.code, self.from_.airport.i, self.to.airport.i),
             ).fetchall()
         )
@@ -887,7 +916,14 @@ class BusLine(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        code, company, name, colour, mode, local = kwargs["code"], kwargs["company"], kwargs.get("name", None), kwargs.get("colour", None), kwargs.get("mode", None), kwargs.get("local", None)
+        code, company, name, colour, mode, local = (
+            kwargs["code"],
+            kwargs["company"],
+            kwargs.get("name", None),
+            kwargs.get("colour", None),
+            kwargs.get("mode", None),
+            kwargs.get("local", None),
+        )
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -964,12 +1000,7 @@ class BusStop(LocatedNode):
         name: str | None
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         codes, company, name = kwargs["codes"], kwargs["company"], kwargs.get("name", None)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
@@ -1070,12 +1101,7 @@ class BusBerth(Node):
         stop: BusStop
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         code, stop = kwargs["code"], kwargs["stop"]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -1152,12 +1178,7 @@ class BusConnection(Node):
         direction: NotRequired[str | None]
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         line, from_, to, direction = kwargs["line"], kwargs["from_"], kwargs["to"], kwargs.get("direction", None)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -1269,12 +1290,19 @@ class SeaLine(Node):
 
     @classmethod
     def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams],
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        **kwargs: Unpack[CreateParams],
     ) -> Self:
-        code, company, name, colour, mode, local = kwargs["code"], kwargs["company"], kwargs.get("name", None), kwargs.get("colour", None), kwargs.get("mode", None), kwargs.get("local", None)
+        code, company, name, colour, mode, local = (
+            kwargs["code"],
+            kwargs["company"],
+            kwargs.get("name", None),
+            kwargs.get("colour", None),
+            kwargs.get("mode", None),
+            kwargs.get("local", None),
+        )
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -1351,12 +1379,7 @@ class SeaStop(LocatedNode):
         name: str | None
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         codes, company, name = kwargs["codes"], kwargs["company"], kwargs.get("name", None)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
@@ -1457,12 +1480,7 @@ class SeaDock(Node):
         stop: SeaStop
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         code, stop = kwargs["code"], kwargs["stop"]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -1539,12 +1557,7 @@ class SeaConnection(Node):
         direction: NotRequired[str | None]
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         line, from_, to, direction = kwargs["line"], kwargs["from_"], kwargs["to"], kwargs.get("direction", None)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -1656,12 +1669,19 @@ class RailLine(Node):
 
     @classmethod
     def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams],
+        cls,
+        conn: sqlite3.Connection,
+        src: int,
+        **kwargs: Unpack[CreateParams],
     ) -> Self:
-        code, company, name, colour, mode, local = kwargs["code"], kwargs["company"], kwargs.get("name", None), kwargs.get("colour", None), kwargs.get("mode", None), kwargs.get("local", None)
+        code, company, name, colour, mode, local = (
+            kwargs["code"],
+            kwargs["company"],
+            kwargs.get("name", None),
+            kwargs.get("colour", None),
+            kwargs.get("mode", None),
+            kwargs.get("local", None),
+        )
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -1738,12 +1758,7 @@ class RailStation(LocatedNode):
         name: str | None
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         codes, company, name = kwargs["codes"], kwargs["company"], kwargs.get("name", None)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
@@ -1842,16 +1857,11 @@ class RailPlatform(Node):
 
     class CreateParams(TypedDict):
         code: str | None
-        stop: RailStation
+        station: RailStation
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
-        code, stop = kwargs["code"], kwargs["stop"]
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        code, station = kwargs["code"], kwargs["station"]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -1930,12 +1940,7 @@ class RailConnection(Node):
         direction: NotRequired[str | None]
 
     @classmethod
-    def create(
-            cls,
-            conn: sqlite3.Connection,
-            src: int,
-            **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         line, from_, to, direction = kwargs["line"], kwargs["from_"], kwargs["to"], kwargs.get("direction", None)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -2020,12 +2025,7 @@ class Town(LocatedNode):
         deputy_mayor: str | None
 
     @classmethod
-    def create(
-        cls,
-        conn: sqlite3.Connection,
-        src: int,
-        **kwargs: Unpack[CreateParams]
-    ) -> Self:
+    def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         name, rank, mayor, deputy_mayor = kwargs["name"], kwargs["rank"], kwargs["mayor"], kwargs["deputy_mayor"]
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
