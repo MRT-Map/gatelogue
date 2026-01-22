@@ -1,4 +1,6 @@
-from gatelogue_types import GD, AirAirline, AirAirport, AirFlight, AirGate, BusStop, BusCompany
+from gatelogue_types import GD
+from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate
+from gatelogue_types.bus import BusCompany, BusStop
 
 
 def test_get():
@@ -32,7 +34,7 @@ def test_air_flight_merge():
     flight2 = AirFlight.create(gd.conn, 0, airline=airline, code="001", from_=gate3, to=gate4)
     assert gd.conn.execute("SELECT count(rowid) FROM AirFlight").fetchone()[0] == 2
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 4
-    assert flight1.equivalent(flight2)
+    assert flight2 in flight1.equivalent_nodes()
     flight1.merge(flight2)
     assert gd.conn.execute("SELECT count(rowid) FROM AirFlight").fetchone()[0] == 1
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 2
@@ -44,5 +46,5 @@ def test_bus_stop_merge():
     company = BusCompany.create(gd.conn, 0, name="Example Inc")
     stop1 = BusStop.create(gd.conn, 0, codes={"a", "b"}, company=company)
     stop2 = BusStop.create(gd.conn, 1, codes={"b", "c"}, company=company)
-    assert stop1.equivalent(stop2)
+    assert stop2 in stop1.equivalent_nodes()
     stop1.merge(stop2)

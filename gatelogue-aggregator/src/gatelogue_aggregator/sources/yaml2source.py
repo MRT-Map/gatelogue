@@ -18,6 +18,8 @@ from gatelogue_aggregator.types.node.rail import (
 )
 from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
 
+from gatelogue_types import node
+
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -121,7 +123,7 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 st2 = self.S.new(self, codes={code2}, company=company)
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
-                st1.connect(self, st2, gt.Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
+                st1.connect(self, st2, node.Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
 
     def custom_routing(
         self,

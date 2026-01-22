@@ -11,6 +11,7 @@ from gatelogue_aggregator.types.config import Config
 from gatelogue_aggregator.types.edge.proximity import ProximitySource
 from gatelogue_aggregator.types.edge.shared_facility import SharedFacility, SharedFacilitySource
 from gatelogue_aggregator.types.source import Source
+from gatelogue_types import node, air
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -45,7 +46,7 @@ class GatelogueData:
                     merged.add(equiv.i)
 
             for n in track(
-                self.gd.nodes(gt.AirAirport),
+                self.gd.nodes(air.AirAirport),
                 INFO2,
                 description=f"Merging airports (pass {pass_})",
             ):
@@ -119,7 +120,7 @@ class GatelogueData:
                 d["tooltip"] = replace(f"({u.str_src(self)} -- {v.str_src(self)})")
             else:
                 d["tooltip"] = replace(f"{edge_data} ({u.str_src(self)} -- {v.str_src(self)})")
-            if isinstance(edge_data, gt.Proximity):
+            if isinstance(edge_data, node.Proximity):
                 d["color"] = '"#ff00ff"'
                 return d
             if isinstance(edge_data, SharedFacility):

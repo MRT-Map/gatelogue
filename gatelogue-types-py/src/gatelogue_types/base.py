@@ -1,0 +1,183 @@
+from __future__ import annotations
+
+from collections.abc import Callable
+from typing import LiteralString, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gatelogue_types.node import Node
+
+
+class _Column[T]:
+    def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
+        self.name = f'"{name}"'
+        self.table = table
+        self.sourced = sourced
+
+    def __get__(self, instance: Node, owner: type[Node]) -> T:
+        return instance.conn.execute(
+            f"SELECT {self.name} FROM {self.table} WHERE i = :i", dict(i=instance.i)
+        ).fetchone()[0]
+
+    def __set__(self, instance: Node, value: T | tuple[set[int], T]):
+        srcs, value = value if isinstance(value, tuple) else (instance.sources, value)
+        cur = instance.conn.cursor()
+        cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
+        if not self.sourced:
+            return
+        for src in srcs:
+            cur.execute(
+                f"INSERT INTO {self.table + 'Source'} (i, source, {self.name}) VALUES (:i, :source, :bool) "
+                f"ON CONFLICT (i, source) DO UPDATE SET {self.name} = :bool",
+                dict(bool=value is not None, i=instance.i, source=src),
+            )
+
+    def sources(self, instance: Node) -> set[int]:
+        return {
+            src
+            for (src,) in instance.conn.execute(
+                f"SELECT DISTINCT source FROM {self.table + 'Source'} WHERE {self.name} = true"
+            ).fetchall()
+        }
+
+    def _merge(self, instance1: Node, instance2: Node, warn_fn: Callable[[str], object]):
+        self_v = self.__get__(instance1, type(instance1))
+        other_v = self.__get__(instance2, type(instance2))
+        if not self.sourced:
+            if self_v != other_v:
+                self_sources = instance1.sources
+                other_sources = instance2.sources
+                if min(self_sources) >= min(other_sources):
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                    )
+                else:
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                    )
+                    self.__set__(instance1, other_v)
+            return
+        match (self_v, other_v):
+            case (None, None):
+                pass
+            case (_, None):
+                pass
+            case (None, _):
+                sources = self.sources(instance2)
+                self.__set__(instance1, (sources, other_v))
+            case (_, _) if self_v != other_v:
+                # TODO warning for override
+                self_sources = self.sources(instance1)
+                other_sources = self.sources(instance2)
+                if min(self_sources) >= min(other_sources):
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                    )
+                    self.__set__(instance2, None)
+                else:
+                    warn_fn(
+                        f"Column {self.name} in table {self.table} is different "
+                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                    )
+                    self.__set__(instance1, (other_sources, other_v))
+
+
+class _FKColumn[T: Node | None]:
+    def __init__(self, ty: type[T], name: LiteralString, table: LiteralString, sourced: bool = False):
+        self.name = name
+        self.table = table
+        self.sourced = sourced
+        self.ty = ty
+
+    def __get__(self, instance: Node, owner: type[Node]) -> T:
+        target_i = _Column(self.name, self.table, self.sourced).__get__(instance, owner)
+        if target_i is None:
+            return None
+        return self.ty(instance.conn, target_i)
+
+    def __set__(self, instance: Node, value: T | tuple[int, T]):
+        _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
+
+    def _merge(self, instance1: Node, instance2: Node, warn_fn: Callable[[str], object]):
+        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, warn_fn)
+
+
+class _SetAttr[T]:
+    def __init__(self, table: LiteralString, table_column: LiteralString, sourced: bool = False):
+        self.table = table
+        self.table_column = table_column
+        self.sourced = sourced
+
+    def __get__(self, instance: Node, owner: type[Node]) -> set[T]:
+        return {
+            v
+            for (v,) in instance.conn.execute(
+                f"SELECT {self.table_column} FROM {self.table} WHERE i = :i", dict(i=instance.i)
+            ).fetchall()
+        }
+
+    def __set__(self, instance: Node, values: set[T] | tuple[set[int], set[T]]):
+        srcs, values = values if isinstance(values, tuple) else (instance.sources, values)
+        cur = instance.conn.cursor()
+        if not self.sourced:
+            cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))
+            cur.executemany(
+                f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value)",
+                [dict(i=instance.i, value=value) for value in values],
+            )
+            return
+        existing_values = {
+            v
+            for (v,) in cur.execute(
+                f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source IN :sources",
+                dict(i=instance.i, sources=srcs),
+            ).fetchall()
+        }
+        for new_value in values - existing_values:
+            cur.execute(
+                f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value) "
+                f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
+                dict(i=instance.i, value=new_value),
+            )
+            cur.executemany(
+                f"INSERT INTO {self.table + 'Source'} (i, {self.table_column}, source) VALUES (:i, :value, :source) "
+                f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
+                [dict(i=instance.i, value=new_value, source=src) for src in srcs],
+            )
+        for old_value in existing_values - values:
+            cur.execute(
+                f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source IN :sources",
+                dict(i=instance.i, value=old_value, sources=srcs),
+            )
+            if (
+                cur.execute(
+                    f"SELECT count(i) FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value",
+                    dict(i=instance.i, value=old_value),
+                ).fetchone()[0]
+                == 0
+            ):
+                cur.execute(
+                    f"DELETE FROM {self.table} WHERE i = :i AND {self.table_column} = :value",
+                    dict(i=instance.i, value=old_value),
+                )
+
+    def _merge(self, instance1: Node, instance2: Node, _=None):
+        cur = instance1.conn.cursor()
+        cur.execute(
+            f"INSERT INTO {self.table} (i, {self.table_column}) "
+            f"SELECT :i1, {self.table_column} FROM {self.table} WHERE i = :i2 "
+            f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
+            dict(i1=instance1.i, i2=instance2.i),
+        )
+        if self.sourced:
+            cur.execute(
+                f"UPDATE OR FAIL {self.table + 'Source'} SET i = :i1 WHERE i = :i2",
+                dict(i1=instance1.i, i2=instance2.i),
+            )
+        cur.execute(f"DELETE FROM {self.table} WHERE i = :i2", dict(i1=instance1.i, i2=instance2.i))

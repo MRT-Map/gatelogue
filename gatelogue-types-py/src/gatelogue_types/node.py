@@ -1,0 +1,237 @@
+from __future__ import annotations
+
+import sqlite3
+import warnings
+from collections.abc import Callable, Iterable, Iterator
+from typing import ClassVar, Literal, Self, TypedDict, Unpack
+
+from gatelogue_types.base import _Column, _FKColumn, _SetAttr
+
+
+class Node:
+    STR2TYPE: ClassVar[dict] = {}
+
+    def __init_subclass__(cls, **kwargs):
+        cls.STR2TYPE[cls.__name__] = cls
+
+    def __init__(self, conn: sqlite3.Connection, i: int):
+        self.conn = conn
+        self.i = i
+        """The ID of the node"""
+
+    type = _Column[str]("type", "Node")
+    """The type of the node"""
+    sources = _SetAttr[int]("NodeSource", "source")
+    """All sources that prove the node's existence"""
+
+    @property
+    def source(self) -> int:
+        sources = self.sources
+        assert len(sources) == 1, "Expected only one source"
+        return next(iter(sources))
+
+    @source.setter
+    def source(self, value: int):
+        self.sources = {value}
+
+    @classmethod
+    def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
+        cur = conn.cursor()
+        cur.execute("INSERT INTO Node ( type ) VALUES ( :type )", dict(type=ty))
+        (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = :rowid", dict(rowid=cur.lastrowid)).fetchone()
+        cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
+        return i
+
+    def __eq__(self, other: Self) -> bool:
+        return self.i == other.i
+
+    def equivalent_nodes(self) -> Iterator[Self]:
+        raise NotImplementedError
+
+    def _merge(self, other: Self):
+        raise NotImplementedError
+
+    def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
+        for name, attr in type(self).__dict__.items():
+            if isinstance(attr, (_Column, _FKColumn, _SetAttr)):
+                attr._merge(self, other, warn_fn)
+
+        self._merge(other)
+
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i))
+
+
+type World = Literal["New", "Old", "Space"]
+
+
+class LocatedNode(Node):
+    world = _Column[World | None]("world", "LocatedNode", sourced=True)
+    """The world the node is in"""
+    _x = _Column[int | None]("x", "LocatedNode", sourced=True)
+    """The x-coordinate of the node"""
+    _y = _Column[int | None]("y", "LocatedNode", sourced=True)
+    """The y-coordinate of the node"""
+
+    @property
+    def coordinates(self) -> tuple[int, int] | None:
+        """The coordinates of the object"""
+        if (x := self._x) is None:
+            return None
+        if (y := self._y) is None:
+            return None
+        return x, y
+
+    @coordinates.setter
+    def coordinates(self, value: tuple[int, int] | None):
+        x, y = (None, None) if value is None else value
+        self._x = x
+        self._y = y
+
+    class CreateParams(TypedDict, total=False):
+        world: World | None
+        coordinates: tuple[int, int] | None
+
+    @classmethod
+    def create_node_with_location(
+        cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
+    ) -> int:
+        world, coordinates = kwargs.get("world"), kwargs.get("coordinates")
+        i = cls.create_node(conn, src, ty=ty)
+        x, y = (None, None) if coordinates is None else coordinates
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO NodeLocation (i, world, x, y) VALUES (:i, :world, :x, :y)",
+            dict(i=i, world=world, x=x, y=y),
+        )
+        cur.execute(
+            "INSERT INTO NodeLocationSource (i, source, world, coordinates) VALUES (:i, :source, :world, :coordinates)",
+            dict(i=i, source=src, world=world is not None, coordinates=coordinates is not None),
+        )
+        return i
+
+    @property
+    def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
+        """
+        References all nodes that are near (within walking distance of) this object.
+
+        :return: Pairs of nodes in proximity as well as proximity data (:py:class:`Proximity`).
+        """
+        return (
+            (LocatedNode(self.conn, j if self.i == i else i), Proximity(self.conn, i, j))
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
+    @property
+    def shared_facility(self) -> Iterable[LocatedNode]:
+        """References all nodes that this object shares the same facility with (same building, station, hub etc)"""
+        return (
+            LocatedNode(self.conn, j if self.i == i else i)
+            for i, j in self.conn.execute(
+                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
+            ).fetchall()
+        )
+
+    def _merge(self, other: Self):
+        # TODO handle merging of Proximity
+        cur = self.conn.cursor()
+        cur.execute("UPDATE OR FAIL SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute(
+            "INSERT INTO Proximity SELECT :i1, node2, distance, explicit FROM Proximity "
+            "WHERE node1 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
+            dict(i1=self.i, i2=other.i),
+        )
+        cur.execute(
+            "INSERT INTO Proximity SELECT node1, :i1, distance, explicit FROM Proximity "
+            "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
+            dict(i1=self.i, i2=other.i),
+        )
+        cur.execute("UPDATE OR FAIL ProximitySource SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL ProximitySource SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))
+
+
+class Proximity:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @property
+    def distance(self):
+        """Distance between the two objects in blocks"""
+        return self.conn.execute(
+            "SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @distance.setter
+    def distance(self, value: float):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Proximity set distance = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @property
+    def explicit(self):
+        """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
+        return self.conn.execute(
+            "SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",
+            dict(node1=self.node1, node2=self.node2),
+        ).fetchone()[0]
+
+    @explicit.setter
+    def explicit(self, value: bool):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Proximity set explicit = :value WHERE node1 = :node1 AND node2 = :node2",
+            dict(value=value, node1=self.node1, node2=self.node2),
+        )
+
+    @classmethod
+    def create(
+        cls,
+        conn: sqlite3.Connection,
+        srcs: Iterable[int],
+        *,
+        node1: LocatedNode,
+        node2: LocatedNode,
+        distance: float,
+        explicit: bool = False,
+    ) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit)",
+            dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
+        )
+        cur.execute(
+            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source )",
+            [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
+        )
+        return cls(conn, node1, node2)
+
+
+class SharedFacility:
+    def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
+        self.conn = conn
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+        self.node1 = node1.i
+        self.node2 = node2.i
+
+    @classmethod
+    def create(cls, conn: sqlite3.Connection, *, node1: LocatedNode, node2: LocatedNode) -> Self:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2)", dict(node1=node1.i, node2=node2.i)
+        )
+        return cls(conn, node1, node2)

@@ -5,6 +5,7 @@ import rustworkx as rx
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.types.source import Source
+from gatelogue_types import node
 
 
 class ProximitySource(Source):
@@ -33,7 +34,7 @@ class ProximitySource(Source):
                     node.connect(
                         self,
                         existing,
-                        gt.Proximity(dist**0.5),
+                        node.Proximity(dist ** 0.5),
                         source=node.world.s | node.coordinates.s | existing.world.s | existing.coordinates.s,
                     )
             processed.append((node, node.world.v, node_coordinates))
@@ -66,6 +67,6 @@ class ProximitySource(Source):
                     this.connect(
                         self,
                         nearest,
-                        gt.Proximity(dist_sq(nearest, this, component) ** 0.5),
+                        node.Proximity(dist_sq(nearest, this, component) ** 0.5),
                         source=this.world.s | this.coordinates.s | nearest.world.s | nearest.coordinates.s,
                     )
