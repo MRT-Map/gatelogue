@@ -1,29 +1,32 @@
 from __future__ import annotations
 
-import sqlite3
-from collections.abc import Iterator
-from typing import Literal, NotRequired, Required, Self, TypedDict, Unpack
+from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _SetAttr
+from gatelogue_types.base import _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
+
+if TYPE_CHECKING:
+    import sqlite3
+    from collections.abc import Iterator
 
 type SeaMode = Literal["cruise", "warp ferry", "traincarts ferry"]
 
 
 class SeaCompany(Node):
-    name = _Column[str]("name", "SeaCompany")
+    name = _Column[str]("name", "SeaCompany", formatter=_format_str)
     """Name of the sea company"""
+    COLUMNS: ClassVar = (name,)
 
     class CreateParams(TypedDict):
         name: str
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        name = kwargs["name"]
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO SeaCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
-        cur.execute("INSERT INTO SeaCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        cur.execute("INSERT INTO SeaCompany (i, name) VALUES (:i, :name)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO SeaCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 
     @property
@@ -70,25 +73,26 @@ class SeaCompany(Node):
 
 
 class SeaLine(Node):
-    code = _Column[str]("code", "SeaLine")
+    code = _Column[str]("code", "SeaLine", formatter=_format_code)
     """Unique code identifying the sea line"""
     company = _FKColumn(SeaCompany, "company", "SeaLine")
     """The :py:class:`SeaCompany` that operates the line"""
-    name = _Column[str | None]("name", "SeaLine", sourced=True)
+    name = _Column[str | None]("name", "SeaLine", sourced=True, formatter=_format_str)
     """Name of the line"""
-    colour = _Column[str | None]("colour", "SeaLine", sourced=True)
+    colour = _Column[str | None]("colour", "SeaLine", sourced=True, formatter=_format_str)
     """Colour of the line (on a map)"""
-    mode = _Column[str | None]("mode", "SeaLine", sourced=True)
+    mode = _Column[SeaMode | None]("mode", "SeaLine", sourced=True, formatter=_format_str)
     """Type of sea vehicle or technology the line uses"""
-    local = _Column[bool | None]("name", "SeaLine", sourced=True)
+    local = _Column[bool | None]("name", "SeaLine", sourced=True, formatter=_format_str)
     """Whether the company operates within the city, e.g. a local ferry service"""
+    COLUMNS: ClassVar = (code, company, name, colour, mode, local)
 
     class CreateParams(TypedDict, total=False):
         code: Required[str]
         company: Required[SeaCompany]
         name: str | None
         colour: str | None
-        mode: BusMode | None
+        mode: SeaMode | None
         local: bool | None
 
     @classmethod
@@ -98,32 +102,18 @@ class SeaLine(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        code, company, name, colour, mode, local = (
-            kwargs["code"],
-            kwargs["company"],
-            kwargs.get("name"),
-            kwargs.get("colour"),
-            kwargs.get("mode"),
-            kwargs.get("local"),
-        )
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO SeaLine (i, code, company, name, colour, mode, local) "
             "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
-            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+            dict(i=i, **kwargs),
         )
         cur.execute(
             "INSERT INTO SeaLineSource (i, source, name, colour, mode, local) "
-            "VALUES (:i, :source, :name, :colour, :mode, :local)",
-            dict(
-                i=i,
-                source=src,
-                name=name is not None,
-                colour=colour is not None,
-                mode=mode is not None,
-                local=local is not None,
-            ),
+            "VALUES (:i, :source, :name_src, :colour_src, :mode_src, :local_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -169,12 +159,13 @@ class SeaLine(Node):
 
 
 class SeaStop(LocatedNode):
-    codes = _SetAttr[str]("SeaStopCodes", "code")
+    codes = _SetAttr[str]("SeaStopCodes", "code", formatter=_format_code)
     """Unique code(s) identifying the sea stop. May also be the same as the name"""
     company = _FKColumn(SeaCompany, "company", "SeaStop")
     """The :py:class:`SeaCompany` that owns this stop"""
-    name = _Column[str | None]("name", "SeaStop", sourced=True)
+    name = _Column[str | None]("name", "SeaStop", sourced=True, formatter=_format_str)
     """Name of the stop"""
+    COLUMNS: ClassVar = (*LocatedNode.COLUMNS, codes, company, name)
 
     class CreateParams(LocatedNode.CreateParams, total=False):
         codes: Required[set[str]]
@@ -183,17 +174,18 @@ class SeaStop(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        codes, company, name = kwargs["codes"], kwargs["company"], kwargs.get("name")
+        kwargs = cls.format_create_kwargs(**kwargs)
+        codes = kwargs.get("codes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO SeaStop (i, name, company) VALUES (:i, :name, :company)",
-            dict(i=i, name=name, company=company.i),
+            dict(i=i, **kwargs),
         )
         cur.executemany("INSERT INTO SeaStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
         cur.execute(
-            "INSERT INTO SeaStopSource (i, source, name) VALUES (:i, :source, :name)",
-            dict(i=i, source=src, name=name is not None),
+            "INSERT INTO SeaStopSource (i, source, name) VALUES (:i, :source, :name_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -273,10 +265,11 @@ class SeaStop(LocatedNode):
 
 
 class SeaDock(Node):
-    code = _Column[str | None]("code", "SeaDock")
+    code = _Column[str | None]("code", "SeaDock", formatter=_format_code)
     """Unique code identifying the dock. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
     stop = _FKColumn(SeaStop, "stop", "SeaStop")
     """The :py:class:`SeaStop` of the dock"""
+    COLUMNS: ClassVar = (code, stop)
 
     class CreateParams(TypedDict):
         code: str | None
@@ -284,11 +277,11 @@ class SeaDock(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        code, stop = kwargs["code"], kwargs["stop"]
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO SeaDock (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
-        cur.execute("INSERT INTO SeaDockSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        cur.execute("INSERT INTO SeaDock (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO SeaDockSource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 
     @property
@@ -350,8 +343,9 @@ class SeaConnection(Node):
     """The :py:class:`SeaDock` the connection departs from"""
     to = _FKColumn(SeaDock, "to", "SeaConnection")
     """The :py:class:`SeaDock` the connection arrives at"""
-    direction = _Column[str | None]("direction", "SeaConnection", sourced=True)
+    direction = _Column[str | None]("direction", "SeaConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
+    COLUMNS: ClassVar = (line, from_, to, direction)
 
     class CreateParams(TypedDict):
         line: SeaLine
@@ -361,16 +355,16 @@ class SeaConnection(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        line, from_, to, direction = kwargs["line"], kwargs["from_"], kwargs["to"], kwargs.get("direction")
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO SeaConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
-            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+            dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO SeaConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
-            dict(i=i, source=src, direction=direction is not None),
+            "INSERT INTO SeaConnectionSource (i, source, direction) VALUES (:i, :source, :direction_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 

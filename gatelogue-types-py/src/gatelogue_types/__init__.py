@@ -3,7 +3,6 @@ from __future__ import annotations
 import contextlib
 import datetime
 import sqlite3
-from collections.abc import Iterator
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -15,6 +14,8 @@ from gatelogue_types.node import Node
 
 if TYPE_CHECKING:
     # pyrefly: ignore [missing-import]
+    from collections.abc import Iterator
+
     import aiohttp
 
 URL: str = "???"

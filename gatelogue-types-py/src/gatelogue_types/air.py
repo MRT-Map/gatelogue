@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-import sqlite3
 import warnings
-from collections.abc import Callable, Iterator
-from typing import Literal, NotRequired, Required, Self, TypedDict, Unpack
+from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _SetAttr
+from gatelogue_types.base import _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
+
+if TYPE_CHECKING:
+    import sqlite3
+    from collections.abc import Callable, Iterator
 
 type AirMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
 
 
 class AirAirline(Node):
-    name = _Column[str]("name", "AirAirline")
+    name = _Column[str]("name", "AirAirline", formatter=_format_str)
     """Name of the airline"""
-    link = _Column[str | None]("link", "AirAirline", sourced=True)
+    link = _Column[str | None]("link", "AirAirline", sourced=True, formatter=_format_str)
     """Link to the MRT Wiki page for the airline"""
+    COLUMNS: ClassVar = (name, link)
 
     class CreateParams(TypedDict, total=False):
         name: Required[str]
@@ -23,13 +26,13 @@ class AirAirline(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        name, link = kwargs["name"], kwargs.get("link")
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO AirAirline (i, name, link) VALUES (:i, :name, :link)", dict(i=i, name=name, link=link))
+        cur.execute("INSERT INTO AirAirline (i, name, link) VALUES (:i, :name, :link)", dict(i=i, **kwargs))
         cur.execute(
-            "INSERT INTO AirAirlineSource (i, source, link) VALUES (:i, :source, :link)",
-            dict(i=i, source=src, link=link is not None),
+            "INSERT INTO AirAirlineSource (i, source, link) VALUES (:i, :source, :link_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -75,14 +78,22 @@ class AirAirline(Node):
 
 
 class AirAirport(LocatedNode):
-    code = _Column[str]("code", "AirAirport")
+    @staticmethod
+    def _format_airport_code(s: str) -> str:
+        s = s.strip().upper()
+        if len(s) == 4 and s[3] == "T":
+            return s[:3]
+        return s
+
+    code = _Column[str]("code", "AirAirport", formatter=_format_airport_code)
     """Unique 3 (sometimes 4)-letter code"""
-    names = _SetAttr[str]("AirAirportNames", "name", sourced=True)
+    names = _SetAttr[str]("AirAirportNames", "name", sourced=True, formatter=_format_str)
     """Name(s) of the airport"""
-    link = _Column[str | None]("link", "AirAirport", sourced=True)
+    link = _Column[str | None]("link", "AirAirport", sourced=True, formatter=_format_str)
     """Link to the MRT Wiki page for the airport"""
-    modes = _SetAttr[AirMode]("AirAirportModes", "mode", sourced=True)
+    modes = _SetAttr[AirMode]("AirAirportModes", "mode", sourced=True, formatter=_format_str)
     """Types of air vehicle or technology the airport supports"""
+    COLUMNS: ClassVar = (*LocatedNode.COLUMNS, code, names, link, modes)
 
     class CreateParams(LocatedNode.CreateParams, total=False):
         code: Required[str]
@@ -92,20 +103,16 @@ class AirAirport(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        code, names, link, modes = (
-            kwargs["code"],
-            kwargs.get("names", set()),
-            kwargs.get("link"),
-            kwargs.get("modes", set()),
-        )
+        kwargs = cls.format_create_kwargs(**kwargs)
+        names, modes = kwargs.get("names", set()), kwargs.get("modes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
-        cur.execute("INSERT INTO AirAirport (i, code, link) VALUES (:i, :code, :link)", dict(i=i, code=code, link=link))
+        cur.execute("INSERT INTO AirAirport (i, code, link) VALUES (:i, :code, :link)", dict(i=i, **kwargs))
         cur.executemany("INSERT INTO AirAirportNames (i, name) VALUES (?, ?)", [(i, name) for name in names])
         cur.executemany("INSERT INTO AirAirportModes (i, mode) VALUES (?, ?)", [(i, mode) for mode in modes])
         cur.execute(
-            "INSERT INTO AirAirportSource (i, source, link) VALUES (:i, :source, :link)",
-            dict(i=i, source=src, link=link is not None),
+            "INSERT INTO AirAirportSource (i, source, link) VALUES (:i, :source, :link_src)",
+            dict(i=i, source=src, **kwargs),
         )
         cur.executemany(
             "INSERT INTO AirAirportNamesSource (i, name, source) VALUES (?, ?, ?)", [(i, name, src) for name in names]
@@ -138,16 +145,17 @@ class AirAirport(LocatedNode):
 
 
 class AirGate(Node):
-    code = _Column[str | None]("code", "AirGate")
+    code = _Column[str | None]("code", "AirGate", formatter=_format_code)
     """Unique gate code. If ``None``, code is not known"""
     airport = _FKColumn(AirAirport, "airport", "AirGate")
     """The :py:class:`AirAirport`"""
     airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate", sourced=True)
     """The :py:class:`Airline` that owns this gate"""
-    size = _Column[str | None]("size", "AirGate", sourced=True)
+    size = _Column[str | None]("size", "AirGate", sourced=True, formatter=_format_str)
     """Abbreviated size of the gate (eg. ``S``, ``M``)"""
-    mode = _Column[AirMode | None]("mode", "AirGate", sourced=True)
+    mode = _Column[AirMode | None]("mode", "AirGate", sourced=True, formatter=_format_str)
     """Type of air vehicle or technology the gate supports"""
+    COLUMNS: ClassVar = (code, airport, airline, size, mode)
 
     class CreateParams(TypedDict, total=False):
         code: Required[str | None]
@@ -158,24 +166,16 @@ class AirGate(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        code, airport, airline, size, mode = (
-            kwargs["code"],
-            kwargs["airport"],
-            kwargs.get("airline"),
-            kwargs.get("size"),
-            kwargs.get("mode"),
-        )
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO AirGate (i, code, airport, airline, size, mode) VALUES (:i, :code, :airport, :airline, :size, :mode)",
-            dict(
-                i=i, code=code, airport=airport.i, airline=None if airline is None else airline.i, size=size, mode=mode
-            ),
+            dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirGateSource (i, source, size, mode, airline) VALUES (:i, :source, :size, :mode, :airline)",
-            dict(i=i, source=src, size=size is not None, mode=mode is not None, airline=airline is not None),
+            "INSERT INTO AirGateSource (i, source, size, mode, airline) VALUES (:i, :source, :size_src, :mode_src, :airline_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -223,15 +223,16 @@ class AirGate(Node):
 class AirFlight(Node):
     airline = _FKColumn(AirAirline, "airline", "AirFlight")
     """The :py:class:`AirAirline` the flight is operated by"""
-    code = _Column[str]("code", "AirFlight")
+    code = _Column[str]("code", "AirFlight", formatter=_format_code)
     """Flight code. May be duplicated if the return flight uses the same code as this flight.
     **2-letter airline prefix not included**"""
     from_ = _FKColumn(AirGate, "from", "AirFlight")
     """The :py:class:`AirGate` this flight departs from"""
     to = _FKColumn(AirGate, "to", "AirFlight")
     """The :py:class:`AirGate` this flight arrives at"""
-    mode = _Column[str | None]("mode", "AirFlight", sourced=True)
+    mode = _Column[str | None]("mode", "AirFlight", sourced=True, formatter=_format_str)
     """Type of air vehicle or technology used on the flight"""
+    COLUMNS: ClassVar = (airline, code, from_, to, mode)
 
     class CreateParams(TypedDict):
         airline: AirAirline
@@ -247,26 +248,16 @@ class AirFlight(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        airline, code, from_, to, mode = (
-            kwargs["airline"],
-            kwargs["code"],
-            kwargs["from_"],
-            kwargs["to"],
-            kwargs.get("mode"),
-        )
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO AirFlight (i, "from", "to", code, mode, airline) VALUES (:i, :from_, :to, :code, :mode, :airline)',
-            dict(i=i, from_=from_.i, to=to.i, code=code, mode=mode, airline=airline.i),
+            dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirFlightSource (i, source, mode) VALUES (:i, :source, :mode)",
-            dict(
-                i=i,
-                source=src,
-                mode=mode is not None,
-            ),
+            "INSERT INTO AirFlightSource (i, source, mode) VALUES (:i, :source, :mode_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 

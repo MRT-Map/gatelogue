@@ -1,17 +1,70 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import LiteralString, TYPE_CHECKING
+import re
+from typing import TYPE_CHECKING, LiteralString
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+
     from gatelogue_types.node import Node
 
 
+def _format_str[T: str](s: T | None) -> T | None:
+    if s is None or s.strip().lower() in ("", "?", "??", "-"):
+        return None
+    return s.strip()
+
+
+def _format_code[T: str](s: T | None) -> T | None:
+    def search_all(regex: re.Pattern[str], text: str) -> Iterator[re.Match[str]]:
+        pos = 0
+        while (m := regex.search(text, pos)) is not None:
+            pos = m.end()
+            yield m
+
+    if (s := _format_str(s)) is None:
+        return None
+    res = ""
+    hyphen1 = False
+    hyphen2 = False
+    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
+        t = match.group(0)
+        if len(t) == 0:
+            continue
+        if (
+            (hyphen1 and t[0].isdigit())
+            or (hyphen2 and t[0].isalpha())
+            or (len(res) != 0 and t[0].isdigit() and res[-1].isdigit())
+        ):
+            res += "-"
+        if hyphen1:
+            hyphen1 = False
+        if hyphen2:
+            hyphen2 = False
+        if t.isdigit():
+            res += t.lstrip("0") or "0"
+        elif t.isalpha():
+            res += t.upper()
+        elif (t == "-" and len(res) == 0) or (len(res) != 0 and res[-1].isdigit()):
+            hyphen1 = True
+        elif len(res) != 0 and res[-1].isalpha():
+            hyphen2 = True
+
+    return res
+
+
 class _Column[T]:
-    def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
+    def __init__(
+        self,
+        name: LiteralString,
+        table: LiteralString,
+        sourced: bool = False,
+        formatter: Callable[[T], T] | None = None,
+    ):
         self.name = f'"{name}"'
         self.table = table
         self.sourced = sourced
+        self.formatter = formatter
 
     def __get__(self, instance: Node, owner: type[Node]) -> T:
         return instance.conn.execute(
@@ -20,6 +73,8 @@ class _Column[T]:
 
     def __set__(self, instance: Node, value: T | tuple[set[int], T]):
         srcs, value = value if isinstance(value, tuple) else (instance.sources, value)
+        if self.formatter is not None:
+            value = self.formatter(value)
         cur = instance.conn.cursor()
         cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
         if not self.sourced:
@@ -69,7 +124,6 @@ class _Column[T]:
                 sources = self.sources(instance2)
                 self.__set__(instance1, (sources, other_v))
             case (_, _) if self_v != other_v:
-                # TODO warning for override
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
                 if min(self_sources) >= min(other_sources):
@@ -109,10 +163,17 @@ class _FKColumn[T: Node | None]:
 
 
 class _SetAttr[T]:
-    def __init__(self, table: LiteralString, table_column: LiteralString, sourced: bool = False):
+    def __init__(
+        self,
+        table: LiteralString,
+        table_column: LiteralString,
+        sourced: bool = False,
+        formatter: Callable[[T], T] | None = None,
+    ):
         self.table = table
         self.table_column = table_column
         self.sourced = sourced
+        self.formatter = formatter
 
     def __get__(self, instance: Node, owner: type[Node]) -> set[T]:
         return {
@@ -124,6 +185,8 @@ class _SetAttr[T]:
 
     def __set__(self, instance: Node, values: set[T] | tuple[set[int], set[T]]):
         srcs, values = values if isinstance(values, tuple) else (instance.sources, values)
+        if self.formatter is not None:
+            values = {self.formatter(value) for value in values}
         cur = instance.conn.cursor()
         if not self.sourced:
             cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))

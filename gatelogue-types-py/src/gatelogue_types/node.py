@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-import sqlite3
 import warnings
-from collections.abc import Callable, Iterable, Iterator
-from typing import ClassVar, Literal, Self, TypedDict, Unpack
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _SetAttr
+from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr
+
+if TYPE_CHECKING:
+    import sqlite3
+    from collections.abc import Callable, Iterable, Iterator
 
 
 class Node:
@@ -23,6 +25,7 @@ class Node:
     """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
     """All sources that prove the node's existence"""
+    COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr, ...]] = ()
 
     @property
     def source(self) -> int:
@@ -52,9 +55,8 @@ class Node:
         raise NotImplementedError
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
-        for name, attr in type(self).__dict__.items():
-            if isinstance(attr, (_Column, _FKColumn, _SetAttr)):
-                attr._merge(self, other, warn_fn)
+        for attr in self.COLUMNS:
+            attr._merge(self, other, warn_fn)
 
         self._merge(other)
 
@@ -62,17 +64,44 @@ class Node:
         cur.execute("DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
+    @classmethod
+    def format_create_kwargs(cls, **kwargs) -> dict:
+        for attr in cls.COLUMNS:
+            key = (attr.table_column + "s" if isinstance(attr, _SetAttr) else attr.name).strip('"')
+            if key == "from":
+                key += "_"
+            if key in ("x", "y"):
+                continue
+            if key not in kwargs:
+                kwargs[key] = None
+            if isinstance(attr, _Column):
+                if attr.formatter is not None:
+                    kwargs[key] = attr.formatter(kwargs[key])
+                if attr.sourced:
+                    kwargs[key + "_src"] = kwargs[key] is not None
+            elif isinstance(attr, _SetAttr):
+                if attr.formatter is not None:
+                    kwargs[key] = {attr.formatter(value) for value in kwargs[key]} if kwargs[key] is not None else set()
+                if attr.sourced:
+                    kwargs[key + "_src"] = kwargs[key] is not None and len(kwargs[key]) > 0
+            elif isinstance(attr, _FKColumn):
+                kwargs[key] = kwargs[key].i if kwargs[key] is not None else None
+                if attr.sourced:
+                    kwargs[key + "_src"] = kwargs[key] is not None
+        return kwargs
+
 
 type World = Literal["New", "Old", "Space"]
 
 
 class LocatedNode(Node):
-    world = _Column[World | None]("world", "LocatedNode", sourced=True)
+    world = _Column[World | None]("world", "NodeLocation", sourced=True, formatter=_format_str)
     """The world the node is in"""
-    _x = _Column[int | None]("x", "LocatedNode", sourced=True)
+    _x = _Column[int | None]("x", "NodeLocation", sourced=True)
     """The x-coordinate of the node"""
-    _y = _Column[int | None]("y", "LocatedNode", sourced=True)
+    _y = _Column[int | None]("y", "NodeLocation", sourced=True)
     """The y-coordinate of the node"""
+    COLUMNS: ClassVar = (world, _x, _y)
 
     @property
     def coordinates(self) -> tuple[int, int] | None:
@@ -97,17 +126,16 @@ class LocatedNode(Node):
     def create_node_with_location(
         cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
     ) -> int:
-        world, coordinates = kwargs.get("world"), kwargs.get("coordinates")
+        x, y = (None, None) if kwargs.get("coordinates") is None else kwargs["coordinates"]
         i = cls.create_node(conn, src, ty=ty)
-        x, y = (None, None) if coordinates is None else coordinates
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO NodeLocation (i, world, x, y) VALUES (:i, :world, :x, :y)",
-            dict(i=i, world=world, x=x, y=y),
+            dict(i=i, x=x, y=y, **kwargs),
         )
         cur.execute(
-            "INSERT INTO NodeLocationSource (i, source, world, coordinates) VALUES (:i, :source, :world, :coordinates)",
-            dict(i=i, source=src, world=world is not None, coordinates=coordinates is not None),
+            "INSERT INTO NodeLocationSource (i, source, world, coordinates) VALUES (:i, :source, :world_src, :coordinates_src)",
+            dict(i=i, source=src, coordinates_src=kwargs.get("coordinates") is not None, **kwargs),
         )
         return i
 

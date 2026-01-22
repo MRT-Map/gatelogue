@@ -1,29 +1,32 @@
 from __future__ import annotations
 
-import sqlite3
-from collections.abc import Iterator
-from typing import Literal, NotRequired, Required, Self, TypedDict, Unpack
+from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _SetAttr
+from gatelogue_types.base import _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
+
+if TYPE_CHECKING:
+    import sqlite3
+    from collections.abc import Iterator
 
 type BusMode = Literal["warp", "traincarts"]
 
 
 class BusCompany(Node):
-    name = _Column[str]("name", "BusCompany")
+    name = _Column[str]("name", "BusCompany", formatter=_format_str)
     """Name of the bus company"""
+    COLUMNS: ClassVar = (name,)
 
     class CreateParams(TypedDict):
         name: str
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        name = kwargs["name"]
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO BusCompany (i, name) VALUES (:i, :name)", dict(i=i, name=name))
-        cur.execute("INSERT INTO BusCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        cur.execute("INSERT INTO BusCompany (i, name) VALUES (:i, :name)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO BusCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 
     @property
@@ -70,18 +73,19 @@ class BusCompany(Node):
 
 
 class BusLine(Node):
-    code = _Column[str]("code", "BusLine")
+    code = _Column[str]("code", "BusLine", formatter=_format_code)
     """Unique code identifying the bus line"""
     company = _FKColumn(BusCompany, "company", "BusLine")
     """The :py:class:`BusCompany` that operates the line"""
-    name = _Column[str | None]("name", "BusLine", sourced=True)
+    name = _Column[str | None]("name", "BusLine", sourced=True, formatter=_format_str)
     """Name of the line"""
-    colour = _Column[str | None]("colour", "BusLine", sourced=True)
+    colour = _Column[str | None]("colour", "BusLine", sourced=True, formatter=_format_str)
     """Colour of the line (on a map)"""
-    mode = _Column[str | None]("mode", "BusLine", sourced=True)
+    mode = _Column[str | None]("mode", "BusLine", sourced=True, formatter=_format_str)
     """Type of bus vehicle or technology the line uses"""
-    local = _Column[bool | None]("name", "BusLine", sourced=True)
+    local = _Column[bool | None]("name", "BusLine", sourced=True, formatter=_format_str)
     """Whether the line operates within the city, e.g. a local bus service"""
+    COLUMNS: ClassVar = (code, company, name, colour, mode, local)
 
     class CreateParams(TypedDict, total=False):
         code: Required[str]
@@ -98,32 +102,18 @@ class BusLine(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        code, company, name, colour, mode, local = (
-            kwargs["code"],
-            kwargs["company"],
-            kwargs.get("name"),
-            kwargs.get("colour"),
-            kwargs.get("mode"),
-            kwargs.get("local"),
-        )
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO BusLine (i, code, company, name, colour, mode, local) "
             "VALUES (:i, :code, :company, :name, :colour, :mode, :local)",
-            dict(i=i, code=code, company=company.i, name=name, colour=colour, mode=mode, local=local),
+            dict(i=i, **kwargs),
         )
         cur.execute(
             "INSERT INTO BusLineSource (i, source, name, colour, mode, local) "
-            "VALUES (:i, :source, :name, :colour, :mode, :local)",
-            dict(
-                i=i,
-                source=src,
-                name=name is not None,
-                colour=colour is not None,
-                mode=mode is not None,
-                local=local is not None,
-            ),
+            "VALUES (:i, :source, :name_src, :colour_src, :mode_src, :local_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -169,12 +159,13 @@ class BusLine(Node):
 
 
 class BusStop(LocatedNode):
-    codes = _SetAttr[str]("BusStopCodes", "code")
+    codes = _SetAttr[str]("BusStopCodes", "code", formatter=_format_code)
     """Unique code(s) identifying the bus stop. May also be the same as the name"""
     company = _FKColumn(BusCompany, "company", "BusStop")
     """The :py:class:`BusCompany` that owns this stop"""
-    name = _Column[str | None]("name", "BusStop", sourced=True)
+    name = _Column[str | None]("name", "BusStop", sourced=True, formatter=_format_str)
     """Name of the stop"""
+    COLUMNS: ClassVar = (*LocatedNode.COLUMNS, codes, company, name)
 
     class CreateParams(LocatedNode.CreateParams, total=False):
         codes: Required[set[str]]
@@ -183,17 +174,18 @@ class BusStop(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        codes, company, name = kwargs["codes"], kwargs["company"], kwargs.get("name")
+        kwargs = cls.format_create_kwargs(**kwargs)
+        codes = kwargs.get("codes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO BusStop (i, name, company) VALUES (:i, :name, :company)",
-            dict(i=i, name=name, company=company.i),
+            dict(i=i, **kwargs),
         )
         cur.executemany("INSERT INTO BusStopCodes (i, code) VALUES (?, ?)", [(i, code) for code in codes])
         cur.execute(
-            "INSERT INTO BusStopSource (i, source, name) VALUES (:i, :source, :name)",
-            dict(i=i, source=src, name=name is not None),
+            "INSERT INTO BusStopSource (i, source, name) VALUES (:i, :source, :name_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 
@@ -273,10 +265,11 @@ class BusStop(LocatedNode):
 
 
 class BusBerth(Node):
-    code = _Column[str | None]("code", "BusBerth")
+    code = _Column[str | None]("code", "BusBerth", formatter=_format_code)
     """Unique code identifying the berth. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
     stop = _FKColumn(BusStop, "stop", "BusStop")
     """The :py:class:`BusStop` of the berth"""
+    COLUMNS: ClassVar = (code, stop)
 
     class CreateParams(TypedDict):
         code: str | None
@@ -284,11 +277,11 @@ class BusBerth(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        code, stop = kwargs["code"], kwargs["stop"]
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO BusBerth (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, code=code, stop=stop.i))
-        cur.execute("INSERT INTO BusBerthSource (i, source) VALUES (:i, :source)", dict(i=i, source=src))
+        cur.execute("INSERT INTO BusBerth (i, code, stop) VALUES (:i, :code, :stop)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO BusBerthSource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 
     @property
@@ -350,8 +343,9 @@ class BusConnection(Node):
     """The :py:class:`BusBerth` the connection departs from"""
     to = _FKColumn(BusBerth, "to", "BusConnection")
     """The :py:class:`BusBerth` the connection arrives at"""
-    direction = _Column[str | None]("direction", "BusConnection", sourced=True)
+    direction = _Column[str | None]("direction", "BusConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
+    COLUMNS: ClassVar = (line, from_, to, direction)
 
     class CreateParams(TypedDict):
         line: BusLine
@@ -361,16 +355,16 @@ class BusConnection(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
-        line, from_, to, direction = kwargs["line"], kwargs["from_"], kwargs["to"], kwargs.get("direction")
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO BusConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
-            dict(i=i, line=line.i, from_=from_.i, to=to.i, direction=direction),
+            dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO BusConnectionSource (i, source, direction) VALUES (:i, :source, :direction)",
-            dict(i=i, source=src, direction=direction is not None),
+            "INSERT INTO BusConnectionSource (i, source, direction) VALUES (:i, :source, :direction_src)",
+            dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
 

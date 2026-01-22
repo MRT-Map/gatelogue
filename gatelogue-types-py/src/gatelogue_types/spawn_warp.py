@@ -1,20 +1,23 @@
 from __future__ import annotations
 
-import sqlite3
-from collections.abc import Iterator
-from typing import Literal, Self, Unpack
+from typing import TYPE_CHECKING, ClassVar, Literal, Self, Unpack
 
-from gatelogue_types.base import _Column
+from gatelogue_types.base import _Column, _format_str
 from gatelogue_types.node import LocatedNode
+
+if TYPE_CHECKING:
+    import sqlite3
+    from collections.abc import Iterator
 
 type WarpType = Literal["premier", "terminus", "traincarts", "portal", "misc"]
 
 
 class SpawnWarp(LocatedNode):
-    name = _Column[str]("name", "SpawnWarp")
+    name = _Column[str]("name", "SpawnWarp", formatter=_format_str)
     """Name of the spawn warp"""
-    warp_type = _Column[str]("warpType", "SpawnWarp")
+    warp_type = _Column[WarpType]("warpType", "SpawnWarp", formatter=_format_str)
     """The type of the spawn warp"""
+    COLUMNS: ClassVar = (*LocatedNode.COLUMNS, name, warp_type)
 
     class CreateParams(LocatedNode.CreateParams, total=True):
         name: str
@@ -27,12 +30,12 @@ class SpawnWarp(LocatedNode):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
-        name, warp_type = kwargs["name"], kwargs["warp_type"]
+        kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO SpawnWarp (i, name, warpType) VALUES (:i, :name, :warp_type)",
-            dict(i=i, name=name, warp_type=warp_type),
+            dict(i=i, **kwargs),
         )
         return cls(conn, i)
 
