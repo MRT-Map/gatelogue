@@ -1,133 +1,138 @@
 from __future__ import annotations
 
 import itertools
-from typing import TYPE_CHECKING
+import re
+from typing import TYPE_CHECKING, ClassVar, Literal
 
 import gatelogue_types as gt
 import msgspec
 import rich
+
+from gatelogue_aggregator.source import RailSource, BusSource, SeaSource
+from gatelogue_aggregator.sources.line_builder import SeaLineBuilder, BusLineBuilder, RailLineBuilder
 from gatelogue_types import node
 
 from gatelogue_aggregator.logging import RESULT
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailLine,
-    RailLineBuilder,
-    RailSource,
-    RailStation,
-)
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.config import Config
 
 
 class YamlLine(msgspec.Struct):
     name: str
     stations: list[str | list[str]]
 
-    forward_label: str | None = None
-    backward_label: str | None = None
+    forward_direction: str | None = None
+    backward_direction: str | None = None
     colour: str | None = None
-    mode: str | None = None
+    mode: gt.BusMode | gt.RailMode | gt.SeaMode | None = None
     code: str | None = None
+    local: bool | None = None
 
 
 class Yaml(msgspec.Struct):
     company_name: str
     lines: list[YamlLine] = msgspec.field(default_factory=list)
-    coords: dict[str, tuple[float, float]] = msgspec.field(default_factory=dict)
+    coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
     merge_codes: list[set[str]] = msgspec.field(default_factory=list)
     proximity: list[set[str]] = msgspec.field(default_factory=list)
 
     local: bool = False
     colour: str | None = None
-    mode: gt.RailMode | gt.SeaMode | None = "warp"
-    world: str = "New"
+    mode: gt.BusMode | gt.RailMode | gt.SeaMode | None = "warp"
+    world: gt.World = "New"
 
 
 class Yaml2Source(RailSource, BusSource, SeaSource):
     name = "Gatelogue"
-    priority = 0
 
-    file_path: Path
-    C: type[RailCompany | BusCompany | SeaCompany]
-    L: type[RailLine | BusLine | SeaLine]
-    S: type[RailStation | BusStop | SeaStop]
-    B: type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]
+    file_path: ClassVar[Path]
+    C: ClassVar[type[gt.RailCompany | gt.BusCompany | gt.SeaCompany]]
+    L: ClassVar[type[gt.RailLine | gt.BusLine | gt.SeaLine]]
+    S: ClassVar[type[gt.RailStation | gt.BusStop | gt.SeaStop]]
+    P: ClassVar[type[gt.RailPlatform | gt.BusBerth | gt.SeaDock]]
+    B: ClassVar[type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]]
 
     def build(self, _config: Config):
         with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 
-        company = self.C.new(self, name=file.company_name, local=file.local)
+        company = self.C.create(self.conn, self.priority, name=file.company_name)
 
         for codes in file.merge_codes:
-            self.S.new(
-                self,
+            self.S.create(
+                self.conn, self.priority,
                 codes=codes,
                 company=company,
             )
 
         for line in file.lines:
-            line_node = self.L.new(
-                self,
+            line_node = self.L.create(
+                self.conn, self.priority,
                 code=line.code or line.name,
                 name=line.name,
                 colour=line.colour or file.colour,
+                local=line.local or file.local,
+                mode=line.mode or file.mode,
                 company=company,
             )
-            if hasattr(line_node, "mode"):
-                line_node.mode = (
-                    self.source(line.mode)
-                    if line.mode is not None
-                    else self.source(file.mode)
-                    if file.mode is not None
-                    else None
-                )
             for station_list in line.stations if isinstance(line.stations[0], list) else (line.stations,):
-                stations = [
-                    self.S.new(
-                        self,
-                        codes={a.split("@")[-1].strip()},
-                        name=a.split("@")[0].strip(),
+                builder = self.B(self.priority, line_node)
+                one_way: dict[str, Literal["forwards", "backwards"]] = {}
+                platform_codes: dict[str, tuple[str | None, str | None]] = {}
+                for station in station_list:
+                    matches = re.match(R"(?P<name>[^@#<>]+)\s*?(?:@(?P<code>[^@#<>]*)|)\s*?(?:#(?P<one_way>[^@#<>]*)|)\s*?(?:<(?P<forward_code>[^@#<>]*)\s*?>(?P<backward_code>[^@#<>]*)|)", station)
+                    name = matches["name"].strip()
+                    try:
+                        code = matches["code"].strip()
+                    except IndexError:
+                        code = name
+                    try:
+                        direction = matches["one_way"].strip()
+                        assert direction in ("forwards", "backwards")
+                        one_way[name] = direction
+                    except IndexError:
+                        pass
+                    try:
+                        forward_code, backward_code = matches["forward_code"].strip(), matches["backward_code"].strip()
+                        forward_code = None if forward_code == "-" else forward_code
+                        backward_code = None if backward_code == "-" else backward_code
+                        platform_codes[name] = forward_code, backward_code
+                    except IndexError:
+                        pass
+                    builder.add(self.S.create(
+                        self.conn, self.priority,
+                        codes={code},
+                        name=name,
                         company=company,
-                    )
-                    for a in station_list
-                ]
-                try:
-                    self.custom_routing(line_node, stations, line)
-                except NotImplementedError:
-                    self.B(self, line_node).connect(
-                        *stations, forward_label=line.forward_label, backward_label=line.backward_label
-                    )
-
-            rich.print(RESULT + f"{file.company_name} {line.code or line.name} has {len(stations)} stations")
+                    ))
+                self.routing(line_node, builder, line)
 
         for code, (x, z) in file.coords.items():
-            self.S.new(
-                self,
+            self.S.create(
+                self.conn, self.priority,
                 codes={code},
                 company=company,
-                world="New",
+                world=file.world,
                 coordinates=(x, z),
             )
 
         for set_ in file.proximity:
             for code1, code2 in itertools.combinations(set_, 2):
-                st1 = self.S.new(self, codes={code1}, company=company)
-                st2 = self.S.new(self, codes={code2}, company=company)
+                st1 = self.S.create(self.conn, self.priority, codes={code1}, company=company)
+                st2 = self.S.create(self.conn, self.priority, codes={code2}, company=company)
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
-                st1.connect(self, st2, node.Proximity(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True))
+                gt.Proximity.create(self.conn, (self.priority,), node1=st1, node2=st2, distance=((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True)
 
-    def custom_routing(
+    def routing(
         self,
-        line_node: RailLine | BusLine | SeaLine,
-        stations: list[RailStation | BusStop | SeaStop],
+        line_node: gt.RailLine | gt.BusLine | gt.SeaLine,
+        builder: RailLineBuilder | BusLineBuilder | SeaLineBuilder,
         line_yaml: YamlLine,
     ):
-        raise NotImplementedError
+        builder.connect(
+            forward_direction=line_yaml.forward_direction, backward_direction=line_yaml.backward_direction
+        )
