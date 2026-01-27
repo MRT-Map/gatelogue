@@ -10,13 +10,13 @@ from typing import (
 )
 
 from gatelogue_types.__about__ import __data_version__
-from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate
-from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusStop
-from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility
-from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailPlatform, RailStation
-from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop
-from gatelogue_types.spawn_warp import SpawnWarp
-from gatelogue_types.town import Town
+from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate, AirMode
+from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusStop, BusMode
+from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
+from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailPlatform, RailStation, RailMode
+from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop, SeaMode
+from gatelogue_types.spawn_warp import SpawnWarp, WarpType
+from gatelogue_types.town import Town, Rank
 
 if TYPE_CHECKING:
     # pyrefly: ignore [missing-import]
