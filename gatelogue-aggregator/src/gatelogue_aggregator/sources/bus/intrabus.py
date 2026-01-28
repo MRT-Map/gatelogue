@@ -1,26 +1,30 @@
+import bs4
+
+from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.utils import get_stn
 
 
 class IntraBus(BusSource):
     name = "MRT Wiki (Bus, IntraBus)"
-    priority = 1
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("IntraBus", config)
 
     def build(self, config: Config):
-        company = BusCompany.new(self, name="IntraBus")
+        company = self.company(name="IntraBus")
 
-        html = get_wiki_html("IntraBus", config)
-        for table in html.find_all("table"):
+        for table in self.html.find_all("table"):
             if not table("th") or "Route Number" not in table.strings:
                 continue
             shift = 1 if "Replacement For" in table.strings else 0
             for tr in table("tr")[1::2]:
                 line_code = tr("td")[0].find("span").string
-                line = BusLine.new(self, code=line_code, company=company)
+                line = self.line(code=line_code, company=company)
 
-                stops = []
+                builder = self.builder(line)
                 for li in tr("td")[1 + shift]("li"):
                     if li.find("s") is not None:
                         continue
@@ -29,17 +33,14 @@ class IntraBus(BusSource):
                     name = name.string
                     if (more := li.find("i")) is not None:
                         name += " " + more.string.strip()
-                    stop = BusStop.new(self, codes={name}, name=name, company=company)
-                    stops.append(stop)
+                    builder.add(self.stop(codes={name}, name=name, company=company))
 
-                if len(stops) == 0:
+                if len(builder.station_list) == 0:
                     continue
-
-                if line_code == "419":
-                    BusLineBuilder(self, line).connect(*stops, between=(None, "Shenghua Michigan Avenue"))
-                    BusLineBuilder(self, line).connect(*stops, between=("Shenghua Michigan Avenue", None), one_way=True)
-                    BusLineBuilder(self, line).connect(
-                        stops[-1], get_stn(stops, "Shenghua Michigan Avenue"), one_way=True
-                    )
+                if line_code in ("313", "425"):
+                    builder.connect_circle(one_way={"*": "forwards"})
+                elif line_code == "419":
+                    builder.connect(one_way={"Shenghua International Airport Terminal 1": "forwards", "Shenghua International Airport Terminal 2": "forwards"})
+                    builder.connect_to("Shenghua Michigan Avenue", one_way="forwards")
                 else:
-                    BusLineBuilder(self, line).connect(*stops)
+                    builder.connect()

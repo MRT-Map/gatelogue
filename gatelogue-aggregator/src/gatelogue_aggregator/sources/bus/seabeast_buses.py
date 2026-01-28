@@ -3,21 +3,23 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
+from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.utils import search_all
 
 
 class SeabeastBuses(BusSource):
     name = "MRT Wiki (Bus, Seabeast Buses)"
-    priority = 1
+    text: str
+
+    def prepare(self, config: Config):
+        self.text = get_wiki_text("Seabeast Buses", config)
 
     def build(self, config: Config):
-        company = BusCompany.new(self, name="Seabeast Buses")
+        company = self.company(name="Seabeast Buses")
         stop_names = {}
 
-        text = get_wiki_text("Seabeast Buses", config)
         for match in search_all(
             re.compile(r"""\|-
 \| style="background:(?P<col>.*?);.*?
@@ -26,29 +28,26 @@ class SeabeastBuses(BusSource):
 \|.*?
 \|(?P<dests>.*?)
 \| style="background:green"""),
-            text,
+            self.text,
         ):
             line_code = match.group("code")
             line_colour = match.group("col")
-            line = BusLine.new(
-                self,
+            line = self.line(
                 code=line_code,
                 company=company,
                 name=line_code,
                 colour="#eee" if line_colour == "white" else line_colour,
             )
 
-            stops = []
+            builder = self.builder(line)
             for n in (match.group("origin"), *match.group("dests").split(",")):
                 name = n.strip()
                 stop_names.setdefault(line_code, []).append(name)
-                stop = BusStop.new(self, codes={name}, name=name, company=company)
-                stops.append(stop)
+                builder.add(self.stop(codes={name}, name=name, company=company))
 
-            if len(stops) == 0:
+            if len(builder.station_list) == 0:
                 continue
-
-            BusLineBuilder(self, line).connect(*stops)
+            builder.connect()
 
         ###
 
@@ -73,5 +72,5 @@ class SeabeastBuses(BusSource):
             if name in names or name is None:
                 continue
 
-            BusStop.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

@@ -336,7 +336,7 @@ class BusBerth(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                "SELECT i FROM BusBerth WHERE stop = ? AND code = ?", (self.stop, code)
+                "SELECT i FROM BusBerth WHERE stop = ? AND code = ?", (self.stop.i, code)
             ).fetchall()
         )
 

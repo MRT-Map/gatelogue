@@ -63,7 +63,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         while True:
             station = self.station_list[self.cursor]
             forward_code, backward_code = platform_codes.get(station.name, (self.default_forward_code, self.default_backward_code))
-            self.connect_to(station, one_way=one_way.get(station.name, None), forward_code=forward_code, backward_code=backward_code, forward_direction=forward_direction, backward_direction=backward_direction)
+            self.connect_to(station, one_way=one_way.get(station.name, one_way.get("*", None)), forward_code=forward_code, backward_code=backward_code, forward_direction=forward_direction, backward_direction=backward_direction)
 
             self.cursor += 1
             if self.cursor >= len(self.station_list) or self.station_list[self.cursor - 1].name == until or self.station_list[self.cursor].name == until_before:
@@ -71,7 +71,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
 
     def connect_circle(self, *, one_way: dict[str, _OneWay] | None = None, platform_codes: dict[str, tuple[str | None, str | None]] | None = None, forward_direction: str | None = None, backward_direction: str | None = None,):
         self.connect(one_way=one_way, platform_codes=platform_codes, forward_direction=forward_direction, backward_direction=backward_direction)
-        self.connect_to(self.station_list[0], one_way=one_way, forward_direction=forward_direction, backward_direction=backward_direction)
+        self.connect_to(self.station_list[0], one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)), forward_direction=forward_direction, backward_direction=backward_direction)
 
     def skip(self, *, until: str):
         while self.cursor < len(self.station_list) and self.station_list[self.cursor].name != until:

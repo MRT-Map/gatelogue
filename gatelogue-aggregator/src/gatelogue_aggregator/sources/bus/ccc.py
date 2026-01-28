@@ -3,39 +3,43 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
+from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.bus import BusCompany, BusLine, BusLineBuilder, BusSource, BusStop
+from gatelogue_aggregator.config import Config
 
 
 class CCC(BusSource):
     name = "MRT Wiki (Bus, Caravacan Caravan Company)"
-    priority = 1
+    text: str
+
+    def prepare(self, config: Config):
+        self.text = get_wiki_text("Caravacan Caravan Company", config)
 
     def build(self, config: Config):
-        company = BusCompany.new(self, name="Caravacan Caravan Company")
+        company = self.company(name="Caravacan Caravan Company")
         stop_names = []
 
-        text = get_wiki_text("Caravacan Caravan Company", config)
         line = None
         stops = []
 
-        for ln in text.split("\n"):
+        for ln in self.text.split("\n"):
             if (match := re.search(r"'''Line (.*?)'''", ln)) is not None:
                 line_code = match.group(1)
-                line = BusLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
+                line = self.line(code=line_code, company=company, name=line_code, colour="#800")
                 continue
             if ln.strip() == "" and line is not None:
                 if len(stops) != 0:
-                    BusLineBuilder(self, line).connect(*stops)
+                    builder = self.builder(line)
+                    builder.add(*stops)
+                    builder.connect()
                 line = None
-                stops = []
+                stops.clear()
                 continue
             if line is None:
                 continue
 
             name = ln.removeprefix("* ")
-            stop = BusStop.new(self, codes={name}, name=name, company=company)
+            stop = self.stop(codes={name}, name=name, company=company)
             stops.append(stop)
             stop_names.append(name)
 
@@ -58,5 +62,5 @@ class CCC(BusSource):
             if name in names:
                 continue
 
-            BusStop.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)
