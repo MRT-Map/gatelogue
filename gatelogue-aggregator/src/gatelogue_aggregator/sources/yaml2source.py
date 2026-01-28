@@ -6,23 +6,21 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 
 import gatelogue_types as gt
 import msgspec
-import rich
 
-from gatelogue_aggregator.source import RailSource, BusSource, SeaSource, Source
-from gatelogue_aggregator.sources.line_builder import SeaLineBuilder, BusLineBuilder, RailLineBuilder
-from gatelogue_types import node
-
-from gatelogue_aggregator.logging import RESULT
+from gatelogue_aggregator.source import BusSource, RailSource, SeaSource, Source
+from gatelogue_aggregator.sources.line_builder import BusLineBuilder, RailLineBuilder, SeaLineBuilder
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     from gatelogue_aggregator.config import Config
 
+
 class YamlRoute(msgspec.Struct):
     stations: list[str]
     forward_direction: str | None = ""
     backward_direction: str | None = ""
+
 
 class YamlLine(msgspec.Struct):
     name: str
@@ -70,14 +68,16 @@ class Yaml2Source(Source):
 
         for codes in file.merge_codes:
             self.S.create(
-                self.conn, self.priority,
+                self.conn,
+                self.priority,
                 codes=codes,
                 company=company,
             )
 
         for line in file.lines:
             line_node = self.L.create(
-                self.conn, self.priority,
+                self.conn,
+                self.priority,
                 code=line.code or line.name,
                 name=line.name,
                 colour=line.colour or file.colour,
@@ -92,29 +92,38 @@ class Yaml2Source(Source):
                 platform_codes: dict[str, tuple[str | None, str | None]] = {}
 
                 for station in route.stations:
-                    matches = re.match(R"(?P<name>[^@#<>]+)\s*?(?:@(?P<code>[^@#<>]*)|)\s*?(?:#(?P<one_way>[^@#<>]*)|)\s*?(?:<(?P<forward_code>[^@#<>]*)\s*?>(?P<backward_code>[^@#<>]*)|)", station)
+                    matches = re.match(
+                        R"(?P<name>[^@#<>]+)\s*?(?:@(?P<code>[^@#<>]*)|)\s*?(?:#(?P<one_way>[^@#<>]*)|)\s*?(?:<(?P<forward_code>[^@#<>]*)\s*?>(?P<backward_code>[^@#<>]*)|)",
+                        station,
+                    )
                     name = matches["name"].strip()
                     code = name if (c := matches["code"] is None) else c.strip()
                     if (direction := matches["one_way"]) is not None:
                         direction = direction.strip()
                         assert direction in ("forwards", "backwards")
                         one_way[name] = direction
-                    if (forward_code := matches["forward_code"]) is not None and (backward_code := matches["backward_code"]) is not None:
+                    if (forward_code := matches["forward_code"]) is not None and (
+                        backward_code := matches["backward_code"]
+                    ) is not None:
                         forward_code, backward_code = forward_code.strip(), backward_code.strip()
                         forward_code = None if forward_code == "-" else forward_code
                         backward_code = None if backward_code == "-" else backward_code
                         platform_codes[name] = forward_code, backward_code
-                    builder.add(self.S.create(
-                        self.conn, self.priority,
-                        codes={code},
-                        name=name,
-                        company=company,
-                    ))
+                    builder.add(
+                        self.S.create(
+                            self.conn,
+                            self.priority,
+                            codes={code},
+                            name=name,
+                            company=company,
+                        )
+                    )
                 self.routing(line_node, builder, line, route, one_way, platform_codes)
 
         for code, (x, z) in file.coords.items():
             self.S.create(
-                self.conn, self.priority,
+                self.conn,
+                self.priority,
                 codes={code},
                 company=company,
                 world=file.world,
@@ -127,7 +136,14 @@ class Yaml2Source(Source):
                 st2 = self.S.create(self.conn, self.priority, codes={code2}, company=company)
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
-                gt.Proximity.create(self.conn, (self.priority,), node1=st1, node2=st2, distance=((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5, explicit=True)
+                gt.Proximity.create(
+                    self.conn,
+                    (self.priority,),
+                    node1=st1,
+                    node2=st2,
+                    distance=((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5,
+                    explicit=True,
+                )
 
     def routing(
         self,
@@ -139,7 +155,8 @@ class Yaml2Source(Source):
         platform_codes: dict[str, tuple[str | None, str | None]] | None,
     ):
         builder.connect(
-            one_way=one_way, platform_codes=platform_codes,
+            one_way=one_way,
+            platform_codes=platform_codes,
             forward_direction=route_yaml.forward_direction,
             backward_direction=route_yaml.backward_direction,
         )

@@ -37,7 +37,11 @@ class FredRail(Yaml2Source, RailSource):
                 *stations[2:5], forward_direction=forward_label, backward_direction=backward_label, one_way=True
             )
             RailLineBuilder(self, line_node).connect(
-                stations[4], stations[2], forward_direction=backward_label, backward_direction=forward_label, one_way=True
+                stations[4],
+                stations[2],
+                forward_direction=backward_label,
+                backward_direction=forward_label,
+                one_way=True,
             )
             RailLineBuilder(self, line_node).connect(
                 *stations[4:], forward_direction=forward_label, backward_direction=backward_label

@@ -1,9 +1,8 @@
 import bs4
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.utils import get_stn
 
 
 class IntraBus(BusSource):
@@ -40,7 +39,12 @@ class IntraBus(BusSource):
                 if line_code in ("313", "425"):
                     builder.connect_circle(one_way={"*": "forwards"})
                 elif line_code == "419":
-                    builder.connect(one_way={"Shenghua International Airport Terminal 1": "forwards", "Shenghua International Airport Terminal 2": "forwards"})
+                    builder.connect(
+                        one_way={
+                            "Shenghua International Airport Terminal 1": "forwards",
+                            "Shenghua International Airport Terminal 2": "forwards",
+                        }
+                    )
                     builder.connect_to("Shenghua Michigan Avenue", one_way="forwards")
                 else:
                     builder.connect()

@@ -1,8 +1,8 @@
 import bs4
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.config import Config
 
 
 class IntraBusOmegaBus(BusSource):

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 if TYPE_CHECKING:
     import bs4

@@ -13,11 +13,4 @@ if TYPE_CHECKING:
 
 
 def SOURCES() -> list[type[BusSource]]:  # noqa: N802
-
-    return [
-        CCC,
-        IntraBus,
-        IntraBusWarp,
-        IntraBusOmegaBus,
-        SeabeastBuses
-    ]
+    return [CCC, IntraBus, IntraBusWarp, IntraBusOmegaBus, SeabeastBuses]

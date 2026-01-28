@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from turtledemo.sorting_animate import start_isort
 from typing import TYPE_CHECKING, LiteralString
 
 if TYPE_CHECKING:
@@ -97,7 +96,8 @@ class _Column[T]:
         return {
             src
             for (src,) in instance.conn.execute(
-                f"SELECT DISTINCT source FROM {self.table + 'Source'} WHERE i = :i AND {self.name} = true", dict(i=instance.i)
+                f"SELECT DISTINCT source FROM {self.table + 'Source'} WHERE i = :i AND {self.name} = true",
+                dict(i=instance.i),
             ).fetchall()
         }
 
@@ -109,17 +109,19 @@ class _Column[T]:
                 self_sources = instance1.sources
                 other_sources = instance2.sources
                 if min(self_sources) >= min(other_sources):
-                    if self_sources != other_sources: warn_fn(
-                        f"Column {self.name} in table {self.table} is different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Column {self.name} in table {self.table} is different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                        )
                 else:
-                    if self_sources != other_sources: warn_fn(
-                        f"Column {self.name} in table {self.table} is different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Column {self.name} in table {self.table} is different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                        )
                     self.__set__(instance1, (self_sources, other_v))
             return
         match (self_v, other_v):
@@ -134,18 +136,20 @@ class _Column[T]:
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
                 if min(self_sources) >= min(other_sources):
-                    if self_sources != other_sources: warn_fn(
-                        f"Column {self.name} in table {self.table} is different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Column {self.name} in table {self.table} is different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                        )
                     self.__set__(instance2, None)
                 else:
-                    if self_sources != other_sources: warn_fn(
-                        f"Column {self.name} in table {self.table} is different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Column {self.name} in table {self.table} is different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                        )
                     self.__set__(instance1, (other_sources, other_v))
 
 
@@ -153,9 +157,7 @@ class _CoordinatesColumn:
     name = "coordinates"
 
     def __get__(self, instance: Node, owner: type[Node]) -> tuple[int, int] | None:
-        x, y = instance.conn.execute(
-            f"SELECT x, y from NodeLocation WHERE i = :i", dict(i=instance.i)
-        ).fetchone()
+        x, y = instance.conn.execute("SELECT x, y from NodeLocation WHERE i = :i", dict(i=instance.i)).fetchone()
         return None if x is None or y is None else (x, y)
 
     def __set__(self, instance: Node, value: tuple[int, int] | None | tuple[set[int], tuple[int, int] | None]):
@@ -163,14 +165,14 @@ class _CoordinatesColumn:
         x, y = (None, None) if value is not None else None
         cur = instance.conn.cursor()
         old_value = self.__get__(instance, type(instance))
-        cur.execute(f"UPDATE NodeLocation SET x = :x, y = :y WHERE i = :i", dict(x=x, y=y, i=instance.i))
+        cur.execute("UPDATE NodeLocation SET x = :x, y = :y WHERE i = :i", dict(x=x, y=y, i=instance.i))
 
         if value != old_value:
-            cur.execute(f"UPDATE NodeLocationSource SET coordinates = false WHERE i = :i", dict(i=instance.i))
+            cur.execute("UPDATE NodeLocationSource SET coordinates = false WHERE i = :i", dict(i=instance.i))
         for src in srcs:
             cur.execute(
-                f"INSERT INTO NodeLocationSource (i, source, coordinates) VALUES (:i, :source, :bool) "
-                f"ON CONFLICT (i, source) DO UPDATE SET coordinates = :bool",
+                "INSERT INTO NodeLocationSource (i, source, coordinates) VALUES (:i, :source, :bool) "
+                "ON CONFLICT (i, source) DO UPDATE SET coordinates = :bool",
                 dict(bool=value is not None, i=instance.i, source=src),
             )
 
@@ -179,7 +181,7 @@ class _CoordinatesColumn:
         return {
             src
             for (src,) in instance.conn.execute(
-                f"SELECT DISTINCT source FROM NodeLocationSource WHERE i = :i AND coordinates = true", dict(i=instance.i)
+                "SELECT DISTINCT source FROM NodeLocationSource WHERE i = :i AND coordinates = true", dict(i=instance.i)
             ).fetchall()
         }
 
@@ -198,18 +200,20 @@ class _CoordinatesColumn:
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
                 if min(self_sources) >= min(other_sources):
-                    if self_sources != other_sources: warn_fn(
-                        f"Columns x/y in table NodeLocation are different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Former has higher priority of {self_sources} than latter which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Columns x/y in table NodeLocation are different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+                        )
                     self.__set__(instance2, None)
                 else:
-                    if self_sources != other_sources: warn_fn(
-                        f"Columns x, y in table NodeLocation are different "
-                        f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                        f"Latter has higher priority of {self_sources} than former which has {other_sources}"
-                    )
+                    if self_sources != other_sources:
+                        warn_fn(
+                            f"Columns x, y in table NodeLocation are different "
+                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                        )
                     self.__set__(instance1, (other_sources, other_v))
 
 

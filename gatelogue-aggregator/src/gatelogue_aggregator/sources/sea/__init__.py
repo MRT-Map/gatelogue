@@ -19,17 +19,4 @@ def SOURCES() -> list[type[SeaSource]]:  # noqa: N802
     from gatelogue_aggregator.sources.sea.wzf import WZF
     from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
 
-    return [
-        AquaLinQ,
-        AquaLinQWarp,
-        CFC,
-        HBL,
-        HBLWarp,
-        IntraSail,
-        IntraSailWarp,
-        WZF,
-        WZFWarp,
-
-        ErzLinkFerry,
-        Windboat
-    ]
+    return [AquaLinQ, AquaLinQWarp, CFC, HBL, HBLWarp, IntraSail, IntraSailWarp, WZF, WZFWarp, ErzLinkFerry, Windboat]

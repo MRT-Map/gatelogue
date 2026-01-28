@@ -1,10 +1,10 @@
 import difflib
 import uuid
 
-from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
 class CFC(SeaSource):

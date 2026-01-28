@@ -3,9 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, YamlRoute, SeaYaml2Source
 import gatelogue_types as gt
+
+from gatelogue_aggregator.sources.line_builder import SeaLineBuilder
+from gatelogue_aggregator.sources.yaml2source import SeaYaml2Source, YamlLine, YamlRoute
 
 
 class ErzLinkFerry(SeaYaml2Source):

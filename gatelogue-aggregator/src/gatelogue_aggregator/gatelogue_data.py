@@ -3,19 +3,18 @@ from __future__ import annotations
 import difflib
 import re
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 import gatelogue_types as gt
 import msgspec
 import rich
-
-from gatelogue_aggregator.report import report
 from gatelogue_types import node
 
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
+from gatelogue_aggregator.report import report
 from gatelogue_aggregator.source import Source
-from pathlib import Path
 
 if TYPE_CHECKING:
     from collections.abc import Container, Iterable
@@ -249,7 +248,11 @@ class GatelogueData:
                     if nearest.i in this._nodes_in_proximity:
                         continue
                     gt.Proximity.create(
-                        self.gd.conn, srcs, node1=this, node2=nearest, distance=dist_sq_fn(nearest, this, component) ** 0.5
+                        self.gd.conn,
+                        srcs,
+                        node1=this,
+                        node2=nearest,
+                        distance=dist_sq_fn(nearest, this, component) ** 0.5,
                     )
 
     def _shared_facility(self):

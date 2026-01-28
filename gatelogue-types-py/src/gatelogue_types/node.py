@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import uuid
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr, _CoordinatesColumn
+from gatelogue_types.base import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
 
 if TYPE_CHECKING:
     import sqlite3
     from collections.abc import Callable, Iterable, Iterator
+
 
 class Node:
     STR2TYPE: ClassVar[dict] = {}
@@ -130,11 +130,6 @@ class LocatedNode(Node):
     def create_node_with_location(
         cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
     ) -> int:
-        x, y = (None, None) if kwargs.get("coordinates") is None else kwargs["coordinates"]
-        if x is not None:
-            x = int(x)
-        if y is not None:
-            y = int(y)
         i = cls.create_node(conn, src, ty=ty)
         cur = conn.cursor()
         cur.execute(

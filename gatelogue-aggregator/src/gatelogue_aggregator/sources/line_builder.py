@@ -1,16 +1,21 @@
 from __future__ import annotations
 
-import itertools
 from typing import TYPE_CHECKING, ClassVar, Literal, Self
 
 import gatelogue_types as gt
 
 if TYPE_CHECKING:
-    from collections.abc import Container
-    from gatelogue_types import BusLine, RailLine, SeaLine, BusStop, RailStation, SeaStop, BusConnection, RailConnection, \
-    SeaConnection, BusBerth, SeaDock, RailPlatform
+    from gatelogue_types import (
+        BusLine,
+        BusStop,
+        RailLine,
+        RailStation,
+        SeaLine,
+        SeaStop,
+    )
 
 type _OneWay = Literal["forwards", "backwards"]
+
 
 class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, SeaStop)]:
     Pt: ClassVar[type[gt.BusBerth, gt.SeaDock, gt.RailPlatform]]
@@ -30,7 +35,16 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
     def add(self, *stations: S):
         self.station_list.extend(stations)
 
-    def connect_to(self, station: str | S, *, one_way: _OneWay | None = None, forward_code: str | None = "DEFAULT", backward_code: str | None = "DEFAULT", forward_direction: str | None = None, backward_direction: str | None = None,):
+    def connect_to(
+        self,
+        station: str | S,
+        *,
+        one_way: _OneWay | None = None,
+        forward_code: str | None = "DEFAULT",
+        backward_code: str | None = "DEFAULT",
+        forward_direction: str | None = None,
+        backward_direction: str | None = None,
+    ):
         forward_direction = f"towards {station.name}" if forward_direction == "" else None
         backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
         if forward_code == "DEFAULT":
@@ -44,17 +58,50 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
 
         if one_way != "backwards":
-            platform_forwards = self.Pt.create(station.conn, self.src, code=forward_code, **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station})
+            platform_forwards = self.Pt.create(
+                station.conn,
+                self.src,
+                code=forward_code,
+                **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station},
+            )
             if self.prev_platform_forwards is not None:
-                self.Cn.create(station.conn, self.src, line=self.line, from_=self.prev_platform_forwards, to=platform_forwards, direction=forward_direction)
+                self.Cn.create(
+                    station.conn,
+                    self.src,
+                    line=self.line,
+                    from_=self.prev_platform_forwards,
+                    to=platform_forwards,
+                    direction=forward_direction,
+                )
             self.prev_platform_forwards = platform_forwards
         if one_way != "forwards":
-            platform_backwards = self.Pt.create(station.conn, self.src, code=backward_code, **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station})
+            platform_backwards = self.Pt.create(
+                station.conn,
+                self.src,
+                code=backward_code,
+                **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station},
+            )
             if self.prev_platform_backwards is not None:
-                self.Cn.create(station.conn, self.src, line=self.line, from_=platform_backwards, to=self.prev_platform_backwards, direction=backward_direction)
+                self.Cn.create(
+                    station.conn,
+                    self.src,
+                    line=self.line,
+                    from_=platform_backwards,
+                    to=self.prev_platform_backwards,
+                    direction=backward_direction,
+                )
             self.prev_platform_backwards = platform_backwards
 
-    def connect(self, *, until: str | None = None, until_before: str | None = None, one_way: dict[str, _OneWay] | None = None, platform_codes: dict[str, tuple[str | None, str | None]] | None = None, forward_direction: str | None = None, backward_direction: str | None = None,):
+    def connect(
+        self,
+        *,
+        until: str | None = None,
+        until_before: str | None = None,
+        one_way: dict[str, _OneWay] | None = None,
+        platform_codes: dict[str, tuple[str | None, str | None]] | None = None,
+        forward_direction: str | None = None,
+        backward_direction: str | None = None,
+    ):
         forward_direction = f"towards {self.station_list[-1].name}" if forward_direction == "" else None
         backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
         one_way = one_way or {}
@@ -62,16 +109,46 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
 
         while True:
             station = self.station_list[self.cursor]
-            forward_code, backward_code = platform_codes.get(station.name, (self.default_forward_code, self.default_backward_code))
-            self.connect_to(station, one_way=one_way.get(station.name, one_way.get("*", None)), forward_code=forward_code, backward_code=backward_code, forward_direction=forward_direction, backward_direction=backward_direction)
+            forward_code, backward_code = platform_codes.get(
+                station.name, (self.default_forward_code, self.default_backward_code)
+            )
+            self.connect_to(
+                station,
+                one_way=one_way.get(station.name, one_way.get("*", None)),
+                forward_code=forward_code,
+                backward_code=backward_code,
+                forward_direction=forward_direction,
+                backward_direction=backward_direction,
+            )
 
             self.cursor += 1
-            if self.cursor >= len(self.station_list) or self.station_list[self.cursor - 1].name == until or self.station_list[self.cursor].name == until_before:
+            if (
+                self.cursor >= len(self.station_list)
+                or self.station_list[self.cursor - 1].name == until
+                or self.station_list[self.cursor].name == until_before
+            ):
                 break
 
-    def connect_circle(self, *, one_way: dict[str, _OneWay] | None = None, platform_codes: dict[str, tuple[str | None, str | None]] | None = None, forward_direction: str | None = None, backward_direction: str | None = None,):
-        self.connect(one_way=one_way, platform_codes=platform_codes, forward_direction=forward_direction, backward_direction=backward_direction)
-        self.connect_to(self.station_list[0], one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)), forward_direction=forward_direction, backward_direction=backward_direction)
+    def connect_circle(
+        self,
+        *,
+        one_way: dict[str, _OneWay] | None = None,
+        platform_codes: dict[str, tuple[str | None, str | None]] | None = None,
+        forward_direction: str | None = None,
+        backward_direction: str | None = None,
+    ):
+        self.connect(
+            one_way=one_way,
+            platform_codes=platform_codes,
+            forward_direction=forward_direction,
+            backward_direction=backward_direction,
+        )
+        self.connect_to(
+            self.station_list[0],
+            one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)),
+            forward_direction=forward_direction,
+            backward_direction=backward_direction,
+        )
 
     def skip(self, *, until: str):
         while self.cursor < len(self.station_list) and self.station_list[self.cursor].name != until:
@@ -83,7 +160,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         if terminus is not None:
             self.skip(until=terminus)
             self.cursor += 1
-            branch.station_list = self.station_list[:self.cursor]
+            branch.station_list = self.station_list[: self.cursor]
 
         return branch
 

@@ -11,12 +11,12 @@ from typing import (
 
 from gatelogue_types.__about__ import __data_version__
 from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate, AirMode
-from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusStop, BusMode
+from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop
 from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
-from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailPlatform, RailStation, RailMode
-from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop, SeaMode
+from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailMode, RailPlatform, RailStation
+from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaMode, SeaStop
 from gatelogue_types.spawn_warp import SpawnWarp, WarpType
-from gatelogue_types.town import Town, Rank
+from gatelogue_types.town import Rank, Town
 
 if TYPE_CHECKING:
     # pyrefly: ignore [missing-import]
@@ -117,7 +117,9 @@ class GD:
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:
         if ty is None or ty is Node:
-            return (Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall())
+            return (
+                Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall()
+            )
         if ty is LocatedNode:
             return (
                 Node.STR2TYPE[ty](self.conn, i)

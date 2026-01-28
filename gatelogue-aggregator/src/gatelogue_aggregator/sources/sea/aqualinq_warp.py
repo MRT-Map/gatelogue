@@ -2,8 +2,8 @@ import uuid
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.downloader import get_url, warps
 from gatelogue_aggregator.source import SeaSource
 
 
@@ -18,7 +18,7 @@ class AquaLinQWarp(SeaSource):
             config.cache_dir / "aqualinq",
             timeout=config.timeout,
             cooldown=config.cooldown,
-            )
+        )
         df = pd.read_csv(config.cache_dir / "aqualinq", header=None)
         df.rename(
             columns={
