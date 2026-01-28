@@ -10,13 +10,15 @@ if TYPE_CHECKING:
 
 class IntraSail(SeaSource):
     name = "MRT Wiki (Sea, IntraSail)"
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("IntraSail", config)
 
     def build(self, config: Config):
         company = self.company(name="IntraSail")
 
-        html = get_wiki_html("IntraSail", config)
-
-        cursor: bs4.Tag = html.find("span", "mw-headline", string="1 Nansei Gintra").parent
+        cursor: bs4.Tag = self.html.find("span", "mw-headline", string="1 Nansei Gintra").parent
 
         while cursor and (line_code_name := cursor.find(class_="mw-headline")) is not None:
             line_code, line_name = line_code_name.string.split(" ", 1)

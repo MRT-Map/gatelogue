@@ -11,12 +11,15 @@ if TYPE_CHECKING:
 
 class AquaLinQ(SeaSource):
     name = "MRT Wiki (Sea, AquaLinQ)"
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("AquaLinQ", config)
 
     def build(self, config: Config):
         company = self.company(name="AquaLinQ")
 
-        html = get_wiki_html("AquaLinQ", config)
-        for h3 in html.find_all("h3"):
+        for h3 in self.html.find_all("h3"):
             if (match := re.search(r"([^:]*): (.*)", h3.find("span", class_="mw-headline").string)) is None:
                 continue
             line_code = match.group(1)

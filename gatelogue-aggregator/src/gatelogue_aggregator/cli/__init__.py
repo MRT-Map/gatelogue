@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -61,9 +62,8 @@ def gatelogue_aggregator():
     help="how long to wait before sending new requests to the same URL if `429 Too Many Requests` is received",
 )
 @click.option(
-    "-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON"
+    "-o", "--output", default="data.db", type=Path, show_default=True, help="file to output the result to, in JSON"
 )
-@click.option("-f/-F", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
 @click.option(
     "-r/-R", "--report/--no-report", default=True, show_default=True, help="print a report of all nodes after merger"
 )
@@ -113,7 +113,6 @@ def run(
     timeout: int,
     cooldown: int,
     output: Path,
-    fmt: bool,
     report: bool,
     graph: Path | None,
     max_workers: int,
@@ -137,34 +136,15 @@ def run(
         cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
     )
 
-    src = GatelogueData(config, sources)
+    gd = GatelogueData(config, sources)
 
     if report:
-        src.report()
+        gd.report()
 
     if graph is not None:
         with progress_bar(INFO1, f"Outputting graph to {graph}..."):
-            src.graph(graph)
+            gd.graph(graph)
 
-    j = msgspec.json.encode(src.export(), enc_hook=_enc_hook)
-    if fmt:
-        rich.print(INFO1 + f"Writing to {output} (formatted)")
-        output.write_text(msgspec.json.format(j.decode("utf-8")))
-    else:
-        rich.print(INFO1 + f"Writing to {output} (unformatted)")
-        output.write_bytes(j)
-
-
-@gatelogue_aggregator.command(help="export a JSON schema of the current data format")
-@click.option(
-    "-o", "--output", default="data.json", type=Path, show_default=True, help="file to output the result to, in JSON"
-)
-@click.option("-f/", "--fmt/--no-fmt", default=False, show_default=True, help="prettify the JSON result")
-def schema(output: Path, *, fmt: bool):
-    j = msgspec.json.encode(msgspec.json.schema(gt.GatelogueData, schema_hook=_schema_hook))
-    if fmt:
-        rich.print(INFO1 + f"Outputting to {output} (formatted)")
-        output.write_text(msgspec.json.format(j.decode("utf-8")))
-    else:
-        rich.print(INFO1 + f"Outputting to {output} (unformatted)")
-        output.write_bytes(j)
+    if output != Path("/dev/null"):
+        rich.print(INFO1 + f"Writing to {output}")
+        gd.gd.conn.backup(sqlite3.connect(output))

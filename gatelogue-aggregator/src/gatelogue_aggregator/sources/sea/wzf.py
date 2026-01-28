@@ -1,5 +1,7 @@
 import re
 
+import bs4
+
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import SeaSource
@@ -7,13 +9,15 @@ from gatelogue_aggregator.source import SeaSource
 
 class WZF(SeaSource):
     name = "MRT Wiki (Sea, West Zeta Ferry)"
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("West Zeta Ferry", config)
 
     def build(self, config: Config):
         company = self.company(name="West Zeta Ferry")
 
-        html = get_wiki_html("West Zeta Ferry", config)
-
-        for table in html.find_all("table"):
+        for table in self.html.find_all("table"):
             if "Status" not in table.th.string:
                 continue
             span = table.previous_sibling.previous_sibling.find(

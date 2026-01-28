@@ -9,13 +9,18 @@ from gatelogue_aggregator.source import SeaSource
 
 class CFC(SeaSource):
     name = "MRT Wiki (Sea, Caravacan Floaty Company)"
+    text: str
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.text = get_wiki_text("Caravacan Floaty Company", config)
+        self.warps = list(warps(uuid.UUID("7adc9642-5f67-4264-88e3-3c8bd93261c0"), config))
 
     def build(self, config: Config):
         company = self.company(name="Caravacan Floaty Company")
         stop_names = []
 
-        text = get_wiki_text("Caravacan Floaty Company", config)
-        for ln in text.split("\n"):
+        for ln in self.text.split("\n"):
             if ". " not in ln:
                 continue
             line_code, line_stations = ln.split(". ")
@@ -36,7 +41,7 @@ class CFC(SeaSource):
         ###
 
         names = []
-        for warp in warps(uuid.UUID("7adc9642-5f67-4264-88e3-3c8bd93261c0"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("CFC"):
                 continue
 

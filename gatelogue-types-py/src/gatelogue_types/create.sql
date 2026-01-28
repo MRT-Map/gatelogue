@@ -20,8 +20,7 @@ CREATE TABLE Node
                                         'BusCompany', 'BusLine', 'BusStop', 'BusBerth', 'BusConnection',
                                         'SeaCompany', 'SeaLine', 'SeaStop', 'SeaDock', 'SeaConnection',
                                         'RailCompany', 'RailLine', 'RailStation', 'RailPlatform', 'RailConnection',
-                                        'Town', 'SpawnWarp') ),
-    _key TEXT
+                                        'Town', 'SpawnWarp') )
 ) STRICT;
 CREATE TABLE NodeSource
 (

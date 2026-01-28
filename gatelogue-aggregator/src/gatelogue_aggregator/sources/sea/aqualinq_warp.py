@@ -9,16 +9,16 @@ from gatelogue_aggregator.source import SeaSource
 
 class AquaLinQWarp(SeaSource):
     name = "MRT Warp API (Sea, AquaLinQ)"
+    d: dict[str, str]
+    warps: list[dict]
 
-    def build(self, config: Config):
-        company = self.company(name="AquaLinQ")
-
+    def prepare(self, config: Config):
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=1793169664",
             config.cache_dir / "aqualinq",
             timeout=config.timeout,
             cooldown=config.cooldown,
-        )
+            )
         df = pd.read_csv(config.cache_dir / "aqualinq", header=None)
         df.rename(
             columns={
@@ -41,10 +41,16 @@ class AquaLinQWarp(SeaSource):
         d["AQ900ONEM"] = "Onemalu Moku Uopa Regional Pier"
         d["AQ1600MORA"] = "Moramoa Central"
         d["AQ1000NIWEN"] = "Niwen"
+        self.d = d
+
+        self.warps = list(warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config))
+
+    def build(self, config: Config):
+        company = self.company(name="AquaLinQ")
 
         names = []
-        for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
-            if warp["name"] not in d or (name := d[warp["name"]]) in names:
+        for warp in self.warps:
+            if warp["name"] not in self.d or (name := self.d[warp["name"]]) in names:
                 continue
             self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

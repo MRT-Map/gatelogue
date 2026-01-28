@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import uuid
 import warnings
-from threading import Lock
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
 from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr, _CoordinatesColumn
@@ -10,8 +9,6 @@ from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr, _Coo
 if TYPE_CHECKING:
     import sqlite3
     from collections.abc import Callable, Iterable, Iterator
-
-_CREATE_LOCK = Lock()
 
 class Node:
     STR2TYPE: ClassVar[dict] = {}
@@ -51,11 +48,8 @@ class Node:
     @classmethod
     def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
         cur = conn.cursor()
-        key = str(uuid.uuid4())
-        with _CREATE_LOCK:
-            cur.execute("INSERT INTO Node ( type, _key ) VALUES ( :type, :key )", dict(type=ty, key=key))
-            (i,) = cur.execute("SELECT i FROM Node WHERE _key = :key", dict(key=key)).fetchone()
-        cur.execute("UPDATE Node SET _key = null WHERE i = :i", dict(i=i))
+        cur.execute("INSERT INTO Node ( type ) VALUES ( :type )", dict(type=ty))
+        (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = last_insert_rowid()").fetchone()
         cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
         return i
 

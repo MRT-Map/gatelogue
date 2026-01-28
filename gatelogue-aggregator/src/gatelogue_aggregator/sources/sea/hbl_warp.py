@@ -139,15 +139,19 @@ _DICT = {
 
 class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(itertools.chain(
+            warps(uuid.UUID("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"), config),
+            warps(uuid.UUID("8a928931-aa14-4a1c-8a39-0a7630922001"), config),
+        ))
 
     def build(self, config: Config):
         company = self.company(name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
-        for warp in itertools.chain(
-            warps(uuid.UUID("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"), config),
-            warps(uuid.UUID("8a928931-aa14-4a1c-8a39-0a7630922001"), config),
-        ):
+        for warp in self.warps:
             if (result := re.match(r"HBL_(...)_(.*)", warp["name"])) is None:
                 continue
             if (name := _DICT.get(result.group(1))) is None:

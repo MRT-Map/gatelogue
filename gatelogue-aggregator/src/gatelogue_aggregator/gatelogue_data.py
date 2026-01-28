@@ -48,7 +48,11 @@ class GatelogueData:
         self.gd = gt.GD.create([a.__name__ for a in sources], database)
 
         with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
-            list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
+            source_instances: list[Source] = list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
+
+        for source in track(source_instances, INFO1, description="Building sources"):
+            source.build(self.config)
+            source.report()
 
     def _merge_equivalent_nodes(self, pass_: int):
         merged: set[int] = set()

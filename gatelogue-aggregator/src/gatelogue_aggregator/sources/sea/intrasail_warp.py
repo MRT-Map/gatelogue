@@ -8,12 +8,16 @@ from gatelogue_aggregator.source import SeaSource
 
 class IntraSailWarp(SeaSource):
     name = "MRT Warp API (Sea, IntraSail)"
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config))
 
     def build(self, config: Config):
         company = self.company(name="IntraSail")
 
         names = []
-        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("IS"):
                 continue
             if warp["name"] == "IS1d-KZH-WB":

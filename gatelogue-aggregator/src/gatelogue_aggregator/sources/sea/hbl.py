@@ -1,6 +1,8 @@
 import itertools
 import re
 
+import bs4
+
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import SeaSource
@@ -8,12 +10,16 @@ from gatelogue_aggregator.source import SeaSource
 
 class HBL(SeaSource):
     name = "MRT Wiki (Sea, Hummingbird Boat Lines)"
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("Hummingbird Boat Lines", config)
 
     def build(self, config: Config):
         company = self.company(name="Hummingbird Boat Lines")
 
-        html = get_wiki_html("Hummingbird Boat Lines", config)
-        for td in html.find("table", class_="multicol").find_all("td"):
+
+        for td in self.html.find("table", class_="multicol").find_all("td"):
             for p, ul in zip(td.find_all("p"), td.find_all("ul"), strict=False):
                 line_code = p.span.string or p.span.span.string
                 line_name = p.b.string

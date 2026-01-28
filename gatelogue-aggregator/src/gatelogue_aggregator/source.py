@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
-from typing import TYPE_CHECKING, ClassVar, Unpack
+from typing import TYPE_CHECKING, ClassVar, Unpack, Any
 
 import gatelogue_types as gt
 import rich
@@ -22,10 +22,12 @@ class Source:
 
     def __init__(self, config: Config, conn: sqlite3.Connection):
         self.conn = conn
-        rich.print(INFO1 + f"Retrieving from {self.name}")
+        rich.print(INFO1 + f"Preparing raw data for {self.name}")
 
-        self.build(config)
-        self.report()
+        self.prepare(config)
+
+    def prepare(self, config: Config):
+        pass
 
     def build(self, config: Config):
         raise NotImplementedError

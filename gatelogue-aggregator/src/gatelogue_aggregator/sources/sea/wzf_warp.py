@@ -7,12 +7,16 @@ from gatelogue_aggregator.source import SeaSource
 
 class WZFWarp(SeaSource):
     name = "MRT Warp API (Sea, West Zeta Ferry)"
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(warps(uuid.UUID("4230e859-a39b-4124-b368-28819b77f986"), config))
 
     def build(self, config: Config):
         company = self.company(name="West Zeta Ferry")
 
         codes = []
-        for warp in warps(uuid.UUID("4230e859-a39b-4124-b368-28819b77f986"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("WZF") and not warp["name"].startswith("ZF"):
                 continue
             code = warp["name"].split("-")[-1]
