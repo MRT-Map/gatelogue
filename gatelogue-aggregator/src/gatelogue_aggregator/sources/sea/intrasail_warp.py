@@ -2,16 +2,15 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 
 class IntraSailWarp(SeaSource):
     name = "MRT Warp API (Sea, IntraSail)"
-    priority = 0
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="IntraSail")
+        company = self.company(name="IntraSail")
 
         names = []
         for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
@@ -49,5 +48,5 @@ class IntraSailWarp(SeaSource):
             if name in names:
                 continue
 
-            SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

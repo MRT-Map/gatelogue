@@ -21,7 +21,7 @@ class FredRail(Yaml2Source, RailSource):
     S = RailStation
     B = RailLineBuilder
 
-    def custom_routing(
+    def routing(
         self,
         line_node: RailLine | BusLine | SeaLine,
         stations: list[RailStation | BusStop | SeaStop],
@@ -31,16 +31,16 @@ class FredRail(Yaml2Source, RailSource):
             forward_label = "towards Boston Waterloo"
             backward_label = "towards Rattlerville Central"
             RailLineBuilder(self, line_node).connect(
-                *stations[:3], forward_label=forward_label, backward_label=backward_label
+                *stations[:3], forward_direction=forward_label, backward_direction=backward_label
             )
             RailLineBuilder(self, line_node).connect(
-                *stations[2:5], forward_label=forward_label, backward_label=backward_label, one_way=True
+                *stations[2:5], forward_direction=forward_label, backward_direction=backward_label, one_way=True
             )
             RailLineBuilder(self, line_node).connect(
-                stations[4], stations[2], forward_label=backward_label, backward_label=forward_label, one_way=True
+                stations[4], stations[2], forward_direction=backward_label, backward_direction=forward_label, one_way=True
             )
             RailLineBuilder(self, line_node).connect(
-                *stations[4:], forward_label=forward_label, backward_label=backward_label
+                *stations[4:], forward_direction=forward_label, backward_direction=backward_label
             )
             return
         raise NotImplementedError

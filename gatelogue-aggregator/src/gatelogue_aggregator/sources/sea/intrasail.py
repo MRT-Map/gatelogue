@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 if TYPE_CHECKING:
     import bs4
@@ -10,10 +10,9 @@ if TYPE_CHECKING:
 
 class IntraSail(SeaSource):
     name = "MRT Wiki (Sea, IntraSail)"
-    priority = 1
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="IntraSail")
+        company = self.company(name="IntraSail")
 
         html = get_wiki_html("IntraSail", config)
 
@@ -25,10 +24,10 @@ class IntraSail(SeaSource):
             line_name = line_name.strip()
 
             line_colour = "#C74EBD" if line_code.endswith("X") else "#3AB3DA" if line_code[-1].isdigit() else "#B02E26"
-            line = SeaLine.new(self, code=line_code, name=line_name, company=company, mode="ferry", colour=line_colour)
+            line = self.line(code=line_code, name=line_name, company=company, mode="warp ferry", colour=line_colour)
             cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
 
-            stops = []
+            builder = self.builder(line)
             for big in cursor.find_all("big"):
                 if (big2 := big.find("big")) is None:
                     continue
@@ -39,9 +38,10 @@ class IntraSail(SeaSource):
                     continue
                 name = " ".join(big2.stripped_strings)
 
-                stop = SeaStop.new(self, codes={name}, name=name, company=company)
-                stops.append(stop)
+                builder.add(self.stop(codes={name}, name=name, company=company))
 
-            SeaLineBuilder(self, line).connect(*stops)
+            if len(builder.station_list) == 0:
+                continue
+            builder.connect()
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling

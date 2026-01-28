@@ -17,7 +17,7 @@ class ErzLinkTrams(Yaml2Source, RailSource):
     S = RailStation
     B = RailLineBuilder
 
-    def custom_routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
         if line_node.code == "0":
             self.B(self, line_node).circle(
                 *stations, forward_label=line_yaml.forward_label, backward_label=line_yaml.backward_label
@@ -26,43 +26,43 @@ class ErzLinkTrams(Yaml2Source, RailSource):
             self.B(self, line_node).connect(
                 *stations,
                 between=(None, "Atrium North"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 *stations,
                 between=("Atrium South", None),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 get_stn(stations, "Atrium North"),
                 get_stn(stations, "Atrium East"),
                 get_stn(stations, "Atrium South"),
                 one_way=True,
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 get_stn(stations, "Atrium South"),
                 get_stn(stations, "Atrium West"),
                 get_stn(stations, "Atrium North"),
                 one_way=True,
-                forward_label=line_yaml.backward_label,
-                backward_label=line_yaml.forward_label,
+                forward_direction=line_yaml.backward_label,
+                backward_direction=line_yaml.forward_label,
             )
         elif line_node.code == "X2a":
             self.B(self, line_node).connect(
                 *stations,
                 between=(None, "Euneva Interchange"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 *stations,
                 between=("Shellwater Plaza", None),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
         else:
             raise NotImplementedError

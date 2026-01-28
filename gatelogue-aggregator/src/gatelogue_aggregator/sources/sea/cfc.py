@@ -3,16 +3,15 @@ import uuid
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 
 class CFC(SeaSource):
     name = "MRT Wiki (Sea, Caravacan Floaty Company)"
-    priority = 1
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="Caravacan Floaty Company")
+        company = self.company(name="Caravacan Floaty Company")
         stop_names = []
 
         text = get_wiki_text("Caravacan Floaty Company", config)
@@ -22,19 +21,17 @@ class CFC(SeaSource):
             line_code, line_stations = ln.split(". ")
             if len(line_code) > 3:
                 continue
-            line = SeaLine.new(self, code=line_code, company=company, name=line_code, colour="#800")
+            line = self.line(code=line_code, company=company, name=line_code, colour="#800")
 
-            stops = []
+            builder = self.builder(line)
             for stn in line_stations.split("--"):
                 name = stn.strip(" '")
                 stop_names.append(name)
-                stop = SeaStop.new(self, codes={name}, name=name, company=company)
-                stops.append(stop)
+                builder.add(self.stop(codes={name}, name=name, company=company))
 
-            if len(stops) == 0:
+            if len(builder.station_list) == 0:
                 continue
-
-            SeaLineBuilder(self, line).connect(*stops)
+            builder.connect()
 
         ###
 
@@ -56,5 +53,5 @@ class CFC(SeaSource):
             if name in names:
                 continue
 
-            SeaStop.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

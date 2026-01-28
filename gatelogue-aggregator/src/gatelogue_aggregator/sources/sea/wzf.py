@@ -1,16 +1,15 @@
 import re
 
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 
 class WZF(SeaSource):
     name = "MRT Wiki (Sea, West Zeta Ferry)"
-    priority = 1
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="West Zeta Ferry")
+        company = self.company(name="West Zeta Ferry")
 
         html = get_wiki_html("West Zeta Ferry", config)
 
@@ -26,9 +25,9 @@ class WZF(SeaSource):
                 continue
             line_name = result.group("name")
             line_code = result.group("code")
-            line = SeaLine.new(self, code=line_code, name=line_name, company=company)
+            line = self.line(code=line_code, name=line_name, company=company)
 
-            stops = []
+            builder = self.builder(line)
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:
                     continue
@@ -36,10 +35,11 @@ class WZF(SeaSource):
                 name = "".join(tr("td")[2].strings)
                 if "planned" in name:
                     continue
-                stop = SeaStop.new(self, codes={code}, name=name, company=company)
-                stops.append(stop)
+                builder.add(self.stop(codes={code}, name=name, company=company))
 
                 colour = tr("td")[1].attrs["style"].split(":")[1]
-                line.colour = self.source(colour)
+                line.colour = colour
 
-            SeaLineBuilder(self, line).connect(*stops)
+            if len(builder.station_list) == 0:
+                continue
+            builder.connect()

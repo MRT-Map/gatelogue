@@ -30,7 +30,7 @@ URL: str = "???"
 class GD:
     def __init__(self, database=":memory:"):
         sqlite3.threadsafety = 3
-        self.conn = sqlite3.connect(database, check_same_thread=False)
+        self.conn = sqlite3.connect(database, check_same_thread=False, autocommit=True)
         self.conn.execute("PRAGMA foreign_keys = true")
 
     @classmethod
@@ -117,7 +117,7 @@ class GD:
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:
         if ty is None or ty is Node:
-            return (Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i FROM Node").fetchall())
+            return (Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall())
         if ty is LocatedNode:
             return (
                 Node.STR2TYPE[ty](self.conn, i)

@@ -8,15 +8,17 @@ from typing import TYPE_CHECKING, Literal
 import gatelogue_types as gt
 import msgspec
 import rich
+
+from gatelogue_aggregator.report import report
 from gatelogue_types import node
 
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import Source
+from pathlib import Path
 
 if TYPE_CHECKING:
     from collections.abc import Container, Iterable
-    from pathlib import Path
 
 
 class GatelogueData:
@@ -58,7 +60,9 @@ class GatelogueData:
             if n.i in merged:
                 continue
             for equiv in n.equivalent_nodes():
-                n.merge(equiv)
+                if n.i == equiv.i:
+                    continue
+                n.merge(equiv, warn_fn=lambda msg: rich.print(ERROR + msg))
                 merged.add(equiv.i)
 
     def _merge_airports_with_unknown_code(self, pass_: int):
@@ -172,12 +176,12 @@ class GatelogueData:
             if len(queue) == 0:
                 components.append(set())
                 n = next(iter(nodes))
-                nodes.remove(n)
             else:
                 n = next(iter(queue))
                 queue.remove(n)
             components[-1].add(n)
             processed.add(n)
+            nodes.remove(n)
             queue |= {a for a in gt.LocatedNode(self.gd.conn, n)._nodes_in_proximity}
             queue -= processed
         components.remove(max(components, key=len))
@@ -198,7 +202,7 @@ class GatelogueData:
                 x1, y1 = existing.coordinates
                 x2, y2 = n.coordinates
                 dist_sq = (x1 - x2) ** 2 + (y1 - y2) ** 2
-                threshold = 500**2 if isinstance(existing, gt.AirAirport) or isinstance(node, gt.AirAirport) else 250**2
+                threshold = 500**2 if isinstance(existing, gt.AirAirport) or isinstance(n, gt.AirAirport) else 250**2
                 if dist_sq < threshold:
                     srcs = {
                         s
@@ -209,7 +213,7 @@ class GatelogueData:
                         )
                     }
                     gt.Proximity.create(self.gd.conn, srcs, node1=n, node2=existing, distance=dist_sq**0.5)
-            processed.append(node)
+            processed.append(n)
 
         def dist_sq_fn(n_: gt.LocatedNode, this_: gt.LocatedNode, others: Container[int]):
             if n_.world != this_.world or n_.i in others:
@@ -238,6 +242,8 @@ class GatelogueData:
                             dict(i1=this.i, i2=nearest.i),
                         )
                     }
+                    if nearest.i in this._nodes_in_proximity:
+                        continue
                     gt.Proximity.create(
                         self.gd.conn, srcs, node1=this, node2=nearest, distance=dist_sq_fn(nearest, this, component) ** 0.5
                     )
@@ -360,7 +366,7 @@ class GatelogueData:
     def report(self):
         rich.print(INFO1 + "Below is a final report of all nodes collected")
         for node in self.gd.nodes():
-            node.report(self)
+            report(node)
         rich.print(INFO1 + "End of report")
 
     def graph(self, path: Path):

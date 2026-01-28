@@ -13,9 +13,9 @@ from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.logging import INFO1, progress_bar
 from gatelogue_aggregator.sources import SOURCES
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.gatelogue_data import GatelogueData
-from gatelogue_aggregator.types.source import Source
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.gatelogue_data import GatelogueData
+from gatelogue_aggregator.source import Source
 
 
 def _enc_hook(obj):
@@ -136,10 +136,8 @@ def run(
     config = Config(
         cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
     )
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        result = list(executor.map(lambda s: s(config), sources))
 
-    src = GatelogueData.from_sources(result)
+    src = GatelogueData(config, sources)
 
     if report:
         src.report()

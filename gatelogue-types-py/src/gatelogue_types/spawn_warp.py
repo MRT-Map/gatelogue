@@ -19,6 +19,9 @@ class SpawnWarp(LocatedNode):
     """The type of the spawn warp"""
     COLUMNS: ClassVar = (*LocatedNode.COLUMNS, name, warp_type)
 
+    def __str__(self):
+        return super().__str__() + f" {self.name} ({self.warp_type})"
+
     class CreateParams(LocatedNode.CreateParams, total=True):
         name: str
         warp_type: str

@@ -16,19 +16,19 @@ class FLRKaze(Yaml2Source, RailSource):
     S = RailStation
     B = RailLineBuilder
 
-    def custom_routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
         if line_node.code == "C1":
             self.B(self, line_node).connect(
                 *stations,
                 exclude=["Ho Kok West"],
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
             self.B(self, line_node).connect(
                 *stations,
                 between=("Ho Kok West", "Ho Kok"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
+                forward_direction=line_yaml.forward_label,
+                backward_direction=line_yaml.backward_label,
             )
         else:
             raise NotImplementedError

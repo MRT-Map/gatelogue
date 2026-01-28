@@ -7,8 +7,8 @@ import rich
 
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import ERROR
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 # Adapted from https://docs.google.com/spreadsheets/d/1nIIettVbGwzm7DkmYqqPVoguw2U53R5un4nrC76w-Xg/edit#gid=1423194214
 _DICT = {
@@ -139,10 +139,9 @@ _DICT = {
 
 class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
-    priority = 0
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="Hummingbird Boat Lines")
+        company = self.company(name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
         for warp in itertools.chain(
@@ -167,7 +166,7 @@ class HBLWarp(SeaSource):
                 elif result.group(2) in ("22", "24", "51", "55"):
                     name += " (north)"
 
-            SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             with contextlib.suppress(ValueError):
                 names.remove(name)
 

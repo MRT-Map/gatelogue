@@ -8,7 +8,7 @@ import gatelogue_types as gt
 import msgspec
 import rich
 
-from gatelogue_aggregator.source import RailSource, BusSource, SeaSource
+from gatelogue_aggregator.source import RailSource, BusSource, SeaSource, Source
 from gatelogue_aggregator.sources.line_builder import SeaLineBuilder, BusLineBuilder, RailLineBuilder
 from gatelogue_types import node
 
@@ -19,13 +19,20 @@ if TYPE_CHECKING:
 
     from gatelogue_aggregator.config import Config
 
+class YamlRoute(msgspec.Struct):
+    stations: list[str]
+    forward_direction: str | None = ""
+    backward_direction: str | None = ""
 
 class YamlLine(msgspec.Struct):
     name: str
-    stations: list[str | list[str]]
+    routing: list[YamlRoute] | None = None
 
-    forward_direction: str | None = None
-    backward_direction: str | None = None
+    stations: list[str] | None = None
+    forward_direction: str | None = ""
+    backward_direction: str | None = ""
+    # TODO mutually exclusive
+
     colour: str | None = None
     mode: gt.BusMode | gt.RailMode | gt.SeaMode | None = None
     code: str | None = None
@@ -45,7 +52,7 @@ class Yaml(msgspec.Struct):
     world: gt.World = "New"
 
 
-class Yaml2Source(RailSource, BusSource, SeaSource):
+class Yaml2Source(Source):
     name = "Gatelogue"
 
     file_path: ClassVar[Path]
@@ -78,37 +85,32 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
                 mode=line.mode or file.mode,
                 company=company,
             )
-            for station_list in line.stations if isinstance(line.stations[0], list) else (line.stations,):
+            routing = line.routing or [YamlRoute(line.stations, line.forward_direction, line.backward_direction)]
+            for route in routing:
                 builder = self.B(self.priority, line_node)
                 one_way: dict[str, Literal["forwards", "backwards"]] = {}
                 platform_codes: dict[str, tuple[str | None, str | None]] = {}
-                for station in station_list:
+
+                for station in route.stations:
                     matches = re.match(R"(?P<name>[^@#<>]+)\s*?(?:@(?P<code>[^@#<>]*)|)\s*?(?:#(?P<one_way>[^@#<>]*)|)\s*?(?:<(?P<forward_code>[^@#<>]*)\s*?>(?P<backward_code>[^@#<>]*)|)", station)
                     name = matches["name"].strip()
-                    try:
-                        code = matches["code"].strip()
-                    except IndexError:
-                        code = name
-                    try:
-                        direction = matches["one_way"].strip()
+                    code = name if (c := matches["code"] is None) else c.strip()
+                    if (direction := matches["one_way"]) is not None:
+                        direction = direction.strip()
                         assert direction in ("forwards", "backwards")
                         one_way[name] = direction
-                    except IndexError:
-                        pass
-                    try:
-                        forward_code, backward_code = matches["forward_code"].strip(), matches["backward_code"].strip()
+                    if (forward_code := matches["forward_code"]) is not None and (backward_code := matches["backward_code"]) is not None:
+                        forward_code, backward_code = forward_code.strip(), backward_code.strip()
                         forward_code = None if forward_code == "-" else forward_code
                         backward_code = None if backward_code == "-" else backward_code
                         platform_codes[name] = forward_code, backward_code
-                    except IndexError:
-                        pass
                     builder.add(self.S.create(
                         self.conn, self.priority,
                         codes={code},
                         name=name,
                         company=company,
                     ))
-                self.routing(line_node, builder, line)
+                self.routing(line_node, builder, line, route, one_way, platform_codes)
 
         for code, (x, z) in file.coords.items():
             self.S.create(
@@ -132,7 +134,36 @@ class Yaml2Source(RailSource, BusSource, SeaSource):
         line_node: gt.RailLine | gt.BusLine | gt.SeaLine,
         builder: RailLineBuilder | BusLineBuilder | SeaLineBuilder,
         line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        one_way: dict[str, Literal["forwards", "backwards"]] | None,
+        platform_codes: dict[str, tuple[str | None, str | None]] | None,
     ):
         builder.connect(
-            forward_direction=line_yaml.forward_direction, backward_direction=line_yaml.backward_direction
+            one_way=one_way, platform_codes=platform_codes,
+            forward_direction=route_yaml.forward_direction,
+            backward_direction=route_yaml.backward_direction,
         )
+
+
+class BusYaml2Source(Yaml2Source, BusSource):
+    C = gt.BusCompany
+    L = gt.BusLine
+    S = gt.BusStop
+    P = gt.BusBerth
+    B = BusLineBuilder
+
+
+class RailYaml2Source(Yaml2Source, RailSource):
+    C = gt.RailCompany
+    L = gt.RailLine
+    S = gt.RailStation
+    P = gt.RailPlatform
+    B = RailLineBuilder
+
+
+class SeaYaml2Source(Yaml2Source, SeaSource):
+    C = gt.SeaCompany
+    L = gt.SeaLine
+    S = gt.SeaStop
+    P = gt.SeaDock
+    B = SeaLineBuilder

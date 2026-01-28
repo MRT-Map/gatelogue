@@ -7,6 +7,8 @@ import gatelogue_types as gt
 import rich
 
 from gatelogue_aggregator.logging import ERROR, INFO1
+from gatelogue_aggregator.report import report
+from gatelogue_aggregator.sources.line_builder import SeaLineBuilder, BusLineBuilder, RailLineBuilder
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
@@ -15,6 +17,7 @@ if TYPE_CHECKING:
 class Source:
     name: ClassVar[str]
     priority: ClassVar[int] = -1
+    report_ignore: tuple[type[gt.Node], ...] = ()
     conn: sqlite3.Connection
 
     def __init__(self, config: Config, conn: sqlite3.Connection):
@@ -37,10 +40,10 @@ class Source:
         ]
 
         if len(nodes) == 0:
-            rich.print(ERROR + f"{self.__name__} yielded no results")
+            rich.print(ERROR + f"{self.name} yielded no results")
 
         for node in nodes:
-            node.report(self)
+            report(node, prefix=self.name, ignore=self.report_ignore)
 
 
 class AirSource(Source):
@@ -73,6 +76,9 @@ class BusSource(Source):
     def connection(self, **kwargs: Unpack[gt.BusConnection.CreateParams]) -> gt.BusConnection:
         return gt.BusConnection.create(self.conn, self.priority, **kwargs)
 
+    def builder(self, line: gt.BusLine) -> BusLineBuilder:
+        return BusLineBuilder(self.priority, line)
+
 
 class SeaSource(Source):
     def company(self, **kwargs: Unpack[gt.SeaCompany.CreateParams]) -> gt.SeaCompany:
@@ -84,11 +90,14 @@ class SeaSource(Source):
     def stop(self, **kwargs: Unpack[gt.SeaStop.CreateParams]) -> gt.SeaStop:
         return gt.SeaStop.create(self.conn, self.priority, **kwargs)
 
-    def berth(self, **kwargs: Unpack[gt.SeaDock.CreateParams]) -> gt.SeaDock:
+    def dock(self, **kwargs: Unpack[gt.SeaDock.CreateParams]) -> gt.SeaDock:
         return gt.SeaDock.create(self.conn, self.priority, **kwargs)
 
     def connection(self, **kwargs: Unpack[gt.SeaConnection.CreateParams]) -> gt.SeaConnection:
         return gt.SeaConnection.create(self.conn, self.priority, **kwargs)
+
+    def builder(self, line: gt.SeaLine) -> SeaLineBuilder:
+        return SeaLineBuilder(self.priority, line)
 
 
 class RailSource(Source):
@@ -106,3 +115,6 @@ class RailSource(Source):
 
     def connection(self, **kwargs: Unpack[gt.RailConnection.CreateParams]) -> gt.RailConnection:
         return gt.RailConnection.create(self.conn, self.priority, **kwargs)
+
+    def builder(self, line: gt.RailLine) -> RailLineBuilder:
+        return RailLineBuilder(self.priority, line)

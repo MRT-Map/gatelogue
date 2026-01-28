@@ -90,12 +90,12 @@ class WikiMRT(RailSource):
                 )
                 if line_code == "R":
                     RailLineBuilder(self, line).connect(
-                        *stations[:5], forward_label=forward_label, backward_label=backward_label
+                        *stations[:5], forward_direction=forward_label, backward_direction=backward_label
                     )
                     RailLineBuilder(self, line).connect(
-                        *stations[7:], forward_label=forward_label, backward_label=backward_label
+                        *stations[7:], forward_direction=forward_label, backward_direction=backward_label
                     )
                 else:
                     RailLineBuilder(self, line).connect(
-                        *stations, forward_label=forward_label, backward_label=backward_label
+                        *stations, forward_direction=forward_label, backward_direction=backward_label
                     )

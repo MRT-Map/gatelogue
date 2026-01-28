@@ -94,14 +94,14 @@ class NFLR(RailSource):
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
                     between=(None, "Deadbush Euphorial"),
-                    forward_label="southbound",
-                    backward_label="northbound",
+                    forward_direction="southbound",
+                    backward_direction="northbound",
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
                     between=("Deadbush Euphorial", "Deadbush Quarryville"),
-                    forward_label="southbound",
-                    backward_label="northbound CW",
+                    forward_direction="southbound",
+                    backward_direction="northbound CW",
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
@@ -109,15 +109,15 @@ class NFLR(RailSource):
                         "Deadbush Quarryville",
                         "Deadbush Johnston-Euphorial Airport Terminal 2",
                     ),
-                    forward_label="northbound CCW",
-                    backward_label="southbound",
+                    forward_direction="northbound CCW",
+                    backward_direction="southbound",
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
                     get_stn(r_stations, "Deadbush Karaj Expo"),
                     between=("Deadbush Johnston-Euphorial Airport Terminal 2", None),
-                    forward_label="northbound",
-                    backward_label="southbound",
+                    forward_direction="northbound",
+                    backward_direction="southbound",
                 )
             elif line_name == "R23":
                 RailLineBuilder(self, r_line).connect(
@@ -127,26 +127,26 @@ class NFLR(RailSource):
                         "Sansvikk Karlstad",
                         "Sansvikk IKEA",
                     ],
-                    forward_label="eastbound",
-                    backward_label="westbound",
+                    forward_direction="eastbound",
+                    backward_direction="westbound",
                 )
                 RailLineBuilder(self, r_line).connect(
                     get_stn(r_stations, "Glacierton"),
                     get_stn(r_stations, "Sansvikk Kamprad Airfield"),
-                    forward_label="to Sansvikk IKEA",
-                    backward_label="westbound",
+                    forward_direction="to Sansvikk IKEA",
+                    backward_direction="westbound",
                 )
                 RailLineBuilder(self, r_line).connect(
                     get_stn(r_stations, "Port Dupont"),
                     get_stn(r_stations, "Sansvikk Kamprad Airfield"),
-                    forward_label="to Sansvikk IKEA",
-                    backward_label="eastbound",
+                    forward_direction="to Sansvikk IKEA",
+                    backward_direction="eastbound",
                 )
                 RailLineBuilder(self, r_line).connect(
                     *r_stations,
                     between=("Sansvikk Kamprad Airfield", "Sansvikk IKEA"),
-                    forward_label="to Sansvikk IKEA",
-                    backward_label="to mainline",
+                    forward_direction="to Sansvikk IKEA",
+                    backward_direction="to mainline",
                 )
             elif line_name == "R4":
                 RailLineBuilder(self, r_line).connect(*r_stations, between=(None, "Birmingham"))

@@ -6,8 +6,8 @@ lines:
   - name: Line K1
     code: K1
     colour: "#c33"
-    forward_label: Westbound
-    backward_label: Eastbound
+    forward_direction: Westbound
+    backward_direction: Eastbound
     stations:
       - Setsuritsuchō @ K100
       - Konranchō @ K101
@@ -16,8 +16,8 @@ lines:
   - name: Line K2
     code: K2
     colour: "#f80"
-    forward_label: Southbound
-    backward_label: Northbound
+    forward_direction: Southbound
+    backward_direction: Northbound
     stations:
       - Chūōkochō @ K200
       - Tōkochō @ K201
@@ -28,8 +28,8 @@ lines:
   - name: Line K3
     code: K3
     colour: "#fc0"
-    forward_label: Southbound
-    backward_label: Northbound
+    forward_direction: Southbound
+    backward_direction: Northbound
     stations:
       - Aomi @ K302
       - Saikochō @ K303
@@ -44,8 +44,8 @@ lines:
   - name: Line K6
     code: K6
     colour: "#f5c"
-    forward_label: Westbound
-    backward_label: Eastbound
+    forward_direction: Westbound
+    backward_direction: Eastbound
     stations:
       - Kazetera @ K603
       - Hakobori @ K604
@@ -54,8 +54,8 @@ lines:
   - name: Line C1
     code: C1
     colour: "#808"
-    forward_label: Northbound
-    backward_label: Southbound
+    forward_direction: Northbound
+    backward_direction: Southbound
     stations:
       - Sha Tsui @ C100
       - Ho Kok West @ C101A

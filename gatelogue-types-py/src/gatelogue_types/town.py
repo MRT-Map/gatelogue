@@ -23,6 +23,9 @@ class Town(LocatedNode):
     """Deputy Mayor of the town"""
     COLUMNS: ClassVar = (*LocatedNode.COLUMNS, name, rank, mayor, deputy_mayor)
 
+    def __str__(self):
+        return super().__str__() + f" {self.name} ({self.rank})"
+
     class CreateParams(LocatedNode.CreateParams, total=True):
         name: str
         rank: Rank

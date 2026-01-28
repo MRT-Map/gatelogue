@@ -6,8 +6,8 @@ lines:
   - name: Line 1
     code: "1"
     colour: "#a00"
-    forward_label: Eastbound
-    backward_label: Westbound
+    forward_direction: Eastbound
+    backward_direction: Westbound
     stations:
       - Wontridge
       - Wontridge Museum
@@ -20,8 +20,8 @@ lines:
   - name: Line 2
     code: "2"
     colour: "#008"
-    forward_label: Southbound
-    backward_label: Northbound
+    forward_direction: Southbound
+    backward_direction: Northbound
     stations:
       - Liveray
       - Stonks Lake West
@@ -31,8 +31,8 @@ lines:
   - name: Line 3
     code: "3"
     colour: "#080"
-    forward_label: Northbound
-    backward_label: Southbound
+    forward_direction: Northbound
+    backward_direction: Southbound
     stations:
       - Solstinox Zoo
       - Mayor's Peninsula
@@ -42,8 +42,8 @@ lines:
   - name: Line 4
     code: "4"
     colour: "#fc0"
-    forward_label: Southbound
-    backward_label: Northbound
+    forward_direction: Southbound
+    backward_direction: Northbound
     stations:
       - Liveray
       - Botanic Gardens
@@ -56,8 +56,8 @@ lines:
     code: "5"
     mode: "warp"
     colour: "#f80"
-    forward_label: Northbound
-    backward_label: Southbound
+    forward_direction: Northbound
+    backward_direction: Southbound
     stations:
       - North Plaxaëten
       - Secatzgarden

@@ -20,6 +20,9 @@ class AirAirline(Node):
     """Link to the MRT Wiki page for the airline"""
     COLUMNS: ClassVar = (name, link)
 
+    def __str__(self):
+        return super().__str__() + f" {self.name}"
+
     class CreateParams(TypedDict, total=False):
         name: Required[str]
         link: str | None
@@ -95,6 +98,9 @@ class AirAirport(LocatedNode):
     """Types of air vehicle or technology the airport supports"""
     COLUMNS: ClassVar = (*LocatedNode.COLUMNS, code, names, link, modes)
 
+    def __str__(self):
+        return super().__str__() + f" {self.code}"
+
     class CreateParams(LocatedNode.CreateParams, total=False):
         code: Required[str]
         names: set[str]
@@ -158,6 +164,9 @@ class AirGate(Node):
     mode = _Column[AirMode | None]("mode", "AirGate", sourced=True, formatter=_format_str)
     """Type of air vehicle or technology the gate supports"""
     COLUMNS: ClassVar = (code, airport, airline, size, mode)
+
+    def __str__(self):
+        return super().__str__() + f" {self.airport.code} {self.code}"
 
     class CreateParams(TypedDict, total=False):
         code: Required[str | None]
@@ -236,6 +245,9 @@ class AirFlight(Node):
     """Type of air vehicle or technology used on the flight"""
     COLUMNS: ClassVar = (airline, code, from_, to, mode)
 
+    def __str__(self):
+        return super().__str__() + f" {self.airline.name} {self.code}"
+
     class CreateParams(TypedDict):
         airline: AirAirline
         code: str
@@ -284,9 +296,9 @@ class AirFlight(Node):
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
         if self.from_.code is None or other.from_.code is None:
-            self.from_.merge(other.from_)
+            self.from_.merge(other.from_, warn_fn=warn_fn)
         if self.to.code is None or other.to.code is None:
-            self.to.merge(other.to)
+            self.to.merge(other.to, warn_fn=warn_fn)
         super().merge(other, warn_fn)
 
     def _merge(self, other: Self):

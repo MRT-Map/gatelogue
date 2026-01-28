@@ -56,19 +56,19 @@ class IntraRail(RailSource):
                 backward_label = "towards " + stations[0].names.v
                 RailLineBuilder(self, line).connect(
                     *stations[0:2],
-                    forward_label=forward_label,
-                    backward_label=backward_label,
+                    forward_direction=forward_label,
+                    backward_direction=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
                     *stations[8 - 1 : 12 - 1],
-                    forward_label=forward_label,
-                    backward_label=backward_label,
+                    forward_direction=forward_label,
+                    backward_direction=backward_label,
                 )
                 RailLineBuilder(self, line).connect(
-                    stations[8 - 1], *stations[5 - 1 : 0 : -1], forward_label=backward_label, one_way=True
+                    stations[8 - 1], *stations[5 - 1 : 0 : -1], forward_direction=backward_label, one_way=True
                 )
                 RailLineBuilder(self, line).connect(
-                    stations[1], *stations[6 - 1 : 9 - 1], forward_label=forward_label, one_way=True
+                    stations[1], *stations[6 - 1 : 9 - 1], forward_direction=forward_label, one_way=True
                 )
             elif line_code == "55":
                 RailLineBuilder(self, line).connect(*stations, one_way=True)

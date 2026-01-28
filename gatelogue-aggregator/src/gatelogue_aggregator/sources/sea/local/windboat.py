@@ -1,91 +1,51 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+import gatelogue_types as gt
+from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
+
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, SeaYaml2Source, YamlRoute
 from gatelogue_aggregator.utils import get_stn
 
 
-class Windboat(Yaml2Source, SeaSource):
+class Windboat(SeaYaml2Source):
     name = "Gatelogue (Sea, Windboat)"
-    priority = 1
-
     file_path = Path(__file__).parent / "windboat.yaml"
-    C = SeaCompany
-    L = SeaLine
-    S = SeaStop
-    B = SeaLineBuilder
 
-    def custom_routing(self, line_node: SeaLine, stations: list[SeaStop], line_yaml: YamlLine):
-        if line_node.code == "KN":
-            self.B(self, line_node).connect(
-                *stations,
-                between=(None, "Wenyanga"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations[::2],
-                between=(None, "Wenyanga"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations[1::2],
-                between=(None, "Anseijima"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
+    def routing(
+        self,
+        line_node: gt.SeaLine,
+        builder: SeaLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        one_way: dict[str, Literal["forwards", "backwards"]] | None,
+        platform_codes: dict[str, tuple[str | None, str | None]] | None,
+    ):
+        builder.connect(one_way=one_way, platform_codes=platform_codes, forward_direction=None, backward_direction=None)
+        for i in range(len(builder.station_list)):
+            station = builder.station_list[i]
+            dock = next(station.docks)
+            station_left = []
+            if line_node.code == "KN" and station.name in ("Anseijima", "Triangle Archipelago"):
+                station_left.append(self.stop(codes={"Minami-kengiguntō"}, company=line_node.company))
+            elif line_node.code == "HE" and station.name == "Tristan de Cunha":
+                station_left.append(self.stop(codes={"Rose Island"}, company=line_node.company))
+            elif i - 2 >= 0:
+                station_left.append(builder.station_list[i - 2])
+            for station_left in station_left:
+                dock_left = self.dock(code=None, stop=station_left)
+                self.connection(line=line_node, from_=dock, to=dock_left, direction=None)
 
-            self.B(self, line_node).connect(
-                get_stn(stations, "Kita-kengiguntō"),
-                get_stn(stations, "Triangle Archipelago"),
-                get_stn(stations, "Macece Island"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                get_stn(stations, "Kita-kengiguntō"),
-                get_stn(stations, "Macece Island"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                get_stn(stations, "Minami-kengiguntō"),
-                get_stn(stations, "Triangle Archipelago"),
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-        elif line_node.code == "HE":
-            self.B(self, line_node).circle(
-                *stations,
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).circle(
-                *stations[::2],
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).circle(
-                *stations[1::2],
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-        else:
-            self.B(self, line_node).connect(
-                *stations,
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations[::2],
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations[1::2],
-                forward_label=line_yaml.forward_label,
-                backward_label=line_yaml.backward_label,
-            )
+            station_right = []
+            if line_node.code == "KN" and station.name == "Minami-kengiguntō":
+                station_right.append(self.stop(codes={"Anseijima"}, company=line_node.company))
+                station_right.append(self.stop(codes={"Triangle Archipelago"}, company=line_node.company))
+            elif line_node.code == "HE" and station.name == "Rose Island":
+                station_right.append(self.stop(codes={"Tristan de Cunha"}, company=line_node.company))
+            elif i + 2 < len(builder.station_list):
+                station_right.append(builder.station_list[i - 2])
+            for station_right in station_right:
+                dock_right = self.dock(code=None, stop=station_right)
+                self.connection(line=line_node, from_=dock, to=dock_right, direction=None)

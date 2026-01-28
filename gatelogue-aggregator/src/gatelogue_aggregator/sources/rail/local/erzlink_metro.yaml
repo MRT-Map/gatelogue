@@ -35,8 +35,8 @@ lines:
   - name: Odralia Line
     code: "2"
     colour: "#59c4e9"
-    forward_label: Clockwise
-    backward_label: Anticlockwise
+    forward_direction: Clockwise
+    backward_direction: Anticlockwise
     stations:
       - Esperance Harbour
       - Erzville Central
@@ -45,8 +45,8 @@ lines:
   - name: Odralia Line Express
     code: "2 Express"
     colour: "#59c4e9"
-    forward_label: Clockwise
-    backward_label: Anticlockwise
+    forward_direction: Clockwise
+    backward_direction: Anticlockwise
     stations:
       - Erzville Central
       - Daygon
@@ -87,8 +87,8 @@ lines:
   - name: Kananook Line
     code: "4"
     colour: "#765d58"
-    forward_label: Clockwise
-    backward_label: Anticlockwise
+    forward_direction: Clockwise
+    backward_direction: Anticlockwise
     stations:
       - Scalia City
       - Robloxia

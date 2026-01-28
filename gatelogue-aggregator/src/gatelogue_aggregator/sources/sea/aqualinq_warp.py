@@ -3,16 +3,15 @@ import uuid
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url, warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 
 class AquaLinQWarp(SeaSource):
     name = "MRT Warp API (Sea, AquaLinQ)"
-    priority = 0
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="AquaLinQ")
+        company = self.company(name="AquaLinQ")
 
         get_url(
             "https://docs.google.com/spreadsheets/d/18VPaErIgb0zOS7t8Sb4x_QwV09zFkeCM6WXL1uvIb1s/export?format=csv&gid=1793169664",
@@ -47,5 +46,5 @@ class AquaLinQWarp(SeaSource):
         for warp in warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config):
             if warp["name"] not in d or (name := d[warp["name"]]) in names:
                 continue
-            SeaStop.new(self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

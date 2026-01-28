@@ -17,6 +17,9 @@ class SeaCompany(Node):
     """Name of the sea company"""
     COLUMNS: ClassVar = (name,)
 
+    def __str__(self):
+        return super().__str__() + f" {self.name}"
+
     class CreateParams(TypedDict):
         name: str
 
@@ -83,9 +86,12 @@ class SeaLine(Node):
     """Colour of the line (on a map)"""
     mode = _Column[SeaMode | None]("mode", "SeaLine", sourced=True, formatter=_format_str)
     """Type of sea vehicle or technology the line uses"""
-    local = _Column[bool | None]("name", "SeaLine", sourced=True, formatter=_format_str)
+    local = _Column[bool | None]("local", "SeaLine", sourced=True)
     """Whether the company operates within the city, e.g. a local ferry service"""
     COLUMNS: ClassVar = (code, company, name, colour, mode, local)
+
+    def __str__(self):
+        return super().__str__() + f" {self.company.name} {self.code}"
 
     class CreateParams(TypedDict, total=False):
         code: Required[str]
@@ -166,6 +172,9 @@ class SeaStop(LocatedNode):
     name = _Column[str | None]("name", "SeaStop", sourced=True, formatter=_format_str)
     """Name of the stop"""
     COLUMNS: ClassVar = (*LocatedNode.COLUMNS, codes, company, name)
+
+    def __str__(self):
+        return super().__str__() + f" {self.company.name} {'/'.join(self.codes)}"
 
     class CreateParams(LocatedNode.CreateParams, total=False):
         codes: Required[set[str]]
@@ -267,9 +276,12 @@ class SeaStop(LocatedNode):
 class SeaDock(Node):
     code = _Column[str | None]("code", "SeaDock", formatter=_format_code)
     """Unique code identifying the dock. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
-    stop = _FKColumn(SeaStop, "stop", "SeaStop")
+    stop = _FKColumn(SeaStop, "stop", "SeaDock")
     """The :py:class:`SeaStop` of the dock"""
     COLUMNS: ClassVar = (code, stop)
+
+    def __str__(self):
+        return super().__str__() + f" {self.stop.company.name} {'/'.join(self.stop.codes)} {self.code}"
 
     class CreateParams(TypedDict):
         code: str | None
@@ -324,7 +336,7 @@ class SeaDock(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                "SELECT i FROM SeaDock WHERE stop = ? AND code = ?", (self.stop, code)
+                "SELECT i FROM SeaDock WHERE stop = ? AND code = ?", (self.stop.i, code)
             ).fetchall()
         )
 
@@ -346,6 +358,9 @@ class SeaConnection(Node):
     direction = _Column[str | None]("direction", "SeaConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
     COLUMNS: ClassVar = (line, from_, to, direction)
+
+    def __str__(self):
+        return super().__str__() + f" {self.line.company.name} {self.line.code} {self.from_.code} -> {self.to.code}"
 
     class CreateParams(TypedDict):
         line: SeaLine

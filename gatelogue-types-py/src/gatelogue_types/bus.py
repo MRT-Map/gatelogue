@@ -17,6 +17,9 @@ class BusCompany(Node):
     """Name of the bus company"""
     COLUMNS: ClassVar = (name,)
 
+    def __str__(self):
+        return super().__str__() + f" {self.name}"
+
     class CreateParams(TypedDict):
         name: str
 
@@ -83,9 +86,12 @@ class BusLine(Node):
     """Colour of the line (on a map)"""
     mode = _Column[str | None]("mode", "BusLine", sourced=True, formatter=_format_str)
     """Type of bus vehicle or technology the line uses"""
-    local = _Column[bool | None]("name", "BusLine", sourced=True, formatter=_format_str)
+    local = _Column[bool | None]("local", "BusLine", sourced=True)
     """Whether the line operates within the city, e.g. a local bus service"""
     COLUMNS: ClassVar = (code, company, name, colour, mode, local)
+
+    def __str__(self):
+        return super().__str__() + f" {self.company.name} {self.code}"
 
     class CreateParams(TypedDict, total=False):
         code: Required[str]
@@ -166,6 +172,9 @@ class BusStop(LocatedNode):
     name = _Column[str | None]("name", "BusStop", sourced=True, formatter=_format_str)
     """Name of the stop"""
     COLUMNS: ClassVar = (*LocatedNode.COLUMNS, codes, company, name)
+
+    def __str__(self):
+        return super().__str__() + f" {self.company.name} {'/'.join(self.codes)}"
 
     class CreateParams(LocatedNode.CreateParams, total=False):
         codes: Required[set[str]]
@@ -267,9 +276,12 @@ class BusStop(LocatedNode):
 class BusBerth(Node):
     code = _Column[str | None]("code", "BusBerth", formatter=_format_code)
     """Unique code identifying the berth. May not necessarily be the same as the code ingame. If ``None``, code is unspecified"""
-    stop = _FKColumn(BusStop, "stop", "BusStop")
+    stop = _FKColumn(BusStop, "stop", "BusBerth")
     """The :py:class:`BusStop` of the berth"""
     COLUMNS: ClassVar = (code, stop)
+
+    def __str__(self):
+        return super().__str__() + f" {self.stop.company.name} {'/'.join(self.stop.codes)} {self.code}"
 
     class CreateParams(TypedDict):
         code: str | None
@@ -346,6 +358,9 @@ class BusConnection(Node):
     direction = _Column[str | None]("direction", "BusConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
     COLUMNS: ClassVar = (line, from_, to, direction)
+
+    def __str__(self):
+        return super().__str__() + f" {self.line.company.name} {self.line.code} {self.from_.code} -> {self.to.code}"
 
     class CreateParams(TypedDict):
         line: BusLine

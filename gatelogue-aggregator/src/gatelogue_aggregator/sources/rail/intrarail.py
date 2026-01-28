@@ -60,7 +60,7 @@ class IntraRail(RailSource):
                 RailLineBuilder(self, line).connect(
                     *stations,
                     between=("Amestris Cummins Highway", "Laclede Airport Plaza"),
-                    forward_label="to Bakersville Grand Central",
+                    forward_direction="to Bakersville Grand Central",
                 )
             else:
                 RailLineBuilder(self, line).connect(*stations)
@@ -69,13 +69,13 @@ class IntraRail(RailSource):
                 RailLineBuilder(self, line).connect(
                     get_stn(stations, "Formosa Northern"),
                     get_stn(stations, "UCWT International Airport East"),
-                    forward_label="to Siletz Salvador Station",
-                    backward_label="to Whitechapel Border",
+                    forward_direction="to Siletz Salvador Station",
+                    backward_direction="to Whitechapel Border",
                 )
                 RailLineBuilder(self, line).connect(
                     get_stn(stations, "Central City Warp Rail Terminal"),
                     get_stn(stations, "Achowalogen Takachsin-Covina International Airport"),
                     get_stn(stations, "Siletz Salvador Station"),
-                    forward_label="to Siletz Salvador Station",
-                    backward_label="to Whitechapel Border",
+                    forward_direction="to Siletz Salvador Station",
+                    backward_direction="to Whitechapel Border",
                 )

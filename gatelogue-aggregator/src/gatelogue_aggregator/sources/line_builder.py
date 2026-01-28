@@ -15,6 +15,8 @@ type _OneWay = Literal["forwards", "backwards"]
 class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, SeaStop)]:
     Pt: ClassVar[type[gt.BusBerth, gt.SeaDock, gt.RailPlatform]]
     Cn: ClassVar[type[gt.BusConnection, gt.SeaConnection, gt.RailConnection]]
+    default_forward_code: ClassVar[str | None] = "forwards"
+    default_backward_code: ClassVar[str | None] = "forwards"
 
     def __init__(self, src: int, line: L):
         self.src = src
@@ -28,7 +30,17 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
     def add(self, *stations: S):
         self.station_list.extend(stations)
 
-    def connect_to(self, station: str | S, *, one_way: _OneWay | None = None, forward_code: str | None = "forward", backward_code: str | None = "backwards", forward_direction: str | None = None, backward_direction: str | None = None,):
+    def connect_to(self, station: str | S, *, one_way: _OneWay | None = None, forward_code: str | None = "DEFAULT", backward_code: str | None = "DEFAULT", forward_direction: str | None = None, backward_direction: str | None = None,):
+        forward_direction = f"towards {station.name}" if forward_direction == "" else None
+        backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
+        if forward_code == "DEFAULT":
+            forward_code = self.default_forward_code
+        elif forward_code == "LINE":
+            forward_code = self.line.code
+        if backward_code == "DEFAULT":
+            backward_code = self.default_backward_code
+        elif backward_code == "LINE":
+            backward_code = self.line.code
         station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
 
         if one_way != "backwards":
@@ -43,14 +55,14 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
             self.prev_platform_backwards = platform_backwards
 
     def connect(self, *, until: str | None = None, until_before: str | None = None, one_way: dict[str, _OneWay] | None = None, platform_codes: dict[str, tuple[str | None, str | None]] | None = None, forward_direction: str | None = None, backward_direction: str | None = None,):
-        forward_direction = forward_direction or f"towards {self.station_list[-1].name}"
-        backward_direction = backward_direction or f"towards {self.station_list[0].name}"
+        forward_direction = f"towards {self.station_list[-1].name}" if forward_direction == "" else None
+        backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
         one_way = one_way or {}
         platform_codes = platform_codes or {}
 
         while True:
             station = self.station_list[self.cursor]
-            forward_code, backward_code = platform_codes.get(station.name, ("forwards", "backwards"))
+            forward_code, backward_code = platform_codes.get(station.name, (self.default_forward_code, self.default_backward_code))
             self.connect_to(station, one_way=one_way.get(station.name, None), forward_code=forward_code, backward_code=backward_code, forward_direction=forward_direction, backward_direction=backward_direction)
 
             self.cursor += 1
@@ -104,3 +116,5 @@ class RailLineBuilder(LineBuilder[gt.RailLine, gt.RailStation]):
 class SeaLineBuilder(LineBuilder[gt.SeaLine, gt.SeaStop]):
     Pt = gt.SeaDock
     Cn = gt.SeaConnection
+    default_forward_code = "LINE"
+    default_backward_code = "LINE"

@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+import uuid
 import warnings
+from threading import Lock
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr
+from gatelogue_types.base import _Column, _FKColumn, _format_str, _SetAttr, _CoordinatesColumn
 
 if TYPE_CHECKING:
     import sqlite3
     from collections.abc import Callable, Iterable, Iterator
 
+_CREATE_LOCK = Lock()
 
 class Node:
     STR2TYPE: ClassVar[dict] = {}
@@ -30,7 +33,7 @@ class Node:
     """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
     """All sources that prove the node's existence"""
-    COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr, ...]] = ()
+    COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr | _CoordinatesColumn, ...]] = ()
 
     @property
     def source(self) -> int:
@@ -42,11 +45,17 @@ class Node:
     def source(self, value: int):
         self.sources = {value}
 
+    def __str__(self):
+        return type(self).__name__ + f"({self.i})"
+
     @classmethod
     def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
         cur = conn.cursor()
-        cur.execute("INSERT INTO Node ( type ) VALUES ( :type )", dict(type=ty))
-        (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = :rowid", dict(rowid=cur.lastrowid)).fetchone()
+        key = str(uuid.uuid4())
+        with _CREATE_LOCK:
+            cur.execute("INSERT INTO Node ( type, _key ) VALUES ( :type, :key )", dict(type=ty, key=key))
+            (i,) = cur.execute("SELECT i FROM Node WHERE _key = :key", dict(key=key)).fetchone()
+        cur.execute("UPDATE Node SET _key = null WHERE i = :i", dict(i=i))
         cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
         return i
 
@@ -78,8 +87,6 @@ class Node:
             key = (attr.table_column + "s" if isinstance(attr, _SetAttr) else attr.name).strip('"')
             if key == "from":
                 key += "_"
-            if key in ("x", "y"):
-                continue
             if key not in kwargs:
                 kwargs[key] = None
             if isinstance(attr, _Column):
@@ -96,6 +103,10 @@ class Node:
                 kwargs[key] = kwargs[key].i if kwargs[key] is not None else None
                 if attr.sourced:
                     kwargs[key + "_src"] = kwargs[key] is not None
+            elif isinstance(attr, _CoordinatesColumn):
+                kwargs["coordinates_src"] = kwargs["coordinates"] is not None
+                kwargs["x"] = int(kwargs["coordinates"][0]) if kwargs["coordinates"] is not None else None
+                kwargs["y"] = int(kwargs["coordinates"][1]) if kwargs["coordinates"] is not None else None
         return kwargs
 
 
@@ -105,11 +116,9 @@ type World = Literal["New", "Old", "Space"]
 class LocatedNode(Node):
     world = _Column[World | None]("world", "NodeLocation", sourced=True, formatter=_format_str)
     """The world the node is in"""
-    _x = _Column[int | None]("x", "NodeLocation", sourced=True)
-    """The x-coordinate of the node"""
-    _y = _Column[int | None]("y", "NodeLocation", sourced=True)
-    """The y-coordinate of the node"""
-    COLUMNS: ClassVar = (world, _x, _y)
+    coordinates = _CoordinatesColumn()
+    """The coordinates of the node"""
+    COLUMNS: ClassVar = (world, coordinates)
 
     @classmethod
     def auto_type(cls, conn: sqlite3.Connection, i: int) -> LocatedNode:
@@ -118,21 +127,6 @@ class LocatedNode(Node):
             dict(i=i),
         ).fetchone()
         return cls.STR2TYPE[ty](conn, i)
-
-    @property
-    def coordinates(self) -> tuple[int, int] | None:
-        """The coordinates of the object"""
-        if (x := self._x) is None:
-            return None
-        if (y := self._y) is None:
-            return None
-        return x, y
-
-    @coordinates.setter
-    def coordinates(self, value: tuple[int, int] | None):
-        x, y = (None, None) if value is None else value
-        self._x = x
-        self._y = y
 
     class CreateParams(TypedDict, total=False):
         world: World | None
@@ -143,15 +137,19 @@ class LocatedNode(Node):
         cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
     ) -> int:
         x, y = (None, None) if kwargs.get("coordinates") is None else kwargs["coordinates"]
+        if x is not None:
+            x = int(x)
+        if y is not None:
+            y = int(y)
         i = cls.create_node(conn, src, ty=ty)
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO NodeLocation (i, world, x, y) VALUES (:i, :world, :x, :y)",
-            dict(i=i, x=x, y=y, **kwargs),
+            dict(i=i, **kwargs),
         )
         cur.execute(
             "INSERT INTO NodeLocationSource (i, source, world, coordinates) VALUES (:i, :source, :world_src, :coordinates_src)",
-            dict(i=i, source=src, coordinates_src=kwargs.get("coordinates") is not None, **kwargs),
+            dict(i=i, source=src, **kwargs),
         )
         return i
 
@@ -262,12 +260,15 @@ class Proximity:
         distance: float,
         explicit: bool = False,
     ) -> Self:
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit)",
             dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
         )
-        cur.execute(
+        cur.executemany(
             "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source )",
             [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
         )
@@ -284,6 +285,9 @@ class SharedFacility:
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, *, node1: LocatedNode, node2: LocatedNode) -> Self:
+        if node1.i > node2.i:
+            node1, node2 = node2, node1
+
         cur = conn.cursor()
         cur.execute(
             "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2)", dict(node1=node1.i, node2=node2.i)

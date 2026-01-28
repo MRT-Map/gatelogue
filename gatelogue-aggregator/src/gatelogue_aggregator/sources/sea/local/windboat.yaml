@@ -1,21 +1,17 @@
 company_name: Windboat
-mode: "ferry"
+mode: "warp ferry"
 local: true
 
 lines:
   - name: Shui Chau Route
     code: SC
     colour: "#888"
-    forward_label: towards Tsukihama
-    backward_label: towards Shui Chau
     stations:
       - Shui Chau
       - Tsukihama
   - name: Eumi Route
     code: EU
     colour: "#888"
-    forward_label: towards St Helena
-    backward_label: towards Setsuritsuchō
     stations:
       - Setsuritsuchō
       - Kazeshima Ferry Terminal
@@ -26,8 +22,6 @@ lines:
   - name: Far Islands Route
     code: FI
     colour: "#888"
-    forward_label: towards Kazeshima Ferry Terminal
-    backward_label: towards Far Islet 7
     stations:
       - Kazeshima Ferry Terminal
       - Far Islet 1
@@ -38,8 +32,6 @@ lines:
   - name: Setsuritsu Route
     code: SS
     colour: "#888"
-    forward_label: towards Setsuritsu Islet 6
-    backward_label: towards Setsuritsuchō
     stations:
       - Setsuritsuchō
       - Setsuritsu Islet 4
@@ -47,21 +39,22 @@ lines:
   - name: Konaemachi Route
     code: KN
     colour: "#888"
-    forward_label: towards Wenyanga/Macece Island
-    backward_label: towards Konaemachi
-    stations:
-      - Konaemachi
-      - Minami-kengiguntō
-      - Kita-kengiguntō
-      - Anseijima
-      - Wenyanga
-      - Triangle Archipelago
-      - Macece Island
+    routing:
+      - stations:
+          - Konaemachi
+          - Minami-kengiguntō
+          - Kita-kengiguntō
+      - stations:
+          - Kita-kengiguntō
+          - Anseijima
+          - Wenyanga
+      - stations:
+          - Kita-kengiguntō
+          - Triangle Archipelago
+          - Macece Island
   - name: Etamachi Route
     code: ET
     colour: "#888"
-    forward_label: towards Kazeshima Ferry Terminal
-    backward_label: towards Etamachi
     stations:
       - Etamachi
       - Meiwakuchō
@@ -69,8 +62,6 @@ lines:
   - name: Macquarie Route
     code: MQ
     colour: "#888"
-    forward_label: towards St Helena
-    backward_label: towards Henkyōchō
     stations:
       - Henkyōchō
       - Macquarie Island
@@ -78,8 +69,6 @@ lines:
   - name: St Helena Route
     code: HE
     colour: "#888"
-    forward_label: Clockwise
-    backward_label: Anticlockwise
     stations:
       - St Helena
       - Tristan de Cunha
@@ -87,6 +76,7 @@ lines:
       - Ascension Island
       - Guano Island
       - Rose Island
+      - St Helena
 coords:
   Setsuritsuchō: [-26325, 16423]
   Setsuritsu Islet 4: [-26287, 16468]

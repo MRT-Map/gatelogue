@@ -1,16 +1,16 @@
+import itertools
 import re
 
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.sea import SeaCompany, SeaLine, SeaLineBuilder, SeaSource, SeaStop
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import SeaSource
 
 
 class HBL(SeaSource):
     name = "MRT Wiki (Sea, Hummingbird Boat Lines)"
-    priority = 1
 
     def build(self, config: Config):
-        company = SeaCompany.new(self, name="Hummingbird Boat Lines")
+        company = self.company(name="Hummingbird Boat Lines")
 
         html = get_wiki_html("Hummingbird Boat Lines", config)
         for td in html.find("table", class_="multicol").find_all("td"):
@@ -18,17 +18,17 @@ class HBL(SeaSource):
                 line_code = p.span.string or p.span.span.string
                 line_name = p.b.string
                 line_colour = re.match(r"background-color:\s*([^;]*)", p.span.attrs["style"]).group(1)
-                line = SeaLine.new(self, code=line_code, company=company, name=line_name, colour=line_colour)
+                line = self.line(code=line_code, company=company, name=line_name, colour=line_colour, mode="warp ferry")
 
-                stops = []
+                docks = []
                 for li in ul.find_all("li"):
                     if "Planned" in li.strings:
                         continue
                     stop_name = "".join(li.strings)
-                    stop = SeaStop.new(self, codes={stop_name}, name=stop_name, company=company)
-                    stops.append(stop)
+                    stop = self.stop(codes={stop_name}, name=stop_name, company=company)
+                    docks.append(self.dock(code=line.code, stop=stop))
 
-                if len(stops) == 0:
+                if len(docks) == 0:
                     continue
-
-                SeaLineBuilder(self, line).matrix(*stops)
+                for d1, d2 in itertools.permutations(docks, 2):
+                    self.connection(line=line, from_=d1, to=d2)

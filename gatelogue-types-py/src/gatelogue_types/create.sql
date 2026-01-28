@@ -20,7 +20,8 @@ CREATE TABLE Node
                                         'BusCompany', 'BusLine', 'BusStop', 'BusBerth', 'BusConnection',
                                         'SeaCompany', 'SeaLine', 'SeaStop', 'SeaDock', 'SeaConnection',
                                         'RailCompany', 'RailLine', 'RailStation', 'RailPlatform', 'RailConnection',
-                                        'Town', 'SpawnWarp') )
+                                        'Town', 'SpawnWarp') ),
+    _key TEXT
 ) STRICT;
 CREATE TABLE NodeSource
 (
@@ -34,8 +35,8 @@ CREATE TABLE NodeLocation
     i     INTEGER PRIMARY KEY REFERENCES Node (i),
     world TEXT CHECK ( world IS NULL OR world IN ('New', 'Old', 'Space') ),
     x     INTEGER,
-    y     INTEGER,
-    CHECK ( (x IS NULL AND y IS NULL) OR (x IS NOT NULL AND y IS NOT NULL) )
+    y     INTEGER --,
+    -- CHECK ( (x IS NULL AND y IS NULL) OR (x IS NOT NULL AND y IS NOT NULL) )
 ) STRICT;
 CREATE TABLE NodeLocationSource
 (
