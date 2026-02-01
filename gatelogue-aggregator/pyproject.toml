@@ -32,7 +32,7 @@ dependencies = [
   "click==8.3.1",
   "msgspec==0.20.0",
   "pandas==3.0.0",
-  "rich==14.3.1",
+  "rich==14.3.2",
   "cloudscraper==1.2.71",
   "BeautifulSoup4==4.14.3",
   "rustworkx==0.17.1",
