@@ -19,7 +19,7 @@ rust-version = "1.68"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-enum-as-inner = "0.6.1"
+enum-as-inner = "0.7.0"
 thiserror = "2.0"
 
 reqwest = { version = "0.13.0", optional = true }
