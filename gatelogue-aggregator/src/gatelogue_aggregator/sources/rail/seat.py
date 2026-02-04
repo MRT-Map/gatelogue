@@ -1,8 +1,8 @@
 import bs4
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.config import Config
 
 
 class SEAT(RailSource):
@@ -37,8 +37,6 @@ class SEAT(RailSource):
                 name = tr("td")[1].string.strip().removesuffix(" Station")
 
                 builder.add(self.station(codes={name}, name=name, company=company))
-
-            
 
             if line.name == "Cross Continental Line":
                 builder.connect(until="Maple St.")

@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 def SOURCES() -> list[type[Source]]:  # noqa: N802
-
     from gatelogue_aggregator.sources.bus import SOURCES as SOURCES_BUS
-    from gatelogue_aggregator.sources.sea import SOURCES as SOURCES_SEA
     from gatelogue_aggregator.sources.rail import SOURCES as SOURCES_RAIL
+    from gatelogue_aggregator.sources.sea import SOURCES as SOURCES_SEA
+
     return [*SOURCES_BUS(), *SOURCES_SEA(), *SOURCES_RAIL()]

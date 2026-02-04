@@ -1,8 +1,8 @@
 import re
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.utils import search_all
 
 
@@ -22,8 +22,7 @@ class Pacifica(RailSource):
             line_name = match.group("name")
             if "Planned" in line_name or "Colwyn" in line_name:
                 continue
-            line = self.line( code=line_name, name=line_name, company=company, mode="traincarts", colour="#008080"
-            )
+            line = self.line(code=line_name, name=line_name, company=company, mode="traincarts", colour="#008080")
 
             builder = self.builder(line)
             for name in match.group("stations").split("\n|-\n"):
@@ -52,5 +51,4 @@ class Pacifica(RailSource):
 
                 builder.add(self.station(codes={name}, name=name, company=company))
 
-            
             builder.connect()

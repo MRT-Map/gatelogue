@@ -44,7 +44,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         backward_code: str | None = "DEFAULT",
         forward_direction: str | None = None,
         backward_direction: str | None = None,
-        **_
+        **_,
     ):
         station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
         forward_direction = f"towards {station.name}" if forward_direction == "" else None
@@ -66,7 +66,10 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
                 code=forward_code,
                 **{station_attr: station},
             )
-            if self.prev_platform_forwards is not None and getattr(self.prev_platform_forwards, station_attr) != station:
+            if (
+                self.prev_platform_forwards is not None
+                and getattr(self.prev_platform_forwards, station_attr) != station
+            ):
                 self.Cn.create(
                     station.conn,
                     self.src,
@@ -83,7 +86,10 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
                 code=backward_code,
                 **{station_attr: station},
             )
-            if self.prev_platform_backwards is not None and getattr(self.prev_platform_backwards, station_attr) != station:
+            if (
+                self.prev_platform_backwards is not None
+                and getattr(self.prev_platform_backwards, station_attr) != station
+            ):
                 self.Cn.create(
                     station.conn,
                     self.src,
@@ -189,7 +195,10 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
     def u_turn(self) -> Self:
         self.station_list = list(reversed(self.station_list))
         self.cursor = len(self.station_list) - 1 - self.cursor
-        self.prev_platform_backwards, self.prev_platform_forwards = self.prev_platform_forwards, self.prev_platform_backwards
+        self.prev_platform_backwards, self.prev_platform_forwards = (
+            self.prev_platform_forwards,
+            self.prev_platform_backwards,
+        )
         return self
 
 

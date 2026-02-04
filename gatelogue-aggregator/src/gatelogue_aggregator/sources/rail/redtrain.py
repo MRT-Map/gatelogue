@@ -1,8 +1,8 @@
 import bs4
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.config import Config
 
 
 class RedTrain(RailSource):
@@ -18,7 +18,8 @@ class RedTrain(RailSource):
         for table in self.html.find_all("table"):
             if "Code" not in table("th")[1].string:
                 continue
-            line = self.line( code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"
+            line = self.line(
+                code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"
             )
 
             builder = self.builder(line)

@@ -118,12 +118,18 @@ class Yaml2Source(Source):
                             company=company,
                         )
                     )
-                self.routing(line_node, builder, line, route, self._ConnectParams(
-                    one_way=one_way,
-                    platform_codes=platform_codes,
-                    forward_direction=line.forward_direction,
-                    backward_direction=line.backward_direction,
-                ))
+                self.routing(
+                    line_node,
+                    builder,
+                    line,
+                    route,
+                    self._ConnectParams(
+                        one_way=one_way,
+                        platform_codes=platform_codes,
+                        forward_direction=line.forward_direction,
+                        backward_direction=line.backward_direction,
+                    ),
+                )
 
         for code, (x, z) in file.coords.items():
             self.S.create(

@@ -3,10 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import RailSource
-from gatelogue_aggregator.utils import get_stn
 
 
 class NFLR(RailSource):
@@ -21,7 +20,7 @@ class NFLR(RailSource):
             self.cache / "lines",
             timeout=config.timeout,
             cooldown=config.cooldown,
-            )
+        )
         df = pd.read_csv(self.cache / "lines")
         self.lines = [
             (str(line_name), str(back), bool(w), int(gid))
@@ -36,11 +35,10 @@ class NFLR(RailSource):
                 self.cache / line_name,
                 timeout=config.timeout,
                 cooldown=config.cooldown,
-                )
+            )
 
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
             list(executor.map(lambda s: retrieve_urls(s[0], s[3]), self.lines))
-
 
     def build(self, config: Config):
         company = self.company(name="nFLR")
@@ -85,18 +83,38 @@ class NFLR(RailSource):
             if line_name == "R7A":
                 r_builder.connect_circle(forward_direction="clockwise", backward_direction="anticlockwise")
             elif line_name == "R5A":
-                r_builder.connect(until="Deadbush Euphorial", forward_direction="southbound", backward_direction="northbound")
-                r_builder.connect(until="Deadbush Quarryville", forward_direction="southbound", backward_direction="northbound CW")
-                r_builder.connect(until="Deadbush Johnston-Euphorial Airport Terminal 2", forward_direction="northbound ACW", backward_direction="southbound")
+                r_builder.connect(
+                    until="Deadbush Euphorial", forward_direction="southbound", backward_direction="northbound"
+                )
+                r_builder.connect(
+                    until="Deadbush Quarryville", forward_direction="southbound", backward_direction="northbound CW"
+                )
+                r_builder.connect(
+                    until="Deadbush Johnston-Euphorial Airport Terminal 2",
+                    forward_direction="northbound ACW",
+                    backward_direction="southbound",
+                )
                 r_builder.connect(forward_direction="northbound", backward_direction="southbound")
-                r_builder.connect_to("Deadbush Karaj Expo", forward_direction="northbound", backward_direction="southbound")
+                r_builder.connect_to(
+                    "Deadbush Karaj Expo", forward_direction="northbound", backward_direction="southbound"
+                )
             elif line_name == "R23":
                 r_builder.connect(until="Glacierton", forward_direction="eastbound", backward_direction="westbound")
 
                 branch = r_builder.branch_off()
-                branch.connect(until="Sansvikk Kamprad Airfield", forward_direction="towards Sansvikk IKEA", backward_direction="westbound")
-                branch.branch_off().u_turn().connect_to("Port Dupont", forward_direction="eastbound", backward_direction="towards Sansvikk IKEA")
-                branch.connect(until="Sansvikk IKEA", forward_direction="towards Sansvikk IKEA", backward_direction="towards mainline")
+                branch.connect(
+                    until="Sansvikk Kamprad Airfield",
+                    forward_direction="towards Sansvikk IKEA",
+                    backward_direction="westbound",
+                )
+                branch.branch_off().u_turn().connect_to(
+                    "Port Dupont", forward_direction="eastbound", backward_direction="towards Sansvikk IKEA"
+                )
+                branch.connect(
+                    until="Sansvikk IKEA",
+                    forward_direction="towards Sansvikk IKEA",
+                    backward_direction="towards mainline",
+                )
 
                 r_builder.connect(forward_direction="eastbound", backward_direction="westbound")
             elif line_name == "R4":

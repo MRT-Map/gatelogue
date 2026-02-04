@@ -34,7 +34,6 @@ class CFC(SeaSource):
                 stop_names.append(name)
                 builder.add(self.stop(codes={name}, name=name, company=company))
 
-            
             builder.connect()
 
         ###

@@ -12,7 +12,7 @@ import rich
 from gatelogue_types import node
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track, INFO3
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, INFO3, RESULT, track
 from gatelogue_aggregator.report import report
 from gatelogue_aggregator.source import Source
 
@@ -235,9 +235,9 @@ class GatelogueData:
                 description=f"Ensuring all located nodes are connected (pass {pass_})",
             ):
                 for this_i in track(
-                        component,
-                        INFO3,
-                        description=f"Processing disconnected component",
+                    component,
+                    INFO3,
+                    description="Processing disconnected component",
                 ):
                     this = gt.LocatedNode(self.gd.conn, this_i)
                     nearest = min(nodes, key=lambda nr: dist_sq_fn(nr, this, component))

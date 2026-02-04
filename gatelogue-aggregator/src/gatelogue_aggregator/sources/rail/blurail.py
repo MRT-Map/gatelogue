@@ -1,10 +1,10 @@
 import json
 import re
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.utils import search_all
 
 
@@ -19,7 +19,7 @@ class BluRail(RailSource):
                 config.cache_dir / "blurail_line_list",
                 config.timeout,
                 cooldown=config.cooldown,
-                )
+            )
         )["query"]["categorymembers"]
 
         line_codes = [result["title"].removesuffix(" (BluRail line)") for result in line_list]
@@ -62,5 +62,4 @@ class BluRail(RailSource):
                     continue
                 builder.add(self.station(codes=codes, name=name, company=company))
 
-            
             builder.connect()

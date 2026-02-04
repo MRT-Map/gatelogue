@@ -2,20 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from gatelogue_aggregator.source import RailSource
 
 
 def SOURCES() -> list[type[RailSource]]:  # noqa: N802
-    from gatelogue_aggregator.sources.rail.local.erzlink_metro import ErzLinkMetro
-    from gatelogue_aggregator.sources.rail.local.erzlink_trams import ErzLinkTrams
-    from gatelogue_aggregator.sources.rail.local.flr_foresne import FLRForesne
-    from gatelogue_aggregator.sources.rail.local.flr_kaze import FLRKaze
-    from gatelogue_aggregator.sources.rail.local.flr_sheng import FLRSheng
-    from gatelogue_aggregator.sources.rail.local.metro_de_ene import MetroDeEne
-    from gatelogue_aggregator.sources.rail.local.np_subway import NPSubway
-    from gatelogue_aggregator.sources.rail.local.refuge_streetcar import RefugeStreetcar
     from gatelogue_aggregator.sources.rail.blurail import BluRail
     from gatelogue_aggregator.sources.rail.blurail_warp import BluRailWarp
     from gatelogue_aggregator.sources.rail.breezerail import BreezeRail
@@ -28,6 +19,14 @@ def SOURCES() -> list[type[RailSource]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.intrarail import IntraRail
     from gatelogue_aggregator.sources.rail.intrarail_warp import IntraRailWarp
     from gatelogue_aggregator.sources.rail.lava_rail import LavaRail
+    from gatelogue_aggregator.sources.rail.local.erzlink_metro import ErzLinkMetro
+    from gatelogue_aggregator.sources.rail.local.erzlink_trams import ErzLinkTrams
+    from gatelogue_aggregator.sources.rail.local.flr_foresne import FLRForesne
+    from gatelogue_aggregator.sources.rail.local.flr_kaze import FLRKaze
+    from gatelogue_aggregator.sources.rail.local.flr_sheng import FLRSheng
+    from gatelogue_aggregator.sources.rail.local.metro_de_ene import MetroDeEne
+    from gatelogue_aggregator.sources.rail.local.np_subway import NPSubway
+    from gatelogue_aggregator.sources.rail.local.refuge_streetcar import RefugeStreetcar
     from gatelogue_aggregator.sources.rail.marblerail import MarbleRail
     from gatelogue_aggregator.sources.rail.marblerail_coord import MarbleRailCoord
     from gatelogue_aggregator.sources.rail.nflr import NFLR
@@ -50,8 +49,47 @@ def SOURCES() -> list[type[RailSource]]:  # noqa: N802
     from gatelogue_aggregator.sources.rail.wzr import WZR
     from gatelogue_aggregator.sources.rail.wzr_warp import WZRWarp
 
-    return [ErzLinkMetro, ErzLinkTrams, FLRForesne, FLRKaze, FLRSheng, MetroDeEne, NPSubway, RefugeStreetcar, BluRail,
-            BluRailWarp, BreezeRail, BreezeRailWarp, CVCExpress, CVCExpressCoord, DynmapMRT, ErzLinkIntercity, FredRail,
-            IntraRail, IntraRailWarp, LavaRail, MarbleRail, MarbleRailCoord, NFLR, NFLRWarp, NRN, NSC, NSCWarp, Pacifica,
-            PacificaCoord, RaiLinQ, RaiLinQWarp, RailNorth, RailNorthWarp, RedTrain, RedTrainWarp, SeabeastRail, SEAT, SEATWarp,
-            WikiMRT, WZR, WZRWarp]
+    return [
+        ErzLinkMetro,
+        ErzLinkTrams,
+        FLRForesne,
+        FLRKaze,
+        FLRSheng,
+        MetroDeEne,
+        NPSubway,
+        RefugeStreetcar,
+
+        BluRail,
+        BluRailWarp,
+        BreezeRail,
+        BreezeRailWarp,
+        CVCExpress,
+        CVCExpressCoord,
+        DynmapMRT,
+        ErzLinkIntercity,
+        FredRail,
+        IntraRail,
+        IntraRailWarp,
+        LavaRail,
+        MarbleRail,
+        MarbleRailCoord,
+        NFLR,
+        NFLRWarp,
+        NRN,
+        NSC,
+        NSCWarp,
+        Pacifica,
+        PacificaCoord,
+        RaiLinQ,
+        RaiLinQWarp,
+        RailNorth,
+        RailNorthWarp,
+        RedTrain,
+        RedTrainWarp,
+        SeabeastRail,
+        SEAT,
+        SEATWarp,
+        WikiMRT,
+        WZR,
+        WZRWarp,
+    ]

@@ -45,7 +45,6 @@ class SeabeastBuses(BusSource):
                 stop_names.setdefault(line_code, []).append(name)
                 builder.add(self.stop(codes={name}, name=name, company=company))
 
-            
             builder.connect()
 
         ###

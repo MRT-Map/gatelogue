@@ -2,9 +2,9 @@ import re
 
 import msgspec
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
-from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 
 

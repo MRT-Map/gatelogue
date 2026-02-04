@@ -1,8 +1,8 @@
 import bs4
 
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 
 class MarbleRail(RailSource):
@@ -21,8 +21,7 @@ class MarbleRail(RailSource):
             line_name = line_table.caption.string.split("(")[0].strip()
             if line_name not in ("Meridia Line",):
                 continue
-            line = self.line( code=line_name, name=line_name, company=company, mode="traincarts", colour="#cc00cc"
-            )
+            line = self.line(code=line_name, name=line_name, company=company, mode="traincarts", colour="#cc00cc")
 
             builder = self.builder(line)
             for tr in line_table.find_all("tr"):
@@ -35,5 +34,4 @@ class MarbleRail(RailSource):
 
                 builder.add(self.station(codes={code}, name=name, company=company))
 
-            
             builder.connect()

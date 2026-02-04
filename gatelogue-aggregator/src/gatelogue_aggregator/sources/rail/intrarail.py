@@ -1,9 +1,8 @@
 import bs4
 
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
-from gatelogue_aggregator.utils import get_stn
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 
 class IntraRail(RailSource):
@@ -12,7 +11,6 @@ class IntraRail(RailSource):
 
     def prepare(self, config: Config):
         self.html = get_wiki_html("IntraRail", config)
-
 
     def build(self, config: Config):
         company = self.company(name="IntraRail")
@@ -55,16 +53,27 @@ class IntraRail(RailSource):
             if line_code == "2X":
                 builder2 = builder.copy()
                 builder2.connect_to("Formosa Northern", forward_direction=f"towards {builder2.station_list[-1].name}")
-                builder2.connect_to("UCWT International Airport East", forward_direction=f"towards {builder2.station_list[-1].name}")
+                builder2.connect_to(
+                    "UCWT International Airport East", forward_direction=f"towards {builder2.station_list[-1].name}"
+                )
 
                 builder3 = builder.copy()
-                builder3.connect_to("Central City Warp Rail Terminal", forward_direction=f"towards {builder3.station_list[-1].name}")
-                builder3.connect_to("Achowalogen Takachsin-Covina International Airport", forward_direction=f"towards {builder3.station_list[-1].name}")
-                builder3.connect_to("Siletz Salvador Station", forward_direction=f"towards {builder3.station_list[-1].name}")
+                builder3.connect_to(
+                    "Central City Warp Rail Terminal", forward_direction=f"towards {builder3.station_list[-1].name}"
+                )
+                builder3.connect_to(
+                    "Achowalogen Takachsin-Covina International Airport",
+                    forward_direction=f"towards {builder3.station_list[-1].name}",
+                )
+                builder3.connect_to(
+                    "Siletz Salvador Station", forward_direction=f"towards {builder3.station_list[-1].name}"
+                )
 
             if line_code == "202":
                 builder.connect(until_before="Amestris Cummins Highway")
-                builder.branch_detached(join_back_at="Laclede Airport Plaza").connect(until="Laclede Airport Plaza", backward_direction="towards Amestris Cummins Highway")
+                builder.branch_detached(join_back_at="Laclede Airport Plaza").connect(
+                    until="Laclede Airport Plaza", backward_direction="towards Amestris Cummins Highway"
+                )
                 builder.connect()
             else:
                 builder.connect()

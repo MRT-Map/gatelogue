@@ -1,7 +1,7 @@
 import uuid
 
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import RailSource
 
 

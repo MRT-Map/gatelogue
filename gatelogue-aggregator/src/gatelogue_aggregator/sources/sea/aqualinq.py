@@ -36,5 +36,4 @@ class AquaLinQ(SeaSource):
             ):
                 builder.add(self.stop(codes={b}, name=b, company=company))
 
-            
             builder.connect()

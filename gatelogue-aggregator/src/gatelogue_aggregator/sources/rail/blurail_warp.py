@@ -1,8 +1,8 @@
 import re
 import uuid
 
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import RailSource
 
 
@@ -50,6 +50,5 @@ class BluRailWarp(RailSource):
                 "Titsensaki Palm Shores": "TPS",
                 "Washingcube Airfield": "WCA",
             }.get(name, match.group(2))
-            self.station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
-            )
+            self.station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

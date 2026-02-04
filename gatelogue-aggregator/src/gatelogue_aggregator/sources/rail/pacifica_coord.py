@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, RailYaml2Source
+from gatelogue_aggregator.sources.yaml2source import RailYaml2Source
 
 
 class PacificaCoord(RailYaml2Source):

@@ -1,8 +1,8 @@
 import bs4
 
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html
 
 
 class CVCExpress(RailSource):
@@ -26,5 +26,4 @@ class CVCExpress(RailSource):
                 name = li.string.strip()
                 builder.add(self.station(codes={name}, name=name, company=company))
 
-            
             builder.connect()
