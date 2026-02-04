@@ -78,7 +78,7 @@ class GatelogueData:
         }
 
         for n in track(
-            (gt.AirAirport(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code != ''")),
+            (gt.AirAirport(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code == ''")),
             INFO2,
             description=f"Merging airports (pass {pass_})",
         ):
@@ -234,11 +234,7 @@ class GatelogueData:
                 INFO2,
                 description=f"Ensuring all located nodes are connected (pass {pass_})",
             ):
-                for this_i in track(
-                    component,
-                    INFO3,
-                    description="Processing disconnected component",
-                ):
+                for this_i in component:
                     this = gt.LocatedNode(self.gd.conn, this_i)
                     nearest = min(nodes, key=lambda nr: dist_sq_fn(nr, this, component))
                     if nearest.i in this._nodes_in_proximity:

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from gatelogue_aggregator.sources.air.wiki_airline import WikiAirline
-    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.config import Config
 
 _EXTRACTORS: list[Callable[[WikiAirline, Config], None]] = []
 

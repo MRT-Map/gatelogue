@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from gatelogue_aggregator.downloader import get_url
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.config import Config
 
 
 def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
