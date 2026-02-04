@@ -1,23 +1,22 @@
 import uuid
 
 from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import RailSource
 
 
 class NFLRWarp(RailSource):
     name = "MRT Warp API (Rail, nFLR)"
-    priority = 0
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config))
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="nFLR")
+        company = self.company(name="nFLR")
 
         codes = []
-        for warp in warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("FLR"):
                 continue
             if len(warp["name"].split("-")) < 3:
@@ -43,8 +42,7 @@ class NFLRWarp(RailSource):
             }.get(code, {code})
             if code in codes:
                 continue
-            RailStation.new(
-                self,
+            self.station(
                 codes=code,
                 company=company,
                 world="New",

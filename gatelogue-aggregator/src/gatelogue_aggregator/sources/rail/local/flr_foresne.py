@@ -21,7 +21,7 @@ class FLRForesne(RailYaml2Source):
     ):
         if line_node.code == "4":
             builder.connect(until="Suspension Hill", **cp)
-            builder.skip(until="Cinnameadow")
+            builder.skip(until="Cinnameadow", detached=True)
             builder.connect(**cp)
         else:
             super().routing(line_node, builder, line_yaml, route_yaml, cp)

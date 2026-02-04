@@ -1,36 +1,31 @@
 import re
 
+from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailLine,
-    RailLineBuilder,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.utils import search_all
 
 
 class Pacifica(RailSource):
     name = "MRT Wiki (Rail, Pacifica)"
-    priority = 1
+    text: str
+
+    def prepare(self, config: Config):
+        self.text = get_wiki_text("Pacifica", config)
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="Pacifica")
+        company = self.company(name="Pacifica")
 
-        text = get_wiki_text("Pacifica", config)
         for match in search_all(
-            re.compile(r"(?s){\| class=\"wikitable\".*?\n\|\+\n!(?P<name>.*?)\n\|-\n(?P<stations>.*?)\n\|}"), text
+            re.compile(r"(?s){\| class=\"wikitable\".*?\n\|\+\n!(?P<name>.*?)\n\|-\n(?P<stations>.*?)\n\|}"), self.text
         ):
             line_name = match.group("name")
             if "Planned" in line_name or "Colwyn" in line_name:
                 continue
-            line = RailLine.new(
-                self, code=line_name, name=line_name, company=company, mode="traincarts", colour="#008080"
+            line = self.line( code=line_name, name=line_name, company=company, mode="traincarts", colour="#008080"
             )
 
-            stations = []
+            builder = self.builder(line)
             for name in match.group("stations").split("\n|-\n"):
                 if "No Station" in name or "(planned)" in name:
                     continue
@@ -55,10 +50,7 @@ class Pacifica(RailSource):
                     "Blackfriars": "Blackfriars - Huxley Square",
                 }.get(name, name)
 
-                station = RailStation.new(self, codes={name}, name=name, company=company)
-                stations.append(station)
+                builder.add(self.station(codes={name}, name=name, company=company))
 
-            if len(stations) == 0:
-                continue
-
-            RailLineBuilder(self, line).connect(*stations)
+            
+            builder.connect()

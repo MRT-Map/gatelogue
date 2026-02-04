@@ -2,20 +2,19 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import RailSource
 
 
 class IntraRailWarp(RailSource):
     name = "MRT Warp API (Rail, IntraRail)"
-    priority = 0
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config))
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="IntraRail")
+        company = self.company(name="IntraRail")
 
         names = [
             "Whiteley Southwold University",
@@ -26,7 +25,7 @@ class IntraRailWarp(RailSource):
             "New Stone City South",
             "Zerez Thespe Railway Station",
         ]
-        for warp in warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("ItR"):
                 continue
             if warp["name"] == "ItR213-Anthro-SB":
@@ -51,7 +50,6 @@ class IntraRailWarp(RailSource):
                 }.get(name, name)
             if name in names:
                 continue
-            RailStation.new(
-                self, codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
+            self.station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)

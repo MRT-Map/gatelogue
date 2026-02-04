@@ -3,39 +3,43 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
+from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.types.config import Config
+from gatelogue_aggregator.config import Config
 
 from gatelogue_aggregator.utils import search_all
 
 
 class SeabeastRail(RailSource):
     name = "MRT Wiki (Rail, Seabeast Rail)"
-    priority = 1
+    text: str
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.text = get_wiki_text("Seabeast Rail", config)
+        self.warps = list(warps(uuid.UUID("99197ab5-4a78-4e99-b43b-fdf1e04ada1d"), config))
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="Seabeast Rail")
-        line = RailLine.new(self, code="Green Line", company=company, name="Green Line", colour="green")
+        company = self.company(name="Seabeast Rail")
+        line = self.line(code="Green Line", company=company, name="Green Line", colour="green")
         station_names = []
 
-        text = get_wiki_text("Seabeast Rail", config)
-        stations = []
+        builder = self.builder(line)
         for match in search_all(
             re.compile(r"""\| style="background:green; border:none; " \|.*?
 \| style ="border:none; " \| • ([^(\n]*)"""),
-            text,
+            self.text,
         ):
             name = match.group(1)
             station_names.append(name)
-            station = RailStation.new(self, codes={name}, name=name, company=company)
-            stations.append(station)
+            builder.add(self.station(codes={name}, name=name, company=company))
 
-        RailLineBuilder(self, line).connect(*stations)
+        builder.connect()
 
         ###
 
         names = []
-        for warp in warps(uuid.UUID("99197ab5-4a78-4e99-b43b-fdf1e04ada1d"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("SBR"):
                 continue
 
@@ -47,5 +51,5 @@ class SeabeastRail(RailSource):
             if name in names:
                 continue
 
-            RailStation.new(self, codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.station(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
             names.append(name)

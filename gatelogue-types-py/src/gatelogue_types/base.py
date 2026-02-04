@@ -108,7 +108,7 @@ class _Column[T]:
             if self_v != other_v:
                 self_sources = instance1.sources
                 other_sources = instance2.sources
-                if min(self_sources) >= min(other_sources):
+                if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
@@ -120,7 +120,7 @@ class _Column[T]:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
                             f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                            f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (self_sources, other_v))
             return
@@ -135,7 +135,7 @@ class _Column[T]:
             case (_, _) if self_v != other_v:
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
-                if min(self_sources) >= min(other_sources):
+                if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
@@ -148,7 +148,7 @@ class _Column[T]:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
                             f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                            f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (other_sources, other_v))
 
@@ -161,8 +161,8 @@ class _CoordinatesColumn:
         return None if x is None or y is None else (x, y)
 
     def __set__(self, instance: Node, value: tuple[int, int] | None | tuple[set[int], tuple[int, int] | None]):
-        srcs, value = value if not isinstance(value[0], set) else (instance.sources, value)
-        x, y = (None, None) if value is not None else None
+        srcs, value = value if value is not None and isinstance(value[0], set) else (instance.sources, value)
+        x, y = (None, None) if value is None else value
         cur = instance.conn.cursor()
         old_value = self.__get__(instance, type(instance))
         cur.execute("UPDATE NodeLocation SET x = :x, y = :y WHERE i = :i", dict(x=x, y=y, i=instance.i))
@@ -199,7 +199,7 @@ class _CoordinatesColumn:
             case (_, _) if self_v != other_v:
                 self_sources = self.sources(instance1)
                 other_sources = self.sources(instance2)
-                if min(self_sources) >= min(other_sources):
+                if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
                         warn_fn(
                             f"Columns x/y in table NodeLocation are different "
@@ -212,7 +212,7 @@ class _CoordinatesColumn:
                         warn_fn(
                             f"Columns x, y in table NodeLocation are different "
                             f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
-                            f"Latter has higher priority of {self_sources} than former which has {other_sources}"
+                            f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (other_sources, other_v))
 

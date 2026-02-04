@@ -21,6 +21,6 @@ class NPSubway(RailYaml2Source):
     ):
         if line_node.code == "B":
             builder2 = builder.copy()
-            builder2.connect_to("Penn Island-Zoo")
-            builder2.connect_to("Evergreen Parkway")
+            builder2.connect_to("Penn Island-Zoo", **cp)
+            builder2.connect_to("Evergreen Parkway", **cp)
         super().routing(line_node, builder, line_yaml, route_yaml, cp)

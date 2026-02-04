@@ -254,11 +254,11 @@ class Proximity:
 
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit)",
+            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit) ON CONFLICT DO NOTHING",
             dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
         )
         cur.executemany(
-            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source )",
+            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source ) ON CONFLICT DO NOTHING",
             [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
         )
         return cls(conn, node1, node2)
@@ -279,6 +279,6 @@ class SharedFacility:
 
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2)", dict(node1=node1.i, node2=node2.i)
+            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2) ON CONFLICT DO NOTHING ", dict(node1=node1.i, node2=node2.i)
         )
         return cls(conn, node1, node2)

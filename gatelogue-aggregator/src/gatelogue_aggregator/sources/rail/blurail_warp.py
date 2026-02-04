@@ -2,16 +2,19 @@ import re
 import uuid
 
 from gatelogue_aggregator.downloader import warps
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import RailCompany, RailSource, RailStation
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import RailSource
 
 
 class BluRailWarp(RailSource):
     name = "MRT Warp API (Rail, BluRail)"
-    priority = 0
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config))
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="BluRail")
+        company = self.company(name="BluRail")
 
         names = [
             "Sunshine Coast Docks",
@@ -22,7 +25,7 @@ class BluRailWarp(RailSource):
             "Titsensaki",
             "Titsensaki Transfer",
         ]
-        for warp in warps(uuid.UUID("fe400b78-b441-4551-8ede-a1295434a13b"), config):
+        for warp in self.warps:
             if not warp["name"].startswith("BLU") and not warp["name"].startswith("BR"):
                 continue
             if (match := re.search(r"(?i)^This is ([^.]*)\.|^[→✈] ([^|]*?) *\|", warp["welcomeMessage"])) is None:
@@ -47,7 +50,6 @@ class BluRailWarp(RailSource):
                 "Titsensaki Palm Shores": "TPS",
                 "Washingcube Airfield": "WCA",
             }.get(name, match.group(2))
-            RailStation.new(
-                self, codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
+            self.station(codes={code}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"])
             )
             names.append(name)

@@ -1,15 +1,8 @@
 from pathlib import Path
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, RailYaml2Source
 
 
-
-class LavaRail(Yaml2Source, RailSource):
+class LavaRail(RailYaml2Source):
     name = "Gatelogue (Rail, Lava Rail)"
-    priority = 1
-
     file_path = Path(__file__).parent / "lava_rail.yaml"
-    C = RailCompany
-    L = RailLine
-    S = RailStation
-    B = RailLineBuilder

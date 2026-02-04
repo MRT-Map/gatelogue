@@ -1,35 +1,30 @@
+import bs4
+
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailLine,
-    RailLineBuilder,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.config import Config
+from gatelogue_aggregator.source import RailSource
 
 
 class CVCExpress(RailSource):
     name = "MRT Wiki (Rail, CVCExpress)"
-    priority = 1
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("CVCExpress", config)
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="CVCExpress")
+        company = self.company(name="CVCExpress")
 
-        html = get_wiki_html("CVCExpress", config)
-        for h3 in html.find_all("h3"):
+        for h3 in self.html.find_all("h3"):
             line_code_name = h3.find("span", class_="mw-headline").string
             line_code, line_name = line_code_name.split(" -- ")
-            line = RailLine.new(self, code=line_code, name=line_name, company=company, mode="traincarts", colour="#c00")
+            line = self.line(code=line_code, name=line_name, company=company, mode="traincarts", colour="#c00")
 
             ul = h3.find_next("ul")
-            stations = []
+            builder = self.builder(line)
             for li in ul.find_all("li"):
                 name = li.string.strip()
-                station = RailStation.new(self, codes={name}, name=name, company=company)
-                stations.append(station)
+                builder.add(self.station(codes={name}, name=name, company=company))
 
-            if len(stations) == 0:
-                continue
-
-            RailLineBuilder(self, line).connect(*stations)
+            
+            builder.connect()

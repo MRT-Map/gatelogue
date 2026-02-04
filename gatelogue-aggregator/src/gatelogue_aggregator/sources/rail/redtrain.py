@@ -1,31 +1,27 @@
+import bs4
+
+from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.rail import (
-    RailCompany,
-    RailLine,
-    RailLineBuilder,
-    RailSource,
-    RailStation,
-)
+from gatelogue_aggregator.config import Config
 
 
 class RedTrain(RailSource):
     name = "MRT Wiki (Rail, RedTrain)"
-    priority = 1
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("RedTrain", config)
 
     def build(self, config: Config):
-        company = RailCompany.new(self, name="RedTrain")
+        company = self.company(name="RedTrain")
 
-        html = get_wiki_html("RedTrain", config)
-
-        for table in html.find_all("table"):
+        for table in self.html.find_all("table"):
             if "Code" not in table("th")[1].string:
                 continue
-            line = RailLine.new(
-                self, code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"
+            line = self.line( code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"
             )
 
-            stations = []
+            builder = self.builder(line)
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:
                     continue
@@ -33,7 +29,6 @@ class RedTrain(RailSource):
                     continue
                 name = " ".join(tr("td")[2].strings).strip().removesuffix(" £")
                 code = next(tr("td")[1].strings)
-                station = RailStation.new(self, codes={code}, name=name, company=company)
-                stations.append(station)
+                builder.add(self.station(codes={code}, name=name, company=company))
 
-            RailLineBuilder(self, line).connect(*stations)
+            builder.connect()

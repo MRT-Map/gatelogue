@@ -22,11 +22,11 @@ class ErzLinkMetro(RailYaml2Source):
     ):
         if line_node.code == "6":
             builder.connect(until="Riverdane", **cp)
-            builder.skip(until="Crowood")
+            builder.skip(until="Crowood", detached=True)
             builder.connect(**cp)
         elif line_node.code == "6 Express":
             builder.connect(until="Essex Central", **cp)
-            builder.skip(until="New Erzville")
+            builder.skip(until="New Erzville", detached=True)
             builder.connect(**cp)
         else:
             super().routing(line_node, builder, line_yaml, route_yaml, cp)

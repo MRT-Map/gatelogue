@@ -44,6 +44,5 @@ class WZF(SeaSource):
                 colour = tr("td")[1].attrs["style"].split(":")[1]
                 line.colour = colour
 
-            if len(builder.station_list) == 0:
-                continue
+            
             builder.connect()

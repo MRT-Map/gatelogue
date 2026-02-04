@@ -42,8 +42,7 @@ class IntraSail(SeaSource):
 
                 builder.add(self.stop(codes={name}, name=name, company=company))
 
-            if len(builder.station_list) == 0:
-                continue
+            
             builder.connect()
 
             cursor: bs4.Tag = cursor.next_sibling.next_sibling

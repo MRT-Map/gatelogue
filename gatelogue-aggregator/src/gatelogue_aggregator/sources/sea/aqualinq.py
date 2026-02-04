@@ -36,6 +36,5 @@ class AquaLinQ(SeaSource):
             ):
                 builder.add(self.stop(codes={b}, name=b, company=company))
 
-            if len(builder.station_list) == 0:
-                continue
+            
             builder.connect()

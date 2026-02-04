@@ -44,7 +44,9 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         backward_code: str | None = "DEFAULT",
         forward_direction: str | None = None,
         backward_direction: str | None = None,
+        **_
     ):
+        station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
         forward_direction = f"towards {station.name}" if forward_direction == "" else None
         backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
         if forward_code == "DEFAULT":
@@ -55,7 +57,6 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
             backward_code = self.default_backward_code
         elif backward_code == "LINE":
             backward_code = self.line.code
-        station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
         station_attr = "station" if issubclass(self.Pt, gt.RailPlatform) else "stop"
 
         if one_way != "backwards":
@@ -100,9 +101,11 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         until_before: str | None = None,
         one_way: dict[str, _OneWay] | None = None,
         platform_codes: dict[str, tuple[str | None, str | None]] | None = None,
-        forward_direction: str | None = None,
-        backward_direction: str | None = None,
+        forward_direction: str | None = "",
+        backward_direction: str | None = "",
     ):
+        if self.cursor == len(self.station_list):
+            return
         forward_direction = f"towards {self.station_list[-1].name}" if forward_direction == "" else None
         backward_direction = f"towards {self.station_list[0].name}" if backward_direction == "" else None
         one_way = one_way or {}
@@ -146,14 +149,17 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         )
         self.connect_to(
             self.station_list[0],
-            one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)),
+            one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)) if one_way is not None else None,
             forward_direction=forward_direction,
             backward_direction=backward_direction,
         )
 
-    def skip(self, *, until: str):
+    def skip(self, *, until: str, detached: bool = False):
         while self.cursor < len(self.station_list) and self.station_list[self.cursor].name != until:
             self.cursor += 1
+        if detached:
+            self.prev_platform_forwards = None
+            self.prev_platform_backwards = None
 
     def branch_off(self, *, terminus: str | None = None) -> Self:
         branch = self.copy()
@@ -178,6 +184,12 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         branch.station_list = self.station_list
         branch.prev_platform_forwards = self.prev_platform_forwards
         branch.prev_platform_backwards = self.prev_platform_backwards
+        return self
+
+    def u_turn(self) -> Self:
+        self.station_list = list(reversed(self.station_list))
+        self.cursor = len(self.station_list) - 1 - self.cursor
+        self.prev_platform_backwards, self.prev_platform_forwards = self.prev_platform_forwards, self.prev_platform_backwards
         return self
 
 
