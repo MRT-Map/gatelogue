@@ -2,33 +2,25 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
-from gatelogue_aggregator.utils import get_stn
+from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, RailYaml2Source, YamlRoute
+import gatelogue_types as gt
 
 
-class NPSubway(Yaml2Source, RailSource):
+class NPSubway(RailYaml2Source):
     name = "Gatelogue (Rail, New Prubourne Subway)"
-    priority = 1
-
     file_path = Path(__file__).parent / "np_subway.yaml"
-    C = RailCompany
-    L = RailLine
-    S = RailStation
-    B = RailLineBuilder
 
-    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(
+        self,
+        line_node: gt.RailLine,
+        builder: RailLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        cp: RailYaml2Source._ConnectParams,
+    ):
         if line_node.code == "B":
-            self.B(self, line_node).connect(
-                *stations,
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                get_stn(stations, "Penn Island-Zoo"),
-                get_stn(stations, "Evergreen Parkway"),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
-        else:
-            raise NotImplementedError
+            builder2 = builder.copy()
+            builder2.connect_to("Penn Island-Zoo")
+            builder2.connect_to("Evergreen Parkway")
+        super().routing(line_node, builder, line_yaml, route_yaml, cp)

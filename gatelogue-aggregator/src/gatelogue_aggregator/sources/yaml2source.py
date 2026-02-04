@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 import re
-from typing import TYPE_CHECKING, ClassVar, Literal
+from typing import TYPE_CHECKING, ClassVar, Literal, TypedDict
 
 import gatelogue_types as gt
 import msgspec
@@ -93,11 +93,11 @@ class Yaml2Source(Source):
 
                 for station in route.stations:
                     matches = re.match(
-                        R"(?P<name>[^@#<>]+)\s*?(?:@(?P<code>[^@#<>]*)|)\s*?(?:#(?P<one_way>[^@#<>]*)|)\s*?(?:<(?P<forward_code>[^@#<>]*)\s*?>(?P<backward_code>[^@#<>]*)|)",
+                        R"(?P<name>[^@%<>]+)\s*?(?:@(?P<code>[^@%<>]*)|)\s*?(?:%(?P<one_way>[^@%<>]*)|)\s*?(?:<(?P<forward_code>[^@%<>]*)\s*?>(?P<backward_code>[^@%<>]*)|)",
                         station,
                     )
                     name = matches["name"].strip()
-                    code = name if (c := matches["code"] is None) else c.strip()
+                    code = name if (c := matches["code"]) is None else c.strip()
                     if (direction := matches["one_way"]) is not None:
                         direction = direction.strip()
                         assert direction in ("forwards", "backwards")
@@ -118,7 +118,12 @@ class Yaml2Source(Source):
                             company=company,
                         )
                     )
-                self.routing(line_node, builder, line, route, one_way, platform_codes)
+                self.routing(line_node, builder, line, route, self._ConnectParams(
+                    one_way=one_way,
+                    platform_codes=platform_codes,
+                    forward_direction=line.forward_direction,
+                    backward_direction=line.backward_direction,
+                ))
 
         for code, (x, z) in file.coords.items():
             self.S.create(
@@ -145,21 +150,21 @@ class Yaml2Source(Source):
                     explicit=True,
                 )
 
+    class _ConnectParams(TypedDict, total=False):
+        one_way: dict[str, Literal["forwards", "backwards"]] | None
+        platform_codes: dict[str, tuple[str | None, str | None]] | None
+        forward_direction: str | None
+        backward_direction: str | None
+
     def routing(
         self,
         line_node: gt.RailLine | gt.BusLine | gt.SeaLine,
         builder: RailLineBuilder | BusLineBuilder | SeaLineBuilder,
         line_yaml: YamlLine,
         route_yaml: YamlRoute,
-        one_way: dict[str, Literal["forwards", "backwards"]] | None,
-        platform_codes: dict[str, tuple[str | None, str | None]] | None,
+        cp: _ConnectParams,
     ):
-        builder.connect(
-            one_way=one_way,
-            platform_codes=platform_codes,
-            forward_direction=route_yaml.forward_direction,
-            backward_direction=route_yaml.backward_direction,
-        )
+        builder.connect(**cp)
 
 
 class BusYaml2Source(Yaml2Source, BusSource):

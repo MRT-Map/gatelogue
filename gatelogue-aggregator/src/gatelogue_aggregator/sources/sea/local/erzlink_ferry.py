@@ -19,7 +19,7 @@ class ErzLinkFerry(SeaYaml2Source):
         builder: SeaLineBuilder,
         line_yaml: YamlLine,
         route_yaml: YamlRoute,
-        one_way: dict[str, Literal["forwards", "backwards"]] | None,
-        platform_codes: dict[str, tuple[str | None, str | None]] | None,
+        cp: SeaYaml2Source._ConnectParams,
     ):
-        builder.connect(one_way=one_way, platform_codes=platform_codes, forward_direction=None, backward_direction=None)
+        cp["forward_direction"] = cp["backward_direction"] = None
+        builder.connect(**cp)

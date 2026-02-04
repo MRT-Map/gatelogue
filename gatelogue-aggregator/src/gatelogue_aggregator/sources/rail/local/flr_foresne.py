@@ -2,42 +2,26 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
-from gatelogue_aggregator.utils import get_stn
+from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, RailYaml2Source, YamlRoute
+import gatelogue_types as gt
 
 
-class FLRForesne(Yaml2Source, RailSource):
+class FLRForesne(RailYaml2Source):
     name = "Gatelogue (Rail, FLR Foresne)"
-    priority = 1
-
     file_path = Path(__file__).parent / "flr_foresne.yaml"
-    C = RailCompany
-    L = RailLine
-    S = RailStation
-    B = RailLineBuilder
 
-    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(
+        self,
+        line_node: gt.RailLine,
+        builder: RailLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        cp: RailYaml2Source._ConnectParams,
+    ):
         if line_node.code == "4":
-            self.B(self, line_node).connect(
-                *stations,
-                between=(None, "Suspension Hill"),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                get_stn(stations, "Cinnameadow"),
-                get_stn(stations, "North Plaxaëten"),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-                one_way=True,
-            )
-            self.B(self, line_node).connect(
-                *reversed(stations),
-                between=(None, "Cinnameadow"),
-                forward_direction=line_yaml.backward_label,
-                backward_direction=line_yaml.forward_label,
-                one_way=True,
-            )
+            builder.connect(until="Suspension Hill", **cp)
+            builder.skip(until="Cinnameadow")
+            builder.connect(**cp)
         else:
-            raise NotImplementedError
+            super().routing(line_node, builder, line_yaml, route_yaml, cp)

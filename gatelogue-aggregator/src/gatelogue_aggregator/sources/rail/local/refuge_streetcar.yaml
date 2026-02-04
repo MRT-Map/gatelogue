@@ -56,22 +56,22 @@ lines:
   - name: North/South Loop
     colour: "#f33"
     stations:
-      - Cranberry Green
-      - Cherimoya Park
-      - Sato Plaza South
-      - Sato Plaza North
-      - Great Guava
-      - 3rd Street
-      - 2nd Street
-      - Downtown North
+      - Cranberry Green %forwards
+      - Cherimoya Park %forwards
+      - Sato Plaza South %forwards
+      - Sato Plaza North %forwards
+      - Great Guava %forwards
+      - 3rd Street %forwards
+      - 2nd Street %forwards
+      - Downtown North %forwards
       - West Train Station
       - Hilltop
       - South Hill
-      - Refuge Airfield North
-      - Refuge Airfield West
-      - Industrial East
-      - Iserlohn Avenue East
-      - University South
+      - Refuge Airfield North %forwards
+      - Refuge Airfield West %forwards
+      - Industrial East %forwards
+      - Iserlohn Avenue East %forwards
+      - University South %forwards
 
 
 coords:

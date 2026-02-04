@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
+
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.types.node.bus import BusLine, BusStop

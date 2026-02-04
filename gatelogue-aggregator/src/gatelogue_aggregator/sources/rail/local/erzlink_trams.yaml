@@ -94,8 +94,8 @@ lines:
       - Azuris
       - Almono
       - Atrium North
-      - Atrium West
-      - Atrium East
+      - Atrium West %backwards
+      - Atrium East %forwards
       - Atrium South
       - Spire of New Domain
       - Elkite-Federation Gate

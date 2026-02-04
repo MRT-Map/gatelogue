@@ -54,12 +54,17 @@ lines:
   - name: Line C1
     code: C1
     colour: "#808"
-    forward_direction: Northbound
-    backward_direction: Southbound
-    stations:
-      - Sha Tsui @ C100
-      - Ho Kok West @ C101A
-      - Ho Kok @ C101
+    routing:
+      - forward_direction: Northbound
+        backward_direction: Southbound
+        stations:
+          - Sha Tsui @ C100
+          - Ho Kok @ C101
+      - forward_direction: Northbound
+        backward_direction: Southbound
+        stations:
+          - Ho Kok West @ C101A
+          - Ho Kok @ C101
 
 coords:
   K100: [-26414, 16426]

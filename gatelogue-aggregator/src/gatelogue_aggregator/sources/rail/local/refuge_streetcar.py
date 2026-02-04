@@ -2,46 +2,38 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
-from gatelogue_aggregator.utils import get_stn
+from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, RailYaml2Source, YamlRoute
+import gatelogue_types as gt
 
 
-class RefugeStreetcar(Yaml2Source, RailSource):
+class RefugeStreetcar(RailYaml2Source):
     name = "Gatelogue (Rail, Refuge Streetcar)"
-    priority = 1
-
     file_path = Path(__file__).parent / "refuge_streetcar.yaml"
-    C = RailCompany
-    L = RailLine
-    S = RailStation
-    B = RailLineBuilder
 
-    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(
+        self,
+        line_node: gt.RailLine,
+        builder: RailLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        cp: RailYaml2Source._ConnectParams,
+    ):
         if line_node.code == "North/South Loop":
-            self.B(self, line_node).connect(
-                get_stn(stations, "West Train Station"), stations[0], forward_direction="Anticlockwise", one_way=True
-            )
-            self.B(self, line_node).connect(
-                *stations, between=(None, "West Train Station"), forward_direction="Anticlockwise", one_way=True
-            )
-            self.B(self, line_node).connect(
-                *stations,
-                between=("West Train Station", "South Hill"),
-                forward_direction="Southbound",
-                backward_direction="Northbound",
-            )
-            self.B(self, line_node).connect(
-                *stations,
-                between=("South Hill", None),
-                forward_direction="Anticlockwise",
-                one_way=True,
-            )
-            self.B(self, line_node).connect(
-                stations[-1],
-                get_stn(stations, "South Hill"),
-                forward_direction="Anticlockwise",
-                one_way=True,
-            )
+            builder.connect_to("West Train Station", **cp)
+
+            cp["forward_direction"] = "Anticlockwise"
+            builder.connect(until="West Train Station", **cp)
+
+            cp["forward_direction"] = "Southbound"
+            cp["backward_direction"] = "Northbound"
+            builder.connect(until="South Hill", **cp)
+
+            cp["forward_direction"] = "Anticlockwise"
+            builder.connect(**cp)
+
+            builder.connect_to("South Hill", **cp)
         else:
-            self.B(self, line_node).circle(*stations, forward_label="Clockwise", backward_label="Anticlockwise")
+            cp["forward_direction"] = "Clockwise"
+            cp["backward_direction"] = "Anticlockwise"
+            builder.connect_circle(**cp)

@@ -72,8 +72,8 @@ class Node:
         self._merge(other)
 
         cur = self.conn.cursor()
-        cur.execute("DELETE FROM NodeSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM Node WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("DELETE FROM NodeSource WHERE i = :i", dict(i=other.i))
+        cur.execute("DELETE FROM Node WHERE i = :i", dict(i=other.i))
 
     @classmethod
     def format_create_kwargs(cls, **kwargs) -> dict:
@@ -182,17 +182,17 @@ class LocatedNode(Node):
         cur.execute("UPDATE OR FAIL SharedFacility SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE OR FAIL SharedFacility SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
         cur.execute(
-            "INSERT INTO Proximity SELECT :i1, node2, distance, explicit FROM Proximity "
+            "INSERT INTO Proximity SELECT min(node2, :i1), max(node2, :i1), distance, explicit FROM Proximity "
             "WHERE node1 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
             dict(i1=self.i, i2=other.i),
         )
         cur.execute(
-            "INSERT INTO Proximity SELECT node1, :i1, distance, explicit FROM Proximity "
+            "INSERT INTO Proximity SELECT min(node1, :i1), max(node1, :i1), distance, explicit FROM Proximity "
             "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
             dict(i1=self.i, i2=other.i),
         )
-        cur.execute("UPDATE OR FAIL ProximitySource SET node1 = :i1 WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("UPDATE OR FAIL ProximitySource SET node2 = :i1 WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node2, :i1), max(node2, :i1)) WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute("UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node1, :i1), max(node1, :i1)) WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))

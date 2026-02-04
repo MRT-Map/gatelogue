@@ -1,47 +1,32 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
-from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine
-from gatelogue_aggregator.types.node.rail import RailCompany, RailLine, RailLineBuilder, RailSource, RailStation
+from gatelogue_aggregator.sources.line_builder import RailLineBuilder, BusLineBuilder, SeaLineBuilder
+from gatelogue_aggregator.sources.yaml2source import Yaml2Source, YamlLine, RailYaml2Source, YamlRoute
+import gatelogue_types as gt
 
 
-class ErzLinkMetro(Yaml2Source, RailSource):
+class ErzLinkMetro(RailYaml2Source):
     name = "Gatelogue (Rail, ErzLink Metro)"
-    priority = 1
-
     file_path = Path(__file__).parent / "erzlink_metro.yaml"
-    C = RailCompany
-    L = RailLine
-    S = RailStation
-    B = RailLineBuilder
 
-    def routing(self, line_node: RailLine, stations: list[RailStation], line_yaml: YamlLine):
+    def routing(
+        self,
+        line_node: gt.RailLine,
+        builder: RailLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        cp: RailYaml2Source._ConnectParams,
+    ):
         if line_node.code == "6":
-            self.B(self, line_node).connect(
-                *stations,
-                between=(None, "Riverdane"),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations,
-                between=("Crowood", None),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
+            builder.connect(until="Riverdane", **cp)
+            builder.skip(until="Crowood")
+            builder.connect(**cp)
         elif line_node.code == "6 Express":
-            self.B(self, line_node).connect(
-                *stations,
-                between=(None, "Essex Central"),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
-            self.B(self, line_node).connect(
-                *stations,
-                between=("New Erzville", None),
-                forward_direction=line_yaml.forward_label,
-                backward_direction=line_yaml.backward_label,
-            )
+            builder.connect(until="Essex Central", **cp)
+            builder.skip(until="New Erzville")
+            builder.connect(**cp)
         else:
-            raise NotImplementedError
+            super().routing(line_node, builder, line_yaml, route_yaml, cp)

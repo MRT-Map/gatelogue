@@ -282,7 +282,7 @@ class RailPlatform(Node):
     COLUMNS: ClassVar = (code, station)
 
     def __str__(self):
-        return super().__str__() + f" {self.stop.company.name} {'/'.join(self.stop.codes)} {self.code}"
+        return super().__str__() + f" {self.station.company.name} {'/'.join(self.station.codes)} {self.code}"
 
     class CreateParams(TypedDict):
         code: str | None
@@ -340,7 +340,7 @@ class RailPlatform(Node):
         return (
             type(self)(self.conn, i)
             for (i,) in self.conn.execute(
-                "SELECT i FROM RailPlatform WHERE station = ? AND code = ?", (self.station, code)
+                "SELECT i FROM RailPlatform WHERE station = ? AND code = ?", (self.station.i, code)
             ).fetchall()
         )
 

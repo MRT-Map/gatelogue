@@ -56,15 +56,16 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         elif backward_code == "LINE":
             backward_code = self.line.code
         station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
+        station_attr = "station" if issubclass(self.Pt, gt.RailPlatform) else "stop"
 
         if one_way != "backwards":
             platform_forwards = self.Pt.create(
                 station.conn,
                 self.src,
                 code=forward_code,
-                **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station},
+                **{station_attr: station},
             )
-            if self.prev_platform_forwards is not None:
+            if self.prev_platform_forwards is not None and getattr(self.prev_platform_forwards, station_attr) != station:
                 self.Cn.create(
                     station.conn,
                     self.src,
@@ -79,9 +80,9 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
                 station.conn,
                 self.src,
                 code=backward_code,
-                **{("station" if isinstance(self.Pt, gt.RailPlatform) else "stop"): station},
+                **{station_attr: station},
             )
-            if self.prev_platform_backwards is not None:
+            if self.prev_platform_backwards is not None and getattr(self.prev_platform_backwards, station_attr) != station:
                 self.Cn.create(
                     station.conn,
                     self.src,
