@@ -7,23 +7,18 @@ import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.logging import INFO3, track
-from gatelogue_aggregator.types.node._air import AirAirline, AirAirport, AirFlight, AirGate, AirSource
+from gatelogue_aggregator.source import AirSource
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.types.config import Config
-    from gatelogue_aggregator.types.node.base import Node
+    from gatelogue_aggregator.config import Config
+    import gatelogue_types as gt
 
 
 class MRTTransit(AirSource):
     name = "MRT Transit (Air)"
-    priority = 2
+    df: pd.DataFrame
 
-    @classmethod
-    @override
-    def reported_nodes(cls) -> tuple[type[Node], ...]:
-        return (AirAirline, AirAirport)
-
-    def build(self, config: Config):
+    def prepare(self, config: Config):
         cache1 = config.cache_dir / "mrt-transit1"
         cache2 = config.cache_dir / "mrt-transit2"
         cache3 = config.cache_dir / "mrt-transit3"
@@ -79,18 +74,21 @@ class MRTTransit(AirSource):
         )
         df3.drop(df3.tail(6).index, inplace=True)
 
-        df = pd.concat((df1, df2, df3))
+        self.df = pd.concat((df1, df2, df3))
 
-        for airline_name in track(df.columns, INFO3, description="Extracting data from CSV", nonlinear=True):
+    def build(self, config: Config):
+        for airline_name in track(self.df.columns, INFO3, description="Extracting data from CSV", nonlinear=True):
             if airline_name in ("Name", "Code", "World", "Operator", "Owner", "Mode"):
                 continue
-            airline = AirAirline.new(self, name=AirAirline.process_airline_name(airline_name))
+            airline = self.airline(name=airline_name)
+            code2dest: dict[str, list[gt.AirAirport]] = {}
+
             for airport_name, airport_code, airport_world, mode, flights in zip(
-                df["Name"], df["Code"], df["World"], df["Mode"], df[airline_name], strict=False
+                self.df["Name"], self.df["Code"], self.df["World"], self.df["Mode"], self.df[airline_name], strict=False
             ):
                 if airport_code == "" or str(flights) == "nan":
                     continue
-                airport = AirAirport.new(self, code=AirAirport.process_code(airport_code), modes={mode})
+                airport = self.airport(code=airport_code, modes={mode})
 
                 if str(airport_name) != "nan":
                     if "(" in airport_name:
@@ -100,25 +98,25 @@ class MRTTransit(AirSource):
                         names = {airport_name}
                     if airport_code == "CWI":
                         names.update({"UCWT International Airport", "UCWTIA"})
-                    airport.names = self.source(names)
+                    airport.names = names
                 if str(airport_world) != "nan":
-                    airport.world = self.source(airport_world)
-
-                gate = AirGate.new(
-                    self,
-                    code=None,
-                    airport=airport,
-                )
+                    airport.world = airport_world
 
                 if mode == "helicopter":
                     continue
 
                 for flight_code in str(flights).split(", "):
-                    flight = AirFlight.new(
-                        self,
-                        codes=AirFlight.process_code(flight_code, airline_name),
-                        airline=airline,
+                    gate = self.gate(
+                        code=None,
+                        airport=airport,
                         mode=mode,
                     )
-                    flight.connect_one(self, airline)
-                    flight.connect(self, gate)
+                    for other_airport in code2dest.setdefault(flight_code, []):
+                        other_gate = self.gate(
+                            code=None,
+                            airport=other_airport,
+                            mode=mode,
+                        )
+                        self.flight(airline=airline, code=flight_code, from_=gate, to=other_gate, mode=mode)
+                        self.flight(airline=airline, code=flight_code, from_=other_gate, to=gate, mode=mode)
+                    code2dest[flight_code].append(airport)

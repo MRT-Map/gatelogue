@@ -1,374 +1,327 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
+import bs4
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html
+from gatelogue_aggregator.source import AirSource
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link
+from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from gatelogue_aggregator.sources.air.wiki_airport import WikiAirport
-    from gatelogue_aggregator.types.config import Config
+    from gatelogue_aggregator.config import Config
 
-_EXTRACTORS: list[Callable[[WikiAirport, Config], None]] = []
+AIRPORT_SOURCES: list[type[AirSource]] = []
 
 
-@_EXTRACTORS.append
-def pce(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Peacopolis International Airport",
-        "PCE",
-        re.compile(
-            r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*?|)\|\|(?:(?!Service).)*Service"
-        ),
-        config,
+@AIRPORT_SOURCES.append
+class PCE(RegexWikiAirport):
+    airport_code = "PCE"
+    page_name = "Peacopolis International Airport"
+    regex = re.compile(
+        r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*?|)\|\|(?:(?!Service).)*Service"
+    )
+
+@AIRPORT_SOURCES.append
+class MWT(RegexWikiAirport):
+    airport_code = "MWT"
+    page_name = "Miu Wan Tseng Tsz Leng International Airport"
+    regex = re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)")
+
+    @staticmethod
+    def size(matches: dict[str, str]) -> str | None:
+        return "XS" if (code := matches["code"].removesuffix("A")).startswith("P") else "S" if int(code) <= 60 else "M" if int(code) <= 82 else "H"
+
+
+@AIRPORT_SOURCES.append
+class KEK(RegexWikiAirport):
+    airport_code = "KEK"
+    page_name = "Kazeshima Eumi Konaejima Airport"
+    regex = re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|")
+
+    @staticmethod
+    def size(matches: dict[str, str]) -> str | None:
+        return "XS" if int(matches["code"]) > 100 else "SP"
+
+@AIRPORT_SOURCES.append
+class ABG(RegexWikiAirport):
+    airport_code = "ABG"
+    page_name = "Antioch-Bay Point Garvey International Airport"
+    regex = re.compile(
+        r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)(?:\|\||\n)",
+    )
+
+@AIRPORT_SOURCES.append
+class OPA(RegexWikiAirport):
+    airport_code = "OPA"
+    page_name = "Oparia LeTourneau International Airport"
+    regex = re.compile(
+        r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
+    )
+
+@AIRPORT_SOURCES.append
+class CHB(RegexWikiAirport):
+    airport_code = "CHB"
+    page_name = "Chan Bay Municipal Airport"
+    regex = re.compile(
+        r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
+    )
+
+@AIRPORT_SOURCES.append
+class CBZ(RegexWikiAirport):
+    airport_code = "CBZ"
+    page_name = "Chan Bay Zeta Airport"
+    regex = re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
+    @staticmethod
+    def size(_matches: dict[str, str]) -> str | None:
+        return "S"
+
+@AIRPORT_SOURCES.append
+class CBI(RegexWikiAirport):
+    airport_code = "CBI"
+    page_name = "Chan Bay International Airport"
+    regex = re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
+
+@AIRPORT_SOURCES.append
+class DJE(AirSource):
+    name = "MRT Wiki (Airport DJE)"
+    html: bs4.BeautifulSoup
+
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
+
+    def build(self, config: Config):
+        airport = self.airport(code="DJE", names={"Deadbush Johnston-Euphorial Airport"}, link=get_wiki_link("Deadbush Johnston-Euphorial Airport"))
+
+        for table in self.html("table"):
+            if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
+                continue
+            if caption == "Terminal 1":
+                for tr in table("tr")[1:]:
+                    code = tr("td")[0].string
+                    size = "MS" if 1 <= int(code) <= 10 else "S"
+                    airline = tr("td")[1]
+                    airline = airline.a.string if airline.a is not None else airline.string
+                    airline = airline if airline is not None and airline.strip() != "" else None
+                    self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
+            elif caption == "Terminal 2":
+                concourse = ""
+                for tr in table("tr")[1:]:
+                    if len(tr("td")) == 1:
+                        concourse = tr.find("b").string.strip(" ")[0]
+                        continue
+                    code = concourse + tr("td")[0].string
+                    size = "S"
+                    airline = tr("td")[1]
+                    airline = airline.a.string if airline.a is not None else airline.string
+                    airline = airline if airline is not None and airline.strip() != "" else None
+                    self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
+
+@AIRPORT_SOURCES.append
+class VDA(RegexWikiAirport):
+    airport_code = "VDA"
+    page_name = "Deadbush Valletta Desert Airport"
+    regex = re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)")
+
+@AIRPORT_SOURCES.append
+class WMI(RegexWikiAirport):
+    airport_code = "WMI"
+    page_name = "West Mesa International Airport"
+    regex = re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
+@AIRPORT_SOURCES.append
+class DFM(RegexWikiAirport):
+    airport_code = "DFM"
+    page_name = "Deadbush Foxfoe Memorial Airport"
+    regex = re.compile(
+        r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)\n|[^|]*?)"
     )
 
 
-@_EXTRACTORS.append
-def mwt(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Miu Wan Tseng Tsz Leng International Airport",
-        "MWT",
-        re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)"),
-        config,
-        size=lambda matches: "XS"
-        if (code := matches["code"].removesuffix("A")).startswith("P")
-        else "S"
-        if int(code) <= 60
-        else "M"
-        if int(code) <= 82
-        else "H",
-    )
+@AIRPORT_SOURCES.append
+class DBI(AirSource):
+    name = "MRT Wiki (Airport DBI)"
+    html: bs4.BeautifulSoup
 
+    def prepare(self, config: Config):
+        self.html = get_wiki_html("Deadbush International Airport", config)
 
-@_EXTRACTORS.append
-def kek(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Kazeshima Eumi Konaejima Airport",
-        "KEK",
-        re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|"),
-        config,
-        size=lambda matches: "XS" if int(matches["code"]) > 100 else "SP",
-    )
+    def build(self, config: Config):
+        airport = self.airport(code="DBI", names={"Deadbush International Airport"}, link=get_wiki_link("Deadbush International Airport"))
 
-
-@_EXTRACTORS.append
-def abg(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Antioch-Bay Point Garvey International Airport",
-        "ABG",
-        re.compile(
-            r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)(?:\|\||\n)",
-        ),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def opa(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Oparia LeTourneau International Airport",
-        "OPA",
-        re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
-        ),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def chb(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Chan Bay Municipal Airport",
-        "CHB",
-        re.compile(
-            r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
-        ),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def cbz(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Chan Bay Zeta Airport",
-        "CBZ",
-        re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
-        config,
-        size="S",
-    )
-
-
-@_EXTRACTORS.append
-def cbi(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Chan Bay International Airport",
-        "CBI",
-        re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def dje(src: WikiAirport, config):
-    airport_code = "DJE"
-    html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
-    airport = src.extract_get_airport(airport_code, "Deadbush Johnston-Euphorial Airport")
-
-    for table in html("table"):
-        if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
-            continue
-        if caption == "Terminal 1":
+        for table in self.html("table"):
+            if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
+                continue
+            if (
+                concourse := "A"
+                if "Main" in caption
+                else caption[0]
+                if caption.endswith("Gates") and caption[0] != "H"
+                else None
+            ) is None:
+                continue
             for tr in table("tr")[1:]:
-                code = tr("td")[0].string
-                size = "MS" if 1 <= int(code) <= 10 else "S"
-                airline = tr("td")[1]
-                airline = airline.a.string if airline.a is not None else airline.string
-                airline = airline if airline is not None and airline.strip() != "" else None
-                src.extract_get_gate(airport, code=code, size=size, airline=airline)
-        elif caption == "Terminal 2":
-            concourse = ""
-            for tr in table("tr")[1:]:
-                if len(tr("td")) == 1:
-                    concourse = tr.find("b").string.strip(" ")[0]
-                    continue
                 code = concourse + tr("td")[0].string
-                size = "S"
-                airline = tr("td")[1]
+                size = tr("td")[1].string
+                airline = tr("td")[2]
                 airline = airline.a.string if airline.a is not None else airline.string
-                airline = airline if airline is not None and airline.strip() != "" else None
-                src.extract_get_gate(airport, code=code, size=size, airline=airline)
+                self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
 
-
-@_EXTRACTORS.append
-def vda(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Deadbush Valletta Desert Airport",
-        "VDA",
-        re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)"),
-        config,
-        size="S",
+@AIRPORT_SOURCES.append
+class GSM(RegexWikiAirport):
+    airport_code = "GSM"
+    page_name = "Gemstride Melodia Airfield"
+    regex = re.compile(
+        r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
     )
 
+    @staticmethod
+    def size(matches: dict[str, str]) -> str | None:
+        return "H" if matches["code"].startswith("H") else "S"
 
-@_EXTRACTORS.append
-def wmi(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "West Mesa International Airport",
-        "WMI",
-        re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)"),
-        config,
+@AIRPORT_SOURCES.append
+class VFW(RegexWikiAirport):
+    airport_code = "VFW"
+    page_name = "Venceslo-Fifth Ward International Airport"
+    regex = re.compile(
+        r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
     )
 
-
-@_EXTRACTORS.append
-def dfm(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Deadbush Foxfoe Memorial Airport",
-        "DFM",
-        re.compile(
-            r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)\n|[^|]*?)"
-        ),
-        config,
+@AIRPORT_SOURCES.append
+class SDZ(RegexWikiAirport):
+    airport_code = "SDZ"
+    page_name = "San Dzobiak International Airport"
+    regex = re.compile(
+        r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
     )
 
+    @staticmethod
+    def size(_matches: dict[str, str]) -> str | None:
+        return "S"
 
-@_EXTRACTORS.append
-def dbi(src: WikiAirport, config):
-    html = get_wiki_html("Deadbush International Airport", config)
-    airport_code = "DBI"
-    airport = src.extract_get_airport(airport_code, "Deadbush International Airport")
-
-    for table in html("table"):
-        if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
-            continue
-        if (
-            concourse := "A"
-            if "Main" in caption
-            else caption[0]
-            if caption.endswith("Gates") and caption[0] != "H"
-            else None
-        ) is None:
-            continue
-        for tr in table("tr")[1:]:
-            code = concourse + tr("td")[0].string
-            size = tr("td")[1].string
-            airline = tr("td")[2]
-            airline = airline.a.string if airline.a is not None else airline.string
-            src.extract_get_gate(airport, code=code, size=size, airline=airline)
-
-
-@_EXTRACTORS.append
-def gsm(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Gemstride Melodia Airfield",
-        "GSM",
-        re.compile(
-            r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
-        ),
-        config,
-        size=lambda matches: "H" if matches["code"].startswith("H") else "S",
+@AIRPORT_SOURCES.append
+class CIA(RegexWikiAirport):
+    airport_code = "CIA"
+    page_name = "Carnoustie International Airport"
+    regex = re.compile(
+        r"\|\s*(?P<code>.*?)\s*\|\|\s*(?:\[\[(?P<airline>[^|]*?)]]|(?P<airline2>[^|]*?))\s*\|\|",
     )
 
-
-@_EXTRACTORS.append
-def vfw(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Venceslo-Fifth Ward International Airport",
-        "VFW",
-        re.compile(
-            r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
-        ),
-        config,
+@AIRPORT_SOURCES.append
+class ERZ(RegexWikiAirport):
+    airport_code = "ERZ"
+    page_name = "Erzgard International Airport"
+    regex = re.compile(
+        r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
 
-
-@_EXTRACTORS.append
-def sdz(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "San Dzobiak International Airport",
-        "SDZ",
-        re.compile(
-            r"\|-\n\|'''(?P<code>\w*?)'''\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>(?!vacant)\S[^|]*)|[^|]*?)\n\|",
-        ),
-        config,
-        size="S",
+@AIRPORT_SOURCES.append
+class ERZ2(RegexWikiAirport):
+    airport_code = "ERZ"
+    page_name = "Erzville Passenger Seaport"
+    regex = re.compile(
+        r"\|-\n\|(?P<code>S.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
 
+    @staticmethod
+    def size(_matches: dict[str, str]) -> str | None:
+        return "SP"
 
-@_EXTRACTORS.append
-def cia(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Carnoustie International Airport",
-        "CIA",
-        re.compile(
-            r"\|\s*(?P<code>.*?)\s*\|\|\s*(?:\[\[(?P<airline>[^|]*?)]]|(?P<airline2>[^|]*?))\s*\|\|",
-        ),
-        config,
+@AIRPORT_SOURCES.append
+class ATC(RegexWikiAirport):
+    airport_code = "ATC"
+    page_name = "Achowalogen Takachsin-Covina International Airport"
+    regex = re.compile(
+        r"\|-\n\|\s*(?P<code>[^|]*?)\s*\|\|[^|]*?\|\|\s*(?:\[\[(?P<airline>[^|]*?)(?:\|[^]]*?|)]][^|]*?|(?P<airline2>[^-|]*?)|-*?)\s*\|\|",
     )
 
+@AIRPORT_SOURCES.append
+class AIX(AirSource):
+    name = "MRT Wiki (Airport AIX)"
+    df: pd.DataFrame
 
-@_EXTRACTORS.append
-def erz(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Erzgard International Airport",
-        "ERZ",
-        re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
-        ),
-        config,
-    )
+    def prepare(self, config: Config):
+        cache = config.cache_dir / "aix"
 
-
-@_EXTRACTORS.append
-def erz2(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Erzville Passenger Seaport",
-        "ERZ",
-        re.compile(
-            r"\|-\n\|(?P<code>S.*?)\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
-        ),
-        config,
-        size="SP",
-    )
-
-
-@_EXTRACTORS.append
-def atc(src: WikiAirport, config):
-    src.regex_extract_airport(
-        "Achowalogen Takachsin-Covina International Airport",
-        "ATC",
-        re.compile(
-            r"\|-\n\|\s*(?P<code>[^|]*?)\s*\|\|[^|]*?\|\|\s*(?:\[\[(?P<airline>[^|]*?)(?:\|[^]]*?|)]][^|]*?|(?P<airline2>[^-|]*?)|-*?)\s*\|\|",
-        ),
-        config,
-    )
-
-
-@_EXTRACTORS.append
-def aix(src: WikiAirport, config):
-    cache = config.cache_dir / "aix"
-    airport_code = "AIX"
-    airport = src.extract_get_airport(airport_code, "Aurora International Airport")
-
-    get_url(
-        "https://docs.google.com/spreadsheets/d/1vG_oEj_XzZlckRwxn4jKkK1FcgjjaULpt66XcxClqP8/export?format=csv&gid=0",
-        cache,
-        timeout=config.timeout,
-        cooldown=config.cooldown,
-    )
-
-    df = pd.read_csv(cache, header=1)
-
-    d = list(zip(df["Gate ID"], df["Gate Size"], df["Company"], strict=False))
-
-    old_gate_size = None
-    for gate_code, gate_size, airline in d:
-        if str(gate_size) == "nan":
-            gate_size = old_gate_size  # noqa: PLW2901
-        else:
-            gate_size = str(gate_size)[0]  # noqa: PLW2901
-            old_gate_size = gate_size
-        src.extract_get_gate(
-            airport=airport,
-            code=gate_code,
-            airline=airline if str(airline) != "nan" and airline != "Unavailable" else None,
-            size=gate_size,
+        get_url(
+            "https://docs.google.com/spreadsheets/d/1vG_oEj_XzZlckRwxn4jKkK1FcgjjaULpt66XcxClqP8/export?format=csv&gid=0",
+            cache,
+            timeout=config.timeout,
+            cooldown=config.cooldown,
         )
 
+        self.df = pd.read_csv(cache, header=1)
 
-@_EXTRACTORS.append
-def lar(src: WikiAirport, config):
-    cache = config.cache_dir / "lar"
-    airport_code = "LAR"
-    airport = src.extract_get_airport(airport_code, "Larkspur Lilyflower International Airport")
+    def build(self, config: Config):
+        airport = self.airport(code="AIX", names={"Aurora International Airport"}, link=get_wiki_link("Aurora International Airport"))
 
-    get_url(
-        "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=0",
-        cache,
-        timeout=config.timeout,
-        cooldown=config.cooldown,
-    )
+        d = list(zip(self.df["Gate ID"], self.df["Gate Size"], self.df["Company"], strict=False))
 
-    df = pd.read_csv(cache)
+        old_gate_size = None
+        for gate_code, gate_size, airline in d:
+            if str(gate_size) == "nan":
+                gate_size = old_gate_size  # noqa: PLW2901
+            else:
+                gate_size = str(gate_size)[0]  # noqa: PLW2901
+                old_gate_size = gate_size
+            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "Unavailable" else None, size=gate_size)
 
-    d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
-    for gate_code, size, airline, _status in d:
-        src.extract_get_gate(
-            airport=airport,
-            code=gate_code,
-            size=size,
-            airline=airline if str(airline) != "nan" and airline != "?" else None,
+@AIRPORT_SOURCES.append
+class LAR(AirSource):
+    name = "MRT Wiki (Airport LAR)"
+    df: pd.DataFrame
+
+    def prepare(self, config: Config):
+        cache = config.cache_dir / "lar"
+
+        get_url(
+            "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=0",
+            cache,
+            timeout=config.timeout,
+            cooldown=config.cooldown,
         )
 
+        self.df = pd.read_csv(cache)
 
-@_EXTRACTORS.append
-def lfa(src: WikiAirport, config):
-    cache = config.cache_dir / "lfa"
-    airport_code = "LFA"
-    airport = src.extract_get_airport(airport_code, "Larkspur Lilyflower International Airport")
+    def build(self, config: Config):
+        airport = self.airport(code="LAR", names={"Larkspur Lilyflower International Airport"}, link=get_wiki_link("Larkspur Lilyflower International Airport"))
 
-    get_url(
-        "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=1289412824",
-        cache,
-        timeout=config.timeout,
-        cooldown=config.cooldown,
-    )
+        d = list(zip(self.df["Gate"], self.df["Size"], self.df["Airline"], self.df["Status"], strict=False))
 
-    df = pd.read_csv(cache)
+        for gate_code, size, airline, _status in d:
+            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None, size=size)
 
-    d = list(zip(df["Gate"], df["Size"], df["Airline"], df["Status"], strict=False))
 
-    for gate_code, size, airline, _status in d:
-        src.extract_get_gate(
-            airport=airport,
-            code=gate_code,
-            size=size,
-            airline=airline if str(airline) != "nan" and airline != "?" else None,
+
+@AIRPORT_SOURCES.append
+class LFA(AirSource):
+    name = "MRT Wiki (Airport LFA)"
+    df: pd.DataFrame
+
+    def prepare(self, config: Config):
+        cache = config.cache_dir / "lfa"
+
+        get_url(
+            "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=1289412824",
+            cache,
+            timeout=config.timeout,
+            cooldown=config.cooldown,
         )
+
+        self.df = pd.read_csv(cache)
+
+    def build(self, config: Config):
+        airport = self.airport(code="LAR", names={"Larkspur Frankford Airfield"}, link=get_wiki_link("Larkspur Frankford Airfield"))
+
+        d = list(zip(self.df["Gate"], self.df["Size"], self.df["Airline"], self.df["Status"], strict=False))
+
+        for gate_code, size, airline, _status in d:
+            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None, size=size)

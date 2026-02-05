@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from gatelogue_aggregator.config import Config
 
-AIRLINE_SOURCES: list[AirSource] = []
+AIRLINE_SOURCES: list[type[AirSource]] = []
 
 
 @AIRLINE_SOURCES.append
@@ -53,7 +53,7 @@ class BluAir(RegexWikiAirline):
         r"\{\{BA\|BU(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|.}}"
     )
 
-
+@AIRLINE_SOURCES.append
 class IntraAir(AirSource):
     name = f"MRT Wiki (Airline IntraAir)"
     html: bs4.BeautifulSoup
@@ -96,7 +96,7 @@ class IntraAir(AirSource):
                     size=size
                 )
 
-
+@AIRLINE_SOURCES.append
 class FliHigh(AirSource):
     name = f"MRT Wiki (Airline FliHigh)"
     html: bs4.BeautifulSoup
@@ -160,7 +160,7 @@ class Berryessa(RegexWikiAirline):
         r"\{\{BA\|IN(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
     )
 
-
+@AIRLINE_SOURCES.append
 class AirNet(AirSource):
     name = f"MRT Wiki (Airline AirNet)"
     html: bs4.BeautifulSoup
@@ -185,13 +185,13 @@ class AirNet(AirSource):
                 airline=airline,
                 flight_code1=flight_code,
                 flight_code2=flight_code,
-                airport1_code="",
-                airport2_code="",
+                airport1_name=airport1_name,
+                airport2_name=airport2_name,
                 gate1_code=gate1_code,
                 gate2_code=gate2_code,
             )
 
-
+@AIRLINE_SOURCES.append
 class FlyCreeper(AirSource):
     name = f"MRT Wiki (Airline FlyCreeper)"
     html: bs4.BeautifulSoup
@@ -321,24 +321,24 @@ class AmberAir(RegexWikiAirline):
 @AIRLINE_SOURCES.append
 class ArcticAir(AirSource):
     name = f"MRT Wiki (Airline ArcticAir)"
-    html: bs4.BeautifulSoup
-    cache: Path
+    df: pd.DataFrame
 
     def prepare(self, config: Config):
-        self.cache = config.cache_dir / "arctic_air"
+        cache = config.cache_dir / "arctic_air"
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=0",
-            self.cache,
+            cache,
             timeout=config.timeout,
             cooldown=config.cooldown,
         )
 
+        self.df = pd.read_csv(cache)
+
     def build(self, config: Config):
-        df = pd.read_csv(self.cache)
         airline = self.airline(name="ArcticAir", link=get_wiki_link("ArcticAir"))
 
-        d = list(zip(df["Flight"], df["Departure"], df["Arrival"], df["D. Gate"], df["A. Gate"], strict=False))
+        d = list(zip(self.df["Flight"], self.df["Departure"], self.df["Arrival"], self.df["D. Gate"], self.df["A. Gate"], strict=False))
 
         for flight, a1, a2, g1, g2 in d[::2]:
             if str(flight).strip() in ("227", "228", "239", "240"):
@@ -365,24 +365,23 @@ class ArcticAir(AirSource):
 @AIRLINE_SOURCES.append
 class SandstoneAirr(AirSource):
     name = f"MRT Wiki (Airline SandstoneAirr)"
-    html: bs4.BeautifulSoup
-    cache: Path
+    df: pd.DataFrame
 
     def prepare(self, config: Config):
-        self.cache = config.cache_dir / "sandstone_airr"
+        cache = config.cache_dir / "sandstone_airr"
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=3084051",
-            self.cache,
+            cache,
             timeout=config.timeout,
             cooldown=config.cooldown,
         )
+        self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
-        df = pd.read_csv(self.cache)
         airline = self.airline(name="Sandstone Airr", link=get_wiki_link("Sandstone Airr"))
 
-        d = list(zip(df["Unnamed: 1"], df["Airport"], df["Gate"], strict=False))
+        d = list(zip(self.df["Unnamed: 1"], self.df["Airport"], self.df["Gate"], strict=False))
 
         for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
             if not a1 or str(a1) == "nan":
@@ -398,7 +397,7 @@ class SandstoneAirr(AirSource):
                 flight_code1=str(int(flight)),
                 flight_code2=str(int(flight)),
                 airport1_code=a1,
-                airport2_code=a1,
+                airport2_code=a2,
                 gate1_code=g1 if "*" not in g1 else None,
                 gate2_code=g2 if "*" not in g2 else None,
             )
@@ -419,24 +418,24 @@ class Michigana(RegexWikiAirline):
 @AIRLINE_SOURCES.append
 class Lilyflower(AirSource):
     name = f"MRT Wiki (Airline Lilyflower Airlines)"
-    html: bs4.BeautifulSoup
-    cache: Path
+    df: pd.DataFrame
 
     def prepare(self, config: Config):
-        self.cache = config.cache_dir / "lilyflower"
+        cache = config.cache_dir / "lilyflower"
 
         get_url(
             "https://docs.google.com/spreadsheets/d/1B-fSerCAQAtaW-kAfv1npdjpGt-N1PrB1iUOmUBX5HI/export?format=csv&gid=1864111212",
-            self.cache,
+            cache,
             timeout=config.timeout,
             cooldown=config.cooldown,
         )
 
+        self.df = pd.read_csv(cache, header=1)
+
     def build(self, config: Config):
-        df = pd.read_csv(self.cache, header=1)
         airline = self.airline(name="Lilyflower Airlines", link=get_wiki_link("Lilyflower Airlines"))
 
-        d = list(zip(df["Flight"], df["IATA"], df["Gate"], df["IATA.1"], df["Gate.1"], strict=False))
+        d = list(zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], strict=False))
 
         for flight, a1, g1, a2, g2 in d:
             if not a1 or str(a1) == "nan":
@@ -593,8 +592,8 @@ class Caelus(AirSource):
                     airline=airline,
                     flight_code1=match["code"],
                     flight_code2=match["code"],
-                    airport1_name=match["a1"],
-                    airport2_name=match["a2"],
+                    airport1_code=match["a1"],
+                    airport2_code=match["a2"],
                 )
 
         table = next(a for a in self.html3("table") if "Operated by" in str(a))

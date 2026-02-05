@@ -70,8 +70,10 @@ class Node:
         if self == other:
             warn_fn(f"{self} tried to merge with itself")
             return
+        self_str = str(self)
+        other_str = str(other)
         for attr in self.COLUMNS:
-            attr._merge(self, other, warn_fn)
+            attr._merge(self, other, self_str, other_str, warn_fn)
 
         self._merge(other)
 

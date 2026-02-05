@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import warnings
 from typing import TYPE_CHECKING, LiteralString
 
 if TYPE_CHECKING:
@@ -101,7 +102,9 @@ class _Column[T]:
             ).fetchall()
         }
 
-    def _merge(self, instance1: Node, instance2: Node, warn_fn: Callable[[str], object]):
+    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+        str_instance1 = str_instance1 or str(instance1)
+        str_instance2 = str_instance2 or str(instance2)
         self_v = self.__get__(instance1, type(instance1))
         other_v = self.__get__(instance2, type(instance2))
         if not self.sourced:
@@ -112,14 +115,14 @@ class _Column[T]:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Former has higher priority of {self_sources} than latter which has {other_sources}"
                         )
                 else:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (self_sources, other_v))
@@ -139,7 +142,7 @@ class _Column[T]:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Former has higher priority of {self_sources} than latter which has {other_sources}"
                         )
                     self.__set__(instance2, None)
@@ -147,7 +150,7 @@ class _Column[T]:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Column {self.name} in table {self.table} is different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (other_sources, other_v))
@@ -185,7 +188,9 @@ class _CoordinatesColumn:
             ).fetchall()
         }
 
-    def _merge(self, instance1: Node, instance2: Node, warn_fn: Callable[[str], object]):
+    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+        str_instance1 = str_instance1 or str(instance1)
+        str_instance2 = str_instance2 or str(instance2)
         self_v = self.__get__(instance1, type(instance1))
         other_v = self.__get__(instance2, type(instance2))
         match (self_v, other_v):
@@ -203,7 +208,7 @@ class _CoordinatesColumn:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Columns x/y in table NodeLocation are different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Former has higher priority of {self_sources} than latter which has {other_sources}"
                         )
                     self.__set__(instance2, None)
@@ -211,7 +216,7 @@ class _CoordinatesColumn:
                     if self_sources != other_sources:
                         warn_fn(
                             f"Columns x, y in table NodeLocation are different "
-                            f"between {instance1} ({self_v}) and {instance2} ({other_v}). "
+                            f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
                             f"Latter has higher priority of {other_sources} than former which has {self_sources}"
                         )
                     self.__set__(instance1, (other_sources, other_v))
@@ -233,8 +238,8 @@ class _FKColumn[T: Node | None]:
     def __set__(self, instance: Node, value: T | tuple[int, T]):
         _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
 
-    def _merge(self, instance1: Node, instance2: Node, warn_fn: Callable[[str], object]):
-        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, warn_fn)
+    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
 
 
 class _SetAttr[T]:
@@ -262,6 +267,8 @@ class _SetAttr[T]:
         srcs, values = values if isinstance(values, tuple) else (instance.sources, values)
         if self.formatter is not None:
             values = {self.formatter(value) for value in values}
+        source_params = "?, " * (len(srcs) - 1) + "?"
+
         cur = instance.conn.cursor()
         if not self.sourced:
             cur.execute(f"DELETE FROM {self.table} WHERE i = :i", dict(i=instance.i))
@@ -273,8 +280,8 @@ class _SetAttr[T]:
         existing_values = {
             v
             for (v,) in cur.execute(
-                f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = :i AND source IN :sources",
-                dict(i=instance.i, sources=srcs),
+                f"SELECT {self.table_column} FROM {self.table + 'Source'} WHERE i = ? AND source IN ({source_params})",
+                (instance.i, *srcs),
             ).fetchall()
         }
         for new_value in values - existing_values:
@@ -285,13 +292,13 @@ class _SetAttr[T]:
             )
             cur.executemany(
                 f"INSERT INTO {self.table + 'Source'} (i, {self.table_column}, source) VALUES (:i, :value, :source) "
-                f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
+                f"ON CONFLICT (i, {self.table_column}, source) DO NOTHING",
                 [dict(i=instance.i, value=new_value, source=src) for src in srcs],
             )
         for old_value in existing_values - values:
             cur.execute(
-                f"DELETE FROM {self.table + 'Source'} WHERE i = :i AND {self.table_column} = :value AND source IN :sources",
-                dict(i=instance.i, value=old_value, sources=srcs),
+                f"DELETE FROM {self.table + 'Source'} WHERE i = ? AND {self.table_column} = ? AND source IN ({source_params})",
+                (instance.i, old_value, *srcs),
             )
             if (
                 cur.execute(
@@ -305,7 +312,7 @@ class _SetAttr[T]:
                     dict(i=instance.i, value=old_value),
                 )
 
-    def _merge(self, instance1: Node, instance2: Node, _=None):
+    def _merge(self, instance1: Node, instance2: Node, *_, **__):
         cur = instance1.conn.cursor()
         cur.execute(
             f"INSERT INTO {self.table} (i, {self.table_column}) "
@@ -315,7 +322,7 @@ class _SetAttr[T]:
         )
         if self.sourced:
             cur.execute(
-                f"UPDATE OR FAIL {self.table + 'Source'} SET i = :i1 WHERE i = :i2",
+                f"UPDATE OR REPLACE {self.table + 'Source'} SET i = :i1 WHERE i = :i2",
                 dict(i1=instance1.i, i2=instance2.i),
             )
         cur.execute(f"DELETE FROM {self.table} WHERE i = :i2", dict(i1=instance1.i, i2=instance2.i))

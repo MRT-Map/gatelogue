@@ -76,7 +76,8 @@ class GatelogueData:
             name: i
             for name, i in self.gd.conn.execute(
                 "SELECT name, AirAirport.i FROM AirAirport "
-                "INNER JOIN AirAirportNames on AirAirport.i = AirAirportNames.i"
+                "INNER JOIN AirAirportNames on AirAirport.i = AirAirportNames.i "
+                "WHERE code != ''"
             ).fetchall()
         }
 
@@ -89,14 +90,16 @@ class GatelogueData:
                 iter(difflib.get_close_matches(next(iter(n.names)), name2i.keys(), 1, 0.0)),
                 None,
             )
-            if best_name is not None:
-                equiv = gt.AirAirport(self.gd.conn, name2i[best_name])
-                rich.print(
-                    RESULT
-                    + f"AirAirport of name `{n.names}` found code `{equiv.code}` with similar name `{equiv.names}`"
-                )
-                n.code = equiv.code
-                equiv.merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
+            if best_name is None:
+                rich.print(ERROR + f"AirAirport of name(s) {n.names} cannot find code")
+                continue
+            equiv = gt.AirAirport(self.gd.conn, name2i[best_name])
+            rich.print(
+                RESULT
+                + f"AirAirport of name(s) {n.names} found code `{equiv.code}` with similar name(s) {equiv.names}"
+            )
+            n.code = equiv.code
+            equiv.merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
 
     def _update_flight_mode(self):
         for n in track(

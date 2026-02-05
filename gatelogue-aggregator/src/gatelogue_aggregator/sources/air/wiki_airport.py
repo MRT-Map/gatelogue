@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, override, ClassVar
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.source import AirSource
-from gatelogue_aggregator.sources.air.wiki_extractors.airport import _EXTRACTORS
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.utils import search_all
 
@@ -15,9 +14,12 @@ if TYPE_CHECKING:
 
     from gatelogue_aggregator.config import Config
 
+class _NameDescriptor:
+    def __get__(self, instance: None, owner: type[RegexWikiAirport]):
+        return f"MRT Wiki (Airport {owner.airport_code})"
 
 class RegexWikiAirport(AirSource):
-    # priority = 3
+    name = _NameDescriptor()
     text: str
     airport_code: ClassVar[str]
     page_name: ClassVar[str]
@@ -27,7 +29,7 @@ class RegexWikiAirport(AirSource):
         self.text = get_wiki_text(self.page_name, config)
 
     def build(self, config: Config):
-        airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name))
+        airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name), names={self.page_name})
         for match in search_all(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             gate_code = self.process_gate_code(matches["code"])
