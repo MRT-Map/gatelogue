@@ -217,7 +217,7 @@ class SeaStop(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT SeaConnection.i "
                 "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
-                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from"',
+                'INNER JOIN SeaConnection ON A.i = SeaConnection."from"',
                 dict(i=self.i),
             ).fetchall()
         )
@@ -230,7 +230,7 @@ class SeaStop(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT SeaConnection.i "
                 "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
-                'LEFT JOIN SeaConnection ON A.i = SeaConnection."to"',
+                'INNER JOIN SeaConnection ON A.i = SeaConnection."to"',
                 dict(i=self.i),
             ).fetchall()
         )

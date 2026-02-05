@@ -217,7 +217,7 @@ class BusStop(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT BusConnection.i "
                 "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
-                'LEFT JOIN BusConnection ON A.i = BusConnection."from"',
+                'INNER JOIN BusConnection ON A.i = BusConnection."from"',
                 dict(i=self.i),
             ).fetchall()
         )
@@ -230,7 +230,7 @@ class BusStop(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT BusConnection.i "
                 "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
-                'LEFT JOIN BusConnection ON A.i = BusConnection."to"',
+                'INNER JOIN BusConnection ON A.i = BusConnection."to"',
                 dict(i=self.i),
             ).fetchall()
         )

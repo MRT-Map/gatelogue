@@ -188,14 +188,26 @@ class GatelogueData:
         while len(nodes) != 0:
             if len(queue) == 0:
                 components.append(set())
-                n = next(iter(nodes))
+                ni = next(iter(nodes))
             else:
-                n = next(iter(queue))
-                queue.remove(n)
-            components[-1].add(n)
-            processed.add(n)
-            nodes.remove(n)
-            queue |= {a for a in gt.LocatedNode(self.gd.conn, n)._nodes_in_proximity}
+                ni = next(iter(queue))
+                queue.remove(ni)
+            components[-1].add(ni)
+            processed.add(ni)
+            nodes.remove(ni)
+
+            n = gt.LocatedNode.auto_type(self.gd.conn, ni)
+            queue |= set(n._nodes_in_proximity)
+            if isinstance(n, gt.AirAirport):
+                gates = list(n.gates)
+                queue |= set(f.to.i for g in gates for f in g.flights_from_here) & nodes
+                queue |= set(f.from_.i for g in gates for f in g.flights_to_here) & nodes
+            elif isinstance(n, (gt.BusStop, gt.SeaStop)):
+                queue |= set(c.to.stop.i for c in n.connections_from_here) & nodes
+                queue |= set(c.from_.stop.i for c in n.connections_to_here) & nodes
+            elif isinstance(n, gt.RailStation):
+                queue |= set(c.to.station.i for c in n.connections_from_here) & nodes
+                queue |= set(c.from_.station.i for c in n.connections_to_here) & nodes
             queue -= processed
         components.remove(max(components, key=len))
         return components
@@ -235,10 +247,10 @@ class GatelogueData:
             tx, ty = this_.coordinates
             return (nx - tx) ** 2 + (ny - ty) ** 2
 
+        prev_length: int | None = None
         for pass_ in range(1, 10):
             isolated = self._isolated_nodes({n.i for n in nodes})
-            if len(isolated) == 0:
-                break
+
             for component in track(
                 isolated,
                 INFO2,
@@ -264,6 +276,11 @@ class GatelogueData:
                         node2=nearest,
                         distance=dist_sq_fn(nearest, this, component) ** 0.5,
                     )
+
+            length = sum(len(a) for a in isolated)
+            if length == prev_length:
+                break
+            prev_length = length
 
     def _shared_facility(self):
         class Yaml(msgspec.Struct):

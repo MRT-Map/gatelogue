@@ -217,7 +217,7 @@ class RailStation(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT RailConnection.i "
                 "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
-                'LEFT JOIN RailConnection ON A.i = RailConnection."from"',
+                'INNER JOIN RailConnection ON A.i = RailConnection."from"',
                 dict(i=self.i),
             ).fetchall()
         )
@@ -230,7 +230,7 @@ class RailStation(LocatedNode):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT RailConnection.i "
                 "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
-                'LEFT JOIN RailConnection ON A.i = RailConnection."to"',
+                'INNER JOIN RailConnection ON A.i = RailConnection."to"',
                 dict(i=self.i),
             ).fetchall()
         )

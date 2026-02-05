@@ -18,7 +18,7 @@ class Node:
 
     def __init__(self, conn: sqlite3.Connection, i: int):
         self.conn = conn
-        assert isinstance(i, int)
+        assert isinstance(i, int), i
         self.i = i
         """The ID of the node"""
 
