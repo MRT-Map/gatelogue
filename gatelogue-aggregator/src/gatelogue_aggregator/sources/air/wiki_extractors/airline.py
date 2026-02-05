@@ -466,7 +466,7 @@ class Lilyflower(AirSource):
                 flight_code1=str(int(flight)),
                 flight_code2=str(int(flight)),
                 airport1_code=a1,
-                airport2_code=a1,
+                airport2_code=a2,
                 gate1_code=g1,
                 gate2_code=g2,
             )
