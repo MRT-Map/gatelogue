@@ -1,14 +1,18 @@
 from typing import Literal
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import all_warps
 from gatelogue_aggregator.logging import INFO3, track
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.spawn_warp import SpawnWarp, SpawnWarpSource
+from gatelogue_aggregator.source import Source
+import gatelogue_types as gt
 
 
-class SpawnWarps(SpawnWarpSource):
+class SpawnWarps(Source):
     name = "Gatelogue"
-    priority = 0
+    warps: list[dict]
+
+    def prepare(self, config: Config):
+        self.warps = list(all_warps(config))
 
     def build(self, config: Config):
         search_dict: dict[Literal["premier", "terminus", "traincarts", "misc"], set] = {
@@ -126,7 +130,7 @@ class SpawnWarps(SpawnWarpSource):
             },
         }
 
-        for warp in track(all_warps(config), INFO3, description="Searching all warps for spawn warps", total=35000):
+        for warp in track(self.warps, INFO3, description="Searching all warps for spawn warps", total=len(self.warps)):
             for ty, search_list in search_dict.items():
                 for search_warp in search_list:
                     if isinstance(search_warp, tuple):
@@ -137,13 +141,15 @@ class SpawnWarps(SpawnWarpSource):
                     if search_warp != warp["name"]:
                         continue
 
-                    SpawnWarp.new(
-                        self,
+                    gt.SpawnWarp.create(
+                        self.conn, self.priority,
                         name=name,
                         warp_type=ty,
                         world="New" if warp["worldUUID"] == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",
                         coordinates=(warp["x"], warp["z"]),
                     )
 
-        SpawnWarp.new(self, name="Old World", warp_type="portal", world="Old", coordinates=(0, 0))
-        SpawnWarp.new(self, name="Space World", warp_type="portal", world="Space", coordinates=(0, 0))
+        gt.SpawnWarp.create(
+            self.conn, self.priority, name="Old World", warp_type="portal", world="Old", coordinates=(0, 0))
+        gt.SpawnWarp.create(
+            self.conn, self.priority, name="Space World", warp_type="portal", world="Space", coordinates=(0, 0))

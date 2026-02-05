@@ -11,5 +11,7 @@ def SOURCES() -> list[type[Source]]:  # noqa: N802
     from gatelogue_aggregator.sources.bus import SOURCES as SOURCES_BUS
     from gatelogue_aggregator.sources.rail import SOURCES as SOURCES_RAIL
     from gatelogue_aggregator.sources.sea import SOURCES as SOURCES_SEA
+    from gatelogue_aggregator.sources.spawn_warp import SpawnWarps
+    from gatelogue_aggregator.sources.town import TownList
 
-    return [*SOURCES_AIR(), *SOURCES_BUS(), *SOURCES_SEA(), *SOURCES_RAIL(),]
+    return [*SOURCES_AIR(), *SOURCES_BUS(), *SOURCES_SEA(), *SOURCES_RAIL(), SpawnWarps, TownList]

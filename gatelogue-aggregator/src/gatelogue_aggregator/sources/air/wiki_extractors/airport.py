@@ -319,7 +319,7 @@ class LFA(AirSource):
         self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
-        airport = self.airport(code="LAR", names={"Larkspur Frankford Airfield"}, link=get_wiki_link("Larkspur Frankford Airfield"))
+        airport = self.airport(code="LFA", names={"Larkspur Frankford Airfield"}, link=get_wiki_link("Larkspur Frankford Airfield"))
 
         d = list(zip(self.df["Gate"], self.df["Size"], self.df["Airline"], self.df["Status"], strict=False))
 

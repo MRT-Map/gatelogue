@@ -1,15 +1,16 @@
 import pandas as pd
 
+from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_url
-from gatelogue_aggregator.types.config import Config
-from gatelogue_aggregator.types.node.town import Town, TownSource
+from gatelogue_aggregator.source import Source
+import gatelogue_types as gt
 
 
-class TownList(TownSource):
+class TownList(Source):
     name = "MRT Town List"
-    priority = 0
+    df: pd.DataFrame
 
-    def build(self, config: Config):
+    def prepare(self, config: Config):
         cache1 = config.cache_dir / "town-list1"
         cache2 = config.cache_dir / "town-list2"
 
@@ -31,12 +32,14 @@ class TownList(TownSource):
         df2 = pd.read_csv(cache2)
         df2["World"] = "Old"
         df2["Town Rank"] = "Unranked"
+        self.df = pd.concat((df1, df2))
 
-        for _, row in pd.concat((df1, df2)).iterrows():
+    def build(self, config: Config):
+        for _, row in self.df.iterrows():
             if str(row["Town Name"]) == "nan":
                 continue
-            Town.new(
-                self,
+            gt.Town.create(
+                self.conn, self.priority,
                 name=row["Town Name"],
                 rank=row["Town Rank"]
                 if row["Town Name"] != "Arisa"
@@ -51,8 +54,8 @@ class TownList(TownSource):
                 coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
             )
 
-        Town.new(
-            self,
+        gt.Town.create(
+            self.conn, self.priority,
             name="Central City",
             rank="Community",
             mayor="MRT Staff",
