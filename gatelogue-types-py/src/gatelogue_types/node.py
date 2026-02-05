@@ -71,7 +71,6 @@ class Node:
             warn_fn(f"{self} tried to merge with itself")
             return
         for attr in self.COLUMNS:
-            print(attr.table_column if isinstance(attr, _SetAttr) else attr.name, self.i, other.i)
             attr._merge(self, other, warn_fn)
 
         self._merge(other)

@@ -32,6 +32,8 @@ def report(node: gt.Node, prefix: str | None = None, ignore: Container[type[gt.N
         string += f"has {gates} gates"
         if gates == 0 and gt.AirGate not in ignore:
             colour = ERROR
+    elif isinstance(node, gt.AirFlight):
+        string += f"goes between {node.from_} and {node.to}"
     elif isinstance(node, gt.BusCompany):
         lines = len(list(node.lines))
         stops = len(list(node.stops))

@@ -298,14 +298,13 @@ class AirFlight(Node):
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn) -> set[int] | None:
         also_merged = set()
-        if self.from_.code is None or other.from_.code is None:
+        if (self.from_.code is None or other.from_.code is None) and self.from_ != other.from_:
             also_merged.add(other.from_.i)
             self.from_.merge(other.from_, warn_fn=warn_fn)
-        if self.to.code is None or other.to.code is None:
+        if (self.to.code is None or other.to.code is None) and self.to != other.to:
             also_merged.add(other.to.i)
             self.to.merge(other.to, warn_fn=warn_fn)
         super().merge(other, warn_fn)
-        print(also_merged)
         return also_merged
 
     def _merge(self, other: Self):

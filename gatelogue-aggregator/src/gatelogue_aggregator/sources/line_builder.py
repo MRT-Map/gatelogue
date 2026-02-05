@@ -151,8 +151,8 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
             self.cursor += 1
             if (
                 self.cursor >= len(self.station_list)
-                or self.station_list[self.cursor - 1].name == until
-                or self.station_list[self.cursor].name == until_before
+                or (until is not None and self.station_list[self.cursor - 1].name == until)
+                or (until_before is not None and self.station_list[self.cursor].name == until_before)
             ):
                 break
 

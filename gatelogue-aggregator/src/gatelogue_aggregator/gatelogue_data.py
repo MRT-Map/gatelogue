@@ -27,8 +27,8 @@ class GatelogueData:
 
         prev_length: int | None = None
         for pass_ in range(1, 10):
-            self._merge_equivalent_nodes(pass_)
             self._merge_airports_with_unknown_code(pass_)
+            self._merge_equivalent_nodes(pass_)
             self._merge_gates_without_code()
 
             if len(self.gd) == prev_length:
@@ -76,7 +76,7 @@ class GatelogueData:
             name: i
             for name, i in self.gd.conn.execute(
                 "SELECT name, AirAirport.i FROM AirAirport "
-                "INNER JOIN AirAirportNames on AirAirport.i = AirAirport.i = AirAirportNames.i"
+                "INNER JOIN AirAirportNames on AirAirport.i = AirAirportNames.i"
             ).fetchall()
         }
 
