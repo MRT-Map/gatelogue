@@ -12,7 +12,7 @@ import rich
 from gatelogue_types import node
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, INFO3, RESULT, track
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
 from gatelogue_aggregator.report import report
 from gatelogue_aggregator.source import Source
 
@@ -57,10 +57,7 @@ class GatelogueData:
     def _merge_equivalent_nodes(self, pass_: int):
         merged: set[int] = set()
         for n in track(
-            self.gd.nodes(),
-            INFO2,
-            description=f"Merging equivalent nodes (pass {pass_})",
-            total=len(self.gd)
+            self.gd.nodes(), INFO2, description=f"Merging equivalent nodes (pass {pass_})", total=len(self.gd)
         ):
             if n.i in merged:
                 continue
@@ -82,7 +79,10 @@ class GatelogueData:
         }
 
         for n in track(
-            (gt.AirAirport(self.gd.conn, i) for (i,) in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code == ''")),
+            (
+                gt.AirAirport(self.gd.conn, i)
+                for (i,) in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code == ''")
+            ),
             INFO2,
             description=f"Merging airports (pass {pass_})",
         ):
@@ -95,15 +95,17 @@ class GatelogueData:
                 continue
             equiv = gt.AirAirport(self.gd.conn, name2i[best_name])
             rich.print(
-                RESULT
-                + f"AirAirport of name(s) {n.names} found code `{equiv.code}` with similar name(s) {equiv.names}"
+                RESULT + f"AirAirport of name(s) {n.names} found code `{equiv.code}` with similar name(s) {equiv.names}"
             )
             n.code = equiv.code
             equiv.merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
 
     def _update_flight_mode(self):
         for n in track(
-            (gt.AirFlight(self.gd.conn, i) for (i,) in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")),
+            (
+                gt.AirFlight(self.gd.conn, i)
+                for (i,) in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")
+            ),
             INFO2,
             description="Updating AirFlight `mode` field",
         ):

@@ -8,7 +8,7 @@ import gatelogue_types as gt
 import msgspec
 
 from gatelogue_aggregator.source import BusSource, RailSource, SeaSource, Source
-from gatelogue_aggregator.sources.line_builder import BusLineBuilder, RailLineBuilder, SeaLineBuilder, DirectionLabel
+from gatelogue_aggregator.sources.line_builder import BusLineBuilder, DirectionLabel, RailLineBuilder, SeaLineBuilder
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -107,7 +107,7 @@ class Yaml2Source(Source):
                         assert direction in ("forwards", "backwards")
                         one_way[name] = direction
                     if (forward_code := matches["forward_code"]) is not None and (
-                            backward_code := matches["backward_code"]
+                        backward_code := matches["backward_code"]
                     ) is not None:
                         forward_code, backward_code = forward_code.strip(), backward_code.strip()
                         forward_code = None if forward_code == "-" else forward_code
@@ -167,12 +167,12 @@ class Yaml2Source(Source):
         backward_direction: str | None
 
     def routing(
-            self,
-            line_node: gt.RailLine | gt.BusLine | gt.SeaLine,
-            builder: RailLineBuilder | BusLineBuilder | SeaLineBuilder,
-            line_yaml: YamlLine,
-            route_yaml: YamlRoute,
-            cp: _ConnectParams,
+        self,
+        line_node: gt.RailLine | gt.BusLine | gt.SeaLine,
+        builder: RailLineBuilder | BusLineBuilder | SeaLineBuilder,
+        line_yaml: YamlLine,
+        route_yaml: YamlRoute,
+        cp: _ConnectParams,
     ):
         builder.connect(**cp)
 

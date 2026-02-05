@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import warnings
-from typing import TYPE_CHECKING, LiteralString, Literal
+from typing import TYPE_CHECKING, Literal, LiteralString
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -53,12 +53,29 @@ def _format_code[T: str](s: T | None) -> T | None:
 
     return res
 
-def _warn_clash(warn_fn: Callable[[str], object], column: str, table: str, str_instance1: str, self_v, str_instance2: str, other_v, self_sources: set[int], other_sources: set[int], priority: Literal["former", "latter"]):
+
+def _warn_clash(
+    warn_fn: Callable[[str], object],
+    column: str,
+    table: str,
+    str_instance1: str,
+    self_v,
+    str_instance2: str,
+    other_v,
+    self_sources: set[int],
+    other_sources: set[int],
+    priority: Literal["former", "latter"],
+):
     warn_fn(
         f"{column} in table {table} is different "
-        f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). " +
-        (f"Former has higher priority of {self_sources} than latter which has {other_sources}" if priority == "former" else f"Latter has higher priority of {other_sources} than former which has {self_sources}")
+        f"between {str_instance1} ({self_v}) and {str_instance2} ({other_v}). "
+        + (
+            f"Former has higher priority of {self_sources} than latter which has {other_sources}"
+            if priority == "former"
+            else f"Latter has higher priority of {other_sources} than former which has {self_sources}"
+        )
     )
+
 
 class _Column[T]:
     def __init__(
@@ -108,7 +125,14 @@ class _Column[T]:
             ).fetchall()
         }
 
-    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+    def _merge(
+        self,
+        instance1: Node,
+        instance2: Node,
+        str_instance1: str | None = None,
+        str_instance2: str | None = None,
+        warn_fn: Callable[[str], object] = warnings.warn,
+    ):
         str_instance1 = str_instance1 or str(instance1)
         str_instance2 = str_instance2 or str(instance2)
         self_v = self.__get__(instance1, type(instance1))
@@ -119,10 +143,32 @@ class _Column[T]:
                 other_sources = instance2.sources
                 if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Column " + self.name, self.table, str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "former")
+                        _warn_clash(
+                            warn_fn,
+                            "Column " + self.name,
+                            self.table,
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "former",
+                        )
                 else:
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Column " + self.name, self.table, str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "latter")
+                        _warn_clash(
+                            warn_fn,
+                            "Column " + self.name,
+                            self.table,
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "latter",
+                        )
                     self.__set__(instance1, (self_sources, other_v))
             return
         match (self_v, other_v):
@@ -138,11 +184,33 @@ class _Column[T]:
                 other_sources = self.sources(instance2)
                 if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Column " + self.name, self.table, str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "former")
+                        _warn_clash(
+                            warn_fn,
+                            "Column " + self.name,
+                            self.table,
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "former",
+                        )
                     self.__set__(instance2, None)
                 else:
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Column " + self.name, self.table, str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "latter")
+                        _warn_clash(
+                            warn_fn,
+                            "Column " + self.name,
+                            self.table,
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "latter",
+                        )
                     self.__set__(instance1, (other_sources, other_v))
 
 
@@ -178,7 +246,14 @@ class _CoordinatesColumn:
             ).fetchall()
         }
 
-    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+    def _merge(
+        self,
+        instance1: Node,
+        instance2: Node,
+        str_instance1: str | None = None,
+        str_instance2: str | None = None,
+        warn_fn: Callable[[str], object] = warnings.warn,
+    ):
         str_instance1 = str_instance1 or str(instance1)
         str_instance2 = str_instance2 or str(instance2)
         self_v = self.__get__(instance1, type(instance1))
@@ -196,11 +271,33 @@ class _CoordinatesColumn:
                 other_sources = self.sources(instance2)
                 if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Columns x/y", "NodeLocation", str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "former")
+                        _warn_clash(
+                            warn_fn,
+                            "Columns x/y",
+                            "NodeLocation",
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "former",
+                        )
                     self.__set__(instance2, None)
                 else:
                     if self_sources != other_sources:
-                        _warn_clash(warn_fn, "Columns x/y", "NodeLocation", str_instance1, self_v, str_instance2, other_v, self_sources, other_sources, "latter")
+                        _warn_clash(
+                            warn_fn,
+                            "Columns x/y",
+                            "NodeLocation",
+                            str_instance1,
+                            self_v,
+                            str_instance2,
+                            other_v,
+                            self_sources,
+                            other_sources,
+                            "latter",
+                        )
                     self.__set__(instance1, (other_sources, other_v))
 
 
@@ -220,7 +317,14 @@ class _FKColumn[T: Node | None]:
     def __set__(self, instance: Node, value: T | tuple[int, T]):
         _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
 
-    def _merge(self, instance1: Node, instance2: Node, str_instance1: str | None = None, str_instance2: str | None = None, warn_fn: Callable[[str], object] = warnings.warn):
+    def _merge(
+        self,
+        instance1: Node,
+        instance2: Node,
+        str_instance1: str | None = None,
+        str_instance2: str | None = None,
+        warn_fn: Callable[[str], object] = warnings.warn,
+    ):
         _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
 
 

@@ -1,18 +1,17 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING
 
 import bs4
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import AirSource
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
+from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
 
     from gatelogue_aggregator.config import Config
 
@@ -27,6 +26,7 @@ class PCE(RegexWikiAirport):
         r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*?|)\|\|(?:(?!Service).)*Service"
     )
 
+
 @AIRPORT_SOURCES.append
 class MWT(RegexWikiAirport):
     airport_code = "MWT"
@@ -35,7 +35,15 @@ class MWT(RegexWikiAirport):
 
     @staticmethod
     def size(matches: dict[str, str]) -> str | None:
-        return "XS" if (code := matches["code"].removesuffix("A")).startswith("P") else "S" if int(code) <= 60 else "M" if int(code) <= 82 else "H"
+        return (
+            "XS"
+            if (code := matches["code"].removesuffix("A")).startswith("P")
+            else "S"
+            if int(code) <= 60
+            else "M"
+            if int(code) <= 82
+            else "H"
+        )
 
 
 @AIRPORT_SOURCES.append
@@ -48,6 +56,7 @@ class KEK(RegexWikiAirport):
     def size(matches: dict[str, str]) -> str | None:
         return "XS" if int(matches["code"]) > 100 else "SP"
 
+
 @AIRPORT_SOURCES.append
 class ABG(RegexWikiAirport):
     airport_code = "ABG"
@@ -55,6 +64,7 @@ class ABG(RegexWikiAirport):
     regex = re.compile(
         r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)(?:\|\||\n)",
     )
+
 
 @AIRPORT_SOURCES.append
 class OPA(RegexWikiAirport):
@@ -64,6 +74,7 @@ class OPA(RegexWikiAirport):
         r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
     )
 
+
 @AIRPORT_SOURCES.append
 class CHB(RegexWikiAirport):
     airport_code = "CHB"
@@ -71,6 +82,7 @@ class CHB(RegexWikiAirport):
     regex = re.compile(
         r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
     )
+
 
 @AIRPORT_SOURCES.append
 class CBZ(RegexWikiAirport):
@@ -81,6 +93,7 @@ class CBZ(RegexWikiAirport):
     @staticmethod
     def size(_matches: dict[str, str]) -> str | None:
         return "S"
+
 
 @AIRPORT_SOURCES.append
 class CBI(RegexWikiAirport):
@@ -98,7 +111,11 @@ class DJE(AirSource):
         self.html = get_wiki_html("Deadbush Johnston-Euphorial Airport", config)
 
     def build(self, config: Config):
-        airport = self.airport(code="DJE", names={"Deadbush Johnston-Euphorial Airport"}, link=get_wiki_link("Deadbush Johnston-Euphorial Airport"))
+        airport = self.airport(
+            code="DJE",
+            names={"Deadbush Johnston-Euphorial Airport"},
+            link=get_wiki_link("Deadbush Johnston-Euphorial Airport"),
+        )
 
         for table in self.html("table"):
             if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
@@ -110,7 +127,12 @@ class DJE(AirSource):
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
                     airline = airline if airline is not None and airline.strip() != "" else None
-                    self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
+                    self.gate(
+                        code=code,
+                        airport=airport,
+                        airline=None if airline is None else self.airline(name=airline),
+                        size=size,
+                    )
             elif caption == "Terminal 2":
                 concourse = ""
                 for tr in table("tr")[1:]:
@@ -122,7 +144,13 @@ class DJE(AirSource):
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
                     airline = airline if airline is not None and airline.strip() != "" else None
-                    self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
+                    self.gate(
+                        code=code,
+                        airport=airport,
+                        airline=None if airline is None else self.airline(name=airline),
+                        size=size,
+                    )
+
 
 @AIRPORT_SOURCES.append
 class VDA(RegexWikiAirport):
@@ -130,11 +158,13 @@ class VDA(RegexWikiAirport):
     page_name = "Deadbush Valletta Desert Airport"
     regex = re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)")
 
+
 @AIRPORT_SOURCES.append
 class WMI(RegexWikiAirport):
     airport_code = "WMI"
     page_name = "West Mesa International Airport"
     regex = re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
 
 @AIRPORT_SOURCES.append
 class DFM(RegexWikiAirport):
@@ -154,7 +184,9 @@ class DBI(AirSource):
         self.html = get_wiki_html("Deadbush International Airport", config)
 
     def build(self, config: Config):
-        airport = self.airport(code="DBI", names={"Deadbush International Airport"}, link=get_wiki_link("Deadbush International Airport"))
+        airport = self.airport(
+            code="DBI", names={"Deadbush International Airport"}, link=get_wiki_link("Deadbush International Airport")
+        )
 
         for table in self.html("table"):
             if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
@@ -172,7 +204,13 @@ class DBI(AirSource):
                 size = tr("td")[1].string
                 airline = tr("td")[2]
                 airline = airline.a.string if airline.a is not None else airline.string
-                self.gate(code=code, airport=airport, airline=None if airline is None else self.airline(name=airline), size=size)
+                self.gate(
+                    code=code,
+                    airport=airport,
+                    airline=None if airline is None else self.airline(name=airline),
+                    size=size,
+                )
+
 
 @AIRPORT_SOURCES.append
 class GSM(RegexWikiAirport):
@@ -186,6 +224,7 @@ class GSM(RegexWikiAirport):
     def size(matches: dict[str, str]) -> str | None:
         return "H" if matches["code"].startswith("H") else "S"
 
+
 @AIRPORT_SOURCES.append
 class VFW(RegexWikiAirport):
     airport_code = "VFW"
@@ -193,6 +232,7 @@ class VFW(RegexWikiAirport):
     regex = re.compile(
         r"\|-\n\|(?P<code>\w*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*|(?P<airline2>\S[^|]*)|[^|]*?)\n\|"
     )
+
 
 @AIRPORT_SOURCES.append
 class SDZ(RegexWikiAirport):
@@ -206,6 +246,7 @@ class SDZ(RegexWikiAirport):
     def size(_matches: dict[str, str]) -> str | None:
         return "S"
 
+
 @AIRPORT_SOURCES.append
 class CIA(RegexWikiAirport):
     airport_code = "CIA"
@@ -214,6 +255,7 @@ class CIA(RegexWikiAirport):
         r"\|\s*(?P<code>.*?)\s*\|\|\s*(?:\[\[(?P<airline>[^|]*?)]]|(?P<airline2>[^|]*?))\s*\|\|",
     )
 
+
 @AIRPORT_SOURCES.append
 class ERZ(RegexWikiAirport):
     airport_code = "ERZ"
@@ -221,6 +263,7 @@ class ERZ(RegexWikiAirport):
     regex = re.compile(
         r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
+
 
 @AIRPORT_SOURCES.append
 class ERZ2(RegexWikiAirport):
@@ -234,6 +277,7 @@ class ERZ2(RegexWikiAirport):
     def size(_matches: dict[str, str]) -> str | None:
         return "SP"
 
+
 @AIRPORT_SOURCES.append
 class ATC(RegexWikiAirport):
     airport_code = "ATC"
@@ -241,6 +285,7 @@ class ATC(RegexWikiAirport):
     regex = re.compile(
         r"\|-\n\|\s*(?P<code>[^|]*?)\s*\|\|[^|]*?\|\|\s*(?:\[\[(?P<airline>[^|]*?)(?:\|[^]]*?|)]][^|]*?|(?P<airline2>[^-|]*?)|-*?)\s*\|\|",
     )
+
 
 @AIRPORT_SOURCES.append
 class AIX(AirSource):
@@ -260,7 +305,9 @@ class AIX(AirSource):
         self.df = pd.read_csv(cache, header=1)
 
     def build(self, config: Config):
-        airport = self.airport(code="AIX", names={"Aurora International Airport"}, link=get_wiki_link("Aurora International Airport"))
+        airport = self.airport(
+            code="AIX", names={"Aurora International Airport"}, link=get_wiki_link("Aurora International Airport")
+        )
 
         d = list(zip(self.df["Gate ID"], self.df["Gate Size"], self.df["Company"], strict=False))
 
@@ -271,7 +318,12 @@ class AIX(AirSource):
             else:
                 gate_size = str(gate_size)[0]  # noqa: PLW2901
                 old_gate_size = gate_size
-            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "Unavailable" else None, size=gate_size)
+            self.gate(
+                code=gate_code,
+                airport=airport,
+                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "Unavailable" else None,
+                size=gate_size,
+            )
 
 
 @AIRPORT_SOURCES.append
@@ -292,13 +344,21 @@ class LAR(AirSource):
         self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
-        airport = self.airport(code="LAR", names={"Larkspur Lilyflower International Airport"}, link=get_wiki_link("Larkspur Lilyflower International Airport"))
+        airport = self.airport(
+            code="LAR",
+            names={"Larkspur Lilyflower International Airport"},
+            link=get_wiki_link("Larkspur Lilyflower International Airport"),
+        )
 
         d = list(zip(self.df["Gate"], self.df["Size"], self.df["Airline"], self.df["Status"], strict=False))
 
         for gate_code, size, airline, _status in d:
-            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None, size=size)
-
+            self.gate(
+                code=gate_code,
+                airport=airport,
+                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None,
+                size=size,
+            )
 
 
 @AIRPORT_SOURCES.append
@@ -319,9 +379,16 @@ class LFA(AirSource):
         self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
-        airport = self.airport(code="LFA", names={"Larkspur Frankford Airfield"}, link=get_wiki_link("Larkspur Frankford Airfield"))
+        airport = self.airport(
+            code="LFA", names={"Larkspur Frankford Airfield"}, link=get_wiki_link("Larkspur Frankford Airfield")
+        )
 
         d = list(zip(self.df["Gate"], self.df["Size"], self.df["Airline"], self.df["Status"], strict=False))
 
         for gate_code, size, airline, _status in d:
-            self.gate(code=gate_code, airport=airport, airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None, size=size)
+            self.gate(
+                code=gate_code,
+                airport=airport,
+                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None,
+                size=size,
+            )

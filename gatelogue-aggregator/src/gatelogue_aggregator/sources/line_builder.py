@@ -16,7 +16,9 @@ if TYPE_CHECKING:
 
 type OneWay = Literal["forwards", "backwards"]
 
-type DirectionLabel = str | Literal["TO_FIRST_STATION", "TO_LAST_STATION", "TO_NEXT_STATION", "DEFAULT_DIRECTION"] | None
+type DirectionLabel = (
+    str | Literal["TO_FIRST_STATION", "TO_LAST_STATION", "TO_NEXT_STATION", "DEFAULT_DIRECTION"] | None
+)
 type PlatformCode = str | Literal["DEFAULT_CODE", "LINE_CODE"] | None
 
 
@@ -38,7 +40,9 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
     def add(self, *stations: S):
         self.station_list.extend(stations)
 
-    def _resolve_direction(self, direction: DirectionLabel, default: DirectionLabel, next_station: S | None = None) -> DirectionLabel:
+    def _resolve_direction(
+        self, direction: DirectionLabel, default: DirectionLabel, next_station: S | None = None
+    ) -> DirectionLabel:
         if direction == "DEFAULT_DIRECTION":
             return self._resolve_direction(default, default, next_station)
         if direction == "TO_FIRST_STATION":

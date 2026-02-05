@@ -169,7 +169,7 @@ class AirGate(Node):
         return super().__str__() + f" {self.airport.code} {self.code}"
 
     class CreateParams(TypedDict, total=False):
-        code: Required[str | None]                                                                                              
+        code: Required[str | None]
         airport: Required[AirAirport]
         airline: AirAirline | None
         size: str | None

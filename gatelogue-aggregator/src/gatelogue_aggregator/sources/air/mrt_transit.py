@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, override
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
@@ -10,8 +10,9 @@ from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.source import AirSource
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.config import Config
     import gatelogue_types as gt
+
+    from gatelogue_aggregator.config import Config
 
 
 class MRTTransit(AirSource):

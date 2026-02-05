@@ -1,10 +1,11 @@
 from typing import Literal
 
+import gatelogue_types as gt
+
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import all_warps
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.source import Source
-import gatelogue_types as gt
 
 
 class SpawnWarps(Source):
@@ -142,7 +143,8 @@ class SpawnWarps(Source):
                         continue
 
                     gt.SpawnWarp.create(
-                        self.conn, self.priority,
+                        self.conn,
+                        self.priority,
                         name=name,
                         warp_type=ty,
                         world="New" if warp["worldUUID"] == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",
@@ -150,6 +152,8 @@ class SpawnWarps(Source):
                     )
 
         gt.SpawnWarp.create(
-            self.conn, self.priority, name="Old World", warp_type="portal", world="Old", coordinates=(0, 0))
+            self.conn, self.priority, name="Old World", warp_type="portal", world="Old", coordinates=(0, 0)
+        )
         gt.SpawnWarp.create(
-            self.conn, self.priority, name="Space World", warp_type="portal", world="Space", coordinates=(0, 0))
+            self.conn, self.priority, name="Space World", warp_type="portal", world="Space", coordinates=(0, 0)
+        )

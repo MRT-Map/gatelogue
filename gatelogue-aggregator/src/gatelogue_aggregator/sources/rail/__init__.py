@@ -58,7 +58,6 @@ def SOURCES() -> list[type[RailSource]]:  # noqa: N802
         MetroDeEne,
         NPSubway,
         RefugeStreetcar,
-
         BluRail,
         BluRailWarp,
         BreezeRail,

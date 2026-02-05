@@ -1,22 +1,21 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, override, ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
-from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.utils import search_all
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from re import Pattern
 
     from gatelogue_aggregator.config import Config
+
 
 class _NameDescriptor:
     def __get__(self, instance: None, owner: type[RegexWikiAirport]):
         return f"MRT Wiki (Airport {owner.airport_code})"
+
 
 class RegexWikiAirport(AirSource):
     name = _NameDescriptor()
@@ -38,12 +37,7 @@ class RegexWikiAirport(AirSource):
                 airline = self.airline(name=self.process_airline_name(airline_name))
             else:
                 airline = None
-            self.gate(
-                code=gate_code,
-                airport=airport,
-                size=size,
-                airline=airline
-            )
+            self.gate(code=gate_code, airport=airport, size=size, airline=airline)
 
     @staticmethod
     def size(_matches: dict[str, str]) -> str | None:

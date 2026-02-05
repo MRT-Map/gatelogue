@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import itertools
 import re
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import bs4
@@ -11,13 +10,12 @@ import pandas as pd
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
+from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.utils import search_all
 
-from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
-
 if TYPE_CHECKING:
-    from collections.abc import Callable
+
     from gatelogue_aggregator.config import Config
 
 AIRLINE_SOURCES: list[type[AirSource]] = []
@@ -53,9 +51,10 @@ class BluAir(RegexWikiAirline):
         r"\{\{BA\|BU(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|.}}"
     )
 
+
 @AIRLINE_SOURCES.append
 class IntraAir(AirSource):
-    name = f"MRT Wiki (Airline IntraAir)"
+    name = "MRT Wiki (Airline IntraAir)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -76,12 +75,18 @@ class IntraAir(AirSource):
                 tr2 = tr.next_sibling.next_sibling
 
                 g1 = tr2("td")[0]("b")
-                gate1_code = f"T{g1[0].string}-{g1[1].string}" if airport1_code in DUPLICATE_GATE_NUM and len(g1) != 1 else g1[
-                    -1].string
+                gate1_code = (
+                    f"T{g1[0].string}-{g1[1].string}"
+                    if airport1_code in DUPLICATE_GATE_NUM and len(g1) != 1
+                    else g1[-1].string
+                )
 
                 g2 = tr2("td")[1]("b")
-                gate2_code = f"T{g2[0].string}-{g2[1].string}" if airport2_code in DUPLICATE_GATE_NUM and len(g2) != 1 else g2[
-                    -1].string
+                gate2_code = (
+                    f"T{g2[0].string}-{g2[1].string}"
+                    if airport2_code in DUPLICATE_GATE_NUM and len(g2) != 1
+                    else g2[-1].string
+                )
 
                 size = "H" if 1400 <= int(flight_code) <= 1799 else "SP" if 1800 <= int(flight_code) >= 2000 else None
 
@@ -93,12 +98,13 @@ class IntraAir(AirSource):
                     airport2_code=airport2_code,
                     gate1_code=gate1_code,
                     gate2_code=gate2_code,
-                    size=size
+                    size=size,
                 )
+
 
 @AIRLINE_SOURCES.append
 class FliHigh(AirSource):
-    name = f"MRT Wiki (Airline FliHigh)"
+    name = "MRT Wiki (Airline FliHigh)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -160,9 +166,10 @@ class Berryessa(RegexWikiAirline):
         r"\{\{BA\|IN(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
     )
 
+
 @AIRLINE_SOURCES.append
 class AirNet(AirSource):
-    name = f"MRT Wiki (Airline AirNet)"
+    name = "MRT Wiki (Airline AirNet)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -191,9 +198,10 @@ class AirNet(AirSource):
                 gate2_code=gate2_code,
             )
 
+
 @AIRLINE_SOURCES.append
 class FlyCreeper(AirSource):
-    name = f"MRT Wiki (Airline FlyCreeper)"
+    name = "MRT Wiki (Airline FlyCreeper)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -301,7 +309,9 @@ class Yousoro(RegexWikiAirline):
 class MarbleAir(RegexWikiAirline):
     airline_name = "MarbleAir"
     page_name = "MarbleAir"
-    regex = re.compile(r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active")
+    regex = re.compile(
+        r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"
+    )
 
 
 @AIRLINE_SOURCES.append
@@ -320,7 +330,7 @@ class AmberAir(RegexWikiAirline):
 
 @AIRLINE_SOURCES.append
 class ArcticAir(AirSource):
-    name = f"MRT Wiki (Airline ArcticAir)"
+    name = "MRT Wiki (Airline ArcticAir)"
     df: pd.DataFrame
 
     def prepare(self, config: Config):
@@ -338,7 +348,16 @@ class ArcticAir(AirSource):
     def build(self, config: Config):
         airline = self.airline(name="ArcticAir", link=get_wiki_link("ArcticAir"))
 
-        d = list(zip(self.df["Flight"], self.df["Departure"], self.df["Arrival"], self.df["D. Gate"], self.df["A. Gate"], strict=False))
+        d = list(
+            zip(
+                self.df["Flight"],
+                self.df["Departure"],
+                self.df["Arrival"],
+                self.df["D. Gate"],
+                self.df["A. Gate"],
+                strict=False,
+            )
+        )
 
         for flight, a1, a2, g1, g2 in d[::2]:
             if str(flight).strip() in ("227", "228", "239", "240"):
@@ -364,7 +383,7 @@ class ArcticAir(AirSource):
 
 @AIRLINE_SOURCES.append
 class SandstoneAirr(AirSource):
-    name = f"MRT Wiki (Airline SandstoneAirr)"
+    name = "MRT Wiki (Airline SandstoneAirr)"
     df: pd.DataFrame
 
     def prepare(self, config: Config):
@@ -417,7 +436,7 @@ class Michigana(RegexWikiAirline):
 
 @AIRLINE_SOURCES.append
 class Lilyflower(AirSource):
-    name = f"MRT Wiki (Airline Lilyflower Airlines)"
+    name = "MRT Wiki (Airline Lilyflower Airlines)"
     df: pd.DataFrame
 
     def prepare(self, config: Config):
@@ -435,7 +454,9 @@ class Lilyflower(AirSource):
     def build(self, config: Config):
         airline = self.airline(name="Lilyflower Airlines", link=get_wiki_link("Lilyflower Airlines"))
 
-        d = list(zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], strict=False))
+        d = list(
+            zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], strict=False)
+        )
 
         for flight, a1, g1, a2, g2 in d:
             if not a1 or str(a1) == "nan":
@@ -492,7 +513,7 @@ class Aero(RegexWikiAirline):
 
 @AIRLINE_SOURCES.append
 class SouthWeast(AirSource):
-    name = f"MRT Wiki (Airline South Weast Airlines)"
+    name = "MRT Wiki (Airline South Weast Airlines)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -514,13 +535,13 @@ class SouthWeast(AirSource):
                 flight_code2=flight_code,
                 airport1_name=airport1_name,
                 airport2_name=airport2_name,
-                size="H" if flight_code.startswith("H") else None
+                size="H" if flight_code.startswith("H") else None,
             )
 
 
 @AIRLINE_SOURCES.append
 class UtopiAir(AirSource):
-    name = f"MRT Wiki (Airline UtopiAir)"
+    name = "MRT Wiki (Airline UtopiAir)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -543,7 +564,7 @@ class UtopiAir(AirSource):
                     flight_code2=flight_code,
                     airport1_name=airport1_name,
                     airport2_name=airport2_name,
-                    size="SP" if int(flight_code) >= 500 else None
+                    size="SP" if int(flight_code) >= 500 else None,
                 )
 
 
@@ -560,7 +581,7 @@ class SoutheasternAirways(RegexWikiAirline):
 
 @AIRLINE_SOURCES.append
 class Caelus(AirSource):
-    name = f"MRT Wiki (Airline Caelus Airlines)"
+    name = "MRT Wiki (Airline Caelus Airlines)"
     text0: str
     text1: str
     text2: str
@@ -576,12 +597,12 @@ class Caelus(AirSource):
 ! .*?CaelusAirlines_Boarding\.png""")
 
     def prepare(self, config: Config):
-        self.text0 = get_wiki_text(f"Template:ICAG 000 Series Flights", config)
-        self.text1 = get_wiki_text(f"Template:ICAG 100 Series Flights", config)
-        self.text2 = get_wiki_text(f"Template:ICAG 200 Series Flights", config)
+        self.text0 = get_wiki_text("Template:ICAG 000 Series Flights", config)
+        self.text1 = get_wiki_text("Template:ICAG 100 Series Flights", config)
+        self.text2 = get_wiki_text("Template:ICAG 200 Series Flights", config)
         self.html3 = get_wiki_html("Template:ICAG 300 Series Flights", config)
         self.html4 = get_wiki_html("Template:ICAG 400 Series Flights", config)
-        self.text7 = get_wiki_text(f"Template:ICAG 700 Series Flights", config)
+        self.text7 = get_wiki_text("Template:ICAG 700 Series Flights", config)
 
     def build(self, config: Config):
         airline = self.airline(name="Caelus Airlines", link=get_wiki_link("Caelus Airlines"))
@@ -649,7 +670,7 @@ class Cascadia(RegexWikiAirline):
 
 @AIRLINE_SOURCES.append
 class Waviation(AirSource):
-    name = f"MRT Wiki (Airline Waviation)"
+    name = "MRT Wiki (Airline Waviation)"
     html: bs4.BeautifulSoup
 
     def prepare(self, config: Config):
@@ -660,7 +681,7 @@ class Waviation(AirSource):
 
         for table in self.html("table"):
             if (caption := table.find("caption")) is None or (
-                    "(000s)" not in str(caption) and "(1000s)" not in str(caption)
+                "(000s)" not in str(caption) and "(1000s)" not in str(caption)
             ):
                 continue
 

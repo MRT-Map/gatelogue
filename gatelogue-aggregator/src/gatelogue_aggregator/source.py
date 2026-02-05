@@ -61,25 +61,25 @@ class AirSource(Source):
     def flight(self, **kwargs: Unpack[gt.AirFlight.CreateParams]) -> gt.AirFlight:
         return gt.AirFlight.create(self.conn, self.priority, **kwargs)
 
-    def connect(self, *, airline: gt.AirAirline, flight_code1: str, flight_code2: str,
-                airport1_code: str = "", airport2_code: str = "", gate1_code: str | None = None, gate2_code: str | None = None,
-                airport1_name: str | None = None, airport2_name: str | None = None,
-                size: str | None = None):
+    def connect(
+        self,
+        *,
+        airline: gt.AirAirline,
+        flight_code1: str,
+        flight_code2: str,
+        airport1_code: str = "",
+        airport2_code: str = "",
+        gate1_code: str | None = None,
+        gate2_code: str | None = None,
+        airport1_name: str | None = None,
+        airport2_name: str | None = None,
+        size: str | None = None,
+    ):
         airport1 = self.airport(code=airport1_code, names=None if airport1_name is None else {airport1_name})
-        gate1 = self.gate(
-            code=gate1_code,
-            airport=airport1,
-            size=size,
-            airline=airline
-        )
+        gate1 = self.gate(code=gate1_code, airport=airport1, size=size, airline=airline)
 
         airport2 = self.airport(code=airport2_code, names=None if airport2_name is None else {airport2_name})
-        gate2 = self.gate(
-            code=gate2_code,
-            airport=airport2,
-            size=size,
-            airline=airline
-        )
+        gate2 = self.gate(code=gate2_code, airport=airport2, size=size, airline=airline)
 
         self.flight(airline=airline, code=flight_code1, from_=gate1, to=gate2)
         self.flight(airline=airline, code=flight_code2, from_=gate2, to=gate1)

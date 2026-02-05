@@ -197,8 +197,14 @@ class LocatedNode(Node):
             "WHERE node2 = :i2 ON CONFLICT (node1, node2) DO NOTHING",
             dict(i1=self.i, i2=other.i),
         )
-        cur.execute("UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node2, :i1), max(node2, :i1)) WHERE node1 = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node1, :i1), max(node1, :i1)) WHERE node2 = :i2", dict(i1=self.i, i2=other.i))
+        cur.execute(
+            "UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node2, :i1), max(node2, :i1)) WHERE node1 = :i2",
+            dict(i1=self.i, i2=other.i),
+        )
+        cur.execute(
+            "UPDATE OR FAIL ProximitySource SET (node1, node2) = (min(node1, :i1), max(node1, :i1)) WHERE node2 = :i2",
+            dict(i1=self.i, i2=other.i),
+        )
         cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))
@@ -285,6 +291,7 @@ class SharedFacility:
 
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2) ON CONFLICT DO NOTHING ", dict(node1=node1.i, node2=node2.i)
+            "INSERT INTO SharedFacility (node1, node2) VALUES (:node1, :node2) ON CONFLICT DO NOTHING ",
+            dict(node1=node1.i, node2=node2.i),
         )
         return cls(conn, node1, node2)

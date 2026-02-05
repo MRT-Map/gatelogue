@@ -1,9 +1,9 @@
+import gatelogue_types as gt
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import Source
-import gatelogue_types as gt
 
 
 class TownList(Source):
@@ -39,7 +39,8 @@ class TownList(Source):
             if str(row["Town Name"]) == "nan":
                 continue
             gt.Town.create(
-                self.conn, self.priority,
+                self.conn,
+                self.priority,
                 name=row["Town Name"],
                 rank=row["Town Rank"]
                 if row["Town Name"] != "Arisa"
@@ -55,7 +56,8 @@ class TownList(Source):
             )
 
         gt.Town.create(
-            self.conn, self.priority,
+            self.conn,
+            self.priority,
             name="Central City",
             rank="Community",
             mayor="MRT Staff",
