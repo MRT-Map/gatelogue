@@ -56,7 +56,7 @@ class RailCompany(Node):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT RailPlatform.i "
                 "FROM (SELECT i FROM RailStation WHERE company = :i) A "
-                "LEFT JOIN RailPlatform on A.i = RailPlatform.station",
+                "INNER JOIN RailPlatform on A.i = RailPlatform.station",
                 dict(i=self.i),
             ).fetchall()
         )

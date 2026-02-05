@@ -56,7 +56,7 @@ class SeaCompany(Node):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT SeaDock.i "
                 "FROM (SELECT i FROM SeaStop WHERE company = :i) A "
-                "LEFT JOIN SeaDock on A.i = SeaDock.stop",
+                "INNER JOIN SeaDock on A.i = SeaDock.stop",
                 dict(i=self.i),
             ).fetchall()
         )

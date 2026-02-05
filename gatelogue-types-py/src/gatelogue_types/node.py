@@ -18,6 +18,7 @@ class Node:
 
     def __init__(self, conn: sqlite3.Connection, i: int):
         self.conn = conn
+        assert isinstance(i, int)
         self.i = i
         """The ID of the node"""
 
@@ -66,7 +67,11 @@ class Node:
         raise NotImplementedError
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
+        if self == other:
+            warn_fn(f"{self} tried to merge with itself")
+            return
         for attr in self.COLUMNS:
+            print(attr.table_column if isinstance(attr, _SetAttr) else attr.name, self.i, other.i)
             attr._merge(self, other, warn_fn)
 
         self._merge(other)

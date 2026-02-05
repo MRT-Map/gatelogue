@@ -50,6 +50,7 @@ class GatelogueData:
             source_instances: list[Source] = list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
 
         for source in track(source_instances, INFO1, description="Building sources"):
+            rich.print(INFO1 + f"Building for {source.name}")
             source.build(self.config)
             source.report()
 
@@ -59,14 +60,16 @@ class GatelogueData:
             self.gd.nodes(),
             INFO2,
             description=f"Merging equivalent nodes (pass {pass_})",
+            total=len(self.gd)
         ):
             if n.i in merged:
                 continue
             for equiv in n.equivalent_nodes():
                 if n.i == equiv.i:
                     continue
-                n.merge(equiv, warn_fn=lambda msg: rich.print(ERROR + msg))
                 merged.add(equiv.i)
+                if (also_merged := n.merge(equiv, warn_fn=lambda msg: rich.print(ERROR + msg))) is not None:
+                    merged |= also_merged
 
     def _merge_airports_with_unknown_code(self, pass_: int):
         name2i = {
@@ -78,7 +81,7 @@ class GatelogueData:
         }
 
         for n in track(
-            (gt.AirAirport(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code == ''")),
+            (gt.AirAirport(self.gd.conn, i) for (i,) in self.gd.conn.execute("SELECT i FROM AirAirport WHERE code == ''")),
             INFO2,
             description=f"Merging airports (pass {pass_})",
         ):
@@ -97,11 +100,13 @@ class GatelogueData:
 
     def _update_flight_mode(self):
         for n in track(
-            (gt.AirFlight(self.gd.conn, i) for i in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")),
+            (gt.AirFlight(self.gd.conn, i) for (i,) in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")),
             INFO2,
             description="Updating AirFlight `mode` field",
         ):
-            size: set[str] = n.from_.size | n.to.size
+            size: str | None = n.from_.size or n.to.size
+            if size is None:
+                continue
             sources = lambda: {
                 s
                 for (s,) in self.gd.conn.execute(
@@ -147,7 +152,7 @@ class GatelogueData:
             }
             for n in (
                 gt.AirGate(self.gd.conn, i)
-                for i in self.gd.conn.execute(
+                for (i,) in self.gd.conn.execute(
                     "SELECT i FROM AirGate WHERE airport = :i AND code IS NULL", dict(i=airport.i)
                 ).fetchall()
             ):

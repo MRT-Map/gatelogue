@@ -56,7 +56,7 @@ class BusCompany(Node):
             for (i,) in self.conn.execute(
                 "SELECT DISTINCT BusBerth.i "
                 "FROM (SELECT i FROM BusStop WHERE company = :i) A "
-                "LEFT JOIN BusBerth on A.i = BusBerth.stop",
+                "INNER JOIN BusBerth on A.i = BusBerth.stop",
                 dict(i=self.i),
             ).fetchall()
         )

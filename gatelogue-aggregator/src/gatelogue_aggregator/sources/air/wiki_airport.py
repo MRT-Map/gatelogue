@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, override
+from typing import TYPE_CHECKING, override, ClassVar
 
 from gatelogue_aggregator.logging import INFO2, track
 from gatelogue_aggregator.source import AirSource
@@ -19,9 +19,9 @@ if TYPE_CHECKING:
 class RegexWikiAirport(AirSource):
     # priority = 3
     text: str
-    airport_code: str
-    page_name: str
-    regex: re.Pattern[str]
+    airport_code: ClassVar[str]
+    page_name: ClassVar[str]
+    regex: ClassVar[re.Pattern[str]]
 
     def prepare(self, config: Config):
         self.text = get_wiki_text(self.page_name, config)
@@ -30,14 +30,14 @@ class RegexWikiAirport(AirSource):
         airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name))
         for match in search_all(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
-            code = matches["code"]
+            gate_code = self.process_gate_code(matches["code"])
             size = matches.get("size") or self.size(matches)
             if (airline_name := (matches.get("airline", matches.get("airline2")))) is not None:
                 airline = self.airline(name=self.process_airline_name(airline_name))
             else:
                 airline = None
             self.gate(
-                code=code,
+                code=gate_code,
                 airport=airport,
                 size=size,
                 airline=airline
@@ -50,3 +50,7 @@ class RegexWikiAirport(AirSource):
     @staticmethod
     def process_airline_name(airline_name: str) -> str:
         return airline_name
+
+    @staticmethod
+    def process_gate_code(gate_code: str) -> str:
+        return gate_code

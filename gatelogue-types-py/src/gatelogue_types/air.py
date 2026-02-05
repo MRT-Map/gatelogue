@@ -169,7 +169,7 @@ class AirGate(Node):
         return super().__str__() + f" {self.airport.code} {self.code}"
 
     class CreateParams(TypedDict, total=False):
-        code: Required[str | None]
+        code: Required[str | None]                                                                                              
         airport: Required[AirAirport]
         airline: AirAirline | None
         size: str | None
@@ -280,7 +280,7 @@ class AirFlight(Node):
         cls, conn: sqlite3.Connection, src: int, *, code2: str | None = None, **kwargs: Unpack[CreateParams]
     ) -> tuple[Self, Self]:
         kwargs2 = kwargs.copy()
-        kwargs2["from_"], kwargs2["to"] = kwargs2["to"], kwargs2["from"]
+        kwargs2["from_"], kwargs2["to"] = kwargs2["to"], kwargs2["from_"]
         kwargs2["code"] = code2 or kwargs2["code"]
         return cls.create(conn, src, **kwargs), cls.create(conn, src, **kwargs2)
 
@@ -291,17 +291,22 @@ class AirFlight(Node):
                 "SELECT AirFlight.i FROM AirFlight "
                 'LEFT JOIN AirGate AGFrom ON "from" = AGFrom.i '
                 'LEFT JOIN AirGate AGTo ON "to" = AGTo.i '
-                "WHERE AirFlight.airline = ? AND (AirFlight.code = ? OR (AGFrom.airport = ? AND AGTo.airport = ?))",
-                (self.airline.i, self.code, self.from_.airport.i, self.to.airport.i),
+                "WHERE AirFlight.airline = ? AND (AGFrom.airport = ? AND AGTo.airport = ?)",
+                (self.airline.i, self.from_.airport.i, self.to.airport.i),
             ).fetchall()
         )
 
-    def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
+    def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn) -> set[int] | None:
+        also_merged = set()
         if self.from_.code is None or other.from_.code is None:
+            also_merged.add(other.from_.i)
             self.from_.merge(other.from_, warn_fn=warn_fn)
         if self.to.code is None or other.to.code is None:
+            also_merged.add(other.to.i)
             self.to.merge(other.to, warn_fn=warn_fn)
         super().merge(other, warn_fn)
+        print(also_merged)
+        return also_merged
 
     def _merge(self, other: Self):
         cur = self.conn.cursor()
