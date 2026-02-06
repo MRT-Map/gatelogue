@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 if TYPE_CHECKING:
 
@@ -29,7 +29,7 @@ class RegexWikiAirline(AirSource):
 
     def build(self, config: Config):
         airline = self.airline(name=self.airline_name, link=get_wiki_link(self.page_name))
-        for match in search_all(self.regex, self.text):
+        for match in re.finditer(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             flight_code = matches["code"]
             size = matches.get("size") or self.size(matches)

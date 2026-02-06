@@ -6,7 +6,7 @@ from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class SeabeastBuses(BusSource):
@@ -20,7 +20,7 @@ class SeabeastBuses(BusSource):
         company = self.company(name="Seabeast Buses")
         stop_names = {}
 
-        for match in search_all(
+        for match in re.finditer(
             re.compile(r"""\|-
 \| style="background:(?P<col>.*?);.*?
 \|(?P<code>.*?)

@@ -5,7 +5,7 @@ from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class BluRail(RailSource):
@@ -47,7 +47,7 @@ class BluRail(RailSource):
             line = self.line(code=line_code, name=line_name, company=company, mode="warp", colour=line_colour)
 
             builder = self.builder(line)
-            for result in search_all(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
+            for result in re.finditer(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
                 code = result.group("code").upper()
                 if code.startswith("BLUTRAIN"):
                     continue

@@ -12,7 +12,7 @@ from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link, get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 if TYPE_CHECKING:
 
@@ -608,7 +608,7 @@ class Caelus(AirSource):
         airline = self.airline(name="Caelus Airlines", link=get_wiki_link("Caelus Airlines"))
 
         for text in (self.text0, self.text1, self.text2, self.text7):
-            for match in search_all(self.regex, text):
+            for match in re.finditer(self.regex, text):
                 self.connect(
                     airline=airline,
                     flight_code1=match["code"],

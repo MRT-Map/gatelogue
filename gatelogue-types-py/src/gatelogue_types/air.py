@@ -52,7 +52,9 @@ class AirAirline(Node):
         """List of all :py:class:`AirGate` s the airline owns or operates"""
         return (
             AirGate(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i", dict(i=self.i)).fetchall()
+            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airline = :i "
+                                          "UNION SELECT \"from\" AS i FROM AirFlight WHERE airline = :i "
+                                          "UNION SELECT \"to\" AS i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
         )
 
     @property
@@ -61,7 +63,9 @@ class AirAirline(Node):
         return (
             AirAirport(self.conn, i)
             for (i,) in self.conn.execute(
-                "SELECT DISTINCT airport FROM AirGate WHERE airline = :i",
+                "SELECT DISTINCT airport FROM AirGate WHERE airline = :i "
+                "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"from\" WHERE AirFlight.airline = :i "
+                "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"to\" WHERE AirFlight.airline = :i",
                 dict(i=self.i),
             ).fetchall()
         )

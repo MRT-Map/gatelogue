@@ -3,7 +3,7 @@ import re
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class WikiMRT(RailSource):
@@ -52,11 +52,11 @@ class WikiMRT(RailSource):
         for line_code, line_name, line_colour, text in self.lines:
             line = self.line(code=line_code, company=company, name=line_name, colour=line_colour, mode="cart")
             builder = self.builder(line)
-            for match in search_all(
+            for match in re.finditer(
                 re.compile(r"{{station\|open\|[^|]*?\|(?:c=white\|)?(?P<code>[^|]*?)\|(?P<transfers>.*?)}}\s*\n"), text
             ):
                 codes = {match.group("code")}
-                for match2 in search_all(
+                for match2 in re.finditer(
                     re.compile(r"{{st/n\|[^}]*\|([^}]*)}}|{{s\|([^}]*)\|[^}]*}}"), match.group("transfers")
                 ):
                     new_code = match2.group(1) or match2.group(2)

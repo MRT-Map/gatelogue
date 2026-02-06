@@ -3,7 +3,7 @@ import re
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class Pacifica(RailSource):
@@ -16,7 +16,7 @@ class Pacifica(RailSource):
     def build(self, config: Config):
         company = self.company(name="Pacifica")
 
-        for match in search_all(
+        for match in re.finditer(
             re.compile(r"(?s){\| class=\"wikitable\".*?\n\|\+\n!(?P<name>.*?)\n\|-\n(?P<stations>.*?)\n\|}"), self.text
         ):
             line_name = match.group("name")

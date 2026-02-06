@@ -5,7 +5,7 @@ import bs4
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class WZR(RailSource):
@@ -52,7 +52,7 @@ class WZR(RailSource):
             line = self.line(code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")
 
             builder = self.builder(line)
-            for result in search_all(
+            for result in re.finditer(
                 re.compile(
                     r"(?:\[\[(?:[^|]*\|)?(?P<name1>[^|]*)]]|{{stl\|WZR\|(?P<name2>[^|]*)}}) *\|\| *(?P<code>\w\w\w)"
                 ),
@@ -73,7 +73,7 @@ class WZR(RailSource):
             line = self.line(code=line_code, name=line_name, company=company, mode="warp", colour="#aa0000")
 
             builder = self.builder(line)
-            for result in search_all(
+            for result in re.finditer(
                 re.compile(r"\[\[(?:[^|]*\|)?(?P<name>[^|]*)]] *\|\| *(?P<code>\w\w\w) .*\|\|.*\|\|(?! *Planned)"), wiki
             ):
                 code = result.group("code").upper()

@@ -6,7 +6,7 @@ from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
-from gatelogue_aggregator.utils import search_all
+
 
 
 class SeabeastRail(RailSource):
@@ -24,7 +24,7 @@ class SeabeastRail(RailSource):
         station_names = []
 
         builder = self.builder(line)
-        for match in search_all(
+        for match in re.finditer(
             re.compile(r"""\| style="background:green; border:none; " \|.*?
 \| style ="border:none; " \| • ([^(\n]*)"""),
             self.text,
