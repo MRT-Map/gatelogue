@@ -5,7 +5,6 @@ from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
-
 class Pacifica(RailSource):
     name = "MRT Wiki (Rail, Pacifica)"
     text: str

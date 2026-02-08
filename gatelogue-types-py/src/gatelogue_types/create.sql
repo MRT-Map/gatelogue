@@ -4,6 +4,7 @@ CREATE TABLE Metadata
 (
     version INTEGER NOT NULL,
     timestamp TEXT NOT NULL,
+    has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
 
@@ -34,8 +35,8 @@ CREATE TABLE NodeLocation
     i     INTEGER PRIMARY KEY REFERENCES Node (i),
     world TEXT CHECK ( world IS NULL OR world IN ('New', 'Old', 'Space') ),
     x     INTEGER,
-    y     INTEGER --,
-    -- CHECK ( (x IS NULL AND y IS NULL) OR (x IS NOT NULL AND y IS NOT NULL) )
+    y     INTEGER,
+    CHECK ( (x IS NULL AND y IS NULL) OR (x IS NOT NULL AND y IS NOT NULL) )
 ) STRICT;
 CREATE TABLE NodeLocationSource
 (

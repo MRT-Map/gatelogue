@@ -9,15 +9,13 @@ from typing import TYPE_CHECKING, Literal
 import gatelogue_types as gt
 import msgspec
 import rich
-from gatelogue_types import node
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, track
-from gatelogue_aggregator.report import report
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.source import Source
 
 if TYPE_CHECKING:
-    from collections.abc import Container, Iterable
+    from collections.abc import Container, Iterable, Callable
 
 
 class GatelogueData:
@@ -40,6 +38,7 @@ class GatelogueData:
         self._update_gate_size()
         self._proximity()
         self._shared_facility()
+        self.gd.conn.execute("VACUUM")
 
     def _build_sources(self, sources: Iterable[type[Source]], database=":memory:"):
         for i, source in enumerate(sources):
@@ -397,92 +396,8 @@ class GatelogueData:
 
             gt.SharedFacility.create(self.gd.conn, node1=stop1, node2=stop2)
 
-    def report(self):
+    def report(self, out_fn: Callable[[str, str], object] | None = None):
         rich.print(INFO1 + "Below is a final report of all nodes collected")
         for node in self.gd.nodes():
-            report(node)
+            report(node, out_fn=out_fn)
         rich.print(INFO1 + "End of report")
-
-    def graph(self, path: Path):
-        g = self.g.copy()
-        for i, (u, v, data) in g.edge_index_map().items():
-            g.update_edge_by_index(i, (u, v, data))
-
-        def replace(s):
-            return s.replace('"', '\\"')
-
-        def node_fn(node: Node):
-            d = {
-                "style": "filled",
-                "tooltip": replace(Node.str_src(node, self)),
-                "label": replace(node.str_src(self)),
-            }
-            for ty, col in (
-                (AirFlight, "#ff8080"),
-                (AirAirport, "#8080ff"),
-                (AirAirline, "#ffff80"),
-                (AirGate, "#80ff80"),
-                (RailCompany, "#ffff80"),
-                (RailLine, "#ff8080"),
-                (RailStation, "#8080ff"),
-                (SeaCompany, "#ffff80"),
-                (SeaLine, "#ff8080"),
-                (SeaStop, "#8080ff"),
-                (BusCompany, "#ffff80"),
-                (BusLine, "#ff8080"),
-                (BusStop, "#8080ff"),
-                (Town, "#aaaaaa"),
-                (SpawnWarp, "#aaaaaa"),
-            ):
-                if isinstance(node, ty):
-                    d["fillcolor"] = '"' + col + '"'
-                    break
-            return d
-
-        def edge_fn(edge):
-            u = g[edge[0]]
-            v = g[edge[1]]
-            edge = edge[2]
-            edge_data = edge.v if isinstance(edge, Sourced) else edge
-            d = {}
-            if edge_data is None:
-                d["tooltip"] = replace(f"({u.str_src(self)} -- {v.str_src(self)})")
-            else:
-                d["tooltip"] = replace(f"{edge_data} ({u.str_src(self)} -- {v.str_src(self)})")
-            if isinstance(edge_data, node.Proximity):
-                d["color"] = '"#ff00ff"'
-                return d
-            if isinstance(edge_data, SharedFacility):
-                d["color"] = '"#008080"'
-                return d
-            for ty1, ty2, col in (
-                (AirAirport, AirGate, "#0000ff"),
-                (AirGate, AirFlight, "#00ff00"),
-                (AirFlight, AirAirline, "#ff0000"),
-                (RailCompany, RailLine, "#ff0000"),
-                (RailStation, RailStation, "#0000ff"),
-                (SeaCompany, SeaLine, "#ff0000"),
-                (SeaStop, SeaStop, "#0000ff"),
-                (BusCompany, BusLine, "#ff0000"),
-                (BusStop, BusStop, "#0000ff"),
-            ):
-                if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
-                    d["color"] = '"' + col + '"'
-                    break
-            else:
-                d["style"] = "invis"
-            return d
-
-        # g.to_dot(
-        #     node_attr=node_fn,
-        #     edge_attr=edge_fn,
-        #     graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"}, filename="test.dot")
-        graphviz_draw(
-            g,
-            node_attr_fn=node_fn,
-            edge_attr_fn=edge_fn,
-            graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"},
-            filename=str(path),
-            image_type="svg",
-            method="sfdp",
-        )

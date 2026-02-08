@@ -13,9 +13,7 @@ from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link, get_wiki_text
 
-
 if TYPE_CHECKING:
-
     from gatelogue_aggregator.config import Config
 
 AIRLINE_SOURCES: list[type[AirSource]] = []

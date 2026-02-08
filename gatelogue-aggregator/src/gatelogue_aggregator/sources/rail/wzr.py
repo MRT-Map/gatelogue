@@ -7,7 +7,6 @@ from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_text
 
 
-
 class WZR(RailSource):
     name = "MRT Wiki (Rail, West Zeta Rail)"
     html: bs4.BeautifulSoup

@@ -12,7 +12,6 @@ from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
 from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link
 
 if TYPE_CHECKING:
-
     from gatelogue_aggregator.config import Config
 
 AIRPORT_SOURCES: list[type[AirSource]] = []

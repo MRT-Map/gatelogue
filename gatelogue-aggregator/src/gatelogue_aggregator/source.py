@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING, ClassVar, Unpack
 import gatelogue_types as gt
 import rich
 
-from gatelogue_aggregator.logging import ERROR, INFO1
-from gatelogue_aggregator.report import report
+from gatelogue_aggregator.logging import ERROR, INFO1, report
 from gatelogue_aggregator.sources.line_builder import BusLineBuilder, RailLineBuilder, SeaLineBuilder
 
 if TYPE_CHECKING:

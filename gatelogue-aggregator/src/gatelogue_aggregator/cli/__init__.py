@@ -14,7 +14,7 @@ from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.gatelogue_data import GatelogueData
-from gatelogue_aggregator.logging import INFO1, progress_bar
+from gatelogue_aggregator.logging import INFO1, progress_bar, draw_graph
 from gatelogue_aggregator.source import Source
 from gatelogue_aggregator.sources import SOURCES
 
@@ -62,18 +62,10 @@ def gatelogue_aggregator():
     help="how long to wait before sending new requests to the same URL if `429 Too Many Requests` is received",
 )
 @click.option(
-    "-o", "--output", default="data.db", type=Path, show_default=True, help="file to output the result to, in JSON"
+    "-o", "--output", default="data.db", type=Path, show_default=True, help="file to output the result to, as an SQLite DB"
 )
 @click.option(
     "-r/-R", "--report/--no-report", default=True, show_default=True, help="print a report of all nodes after merger"
-)
-@click.option(
-    "-g",
-    "--graph",
-    type=Path,
-    default=None,
-    show_default=True,
-    help="file to output a graph representation of all nodes and objects to, in SVG",
 )
 @click.option(
     "-w",
@@ -114,7 +106,6 @@ def run(
     cooldown: int,
     output: Path,
     report: bool,
-    graph: Path | None,
     max_workers: int,
     cache_exclude: str,
     include: str,
@@ -141,10 +132,53 @@ def run(
     if report:
         gd.report()
 
-    if graph is not None:
-        with progress_bar(INFO1, f"Outputting graph to {graph}..."):
-            gd.graph(graph)
-
     if output != Path("/dev/null"):
         rich.print(INFO1 + f"Writing to {output}")
         gd.gd.conn.backup(sqlite3.connect(output))
+
+
+@gatelogue_aggregator.command(help="create a graph of the DB")
+@click.option(
+    "-i",
+    "--input",
+    "input_",
+    type=Path,
+    default="data.db",
+    show_default=True,
+    help="path of the SQLite DB",
+)
+@click.option(
+    "-o",
+    "--output",
+    type=Path,
+    default="graph.svg",
+    show_default=True,
+    help="path to output the SVG graph to",
+)
+def graph(*, input_: Path, output: Path):
+    gd = gt.GD(input_)
+    output.write_bytes(draw_graph(gd))
+
+@gatelogue_aggregator.command(help="create a graph of the DB")
+@click.option(
+    "-i",
+    "--input",
+    "input_",
+    type=Path,
+    default="data.db",
+    show_default=True,
+    help="Path of the SQLite DB",
+)
+@click.option(
+    "-o",
+    "--output",
+    type=Path,
+    default="data-ns.db",
+    show_default=True,
+    help="patah to output the sourceless DB to",
+)
+def drop_sources(*, input_: Path, output: Path):
+    gd = gt.GD.from_bytes(input_.read_bytes())
+    gd.drop_sources()
+    gd.conn.commit()
+    gd.conn.backup(sqlite3.connect(output))

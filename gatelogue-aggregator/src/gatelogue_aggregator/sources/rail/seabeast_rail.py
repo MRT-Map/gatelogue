@@ -8,7 +8,6 @@ from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
-
 class SeabeastRail(RailSource):
     name = "MRT Wiki (Rail, Seabeast Rail)"
     text: str

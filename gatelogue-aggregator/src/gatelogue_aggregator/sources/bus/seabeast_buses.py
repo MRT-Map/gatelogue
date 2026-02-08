@@ -8,7 +8,6 @@ from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
-
 class SeabeastBuses(BusSource):
     name = "MRT Wiki (Bus, Seabeast Buses)"
     text: str

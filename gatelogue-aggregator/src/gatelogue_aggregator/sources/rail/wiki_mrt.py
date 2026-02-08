@@ -5,7 +5,6 @@ from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
-
 class WikiMRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
     lines: list[tuple[str, str, str, str]] = []

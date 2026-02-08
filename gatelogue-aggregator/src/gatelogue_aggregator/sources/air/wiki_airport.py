@@ -6,9 +6,7 @@ from typing import TYPE_CHECKING, ClassVar
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.wiki_base import get_wiki_link, get_wiki_text
 
-
 if TYPE_CHECKING:
-
     from gatelogue_aggregator.config import Config
 
 
