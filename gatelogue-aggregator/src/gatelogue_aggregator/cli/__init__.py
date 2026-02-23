@@ -14,7 +14,7 @@ from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.gatelogue_data import GatelogueData
-from gatelogue_aggregator.logging import INFO1, progress_bar, draw_graph
+from gatelogue_aggregator.logging import INFO1, progress_bar
 from gatelogue_aggregator.source import Source
 from gatelogue_aggregator.sources import SOURCES
 
@@ -137,27 +137,28 @@ def run(
         gd.gd.conn.backup(sqlite3.connect(output))
 
 
-@gatelogue_aggregator.command(help="create a graph of the DB")
-@click.option(
-    "-i",
-    "--input",
-    "input_",
-    type=Path,
-    default="data.db",
-    show_default=True,
-    help="path of the SQLite DB",
-)
-@click.option(
-    "-o",
-    "--output",
-    type=Path,
-    default="graph.svg",
-    show_default=True,
-    help="path to output the SVG graph to",
-)
-def graph(*, input_: Path, output: Path):
-    gd = gt.GD(input_)
-    output.write_bytes(draw_graph(gd))
+# @gatelogue_aggregator.command(help="create a graph of the DB")
+# @click.option(
+#     "-i",
+#     "--input",
+#     "input_",
+#     type=Path,
+#     default="data.db",
+#     show_default=True,
+#     help="path of the SQLite DB",
+# )
+# @click.option(
+#     "-o",
+#     "--output",
+#     type=Path,
+#     default="graph.svg",
+#     show_default=True,
+#     help="path to output the SVG graph to",
+# )
+# def graph(*, input_: Path, output: Path):
+#     gd = gt.GD(input_)
+#     output.write_bytes(draw_graph(gd))
+
 
 @gatelogue_aggregator.command(help="create a graph of the DB")
 @click.option(
@@ -167,7 +168,8 @@ def graph(*, input_: Path, output: Path):
     type=Path,
     default="data.db",
     show_default=True,
-    help="Path of the SQLite DB",
+    help="p"
+         "ath of the SQLite DB",
 )
 @click.option(
     "-o",
@@ -175,7 +177,7 @@ def graph(*, input_: Path, output: Path):
     type=Path,
     default="data-ns.db",
     show_default=True,
-    help="patah to output the sourceless DB to",
+    help="path to output the sourceless DB to",
 )
 def drop_sources(*, input_: Path, output: Path):
     gd = gt.GD.from_bytes(input_.read_bytes())

@@ -3,10 +3,7 @@ from __future__ import annotations
 import contextlib
 import os
 from collections.abc import Callable, Container, Iterable, Sized
-from pathlib import Path
-from typing import cast
 
-import pydot
 import gatelogue_types as gt
 import rich
 import rich.progress
@@ -141,91 +138,93 @@ def report(
     out_fn(colour, string)
 
 
-def draw_graph(gd: gt.GD) -> bytes:
-    g = pydot.Dot(strict=True, overlap="scale", outputorder="edgesfirst")
-    for node in track(gd.nodes(), INFO1, description="Adding nodes", total=len(gd)):
-        g.add_node(pydot.Node(str(node.i), style="filled", label=str(node)))
-    with progress_bar(INFO1, f"Writing graph to svg..."):
-        return cast(bytes, g.create("sfdp", "svg"))
-    # for i, (u, v, data) in g.edge_index_map().items():
-    #     g.update_edge_by_index(i, (u, v, data))
-    #
-    # def replace(s):
-    #     return s.replace('"', '\\"')
-    #
-    # def node_fn(node: Node):
-    #
-    #     d = {
-    #         "style": "filled",
-    #         "tooltip": replace(Node.str_src(node, self)),
-    #         "label": replace(node.str_src(self)),
-    #     }
-    #     for ty, col in (
-    #             (AirFlight, "#ff8080"),
-    #             (AirAirport, "#8080ff"),
-    #             (AirAirline, "#ffff80"),
-    #             (AirGate, "#80ff80"),
-    #             (RailCompany, "#ffff80"),
-    #             (RailLine, "#ff8080"),
-    #             (RailStation, "#8080ff"),
-    #             (SeaCompany, "#ffff80"),
-    #             (SeaLine, "#ff8080"),
-    #             (SeaStop, "#8080ff"),
-    #             (BusCompany, "#ffff80"),
-    #             (BusLine, "#ff8080"),
-    #             (BusStop, "#8080ff"),
-    #             (Town, "#aaaaaa"),
-    #             (SpawnWarp, "#aaaaaa"),
-    #     ):
-    #         if isinstance(node, ty):
-    #             d["fillcolor"] = '"' + col + '"'
-    #             break
-    #     return d
-    #
-    # def edge_fn(edge):
-    #     u = g[edge[0]]
-    #     v = g[edge[1]]
-    #     edge = edge[2]
-    #     edge_data = edge.v if isinstance(edge, Sourced) else edge
-    #     d = {}
-    #     if edge_data is None:
-    #         d["tooltip"] = replace(f"({u.str_src(self)} -- {v.str_src(self)})")
-    #     else:
-    #         d["tooltip"] = replace(f"{edge_data} ({u.str_src(self)} -- {v.str_src(self)})")
-    #     if isinstance(edge_data, node.Proximity):
-    #         d["color"] = '"#ff00ff"'
-    #         return d
-    #     if isinstance(edge_data, SharedFacility):
-    #         d["color"] = '"#008080"'
-    #         return d
-    #     for ty1, ty2, col in (
-    #             (AirAirport, AirGate, "#0000ff"),
-    #             (AirGate, AirFlight, "#00ff00"),
-    #             (AirFlight, AirAirline, "#ff0000"),
-    #             (RailCompany, RailLine, "#ff0000"),
-    #             (RailStation, RailStation, "#0000ff"),
-    #             (SeaCompany, SeaLine, "#ff0000"),
-    #             (SeaStop, SeaStop, "#0000ff"),
-    #             (BusCompany, BusLine, "#ff0000"),
-    #             (BusStop, BusStop, "#0000ff"),
-    #     ):
-    #         if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
-    #             d["color"] = '"' + col + '"'
-    #             break
-    #     else:
-    #         d["style"] = "invis"
-    #     return d
-    #
-    # # g.to_dot(
-    # #     node_attr=node_fn,
-    # #     edge_attr=edge_fn,
-    # #     graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"}, filename="test.dot")
-    # graphviz_draw(
-    #     g,
-    #     node_attr_fn=node_fn,
-    #     edge_attr_fn=edge_fn,
-    #     graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"},
-    #     filename=str(path),
-    #     image_type="svg",
-    #     method="sfdp",
-    # )
+# def draw_graph(gd: gt.GD) -> bytes:
+#     g = pydot.Dot(strict=True, outputorder="edgesfirst")
+#     for node in track(gd.nodes(), INFO1, description="Adding nodes", total=len(gd)):
+#         if node.type in ("AirFlight", "BusConnection", "RailConnection", "SeaConnection"):
+#             continue
+#         g.add_node(pydot.Node(str(node.i), style="filled", label=str(node)))
+#     with progress_bar(INFO1, f"Writing graph to svg..."):
+#         return cast(bytes, g.create(["sfdp", "-x", "-Goverlap=true"], "svg"))
+#     for i, (u, v, data) in g.edge_index_map().items():
+#         g.update_edge_by_index(i, (u, v, data))
+#
+#     def replace(s):
+#         return s.replace('"', '\\"')
+#
+#     def node_fn(node: Node):
+#
+#         d = {
+#             "style": "filled",
+#             "tooltip": replace(Node.str_src(node, self)),
+#             "label": replace(node.str_src(self)),
+#         }
+#         for ty, col in (
+#                 (AirFlight, "#ff8080"),
+#                 (AirAirport, "#8080ff"),
+#                 (AirAirline, "#ffff80"),
+#                 (AirGate, "#80ff80"),
+#                 (RailCompany, "#ffff80"),
+#                 (RailLine, "#ff8080"),
+#                 (RailStation, "#8080ff"),
+#                 (SeaCompany, "#ffff80"),
+#                 (SeaLine, "#ff8080"),
+#                 (SeaStop, "#8080ff"),
+#                 (BusCompany, "#ffff80"),
+#                 (BusLine, "#ff8080"),
+#                 (BusStop, "#8080ff"),
+#                 (Town, "#aaaaaa"),
+#                 (SpawnWarp, "#aaaaaa"),
+#         ):
+#             if isinstance(node, ty):
+#                 d["fillcolor"] = '"' + col + '"'
+#                 break
+#         return d
+#
+#     def edge_fn(edge):
+#         u = g[edge[0]]
+#         v = g[edge[1]]
+#         edge = edge[2]
+#         edge_data = edge.v if isinstance(edge, Sourced) else edge
+#         d = {}
+#         if edge_data is None:
+#             d["tooltip"] = replace(f"({u.str_src(self)} -- {v.str_src(self)})")
+#         else:
+#             d["tooltip"] = replace(f"{edge_data} ({u.str_src(self)} -- {v.str_src(self)})")
+#         if isinstance(edge_data, node.Proximity):
+#             d["color"] = '"#ff00ff"'
+#             return d
+#         if isinstance(edge_data, SharedFacility):
+#             d["color"] = '"#008080"'
+#             return d
+#         for ty1, ty2, col in (
+#                 (AirAirport, AirGate, "#0000ff"),
+#                 (AirGate, AirFlight, "#00ff00"),
+#                 (AirFlight, AirAirline, "#ff0000"),
+#                 (RailCompany, RailLine, "#ff0000"),
+#                 (RailStation, RailStation, "#0000ff"),
+#                 (SeaCompany, SeaLine, "#ff0000"),
+#                 (SeaStop, SeaStop, "#0000ff"),
+#                 (BusCompany, BusLine, "#ff0000"),
+#                 (BusStop, BusStop, "#0000ff"),
+#         ):
+#             if (isinstance(u, ty1) and isinstance(v, ty2)) or (isinstance(u, ty2) and isinstance(v, ty1)):
+#                 d["color"] = '"' + col + '"'
+#                 break
+#         else:
+#             d["style"] = "invis"
+#         return d
+#
+#     # g.to_dot(
+#     #     node_attr=node_fn,
+#     #     edge_attr=edge_fn,
+#     #     graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"}, filename="test.dot")
+#     graphviz_draw(
+#         g,
+#         node_attr_fn=node_fn,
+#         edge_attr_fn=edge_fn,
+#         graph_attr={"overlap": "prism1000", "outputorder": "edgesfirst"},
+#         filename=str(path),
+#         image_type="svg",
+#         method="sfdp",
+#     )
