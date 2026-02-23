@@ -24,8 +24,9 @@ if TYPE_CHECKING:
 
     import aiohttp
 
-URL: str = "???"
-URL_NO_SOURCES: str = "???"
+URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
+URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_ns.db"
+
 
 class GD:
     conn: sqlite3.Connection

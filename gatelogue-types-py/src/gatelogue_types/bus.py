@@ -84,7 +84,7 @@ class BusLine(Node):
     """Name of the line"""
     colour = _Column[str | None]("colour", "BusLine", sourced=True, formatter=_format_str)
     """Colour of the line (on a map)"""
-    mode = _Column[str | None]("mode", "BusLine", sourced=True, formatter=_format_str)
+    mode = _Column[BusMode | None]("mode", "BusLine", sourced=True, formatter=_format_str)
     """Type of bus vehicle or technology the line uses"""
     local = _Column[bool | None]("local", "BusLine", sourced=True)
     """Whether the line operates within the city, e.g. a local bus service"""
