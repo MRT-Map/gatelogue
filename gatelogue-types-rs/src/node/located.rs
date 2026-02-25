@@ -1,5 +1,5 @@
 use enum_dispatch::enum_dispatch;
-use strum_macros::EnumString;
+use strum_macros::{EnumIs, EnumString, EnumTryAs};
 
 use crate::{
     error::Error,
@@ -71,7 +71,7 @@ pub trait LocatedNode: Node + Copy {
 macro_rules! any_located_node {
     ($($Variant:ident),+) => {
         #[enum_dispatch(Node, LocatedNode)]
-        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+        #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
         pub enum AnyLocatedNode {
             $($Variant),+
         }

@@ -7,7 +7,7 @@ pub mod spawn_warp;
 pub mod town;
 
 use enum_dispatch::enum_dispatch;
-
+use strum_macros::{EnumIs, EnumTryAs};
 use crate::{
     error::Result,
     node::{
@@ -32,7 +32,7 @@ pub trait Node: Copy {
 macro_rules! any_node {
     ($($Variant:ident),+) => {
         #[enum_dispatch(Node)]
-        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+        #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
         pub enum AnyNode {
             $($Variant),+
         }
@@ -78,7 +78,7 @@ any_node!(
 macro_rules! node_type {
     ($Ty:ident) => {
         #[derive(Clone, Copy, PartialEq, Eq, Debug)]
-        pub struct $Ty(pub ID);
+        pub struct $Ty(pub(crate) ID);
 
         impl $crate::node::Node for $Ty {
             fn i(self) -> ID {
