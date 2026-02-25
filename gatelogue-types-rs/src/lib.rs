@@ -19,8 +19,7 @@
 //! GatelogueData::ureq_get_no_sources()?; // no sources, requires `ureq_get` feature
 //! ```
 
-use rusqlite::Connection;
-use rusqlite::types::FromSql;
+use rusqlite::{types::FromSql, Connection};
 
 mod error;
 mod node;
@@ -31,10 +30,12 @@ pub use node::{
     air::*, bus::*, located::*, rail::*, sea::*, spawn_warp::*, town::*, AnyNode, Node,
 };
 pub use util::ID;
+
 use crate::util::ConnectionExt;
 
 // TODO
-pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db";
+pub const URL: &str =
+    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db";
 pub const URL_NO_SOURCES: &str =
     "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db";
 
@@ -97,14 +98,24 @@ impl GD {
     }
 
     pub fn nodes(&self) -> Result<Vec<AnyNode>> {
-        self.0.query_and_then_get_vec("SELECT i FROM Node", (), |a| AnyNode::from_id(self, a.get(0)?))
+        self.0
+            .query_and_then_get_vec("SELECT i FROM Node", (), |a| {
+                AnyNode::from_id(self, a.get(0)?)
+            })
     }
     pub fn located_nodes(&self) -> Result<Vec<AnyLocatedNode>> {
-        self.0.query_and_then_get_vec("SELECT i FROM LocatedNode", (), |a| AnyLocatedNode::from_id(self, a.get(0)?))
+        self.0
+            .query_and_then_get_vec("SELECT i FROM LocatedNode", (), |a| {
+                AnyLocatedNode::from_id(self, a.get(0)?)
+            })
     }
     pub fn nodes_of_type<T: Node + From<ID> + FromSql>(&self) -> Result<Vec<T>> {
         let ty = T::from(0).ty();
-        self.0.query_and_then_get_vec("SELECT i FROM Node WHERE type = ?", (ty,), |a| Ok(a.get(0)?))
+        self.0.query_and_then_get_vec(
+            "SELECT i FROM Node WHERE type = ?",
+            (ty,),
+            |a| Ok(a.get(0)?),
+        )
     }
     pub fn get_node(&self, id: ID) -> Result<AnyNode> {
         AnyNode::from_id(self, id)

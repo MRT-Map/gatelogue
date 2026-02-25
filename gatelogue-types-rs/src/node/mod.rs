@@ -8,6 +8,7 @@ pub mod town;
 
 use enum_dispatch::enum_dispatch;
 use strum_macros::{EnumIs, EnumTryAs};
+
 use crate::{
     error::Result,
     node::{
