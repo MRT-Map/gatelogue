@@ -37,6 +37,7 @@ lines:
       - Shrine-Kargorok Bridge
       - Artarmon Park East
       - Artarmon Border
+      # - Sunraysia Interchange
   - name: Erzgard Circle
     code: "2"
     colour: "#eae7b7"
@@ -284,6 +285,7 @@ lines:
       - North Osprey
       - Glenolie
       - Zetland Distribution Terminal
+      - Kivali Interchange
   - name: Azoltham
     code: "13"
     colour: "#ca6d1e"
@@ -360,6 +362,13 @@ lines:
       - Coatl Street
       - Artarmon Seafood Market
       - Artarmon Beach
+      - Nightshade Hill
+      - Nighthawk Village
+      - Kivali Interchange
+      - Grevali Street
+      - Commerah Entrance
+      # - Sunraysia Regional Hospital
+      # - Sunraysia Interchange
   - name: Kaiphek
     code: "17"
     colour: "#6d7b63"
@@ -375,6 +384,26 @@ lines:
       - Solitude Hill Cemetery
       - Kaiphek Central
       - Kaiphek Public School
+  - name: Nergali
+    code: "18"
+    colour: "#d5a22f"
+    stations:
+      - Fort Cain-Historical District
+      - Sunraysia Lighthouse
+      - Strand Theatre
+      - Sunraysia City Hall
+      # - Sunraysia Breakwater
+      # - Nergali Park
+      # - Sunraysia Interchange
+  - name: Orcan
+    code: "19"
+    colour: "#1e57a5"
+    stations:
+      - Fort Cain-Historical District
+      - Sunraysia Lighthouse
+      - Strand Theatre
+      - Sunraysia City Hall
+      - Commerah Entrance
 
 
   - name: Gateway Region
@@ -411,6 +440,7 @@ lines:
       - Spire of New Domain
       - Artarmon Park East
       - Artarmon Border
+      # - Sunraysia Interchange
   - name: Sharkland Region
     code: "X2a"
     colour: "#62b2a3"
@@ -437,18 +467,18 @@ lines:
       - Kananook Junction
       - West Kananook
       - Odralia Junction
-      - Oosterhaven Ferry Terminal
-      - Prohampton Bus Interchange
-      - Prohampton Junction
+      - West Odral Interchange
+      - Plymouth Interchange
+      - Plymouth Central
+      - Westlake
   - name: Lakeland Region
     code: "X3a"
     colour: "#4a6b59"
     stations:
       - Odralia Junction
-      - West Odral Interchange
-      - Plymouth Interchange
-      - Plymouth Central
-      - Westlake
+      - Oosterhaven Ferry Terminal
+      - Prohampton Bus Interchange
+      - Prohampton Junction
   - name: Scalia Region
     code: "X4"
     colour: "#58734a"
@@ -547,6 +577,14 @@ lines:
       - Zetland West
       - Crowood Junction
       - South Wharf-Zetstone Tower
+      - Kivali Interchange
+  - name: Sorland Region
+    code: "X14"
+    colour: "#d5a22f"
+    stations:
+      - Fort Cain-Historical District
+      - Sunraysia City Hall
+      # - Sunraysia Interchange
   - name: Prohampton
     code: "P1"
     colour: "#625351"
@@ -611,6 +649,7 @@ coords:
   Alimar: [ -2964, -26868 ]
   Almono: [ -2835, -26760 ]
   Aquarium: [ -2734, -26681 ]
+  Areboretum Road: [ -2394, -26902 ]
   Artarmon Beach: [ -2463, -26380 ]
   Artarmon Border Heliport: [ -2475, -26490 ]
   Artarmon Border: [ -2391, -26527 ]
@@ -635,6 +674,7 @@ coords:
   Brewery District: [ -3215, -26651 ]
   Bullington North: [ -4443, -25145 ]
   Buraun City Medical Centre: [ -2439, -26688 ]
+  Cape Hognose: [ -5815, -27501 ]
   Capital Plaza: [ -2804, -26832 ]
   Carnigary Central: [ -3208, -27161 ]
   Carnigary Corner: [ -3095, -27307 ]
@@ -645,6 +685,8 @@ coords:
   Cerulean Ridge: [ -2688, -26806 ]
   Coatl Street: [ -2594, -26349 ]
   Coatldale: [ -2503, -26419 ]
+  Commerah Entrance: [ -2158, -26215 ]
+  Copperhead Bay Village: [ -5629, -27467 ]
   Cremorne Market: [ -3262, -26629 ]
   Cremorne Park: [ -3195, -26578 ]
   Cremorne Rocks: [ -3365, -26552 ]
@@ -694,12 +736,13 @@ coords:
   Esperance-Restaurant Precinct: [ -3209, -27001 ]
   Essence Falls: [ -2739, -26831 ]
   Euneva Central: [ -5294, -29077 ]
+  Euneva Interchange: [ -5061, -29027 ]
+  Euneva Public School: [ -5294, -29139 ]
   Euneva West: [ -5364, -29078 ]
   Exchange East: [ -2900, -26531 ]
   Exchange Junction: [ -2966, -26592 ]
   Exchange Plaza: [ -2963, -26547 ]
   Eñe Bahía: [ -4122, -29898 ]
-  Iron Square: [ -3999, -29880 ]
   Falcon Cross: [ -3096, -26357 ]
   Federation Square: [ -3136, -26922 ]
   Fern Crossing: [ -3271, -27113 ]
@@ -714,6 +757,7 @@ coords:
   Folou Gate Bridge South: [ -3450, -26548 ]
   Folou Street Mall East: [ -2644, -26693 ]
   Folou Street Mall West: [ -2913, -26689 ]
+  Fort Cain-Historical District: [ -2295, -26025 ]
   Gateway Junction: [ -3272, -27385 ]
   Gawler Interchange: [ -3885, -27533 ]
   Glaucous Bridge: [ -2899, -26588 ]
@@ -723,6 +767,7 @@ coords:
   Golden Arch: [ -3075, -26803 ]
   Golden Cross: [ -3016, -26614 ]
   Golden Plaza: [ -3018, -26551 ]
+  Grevali Street: [ -2193, -26153 ]
   Griffith Peak: [ -3100, -26231 ]
   Grove Park: [ -3099, -27005 ]
   Gryphon Cross: [ -3269, -26230 ]
@@ -736,10 +781,13 @@ coords:
   Hospital Precinct: [ -3208, -27267 ]
   Ikerfort: [ -3137, -26549 ]
   Indigo Gate: [ -2714, -26687 ]
+  Iron Square: [ -3999, -29880 ]
   Jagaz Street: [ -3316, -26110 ]
   Justice Precinct: [ -3055, -26890 ]
   Kaiman Pass Entrance: [ -2515, -26736 ]
   Kaiman-Buraun Statue: [ -2446, -26754 ]
+  Kaiphek Central: [ -2346, -27024 ]
+  Kaiphek Public School: [ -2260, -27036 ]
   KanaCorp Tower: [ -3096, -26686 ]
   Kananook Junction: [ -3882, -27184 ]
   Kasadie: [ -4068, -28048 ]
@@ -747,6 +795,7 @@ coords:
   Kerong Rapids Picnic Ground: [ -2663, -27064 ]
   Kerong Village: [ -2725, -27247 ]
   Keystone Park: [ -2635, -26399 ]
+  Kivali Interchange: [ -2306, -26050 ]
   Kobold University South: [ -3453, -27190 ]
   Kobold University: [ -3266, -27322 ]
   Kobuld Hall: [ -3355, -27387 ]
@@ -757,10 +806,15 @@ coords:
   Lakeside Station: [ -6509, -24988 ]
   Larnwick Station: [ -3791, -25358 ]
   Larnwick Town Hall: [ -3789, -25256 ]
+  Longhorn Forest: [ -4583, -28917 ]
+  Longhorn Gulch: [ -4825, -28945 ]
   Lower Esperance: [ -3270, -27003 ]
   Mayoral Corner: [ -3029, -27102 ]
   Montclair Front: [ -5344, -29024 ]
   Mountain Gate: [ -2888, -27089 ]
+  Nergali Park: [ -2072, -26271 ]
+  Nighthawk Village: [ -2425, -26171 ]
+  Nightshade Hill: [ -2383, -26274 ]
   Nihill Street: [ -2963, -26946 ]
   Nolan Bridge: [ -2883, -26239 ]
   North Kananook: [ -3881, -27411 ]
@@ -768,10 +822,12 @@ coords:
   Odralia Junction: [ -4419, -27094 ]
   Old Town: [ -3881, -27926 ]
   One Tree Hill: [ -2964, -27226 ]
+  Oosterhaven Ferry Terminal: [ -4480, -26247 ]
   Osprey Interchange: [ -2801, -26132 ]
   Overland Interchange: [ -3264, -26021 ]
   Palmate Beach: [ -5405, -27877 ]
   Parkville East: [ -3098, -27405 ]
+  Patchy's Landing: [ -5210, -29899 ]
   Perch Street-Library: [ -3194, -26356 ]
   Plymouth Central: [ -5615, -26827 ]
   Plymouth Interchange: [ -5542, -26799 ]
@@ -785,18 +841,22 @@ coords:
   Rialto Square: [ -2961, -26453 ]
   Robloxia Downtown: [ -4915, -28215 ]
   Robloxia Junction: [ -4972, -28219 ]
+  Scalia City Mall: [ -5336, -27597 ]
   Scalia City Pier: [ -5424, -27642 ]
   Scalia City Town Hall: [ -5338, -27652 ]
   Scalia City Transit Centre: [ -5196, -27651 ]
+  Scalia Sports Centre: [ -5419, -27586 ]
   Scholar Lane: [ -3361, -27222 ]
   Science Precinct: [ -3510, -27318 ]
   Sedona: [ -2883, -26954 ]
   Sentry Bridge: [ -3370, -26336 ]
+  Shellwater Plaza: [ -5268, -29915 ]
   Shrine-Kargorok Bridge: [ -2610, -26587 ]
   Signal Hill: [ -2527, -25709 ]
   Silverbird Crossing North: [ -3020, -26131 ]
   Sinter Street: [ -3345, -26953 ]
   SkyPeak Observatory: [ -2424, -26830 ]
+  Solitude Hill Cemetery: [ -2536, -27018 ]
   South Quarters: [ -2801, -26311 ]
   South Wharf-ECEC: [ -2736, -26454 ]
   South Wharf-Zetstone Tower: [ -2734, -26351 ]
@@ -811,6 +871,12 @@ coords:
   Stockton Junction: [ -4353, -28361 ]
   Stockton Pier: [ -4391, -28595 ]
   Stockton West: [ -4497, -28477 ]
+  Strand Theatre: [ -2156, -26122 ]
+  Sunraysia Breakwater: [ -2075, -26208 ]
+  Sunraysia City Hall: [ -2104, -26168 ]
+  Sunraysia Interchange: [ -2048, -26359 ]
+  Sunraysia Lighthouse: [ -2207, -26058 ]
+  Sunraysia Regional Hospital: [ -2115, -26284 ]
   Swadestone Park: [ -3269, -26283 ]
   Sycamore: [ -2574, -25707 ]
   Talon Cross: [ -3267, -26579 ]
@@ -837,25 +903,10 @@ coords:
   Westgate Central: [ -3387, -26427 ]
   Westlake: [ -5727, -26754 ]
   Whitechapel Cross: [ -4348, -28465 ]
+  Wrunnwell Lighthouse: [ -5511, -27984 ]
   Zetland Distribution Terminal: [ -2736, -26227 ]
   Zetland Hills: [ -3187, -26226 ]
   Zetland West: [ -3264, -26427 ]
   Zetstone Central: [ -3182, -26416 ]
   Zetstone Gardens: [ -3335, -26374 ]
   Zetstone-Federation Gate: [ -2802, -26454 ]
-  Kaiphek Central: [ -2346, -27024 ]
-  Kaiphek Public School: [ -2260, -27036 ]
-  Areboretum Road: [ -2394, -26902 ]
-  Solitude Hill Cemetery: [ -2536, -27018 ]
-  Longhorn Forest: [ -4583, -28917 ]
-  Longhorn Gulch: [ -4825, -28945 ]
-  Euneva Interchange: [ -5061, -29027 ]
-  Shellwater Plaza: [ -5268, -29915 ]
-  Patchy's Landing: [ -5210, -29899 ]
-  Euneva Public School: [ -5294, -29139 ]
-  Cape Hognose: [ -5815, -27501 ]
-  Copperhead Bay Village: [ -5629, -27467 ]
-  Wrunnwell Lighthouse: [ -5511, -27984 ]
-  Scalia City Mall: [ -5336, -27597 ]
-  Scalia Sports Centre: [ -5419, -27586 ]
-  Oosterhaven Ferry Terminal: [ -4480, -26247 ]
