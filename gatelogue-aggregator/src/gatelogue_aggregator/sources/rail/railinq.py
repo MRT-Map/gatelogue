@@ -35,6 +35,8 @@ class RaiLinQ(RailSource):
                 name = str(b.string)
                 if name == "Wazamawazi Queen Maxima (Low Level)":
                     name = "Wazamawazi Queen Maxima"
+                elif name == "Spruce Valley Airfield":
+                    name = "Spring Valley Airfield"
                 station = RailStation.new(self, codes={name}, name=name, company=company)
                 stations.append(station)
 
