@@ -16,6 +16,7 @@ lines:
       - Repentigny
       - Anthracite Valley
       - Rutland
+      - Northalsted
       - Boofar
       - Noboribetsu
       - San Francisco Midway International Airport
@@ -165,3 +166,4 @@ coords:
   Essex Central: [ -1036, -19795 ]
   Stone: [ -2800, -21364 ]
   Riverdane: [ -3064, -23972 ]
+  Northalsted: [ -13392, -25186 ]

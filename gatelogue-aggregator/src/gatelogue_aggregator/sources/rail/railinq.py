@@ -33,6 +33,8 @@ class RaiLinQ(RailSource):
                 name = str(b.string)
                 if name == "Wazamawazi Queen Maxima (Low Level)":
                     name = "Wazamawazi Queen Maxima"
+                elif name == "Spruce Valley Airfield":
+                    name = "Spring Valley Airfield"
                 builder.add(self.station(codes={name}, name=name, company=company))
 
             builder.connect()
