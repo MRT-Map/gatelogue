@@ -33,9 +33,10 @@ pub use node::{
 pub use util::ID;
 use crate::util::ConnectionExt;
 
-pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
+// TODO
+pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db";
 pub const URL_NO_SOURCES: &str =
-    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_ns.db";
+    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db";
 
 pub struct GD(Connection);
 

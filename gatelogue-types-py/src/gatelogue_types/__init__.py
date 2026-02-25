@@ -24,8 +24,9 @@ if TYPE_CHECKING:
 
     import aiohttp
 
-URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
-URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_ns.db"
+# TODO
+URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db"
+URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db"
 
 
 class GD:

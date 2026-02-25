@@ -168,8 +168,7 @@ def run(
     type=Path,
     default="data.db",
     show_default=True,
-    help="p"
-         "ath of the SQLite DB",
+    help="path of the SQLite DB",
 )
 @click.option(
     "-o",
