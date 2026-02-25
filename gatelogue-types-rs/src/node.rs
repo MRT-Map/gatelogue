@@ -1,84 +1,101 @@
-use std::str::FromStr;
-use rusqlite::OptionalExtension;
-use rusqlite::types::{FromSql, FromSqlError, FromSqlResult, ValueRef};
-use strum_macros::EnumString;
+use crate::air::{AirAirline, AirAirport, AirFlight, AirGate};
+use crate::bus::{BusBerth, BusCompany, BusConnection, BusLine, BusStop};
 use crate::error::Result;
+use crate::located_node::AnyLocatedNode;
+use crate::rail::{RailCompany, RailConnection, RailLine, RailPlatform, RailStation};
+use crate::sea::{SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop};
+use crate::spawn_warp::SpawnWarp;
+use crate::town::Town;
+use crate::util::ID;
 use crate::GD;
+use enum_dispatch::enum_dispatch;
 
-pub type ID = u16;
-
-#[macro_export]
-macro_rules! get_column {
-    ($table_name:literal, $column_name:ident, $ColTy:ty) => {
-        fn $column_name(self, gd: GD) -> crate::error::Result<$ColTy> {
-            gd.0.query_one(concat!("SELECT ", stringify!($column_name), " FROM ", $table_name, " WHERE i = ?"), (self.i(),), |a| a.get(0)).map_err(Into::into)
-        }
-    };
-    ($table_name:literal, $fn_name:ident, $column_name:literal, $ColTy:ty) => {
-        fn $fn_name(self, gd: GD) -> crate::error::Result<$ColTy> {
-            gd.0.query_one(concat!("SELECT ", $column_name, " FROM ", $table_name, " WHERE i = ?"), (self.i(),), |a| a.get(0)).map_err(Into::into)
-        }
-    };
-}
-#[macro_export]
-macro_rules! get_set {
-    ($table_name:literal, $fn_name:ident, $column_name:literal, $ColTy:ty) => {
-        fn $fn_name(self, gd: GD) -> crate::error::Result<Vec<$ColTy>> {
-            gd.0.prepare_cached(concat!("SELECT DISTINCT ", $column_name, " FROM ", $table_name, " WHERE i = ?"))?.query_map(, (self.i(),), |a| a.get(0)).map(|a| a.collect()).map_err(Into::into)
-        }
-    };
-}
-
+#[enum_dispatch]
 pub trait Node: Copy {
     fn i(self) -> ID;
-    get_column!("Node", ty, "type", World);
+    fn ty(self) -> &'static str;
 }
+
+macro_rules! any_node {
+    ($($Variant:ident),+) => {
+        #[enum_dispatch(Node)]
+        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+        pub enum AnyNode {
+            $($Variant),+
+        }
+
+        impl AnyNode {
+            pub fn from_id(gd: &GD, id: ID) -> Result<Self> {
+                gd.0.query_one("SELECT type FROM Node WHERE i = ?", (id,), |row| {
+                    Ok(match &*row.get::<_, String>(0)? {
+                        $(stringify!($Variant) => $Variant(id).into(),)+
+                        _ => unreachable!(),
+                    })
+                })
+                .map_err(Into::into)
+            }
+        }
+    };
+}
+any_node!(
+    AirAirline,
+    AirAirport,
+    AirGate,
+    AirFlight,
+    BusCompany,
+    BusLine,
+    BusStop,
+    BusBerth,
+    BusConnection,
+    RailCompany,
+    RailLine,
+    RailStation,
+    RailPlatform,
+    RailConnection,
+    SeaCompany,
+    SeaLine,
+    SeaStop,
+    SeaDock,
+    SeaConnection,
+    SpawnWarp,
+    Town
+);
 
 #[macro_export]
 macro_rules! node_type {
     ($Ty:ident) => {
-        #[derive(CLone, Copy, PartialEq, Eq, Debug)]
+        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
         pub struct $Ty(pub ID);
 
-        impl crate::node::Node for $Ty {
+        impl $crate::node::Node for $Ty {
             fn i(self) -> ID {
                 self.0
+            }
+            fn ty(self) -> &'static str {
+                stringify!($Ty)
+            }
+        }
+
+        impl From<ID> for $Ty {
+            fn from(value: ID) -> Self {
+                Self(value)
+            }
+        }
+
+        impl rusqlite::types::FromSql for $Ty {
+            fn column_result(
+                value: rusqlite::types::ValueRef<'_>,
+            ) -> rusqlite::types::FromSqlResult<Self> {
+                Ok(Self(ID::try_from(value.as_i64()?).map_err(|e| {
+                    rusqlite::types::FromSqlError::Other(e.into())
+                })?))
             }
         }
     };
 
     (located $Ty:ident) => {
-        node_type!($Ty)
+        node_type!($Ty);
 
-        impl LocatedNode for $Ty {
-
-        }
+        impl $crate::located_node::LocatedNode for $Ty {}
     };
-}
-
-#[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
-pub enum World {
-    Old,
-    New,
-    Space,
-}
-impl FromSql for World {
-    fn column_result(value: ValueRef<'_>) -> FromSqlResult<Self> {
-        World::from_str(value.as_str()?).map_err(FromSqlError::Other)
-    }
-}
-
-pub trait LocatedNode: Node {
-    get_column!("LocatedNode", world, Option<World>);
-    fn coordinates(self, gd: GD) -> Result<Option<(f64, f64)>> {
-        gd.0.query_one("SELECT x, y FROM LocatedNode WHERE i = ?", (self.i(),), |a| {
-            let Some(x) = a.get::<_, Option<f64>>(0) else {
-                return Ok(None);
-            };
-            let Some(y) = a.get::<_, Option<f64>>(1) else {
-                return Ok(None);
-            };
-            Ok(Some((x, y)))
-        }).map_err(Into::into)
-    }
 }

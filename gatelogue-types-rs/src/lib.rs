@@ -19,35 +19,36 @@
 //! GatelogueData::ureq_get_no_sources()?; // no sources, requires `ureq_get` feature
 //! ```
 
-use std::ops::{Deref, DerefMut};
 use rusqlite::Connection;
 
+pub mod air;
+pub mod bus;
 pub mod error;
-mod node;
-mod air;
-mod bus;
+pub mod located_node;
+pub mod node;
+pub mod rail;
+pub mod sea;
+pub mod spawn_warp;
+pub mod town;
+pub mod util;
 
 use error::Result;
 
 pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
-pub const URL_NO_SOURCES: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_ns.db";
+pub const URL_NO_SOURCES: &str =
+    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data_ns.db";
 
 pub struct GD(Connection);
 
 impl GD {
     fn from_bytes(bytes: &[u8]) -> Result<Self> {
         let mut conn = Connection::open_in_memory()?;
-        conn.deserialize_bytes(None, bytes)?;
+        conn.deserialize_read_exact("main", bytes, bytes.len(), true)?;
         Ok(Self(conn))
     }
     #[cfg(feature = "reqwest_get")]
     pub async fn reqwest_get_with_sources() -> Result<Self> {
-        let bytes = reqwest::get(
-            URL,
-        )
-            .await?
-            .bytes()
-            .await?;
+        let bytes = reqwest::get(URL).await?.bytes().await?;
         Self::from_bytes(&bytes)
     }
     #[cfg(feature = "reqwest_get")]
@@ -57,11 +58,7 @@ impl GD {
     }
     #[cfg(feature = "surf_get")]
     pub async fn surf_get_with_sources() -> Result<Self> {
-        let bytes = surf::get(
-            URL,
-        )
-            .recv_bytes()
-            .await?;
+        let bytes = surf::get(URL).recv_bytes().await?;
         Self::from_bytes(&bytes)
     }
     #[cfg(feature = "surf_get")]
@@ -71,30 +68,34 @@ impl GD {
     }
     #[cfg(feature = "ureq_get")]
     pub fn ureq_get_with_sources() -> Result<Self> {
-        let bytes = ureq::get(
-            URL,
-        )
-            .call()?
-            .into_body().read_to_vec()?;
+        let bytes = ureq::get(URL).call()?.into_body().read_to_vec()?;
         Self::from_bytes(&bytes)
     }
     #[cfg(feature = "ureq_get")]
     pub fn ureq_get_no_sources() -> Result<Self> {
-        let bytes = ureq::get(URL_NO_SOURCES).call()?.into_body().read_to_vec()?;
+        let bytes = ureq::get(URL_NO_SOURCES)
+            .call()?
+            .into_body()
+            .read_to_vec()?;
         Self::from_bytes(&bytes)
     }
 
     pub fn timestamp(&self) -> Result<String> {
-        self.0.query_one("SELECT timestamp FROM Metadata", (), |a| a.get(0)).map_err(Into::into)
+        self.0
+            .query_one("SELECT timestamp FROM Metadata", (), |a| a.get(0))
+            .map_err(Into::into)
     }
     pub fn version(&self) -> Result<u32> {
-        self.0.query_one("SELECT version FROM Metadata", (), |a| a.get(0)).map_err(Into::into)
+        self.0
+            .query_one("SELECT version FROM Metadata", (), |a| a.get(0))
+            .map_err(Into::into)
     }
     pub fn has_sources(&self) -> Result<bool> {
-        self.0.query_one("SELECT has_sources FROM Metadata", (), |a| a.get(0)).map_err(Into::into)
+        self.0
+            .query_one("SELECT has_sources FROM Metadata", (), |a| a.get(0))
+            .map_err(Into::into)
     }
 }
-
 
 // pub type ID = u16;
 //

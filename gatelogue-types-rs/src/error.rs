@@ -1,3 +1,4 @@
+use crate::util::ID;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -14,12 +15,14 @@ pub enum Error {
     Ureq(#[from] ureq::Error),
 
     #[error("rusqlite error: {0:?}")]
-    Decode(#[from] rusqlite::Error),
+    RuSQLite(#[from] rusqlite::Error),
 
     #[error("No node {0}")]
     NoNode(ID),
-    #[error("{0} not {1}")]
-    IncorrectType(ID, &'static str),
+    #[error("No node {0} of type {1}")]
+    NoNodeOfType(ID, &'static str),
+    #[error("Node {0} not Located")]
+    NodeNotLocated(ID),
 
     #[error("unknown error")]
     Unknown,
