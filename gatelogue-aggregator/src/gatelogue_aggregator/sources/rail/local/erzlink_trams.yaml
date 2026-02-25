@@ -643,6 +643,9 @@ lines:
       - Vannahelm Station
       - Vannahelm Park and Ride
 
+proximity:
+  - [Kivali Interchange, Fort Cain-Historical District]
+
 coords:
   Acland Street: [ -3365, -26552 ]
   Agora Walk: [ -3210, -27324 ]
