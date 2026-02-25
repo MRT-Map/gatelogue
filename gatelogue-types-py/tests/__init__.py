@@ -4,8 +4,13 @@ from gatelogue_types.bus import BusCompany, BusStop
 
 
 def test_get():
-    # gd = GD.get()
-    # print(gd.timestamp, gd.version)
+    gd = GD.urllib_get()
+    print(gd.timestamp, gd.version)
+    assert True
+
+def test_get_no_sources():
+    gd = GD.urllib_get(sources=False)
+    print(gd.timestamp, gd.version)
     assert True
 
 
