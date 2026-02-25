@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: pypa/hatch@install
-      - run: hatch test --all
+      - run: hatch test -py 3.14 --all
 
   test-types-rs:
     runs-on: ubuntu-latest
