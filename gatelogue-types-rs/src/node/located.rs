@@ -1,16 +1,16 @@
-use crate::air::AirAirport;
-use crate::bus::BusStop;
-use crate::error::Error;
-use crate::node::{AnyNode, Node};
-use crate::rail::RailStation;
-use crate::sea::SeaStop;
-use crate::spawn_warp::SpawnWarp;
-use crate::town::Town;
-use crate::util::{ConnectionExt, ID};
-use crate::Result;
-use crate::{from_sql_for_enum, GD};
 use enum_dispatch::enum_dispatch;
 use strum_macros::EnumString;
+
+use crate::{
+    error::Error,
+    from_sql_for_enum,
+    node::{
+        air::AirAirport, bus::BusStop, rail::RailStation, sea::SeaStop, spawn_warp::SpawnWarp,
+        town::Town, AnyNode, Node,
+    },
+    util::{ConnectionExt, ID},
+    Result, GD,
+};
 
 #[enum_dispatch]
 pub trait LocatedNode: Node + Copy {

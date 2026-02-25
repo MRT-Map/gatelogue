@@ -21,18 +21,15 @@
 
 use rusqlite::Connection;
 
-pub mod air;
-pub mod bus;
-pub mod error;
-pub mod located_node;
-pub mod node;
-pub mod rail;
-pub mod sea;
-pub mod spawn_warp;
-pub mod town;
-pub mod util;
+mod error;
+mod node;
+mod util;
 
-use error::Result;
+pub use error::*;
+pub use node::{
+    air::*, bus::*, located::*, rail::*, sea::*, spawn_warp::*, town::*, AnyNode, Node,
+};
+pub use util::ID;
 
 pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
 pub const URL_NO_SOURCES: &str =

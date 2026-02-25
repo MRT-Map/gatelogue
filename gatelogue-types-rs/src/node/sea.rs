@@ -1,6 +1,6 @@
-use crate::util::ID;
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type};
 use strum_macros::EnumString;
+
+use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum SeaMode {
@@ -16,14 +16,14 @@ from_sql_for_enum!(SeaMode);
 node_type!(SeaCompany);
 impl SeaCompany {
     get_column!("SeaCompany", name, String);
-    get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = :i");
-    get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = :i");
+    get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = ?");
+    get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = ?");
     get_derived_vec!(
         docks,
         SeaDock,
         concat!(
             "SELECT DISTINCT SeaDock.i ",
-            "FROM (SELECT i FROM SeaStop WHERE company = :i) A ",
+            "FROM (SELECT i FROM SeaStop WHERE company = ?) A ",
             "INNER JOIN SeaDock on A.i = SeaDock.stop"
         )
     );
@@ -43,7 +43,7 @@ impl SeaLine {
         SeaDock,
         concat!(
             "SELECT DISTINCT SeaDock.i ",
-            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = ?) A ",
             "LEFT JOIN SeaDock ON A.\"from\" = SeaDock.i OR A.\"to\" = SeaDock.i"
         )
     );
@@ -52,7 +52,7 @@ impl SeaLine {
         SeaStop,
         concat!(
             "SELECT DISTINCT SeaDock.stop ",
-            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = ?) A ",
             "LEFT JOIN SeaDock ON A.\"from\" = SeaDock.i OR A.\"to\" = SeaDock.i"
         )
     );
@@ -64,13 +64,13 @@ impl SeaStop {
     get_column!("SeaStop", company, SeaCompany);
     get_column!("SeaStop", name, Option<String>);
 
-    get_derived_vec!(docks, SeaDock, "SELECT i FROM SeaDock WHERE stop = :i");
+    get_derived_vec!(docks, SeaDock, "SELECT i FROM SeaDock WHERE stop = ?");
     get_derived_vec!(
         connections_from_here,
         SeaConnection,
         concat!(
             "SELECT DISTINCT SeaConnection.i ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = :i) A ",
+            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
             "INNER JOIN SeaConnection ON A.i = SeaConnection.\"from\""
         )
     );
@@ -79,7 +79,7 @@ impl SeaStop {
         SeaConnection,
         concat!(
             "SELECT DISTINCT SeaConnection.i ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = :i) A ",
+            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
             "INNER JOIN SeaConnection ON A.i = SeaConnection.\"to\""
         )
     );
@@ -88,7 +88,7 @@ impl SeaStop {
         SeaLine,
         concat!(
             "SELECT DISTINCT SeaConnection.line ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = :i) A ",
+            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
             "LEFT JOIN SeaConnection ON A.i = SeaConnection.\"from\" OR A.i = SeaConnection.\"to\""
         )
     );
@@ -102,19 +102,19 @@ impl SeaDock {
     get_derived_vec!(
         connections_from_here,
         SeaConnection,
-        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"from\" = :i"
+        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"from\" = ?"
     );
     get_derived_vec!(
         connections_to_here,
         SeaConnection,
-        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"to\" = :i"
+        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"to\" = ?"
     );
     get_derived_vec!(
         lines,
         SeaLine,
         concat!(
             "SELECT DISTINCT SeaConnection.line FROM SeaConnection ",
-            "WHERE SeaConnection.\"from\" = :i OR SeaConnection.\"to\" = :i"
+            "WHERE SeaConnection.\"from\" = ? OR SeaConnection.\"to\" = ?"
         )
     );
 }

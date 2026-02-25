@@ -1,14 +1,27 @@
-use crate::air::{AirAirline, AirAirport, AirFlight, AirGate};
-use crate::bus::{BusBerth, BusCompany, BusConnection, BusLine, BusStop};
-use crate::error::Result;
-use crate::located_node::AnyLocatedNode;
-use crate::rail::{RailCompany, RailConnection, RailLine, RailPlatform, RailStation};
-use crate::sea::{SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop};
-use crate::spawn_warp::SpawnWarp;
-use crate::town::Town;
-use crate::util::ID;
-use crate::GD;
+pub mod air;
+pub mod bus;
+pub mod located;
+pub mod rail;
+pub mod sea;
+pub mod spawn_warp;
+pub mod town;
+
 use enum_dispatch::enum_dispatch;
+
+use crate::{
+    error::Result,
+    node::{
+        air::{AirAirline, AirAirport, AirFlight, AirGate},
+        bus::{BusBerth, BusCompany, BusConnection, BusLine, BusStop},
+        located::AnyLocatedNode,
+        rail::{RailCompany, RailConnection, RailLine, RailPlatform, RailStation},
+        sea::{SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop},
+        spawn_warp::SpawnWarp,
+        town::Town,
+    },
+    util::ID,
+    GD,
+};
 
 #[enum_dispatch]
 pub trait Node: Copy {
@@ -96,6 +109,6 @@ macro_rules! node_type {
     (located $Ty:ident) => {
         node_type!($Ty);
 
-        impl $crate::located_node::LocatedNode for $Ty {}
+        impl $crate::node::located::LocatedNode for $Ty {}
     };
 }

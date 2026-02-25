@@ -1,5 +1,6 @@
-use crate::error::Result;
 use rusqlite::{Connection, Params, Row};
+
+use crate::error::Result;
 
 pub type ID = u16;
 
@@ -20,10 +21,12 @@ macro_rules! get_column {
                 (self.i(),),
                 |a| a.get(0),
             )
-            .map_err(|e| if e == rusqlite::Error::QueryReturnedNoRows {
-                $crate::error::Error::NoNodeOfType(self.i(), self.ty())
-            } else {
-                e.into()
+            .map_err(|e| {
+                if e == rusqlite::Error::QueryReturnedNoRows {
+                    $crate::error::Error::NoNodeOfType(self.i(), self.ty())
+                } else {
+                    e.into()
+                }
             })
         }
     };
@@ -42,10 +45,12 @@ macro_rules! get_column {
                 (self.i(),),
                 |a| a.get(0),
             )
-            .map_err(|e| if e == rusqlite::Error::QueryReturnedNoRows {
-                $crate::error::Error::NoNodeOfType(self.i(), self.ty())
-            } else {
-                e.into()
+            .map_err(|e| {
+                if e == rusqlite::Error::QueryReturnedNoRows {
+                    $crate::error::Error::NoNodeOfType(self.i(), self.ty())
+                } else {
+                    e.into()
+                }
             })
         }
     };

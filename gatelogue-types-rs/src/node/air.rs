@@ -1,6 +1,6 @@
-use crate::util::ID;
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type};
 use strum_macros::EnumString;
+
+use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum AirMode {

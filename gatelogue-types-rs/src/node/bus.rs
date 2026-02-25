@@ -1,6 +1,6 @@
-use crate::util::ID;
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type};
 use strum_macros::EnumString;
+
+use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum BusMode {
@@ -14,14 +14,14 @@ from_sql_for_enum!(BusMode);
 node_type!(BusCompany);
 impl BusCompany {
     get_column!("BusCompany", name, String);
-    get_derived_vec!(lines, BusLine, "SELECT i FROM BusLine WHERE company = :i");
-    get_derived_vec!(stops, BusStop, "SELECT i FROM BusStop WHERE company = :i");
+    get_derived_vec!(lines, BusLine, "SELECT i FROM BusLine WHERE company = ?");
+    get_derived_vec!(stops, BusStop, "SELECT i FROM BusStop WHERE company = ?");
     get_derived_vec!(
         berths,
         BusBerth,
         concat!(
             "SELECT DISTINCT BusBerth.i ",
-            "FROM (SELECT i FROM BusStop WHERE company = :i) A ",
+            "FROM (SELECT i FROM BusStop WHERE company = ?) A ",
             "INNER JOIN BusBerth on A.i = BusBerth.stop"
         )
     );
@@ -41,7 +41,7 @@ impl BusLine {
         BusBerth,
         concat!(
             "SELECT DISTINCT BusBerth.i ",
-            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = ?) A ",
             "LEFT JOIN BusBerth ON A.\"from\" = BusBerth.i OR A.\"to\" = BusBerth.i"
         )
     );
@@ -50,7 +50,7 @@ impl BusLine {
         BusStop,
         concat!(
             "SELECT DISTINCT BusBerth.stop ",
-            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = ?) A ",
             "LEFT JOIN BusBerth ON A.\"from\" = BusBerth.i OR A.\"to\" = BusBerth.i"
         )
     );
@@ -62,13 +62,13 @@ impl BusStop {
     get_column!("BusStop", company, BusCompany);
     get_column!("BusStop", name, Option<String>);
 
-    get_derived_vec!(berths, BusBerth, "SELECT i FROM BusBerth WHERE stop = :i");
+    get_derived_vec!(berths, BusBerth, "SELECT i FROM BusBerth WHERE stop = ?");
     get_derived_vec!(
         connections_from_here,
         BusConnection,
         concat!(
             "SELECT DISTINCT BusConnection.i ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = :i) A ",
+            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
             "INNER JOIN BusConnection ON A.i = BusConnection.\"from\""
         )
     );
@@ -77,7 +77,7 @@ impl BusStop {
         BusConnection,
         concat!(
             "SELECT DISTINCT BusConnection.i ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = :i) A ",
+            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
             "INNER JOIN BusConnection ON A.i = BusConnection.\"to\""
         )
     );
@@ -86,7 +86,7 @@ impl BusStop {
         BusLine,
         concat!(
             "SELECT DISTINCT BusConnection.line ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = :i) A ",
+            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
             "LEFT JOIN BusConnection ON A.i = BusConnection.\"from\" OR A.i = BusConnection.\"to\""
         )
     );
@@ -100,19 +100,19 @@ impl BusBerth {
     get_derived_vec!(
         connections_from_here,
         BusConnection,
-        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"from\" = :i"
+        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"from\" = ?"
     );
     get_derived_vec!(
         connections_to_here,
         BusConnection,
-        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"to\" = :i"
+        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"to\" = ?"
     );
     get_derived_vec!(
         lines,
         BusLine,
         concat!(
             "SELECT DISTINCT BusConnection.line FROM BusConnection ",
-            "WHERE BusConnection.\"from\" = :i OR BusConnection.\"to\" = :i"
+            "WHERE BusConnection.\"from\" = ? OR BusConnection.\"to\" = ?"
         )
     );
 }

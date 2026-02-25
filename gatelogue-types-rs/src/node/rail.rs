@@ -1,6 +1,6 @@
-use crate::util::ID;
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type};
 use strum_macros::EnumString;
+
+use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum RailMode {
@@ -18,18 +18,18 @@ from_sql_for_enum!(RailMode);
 node_type!(RailCompany);
 impl RailCompany {
     get_column!("RailCompany", name, String);
-    get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = :i");
+    get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = ?");
     get_derived_vec!(
         stations,
         RailStation,
-        "SELECT i FROM RailStation WHERE company = :i"
+        "SELECT i FROM RailStation WHERE company = ?"
     );
     get_derived_vec!(
         platforms,
         RailPlatform,
         concat!(
             "SELECT DISTINCT RailPlatform.i ",
-            "FROM (SELECT i FROM RailStation WHERE company = :i) A ",
+            "FROM (SELECT i FROM RailStation WHERE company = ?) A ",
             "INNER JOIN RailPlatform on A.i = RailPlatform.station"
         )
     );
@@ -49,7 +49,7 @@ impl RailLine {
         RailPlatform,
         concat!(
             "SELECT DISTINCT RailPlatform.i ",
-            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = ?) A ",
             "LEFT JOIN RailPlatform ON A.\"from\" = RailPlatform.i OR A.\"to\" = RailPlatform.i"
         )
     );
@@ -58,7 +58,7 @@ impl RailLine {
         RailStation,
         concat!(
             "SELECT DISTINCT RailPlatform.station ",
-            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = :i) A ",
+            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = ?) A ",
             "LEFT JOIN RailPlatform ON A.\"from\" = RailPlatform.i OR A.\"to\" = RailPlatform.i"
         )
     );
@@ -73,14 +73,14 @@ impl RailStation {
     get_derived_vec!(
         platforms,
         RailPlatform,
-        "SELECT i FROM RailPlatform WHERE station = :i"
+        "SELECT i FROM RailPlatform WHERE station = ?"
     );
     get_derived_vec!(
         connections_from_here,
         RailConnection,
         concat!(
             "SELECT DISTINCT RailConnection.i ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = :i) A ",
+            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
             "INNER JOIN RailConnection ON A.i = RailConnection.\"from\""
         )
     );
@@ -89,7 +89,7 @@ impl RailStation {
         RailConnection,
         concat!(
             "SELECT DISTINCT RailConnection.i ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = :i) A ",
+            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
             "INNER JOIN RailConnection ON A.i = RailConnection.\"to\""
         )
     );
@@ -98,7 +98,7 @@ impl RailStation {
         RailLine,
         concat!(
             "SELECT DISTINCT RailConnection.line ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = :i) A ",
+            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
             "LEFT JOIN RailConnection ON A.i = RailConnection.\"from\" OR A.i = RailConnection.\"to\""
         )
     );
@@ -112,19 +112,19 @@ impl RailPlatform {
     get_derived_vec!(
         connections_from_here,
         RailConnection,
-        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"from\" = :i"
+        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"from\" = ?"
     );
     get_derived_vec!(
         connections_to_here,
         RailConnection,
-        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"to\" = :i"
+        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"to\" = ?"
     );
     get_derived_vec!(
         lines,
         RailLine,
         concat!(
             "SELECT DISTINCT RailConnection.line FROM RailConnection ",
-            "WHERE RailConnection.\"from\" = :i OR RailConnection.\"to\" = :i"
+            "WHERE RailConnection.\"from\" = ? OR RailConnection.\"to\" = ?"
         )
     );
 }

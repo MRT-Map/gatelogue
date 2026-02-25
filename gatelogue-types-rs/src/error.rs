@@ -1,5 +1,6 @@
-use crate::util::ID;
 use thiserror::Error;
+
+use crate::util::ID;
 
 #[derive(Error, Debug)]
 #[non_exhaustive]
