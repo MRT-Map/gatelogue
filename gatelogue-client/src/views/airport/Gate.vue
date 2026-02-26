@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { AirGate, StringID } from "gatelogue-types";
+import type { AirGate } from "gatelogue-types";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Flight from "./Flight.vue";
 import { computed } from "vue";
-import { gd } from "@/stores/data";
 
 const props = defineProps<{
   gate: AirGate;

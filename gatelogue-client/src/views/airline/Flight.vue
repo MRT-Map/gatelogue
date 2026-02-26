@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { AirFlight, AirGate, StringID } from "gatelogue-types";
+import type { AirFlight } from "gatelogue-types";
 import { computed } from "vue";
-import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
@@ -9,9 +8,9 @@ const props = defineProps<{
 }>();
 const size = computed(() => props.flight.from.size ?? props.flight.to.size);
 
-const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
-  "mrt-transit",
-);
+// const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
+//   "mrt-transit",
+// );
 </script>
 
 <template>

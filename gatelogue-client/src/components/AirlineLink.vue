@@ -2,7 +2,7 @@
 import type { AirAirline } from "gatelogue-types";
 import { RouterLink } from "vue-router";
 
-const props = defineProps<{
+defineProps<{
   airline: AirAirline;
 }>();
 </script>

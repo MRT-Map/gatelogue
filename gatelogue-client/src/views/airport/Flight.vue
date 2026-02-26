@@ -2,7 +2,6 @@
 import type { AirFlight, AirGate } from "gatelogue-types";
 import AirlineLink from "@/components/AirlineLink.vue";
 import { computed } from "vue";
-import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
@@ -10,9 +9,8 @@ const props = defineProps<{
   gate: AirGate;
   includeAirline: boolean;
 }>();
-const otherGates = computed(() =>
-  [props.flight.from, props.flight.to] // todo
-    .filter((g) => g.i !== props.gate.i),
+const otherGate = computed(() =>
+  props.flight.to === props.gate ? props.flight.from : props.flight.to,
 );
 </script>
 
@@ -24,10 +22,8 @@ const otherGates = computed(() =>
       </template>
       {{ flight.code }}
     </b>
-    <template v-for="otherGate in otherGates" :key="otherGate.i">
-      <br />
-      <GateLink :gate="otherGate" />
-    </template>
+    <br />
+    <GateLink :gate="otherGate" />
   </td>
 </template>
 

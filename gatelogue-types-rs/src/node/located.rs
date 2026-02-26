@@ -48,7 +48,8 @@ pub trait LocatedNode: Node + Copy {
                 let node1 = row.get(0)?;
                 let node2 = row.get(1)?;
                 Ok((
-                    AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 })?.unwrap(),
+                    AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 })?
+                        .unwrap(),
                     Proximity(node1, node2),
                 ))
             },
@@ -62,7 +63,8 @@ pub trait LocatedNode: Node + Copy {
             |row| {
                 let node1 = row.get(0)?;
                 let node2 = row.get(1)?;
-                AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 }).map(|a| a.unwrap())
+                AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 })
+                    .map(|a| a.unwrap())
             },
         )
     }
@@ -104,10 +106,7 @@ impl_any_located_node!(AirAirport, BusStop, RailStation, SeaStop, SpawnWarp, Tow
 
 impl AnyLocatedNode {
     pub fn from_id(gd: &GD, id: ID) -> Result<Option<Self>> {
-        match AnyNode::from_id(gd, id)? {
-            Some(a) => a.try_into().map(Some),
-            None => Ok(None),
-        }
+        AnyNode::from_id(gd, id)?.map_or_else(|| Ok(None), |a| a.try_into().map(Some))
     }
 }
 

@@ -91,7 +91,10 @@ class GD:
         import aiohttp
 
         session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
-        async with session as session, session.get(URL if sources else URL_NO_SOURCES) as response:  # pyrefly: ignore [missing-attribute]
+        async with (
+            session as session,
+            session.get(URL if sources else URL_NO_SOURCES) as response,
+        ):  # pyrefly: ignore [missing-attribute]
             return cls.from_bytes_readonly(await response.read())
 
     @property

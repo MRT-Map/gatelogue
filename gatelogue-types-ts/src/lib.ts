@@ -115,7 +115,7 @@ export class GD {
     params?: BindParams,
   ): T | null {
     const result = this.db.exec(sql, params);
-    if (result.length === 0) return null
+    if (result.length === 0) return null;
     return (result[0]!.values[0] ?? null) as T | null;
   }
   execGetOne<T extends SqlValue[]>(sql: string, params?: BindParams): T {
@@ -123,7 +123,7 @@ export class GD {
   }
   execGetMany<T extends SqlValue[]>(sql: string, params?: BindParams): T[] {
     const result = this.db.exec(sql, params);
-    if (result.length === 0) return []
+    if (result.length === 0) return [];
     return result[0]!.values as T[];
   }
 

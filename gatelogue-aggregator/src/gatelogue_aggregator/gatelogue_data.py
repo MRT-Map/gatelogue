@@ -15,7 +15,7 @@ from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, tr
 from gatelogue_aggregator.source import Source
 
 if TYPE_CHECKING:
-    from collections.abc import Container, Iterable, Callable
+    from collections.abc import Callable, Container, Iterable
 
 
 class GatelogueData:

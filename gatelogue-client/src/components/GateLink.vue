@@ -2,7 +2,7 @@
 import type { AirGate } from "gatelogue-types";
 import { RouterLink } from "vue-router";
 
-const props = defineProps<{
+defineProps<{
   gate: AirGate;
 }>();
 </script>

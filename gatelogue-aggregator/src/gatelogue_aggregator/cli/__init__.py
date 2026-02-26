@@ -62,7 +62,12 @@ def gatelogue_aggregator():
     help="how long to wait before sending new requests to the same URL if `429 Too Many Requests` is received",
 )
 @click.option(
-    "-o", "--output", default="data.db", type=Path, show_default=True, help="file to output the result to, as an SQLite DB"
+    "-o",
+    "--output",
+    default="data.db",
+    type=Path,
+    show_default=True,
+    help="file to output the result to, as an SQLite DB",
 )
 @click.option(
     "-r/-R", "--report/--no-report", default=True, show_default=True, help="print a report of all nodes after merger"
