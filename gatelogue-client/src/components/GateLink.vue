@@ -1,22 +1,14 @@
 <script setup lang="ts">
-import type { AirGate, StringID } from "gatelogue-types";
-import { computed } from "vue";
-import { gd } from "@/stores/data";
+import type { AirGate } from "gatelogue-types";
 import { RouterLink } from "vue-router";
 
 const props = defineProps<{
-  gate?: AirGate;
-  gateId?: StringID<AirGate>;
+  gate: AirGate;
 }>();
-
-const gate = computed(() => props.gate ?? gd.value?.airGate(props.gateId!)!);
-const airport = computed(
-  () => gd.value?.airAirport(gate.value.airport.v.toString())!,
-);
 </script>
 
 <template>
-  <RouterLink :to="`/airport/${airport.i}`">
-    {{ airport.code }}-{{ gate.code ?? "?" }}
+  <RouterLink :to="`/airport/${gate.airport.i}`">
+    {{ gate.airport.code }}-{{ gate.code ?? "?" }}
   </RouterLink>
 </template>

@@ -100,13 +100,13 @@ impl GD {
     pub fn nodes(&self) -> Result<Vec<AnyNode>> {
         self.0
             .query_and_then_get_vec("SELECT i FROM Node", (), |a| {
-                AnyNode::from_id(self, a.get(0)?)
+                AnyNode::from_id(self, a.get(0)?).map(|a| a.unwrap())
             })
     }
     pub fn located_nodes(&self) -> Result<Vec<AnyLocatedNode>> {
         self.0
             .query_and_then_get_vec("SELECT i FROM LocatedNode", (), |a| {
-                AnyLocatedNode::from_id(self, a.get(0)?)
+                AnyLocatedNode::from_id(self, a.get(0)?).map(|a| a.unwrap())
             })
     }
     pub fn nodes_of_type<T: Node + From<ID> + FromSql>(&self) -> Result<Vec<T>> {
@@ -117,10 +117,10 @@ impl GD {
             |a| Ok(a.get(0)?),
         )
     }
-    pub fn get_node(&self, id: ID) -> Result<AnyNode> {
+    pub fn get_node(&self, id: ID) -> Result<Option<AnyNode>> {
         AnyNode::from_id(self, id)
     }
-    pub fn get_located_node(&self, id: ID) -> Result<AnyLocatedNode> {
+    pub fn get_located_node(&self, id: ID) -> Result<Option<AnyLocatedNode>> {
         AnyLocatedNode::from_id(self, id)
     }
 }

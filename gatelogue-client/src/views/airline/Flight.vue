@@ -1,30 +1,13 @@
 <script setup lang="ts">
 import type { AirFlight, AirGate, StringID } from "gatelogue-types";
-import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
-  flightId: StringID<AirFlight>;
-  flight?: AirFlight;
-  maxFlightGatesLength?: number;
+  flight: AirFlight;
 }>();
-const flight = computed(
-  () => props.flight ?? gd.value!.airFlight(props.flightId)!,
-);
-const gates = computed(() =>
-  flight.value.gates
-    .map((g) => [g.s, gd.value!.airGate(g.v.toString())] as [string[], AirGate])
-    .map(([s, g]) => ({
-      v: g,
-      s: s.concat(g.airport.s),
-      s2: s,
-    })),
-);
-const size = computed(
-  () => gates.value.map((g) => g.v.size).filter((s) => s?.v)[0],
-);
+const size = computed(() => props.flight.from.size ?? props.flight.to.size);
 
 const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
   "mrt-transit",
@@ -33,36 +16,24 @@ const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
 
 <template>
   <td class="flight-code">
-    {{
-      flight.codes
-        .sort((a, b) => a.localeCompare(b, "en", { numeric: true }))
-        .join(" ")
-    }}
+    {{ flight.code }}
   </td>
   <td class="flight-size">
-    <Sourced :sourced="size" />
+    {{ size }}
   </td>
   <td
-    v-for="gate in gates"
-    :key="gate.v.code ?? '?'"
+    v-for="gate in [flight.from, flight.to]"
+    :key="gate.code ?? '?'"
     class="flight-gates"
-    :class="{
-      'mrt-transit':
-        !gate.s2.includes('MRT Transit (Air)') && mrtTransitUrlParam,
-    }"
   >
-    <Sourced :sourced="gate">
-      <GateLink :gate="gate.v" />
-    </Sourced>
+    <!--    :class="{-->
+    <!--      'mrt-transit':-->
+    <!--        !gate.s2.includes('MRT Transit (Air)') && mrtTransitUrlParam,-->
+    <!--    }"-->
+    <!--  >-->
+    <GateLink :gate="gate" />
   </td>
-  <td
-    class="closing"
-    :colspan="
-      Math.max(0, (maxFlightGatesLength ?? 2) + 1 - flight.gates.length)
-    "
-  >
-    &nbsp;&nbsp;&nbsp;
-  </td>
+  <td class="closing">&nbsp;&nbsp;&nbsp;</td>
 </template>
 
 <style scoped>

@@ -25,13 +25,13 @@
   "type": "module",
   "scripts": {
     "test": "pnpm run build:esm && node test.js",
-    "build": "pnpm run build:esm && pnpm run build:cjs",
+    "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --outDir dist",
     "build:cjs": "tsc --outDir dist/cjs -m commonjs --verbatimModuleSyntax false --target es2017 --module preserve",
-    "lint": "eslint --fix lib.ts",
+    "lint": "eslint --fix src/*",
     "format": "prettier --write .",
-    "doc": "typedoc lib.ts",
-    "prepare": "pnpm run build",
+    "doc": "typedoc src/*",
+    "prepare": "npm run build",
     "prepublish": "cp ../README.md .",
     "postpublish": "rm ./README.md"
   },

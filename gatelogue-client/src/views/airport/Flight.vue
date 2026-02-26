@@ -1,40 +1,33 @@
 <script setup lang="ts">
-import type { AirGate } from "gatelogue-types";
+import type { AirFlight, AirGate } from "gatelogue-types";
 import AirlineLink from "@/components/AirlineLink.vue";
-import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
 
 const props = defineProps<{
-  flightId: string;
-  gateId: string;
+  flight: AirFlight;
+  gate: AirGate;
   includeAirline: boolean;
 }>();
-const flight = computed(() => gd.value!.airFlight(props.flightId)!);
 const otherGates = computed(() =>
-  flight.value.gates
-    .filter((g) => g.v.toString() !== props.gateId)
-    .map(
-      (g) => [g.s, gd.value!.airGate(g.v.toString())!] as [string[], AirGate],
-    )
-    .map(([s, g]) => ({ s: s.concat(g.airport.s), v: g })),
+  [props.flight.from, props.flight.to] // todo
+    .filter((g) => g.i !== props.gate.i),
 );
-const airline = computed(() => flight.value.airline);
 </script>
 
 <template>
   <td class="gate-flights">
-    <b
-      ><Sourced v-if="includeAirline" :sourced="airline"
-        ><AirlineLink :airline-id="airline.v.toString()"
-      /></Sourced>
-      {{ flight.codes[0] }}</b
-    >
-    <Sourced v-for="gate in otherGates" :key="gate.v.i" :sourced="gate">
+    <b>
+      <template v-if="includeAirline">
+        <AirlineLink :airline="flight.airline" />
+      </template>
+      {{ flight.code }}
+    </b>
+    <template v-for="otherGate in otherGates" :key="otherGate.i">
       <br />
-      <GateLink :gate="gate.v" />
-    </Sourced>
+      <GateLink :gate="otherGate" />
+    </template>
   </td>
 </template>
 

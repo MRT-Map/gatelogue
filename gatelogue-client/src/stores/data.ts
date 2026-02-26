@@ -1,7 +1,7 @@
-import { ref } from "vue";
+import { type Ref, ref } from "vue";
 import { GD } from "gatelogue-types";
 
-export const gd = ref<GD | null>(null);
+export const gd: Ref<GD | null> = ref(null);
 
 GD.get().then((res) => {
   gd.value = res;

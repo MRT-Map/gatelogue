@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed, type ComputedRef, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { AirFlight } from "gatelogue-types";
+import type { AirAirline, AirFlight } from "gatelogue-types";
 import Flight from "./airline/Flight.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
-import Sourced from "@/components/Sourced.vue";
 
 const route = useRoute();
 const router = useRouter();
-const airline = computed(
+const airline: ComputedRef<AirAirline> = computed(
   () =>
-    gd.value!.airAirline(route.params.id as string) ??
+    (gd.value?.getNode(
+      parseInt(route.params.id as string),
+      "AirAirline",
+    ) as AirAirline | null) ??
     Object.values(gd.value!.airAirlines).find(
       (a) => a.name === route.params.id,
     )!,
@@ -26,49 +28,32 @@ watchEffect(() => {
 });
 
 const flights = computed(() =>
-  airline.value.flights
-    .map(
-      (f) =>
-        [f.v.toString(), gd.value!.airFlight(f.v.toString())!] as [
-          string,
-          AirFlight,
-        ],
-    )
-    .sort(([, a], [, b]) => {
-      if (!a.codes[0]) return 100;
-      if (!b.codes[0]) return -100;
-      return a.codes[0]!.localeCompare(b.codes[0]!, "en", { numeric: true });
-    }),
-);
-const maxFlightGatesLength = computed(() =>
-  Math.max(...flights.value.map(([, f]) => f.gates.length)),
+  airline.value.flights.slice().sort((a, b) => {
+    if (!a.code) return 100;
+    if (!b.code) return -100;
+    return a.code!.localeCompare(b.code!, "en", { numeric: true });
+  }),
 );
 
 const gates = computed(() =>
-  airline.value.gates
-    .map((g) => ({ s: g.s, v: gd.value!.airGate(g.v.toString())! }))
-    .sort((g1, g2) => {
-      const a1 = gd.value!.airAirport(g1.v.airport.v.toString())!.code;
-      const a2 = gd.value!.airAirport(g2.v.airport.v.toString())!.code;
-      return a1 === a2
-        ? (g1.v.code ?? "?").localeCompare(g2.v.code ?? "?")
-        : a1.localeCompare(a2);
-    }),
+  airline.value.gates.slice().sort((g1, g2) => {
+    const a1 = g1.airport.code;
+    const a2 = g2.airport.code;
+    return a1 === a2
+      ? (g1.code ?? "?").localeCompare(g2.code ?? "?")
+      : a1.localeCompare(a2);
+  }),
 );
 </script>
 
 <template>
   <main>
-    <a :href="airline.link?.v ?? ''">
+    <a :href="airline.link ?? ''">
       <b class="name">{{ airline.name }}</b></a
     ><br />
     <table>
-      <tr v-for="[flightId, flight] in flights" :key="flightId">
-        <Flight
-          :flight-id="flightId"
-          :flight="flight"
-          :max-flight-gates-length="maxFlightGatesLength"
-        ></Flight>
+      <tr v-for="flight in flights" :key="flight.i">
+        <Flight :flight="flight"></Flight>
       </tr>
     </table>
     <hr />
@@ -76,16 +61,17 @@ const gates = computed(() =>
     <div class="owned-gates">
       <div
         v-for="gate in gates"
-        :key="gate.v.code ?? '?'"
+        :key="gate.code ?? '?'"
         class="owned-gate"
-        :class="{ empty: gate.v.flights.length == 0 }"
+        :class="{
+          empty:
+            gate.flightsFromHere.length === 0 &&
+            gate.flightsToHere.length === 0,
+        }"
       >
-        <Sourced :sourced="gate">
-          <GateLink :gate="gate.v" />
-        </Sourced>
+        <GateLink :gate="gate" />
       </div>
     </div>
-    <span> Source: {{ airline.source.join(", ") }} </span>
     <details>
       <summary>Json</summary>
       <VueJsonPretty :data="airline as any" :deep="1" />

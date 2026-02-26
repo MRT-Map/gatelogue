@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import type { AirAirline, StringID } from "gatelogue-types";
-import { computed } from "vue";
-import { gd } from "@/stores/data";
+import type { AirAirline } from "gatelogue-types";
 import { RouterLink } from "vue-router";
 
 const props = defineProps<{
-  airline?: AirAirline;
-  airlineId?: StringID<AirAirline>;
+  airline: AirAirline;
 }>();
-
-const airline = computed(
-  () => props.airline ?? gd.value?.airAirline(props.airlineId!)!,
-);
 </script>
 
 <template>

@@ -7,6 +7,7 @@ pub mod spawn_warp;
 pub mod town;
 
 use enum_dispatch::enum_dispatch;
+use rusqlite::OptionalExtension;
 use strum_macros::{EnumIs, EnumTryAs};
 
 use crate::{
@@ -58,14 +59,13 @@ pub enum AnyNode {
 macro_rules! impl_any_node {
     ($($Variant:ident),+) => {
         impl AnyNode {
-            pub fn from_id(gd: &GD, id: ID) -> Result<Self> {
+            pub fn from_id(gd: &GD, id: ID) -> Result<Option<Self>> {
                 gd.0.query_one("SELECT type FROM Node WHERE i = ?", (id,), |row| {
                     Ok(match &*row.get::<_, String>(0)? {
                         $(stringify!($Variant) => $Variant(id).into(),)+
                         _ => unreachable!(),
                     })
-                })
-                .map_err(Into::into)
+                }).optional().map_err(Into::into)
             }
         }
     };

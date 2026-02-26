@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed, type ComputedRef, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { type AirGate } from "gatelogue-types";
+import { type AirAirport } from "gatelogue-types";
 import Gate from "./airport/Gate.vue";
-import Sourced from "@/components/Sourced.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
 
 const route = useRoute();
 const router = useRouter();
-const airport = computed(
+const airport: ComputedRef<AirAirport> = computed(
   () =>
-    gd.value?.airAirport(route.params.id as string) ??
+    (gd.value?.getNode(
+      parseInt(route.params.id as string),
+      "AirAirport",
+    ) as AirAirport | null) ??
     Object.values(gd.value!.airAirports).find(
       (a) =>
         a.code !== null && a.code === (route.params.id as string).toUpperCase(),
@@ -26,50 +28,35 @@ watchEffect(() => {
 });
 
 const gates = computed(() =>
-  airport.value.gates
-    .map(
-      (g) =>
-        [g.v.toString(), gd.value!.airGate(g.v.toString())!] as [
-          string,
-          AirGate,
-        ],
-    )
-    .sort(([, a], [, b]) => {
-      if (!a.code) return 100;
-      if (!b.code) return -100;
-      return a.code!.localeCompare(b.code!, "en", { numeric: true });
-    }),
+  airport.value.gates.slice().sort((a, b) => {
+    if (!a.code) return 100;
+    if (!b.code) return -100;
+    return a.code!.localeCompare(b.code!, "en", { numeric: true });
+  }),
 );
 const maxGateFlightsLength = computed(() =>
-  Math.max(...gates.value.map(([, g]) => g.flights.length)),
+  Math.max(...gates.value.map((g) => g.flightsFromHere.length)),
 );
 </script>
 
 <template>
   <main>
-    <b class="code">{{ airport.code }}</b
-    ><br />
-    <a :href="airport.link?.v ?? ''">
-      <Sourced :sourced="airport.names">
-        <b class="name">{{ airport.names?.v.join(" / ") ?? "" }}</b>
-      </Sourced> </a
-    ><br />
+    <b class="code">{{ airport.code }}</b>
+    <br />
+    <a :href="airport.link ?? ''">
+      <b class="name">{{ airport.names?.join(" / ") ?? "" }}</b>
+    </a>
+    <br />
     <b>
-      <Sourced v-if="airport.world" :sourced="airport.world">
-        {{ airport.world?.v }} World
-      </Sourced>
-      <Sourced v-if="airport.coordinates" :sourced="airport.coordinates">
-        @ {{ airport.coordinates.v.join(", ") }}
-      </Sourced>
+      <span v-if="airport.world"> {{ airport.world }} World </span>
+      <span v-if="airport.coordinates">
+        @ {{ airport.coordinates.join(", ") }}
+      </span>
     </b>
     <br /><br />
     <table>
-      <tr v-for="[gateId, gate] in gates" :key="gateId">
-        <Gate
-          :gate-id="gateId"
-          :gate="gate"
-          :max-gate-flights-length="maxGateFlightsLength"
-        />
+      <tr v-for="gate in gates" :key="gate.i">
+        <Gate :gate="gate" :max-gate-flights-length="maxGateFlightsLength" />
       </tr>
     </table>
     <details>

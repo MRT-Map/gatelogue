@@ -2,24 +2,23 @@
 import type { AirGate, StringID } from "gatelogue-types";
 import AirlineLink from "@/components/AirlineLink.vue";
 import Flight from "./Flight.vue";
-import Sourced from "@/components/Sourced.vue";
 import { computed } from "vue";
 import { gd } from "@/stores/data";
 
 const props = defineProps<{
-  gate?: AirGate;
-  gateId: StringID<AirGate>;
+  gate: AirGate;
   maxGateFlightsLength?: number;
 }>();
-const gate = computed(() => props.gate ?? gd.value!.airGate(props.gateId)!);
 const airline = computed(() => {
-  if (gate.value.airline) return gate.value.airline;
+  if (props.gate.airline) return props.gate.airline;
   if (
-    gate.value.code &&
-    gate.value.code !== "?" &&
-    gate.value.flights.length > 0
+    props.gate.code &&
+    props.gate.code !== "?" &&
+    (props.gate.flightsFromHere.length > 0 ||
+      props.gate.flightsToHere.length > 0)
   )
-    return gd.value!.airFlight(gate.value.flights[0]!.v.toString())!.airline;
+    return [...props.gate.flightsFromHere, ...props.gate.flightsToHere][0]!
+      .airline;
   return undefined;
 });
 </script>
@@ -27,24 +26,24 @@ const airline = computed(() => {
 <template>
   <td class="gate-code">{{ gate.code }}</td>
   <td class="gate-size">
-    <Sourced :sourced="gate.size" />
+    {{ gate.size }}
   </td>
   <td class="gate-airline">
-    <Sourced v-if="airline" :sourced="airline"
-      ><AirlineLink :airline-id="airline.v.toString()"
-    /></Sourced>
+    <template v-if="airline">
+      <AirlineLink :airline="airline" />
+    </template>
   </td>
-  <template v-for="flight in gate.flights" :key="flight.v">
+  <template v-for="flight in gate.flightsFromHere" :key="flight.i">
     <Flight
-      :gate-id="gateId"
-      :flight-id="flight.v.toString()"
+      :gate="gate"
+      :flight="flight"
       :include-airline="airline === undefined"
     />
   </template>
   <td
     class="closing"
     :colspan="
-      Math.max(0, (maxGateFlightsLength ?? 6) + 1 - gate.flights.length)
+      Math.max(0, (maxGateFlightsLength ?? 6) + 1 - gate.flightsFromHere.length)
     "
   >
     &nbsp;&nbsp;&nbsp;
