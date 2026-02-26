@@ -1,38 +1,44 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, watchEffect } from "vue";
+import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { type AirAirport } from "gatelogue-types";
+import { AirAirport, AirGate } from "gatelogue-types";
 import Gate from "./airport/Gate.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
 
 const route = useRoute();
 const router = useRouter();
-const airport: ComputedRef<AirAirport> = computed(
-  () =>
-    (gd.value?.getNode(
-      parseInt(route.params.id as string),
-      "AirAirport",
-    ) as AirAirport | null) ??
-    Object.values(gd.value!.airAirports).find(
-      (a) =>
-        a.code !== null && a.code === (route.params.id as string).toUpperCase(),
-    )!,
-);
+const airport = computed(() => {
+  const result = gd.value!.execGetZeroOrOne<[number]>(
+    "SELECT i FROM AirAirport WHERE i = ? UNION ALL SELECT i FROM AirAirport WHERE code = ?",
+    [parseInt(route.params.id as string), route.params.id as string],
+  );
+  if (result === null) return undefined as never;
+  return new AirAirport(result[0], gd.value!);
+});
 watchEffect(() => {
   if (airport.value === undefined) {
     router.replace("/").then(() => router.go(0));
-  } else if (airport.value.code) {
-    router.replace(`/airport/${encodeURIComponent(airport.value.code)}`);
   }
+  router.replace(`/airport/${encodeURIComponent(airport.value.code)}`);
 });
 
 const gates = computed(() =>
-  airport.value.gates.slice().sort((a, b) => {
-    if (!a.code) return 100;
-    if (!b.code) return -100;
-    return a.code!.localeCompare(b.code!, "en", { numeric: true });
-  }),
+  gd
+    .value!.execGetMany<[string | null, number]>(
+      "SELECT code, i FROM AirGate WHERE airport = ?",
+      [airport.value.i],
+    )
+    .map(([code, i]): [string | null, AirGate] => [
+      code,
+      new AirGate(i, gd.value!),
+    ])
+    .sort(([aCode], [bCode]) => {
+      if (!aCode) return 100;
+      if (!bCode) return -100;
+      return aCode!.localeCompare(bCode!, "en", { numeric: true });
+    })
+    .map(([, a]) => a),
 );
 const maxGateFlightsLength = computed(() =>
   Math.max(...gates.value.map((g) => g.flightsFromHere.length)),

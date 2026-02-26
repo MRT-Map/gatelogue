@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, watchEffect } from "vue";
+import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { AirAirline } from "gatelogue-types";
+import { AirAirline, AirFlight, AirGate } from "gatelogue-types";
 import Flight from "./airline/Flight.vue";
 import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
@@ -9,40 +9,54 @@ import GateLink from "@/components/GateLink.vue";
 
 const route = useRoute();
 const router = useRouter();
-const airline: ComputedRef<AirAirline> = computed(
-  () =>
-    (gd.value?.getNode(
-      parseInt(route.params.id as string),
-      "AirAirline",
-    ) as AirAirline | null) ??
-    Object.values(gd.value!.airAirlines).find(
-      (a) => a.name === route.params.id,
-    )!,
-);
+const airline = computed(() => {
+  const result = gd.value!.execGetZeroOrOne<[number]>(
+    "SELECT i FROM AirAirline WHERE i = ? UNION ALL SELECT i FROM AirAirline WHERE name = ?",
+    [parseInt(route.params.id as string), route.params.id as string],
+  );
+  if (result === null) return undefined as never;
+  return new AirAirline(result[0], gd.value!);
+});
 watchEffect(() => {
   if (airline.value === undefined) {
     router.replace("/").then(() => router.go(0));
-  } else if (airline.value.name) {
-    router.replace(`/airline/${encodeURIComponent(airline.value.name)}`);
   }
+  router.replace(`/airline/${encodeURIComponent(airline.value.name)}`);
 });
 
 const flights = computed(() =>
-  airline.value.flights.slice().sort((a, b) => {
-    if (!a.code) return 100;
-    if (!b.code) return -100;
-    return a.code!.localeCompare(b.code!, "en", { numeric: true });
-  }),
+  gd
+    .value!.execGetMany<[string, number]>(
+      "SELECT code, i FROM AirFlight WHERE airline = ?",
+      [airline.value.i],
+    )
+    .map(([code, i]): [string, AirFlight] => [
+      code,
+      new AirFlight(i, gd.value!),
+    ])
+    .sort(([aCode], [bCode]) => {
+      return aCode!.localeCompare(bCode!, "en", { numeric: true });
+    })
+    .map(([, a]) => a),
 );
 
 const gates = computed(() =>
-  airline.value.gates.slice().sort((g1, g2) => {
-    const a1 = g1.airport.code;
-    const a2 = g2.airport.code;
-    return a1 === a2
-      ? (g1.code ?? "?").localeCompare(g2.code ?? "?")
-      : a1.localeCompare(a2);
-  }),
+  gd
+    .value!.execGetMany<[string, string | null, number]>(
+      "SELECT AirAirport.code, AirGate.code, AirGate.i FROM AirGate LEFT JOIN AirAirport on AirAirport.i = AirGate.airport WHERE airline = ?",
+      [airline.value.i],
+    )
+    .map(([aCode, gCode, i]): [string, string | null, AirGate] => [
+      aCode,
+      gCode,
+      new AirGate(i, gd.value!),
+    ])
+    .sort(([aaCode, agCode], [baCode, bgCode]) =>
+      aaCode === baCode
+        ? (agCode ?? "?").localeCompare(bgCode ?? "?")
+        : aaCode.localeCompare(baCode),
+    )
+    .map(([, , a]) => a),
 );
 </script>
 

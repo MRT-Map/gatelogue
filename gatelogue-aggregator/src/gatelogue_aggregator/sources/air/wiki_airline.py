@@ -30,7 +30,7 @@ class RegexWikiAirline(AirSource):
         for match in re.finditer(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             flight_code = matches["code"]
-            size = matches.get("size") or self.size(matches)
+            size = matches.get("s") or self.size(matches)
 
             airport1_code = matches.get("a1") or matches.get("a12")
             airport1_name = matches.get("n1")

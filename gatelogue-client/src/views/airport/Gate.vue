@@ -16,7 +16,7 @@ const airline = computed(() => {
     (props.gate.flightsFromHere.length > 0 ||
       props.gate.flightsToHere.length > 0)
   )
-    return [...props.gate.flightsFromHere, ...props.gate.flightsToHere][0]!
+    return (props.gate.flightsFromHere[0] ?? props.gate.flightsToHere[0]!)
       .airline;
   return undefined;
 });

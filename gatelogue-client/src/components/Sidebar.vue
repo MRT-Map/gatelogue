@@ -76,7 +76,7 @@ const sortedObjects = computed(() =>
           class="button"
           :class="sel.cat === selPanel.cat && sel.id === o.i ? 'sel' : ''"
         >
-          {{ o[selPanel.objDisplay] ?? o.name.v }}
+          {{ o[selPanel.objDisplay] ?? o.name }}
         </div>
       </RouterLink>
     </template>
