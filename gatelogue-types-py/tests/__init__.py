@@ -6,12 +6,14 @@ from gatelogue_types.bus import BusCompany, BusStop
 def test_get():
     gd = GD.urllib_get()
     print(gd.timestamp, gd.version)
+    assert gd.has_sources
     assert True
 
 
 def test_get_no_sources():
     gd = GD.urllib_get(sources=False)
     print(gd.timestamp, gd.version)
+    assert not gd.has_sources
     assert True
 
 

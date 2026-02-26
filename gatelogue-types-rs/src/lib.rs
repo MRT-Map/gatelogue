@@ -131,12 +131,16 @@ mod test {
     use super::*;
 
     #[test]
-    fn ureq1() {
-        let _ = GD::ureq_get_with_sources().unwrap();
+    fn ureq_sources() {
+        let gd = GD::ureq_get_with_sources().unwrap();
+        println!("{} {}", gd.version().unwrap(), gd.timestamp().unwrap());
+        assert!(gd.has_sources().unwrap());
     }
 
     #[test]
-    fn ureq2() {
-        let _ = GD::ureq_get_no_sources().unwrap();
+    fn ureq_no_sources() {
+        let gd = GD::ureq_get_no_sources().unwrap();
+        println!("{} {}", gd.version().unwrap(), gd.timestamp().unwrap());
+        assert!(!gd.has_sources().unwrap());
     }
 }
