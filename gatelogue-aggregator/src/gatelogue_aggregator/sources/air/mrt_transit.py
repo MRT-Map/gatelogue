@@ -110,12 +110,14 @@ class MRTTransit(AirSource):
                     gate = self.gate(
                         code=None,
                         airport=airport,
+                        airline=airline,
                         mode=mode,
                     )
                     for other_airport in code2dest.setdefault(flight_code, []):
                         other_gate = self.gate(
                             code=None,
                             airport=other_airport,
+                            airline=airline,
                             mode=mode,
                         )
                         self.flight(airline=airline, code=flight_code, from_=gate, to=other_gate, mode=mode)
