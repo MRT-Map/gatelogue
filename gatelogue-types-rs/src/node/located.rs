@@ -68,14 +68,18 @@ pub trait LocatedNode: Node + Copy {
     }
 }
 
-macro_rules! any_located_node {
+#[enum_dispatch(Node, LocatedNode)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
+pub enum AnyLocatedNode {
+    AirAirport,
+    BusStop,
+    RailStation,
+    SeaStop,
+    SpawnWarp,
+    Town,
+}
+macro_rules! impl_any_located_node {
     ($($Variant:ident),+) => {
-        #[enum_dispatch(Node, LocatedNode)]
-        #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
-        pub enum AnyLocatedNode {
-            $($Variant),+
-        }
-
         impl TryFrom<AnyNode> for AnyLocatedNode {
             type Error = Error;
 
@@ -96,7 +100,7 @@ macro_rules! any_located_node {
         }
     };
 }
-any_located_node!(AirAirport, BusStop, RailStation, SeaStop, SpawnWarp, Town);
+impl_any_located_node!(AirAirport, BusStop, RailStation, SeaStop, SpawnWarp, Town);
 
 impl AnyLocatedNode {
     pub fn from_id(gd: &GD, id: ID) -> Result<Self> {

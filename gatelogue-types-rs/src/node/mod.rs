@@ -30,14 +30,33 @@ pub trait Node: Copy {
     fn ty(self) -> &'static str;
 }
 
-macro_rules! any_node {
+#[enum_dispatch(Node)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
+pub enum AnyNode {
+    AirAirline,
+    AirAirport,
+    AirGate,
+    AirFlight,
+    BusCompany,
+    BusLine,
+    BusStop,
+    BusBerth,
+    BusConnection,
+    RailCompany,
+    RailLine,
+    RailStation,
+    RailPlatform,
+    RailConnection,
+    SeaCompany,
+    SeaLine,
+    SeaStop,
+    SeaDock,
+    SeaConnection,
+    SpawnWarp,
+    Town,
+}
+macro_rules! impl_any_node {
     ($($Variant:ident),+) => {
-        #[enum_dispatch(Node)]
-        #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumIs, EnumTryAs)]
-        pub enum AnyNode {
-            $($Variant),+
-        }
-
         impl AnyNode {
             pub fn from_id(gd: &GD, id: ID) -> Result<Self> {
                 gd.0.query_one("SELECT type FROM Node WHERE i = ?", (id,), |row| {
@@ -51,7 +70,7 @@ macro_rules! any_node {
         }
     };
 }
-any_node!(
+impl_any_node!(
     AirAirline,
     AirAirport,
     AirGate,

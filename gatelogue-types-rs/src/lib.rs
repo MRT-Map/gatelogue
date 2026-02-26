@@ -39,7 +39,7 @@ pub const URL: &str =
 pub const URL_NO_SOURCES: &str =
     "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db";
 
-pub struct GD(Connection);
+pub struct GD(pub Connection);
 
 impl GD {
     fn from_bytes(bytes: &[u8]) -> Result<Self> {
