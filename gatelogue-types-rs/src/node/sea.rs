@@ -60,7 +60,7 @@ impl SeaLine {
 
 node_type!(located SeaStop);
 impl SeaStop {
-    get_set!("SeaStop", codes, "code", String);
+    get_set!("SeaStopCodes", codes, "code", String);
     get_column!("SeaStop", company, SeaCompany);
     get_column!("SeaStop", name, Option<String>);
 

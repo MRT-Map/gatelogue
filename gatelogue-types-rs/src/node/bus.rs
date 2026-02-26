@@ -58,7 +58,7 @@ impl BusLine {
 
 node_type!(located BusStop);
 impl BusStop {
-    get_set!("BusStop", codes, "code", String);
+    get_set!("BusStopCodes", codes, "code", String);
     get_column!("BusStop", company, BusCompany);
     get_column!("BusStop", name, Option<String>);
 

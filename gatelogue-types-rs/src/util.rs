@@ -12,9 +12,9 @@ macro_rules! get_column {
             use $crate::node::Node;
             gd.0.query_one(
                 concat!(
-                    "SELECT ",
+                    "SELECT \"",
                     stringify!($column_name),
-                    " FROM ",
+                    "\" FROM ",
                     $table_name,
                     " WHERE i = ?"
                 ),
@@ -36,9 +36,9 @@ macro_rules! get_column {
             use $crate::node::Node;
             gd.0.query_one(
                 concat!(
-                    "SELECT ",
+                    "SELECT \"",
                     $column_name,
-                    " FROM ",
+                    "\" FROM ",
                     $table_name,
                     " WHERE i = ?"
                 ),
@@ -64,9 +64,9 @@ macro_rules! get_set {
             match gd
                 .0
                 .prepare_cached(concat!(
-                    "SELECT DISTINCT ",
+                    "SELECT DISTINCT \"",
                     $column_name,
-                    " FROM ",
+                    "\" FROM ",
                     $table_name,
                     " WHERE i = ?"
                 ))?

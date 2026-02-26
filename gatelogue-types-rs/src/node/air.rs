@@ -42,9 +42,9 @@ impl AirAirline {
 node_type!(located AirAirport);
 impl AirAirport {
     get_column!("AirAirport", code, String);
-    get_set!("AirAirport", names, "name", String);
+    get_set!("AirAirportNames", names, "name", String);
     get_column!("AirAirport", link, Option<String>);
-    get_set!("AirAirport", modes, "mode", AirMode);
+    get_set!("AirAirportModes", modes, "mode", AirMode);
     get_derived_vec!(gates, AirGate, "SELECT i FROM AirGate WHERE airport = ?");
 }
 

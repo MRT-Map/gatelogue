@@ -66,7 +66,7 @@ impl RailLine {
 
 node_type!(located RailStation);
 impl RailStation {
-    get_set!("RailStation", codes, "code", String);
+    get_set!("RailStationCodes", codes, "code", String);
     get_column!("RailStation", company, RailCompany);
     get_column!("RailStation", name, Option<String>);
 

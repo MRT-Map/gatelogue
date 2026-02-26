@@ -1,5 +1,9 @@
 {
-  "include": ["lib.ts"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+  },
   "extends": [
     "@total-typescript/tsconfig/tsc/dom/library-monorepo",
     "@tsconfig/strictest"

@@ -1,4 +1,6 @@
+/* eslint-disable no-console,no-undef */
 import { GD } from "./dist/lib.js";
 
-await GD.get();
-await GD.getNoSources();
+const gd = await GD.get();
+console.log(gd.timestamp, gd.version)
+console.assert(!gd.hasSources)

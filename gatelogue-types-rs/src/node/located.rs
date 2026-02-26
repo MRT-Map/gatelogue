@@ -16,7 +16,7 @@ use crate::{
 pub trait LocatedNode: Node + Copy {
     fn world(self, gd: &GD) -> Result<Option<World>> {
         gd.0.query_one(
-            "SELECT world FROM LocatedNode WHERE i = ?",
+            "SELECT world FROM NodeLocation WHERE i = ?",
             (self.i(),),
             |a| a.get(0),
         )
@@ -25,7 +25,7 @@ pub trait LocatedNode: Node + Copy {
 
     fn coordinates(self, gd: &GD) -> Result<Option<(f64, f64)>> {
         gd.0.query_one(
-            "SELECT x, y FROM LocatedNode WHERE i = ?",
+            "SELECT x, y FROM NodeLocation WHERE i = ?",
             (self.i(),),
             |a| {
                 let Some(x) = a.get::<_, Option<f64>>(0)? else {
@@ -116,7 +116,7 @@ pub enum World {
 }
 from_sql_for_enum!(World);
 
-pub struct Proximity(pub ID, pub ID);
+pub struct Proximity(pub(crate) ID, pub(crate) ID);
 
 impl Proximity {
     pub fn distance(self, gd: &GD) -> Result<f64> {
