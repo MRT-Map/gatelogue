@@ -64,7 +64,7 @@ class Node:
         raise NotImplementedError
 
     def _merge(self, other: Self):
-        raise NotImplementedError
+        pass
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
         if self == other:
@@ -76,10 +76,14 @@ class Node:
             attr._merge(self, other, self_str, other_str, warn_fn)
 
         self._merge(other)
+        other.delete()
 
+    def delete(self):
         cur = self.conn.cursor()
-        cur.execute("DELETE FROM NodeSource WHERE i = :i", dict(i=other.i))
-        cur.execute("DELETE FROM Node WHERE i = :i", dict(i=other.i))
+        cur.execute(f"DELETE FROM {type(self).__name__}Source WHERE i = :i", dict(i=self.i))
+        cur.execute(f"DELETE FROM {type(self).__name__} WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM NodeSource WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM Node WHERE i = :i", dict(i=self.i))
 
     @classmethod
     def format_create_kwargs(cls, **kwargs) -> dict:
@@ -206,8 +210,15 @@ class LocatedNode(Node):
             dict(i1=self.i, i2=other.i),
         )
         cur.execute("DELETE FROM Proximity WHERE node1 == :i2 OR node2 == :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM NodeLocationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM NodeLocation WHERE i = :i2", dict(i1=self.i, i2=other.i))
+
+    def delete(self):
+        cur = self.conn.cursor()
+        cur.execute(f"DELETE FROM {type(self).__name__}Source WHERE i = :i", dict(i=self.i))
+        cur.execute(f"DELETE FROM {type(self).__name__} WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM NodeLocationSource WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM NodeLocation WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM NodeSource WHERE i = :i", dict(i=self.i))
+        cur.execute("DELETE FROM Node WHERE i = :i", dict(i=self.i))
 
 
 class Proximity:

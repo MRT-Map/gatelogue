@@ -36,6 +36,7 @@ class GatelogueData:
         self._update_flight_mode()
         self._dedup_airport_names()
         self._update_gate_size()
+        self._delete_empty_gates()
         self._proximity()
         self._shared_facility()
         self.gd.conn.execute("VACUUM")
@@ -179,6 +180,12 @@ class GatelogueData:
             elif modes == {"helicopter"}:
                 for gate in n.gates:
                     gate.size = sources(), "H"
+
+    def _delete_empty_gates(self):
+        empty_gates = (gt.AirGate(self.gd.conn, a) for a, in self.gd.conn.execute("SELECT AirGate.i FROM AirGate LEFT JOIN AirFlight on AirGate.i = AirFlight.\"to\" OR AirGate.i = AirFlight.\"from\" WHERE AirFlight.i IS NULL"))
+        for gate in track(empty_gates, INFO2, description="Removing empty gates"):
+            gate.delete()
+
 
     def _isolated_nodes(self, nodes: set[int]) -> list[set[int]]:
         components = [set()]

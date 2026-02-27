@@ -71,8 +71,6 @@ class RailCompany(Node):
         cur = self.conn.cursor()
         cur.execute("UPDATE RailLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE RailStation SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class RailLine(Node):
@@ -158,10 +156,7 @@ class RailLine(Node):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE RailConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE RailConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
 
 
 class RailStation(LocatedNode):
@@ -266,10 +261,7 @@ class RailStation(LocatedNode):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE RailPlatform SET station = :i1 WHERE station = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailStationSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailStation WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE RailPlatform SET station = :i1 WHERE station = :i2", dict(i1=self.i, i2=other.i))
         super()._merge(other)
 
 
@@ -348,8 +340,6 @@ class RailPlatform(Node):
         cur = self.conn.cursor()
         cur.execute('UPDATE RailConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute('UPDATE RailConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailPlatformSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailPlatform WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class RailConnection(Node):
@@ -404,8 +394,3 @@ class RailConnection(Node):
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
-
-    def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("DELETE FROM RailConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM RailConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))

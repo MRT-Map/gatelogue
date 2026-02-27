@@ -83,8 +83,7 @@ class AirAirline(Node):
         cur = self.conn.cursor()
         cur.execute("UPDATE AirGate SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE AirFlight SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirAirlineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirAirline WHERE i = :i2", dict(i1=self.i, i2=other.i))
+
 
 
 class AirAirport(LocatedNode):
@@ -152,11 +151,9 @@ class AirAirport(LocatedNode):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE AirGate SET airport = :i1 WHERE airport = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirAirportSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirAirport WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE AirGate SET airport = :i1 WHERE airport = :i2", dict(i1=self.i, i2=other.i))
         super()._merge(other)
+
 
 
 class AirGate(Node):
@@ -234,8 +231,7 @@ class AirGate(Node):
         cur = self.conn.cursor()
         cur.execute('UPDATE AirFlight SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute('UPDATE AirFlight SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirGateSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirGate WHERE i = :i2", dict(i1=self.i, i2=other.i))
+
 
 
 class AirFlight(Node):
@@ -313,8 +309,3 @@ class AirFlight(Node):
             self.to.merge(other.to, warn_fn=warn_fn)
         super().merge(other, warn_fn)
         return also_merged
-
-    def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("DELETE FROM AirFlightSource WHERE i = :i2;", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM AirFlight WHERE i = :i2", dict(i1=self.i, i2=other.i))

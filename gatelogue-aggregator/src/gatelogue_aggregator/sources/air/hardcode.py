@@ -1,33 +1,15 @@
 from __future__ import annotations
 
-from typing import Literal
-
-type Direction = Literal["even-odd", "odd-even"]
-
-DIRECTIONAL_FLIGHT_AIRLINES: dict[str, Direction | list[tuple[range | None, Direction]]] = {
-    "MRT Airlines": [
-        (range(1294, 1296), "even-odd"),
-        (range(8392, 8394), "even-odd"),
-        (range(2960, 2962), "even-odd"),
-        (range(6646, 6648), "even-odd"),
-        (range(4554, 4556), "even-odd"),
-        (None, "odd-even"),
-    ],
-    "ArcticAir": [
-        (range(1000), "odd-even"),
-        (None, "even-odd"),
-    ],
-    "MarbleAir": "odd-even",
-    "CampLines": "odd-even",
-    "Rainer Airways": "odd-even",
-    "AmberAir": "odd-even",
-    "Astrella": "odd-even",
-    "Caelus Airlines": [
-        (range(100), "odd-even"),
-        (None, "even-odd"),
-    ],
-    "CaelusLink": "even-odd",
-}
+# AIRLINES_WITH_DIRECTIONAL_FLIGHT_CODE: tuple[str, ...] = (
+#     "MRT Airlines",
+#     "ArcticAir",
+#     "MarbleAir",
+#     "CampLines",
+#     "Rainer Airways",
+#     "AmberAir",
+#     "Astrella",
+#     "Caelus Airlines",
+# )
 
 DUPLICATE_GATE_NUM: tuple[str, ...] = ("MAX", "SHI", "NWT", "NMW")
 
@@ -39,6 +21,7 @@ AIRLINE_ALIASES: dict[str, str] = {
     "BluAir Hub Hopper": "BluAir",
     "Caelus Airlines/ikeda": "Caelus Airlines",
     "Caelus": "Caelus Airlines",
+    "CaelusLink": "Caelus Airlines",
     "Cascadia": "Cascadia Airways",
     "CypressAir": "Cypress Air",
     "DAS": "IntraAir",

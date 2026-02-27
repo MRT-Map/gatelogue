@@ -371,9 +371,9 @@ class ArcticAir(AirSource):
             self.connect(
                 airline=airline,
                 flight_code1=str(flight),
-                flight_code2=str(flight),
+                flight_code2=str(flight + 1),
                 airport1_code=a1,
-                airport2_code=a1,
+                airport2_code=a2,
                 gate1_code=g1 if "*" not in g1 else None,
                 gate2_code=g2 if "*" not in g2 else None,
             )

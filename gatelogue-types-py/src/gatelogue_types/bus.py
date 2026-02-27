@@ -71,8 +71,6 @@ class BusCompany(Node):
         cur = self.conn.cursor()
         cur.execute("UPDATE BusLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE BusStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class BusLine(Node):
@@ -158,10 +156,7 @@ class BusLine(Node):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE BusConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE BusConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
 
 
 class BusStop(LocatedNode):
@@ -266,10 +261,7 @@ class BusStop(LocatedNode):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE BusBerth SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE BusBerth SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
         super()._merge(other)
 
 
@@ -344,8 +336,6 @@ class BusBerth(Node):
         cur = self.conn.cursor()
         cur.execute('UPDATE BusConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute('UPDATE BusConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusBerthSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusBerth WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class BusConnection(Node):
@@ -400,8 +390,3 @@ class BusConnection(Node):
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
-
-    def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("DELETE FROM BusConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM BusConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))

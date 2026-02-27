@@ -49,7 +49,3 @@ class SpawnWarp(LocatedNode):
                 "SELECT i FROM SpawnWarp WHERE name = ? and warpType = ?", (self.name, self.warp_type)
             ).fetchall()
         )
-
-    def _merge(self, other: Self):
-        self.conn.execute("DELETE FROM SpawnWarp WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        super()._merge(other)

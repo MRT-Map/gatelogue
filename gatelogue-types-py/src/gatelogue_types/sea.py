@@ -71,8 +71,6 @@ class SeaCompany(Node):
         cur = self.conn.cursor()
         cur.execute("UPDATE SeaLine SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE SeaStop SET company = :i1 WHERE company = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaCompanySource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaCompany WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class SeaLine(Node):
@@ -158,10 +156,7 @@ class SeaLine(Node):
         )
 
     def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("UPDATE SeaConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaLineSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaLine WHERE i = :i2", dict(i1=self.i, i2=other.i))
+        self.conn.execute("UPDATE SeaConnection SET line = :i1 WHERE line = :i2", dict(i1=self.i, i2=other.i))
 
 
 class SeaStop(LocatedNode):
@@ -268,8 +263,6 @@ class SeaStop(LocatedNode):
     def _merge(self, other: Self):
         cur = self.conn.cursor()
         cur.execute("UPDATE SeaDock SET stop = :i1 WHERE stop = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaStopSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaStop WHERE i = :i2", dict(i1=self.i, i2=other.i))
         super()._merge(other)
 
 
@@ -344,8 +337,6 @@ class SeaDock(Node):
         cur = self.conn.cursor()
         cur.execute('UPDATE SeaConnection SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute('UPDATE SeaConnection SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaDockSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaDock WHERE i = :i2", dict(i1=self.i, i2=other.i))
 
 
 class SeaConnection(Node):
@@ -400,8 +391,3 @@ class SeaConnection(Node):
                 (self.line.i, self.from_.i, self.to.i),
             ).fetchall()
         )
-
-    def _merge(self, other: Self):
-        cur = self.conn.cursor()
-        cur.execute("DELETE FROM SeaConnectionSource WHERE i = :i2", dict(i1=self.i, i2=other.i))
-        cur.execute("DELETE FROM SeaConnection WHERE i = :i2", dict(i1=self.i, i2=other.i))

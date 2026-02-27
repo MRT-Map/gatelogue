@@ -7,6 +7,7 @@ import gatelogue_types as gt
 import rich
 
 from gatelogue_aggregator.logging import ERROR, INFO1, report
+from gatelogue_aggregator.sources.air import hardcode
 from gatelogue_aggregator.sources.line_builder import BusLineBuilder, RailLineBuilder, SeaLineBuilder
 
 if TYPE_CHECKING:
@@ -49,12 +50,17 @@ class Source:
 
 class AirSource(Source):
     def airline(self, **kwargs: Unpack[gt.AirAirline.CreateParams]) -> gt.AirAirline:
+        kwargs["name"] = hardcode.AIRLINE_ALIASES.get(kwargs["name"], kwargs["name"])
         return gt.AirAirline.create(self.conn, self.priority, **kwargs)
 
     def airport(self, **kwargs: Unpack[gt.AirAirport.CreateParams]) -> gt.AirAirport:
+        kwargs["code"] = hardcode.AIRPORT_ALIASES.get(kwargs["code"], kwargs["code"])
         return gt.AirAirport.create(self.conn, self.priority, **kwargs)
 
     def gate(self, **kwargs: Unpack[gt.AirGate.CreateParams]) -> gt.AirGate:
+        kwargs["code"] = d.get(kwargs["code"], kwargs["code"]) if (d := hardcode.GATE_ALIASES.get(kwargs["airport"].code)) is not None else kwargs["code"]
+        if kwargs["airport"].code in hardcode.DUPLICATE_GATE_NUM and kwargs["code"] is not None and not kwargs["code"].startswith("T"):
+            rich.print(ERROR + f"Received gate code without terminal `{kwargs["airport"].code} {kwargs["code"]}`")
         return gt.AirGate.create(self.conn, self.priority, **kwargs)
 
     def flight(self, **kwargs: Unpack[gt.AirFlight.CreateParams]) -> gt.AirFlight:
