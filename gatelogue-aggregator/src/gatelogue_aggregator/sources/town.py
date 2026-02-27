@@ -48,9 +48,7 @@ class TownList(Source):
                 if pd.isna(row["Town Rank"])
                 else "Premier",
                 mayor=row["Mayor"] if pd.notna(row["Mayor"]) else "MRT Staff",
-                deputy_mayor=None
-                if not row["Deputy Mayor"] or pd.isna(row["Deputy Mayor"])
-                else row["Deputy Mayor"],
+                deputy_mayor=None if not row["Deputy Mayor"] or pd.isna(row["Deputy Mayor"]) else row["Deputy Mayor"],
                 world=row["World"],
                 coordinates=None if pd.isna(row["X"]) else (row["X"], row["Z"]),
             )

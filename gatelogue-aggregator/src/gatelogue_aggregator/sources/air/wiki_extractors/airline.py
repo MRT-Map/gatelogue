@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 AIRLINE_SOURCES: list[type[AirSource]] = []
 
+
 @AIRLINE_SOURCES.append
 class Astrella(RegexWikiAirline):
     airline_name = "Astrella"
@@ -71,10 +72,14 @@ class IntraAir(AirSource):
                 airport2_code = tr("td")[4].span.string
 
                 g1 = tr("td")[3]("b")[1:]
-                gate1_code = None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}"
+                gate1_code = (
+                    None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}"
+                )
 
                 g2 = tr("td")[5]("b")[1:]
-                gate2_code = None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
+                gate2_code = (
+                    None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
+                )
 
                 size = "H" if 1400 <= int(flight_code) <= 1799 else "SP" if 1800 <= int(flight_code) >= 2000 else None
 

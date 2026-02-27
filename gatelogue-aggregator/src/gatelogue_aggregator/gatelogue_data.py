@@ -185,9 +185,9 @@ class GatelogueData:
         empty_gates = (
             gt.AirGate(self.gd.conn, a)
             for (a,) in self.gd.conn.execute(
-                'SELECT AirGate.i FROM AirGate '
+                "SELECT AirGate.i FROM AirGate "
                 'LEFT JOIN AirFlight on AirGate.i = AirFlight."to" OR AirGate.i = AirFlight."from" '
-                'WHERE AirFlight.i IS NULL AND AirGate.code IS NULL'
+                "WHERE AirFlight.i IS NULL AND AirGate.code IS NULL"
             )
         )
         for gate in track(empty_gates, INFO2, description="Removing empty gates"):
