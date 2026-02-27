@@ -50,14 +50,17 @@ class Source:
 
 class AirSource(Source):
     def airline(self, **kwargs: Unpack[gt.AirAirline.CreateParams]) -> gt.AirAirline:
+        kwargs["name"] = kwargs["name"].strip()
         kwargs["name"] = hardcode.AIRLINE_ALIASES.get(kwargs["name"], kwargs["name"])
         return gt.AirAirline.create(self.conn, self.priority, **kwargs)
 
     def airport(self, **kwargs: Unpack[gt.AirAirport.CreateParams]) -> gt.AirAirport:
+        kwargs["code"] = kwargs["code"].strip()
         kwargs["code"] = hardcode.AIRPORT_ALIASES.get(kwargs["code"], kwargs["code"])
         return gt.AirAirport.create(self.conn, self.priority, **kwargs)
 
     def gate(self, **kwargs: Unpack[gt.AirGate.CreateParams]) -> gt.AirGate:
+        kwargs["code"] = kwargs["code"].strip()
         kwargs["code"] = (
             d.get(kwargs["code"], kwargs["code"])
             if (d := hardcode.GATE_ALIASES.get(kwargs["airport"].code)) is not None
