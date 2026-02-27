@@ -72,7 +72,7 @@ class AirSource(Source):
             and kwargs["code"] is not None
             and not kwargs["code"].startswith("T")
         ):
-            rich.print(ERROR + f"Received gate code without terminal `{kwargs['airport'].code} {kwargs['code']}`")
+            rich.print(ERROR + self.name + f": Received gate code without terminal `{kwargs['airport'].code} {kwargs['code']}`")
         return gt.AirGate.create(self.conn, self.priority, **kwargs)
 
     def flight(self, **kwargs: Unpack[gt.AirFlight.CreateParams]) -> gt.AirFlight:

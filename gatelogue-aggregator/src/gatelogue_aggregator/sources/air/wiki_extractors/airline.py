@@ -18,7 +18,6 @@ if TYPE_CHECKING:
 
 AIRLINE_SOURCES: list[type[AirSource]] = []
 
-
 @AIRLINE_SOURCES.append
 class Astrella(RegexWikiAirline):
     airline_name = "Astrella"
@@ -62,29 +61,20 @@ class IntraAir(AirSource):
         airline = self.airline(name="IntraAir", link=get_wiki_link("IntraAir/Flight List"))
 
         for table in self.html("table"):
-            for tr in table("tr")[1::4]:
-                if len(tr("td")) < 7:
+            for tr in table("tr")[1:]:
+                if len(tr("td")) < 9:
                     continue
-                if tr("td")[6].find("a", href="/index.php/File:Open.png") is None:
+                if tr("td")[8].find("a", href="/index.php/File:CaelusAirlines_Boarding.png") is None:
                     continue
-                flight_code = tr("td")[1].span.string.removeprefix("Flight ")
-                airport1_code = tr("td")[2].b.string
-                airport2_code = tr("td")[3].b.string
-                tr2 = tr.next_sibling.next_sibling
+                flight_code = tr("td")[1].span.string
+                airport1_code = tr("td")[2].span.string
+                airport2_code = tr("td")[4].span.string
 
-                g1 = tr2("td")[0]("b")
-                gate1_code = (
-                    f"T{g1[0].string}-{g1[1].string}"
-                    if airport1_code in DUPLICATE_GATE_NUM and len(g1) != 1
-                    else g1[-1].string
-                )
+                g1 = tr("td")[3]("b")[1:]
+                gate1_code = None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}"
 
-                g2 = tr2("td")[1]("b")
-                gate2_code = (
-                    f"T{g2[0].string}-{g2[1].string}"
-                    if airport2_code in DUPLICATE_GATE_NUM and len(g2) != 1
-                    else g2[-1].string
-                )
+                g2 = tr("td")[5]("b")[1:]
+                gate2_code = None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
 
                 size = "H" if 1400 <= int(flight_code) <= 1799 else "SP" if 1800 <= int(flight_code) >= 2000 else None
 

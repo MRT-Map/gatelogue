@@ -46,6 +46,8 @@ def test_air_flight_merge():
     flight1.merge(flight2)
     assert gd.conn.execute("SELECT count(rowid) FROM AirFlight").fetchone()[0] == 1
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 2
+    assert flight1.from_.code == "A"
+    assert flight1.to.code == "B"
 
 
 def test_bus_stop_merge():
