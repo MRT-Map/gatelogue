@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, Unpack
 
-from gatelogue_types.base import _Column, _format_str
+from gatelogue_types._util import _Column, _format_str
 from gatelogue_types.node import LocatedNode
 
 if TYPE_CHECKING:
@@ -27,6 +27,7 @@ class Town(LocatedNode):
         return super().__str__() + f" {self.name} ({self.rank})"
 
     class CreateParams(LocatedNode.CreateParams, total=True):
+        """Internal use"""
         name: str
         rank: Rank
         mayor: str
@@ -34,6 +35,7 @@ class Town(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()

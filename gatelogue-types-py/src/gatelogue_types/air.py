@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _format_code, _format_str, _SetAttr
+from gatelogue_types._util import _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -24,11 +24,13 @@ class AirAirline(Node):
         return super().__str__() + f" {self.name}"
 
     class CreateParams(TypedDict, total=False):
+        """Internal use"""
         name: Required[str]
         link: str | None
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -115,6 +117,7 @@ class AirAirport(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         names, modes = kwargs.get("names", set()), kwargs.get("modes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
@@ -173,6 +176,7 @@ class AirGate(Node):
         return super().__str__() + f" {self.airport.code} {self.code}"
 
     class CreateParams(TypedDict, total=False):
+        """Internal use"""
         code: Required[str | None]
         airport: Required[AirAirport]
         airline: AirAirline | None
@@ -181,6 +185,7 @@ class AirGate(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -265,6 +270,7 @@ class AirFlight(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()

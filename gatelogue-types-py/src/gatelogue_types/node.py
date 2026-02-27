@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
+from gatelogue_types._util import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
 
 if TYPE_CHECKING:
     import sqlite3
@@ -11,7 +11,9 @@ if TYPE_CHECKING:
 
 
 class Node:
+    """Base class of all nodes"""
     STR2TYPE: ClassVar[dict] = {}
+    """Internal use"""
 
     def __init_subclass__(cls, **kwargs):
         cls.STR2TYPE[cls.__name__] = cls
@@ -23,18 +25,21 @@ class Node:
         """The ID of the node"""
 
     @classmethod
-    def auto_type(cls, conn: sqlite3.Connection, i: int):
+    def auto_type(cls, conn: sqlite3.Connection, i: int) -> Node:
+        """Automatically find and get the :py:class:`Node` subclass from the index ``i``"""
         (ty,) = conn.execute("SELECT type FROM Node WHERE i = :i", dict(i=i)).fetchone()
         return cls.STR2TYPE[ty](conn, i)
 
     type = _Column[str]("type", "Node")
     """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
-    """All sources that prove the node's existence"""
+    """All sources that prove the node's existence. Does not exist in no-source databases."""
     COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr | _CoordinatesColumn, ...]] = ()
 
     @property
     def source(self) -> int:
+        """Returns a single source.
+        :exception AssertionError: if this node has more than one source, or if querying a non-source database."""
         sources = self.sources
         assert len(sources) == 1, "Expected only one source"
         return next(iter(sources))
@@ -48,6 +53,7 @@ class Node:
 
     @classmethod
     def create_node(cls, conn: sqlite3.Connection, src: int, *, ty: str) -> int:
+        """Internal use"""
         cur = conn.cursor()
         cur.execute("INSERT INTO Node ( type ) VALUES ( :type )", dict(type=ty))
         (i,) = cur.execute("SELECT i FROM Node WHERE ROWID = last_insert_rowid()").fetchone()
@@ -61,12 +67,14 @@ class Node:
         return hash(self.i)
 
     def equivalent_nodes(self) -> Iterator[Self]:
+        """Internal use"""
         raise NotImplementedError
 
     def _merge(self, other: Self):
         pass
 
     def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
+        """Internal use"""
         if self == other:
             warn_fn(f"{self} tried to merge with itself")
             return
@@ -79,6 +87,7 @@ class Node:
         other.delete()
 
     def delete(self):
+        """Internal use"""
         cur = self.conn.cursor()
         cur.execute(f"DELETE FROM {type(self).__name__}Source WHERE i = :i", dict(i=self.i))
         cur.execute(f"DELETE FROM {type(self).__name__} WHERE i = :i", dict(i=self.i))
@@ -87,6 +96,7 @@ class Node:
 
     @classmethod
     def format_create_kwargs(cls, **kwargs) -> dict:
+        """Internal use"""
         for attr in cls.COLUMNS:
             key = (attr.table_column + "s" if isinstance(attr, _SetAttr) else attr.name).strip('"')
             if key == "from":
@@ -118,6 +128,7 @@ type World = Literal["New", "Old", "Space"]
 
 
 class LocatedNode(Node):
+    """Base class of all nodes with a location (world + coordinates)"""
     world = _Column[World | None]("world", "NodeLocation", sourced=True, formatter=_format_str)
     """The world the node is in"""
     coordinates = _CoordinatesColumn()
@@ -133,6 +144,7 @@ class LocatedNode(Node):
         return cls.STR2TYPE[ty](conn, i)
 
     class CreateParams(TypedDict, total=False):
+        """Internal use"""
         world: World | None
         coordinates: tuple[int, int] | None
 
@@ -140,6 +152,7 @@ class LocatedNode(Node):
     def create_node_with_location(
         cls, conn: sqlite3.Connection, src: int, *, ty: str, **kwargs: Unpack[CreateParams]
     ) -> int:
+        """Internal use"""
         i = cls.create_node(conn, src, ty=ty)
         cur = conn.cursor()
         cur.execute(
@@ -222,6 +235,7 @@ class LocatedNode(Node):
 
 
 class Proximity:
+    """Proximity data between two :py:class:`LocatedNode` s"""
     def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
         self.conn = conn
         if node1.i > node2.i:
@@ -272,6 +286,7 @@ class Proximity:
         distance: float,
         explicit: bool = False,
     ) -> Self:
+        """Internal use"""
         if node1.i > node2.i:
             node1, node2 = node2, node1
 
@@ -288,6 +303,7 @@ class Proximity:
 
 
 class SharedFacility:
+    """Shared facility data between two :py:class:`LocatedNode` s. Currently has no attributes."""
     def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
         self.conn = conn
         if node1.i > node2.i:
@@ -297,6 +313,7 @@ class SharedFacility:
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, *, node1: LocatedNode, node2: LocatedNode) -> Self:
+        """Internal use"""
         if node1.i > node2.i:
             node1, node2 = node2, node1
 

@@ -1,8 +1,60 @@
+"""
+``Python utility library for using Gatelogue data in Python projects. It will load the database for you to access via ORM or raw SQL.
+
+Installation
+------------
+Run ``pip install gatelogue-types`` or ``uv add gatelogue-types``. Or add ``gatelogue-types`` to your ``requirements.txt`` or ``pyproject.toml``.
+
+To import directly from the repository, run ``pip install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` or add ``gatelogue-types @ git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` to your ``requirements.txt`` or ``pyproject.toml``.
+
+You can also use ``requests``, ``niquests``, ``httpx``, ``urllib3`` or ``aiohttp`` to retrieve the data via ``gatelogue-types`` if ``[requests]``, ``[niquests]``, ``[httpx]``, ``[urllib3]`` or ``[aiohttp]`` is suffixed. Otherwise ``urllib`` is used.
+
+Usage
+-----
+To retrieve the data:
+
+.. code-block:: python
+
+   import gatelogue_types as gt # for convenience
+
+   gd = gt.GD.niquests_get() # retrieve data via niquests
+   gd = gt.GD.requests_get() # retrieve data via requests
+   gd = gt.GD.httpx_get() # retrieve data via httpx
+   gd = gt.GD.urllib3_get() # retrieve data via urllib3
+   gd = gt.GD.urllib_get() # retrieve data via urllib
+   gd = await gt.GD.aiohttp_get() # retrieve data via aiohttp
+
+   # for all .*_get() methods, you can make it retrieve a version with sources.
+   gd = gt.GD.niquests_get(sources=True)
+
+Using the ORM does not require SQL and makes for generally clean code. However, doing this is very inefficient as each attribute access is one SQL query.
+
+.. code-block:: python
+
+   for airport in gd.nodes(gt.AirAirport):
+       for gate in airport.gates:
+           print(f"Airport {airport.code} has gate {gate.code}")
+
+Querying the underlying SQLite database directly with ``sqlite3`` is generally more efficient and faster. It is also the only way to access the ``*Source`` tables, if you retrieved the database with those.
+
+.. code-block:: python
+
+   for airport_code, gate_code in gd.conn.execute(
+       "SELECT A.code, G.code FROM AirGate G INNER JOIN AirAirport A ON G.airport = A.i"
+   ).fetchall():
+       print(f"Airport {airport.code} has gate {gate.code}")
+
+Note that ``gatelogue-types`` *(py)* is used by ``gatelogue-aggregator``, which is why many classes have methods for modifying the database.
+Usage of these methods are discouraged. These are not used in normal use 99% of the time, and they will probably error anyway.
+
+"""
+
 from __future__ import annotations
 
 import contextlib
 import datetime
 import sqlite3
+from os import PathLike
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -19,9 +71,9 @@ from gatelogue_types.spawn_warp import SpawnWarp, WarpType
 from gatelogue_types.town import Rank, Town
 
 if TYPE_CHECKING:
-    # pyrefly: ignore [missing-import]
     from collections.abc import Iterator
 
+    # pyrefly: ignore [missing-import]
     import aiohttp
 
 # TODO
@@ -30,9 +82,13 @@ URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/
 
 
 class GD:
+    """
+    Main class that contains an :py:class:`sqlite3.Connection`
+    """
     conn: sqlite3.Connection
+    """Connection to the underlying SQL database"""
 
-    def __init__(self, database=":memory:"):
+    def __init__(self, database: str | bytes | PathLike[str] | PathLike[bytes] = ":memory:"):
         sqlite3.threadsafety = 3
         self.conn = sqlite3.connect(database, check_same_thread=False, autocommit=True)
         self.conn.execute("PRAGMA foreign_keys = true")
@@ -114,7 +170,7 @@ class GD:
 
     @classmethod
     def create(cls, sources: list[str], database=":memory:", has_sources: bool = True) -> Self:
-        """Create a new Gatelogue database"""
+        """Internal Use"""
         self = cls(database=database)
         cur = self.conn.cursor()
         cur.executescript((Path(__file__).parent / "create.sql").read_text())
@@ -131,10 +187,15 @@ class GD:
         return self
 
     def drop_sources(self, cur: sqlite3.Cursor | None = None):
+        """Drop all ``*Source`` tables"""
         cur = cur or self.conn.cursor()
         cur.executescript((Path(__file__).parent / "drop_sources.sql").read_text())
 
     def get_node[T: Node = Node](self, i: int, ty: type[T] | None = None) -> T:
+        """Get a single node
+
+        If ``ty`` is ``None``, :py:class:`LocatedNode` or :py:class:`Node`, find the node type automatically.
+        Set ``ty`` to a specific node type only if you can guarantee that the node of ID ``i`` is of said node type."""
         if ty is None or ty is Node:
             return Node.auto_type(self.conn, i)
         if ty is LocatedNode:
@@ -142,6 +203,7 @@ class GD:
         return ty(self.conn, i)
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:
+        """Get all nodes, optionally of a specific type."""
         if ty is None or ty is Node:
             return (
                 Node.STR2TYPE[ty](self.conn, i) for i, ty in self.conn.execute("SELECT i, type FROM Node").fetchall()

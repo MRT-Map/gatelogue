@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types.base import _Column, _FKColumn, _format_code, _format_str, _SetAttr
+from gatelogue_types._util import _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -25,6 +25,7 @@ class BusCompany(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -92,6 +93,7 @@ class BusLine(Node):
         return super().__str__() + f" {self.company.name} {self.code}"
 
     class CreateParams(TypedDict, total=False):
+        """Internal use"""
         code: Required[str]
         company: Required[BusCompany]
         name: str | None
@@ -106,6 +108,7 @@ class BusLine(Node):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -178,6 +181,7 @@ class BusStop(LocatedNode):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         codes = kwargs.get("codes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
@@ -281,6 +285,7 @@ class BusBerth(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
@@ -360,6 +365,7 @@ class BusConnection(Node):
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()

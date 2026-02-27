@@ -1,5 +1,7 @@
 /**
- * # Usage
+ * JS utility library for using Gatelogue data in JS/TS projects. It will load the database for you to access via ORM or raw SQL.
+ *
+ * # Installation
  * The data can be imported into your JavaScript/TypeScript project with classes and type definitions.
  * * retrieving from npmjs.com:
  *   * npm: `npm i gatelogue-types`
@@ -20,14 +22,34 @@
  * * pnpm: `pnpm add mrt-map/gatelogue#path:/gatelogue-types-ts`
  * * bun: `bun add 'git+https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
  *
+ * # Usage
  * To retrieve the data:
  * @example
  * ```ts
  * import { GD } from "gatelogue-types";
- * await GD.get() // retrieve data, with sources
- * await GD.getNoSources() // retrieve data, no sources
+ * const gd = await GD.get() // retrieve data, no sources
+ * const gd = await GD.get(true) // retrieve data, with sources
  * ```
  *
+ * Using the ORM does not require SQL and makes for generally clean code.
+ * However, doing this is very inefficient as each attribute access is one SQL query.
+ * ```ts
+ * for (const airport of gd.airAirports) {
+ *   for (const gate of airport.gates) {
+ *     console.log(`Airport ${airport.code} has gate ${gate.code}`);
+ *   }
+ * }
+ * ```
+ *
+ * Querying the underlying SQLite database directly with `sql.js` is generally more efficient and faster.
+ * It is also the only way to access the `*Source` tables, if you retrieved the database with those.
+ * ```ts
+ * for (const [airportCode, gateCode] of gd.execGetMany<[string, string]>(
+ *   "SELECT A.code, G.code FROM AirGate G INNER JOIN AirAirport A ON G.airport = A.i")
+ * ) {
+ *   console.log(`Airport ${airportCode} has gate ${gateCode}`);
+ * }
+ * ```
  * @packageDocumentation
  */
 

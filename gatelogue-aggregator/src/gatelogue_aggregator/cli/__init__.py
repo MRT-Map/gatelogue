@@ -165,7 +165,7 @@ def run(
 #     output.write_bytes(draw_graph(gd))
 
 
-@gatelogue_aggregator.command(help="create a graph of the DB")
+@gatelogue_aggregator.command(help="Drop all `*Source` tables from the DB from the output of `run`")
 @click.option(
     "-i",
     "--input",

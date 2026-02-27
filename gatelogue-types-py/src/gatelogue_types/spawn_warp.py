@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, Unpack
 
-from gatelogue_types.base import _Column, _format_str
+from gatelogue_types._util import _Column, _format_str
 from gatelogue_types.node import LocatedNode
 
 if TYPE_CHECKING:
@@ -23,6 +23,7 @@ class SpawnWarp(LocatedNode):
         return super().__str__() + f" {self.name} ({self.warp_type})"
 
     class CreateParams(LocatedNode.CreateParams, total=True):
+        """Internal use"""
         name: str
         warp_type: str
 
@@ -33,6 +34,7 @@ class SpawnWarp(LocatedNode):
         src: int,
         **kwargs: Unpack[CreateParams],
     ) -> Self:
+        """Internal use"""
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()

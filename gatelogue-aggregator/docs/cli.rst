@@ -7,6 +7,6 @@ Run
 ---
 .. program-output:: python -m gatelogue_aggregator run -h
 
-Schema
+Drop Sources
 ------
-.. program-output:: python -m gatelogue_aggregator schema -h
+.. program-output:: python -m gatelogue_aggregator drop-sources -h
