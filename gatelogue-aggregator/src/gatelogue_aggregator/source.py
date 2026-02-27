@@ -60,7 +60,8 @@ class AirSource(Source):
         return gt.AirAirport.create(self.conn, self.priority, **kwargs)
 
     def gate(self, **kwargs: Unpack[gt.AirGate.CreateParams]) -> gt.AirGate:
-        kwargs["code"] = kwargs["code"].strip()
+        if kwargs["code"] is not None:
+            kwargs["code"] = kwargs["code"].strip()
         kwargs["code"] = (
             d.get(kwargs["code"], kwargs["code"])
             if (d := hardcode.GATE_ALIASES.get(kwargs["airport"].code)) is not None
