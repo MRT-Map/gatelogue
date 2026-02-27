@@ -26,7 +26,7 @@ jobs:
           ref: dist-v3
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
         with:
-          version: "0.10.6"
+          version: "0.10.7"
           enable-cache: true
 
       - run: echo "key=$(($(date +%s)/3600))" >> "$GITHUB_ENV"
