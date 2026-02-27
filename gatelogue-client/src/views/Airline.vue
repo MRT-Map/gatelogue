@@ -3,7 +3,6 @@ import { computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { AirAirline, AirFlight, AirGate } from "gatelogue-types";
 import Flight from "./airline/Flight.vue";
-import VueJsonPretty from "vue-json-pretty";
 import { gd } from "@/stores/data";
 import GateLink from "@/components/GateLink.vue";
 
@@ -34,9 +33,7 @@ const flights = computed(() =>
       code,
       new AirFlight(i, gd.value!),
     ])
-    .sort(([aCode], [bCode]) => {
-      return aCode!.localeCompare(bCode!, "en", { numeric: true });
-    })
+    .sort(([aCode], [bCode]) => aCode!.localeCompare(bCode!, "en", { numeric: true }))
     .map(([, a]) => a),
 );
 
@@ -86,10 +83,6 @@ const gates = computed(() =>
         <GateLink :gate="gate" />
       </div>
     </div>
-    <details>
-      <summary>Json</summary>
-      <VueJsonPretty :data="airline as any" :deep="1" />
-    </details>
     <br />
   </main>
 </template>
