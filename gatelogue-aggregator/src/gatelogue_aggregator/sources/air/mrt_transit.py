@@ -87,11 +87,11 @@ class MRTTransit(AirSource):
             for airport_name, airport_code, airport_world, mode, flights in zip(
                 self.df["Name"], self.df["Code"], self.df["World"], self.df["Mode"], self.df[airline_name], strict=False
             ):
-                if airport_code == "" or str(flights) == "nan":
+                if airport_code == "" or pd.isna(flights):
                     continue
                 airport = self.airport(code=airport_code, modes={mode})
 
-                if str(airport_name) != "nan":
+                if pd.notna(airport_name):
                     if "(" in airport_name:
                         matches = re.search(r"(.*?) \((.*?)\)", str(airport_name))
                         names = {matches.group(2) + " " + matches.group(1), airport_name}
@@ -100,7 +100,7 @@ class MRTTransit(AirSource):
                     if airport_code == "CWI":
                         names.update({"UCWT International Airport", "UCWTIA"})
                     airport.names = names
-                if str(airport_world) != "nan":
+                if pd.notna(airport_world):
                     airport.world = airport_world
 
                 if mode == "helicopter":

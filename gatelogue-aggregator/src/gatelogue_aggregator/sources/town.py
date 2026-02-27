@@ -36,7 +36,7 @@ class TownList(Source):
 
     def build(self, config: Config):
         for _, row in self.df.iterrows():
-            if str(row["Town Name"]) == "nan":
+            if pd.isna(row["Town Name"]):
                 continue
             gt.Town.create(
                 self.conn,
@@ -45,14 +45,14 @@ class TownList(Source):
                 rank=row["Town Rank"]
                 if row["Town Name"] != "Arisa"
                 else "Unranked"
-                if str(row["Town Rank"]) == "nan"
+                if pd.isna(row["Town Rank"])
                 else "Premier",
-                mayor=row["Mayor"] if str(row["Mayor"]) != "nan" else "MRT Staff",
+                mayor=row["Mayor"] if pd.notna(row["Mayor"]) else "MRT Staff",
                 deputy_mayor=None
-                if not row["Deputy Mayor"] or str(row["Deputy Mayor"]) == "nan"
+                if not row["Deputy Mayor"] or pd.isna(row["Deputy Mayor"])
                 else row["Deputy Mayor"],
                 world=row["World"],
-                coordinates=None if str(row["X"]) == "nan" else (row["X"], row["Z"]),
+                coordinates=None if pd.isna(row["X"]) else (row["X"], row["Z"]),
             )
 
         gt.Town.create(

@@ -312,7 +312,7 @@ class AIX(AirSource):
 
         old_gate_size = None
         for gate_code, gate_size, airline in d:
-            if str(gate_size) == "nan":
+            if pd.isna(gate_size):
                 gate_size = old_gate_size  # noqa: PLW2901
             else:
                 gate_size = str(gate_size)[0]  # noqa: PLW2901
@@ -320,7 +320,7 @@ class AIX(AirSource):
             self.gate(
                 code=gate_code,
                 airport=airport,
-                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "Unavailable" else None,
+                airline=self.airline(name=airline) if pd.notna(airline) and airline != "Unavailable" else None,
                 size=gate_size,
             )
 
@@ -355,7 +355,7 @@ class LAR(AirSource):
             self.gate(
                 code=gate_code,
                 airport=airport,
-                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None,
+                airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
                 size=size,
             )
 
@@ -388,6 +388,6 @@ class LFA(AirSource):
             self.gate(
                 code=gate_code,
                 airport=airport,
-                airline=self.airline(name=airline) if str(airline) != "nan" and airline != "?" else None,
+                airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
                 size=size,
             )

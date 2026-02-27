@@ -30,9 +30,9 @@ class AquaLinQWarp(SeaSource):
         )
 
         d = {
-            (w1 if str(w1) != "nan" else w2): n.split("(")[0].replace(",", "").strip()
+            (w1 if pd.notna(w1) else w2): n.split("(")[0].replace(",", "").strip()
             for n, w1, w2 in zip(df["Name"], df["Warp1"], df["Warp2"], strict=False)
-            if not (str(n).startswith("AQ") or str(n) == "nan")
+            if not (str(n).startswith("AQ") or pd.isna(n))
         }
         d["AQ300ENCI"] = "Encinitas Embarcadero International Seaport"
         d["AQ1200RELAXE"] = "Relaxation Islands"

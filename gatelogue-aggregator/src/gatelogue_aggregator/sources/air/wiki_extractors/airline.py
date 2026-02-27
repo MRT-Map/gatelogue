@@ -360,7 +360,7 @@ class ArcticAir(AirSource):
         for flight, a1, a2, g1, g2 in d[::2]:
             if str(flight).strip() in ("227", "228", "239", "240"):
                 continue
-            if not a1 or str(a1) == "nan":
+            if pd.isna(a1):
                 continue
 
             if str(a1).strip() not in DUPLICATE_GATE_NUM:
@@ -401,7 +401,7 @@ class SandstoneAirr(AirSource):
         d = list(zip(self.df["Unnamed: 1"], self.df["Airport"], self.df["Gate"], strict=False))
 
         for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
-            if not a1 or str(a1) == "nan":
+            if pd.isna(a1):
                 continue
 
             if str(a1).strip() not in DUPLICATE_GATE_NUM:
@@ -457,7 +457,7 @@ class Lilyflower(AirSource):
         )
 
         for flight, a1, g1, a2, g2 in d:
-            if not a1 or str(a1) == "nan":
+            if pd.isna(a1):
                 continue
             self.connect(
                 airline=airline,
