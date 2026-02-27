@@ -81,7 +81,7 @@ class IntraAir(AirSource):
                     None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
                 )
 
-                size = "H" if 1400 <= int(flight_code) <= 1799 else "SP" if 1800 <= int(flight_code) >= 2000 else None
+                size = "SP" if 8001 <= int(flight_code) >= 8199 else None
 
                 self.connect(
                     airline=airline,
