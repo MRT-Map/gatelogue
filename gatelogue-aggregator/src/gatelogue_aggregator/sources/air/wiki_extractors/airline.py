@@ -27,6 +27,10 @@ class Astrella(RegexWikiAirline):
         r"\{\{AstrellaFlight\|code = AA(?P<code>[^$\n]*?)\|airport1 = (?P<a1>[^\n]*?)\|gate1 = (?P<g1>[^\n]*?)\|airport2 = (?P<a2>[^\n]*?)\|gate2 = (?P<g2>[^\n]*?)\|size = (?P<s>[^\n]*?)\|status = active}}"
     )
 
+    @staticmethod
+    def process_flight_code_back(code: str) -> str:
+        return str(int(code) + 1)
+
 
 @AIRLINE_SOURCES.append
 class Turbula(RegexWikiAirline):
@@ -284,7 +288,7 @@ class Yousoro(RegexWikiAirline):
 
 
 @AIRLINE_SOURCES.append
-class Yousoro(RegexWikiAirline):
+class RainerAirways(RegexWikiAirline):
     airline_name = "Rainer Airways"
     page_name = "Rainer Airways"
     regex = re.compile(
@@ -297,6 +301,10 @@ class Yousoro(RegexWikiAirline):
 """
     )
 
+    @staticmethod
+    def process_flight_code_back(code: str) -> str:
+        return str(int(code) + 1)
+
 
 @AIRLINE_SOURCES.append
 class MarbleAir(RegexWikiAirline):
@@ -305,6 +313,10 @@ class MarbleAir(RegexWikiAirline):
     regex = re.compile(
         r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"
     )
+
+    @staticmethod
+    def process_flight_code_back(code: str) -> str:
+        return str(int(code) + 1)
 
 
 @AIRLINE_SOURCES.append
@@ -319,6 +331,10 @@ class AmberAir(RegexWikiAirline):
 \|(?:'''(?P<g2>[^|].*?)'''|)
 \|.*?
 \|\[\[File:Service Good\.png\|50px]]""")
+
+    @staticmethod
+    def process_flight_code_back(code: str) -> str:
+        return str(int(code) + 1)
 
 
 @AIRLINE_SOURCES.append
@@ -605,7 +621,7 @@ class Caelus(AirSource):
                 self.connect(
                     airline=airline,
                     flight_code1=match["code"],
-                    flight_code2=match["code"],
+                    flight_code2=str(int(match["code"])+1),
                     airport1_code=match["a1"],
                     airport2_code=match["a2"],
                 )
