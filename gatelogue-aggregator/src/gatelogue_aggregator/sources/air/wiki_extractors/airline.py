@@ -65,7 +65,7 @@ class IntraAir(AirSource):
             for tr in table("tr")[1::4]:
                 if len(tr("td")) < 7:
                     continue
-                if tr("td")[6].find("a", href="/index.php/File:Rsz_open.png") is None:
+                if tr("td")[6].find("a", href="/index.php/File:Open.png") is None:
                     continue
                 flight_code = tr("td")[1].span.string.removeprefix("Flight ")
                 airport1_code = tr("td")[2].b.string
