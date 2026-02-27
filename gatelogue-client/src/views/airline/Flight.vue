@@ -14,25 +14,27 @@ const size = computed(() => props.flight.from.size ?? props.flight.to.size);
 </script>
 
 <template>
+  <!--    :class="{-->
+  <!--      'mrt-transit':-->
+  <!--        !gate.s2.includes('MRT Transit (Air)') && mrtTransitUrlParam,-->
+  <!--    }"-->
+  <!--  >-->
   <td class="flight-code">
     {{ flight.code }}
   </td>
-  <td class="flight-size">
-    {{ size }}
+  <td class="flight-size-mode">
+    <b>{{ size }}</b><br>{{ flight.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
   </td>
-  <td
-    v-for="gate in [flight.from, flight.to]"
-    :key="gate.code ?? '?'"
-    class="flight-gates"
-  >
-    <!--    :class="{-->
-    <!--      'mrt-transit':-->
-    <!--        !gate.s2.includes('MRT Transit (Air)') && mrtTransitUrlParam,-->
-    <!--    }"-->
-    <!--  >-->
-    <GateLink :gate="gate" />
+  <td class="flight-gates">
+    <GateLink :gate="flight.from" />
   </td>
-  <td class="closing">&nbsp;&nbsp;&nbsp;</td>
+  <td class="arrow">-></td>
+  <td class="flight-gates">
+    <GateLink :gate="flight.to" />
+  </td>
+  <td class="closing">
+    &nbsp;&nbsp;&nbsp;
+  </td>
 </template>
 
 <style scoped>
@@ -44,11 +46,10 @@ const size = computed(() => props.flight.from.size ?? props.flight.to.size);
   font-weight: bold;
   width: 2em;
 }
-.flight-size {
+.flight-size-mode {
   background-color: var(--col-b);
   padding: 0.25em;
   font-size: 1.5em;
-  font-weight: bold;
   width: 2em;
 }
 .flight-gates {
@@ -58,11 +59,18 @@ const size = computed(() => props.flight.from.size ?? props.flight.to.size);
   min-width: 5em;
   max-width: 5em;
 }
-.flight-gates.mrt-transit {
-  background-color: var(--acc-b);
-}
-.closing {
+.arrow {
   font-size: 2em;
+  font-weight: bolder;
+  background-color: var(--col-b);
+  padding: 0.25em;
+  width: 2em;
+}
+/* .flight-gates.mrt-transit {
+  background-color: var(--acc-b);
+} */
+.closing {
+  font-size: 1em;
   border-radius: 0 0.5em 0.5em 0;
   background-color: var(--col-b);
   padding: 0.25em;

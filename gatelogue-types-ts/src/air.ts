@@ -80,7 +80,7 @@ export class AirGate extends Node {
   get size(): string | null {
     return this.getColumn("AirGate", "size");
   }
-  get mode(): string {
+  get mode(): string | null {
     return this.getColumn("AirGate", "mode");
   }
 

@@ -24,8 +24,8 @@ const airline = computed(() => {
 
 <template>
   <td class="gate-code">{{ gate.code }}</td>
-  <td class="gate-size">
-    {{ gate.size }}
+  <td class="gate-size-mode">
+    <b>{{ gate.size }}</b><br>{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
   </td>
   <td class="gate-airline">
     <template v-if="airline">
@@ -58,11 +58,10 @@ const airline = computed(() => {
   font-weight: bold;
   width: 2em;
 }
-.gate-size {
+.gate-size-mode {
   background-color: var(--col-c);
   padding: 0.25em;
   font-size: 1.5em;
-  font-weight: bold;
   width: 2em;
 }
 .gate-airline {

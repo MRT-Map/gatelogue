@@ -33,7 +33,9 @@ const flights = computed(() =>
       code,
       new AirFlight(i, gd.value!),
     ])
-    .sort(([aCode], [bCode]) => aCode!.localeCompare(bCode!, "en", { numeric: true }))
+    .sort(([aCode], [bCode]) =>
+      aCode!.localeCompare(bCode!, "en", { numeric: true }),
+    )
     .map(([, a]) => a),
 );
 
