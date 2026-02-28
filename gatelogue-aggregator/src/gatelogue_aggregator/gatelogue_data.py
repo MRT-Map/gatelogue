@@ -13,6 +13,7 @@ import rich
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.source import Source
+from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 if TYPE_CHECKING:
@@ -49,8 +50,10 @@ class GatelogueData:
 
         with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
             warp_api_thread: Future = executor.submit(WarpAPI.prepare, self.config)
+            dynmap_markers_thread: Future = executor.submit(DynmapMarkers.prepare, self.config)
             source_instances: list[Source] = list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
             warp_api_thread.result()
+            dynmap_markers_thread.result()
 
         for source in track(source_instances, INFO1, description="Building sources"):
             rich.print(INFO1 + f"Building for {source.name}")

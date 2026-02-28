@@ -44,11 +44,7 @@ class WarpAPI:
             offset = 0
             while True:
                 ls = msgspec.json.decode(
-                    get_url(
-                        cls.LINK + f"?offset={offset}",
-                        "mrt-api/" + str(offset),
-                        config
-                    ),
+                    get_url(cls.LINK + f"?offset={offset}", "mrt-api/" + str(offset), config),
                     type=TypedDict("", {"pagination": dict, "result": list[Warp]}),
                 )["result"]
                 if len(ls) == 0:

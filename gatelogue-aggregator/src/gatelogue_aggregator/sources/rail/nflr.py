@@ -5,7 +5,7 @@ from typing import NamedTuple
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url, get_csv
+from gatelogue_aggregator.downloader import get_csv
 from gatelogue_aggregator.source import RailSource
 
 
@@ -14,6 +14,7 @@ class _Line(NamedTuple):
     line_colour: str
     w: bool
     df: pd.DataFrame
+
 
 class NFLR(RailSource):
     name = "MRT Wiki (Rail, nFLR)"
@@ -24,7 +25,7 @@ class NFLR(RailSource):
         df = get_csv(
             "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid=1540849896",
             "nflr/lines",
-            config
+            config,
         )
         lines = [
             (str(line_name), str(back), bool(w), int(gid))
@@ -37,7 +38,7 @@ class NFLR(RailSource):
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),
                 "nflr/" + line_name,
-                config
+                config,
             )
             return _Line(line_name, line_colour, w, dfl)
 

@@ -1,8 +1,7 @@
-import json
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url, get_wiki_text, get_json
+from gatelogue_aggregator.downloader import get_json, get_wiki_text
 from gatelogue_aggregator.source import RailSource
 
 
@@ -15,7 +14,7 @@ class BluRail(RailSource):
             get_json(
                 "https://wiki.minecartrapidtransit.net/api.php?action=query&list=categorymembers&cmtitle=Category%3ABluRail+lines&cmlimit=5000&format=json",
                 "blurail_line_list",
-                config
+                config,
             )
         )["query"]["categorymembers"]
 
