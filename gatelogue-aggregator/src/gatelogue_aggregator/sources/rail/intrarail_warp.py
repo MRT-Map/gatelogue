@@ -1,17 +1,12 @@
 import re
-import uuid
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import RailSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 
 class IntraRailWarp(RailSource):
     name = "MRT Warp API (Rail, IntraRail)"
-    warps: list[dict]
-
-    def prepare(self, config: Config):
-        self.warps = list(warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config))
 
     def build(self, config: Config):
         company = self.company(name="IntraRail")
@@ -25,16 +20,16 @@ class IntraRailWarp(RailSource):
             "New Stone City South",
             "Zerez Thespe Railway Station",
         ]
-        for warp in self.warps:
-            if not warp["name"].startswith("ItR"):
+        for warp in WarpAPI.from_user("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"):
+            if not warp.name.startswith("ItR"):
                 continue
-            if warp["name"] == "ItR213-Anthro-SB":
+            if warp.name == "ItR213-Anthro-SB":
                 name = "Anthro Island City Hall"
             else:
                 if (
                     match := re.search(
                         r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: (.*?) //|THIS & LAST STOP: (.*?) //",
-                        warp["welcomeMessage"],
+                        warp.welcome_message,
                     )
                 ) is None:
                     continue
@@ -50,5 +45,5 @@ class IntraRailWarp(RailSource):
                 }.get(name, name)
             if name in names:
                 continue
-            self.station(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.station(codes={name}, company=company, name=name, world="New", coordinates=warp.coordinates)
             names.append(name)

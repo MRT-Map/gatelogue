@@ -621,7 +621,7 @@ class Caelus(AirSource):
                 self.connect(
                     airline=airline,
                     flight_code1=match["code"],
-                    flight_code2=str(int(match["code"])+1),
+                    flight_code2=str(int(match["code"]) + 1),
                     airport1_code=match["a1"],
                     airport2_code=match["a2"],
                 )

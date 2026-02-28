@@ -1,20 +1,17 @@
 import difflib
-import uuid
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
 class CFC(SeaSource):
     name = "MRT Wiki (Sea, Caravacan Floaty Company)"
     text: str
-    warps: list[dict]
 
     def prepare(self, config: Config):
         self.text = get_wiki_text("Caravacan Floaty Company", config)
-        self.warps = list(warps(uuid.UUID("7adc9642-5f67-4264-88e3-3c8bd93261c0"), config))
 
     def build(self, config: Config):
         company = self.company(name="Caravacan Floaty Company")
@@ -39,11 +36,11 @@ class CFC(SeaSource):
         ###
 
         names = []
-        for warp in self.warps:
-            if not warp["name"].startswith("CFC"):
+        for warp in WarpAPI.from_user("7adc9642-5f67-4264-88e3-3c8bd93261c0"):
+            if not warp.name.startswith("CFC"):
                 continue
 
-            warp_name = warp["name"].split("_")[1]
+            warp_name = warp.name.split("_")[1]
             name = {
                 ",": ",",
                 "DeadbushW": "Deadbush Weezerville",
@@ -56,5 +53,5 @@ class CFC(SeaSource):
             if name in names:
                 continue
 
-            self.stop(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, world="New", coordinates=warp.coordinates)
             names.append(name)

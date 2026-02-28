@@ -3,17 +3,13 @@ from typing import Literal
 import gatelogue_types as gt
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import all_warps
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.source import Source
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 
 class SpawnWarps(Source):
-    name = "Gatelogue"
-    warps: list[dict]
-
-    def prepare(self, config: Config):
-        self.warps = list(all_warps(config))
+    name = "MRT Warp API"
 
     def build(self, config: Config):
         search_dict: dict[Literal["premier", "terminus", "traincarts", "misc"], set] = {
@@ -131,7 +127,9 @@ class SpawnWarps(Source):
             },
         }
 
-        for warp in track(self.warps, INFO3, description="Searching all warps for spawn warps", total=len(self.warps)):
+        for warp in track(
+            WarpAPI.warps, INFO3, description="Searching all warps for spawn warps", total=len(self.warps)
+        ):
             for ty, search_list in search_dict.items():
                 for search_warp in search_list:
                     if isinstance(search_warp, tuple):
@@ -139,7 +137,7 @@ class SpawnWarps(Source):
                     else:
                         name = search_warp
 
-                    if search_warp != warp["name"]:
+                    if search_warp != warp.name:
                         continue
 
                     gt.SpawnWarp.create(
@@ -147,8 +145,8 @@ class SpawnWarps(Source):
                         self.priority,
                         name=name,
                         warp_type=ty,
-                        world="New" if warp["worldUUID"] == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",
-                        coordinates=(warp["x"], warp["z"]),
+                        world="New" if warp.world_uuid == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",
+                        coordinates=warp.coordinates,
                     )
 
         gt.SpawnWarp.create(

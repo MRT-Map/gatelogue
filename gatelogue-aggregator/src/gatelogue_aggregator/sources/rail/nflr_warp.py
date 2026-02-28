@@ -1,35 +1,29 @@
-import uuid
-
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import RailSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 
 class NFLRWarp(RailSource):
     name = "MRT Warp API (Rail, nFLR)"
-    warps: list[dict]
-
-    def prepare(self, config: Config):
-        self.warps = list(warps(uuid.UUID("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"), config))
 
     def build(self, config: Config):
         company = self.company(name="nFLR")
 
         codes = []
-        for warp in self.warps:
-            if not warp["name"].startswith("FLR"):
+        for warp in WarpAPI.from_user("7e96f1a3-d9be-4ca8-a2ac-a67f49c6095e"):
+            if not warp.name.startswith("FLR"):
                 continue
-            if len(warp["name"].split("-")) < 3:
+            if len(warp.name.split("-")) < 3:
                 continue
             if not (
-                (warp["name"].split("-")[2][0].lower() in ("r", "w", "m", "n"))
-                or (len(warp["name"].split("-")[1]) == 4 and warp["name"].split("-")[1][0].lower() == "n")
+                (warp.name.split("-")[2][0].lower() in ("r", "w", "m", "n"))
+                or (len(warp.name.split("-")[1]) == 4 and warp.name.split("-")[1][0].lower() == "n")
             ):
                 continue
-            code = warp["name"].split("-")[1].lower()
+            code = warp.name.split("-")[1].lower()
             if code in ("nsg", "rvb", "ply"):
                 continue
-            if code == "dne" and warp["name"].split("-")[2].lower() == "r5a":
+            if code == "dne" and warp.name.split("-")[2].lower() == "r5a":
                 code = "dnw"
             code = {
                 "n104": {"n104", "n203", "n300"},
@@ -46,9 +40,9 @@ class NFLRWarp(RailSource):
                 codes=code,
                 company=company,
                 world="New",
-                coordinates=(warp["x"], warp["z"]),
+                coordinates=warp.coordinates,
                 name=None
-                if warp["welcomeMessage"].startswith("Welcome")
-                else warp["welcomeMessage"].split("|")[0].split("]")[1].strip(),
+                if warp.welcome_message.startswith("Welcome")
+                else warp.welcome_message.split("|")[0].split("]")[1].strip(),
             )
             codes.append(code)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import difflib
 import re
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
@@ -13,6 +13,7 @@ import rich
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.source import Source
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterable
@@ -47,7 +48,9 @@ class GatelogueData:
         self.gd = gt.GD.create([a.__name__ for a in sources], database)
 
         with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
+            warp_api_thread: Future = executor.submit(WarpAPI.prepare, self.config)
             source_instances: list[Source] = list(executor.map(lambda s: s(self.config, self.gd.conn), sources))
+            warp_api_thread.result()
 
         for source in track(source_instances, INFO1, description="Building sources"):
             rich.print(INFO1 + f"Building for {source.name}")
@@ -195,7 +198,6 @@ class GatelogueData:
 
     def _isolated_nodes(self, nodes: set[int]) -> list[set[int]]:
         components = [set()]
-        processed = set()
         queue = set()
         while len(nodes) != 0:
             if len(queue) == 0:
@@ -205,11 +207,10 @@ class GatelogueData:
                 ni = next(iter(queue))
                 queue.remove(ni)
             components[-1].add(ni)
-            processed.add(ni)
             nodes.remove(ni)
 
             n = gt.LocatedNode.auto_type(self.gd.conn, ni)
-            queue |= set(n._nodes_in_proximity)
+            queue |= set(n._nodes_in_proximity) & nodes
             if isinstance(n, gt.AirAirport):
                 gates = list(n.gates)
                 queue |= set(f.to.i for g in gates for f in g.flights_from_here) & nodes
@@ -220,7 +221,6 @@ class GatelogueData:
             elif isinstance(n, gt.RailStation):
                 queue |= set(c.to.station.i for c in n.connections_from_here) & nodes
                 queue |= set(c.from_.station.i for c in n.connections_to_here) & nodes
-            queue -= processed
         components.remove(max(components, key=len))
         return components
 

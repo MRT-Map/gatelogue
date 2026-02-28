@@ -5,7 +5,6 @@ import tempfile
 import time
 from pathlib import Path
 from threading import Lock
-from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import cloudscraper
@@ -14,12 +13,6 @@ import rich
 import rich.status
 
 from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
-
-if TYPE_CHECKING:
-    import uuid
-    from collections.abc import Iterator
-
-    from gatelogue_aggregator.config import Config
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_COOLDOWN = 15
@@ -81,46 +74,3 @@ def get_json(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: in
             COOLDOWN[urlparse(url).netloc] = time.time() + DEFAULT_COOLDOWN
         rich.print(ERROR + f"Will try {url} again in 15s")
         return get_json(url, cache, timeout, cooldown)
-
-
-def warps(player: uuid.UUID, config: Config) -> Iterator[dict]:
-    link = f"https://api.minecartrapidtransit.net/api/v2/warps?player={player}"
-    offset = 0
-    ls: list[dict] = (
-        get_json(
-            link,
-            config.cache_dir / "mrt-api" / str(player) / str(offset),
-            config.timeout,
-            config.cooldown,
-        )
-    )["result"]
-    while len(ls) != 0:
-        yield from ls
-        offset += len(ls)
-        ls = (
-            get_json(
-                link + f"&offset={offset}",
-                config.cache_dir / "mrt-api" / str(player) / str(offset),
-                config.timeout,
-                config.cooldown,
-            )
-        )["result"]
-
-
-def all_warps(config: Config) -> Iterator[dict]:
-    link = "https://api.minecartrapidtransit.net/api/v2/warps"
-    offset = 0
-    ls: list[dict] = (
-        get_json(link, config.cache_dir / "mrt-api" / "all" / str(offset), config.timeout, config.cooldown)
-    )["result"]
-    while len(ls) != 0:
-        yield from ls
-        offset += len(ls)
-        ls = (
-            get_json(
-                link + f"?offset={offset}",
-                config.cache_dir / "mrt-api" / "all" / str(offset),
-                config.timeout,
-                config.cooldown,
-            )
-        )["result"]

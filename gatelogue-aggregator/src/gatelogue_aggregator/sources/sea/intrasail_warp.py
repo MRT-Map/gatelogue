@@ -1,32 +1,27 @@
 import re
-import uuid
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 
 class IntraSailWarp(SeaSource):
     name = "MRT Warp API (Sea, IntraSail)"
-    warps: list[dict]
-
-    def prepare(self, config: Config):
-        self.warps = list(warps(uuid.UUID("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"), config))
 
     def build(self, config: Config):
         company = self.company(name="IntraSail")
 
         names = []
-        for warp in self.warps:
-            if not warp["name"].startswith("IS"):
+        for warp in WarpAPI.from_user("0a0cbbfd-40bb-41ea-956d-38b8feeaaf92"):
+            if not warp.name.startswith("IS"):
                 continue
-            if warp["name"] == "IS1d-KZH-WB":
+            if warp.name == "IS1d-KZH-WB":
                 name = "Kazeshima Kuzuhamachi"
             else:
                 if (
                     match := re.search(
                         r"(?i)^Welcome to ([^,]*),|^THIS & LAST STOP: ([^/]*) /|(?:THIS|LAST) STOP: ([^/]*) /",
-                        warp["welcomeMessage"],
+                        warp.welcome_message,
                     )
                 ) is None:
                     # rich.print(ERROR + "hUnknown warp message format:", warp['welcomeMessage'])
@@ -52,5 +47,5 @@ class IntraSailWarp(SeaSource):
             if name in names:
                 continue
 
-            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=warp.coordinates)
             names.append(name)

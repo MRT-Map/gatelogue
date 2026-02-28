@@ -1,16 +1,14 @@
-import uuid
-
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url, warps
+from gatelogue_aggregator.downloader import get_url
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 
 class AquaLinQWarp(SeaSource):
     name = "MRT Warp API (Sea, AquaLinQ)"
     d: dict[str, str]
-    warps: list[dict]
 
     def prepare(self, config: Config):
         get_url(
@@ -43,14 +41,12 @@ class AquaLinQWarp(SeaSource):
         d["AQ1000NIWEN"] = "Niwen"
         self.d = d
 
-        self.warps = list(warps(uuid.UUID("1143017d-0f09-4b33-afdd-e5b9eb76797c"), config))
-
     def build(self, config: Config):
         company = self.company(name="AquaLinQ")
 
         names = []
-        for warp in self.warps:
-            if warp["name"] not in self.d or (name := self.d[warp["name"]]) in names:
+        for warp in WarpAPI.from_user("1143017d-0f09-4b33-afdd-e5b9eb76797c"):
+            if warp.name not in self.d or (name := self.d[warp.name]) in names:
                 continue
-            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=warp.coordinates)
             names.append(name)

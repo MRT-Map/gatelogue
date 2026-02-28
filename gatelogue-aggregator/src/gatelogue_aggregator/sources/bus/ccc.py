@@ -1,10 +1,9 @@
 import difflib
 import re
-import uuid
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.source import BusSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
@@ -46,11 +45,11 @@ class CCC(BusSource):
         ###
 
         names = []
-        for warp in warps(uuid.UUID("7adc9642-5f67-4264-88e3-3c8bd93261c0"), config):
-            if not warp["name"].startswith("CCC"):
+        for warp in WarpAPI.from_user("7adc9642-5f67-4264-88e3-3c8bd93261c0"):
+            if not warp.name.startswith("CCC"):
                 continue
 
-            warp_name = warp["name"].split("_")[1]
+            warp_name = warp.name.split("_")[1]
             name = {
                 "JuanCarlosI": "Caravaca - Juan Carlos I",
                 "MWAirport": "Miu Wan TTL T1",
@@ -61,5 +60,5 @@ class CCC(BusSource):
             if name in names:
                 continue
 
-            self.stop(codes={name}, company=company, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, world="New", coordinates=warp.coordinates)
             names.append(name)

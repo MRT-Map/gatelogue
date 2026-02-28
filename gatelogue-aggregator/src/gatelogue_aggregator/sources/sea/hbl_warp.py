@@ -1,14 +1,13 @@
 import contextlib
 import itertools
 import re
-import uuid
 
 import rich
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import warps
 from gatelogue_aggregator.logging import ERROR
 from gatelogue_aggregator.source import SeaSource
+from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 # Adapted from https://docs.google.com/spreadsheets/d/1nIIettVbGwzm7DkmYqqPVoguw2U53R5un4nrC76w-Xg/edit#gid=1423194214
 _DICT = {
@@ -139,22 +138,16 @@ _DICT = {
 
 class HBLWarp(SeaSource):
     name = "MRT Warp API (Sea, Hummingbird Boat Lines)"
-    warps: list[dict]
-
-    def prepare(self, config: Config):
-        self.warps = list(
-            itertools.chain(
-                warps(uuid.UUID("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"), config),
-                warps(uuid.UUID("8a928931-aa14-4a1c-8a39-0a7630922001"), config),
-            )
-        )
 
     def build(self, config: Config):
         company = self.company(name="Hummingbird Boat Lines")
 
         names = list(_DICT.values())
-        for warp in self.warps:
-            if (result := re.match(r"HBL_(...)_(.*)", warp["name"])) is None:
+        for warp in itertools.chain(
+            WarpAPI.from_user("c04532bc-45d7-4d89-a13f-1d3bb4b48f2a"),
+            WarpAPI.from_user("8a928931-aa14-4a1c-8a39-0a7630922001"),
+        ):
+            if (result := re.match(r"HBL_(...)_(.*)", warp.name)) is None:
                 continue
             if (name := _DICT.get(result.group(1))) is None:
                 rich.print(ERROR + f"Unknown warp {warp['name']}")
@@ -172,7 +165,7 @@ class HBLWarp(SeaSource):
                 elif result.group(2) in ("22", "24", "51", "55"):
                     name += " (north)"
 
-            self.stop(codes={name}, company=company, name=name, world="New", coordinates=(warp["x"], warp["z"]))
+            self.stop(codes={name}, company=company, name=name, world="New", coordinates=warp.coordinates)
             with contextlib.suppress(ValueError):
                 names.remove(name)
 
