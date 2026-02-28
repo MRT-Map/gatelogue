@@ -377,3 +377,12 @@ class LFA(AirSource):
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
                 size=size,
             )
+
+@AIRPORT_SOURCES.append
+class KWT(RegexWikiAirport):
+    airport_code = "KWT"
+    page_name = "Ha Shan - Kwai Tin Airport"
+    regex = re.compile(r"\|.*?\| \[\[(?P<airline>.*?)]] \|\|.*?\|.*?\|\|.*?\|(?P<code>.*?)\|\|")
+    additional_names = {"Kwai Tin Airfield"}
+
+

@@ -198,7 +198,7 @@ class GatelogueData:
             gate.delete()
 
     def _isolated_nodes(self, nodes: set[int]) -> list[set[int]]:
-        components = [set()]
+        components: list[set] = []
         queue = set()
         while len(nodes) != 0:
             if len(queue) == 0:

@@ -21,12 +21,13 @@ class RegexWikiAirport(AirSource):
     airport_code: ClassVar[str]
     page_name: ClassVar[str]
     regex: ClassVar[re.Pattern[str]]
+    additional_names: ClassVar[set[str]] = {}
 
     def prepare(self, config: Config):
         self.text = get_wiki_text(self.page_name, config)
 
     def build(self, config: Config):
-        airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name), names={self.page_name})
+        airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name), names={self.page_name, *self.additional_names})
         for match in re.finditer(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             gate_code = self.process_gate_code(matches["code"])
