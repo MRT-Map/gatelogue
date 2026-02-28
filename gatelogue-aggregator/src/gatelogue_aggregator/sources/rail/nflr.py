@@ -33,7 +33,7 @@ class NFLR(RailSource):
             if pd.notna(gid)
         ]
 
-        def retrieve_urls(line_name: str, line_colour: str, w: bool, gid: int) -> _Line:
+        def retrieve_urls(line_name: str, line_colour: str, w: bool, gid: int) -> _Line:  # noqa: FBT001
             dfl = get_csv(
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),

@@ -7,7 +7,7 @@ from gatelogue_aggregator.source import RailSource
 
 class BluRail(RailSource):
     name = "MRT Wiki (Rail, BluRail)"
-    line_wikis: dict[str, str] = {}
+    line_wikis: dict[str, str]
 
     def prepare(self, config: Config):
         line_list = (
@@ -20,6 +20,7 @@ class BluRail(RailSource):
 
         line_codes = [result["title"].removesuffix(" (BluRail line)") for result in line_list]
 
+        self.line_wikis = {} # TODO parallel
         for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             if "is a planned [[BluRail]] warp train line" in wiki:

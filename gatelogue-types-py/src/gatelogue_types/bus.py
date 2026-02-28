@@ -94,6 +94,7 @@ class BusLine(Node):
 
     class CreateParams(TypedDict, total=False):
         """Internal use"""
+
         code: Required[str]
         company: Required[BusCompany]
         name: str | None

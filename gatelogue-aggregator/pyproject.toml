@@ -105,4 +105,10 @@ exclude_lines = [
 ]
 
 [tool.ruff.lint]
-ignore = ["PLR2004"]
+ignore = [
+  "PLR2004", # magic variables
+  "ARG002", # unused arguments
+  "S101", # assert
+  "C408", # dict(a=b)
+  "SLF001", # private members
+]

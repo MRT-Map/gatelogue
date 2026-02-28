@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
-import bs4
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link
@@ -11,6 +10,8 @@ from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
 
 if TYPE_CHECKING:
+    import bs4
+
     from gatelogue_aggregator.config import Config
 
 AIRPORT_SOURCES: list[type[AirSource]] = []

@@ -51,7 +51,7 @@ def progress_bar(level: str, description: str):
 def report(
     node: gt.Node,
     prefix: str | None = None,
-    ignore: Container[type[gt.Node]] = None,
+    ignore: Container[type[gt.Node]] | None = None,
     out_fn: Callable[[str, str], object] | None = None,
 ):
     out_fn = out_fn or (lambda c, text: rich.print(c + text))

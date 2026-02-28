@@ -29,7 +29,6 @@ class YamlLine(msgspec.Struct):
     stations: list[str] | None = None
     forward_direction: DirectionLabel = "DEFAULT_DIRECTION"
     backward_direction: DirectionLabel = "DEFAULT_DIRECTION"
-    # TODO mutually exclusive
 
     colour: str | None = None
     mode: gt.BusMode | gt.RailMode | gt.SeaMode | None = None
@@ -38,7 +37,8 @@ class YamlLine(msgspec.Struct):
 
     def __post_init__(self):
         if self.routing is not None and self.stations is not None:
-            raise ValueError("`routing` and `stations` are mutually exclusive")
+            msg = "`routing` and `stations` are mutually exclusive"
+            raise ValueError(msg)
 
 
 class Yaml(msgspec.Struct):

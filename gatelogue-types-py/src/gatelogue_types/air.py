@@ -25,6 +25,7 @@ class AirAirline(Node):
 
     class CreateParams(TypedDict, total=False):
         """Internal use"""
+
         name: Required[str]
         link: str | None
 
@@ -85,7 +86,6 @@ class AirAirline(Node):
         cur = self.conn.cursor()
         cur.execute("UPDATE AirGate SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
         cur.execute("UPDATE AirFlight SET airline = :i1 WHERE airline = :i2", dict(i1=self.i, i2=other.i))
-
 
 
 class AirAirport(LocatedNode):
@@ -158,7 +158,6 @@ class AirAirport(LocatedNode):
         super()._merge(other)
 
 
-
 class AirGate(Node):
     code = _Column[str | None]("code", "AirGate", formatter=_format_code)
     """Unique gate code. If ``None``, code is not known"""
@@ -177,6 +176,7 @@ class AirGate(Node):
 
     class CreateParams(TypedDict, total=False):
         """Internal use"""
+
         code: Required[str | None]
         airport: Required[AirAirport]
         airline: AirAirline | None
@@ -236,7 +236,6 @@ class AirGate(Node):
         cur = self.conn.cursor()
         cur.execute('UPDATE AirFlight SET "from" = :i1 WHERE "from" = :i2', dict(i1=self.i, i2=other.i))
         cur.execute('UPDATE AirFlight SET "to" = :i1 WHERE "to" = :i2', dict(i1=self.i, i2=other.i))
-
 
 
 class AirFlight(Node):

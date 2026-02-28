@@ -94,6 +94,7 @@ class SeaLine(Node):
 
     class CreateParams(TypedDict, total=False):
         """Internal use"""
+
         code: Required[str]
         company: Required[SeaCompany]
         name: str | None

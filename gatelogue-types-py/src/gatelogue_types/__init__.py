@@ -15,14 +15,14 @@ To retrieve the data:
 
 .. code-block:: python
 
-   import gatelogue_types as gt # for convenience
+   import gatelogue_types as gt  # for convenience
 
-   gd = gt.GD.niquests_get() # retrieve data via niquests
-   gd = gt.GD.requests_get() # retrieve data via requests
-   gd = gt.GD.httpx_get() # retrieve data via httpx
-   gd = gt.GD.urllib3_get() # retrieve data via urllib3
-   gd = gt.GD.urllib_get() # retrieve data via urllib
-   gd = await gt.GD.aiohttp_get() # retrieve data via aiohttp
+   gd = gt.GD.niquests_get()  # retrieve data via niquests
+   gd = gt.GD.requests_get()  # retrieve data via requests
+   gd = gt.GD.httpx_get()  # retrieve data via httpx
+   gd = gt.GD.urllib3_get()  # retrieve data via urllib3
+   gd = gt.GD.urllib_get()  # retrieve data via urllib
+   gd = await gt.GD.aiohttp_get()  # retrieve data via aiohttp
 
    # for all .*_get() methods, you can make it retrieve a version with sources.
    gd = gt.GD.niquests_get(sources=True)
@@ -85,6 +85,7 @@ class GD:
     """
     Main class that contains an :py:class:`sqlite3.Connection`
     """
+
     conn: sqlite3.Connection
     """Connection to the underlying SQL database"""
 

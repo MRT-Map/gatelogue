@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import gatelogue_types as gt
-
-from gatelogue_aggregator.sources.line_builder import SeaLineBuilder
 from gatelogue_aggregator.sources.yaml2source import SeaYaml2Source, YamlLine, YamlRoute
+
+if TYPE_CHECKING:
+    import gatelogue_types as gt
+
+    from gatelogue_aggregator.sources.line_builder import SeaLineBuilder
 
 
 class ErzLinkFerry(SeaYaml2Source):

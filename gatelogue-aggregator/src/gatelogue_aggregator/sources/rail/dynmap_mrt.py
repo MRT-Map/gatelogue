@@ -1,7 +1,6 @@
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_json
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers

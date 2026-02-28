@@ -28,6 +28,7 @@ class Town(LocatedNode):
 
     class CreateParams(LocatedNode.CreateParams, total=True):
         """Internal use"""
+
         name: str
         rank: Rank
         mayor: str

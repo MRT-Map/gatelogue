@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import gatelogue_types as gt
-
-from gatelogue_aggregator.sources.line_builder import RailLineBuilder
 from gatelogue_aggregator.sources.yaml2source import RailYaml2Source, YamlLine, YamlRoute
+
+if TYPE_CHECKING:
+    import gatelogue_types as gt
+
+    from gatelogue_aggregator.sources.line_builder import RailLineBuilder
 
 
 class NPSubway(RailYaml2Source):

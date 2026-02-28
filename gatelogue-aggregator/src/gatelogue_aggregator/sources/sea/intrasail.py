@@ -1,11 +1,9 @@
-from typing import TYPE_CHECKING
+
+import bs4
 
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_wiki_html
 from gatelogue_aggregator.source import SeaSource
-
-if TYPE_CHECKING:
-    import bs4
 
 
 class IntraSail(SeaSource):

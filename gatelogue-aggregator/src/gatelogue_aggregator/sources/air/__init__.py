@@ -7,10 +7,10 @@ if TYPE_CHECKING:
 
 
 def SOURCES() -> list[type[AirSource]]:  # noqa: N802
-    from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports
-    from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit
-    from gatelogue_aggregator.sources.air.wiki_extractors.airline import AIRLINE_SOURCES
-    from gatelogue_aggregator.sources.air.wiki_extractors.airport import AIRPORT_SOURCES
+    from gatelogue_aggregator.sources.air.dynmap_airports import DynmapAirports  # noqa: PLC0415
+    from gatelogue_aggregator.sources.air.mrt_transit import MRTTransit  # noqa: PLC0415
+    from gatelogue_aggregator.sources.air.wiki_extractors.airline import AIRLINE_SOURCES  # noqa: PLC0415
+    from gatelogue_aggregator.sources.air.wiki_extractors.airport import AIRPORT_SOURCES  # noqa: PLC0415
 
     return [
         DynmapAirports,

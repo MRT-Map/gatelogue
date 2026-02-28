@@ -10,14 +10,15 @@ import gatelogue_types as gt
 import msgspec
 import rich
 
-from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
-from gatelogue_aggregator.source import Source
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterable
+
+    from gatelogue_aggregator.config import Config
+    from gatelogue_aggregator.source import Source
 
 
 class GatelogueData:
@@ -75,14 +76,11 @@ class GatelogueData:
                     merged |= also_merged
 
     def _merge_airports_with_unknown_code(self, pass_: int):
-        name2i = {
-            name: i
-            for name, i in self.gd.conn.execute(
+        name2i = dict(self.gd.conn.execute(
                 "SELECT name, AirAirport.i FROM AirAirport "
                 "INNER JOIN AirAirportNames on AirAirport.i = AirAirportNames.i "
                 "WHERE code != ''"
-            ).fetchall()
-        }
+            ).fetchall())
 
         for n in track(
             (
@@ -118,7 +116,7 @@ class GatelogueData:
             size: str | None = n.from_.size or n.to.size
             if size is None:
                 continue
-            sources = lambda: {
+            sources = lambda: {  # noqa: E731
                 s
                 for (s,) in self.gd.conn.execute(
                     "SELECT DISTINCT source FROM AirGateSource WHERE (i = :from_ OR i = :to) AND size = true",
@@ -174,7 +172,7 @@ class GatelogueData:
         for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Updating AirGate `size` field"):
             if (modes := n.modes) is None:
                 continue
-            sources = lambda: {
+            sources = lambda: {  # noqa: E731
                 s
                 for (s,) in self.gd.conn.execute(
                     "SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i", dict(i=n.i)
@@ -216,14 +214,14 @@ class GatelogueData:
             queue |= set(n._nodes_in_proximity) & nodes
             if isinstance(n, gt.AirAirport):
                 gates = list(n.gates)
-                queue |= set(f.to.i for g in gates for f in g.flights_from_here) & nodes
-                queue |= set(f.from_.i for g in gates for f in g.flights_to_here) & nodes
+                queue |= {f.to.i for g in gates for f in g.flights_from_here} & nodes
+                queue |= {f.from_.i for g in gates for f in g.flights_to_here} & nodes
             elif isinstance(n, (gt.BusStop, gt.SeaStop)):
-                queue |= set(c.to.stop.i for c in n.connections_from_here) & nodes
-                queue |= set(c.from_.stop.i for c in n.connections_to_here) & nodes
+                queue |= {c.to.stop.i for c in n.connections_from_here} & nodes
+                queue |= {c.from_.stop.i for c in n.connections_to_here} & nodes
             elif isinstance(n, gt.RailStation):
-                queue |= set(c.to.station.i for c in n.connections_from_here) & nodes
-                queue |= set(c.from_.station.i for c in n.connections_to_here) & nodes
+                queue |= {c.to.station.i for c in n.connections_from_here} & nodes
+                queue |= {c.from_.station.i for c in n.connections_to_here} & nodes
         components.remove(max(components, key=len))
         return components
 

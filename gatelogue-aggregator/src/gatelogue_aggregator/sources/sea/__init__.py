@@ -7,16 +7,16 @@ if TYPE_CHECKING:
 
 
 def SOURCES() -> list[type[SeaSource]]:  # noqa: N802
-    from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ
-    from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp
-    from gatelogue_aggregator.sources.sea.cfc import CFC
-    from gatelogue_aggregator.sources.sea.hbl import HBL
-    from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp
-    from gatelogue_aggregator.sources.sea.intrasail import IntraSail
-    from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp
-    from gatelogue_aggregator.sources.sea.local.erzlink_ferry import ErzLinkFerry
-    from gatelogue_aggregator.sources.sea.local.windboat import Windboat
-    from gatelogue_aggregator.sources.sea.wzf import WZF
-    from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp
+    from gatelogue_aggregator.sources.sea.aqualinq import AquaLinQ  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.aqualinq_warp import AquaLinQWarp  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.cfc import CFC  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.hbl import HBL  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.hbl_warp import HBLWarp  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.intrasail import IntraSail  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.intrasail_warp import IntraSailWarp  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.local.erzlink_ferry import ErzLinkFerry  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.local.windboat import Windboat  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.wzf import WZF  # noqa: PLC0415
+    from gatelogue_aggregator.sources.sea.wzf_warp import WZFWarp  # noqa: PLC0415
 
     return [AquaLinQ, AquaLinQWarp, CFC, HBL, HBLWarp, IntraSail, IntraSailWarp, WZF, WZFWarp, ErzLinkFerry, Windboat]

@@ -7,9 +7,10 @@ from gatelogue_aggregator.source import RailSource
 
 class WikiMRT(RailSource):
     name = "MRT Wiki (Rail, MRT)"
-    lines: list[tuple[str, str, str, str]] = []
+    lines: list[tuple[str, str, str, str]]
 
     def prepare(self, config: Config):
+        self.lines = []
         for line_code, line_name, line_colour in (
             ("A", "MRT Arctic Line", "#00FFFF"),
             ("B", "MRT Beach Line", "#EEDB95"),

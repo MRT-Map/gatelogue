@@ -24,6 +24,7 @@ class SpawnWarp(LocatedNode):
 
     class CreateParams(LocatedNode.CreateParams, total=True):
         """Internal use"""
+
         name: str
         warp_type: str
 

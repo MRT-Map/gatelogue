@@ -17,9 +17,9 @@ if TYPE_CHECKING:
 type OneWay = Literal["forwards", "backwards"]
 
 type DirectionLabel = (
-    str | Literal["TO_FIRST_STATION", "TO_LAST_STATION", "TO_NEXT_STATION", "DEFAULT_DIRECTION"] | None
+    str | Literal["TO_FIRST_STATION", "TO_LAST_STATION", "TO_NEXT_STATION", "DEFAULT_DIRECTION"] | None  # noqa: PYI051
 )
-type PlatformCode = str | Literal["DEFAULT_CODE", "LINE_CODE"] | None
+type PlatformCode = str | Literal["DEFAULT_CODE", "LINE_CODE"] | None  # noqa: PYI051
 
 
 class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, SeaStop)]:
@@ -51,7 +51,8 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
             return f"towards {self.station_list[-1].name}"
         if direction == "TO_NEXT_STATION":
             if next_station is None:
-                raise ValueError("No next station")
+                msg = "No next station"
+                raise ValueError(msg)
             return f"towards {next_station.name}"
         return direction
 

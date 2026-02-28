@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sqlite3
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import click
@@ -14,7 +13,7 @@ from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.gatelogue_data import GatelogueData
-from gatelogue_aggregator.logging import INFO1, progress_bar
+from gatelogue_aggregator.logging import INFO1
 from gatelogue_aggregator.source import Source
 from gatelogue_aggregator.sources import SOURCES
 

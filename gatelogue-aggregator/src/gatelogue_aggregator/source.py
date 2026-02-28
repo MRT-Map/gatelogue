@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sqlite3
 from typing import TYPE_CHECKING, ClassVar, Unpack
 
 import gatelogue_types as gt
@@ -11,6 +10,8 @@ from gatelogue_aggregator.sources.air import hardcode
 from gatelogue_aggregator.sources.line_builder import BusLineBuilder, RailLineBuilder, SeaLineBuilder
 
 if TYPE_CHECKING:
+    import sqlite3
+
     from gatelogue_aggregator.config import Config
 
 

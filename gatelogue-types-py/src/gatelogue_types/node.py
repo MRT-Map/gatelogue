@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 class Node:
     """Base class of all nodes"""
+
     STR2TYPE: ClassVar[dict] = {}
     """Internal use"""
 
@@ -129,6 +130,7 @@ type World = Literal["New", "Old", "Space"]
 
 class LocatedNode(Node):
     """Base class of all nodes with a location (world + coordinates)"""
+
     world = _Column[World | None]("world", "NodeLocation", sourced=True, formatter=_format_str)
     """The world the node is in"""
     coordinates = _CoordinatesColumn()
@@ -145,6 +147,7 @@ class LocatedNode(Node):
 
     class CreateParams(TypedDict, total=False):
         """Internal use"""
+
         world: World | None
         coordinates: tuple[int, int] | None
 
@@ -236,6 +239,7 @@ class LocatedNode(Node):
 
 class Proximity:
     """Proximity data between two :py:class:`LocatedNode` s"""
+
     def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
         self.conn = conn
         if node1.i > node2.i:
@@ -304,6 +308,7 @@ class Proximity:
 
 class SharedFacility:
     """Shared facility data between two :py:class:`LocatedNode` s. Currently has no attributes."""
+
     def __init__(self, conn: sqlite3.Connection, node1: LocatedNode, node2: LocatedNode):
         self.conn = conn
         if node1.i > node2.i:
