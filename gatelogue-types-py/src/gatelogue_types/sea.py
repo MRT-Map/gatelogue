@@ -75,7 +75,7 @@ class SeaCompany(Node):
 
 
 class SeaLine(Node):
-    code = _Column[str]("code", "SeaLine", formatter=_format_code)
+    code = _Column[str]("code", "SeaLine", formatter=_format_str)
     """Unique code identifying the sea line"""
     company = _FKColumn(SeaCompany, "company", "SeaLine")
     """The :py:class:`SeaCompany` that operates the line"""

@@ -75,7 +75,7 @@ class RailCompany(Node):
 
 
 class RailLine(Node):
-    code = _Column[str]("code", "RailLine", formatter=_format_code)
+    code = _Column[str]("code", "RailLine", formatter=_format_str)
     """Unique code identifying the rail line"""
     company = _FKColumn(RailCompany, "company", "RailLine")
     """The :py:class:`RailCompany` that operates the line"""

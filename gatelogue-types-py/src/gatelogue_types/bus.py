@@ -75,7 +75,7 @@ class BusCompany(Node):
 
 
 class BusLine(Node):
-    code = _Column[str]("code", "BusLine", formatter=_format_code)
+    code = _Column[str]("code", "BusLine", formatter=_format_str)
     """Unique code identifying the bus line"""
     company = _FKColumn(BusCompany, "company", "BusLine")
     """The :py:class:`BusCompany` that operates the line"""
