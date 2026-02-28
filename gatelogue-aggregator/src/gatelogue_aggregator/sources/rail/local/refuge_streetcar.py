@@ -20,7 +20,8 @@ class RefugeStreetcar(RailYaml2Source):
         route_yaml: YamlRoute,
         cp: RailYaml2Source._ConnectParams,
     ):
-        if line_node.code == "North/South Loop":
+        if line_node.name == "North/South Loop":
+            cp["backward_direction"] = "Anticlockwise"
             builder.connect_to("West Train Station", **cp)
 
             cp["forward_direction"] = "Anticlockwise"
