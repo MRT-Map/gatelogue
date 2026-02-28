@@ -828,3 +828,4 @@ cython_debug/
 ### Other
 out.json
 .vite
+!log.log
