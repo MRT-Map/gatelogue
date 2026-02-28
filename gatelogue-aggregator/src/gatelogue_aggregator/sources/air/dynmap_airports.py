@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import msgspec
 
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_url, get_json
 from gatelogue_aggregator.source import AirSource
 
 if TYPE_CHECKING:
@@ -17,24 +17,17 @@ class DynmapAirports(AirSource):
     json2: dict
 
     def prepare(self, config: Config):
-        cache1 = config.cache_dir / "dynmap-markers-new"
-        cache2 = config.cache_dir / "dynmap-markers-old"
-
-        response1 = get_url(
+        response1 = get_json(
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_new.json",
-            cache1,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "dynmap-markers-new", config
         )
-        response2 = get_url(
+        response2 = get_json(
             "https://dynmap.minecartrapidtransit.net/main/tiles/_markers_/marker_old.json",
-            cache2,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "dynmap-markers-old", config
         )
         try:
-            self.json1 = msgspec.json.decode(response1)["sets"]["airports"]["markers"]
-            self.json2 = msgspec.json.decode(response2)["sets"]["airports"]["markers"]
+            self.json1 = response1["sets"]["airports"]["markers"]
+            self.json2 = response2["sets"]["airports"]["markers"]
         except Exception as e:
             raise ValueError(response1[:100], response2[:100]) from e
 

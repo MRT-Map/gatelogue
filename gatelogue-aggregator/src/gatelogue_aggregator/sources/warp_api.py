@@ -46,9 +46,8 @@ class WarpAPI:
                 ls = msgspec.json.decode(
                     get_url(
                         cls.LINK + f"?offset={offset}",
-                        config.cache_dir / "mrt-api" / "all" / str(offset),
-                        config.timeout,
-                        config.cooldown,
+                        "mrt-api/" + str(offset),
+                        config
                     ),
                     type=TypedDict("", {"pagination": dict, "result": list[Warp]}),
                 )["result"]

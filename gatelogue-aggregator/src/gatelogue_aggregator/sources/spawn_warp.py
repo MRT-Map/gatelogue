@@ -128,7 +128,7 @@ class SpawnWarps(Source):
         }
 
         for warp in track(
-            WarpAPI.warps, INFO3, description="Searching all warps for spawn warps", total=len(self.warps)
+            WarpAPI.warps, INFO3, description="Searching all warps for spawn warps", total=len(WarpAPI.warps)
         ):
             for ty, search_list in search_dict.items():
                 for search_warp in search_list:

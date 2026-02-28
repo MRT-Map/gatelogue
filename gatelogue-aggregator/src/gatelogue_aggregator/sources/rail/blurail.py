@@ -2,9 +2,8 @@ import json
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_url, get_wiki_text, get_json
 from gatelogue_aggregator.source import RailSource
-from gatelogue_aggregator.sources.wiki_base import get_wiki_text
 
 
 class BluRail(RailSource):
@@ -12,12 +11,11 @@ class BluRail(RailSource):
     line_wikis: dict[str, str] = {}
 
     def prepare(self, config: Config):
-        line_list = json.loads(
-            get_url(
+        line_list = (
+            get_json(
                 "https://wiki.minecartrapidtransit.net/api.php?action=query&list=categorymembers&cmtitle=Category%3ABluRail+lines&cmlimit=5000&format=json",
-                config.cache_dir / "blurail_line_list",
-                config.timeout,
-                cooldown=config.cooldown,
+                "blurail_line_list",
+                config
             )
         )["query"]["categorymembers"]
 

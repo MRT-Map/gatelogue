@@ -2,7 +2,7 @@ import gatelogue_types as gt
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_url, get_csv
 from gatelogue_aggregator.source import Source
 
 
@@ -14,22 +14,16 @@ class TownList(Source):
         cache1 = config.cache_dir / "town-list1"
         cache2 = config.cache_dir / "town-list2"
 
-        get_url(
+        df1 = get_csv(
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=0",
-            cache1,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "town-list1", config
         )
-        df1 = pd.read_csv(cache1)
         df1["World"] = "New"
 
-        get_url(
+        df2 = get_csv(
             "https://docs.google.com/spreadsheets/d/1JSmJtYkYrEx6Am5drhSet17qwJzOKDI7tE7FxPx4YNI/export?format=csv&gid=1533469138",
-            cache2,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "town-list2", config
         )
-        df2 = pd.read_csv(cache2)
         df2["World"] = "Old"
         df2["Town Rank"] = "Unranked"
         self.df = pd.concat((df1, df2))

@@ -7,11 +7,10 @@ from typing import TYPE_CHECKING
 import bs4
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link, get_wiki_text
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
@@ -343,16 +342,11 @@ class ArcticAir(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "arctic_air"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=0",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "arctic_air",
+            config,
         )
-
-        self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
         airline = self.airline(name="ArcticAir", link=get_wiki_link("ArcticAir"))
@@ -396,15 +390,11 @@ class SandstoneAirr(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "sandstone_airr"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1XhIW2kdX_d56qpT-kyGz6tD9ZuPQtqSeFZvPiqMDAVU/export?format=csv&gid=3084051",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "sandstone_airr",
+            config,
         )
-        self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
         airline = self.airline(name="Sandstone Airr", link=get_wiki_link("Sandstone Airr"))
@@ -449,16 +439,12 @@ class Lilyflower(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "lilyflower"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1B-fSerCAQAtaW-kAfv1npdjpGt-N1PrB1iUOmUBX5HI/export?format=csv&gid=1864111212",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "lilyflower",
+            config,
+            header=1,
         )
-
-        self.df = pd.read_csv(cache, header=1)
 
     def build(self, config: Config):
         airline = self.airline(name="Lilyflower Airlines", link=get_wiki_link("Lilyflower Airlines"))

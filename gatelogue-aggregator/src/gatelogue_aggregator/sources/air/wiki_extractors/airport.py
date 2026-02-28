@@ -6,10 +6,9 @@ from typing import TYPE_CHECKING
 import bs4
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
-from gatelogue_aggregator.sources.wiki_base import get_wiki_html, get_wiki_link
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
@@ -292,16 +291,12 @@ class AIX(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "aix"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1vG_oEj_XzZlckRwxn4jKkK1FcgjjaULpt66XcxClqP8/export?format=csv&gid=0",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "aix",
+            config,
+            header=1,
         )
-
-        self.df = pd.read_csv(cache, header=1)
 
     def build(self, config: Config):
         airport = self.airport(
@@ -331,16 +326,11 @@ class LAR(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "lar"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=0",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "lar",
+            config,
         )
-
-        self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
         airport = self.airport(
@@ -366,16 +356,11 @@ class LFA(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache = config.cache_dir / "lfa"
-
-        get_url(
+        self.df = get_csv(
             "https://docs.google.com/spreadsheets/d/1TjGME8Hx_Fh5F0zgHBBvAj_Axlyk4bztUBELiEu4m-w/export?format=csv&gid=1289412824",
-            cache,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "lfa",
+            config,
         )
-
-        self.df = pd.read_csv(cache)
 
     def build(self, config: Config):
         airport = self.airport(

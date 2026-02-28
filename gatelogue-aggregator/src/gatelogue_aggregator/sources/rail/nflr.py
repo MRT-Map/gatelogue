@@ -1,51 +1,53 @@
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import NamedTuple
 
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_url, get_csv
 from gatelogue_aggregator.source import RailSource
 
+
+class _Line(NamedTuple):
+    line_name: str
+    line_colour: str
+    w: bool
+    df: pd.DataFrame
 
 class NFLR(RailSource):
     name = "MRT Wiki (Rail, nFLR)"
     cache: Path
-    lines: list[tuple[str, str, bool, int]]
+    lines: list[_Line]
 
     def prepare(self, config: Config):
-        self.cache = config.cache_dir / "nflr"
-        get_url(
+        df = get_csv(
             "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid=1540849896",
-            self.cache / "lines",
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "nflr/lines",
+            config
         )
-        df = pd.read_csv(self.cache / "lines")
-        self.lines = [
+        lines = [
             (str(line_name), str(back), bool(w), int(gid))
             for line_name, back, w, gid in zip(df["line"], df["back"], df["w"], df["gid"], strict=False)
             if pd.notna(gid)
         ]
 
-        def retrieve_urls(line_name: str, gid: int):
-            get_url(
+        def retrieve_urls(line_name: str, line_colour: str, w: bool, gid: int) -> _Line:
+            dfl = get_csv(
                 "https://docs.google.com/spreadsheets/d/1ohIRZrcLZByL5feqDqgA0QeC3uwAlBKOMKxWMRTSxRw/export?format=csv&gid="
                 + str(gid),
-                self.cache / line_name,
-                timeout=config.timeout,
-                cooldown=config.cooldown,
+                "nflr/" + line_name,
+                config
             )
+            return _Line(line_name, line_colour, w, dfl)
 
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
-            list(executor.map(lambda s: retrieve_urls(s[0], s[3]), self.lines))
+            self.lines = list(executor.map(lambda s: retrieve_urls(*s), lines))
 
     def build(self, config: Config):
         company = self.company(name="nFLR")
 
-        for line_name, line_colour, w, _ in self.lines:
-            df = pd.read_csv(self.cache / line_name)
-
+        for line_name, line_colour, w, df in self.lines:
             d = list(zip(df["route"], df["code"], df["name"], strict=False))
 
             r_stations = []

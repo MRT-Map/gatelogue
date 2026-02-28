@@ -5,14 +5,21 @@ import tempfile
 import time
 from pathlib import Path
 from threading import Lock
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import cloudscraper
 import msgspec
+import msgspec.json
+import pandas as pd
 import rich
 import rich.status
+from bs4 import BeautifulSoup
 
 from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
+
+if TYPE_CHECKING:
+    from gatelogue_aggregator.config import Config
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_COOLDOWN = 15
@@ -26,12 +33,12 @@ COOLDOWN: dict[str, float] = {}
 
 def get_url(
     url: str,
-    cache: Path,
-    timeout: int = DEFAULT_TIMEOUT,
-    cooldown: int = DEFAULT_COOLDOWN,
+    key: str,
+    config: Config,
     *,
     empty_is_error: bool = False,
 ) -> str:
+    cache = config.cache_dir / key
     if cache.exists():
         rich.print(INFO3 + f"Reading {url} from {cache}")
         return cache.read_text()
@@ -44,14 +51,14 @@ def get_url(
             rich.print(INFO3 + f"Waiting for {url} cooldown")
             time.sleep(abs(cool - time.time()))
 
-        response = SESSION.get(url, timeout=timeout)
+        response = SESSION.get(url, timeout=config.timeout)
         if response.status_code >= 400 or (empty_is_error and response.text == ""):
             rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
             if response.status_code in (408, 429):
                 with COOLDOWN_LOCK:
                     COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
                 rich.print(ERROR + f"Will try {url} again in 15s")
-                return get_url(url, cache, timeout, cooldown)
+                return get_url(url, key, config, empty_is_error=empty_is_error)
 
         text = response.text
         with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
@@ -64,8 +71,8 @@ def get_url(
     return text
 
 
-def get_json(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: int = DEFAULT_COOLDOWN) -> dict:
-    text = get_url(url, cache, timeout, cooldown, empty_is_error=True)
+def get_json(url: str, key: str, config: Config) -> dict:
+    text = get_url(url, key, config, empty_is_error=True)
     try:
         return msgspec.json.decode(text)
     except msgspec.DecodeError as e:
@@ -73,4 +80,39 @@ def get_json(url: str, cache: Path, timeout: int = DEFAULT_TIMEOUT, cooldown: in
         with COOLDOWN_LOCK:
             COOLDOWN[urlparse(url).netloc] = time.time() + DEFAULT_COOLDOWN
         rich.print(ERROR + f"Will try {url} again in 15s")
-        return get_json(url, cache, timeout, cooldown)
+        return get_json(url, key, config)
+
+
+def get_csv(url: str, key: str, config: Config, **pd_kwargs) -> pd.DataFrame:
+    get_url(url, key, config)
+    return pd.read_csv(config.cache_dir / key, **pd_kwargs)
+
+
+def get_wiki_text(page: str, config: Config, old_id: int | None = None) -> str:
+    key = "wiki-text/" + (page.replace("/", "") if old_id is None else str(old_id))
+    if old_id is None:
+        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page={page}"
+    else:
+        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&prop=wikitext&formatversion=2&format=json&oldid={old_id}"
+    response = get_url(url, key, config)
+    try:
+        return msgspec.json.decode(response)["parse"]["wikitext"]
+    except Exception as e:
+        raise ValueError(response) from e
+
+
+def get_wiki_html(page: str, config: Config, old_id: int | None = None) -> BeautifulSoup:
+    key = "wiki-html/" + (page.replace("/", "") if old_id is None else str(old_id))
+    if old_id is None:
+        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&page={page}"
+    else:
+        url = f"https://wiki.minecartrapidtransit.net/api.php?action=parse&formatversion=2&format=json&oldid={old_id}"
+    response = get_url(url, key, config)
+    try:
+        return BeautifulSoup(msgspec.json.decode(response)["parse"]["text"], features="html.parser")
+    except Exception as e:
+        raise ValueError(response) from e
+
+
+def get_wiki_link(page: str) -> str:
+    return f"https://wiki.minecartrapidtransit.net/index.php/{page}"

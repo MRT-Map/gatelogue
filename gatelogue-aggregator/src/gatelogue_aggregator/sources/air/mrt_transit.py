@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_url
+from gatelogue_aggregator.downloader import get_csv
 from gatelogue_aggregator.logging import INFO3, track
 from gatelogue_aggregator.source import AirSource
 
@@ -20,18 +20,12 @@ class MRTTransit(AirSource):
     df: pd.DataFrame
 
     def prepare(self, config: Config):
-        cache1 = config.cache_dir / "mrt-transit1"
-        cache2 = config.cache_dir / "mrt-transit2"
-        cache3 = config.cache_dir / "mrt-transit3"
-
-        get_url(
+        df1 = get_csv(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=379342597",
-            cache1,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "mrt-transit1",
+            config,
+            header=1,
         )
-        df1 = pd.read_csv(cache1, header=1)
-
         df1.rename(
             columns={
                 "Unnamed: 0": "Name",
@@ -44,26 +38,23 @@ class MRTTransit(AirSource):
         df1.drop(df1.tail(66).index, inplace=True)
         df1["Mode"] = "seaplane"
 
-        get_url(
+        df2 = get_csv(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=1714326420",
-            cache2,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "mrt-transit2",
+            config,
+            header=0,
         )
-        df2 = pd.read_csv(cache2, header=0)
         df2["Mode"] = "helicopter"
         df2.rename(columns={"Airport Name": "Name"}, inplace=True)
         df2.drop(df2.tail(4).index, inplace=True)
 
-        get_url(
+        df3 = get_csv(
             "https://docs.google.com/spreadsheets/d/1wzvmXHQZ7ee7roIvIrJhkP6oCegnB8-nefWpd8ckqps/export?format=csv&gid=248317803",
-            cache3,
-            timeout=config.timeout,
-            cooldown=config.cooldown,
+            "mrt-transit3",
+            config,
+            header=1,
         )
-        df3 = pd.read_csv(cache3, header=1)
         df3["Mode"] = "warp plane"
-
         df3.rename(
             columns={
                 "Unnamed: 0": "Name",
