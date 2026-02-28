@@ -57,7 +57,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
 
     def _resolve_platform_code(self, code: PlatformCode, direction: Literal["forwards", "backwards"]) -> PlatformCode:
         if code == "DEFAULT_CODE":
-            return self.default_forward_code if direction == "forward" else self.default_backward_code
+            return self.line.code + "-" + (self.default_forward_code if direction == "forward" else self.default_backward_code)
         if code == "LINE_CODE":
             return self.line.code
         return code
@@ -141,7 +141,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         while True:
             station = self.station_list[self.cursor]
             forward_code, backward_code = platform_codes.get(
-                station.name, (self.default_forward_code, self.default_backward_code)
+                station.name, (self.line.code + "-" + self.default_forward_code, self.line.code + "-" + self.default_backward_code)
             )
             self.connect_to(
                 station,
