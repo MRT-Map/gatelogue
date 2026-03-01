@@ -37,7 +37,7 @@ lines:
       - Shrine-Kargorok Bridge
       - Artarmon Park East
       - Artarmon Border
-      # - Sunraysia Interchange
+      - Sunraysia Interchange
   - name: Erzgard Circle
     code: "2"
     colour: "#eae7b7"
@@ -367,8 +367,8 @@ lines:
       - Kivali Interchange
       - Grevali Street
       - Commerah Entrance
-      # - Sunraysia Regional Hospital
-      # - Sunraysia Interchange
+      - Sunraysia Regional Hospital
+      - Sunraysia Interchange
   - name: Kaiphek
     code: "17"
     colour: "#6d7b63"
@@ -392,9 +392,9 @@ lines:
       - Sunraysia Lighthouse
       - Strand Theatre
       - Sunraysia City Hall
-      # - Sunraysia Breakwater
-      # - Nergali Park
-      # - Sunraysia Interchange
+      - Sunraysia Breakwater
+      - Nergali Park
+      - Sunraysia Interchange
   - name: Orcan
     code: "19"
     colour: "#1e57a5"
@@ -440,7 +440,7 @@ lines:
       - Spire of New Domain
       - Artarmon Park East
       - Artarmon Border
-      # - Sunraysia Interchange
+      - Sunraysia Interchange
   - name: Sharkland Region
     code: "X2a"
     colour: "#62b2a3"
@@ -584,7 +584,7 @@ lines:
     stations:
       - Fort Cain-Historical District
       - Sunraysia City Hall
-      # - Sunraysia Interchange
+      - Sunraysia Interchange
   - name: Prohampton
     code: "P1"
     colour: "#625351"

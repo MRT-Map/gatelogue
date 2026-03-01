@@ -25,7 +25,7 @@ jobs:
       - run: |
           cd gatelogue-client/dist
           echo > .nojekyll
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: client
           path: gatelogue-client/dist
@@ -42,7 +42,7 @@ jobs:
       - run: |
           cd gatelogue-aggregator
           hatch run docs:build
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: docs-py
           path: gatelogue-aggregator/docs/_build/html/
@@ -57,7 +57,7 @@ jobs:
           cd gatelogue-types-rs
           cargo doc --no-deps
       - run: cp .github/docs-rs-redirect.html gatelogue-types-rs/target/doc/index.html
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: docs-rs
           path: gatelogue-types-rs/target/doc/
@@ -77,7 +77,7 @@ jobs:
           cd gatelogue-types-ts
           pnpm install --no-frozen-lockfile
           pnpm run doc
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: docs-ts
           path: gatelogue-types-ts/docs
@@ -89,19 +89,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+    - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
       with:
         name: client
         path: dist
-    - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+    - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
       with:
         name: docs-py
         path: dist/docs
-    - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+    - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
       with:
         name: docs-rs
         path: dist/docs/rs
-    - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+    - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
       with:
         name: docs-ts
         path: dist/docs/ts
