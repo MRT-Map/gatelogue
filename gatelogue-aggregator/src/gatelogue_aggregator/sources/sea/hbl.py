@@ -4,7 +4,7 @@ import re
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import SeaSource
 
 
@@ -16,7 +16,7 @@ class HBL(SeaSource):
         self.html = get_wiki_html("Hummingbird Boat Lines", config)
 
     def build(self, config: Config):
-        company = self.company(name="Hummingbird Boat Lines")
+        company = self.company(name="Hummingbird Boat Lines", link=get_wiki_link("Hummingbird Boat Lines"))
 
         for td in self.html.find("table", class_="multicol").find_all("td"):
             for p, ul in zip(td.find_all("p"), td.find_all("ul"), strict=False):

@@ -18,6 +18,7 @@ from_sql_for_enum!(RailMode);
 node_type!(RailCompany);
 impl RailCompany {
     get_column!("RailCompany", name, String);
+    get_column!("RailCompany", link, Option<String>);
     get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = ?");
     get_derived_vec!(
         stations,

@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class IntraRail(RailSource):
         self.html = get_wiki_html("IntraRail", config)
 
     def build(self, config: Config):
-        company = self.company(name="IntraRail")
+        company = self.company(name="IntraRail", link=get_wiki_link("IntraRail"))
 
         for h4 in self.html.find_all("h4"):
             line_code_name: str = h4.find("span", class_="mw-headline").string

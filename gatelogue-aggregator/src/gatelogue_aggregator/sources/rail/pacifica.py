@@ -1,7 +1,7 @@
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class Pacifica(RailSource):
         self.text = get_wiki_text("Pacifica", config)
 
     def build(self, config: Config):
-        company = self.company(name="Pacifica")
+        company = self.company(name="Pacifica", link=get_wiki_link("Pacifica"))
 
         for match in re.finditer(
             re.compile(r"(?s){\| class=\"wikitable\".*?\n\|\+\n!(?P<name>.*?)\n\|-\n(?P<stations>.*?)\n\|}"), self.text

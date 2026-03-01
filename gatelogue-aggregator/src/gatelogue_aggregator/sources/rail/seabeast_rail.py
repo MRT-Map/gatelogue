@@ -2,7 +2,7 @@ import difflib
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import RailSource
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -15,7 +15,7 @@ class SeabeastRail(RailSource):
         self.text = get_wiki_text("Seabeast Rail", config)
 
     def build(self, config: Config):
-        company = self.company(name="Seabeast Rail")
+        company = self.company(name="Seabeast Rail", link=get_wiki_link("Seabeast Rail"))
         line = self.line(code="Green Line", company=company, name="Green Line", colour="green")
         station_names = []
 

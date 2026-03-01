@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class BreezeRail(RailSource):
         self.html = get_wiki_html("BreezeRail", config)
 
     def build(self, config: Config):
-        company = self.company(name="BreezeRail")
+        company = self.company(name="BreezeRail", link=get_wiki_link("BreezeLink"))
 
         for h3 in self.html.find_all("h3"):
             if (line_code_name := h3.find("span", class_="mw-headline")) is None:

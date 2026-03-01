@@ -16,6 +16,7 @@ from_sql_for_enum!(SeaMode);
 node_type!(SeaCompany);
 impl SeaCompany {
     get_column!("SeaCompany", name, String);
+    get_column!("SeaCompany", link, Option<String>);
     get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = ?");
     get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = ?");
     get_derived_vec!(

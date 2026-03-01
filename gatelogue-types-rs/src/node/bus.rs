@@ -14,6 +14,7 @@ from_sql_for_enum!(BusMode);
 node_type!(BusCompany);
 impl BusCompany {
     get_column!("BusCompany", name, String);
+    get_column!("BusCompany", link, Option<String>);
     get_derived_vec!(lines, BusLine, "SELECT i FROM BusLine WHERE company = ?");
     get_derived_vec!(stops, BusStop, "SELECT i FROM BusStop WHERE company = ?");
     get_derived_vec!(

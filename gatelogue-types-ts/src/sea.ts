@@ -7,6 +7,9 @@ export class SeaCompany extends Node {
   get name(): string {
     return this.getColumn("SeaCompany", "name");
   }
+  get link(): string | null {
+    return this.getColumn("SeaCompany", "link");
+  }
 
   get lines(): SeaLine[] {
     return this.gd

@@ -7,6 +7,9 @@ export class RailCompany extends Node {
   get name(): string {
     return this.getColumn("RailCompany", "name");
   }
+  get link(): string | null {
+    return this.getColumn("RailCompany", "link");
+  }
 
   get lines(): RailLine[] {
     return this.gd

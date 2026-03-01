@@ -144,12 +144,14 @@ CREATE TABLE AirGateSource
 CREATE TABLE BusCompany
 (
     i    INTEGER PRIMARY KEY REFERENCES Node (i),
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    link TEXT
 ) STRICT;
 CREATE TABLE BusCompanySource
 (
     i      INTEGER NOT NULL REFERENCES BusCompany (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
+    link   INTEGER NOT NULL CHECK ( link IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -227,12 +229,14 @@ CREATE TABLE BusConnectionSource
 CREATE TABLE SeaCompany
 (
     i    INTEGER PRIMARY KEY REFERENCES Node (i),
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    link TEXT
 ) STRICT;
 CREATE TABLE SeaCompanySource
 (
     i      INTEGER NOT NULL REFERENCES SeaCompany (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
+    link   INTEGER NOT NULL CHECK ( link IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -311,12 +315,14 @@ CREATE TABLE SeaConnectionSource
 CREATE TABLE RailCompany
 (
     i    INTEGER PRIMARY KEY REFERENCES Node (i),
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    link TEXT
 ) STRICT;
 CREATE TABLE RailCompanySource
 (
     i      INTEGER NOT NULL REFERENCES RailCompany (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
+    link   INTEGER NOT NULL CHECK ( link IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 

@@ -3,7 +3,7 @@ import re
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import SeaSource
 
 
@@ -15,7 +15,7 @@ class AquaLinQ(SeaSource):
         self.html = get_wiki_html("AquaLinQ", config)
 
     def build(self, config: Config):
-        company = self.company(name="AquaLinQ")
+        company = self.company(name="AquaLinQ", link=get_wiki_link("AquaLinQ"))
 
         for h3 in self.html.find_all("h3"):
             if (match := re.search(r"([^:]*): (.*)", h3.find("span", class_="mw-headline").string)) is None:

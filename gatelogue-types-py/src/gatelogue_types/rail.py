@@ -15,13 +15,18 @@ type RailMode = Literal["warp", "cart", "traincarts", "vehicles"]
 class RailCompany(Node):
     name = _Column[str]("name", "RailCompany", formatter=_format_str)
     """Name of the rail company"""
-    COLUMNS: ClassVar = (name,)
+    link = _Column[str | None]("link", "RailCompany", sourced=True, formatter=_format_str)
+    """Link to the MRT Wiki page for the company"""
+    COLUMNS: ClassVar = (name, link)
 
     def __str__(self):
         return super().__str__() + f" {self.name}"
 
-    class CreateParams(TypedDict):
-        name: str
+    class CreateParams(TypedDict, total=False):
+        """Internal use"""
+
+        name: Required[str]
+        link: str | None
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
@@ -29,7 +34,7 @@ class RailCompany(Node):
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO RailCompany (i, name) VALUES (:i, :name)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO RailCompany (i, name, link) VALUES (:i, :name, :link)", dict(i=i, **kwargs))
         cur.execute("INSERT INTO RailCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 

@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class RedTrain(RailSource):
         self.html = get_wiki_html("RedTrain", config)
 
     def build(self, config: Config):
-        company = self.company(name="RedTrain")
+        company = self.company(name="RedTrain", link=get_wiki_link("RedTrain"))
 
         for table in self.html.find_all("table"):
             if "Code" not in table("th")[1].string:

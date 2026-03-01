@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal, TypedDict
 import gatelogue_types as gt
 import msgspec
 
+from gatelogue_aggregator.downloader import get_wiki_link
 from gatelogue_aggregator.source import BusSource, RailSource, SeaSource, Source
 from gatelogue_aggregator.sources.line_builder import BusLineBuilder, DirectionLabel, RailLineBuilder, SeaLineBuilder
 
@@ -43,6 +44,7 @@ class YamlLine(msgspec.Struct):
 
 class Yaml(msgspec.Struct):
     company_name: str
+    company_link: str | None = None
     lines: list[YamlLine] = msgspec.field(default_factory=list)
     coords: dict[str, tuple[int, int]] = msgspec.field(default_factory=dict)
     merge_codes: list[set[str]] = msgspec.field(default_factory=list)
@@ -68,7 +70,12 @@ class Yaml2Source(Source):
         with self.file_path.open() as f:
             file = msgspec.yaml.decode(f.read(), type=Yaml)
 
-        company = self.C.create(self.conn, self.priority, name=file.company_name)
+        company = self.C.create(
+            self.conn,
+            self.priority,
+            name=file.company_name,
+            link=None if file.company_link is None else get_wiki_link(file.company_link),
+        )
 
         for codes in file.merge_codes:
             self.S.create(

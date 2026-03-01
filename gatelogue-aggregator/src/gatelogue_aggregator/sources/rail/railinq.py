@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class RaiLinQ(RailSource):
         self.html = get_wiki_html("List of RaiLinQ lines", config)
 
     def build(self, config: Config):
-        company = self.company(name="RaiLinQ")
+        company = self.company(name="RaiLinQ", link=get_wiki_link("RaiLinQ"))
 
         for line_table in self.html.find_all("table"):
             if "border-radius: 11px" not in line_table.attrs.get("style", ""):

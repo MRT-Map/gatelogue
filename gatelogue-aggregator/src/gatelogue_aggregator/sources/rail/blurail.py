@@ -1,7 +1,7 @@
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_json, get_wiki_text
+from gatelogue_aggregator.downloader import get_json, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import RailSource
 
 
@@ -20,7 +20,7 @@ class BluRail(RailSource):
 
         line_codes = [result["title"].removesuffix(" (BluRail line)") for result in line_list]
 
-        self.line_wikis = {} # TODO parallel
+        self.line_wikis = {}  # TODO parallel
         for line_code in line_codes:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             if "is a planned [[BluRail]] warp train line" in wiki:
@@ -28,7 +28,7 @@ class BluRail(RailSource):
             self.line_wikis[line_code] = wiki
 
     def build(self, config: Config):
-        company = self.company(name="BluRail")
+        company = self.company(name="BluRail", link=get_wiki_link("BluRail"))
 
         for line_code, wiki in self.line_wikis.items():
             line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)

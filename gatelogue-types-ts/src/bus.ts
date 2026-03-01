@@ -7,6 +7,9 @@ export class BusCompany extends Node {
   get name(): string {
     return this.getColumn("BusCompany", "name");
   }
+  get link(): string | null {
+    return this.getColumn("BusCompany", "link");
+  }
 
   get lines(): BusLine[] {
     return this.gd

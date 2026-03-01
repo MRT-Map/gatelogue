@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import BusSource
 
 
@@ -13,7 +13,7 @@ class IntraBus(BusSource):
         self.html = get_wiki_html("IntraBus", config)
 
     def build(self, config: Config):
-        company = self.company(name="IntraBus")
+        company = self.company(name="IntraBus", link=get_wiki_link("IntraBus"))
 
         for table in self.html.find_all("table"):
             if not table("th") or "Route Number" not in table.strings:

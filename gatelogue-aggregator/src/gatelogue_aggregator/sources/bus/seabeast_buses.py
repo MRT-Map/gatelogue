@@ -2,7 +2,7 @@ import difflib
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -15,7 +15,7 @@ class SeabeastBuses(BusSource):
         self.text = get_wiki_text("Seabeast Buses", config)
 
     def build(self, config: Config):
-        company = self.company(name="Seabeast Buses")
+        company = self.company(name="Seabeast Buses", link=get_wiki_link("Seabeast Buses"))
         stop_names = {}
 
         for match in re.finditer(

@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class MarbleRail(RailSource):
         self.html = get_wiki_html("MarbleRail", config)
 
     def build(self, config: Config):
-        company = self.company(name="MarbleRail")
+        company = self.company(name="MarbleRail", link=get_wiki_link("MarbleRail"))
 
         for line_table in self.html.find_all("table"):
             if line_table.caption is None:

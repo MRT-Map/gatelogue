@@ -1,7 +1,7 @@
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -13,7 +13,7 @@ class SEAT(RailSource):
         self.html = get_wiki_html("Seoland Economically/Ecologically Advanced Transit", config)
 
     def build(self, config: Config):
-        company = self.company(name="SEAT")
+        company = self.company(name="SEAT", link=get_wiki_link("Seoland Economically/Ecologically Advanced Transit"))
 
         first_seen = False
         for h3 in self.html.find_all("h3"):

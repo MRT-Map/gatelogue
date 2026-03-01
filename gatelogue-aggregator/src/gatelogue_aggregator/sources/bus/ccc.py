@@ -2,7 +2,7 @@ import difflib
 import re
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import BusSource
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -15,7 +15,7 @@ class CCC(BusSource):
         self.text = get_wiki_text("Caravacan Caravan Company", config)
 
     def build(self, config: Config):
-        company = self.company(name="Caravacan Caravan Company")
+        company = self.company(name="Caravacan Caravan Company", link=get_wiki_link("Caravacan Caravan Company"))
         stop_names = []
 
         line = None

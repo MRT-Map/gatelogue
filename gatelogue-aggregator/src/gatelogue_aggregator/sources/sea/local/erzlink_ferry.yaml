@@ -1,4 +1,5 @@
 company_name: ErzLink Ferry
+company_link: ErzLink
 mode: "traincarts ferry"
 colour: "#0aa"
 local: true

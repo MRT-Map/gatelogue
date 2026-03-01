@@ -10,7 +10,7 @@ import gatelogue_types as gt
 import msgspec
 import rich
 
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track, INFO3
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -76,11 +76,13 @@ class GatelogueData:
                     merged |= also_merged
 
     def _merge_airports_with_unknown_code(self, pass_: int):
-        name2i = dict(self.gd.conn.execute(
+        name2i = dict(
+            self.gd.conn.execute(
                 "SELECT name, AirAirport.i FROM AirAirport "
                 "INNER JOIN AirAirportNames on AirAirport.i = AirAirportNames.i "
                 "WHERE code != ''"
-            ).fetchall())
+            ).fetchall()
+        )
 
         for n in track(
             (

@@ -3,7 +3,7 @@ import re
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import RailSource
 
 
@@ -15,7 +15,7 @@ class WZR(RailSource):
         self.html = get_wiki_html("List of West Zeta Rail lines", config)
 
     def build(self, config: Config):
-        company = self.company(name="West Zeta Rail")
+        company = self.company(name="West Zeta Rail", link=get_wiki_link("West Zeta Rail"))
 
         for table in self.html.find_all("table"):
             if "Code" not in table.th.string:

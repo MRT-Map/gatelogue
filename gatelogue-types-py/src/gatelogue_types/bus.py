@@ -15,13 +15,18 @@ type BusMode = Literal["warp", "traincarts"]
 class BusCompany(Node):
     name = _Column[str]("name", "BusCompany", formatter=_format_str)
     """Name of the bus company"""
-    COLUMNS: ClassVar = (name,)
+    link = _Column[str | None]("link", "BusCompany", sourced=True, formatter=_format_str)
+    """Link to the MRT Wiki page for the company"""
+    COLUMNS: ClassVar = (name, link)
 
     def __str__(self):
         return super().__str__() + f" {self.name}"
 
-    class CreateParams(TypedDict):
-        name: str
+    class CreateParams(TypedDict, total=False):
+        """Internal use"""
+
+        name: Required[str]
+        link: str | None
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
@@ -29,7 +34,7 @@ class BusCompany(Node):
         kwargs = cls.format_create_kwargs(**kwargs)
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
-        cur.execute("INSERT INTO BusCompany (i, name) VALUES (:i, :name)", dict(i=i, **kwargs))
+        cur.execute("INSERT INTO BusCompany (i, name, link) VALUES (:i, :name, :link)", dict(i=i, **kwargs))
         cur.execute("INSERT INTO BusCompanySource (i, source) VALUES (:i, :source)", dict(i=i, source=src, **kwargs))
         return cls(conn, i)
 

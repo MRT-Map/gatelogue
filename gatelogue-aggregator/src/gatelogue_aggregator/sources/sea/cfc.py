@@ -1,7 +1,7 @@
 import difflib
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_text
+from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import SeaSource
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -14,7 +14,7 @@ class CFC(SeaSource):
         self.text = get_wiki_text("Caravacan Floaty Company", config)
 
     def build(self, config: Config):
-        company = self.company(name="Caravacan Floaty Company")
+        company = self.company(name="Caravacan Floaty Company", link=get_wiki_link("Caravacan Floaty Company"))
         stop_names = []
 
         for ln in self.text.split("\n"):

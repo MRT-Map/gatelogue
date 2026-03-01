@@ -378,6 +378,7 @@ class LFA(AirSource):
                 size=size,
             )
 
+
 @AIRPORT_SOURCES.append
 class KWT(RegexWikiAirport):
     airport_code = "KWT"

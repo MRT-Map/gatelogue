@@ -5,7 +5,7 @@ from typing import NamedTuple
 import pandas as pd
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_csv
+from gatelogue_aggregator.downloader import get_csv, get_wiki_link
 from gatelogue_aggregator.source import RailSource
 
 
@@ -46,7 +46,7 @@ class NFLR(RailSource):
             self.lines = list(executor.map(lambda s: retrieve_urls(*s), lines))
 
     def build(self, config: Config):
-        company = self.company(name="nFLR")
+        company = self.company(name="nFLR", link=get_wiki_link("NewRail FLR"))
 
         for line_name, line_colour, w, df in self.lines:
             d = list(zip(df["route"], df["code"], df["name"], strict=False))

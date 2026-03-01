@@ -3,7 +3,7 @@ import re
 import bs4
 
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import get_wiki_html
+from gatelogue_aggregator.downloader import get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import SeaSource
 
 
@@ -15,7 +15,7 @@ class WZF(SeaSource):
         self.html = get_wiki_html("West Zeta Ferry", config)
 
     def build(self, config: Config):
-        company = self.company(name="West Zeta Ferry")
+        company = self.company(name="West Zeta Ferry", link=get_wiki_link("West Zeta Ferry"))
 
         for table in self.html.find_all("table"):
             if "Status" not in table.th.string:
