@@ -10,7 +10,7 @@ import gatelogue_types as gt
 import msgspec
 import rich
 
-from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
+from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track, INFO3
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
 
@@ -214,8 +214,8 @@ class GatelogueData:
             queue |= set(n._nodes_in_proximity) & nodes
             if isinstance(n, gt.AirAirport):
                 gates = list(n.gates)
-                queue |= {f.to.i for g in gates for f in g.flights_from_here} & nodes
-                queue |= {f.from_.i for g in gates for f in g.flights_to_here} & nodes
+                queue |= {f.to.airport.i for g in gates for f in g.flights_from_here} & nodes
+                queue |= {f.from_.airport.i for g in gates for f in g.flights_to_here} & nodes
             elif isinstance(n, (gt.BusStop, gt.SeaStop)):
                 queue |= {c.to.stop.i for c in n.connections_from_here} & nodes
                 queue |= {c.from_.stop.i for c in n.connections_to_here} & nodes
@@ -274,6 +274,9 @@ class GatelogueData:
                     nearest = min(nodes, key=lambda nr: dist_sq_fn(nr, this, component))
                     if nearest.i in this._nodes_in_proximity:
                         continue
+                    distance = dist_sq_fn(nearest, this, component) ** 0.5
+                    if distance == float("inf"):
+                        continue
                     srcs = {
                         s
                         for (s,) in self.gd.conn.execute(
@@ -287,7 +290,7 @@ class GatelogueData:
                         srcs,
                         node1=this,
                         node2=nearest,
-                        distance=dist_sq_fn(nearest, this, component) ** 0.5,
+                        distance=distance,
                     )
 
             length = sum(len(a) for a in isolated)
