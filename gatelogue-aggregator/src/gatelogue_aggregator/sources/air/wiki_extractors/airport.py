@@ -386,3 +386,21 @@ class KWT(RegexWikiAirport):
     additional_names = {"Kwai Tin Airfield"}
 
 
+@AIRPORT_SOURCES.append
+class SWH(AirSource):
+    name = "Gatelogue"
+
+    def build(self, config: Config):
+        self.airport(
+            code="SWH", names={"Southwold International Airport"}, link=get_wiki_link("Southwold International Airport")
+        )
+
+
+@AIRPORT_SOURCES.append
+class EXH(AirSource):
+    name = "Gatelogue"
+
+    def build(self, config: Config):
+        self.airport(
+            code="EXH", names={"Essex Municipal Helport", "Essex Heliport"}, link=get_wiki_link("Essex Heliport")
+        )

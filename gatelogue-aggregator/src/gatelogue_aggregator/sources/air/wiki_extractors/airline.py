@@ -553,6 +553,10 @@ class UtopiAir(AirSource):
                 flight_code = tr("td")[0].string
                 airport1_name = "".join(tr("td")[1].strings)
                 airport2_name = "".join(tr("td")[2].strings)
+                if airport1_name == "Porton":
+                    airport1_name = "Porton Seaplane Dock"
+                if airport2_name == "Porton":
+                    airport2_name = "Porton Seaplane Dock"
 
                 self.connect(
                     airline=airline,
@@ -633,12 +637,17 @@ class Caelus(AirSource):
                 continue
             code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")
             n1, n2 = tr("td")[2].strings
+            if n1 == "Deadbush Northeast Airfield":
+                n1 = "West Mesa International Airport"
+            if n2 == "Deadbush Northeast Airfield":
+                n2 = "West Mesa International Airport"
             self.connect(
                 airline=airline,
                 flight_code1=code1,
                 flight_code2=code2,
                 airport1_name=n1,
                 airport2_name=n2,
+                size="H",
             )
 
 
