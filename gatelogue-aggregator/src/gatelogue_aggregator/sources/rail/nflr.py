@@ -119,6 +119,7 @@ class NFLR(RailSource):
                     backward_direction="towards mainline",
                 )
 
+                r_builder.skip(until="Port Dupont")
                 r_builder.connect(forward_direction="eastbound", backward_direction="westbound")
             elif line_name == "R4":
                 r_builder.connect(until="Birmingham")
@@ -131,6 +132,7 @@ class NFLR(RailSource):
             elif line_name == "R13":
                 r_builder.connect(until="New Foresne Cinnameadow")
                 r_builder.skip(until="Lilygrove Union", detached=True)
+                r_builder.connect()
             elif line_name == "R17":
                 r_builder.connect(until="Dewford City Lometa")
                 r_builder.skip(until="Fort Torbay", detached=True)
