@@ -263,6 +263,8 @@ class GatelogueData:
         prev_length: int | None = None
         for pass_ in range(1, 10):
             isolated = self._isolated_nodes({n.i for n in nodes})
+            if len(isolated) == 0:
+                break
 
             for component in track(
                 isolated,

@@ -217,7 +217,7 @@ class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, Sea
         branch.station_list = self.station_list
         branch.prev_platform_forwards = self.prev_platform_forwards
         branch.prev_platform_backwards = self.prev_platform_backwards
-        return self
+        return branch
 
     def u_turn(self) -> Self:
         self.station_list = list(reversed(self.station_list))
