@@ -106,18 +106,18 @@ CREATE TABLE AirAirportModesSource
 
 CREATE TABLE AirFlight
 (
-    i       INTEGER PRIMARY KEY REFERENCES Node (i),
-    "from"  INTEGER NOT NULL REFERENCES AirGate (i),
-    "to"    INTEGER NOT NULL REFERENCES AirGate (i),
-    code    TEXT    NOT NULL,
-    mode    TEXT CHECK ( mode IS NULL OR mode IN ('helicopter', 'seaplane', 'warp plane', 'traincarts plane') ),
-    airline INTEGER NOT NULL REFERENCES AirAirline (i)
+    i        INTEGER PRIMARY KEY REFERENCES Node (i),
+    "from"   INTEGER NOT NULL REFERENCES AirGate (i),
+    "to"     INTEGER NOT NULL REFERENCES AirGate (i),
+    code     TEXT    NOT NULL,
+    aircraft TEXT REFERENCES Aircraft (name),
+    airline  INTEGER NOT NULL REFERENCES AirAirline (i)
 ) STRICT;
 CREATE TABLE AirFlightSource
 (
     i      INTEGER NOT NULL REFERENCES AirFlight (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
-    mode   INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
+    aircraft   INTEGER NOT NULL CHECK ( aircraft IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -127,18 +127,28 @@ CREATE TABLE AirGate
     code    TEXT,
     airport INTEGER NOT NULL REFERENCES AirAirport (i),
     airline INTEGER REFERENCES AirAirline (i),
-    size    TEXT,
+    width   INTEGER,
     mode    TEXT CHECK ( mode IS NULL OR mode IN ('helicopter', 'seaplane', 'warp plane', 'traincarts plane') )
 ) STRICT;
 CREATE TABLE AirGateSource
 (
     i       INTEGER NOT NULL REFERENCES AirGate (i),
     source  INTEGER NOT NULL REFERENCES Source (priority),
-    size    INTEGER NOT NULL CHECK ( size IN (false, true) ) DEFAULT false,
+    width   INTEGER NOT NULL CHECK ( width IN (false, true) ) DEFAULT false,
     mode    INTEGER NOT NULL CHECK ( mode IN (false, true) ) DEFAULT false,
     airline INTEGER NOT NULL CHECK ( airline IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
+
+CREATE TABLE Aircraft
+(
+    name         TEXT PRIMARY KEY,
+    manufacturer TEXT NOT NULL,
+    width        INTEGER NOT NULL,
+    height        INTEGER NOT NULL,
+    length       INTEGER NOT NULL,
+    mode         TEXT NOT NULL CHECK ( mode IN ('helicopter', 'seaplane', 'warp plane', 'traincarts plane') )
+);
 
 
 CREATE TABLE BusCompany

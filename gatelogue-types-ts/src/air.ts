@@ -1,5 +1,6 @@
-import { Node } from "./node.js";
+import {Node} from "./node.js";
 import { LocatedNode } from "./located.js";
+import type {GD} from "./lib.js";
 
 export type AirMode =
   | "helicopter"
@@ -77,8 +78,8 @@ export class AirGate extends Node {
     const id = this.getColumn<number | null>("AirGate", "airline");
     return id === null ? null : new AirAirline(id, this.gd);
   }
-  get size(): string | null {
-    return this.getColumn("AirGate", "size");
+  get width(): number | null {
+    return this.getColumn("AirGate", "width");
   }
   get mode(): string | null {
     return this.getColumn("AirGate", "mode");
@@ -112,7 +113,52 @@ export class AirFlight extends Node {
   get to(): AirGate {
     return new AirGate(this.getColumn("AirFlight", "to"), this.gd);
   }
-  get mode(): string | null {
-    return this.getColumn("AirFlight", "mode");
+  get aircraft(): Aircraft | null {
+    return new Aircraft(this.getColumn("AirFlight", "aircraft"), this.gd);
+  }
+}
+
+export class Aircraft {
+  readonly name: string;
+  protected readonly gd: GD;
+
+  constructor(name: string, gd: GD) {
+    this.name = name;
+    this.gd = gd;
+  }
+
+  get manufacturer(): string {
+    return this.gd.execGetOne<[string]>(
+      `SELECT manufacturer FROM Aircraft WHERE name = ?`,
+      [this.name],
+    )[0]!;
+  }
+
+  get width(): number {
+    return this.gd.execGetOne<[number]>(
+      `SELECT width FROM Aircraft WHERE name = ?`,
+      [this.name],
+    )[0]!;
+  }
+
+  get height(): number {
+    return this.gd.execGetOne<[number]>(
+      `SELECT height FROM Aircraft WHERE name = ?`,
+      [this.name],
+    )[0]!;
+  }
+
+  get length(): number {
+    return this.gd.execGetOne<[number]>(
+      `SELECT length FROM Aircraft WHERE name = ?`,
+      [this.name],
+    )[0]!;
+  }
+
+  get mode(): AirMode {
+    return this.gd.execGetOne<[AirMode]>(
+      `SELECT mode FROM Aircraft WHERE name = ?`,
+      [this.name],
+    )[0]!;
   }
 }

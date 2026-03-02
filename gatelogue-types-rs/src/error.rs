@@ -22,6 +22,8 @@ pub enum Error {
     NoNode(ID),
     #[error("No node {0} of type {1}")]
     NoNodeOfType(ID, &'static str),
+    #[error("No aircraft {0}")]
+    NoAircraft(String),
     #[error("Node {0} not Located")]
     NodeNotLocated(ID),
 

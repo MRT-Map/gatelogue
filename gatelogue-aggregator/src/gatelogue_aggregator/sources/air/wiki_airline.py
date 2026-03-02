@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING, ClassVar
 from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
 
+import gatelogue_types as gt
+
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
 
@@ -30,7 +32,9 @@ class RegexWikiAirline(AirSource):
         for match in re.finditer(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             flight_code = matches["code"]
-            size = matches.get("s") or self.size(matches)
+            aircraft_name = matches.get("ac") or self.aircraft(matches)
+            aircraft = None if aircraft_name is None else gt.Aircraft(self.conn, aircraft_name)
+            mode = self.mode(matches) or (aircraft.mode if aircraft is not None else "warp plane")
 
             airport1_code = matches.get("a1") or matches.get("a12")
             airport1_name = matches.get("n1")
@@ -45,7 +49,7 @@ class RegexWikiAirline(AirSource):
             if gate1_code is not None:
                 self.process_airport_gate_code(gate1_code, airport1_code)
             airport1 = self.airport(code=airport1_code, names=None if airport1_name is None else {airport1_name})
-            gate1 = self.gate(code=gate1_code, airport=airport1, size=size, airline=airline)
+            gate1 = self.gate(code=gate1_code, airport=airport1, mode=mode, airline=airline)
 
             airport2_code = matches.get("a2") or matches.get("a22")
             airport2_name = matches.get("n2")
@@ -60,10 +64,10 @@ class RegexWikiAirline(AirSource):
             if gate2_code is not None:
                 self.process_airport_gate_code(gate2_code, airport2_code)
             airport2 = self.airport(code=airport2_code, names=None if airport2_name is None else {airport2_name})
-            gate2 = self.gate(code=gate2_code, airport=airport2, size=size, airline=airline)
+            gate2 = self.gate(code=gate2_code, airport=airport2, mode=mode, airline=airline)
 
-            self.flight(airline=airline, code=flight_code, from_=gate1, to=gate2)
-            self.flight(airline=airline, code=self.process_flight_code_back(flight_code), from_=gate2, to=gate1)
+            self.flight(airline=airline, code=flight_code, from_=gate1, to=gate2, aircraft=aircraft_name)
+            self.flight(airline=airline, code=self.process_flight_code_back(flight_code), from_=gate2, to=gate1, aircraft=aircraft_name)
 
             airport3_code = matches.get("a3") or matches.get("a32")
             airport3_name = matches.get("n3")
@@ -77,14 +81,18 @@ class RegexWikiAirline(AirSource):
             if gate3_code is not None:
                 self.process_airport_gate_code(gate3_code, airport3_code)
             airport3 = self.airport(code=airport3_code, names=None if airport3_name is None else {airport3_name})
-            gate3 = self.gate(code=gate3_code, airport=airport3, size=size, airline=airline)
-            self.flight(airline=airline, code=flight_code, from_=gate1, to=gate3)
-            self.flight(airline=airline, code=flight_code, from_=gate3, to=gate1)
-            self.flight(airline=airline, code=flight_code, from_=gate2, to=gate3)
-            self.flight(airline=airline, code=flight_code, from_=gate3, to=gate2)
+            gate3 = self.gate(code=gate3_code, airport=airport3, mode=mode, airline=airline)
+            self.flight(airline=airline, code=flight_code, from_=gate1, to=gate3, aircraft=aircraft_name)
+            self.flight(airline=airline, code=flight_code, from_=gate3, to=gate1, aircraft=aircraft_name)
+            self.flight(airline=airline, code=flight_code, from_=gate2, to=gate3, aircraft=aircraft_name)
+            self.flight(airline=airline, code=flight_code, from_=gate3, to=gate2, aircraft=aircraft_name)
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
+    def aircraft(_matches: dict[str, str]) -> str | None:
+        return None
+
+    @staticmethod
+    def mode(_matches: dict[str, str]) -> gt.AirMode | None:
         return None
 
     @staticmethod

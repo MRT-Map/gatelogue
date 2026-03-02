@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _Column, _FKColumn, _format_code, _format_str, _SetAttr
+from gatelogue_types._util import _Column, _FKColumn, _format_code, _format_str, _SetAttr, _AircraftColumn
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -11,6 +11,115 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
 type AirMode = Literal["helicopter", "seaplane", "warp plane", "traincarts plane"]
+
+
+class Aircraft:
+    """An aircraft model."""
+
+    def __init__(self, conn: sqlite3.Connection, name: str):
+        self.conn = conn
+        self.name = _format_str(name)
+        if self.conn.execute("SELECT 1 FROM Aircraft WHERE name = ?", (self.name,)).fetchone() is None:
+            raise ValueError(f"Aircraft {self.name} does not exist")
+
+    @property
+    def manufacturer(self):
+        """Manufacturing company or person of the aircraft"""
+        return self.conn.execute(
+            "SELECT manufacturer from Aircraft WHERE name = :name",
+            dict(name=self.name),
+        ).fetchone()[0]
+
+    @manufacturer.setter
+    def manufacturer(self, value: str):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Aircraft SET manufacturer = :value WHERE name = :name",
+            dict(value=value, name=self.name),
+        )
+
+    @property
+    def width(self) -> int:
+        """Width (Wingspan) of the aircraft"""
+        return self.conn.execute(
+            "SELECT width from Aircraft WHERE name = :name",
+            dict(name=self.name),
+        ).fetchone()[0]
+
+    @width.setter
+    def width(self, value: int):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Aircraft SET width = :value WHERE name = :name",
+            dict(value=value, name=self.name)
+        )
+
+    @property
+    def height(self) -> int:
+        """Height of the aircraft"""
+        return self.conn.execute(
+            "SELECT height from Aircraft WHERE name = :name",
+            dict(name=self.name),
+        ).fetchone()[0]
+
+    @height.setter
+    def height(self, value: int):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Aircraft SET height = :value WHERE name = :name",
+            dict(value=value, name=self.name)
+        )
+
+    @property
+    def length(self) -> int:
+        """Length of the aircraft"""
+        return self.conn.execute(
+            "SELECT length from Aircraft WHERE name = :name",
+            dict(name=self.name),
+        ).fetchone()[0]
+
+    @length.setter
+    def length(self, value: int):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Aircraft SET length = :value WHERE name = :name",
+            dict(value=value, name=self.name)
+        )
+
+    @property
+    def mode(self) -> AirMode:
+        """The technology the aircraft is for"""
+        return self.conn.execute(
+            "SELECT mode from Aircraft WHERE name = :name",
+            dict(name=self.name),
+        ).fetchone()[0]
+
+    @mode.setter
+    def mode(self, value: AirMode):
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE Aircraft SET length = :value WHERE name = :name",
+            dict(value=value, name=self.name)
+        )
+
+    @classmethod
+    def create(
+            cls,
+            conn: sqlite3.Connection,
+            *,
+            name: str,
+            manufacturer: str,
+            width: int,
+            height: int,
+            length: int,
+            mode: AirMode,
+    ) -> Self:
+        """Internal use"""
+        cur = conn.cursor()
+        cur.execute("INSERT INTO Aircraft (name, manufacturer, width, height, length, mode) VALUES (:name, :manufacturer, :width, :height, :length, :mode)", dict(
+            name=_format_str(name), manufacturer=manufacturer, width=width, height=height, length=length, mode=mode,
+        ))
+        return cls(conn, name)
 
 
 class AirAirline(Node):
@@ -165,11 +274,11 @@ class AirGate(Node):
     """The :py:class:`AirAirport`"""
     airline = _FKColumn[AirAirline | None](AirAirline, "airline", "AirGate", sourced=True)
     """The :py:class:`Airline` that owns this gate"""
-    size = _Column[str | None]("size", "AirGate", sourced=True, formatter=_format_str)
-    """Abbreviated size of the gate (eg. ``S``, ``M``)"""
+    width = _Column[int | None]("width", "AirGate", sourced=True)
+    """The width of this gate"""
     mode = _Column[AirMode | None]("mode", "AirGate", sourced=True, formatter=_format_str)
     """Type of air vehicle or technology the gate supports"""
-    COLUMNS: ClassVar = (code, airport, airline, size, mode)
+    COLUMNS: ClassVar = (code, airport, airline, width, mode)
 
     def __str__(self):
         return super().__str__() + f" {self.airport.code} {self.code}"
@@ -180,7 +289,7 @@ class AirGate(Node):
         code: Required[str | None]
         airport: Required[AirAirport]
         airline: AirAirline | None
-        size: str | None
+        width: int | None
         mode: AirMode | None
 
     @classmethod
@@ -190,11 +299,11 @@ class AirGate(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO AirGate (i, code, airport, airline, size, mode) VALUES (:i, :code, :airport, :airline, :size, :mode)",
+            "INSERT INTO AirGate (i, code, airport, airline, width, mode) VALUES (:i, :code, :airport, :airline, :width, :mode)",
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirGateSource (i, source, size, mode, airline) VALUES (:i, :source, :size_src, :mode_src, :airline_src)",
+            "INSERT INTO AirGateSource (i, source, width, mode, airline) VALUES (:i, :source, :width_src, :mode_src, :airline_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
@@ -248,9 +357,9 @@ class AirFlight(Node):
     """The :py:class:`AirGate` this flight departs from"""
     to = _FKColumn(AirGate, "to", "AirFlight")
     """The :py:class:`AirGate` this flight arrives at"""
-    mode = _Column[AirMode | None]("mode", "AirFlight", sourced=True, formatter=_format_str)
-    """Type of air vehicle or technology used on the flight"""
-    COLUMNS: ClassVar = (airline, code, from_, to, mode)
+    aircraft = _AircraftColumn("aircraft", "AirFlight", sourced=True)
+    """Aircraft used on the flight"""
+    COLUMNS: ClassVar = (airline, code, from_, to, aircraft)
 
     def __str__(self):
         return super().__str__() + f" {self.airline.name} {self.code}"
@@ -260,7 +369,7 @@ class AirFlight(Node):
         code: str
         from_: AirGate
         to: AirGate
-        mode: NotRequired[AirMode | None]
+        aircraft: NotRequired[str | None]
 
     @classmethod
     def create(
@@ -274,11 +383,11 @@ class AirFlight(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO AirFlight (i, "from", "to", code, mode, airline) VALUES (:i, :from_, :to, :code, :mode, :airline)',
+            'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline) VALUES (:i, :from_, :to, :code, :aircraft, :airline)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirFlightSource (i, source, mode) VALUES (:i, :source, :mode_src)",
+            "INSERT INTO AirFlightSource (i, source, aircraft) VALUES (:i, :source, :aircraft_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

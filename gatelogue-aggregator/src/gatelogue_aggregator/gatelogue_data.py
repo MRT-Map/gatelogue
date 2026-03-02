@@ -13,6 +13,7 @@ import rich
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
+from gatelogue_types import AirMode
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterable
@@ -36,9 +37,8 @@ class GatelogueData:
                 break
             prev_length = len(self.gd)
 
-        self._update_flight_mode()
         self._dedup_airport_names()
-        self._update_gate_size()
+        self._update_gate_mode()
         self._delete_empty_gates()
         self._proximity()
         self._shared_facility()
@@ -48,6 +48,8 @@ class GatelogueData:
         for i, source in enumerate(sources):
             source.priority = i
         self.gd = gt.GD.create([a.__name__ for a in sources], database)
+
+        self._prepare_aircraft()
 
         with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
             warp_api_thread: Future = executor.submit(WarpAPI.prepare, self.config)
@@ -60,6 +62,20 @@ class GatelogueData:
             rich.print(INFO1 + f"Building for {source.name}")
             source.build(self.config)
             source.report()
+
+    def _prepare_aircraft(self):
+        class Yaml(msgspec.Struct):
+            name: str
+            manu: str
+            w: int
+            h: int
+            l: int
+            mode: AirMode = "warp plane"
+        with (Path(__file__).parent / "sources" / "air" / "aircraft.yaml").open() as f:
+            file = msgspec.yaml.decode(f.read(), type=list[Yaml])
+
+        for aircraft in file:
+            gt.Aircraft.create(self.gd.conn, name=aircraft.name, manufacturer=aircraft.manu, width=aircraft.w, height=aircraft.h, length=aircraft.l, mode=aircraft.mode)
 
     def _merge_equivalent_nodes(self, pass_: int):
         merged: set[int] = set()
@@ -106,30 +122,6 @@ class GatelogueData:
             n.code = equiv.code
             equiv.merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
 
-    def _update_flight_mode(self):
-        for n in track(
-            (
-                gt.AirFlight(self.gd.conn, i)
-                for (i,) in self.gd.conn.execute("SELECT i FROM AirFlight WHERE mode IS NULL")
-            ),
-            INFO2,
-            description="Updating AirFlight `mode` field",
-        ):
-            size: str | None = n.from_.size or n.to.size
-            if size is None:
-                continue
-            sources = lambda: {  # noqa: E731
-                s
-                for (s,) in self.gd.conn.execute(
-                    "SELECT DISTINCT source FROM AirGateSource WHERE (i = :from_ OR i = :to) AND size = true",
-                    dict(from_=n.from_.i, to=n.to.i),
-                ).fetchall()
-            }
-            if size == {"SP"}:
-                n.mode = sources(), "seaplane"
-            elif size == {"H"}:
-                n.mode = sources(), "helicopter"
-
     def _dedup_airport_names(self):
         for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Deduplicating AirAirport `name` field"):
             names: set[str] = n.names
@@ -170,9 +162,9 @@ class GatelogueData:
                 if (airline := n.airline) is not None and airline.i in airline2gate:
                     airline2gate[airline.i].merge(n, warn_fn=lambda msg: rich.print(ERROR + msg))
 
-    def _update_gate_size(self):
-        for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Updating AirGate `size` field"):
-            if (modes := n.modes) is None:
+    def _update_gate_mode(self):
+        for n in track(self.gd.nodes(gt.AirAirport), INFO2, description="Updating AirGate `mode` field"):
+            if (modes := n.modes) is None or len(modes) != 1:
                 continue
             sources = lambda: {  # noqa: E731
                 s
@@ -180,12 +172,8 @@ class GatelogueData:
                     "SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i", dict(i=n.i)
                 ).fetchall()
             }
-            if modes == {"seaplane"}:
-                for gate in n.gates:
-                    gate.size = sources(), "SP"
-            elif modes == {"helicopter"}:
-                for gate in n.gates:
-                    gate.size = sources(), "H"
+            for gate in n.gates:
+                gate.mode = sources(), next(iter(modes))
 
     def _delete_empty_gates(self):
         empty_gates = (

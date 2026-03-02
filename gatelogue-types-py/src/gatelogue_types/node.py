@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
+from gatelogue_types._util import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr, _AircraftColumn
 
 if TYPE_CHECKING:
     import sqlite3
@@ -122,6 +122,11 @@ class Node:
                 kwargs["coordinates_src"] = kwargs["coordinates"] is not None
                 kwargs["x"] = int(kwargs["coordinates"][0]) if kwargs["coordinates"] is not None else None
                 kwargs["y"] = int(kwargs["coordinates"][1]) if kwargs["coordinates"] is not None else None
+            elif isinstance(attr, _AircraftColumn):
+                if kwargs[key] is not None:
+                    kwargs[key] = kwargs[key].strip()
+                if attr.sourced:
+                    kwargs[key + "_src"] = kwargs[key] is not None
         return kwargs
 
 
@@ -248,7 +253,7 @@ class Proximity:
         self.node2 = node2.i
 
     @property
-    def distance(self):
+    def distance(self) -> float:
         """Distance between the two objects in blocks"""
         return self.conn.execute(
             "SELECT distance from Proximity WHERE node1 = :node1 AND node2 = :node2",
@@ -264,7 +269,7 @@ class Proximity:
         )
 
     @property
-    def explicit(self):
+    def explicit(self) -> bool:
         """Whether this relation is explicitly recognised by the company/ies of the stations. Used mostly for local services"""
         return self.conn.execute(
             "SELECT explicit from Proximity WHERE node1 = :node1 AND node2 = :node2",

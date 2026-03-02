@@ -21,25 +21,27 @@ class RegexWikiAirport(AirSource):
     airport_code: ClassVar[str]
     page_name: ClassVar[str]
     regex: ClassVar[re.Pattern[str]]
-    additional_names: ClassVar[set[str]] = {}
+    additional_names: ClassVar[set[str]] = set()
 
     def prepare(self, config: Config):
         self.text = get_wiki_text(self.page_name, config)
 
     def build(self, config: Config):
-        airport = self.airport(code=self.airport_code, link=get_wiki_link(self.page_name), names={self.page_name, *self.additional_names})
+        airport = self.airport(
+            code=self.airport_code, link=get_wiki_link(self.page_name), names={self.page_name, *self.additional_names}
+        )
         for match in re.finditer(self.regex, self.text):
             matches: dict[str, str] = match.groupdict()
             gate_code = self.process_gate_code(matches["code"])
-            size = matches.get("size") or self.size(matches)
+            width = int(matches.get("width")) if matches.get("width") else self.width(matches)
             if (airline_name := (matches.get("airline", matches.get("airline2")))) is not None:
                 airline = self.airline(name=self.process_airline_name(airline_name))
             else:
                 airline = None
-            self.gate(code=gate_code, airport=airport, size=size, airline=airline)
+            self.gate(code=gate_code, airport=airport, width=width, airline=airline)
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
+    def width(_matches: dict[str, str]) -> int | None:
         return None
 
     @staticmethod

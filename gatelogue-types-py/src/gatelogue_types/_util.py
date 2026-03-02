@@ -4,10 +4,12 @@ import re
 import warnings
 from typing import TYPE_CHECKING, Literal, LiteralString
 
+
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
     from gatelogue_types.node import Node
+    from gatelogue_types import Aircraft
 
 
 def _format_str[T: str](s: T | None) -> T | None:
@@ -324,6 +326,33 @@ class _FKColumn[T: Node | None]:
         str_instance1: str | None = None,
         str_instance2: str | None = None,
         warn_fn: Callable[[str], object] = warnings.warn,
+    ):
+        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
+
+
+class _AircraftColumn:
+    def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
+        self.name = name
+        self.table = table
+        self.sourced = sourced
+
+    def __get__(self, instance: Node, owner: type[Node]) -> Aircraft | None:
+        target_name = _Column(self.name, self.table, self.sourced).__get__(instance, owner)
+        if target_name is None:
+            return None
+        from gatelogue_types import Aircraft
+        return Aircraft(instance.conn, target_name)
+
+    def __set__(self, instance: Node, value: Aircraft | tuple[int, Aircraft]):
+        _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.name)
+
+    def _merge(
+            self,
+            instance1: Node,
+            instance2: Node,
+            str_instance1: str | None = None,
+            str_instance2: str | None = None,
+            warn_fn: Callable[[str], object] = warnings.warn,
     ):
         _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
 

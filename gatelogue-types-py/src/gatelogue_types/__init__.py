@@ -62,7 +62,7 @@ from typing import (
 )
 
 from gatelogue_types.__about__ import __data_version__
-from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate, AirMode
+from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate, AirMode, Aircraft
 from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop
 from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
 from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailMode, RailPlatform, RailStation

@@ -34,8 +34,8 @@ def test_air_flight_merge():
     airline = AirAirline.create(gd.conn, 0, name="Example Air")
     airport1 = AirAirport.create(gd.conn, 0, code="AAA")
     airport2 = AirAirport.create(gd.conn, 0, code="BBB")
-    gate1 = AirGate.create(gd.conn, 0, airport=airport1, code=None, size="S")
-    gate2 = AirGate.create(gd.conn, 0, airport=airport2, code=None, size="S")
+    gate1 = AirGate.create(gd.conn, 0, airport=airport1, code=None, mode="helicopter")
+    gate2 = AirGate.create(gd.conn, 0, airport=airport2, code=None, mode="helicopter")
     gate3 = AirGate.create(gd.conn, 1, airport=airport1, code="A")
     gate4 = AirGate.create(gd.conn, 1, airport=airport2, code="B")
     flight1 = AirFlight.create(gd.conn, 0, airline=airline, code="001", from_=gate1, to=gate2)
@@ -48,8 +48,8 @@ def test_air_flight_merge():
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 2
     assert flight1.from_.code == "A"
     assert flight1.to.code == "B"
-    assert flight1.from_.size == "S"
-    assert flight1.to.size == "S"
+    assert flight1.from_.mode == "helicopter"
+    assert flight1.to.mode == "helicopter"
 
 
 def test_bus_stop_merge():

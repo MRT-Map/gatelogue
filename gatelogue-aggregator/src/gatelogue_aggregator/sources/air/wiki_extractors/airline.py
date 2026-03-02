@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 
+import gatelogue_types as gt
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
@@ -28,6 +29,22 @@ class Astrella(RegexWikiAirline):
     )
 
     @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        match matches["s"]:
+            case "XS":
+                return "Astrella XS"
+            case "S":
+                return "Astrella S"
+            case "MS":
+                return "Astrella MS"
+            case "M":
+                return "Astrella M"
+            case "ML":
+                return "Astrella ML"
+            case other:
+                raise ValueError(other)
+
+    @staticmethod
     def process_flight_code_back(code: str) -> str:
         return str(int(code) + 1)
 
@@ -37,12 +54,8 @@ class Turbula(RegexWikiAirline):
     airline_name = "Turbula"
     page_name = "Template:TurbulaFlightList"
     regex = re.compile(
-        r"\{\{AstrellaFlight\|imgname = Turbula\|code = LU(?P<code>[^$\n]*?)\|airport1 = (?P<a1>[^\n]*?)(?:\|gate1 = (?P<g1>[^\n]*?)|)\|airport2 = (?P<a2>[^\n]*?)(?:\|gate2 = (?P<g2>[^\n]*?)|)\|.*?\|status = active}}"
+        r"\{\{AstrellaFlight\|imgname = Turbula\|code = LU(?P<code>[^|\n]*?)\|airport1 = (?P<a1>[^|\n]*?)(?:\|gate1 = (?P<g1>[^|\n]*?)|)\|airport2 = (?P<a2>[^|\n]*?)(?:\|gate2 = (?P<g2>[^|\n]*?)|)\|.*?size = (?P<ac>[^|\n]*?)\|status = active}}"
     )
-
-    @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "SP"
 
 
 @AIRLINE_SOURCES.append
@@ -50,8 +63,24 @@ class BluAir(RegexWikiAirline):
     airline_name = "BluAir"
     page_name = "List of BluAir flights"
     regex = re.compile(
-        r"\{\{BA\|BU(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|.}}"
+        r"\{\{BA\|BU(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|(?P<acc>[^|]*?)\|.}}"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        match matches["acc"]:
+            case "s4n":
+                return "BluJet S4-N"
+            case "s4h":
+                return "BluJet S4-H"
+            case "m1":
+                return "BluJet M1"
+            case "ms2":
+                return "BluJet MS2"
+            case "l1":
+                return "BluJet L1"
+            case other:
+                raise ValueError(other)
 
 
 @AIRLINE_SOURCES.append
@@ -85,7 +114,7 @@ class IntraAir(AirSource):
                     None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
                 )
 
-                size = "SP" if 8001 <= int(flight_code) >= 8199 else None
+                aircraft_name = tr("td")[6].span.string
 
                 self.connect(
                     airline=airline,
@@ -95,7 +124,7 @@ class IntraAir(AirSource):
                     airport2_code=airport2_code,
                     gate1_code=gate1_code,
                     gate2_code=gate2_code,
-                    size=size,
+                    aircraft_name=aircraft_name,
                 )
 
 
@@ -125,6 +154,7 @@ class FliHigh(AirSource):
                     gate1_code = None
                 if "idk" in gate2_code or "CHECK WIKI" in gate2_code:
                     gate2_code = None
+                aircraft_name = tr("td")[8].string.strip()
 
                 self.connect(
                     airline=airline,
@@ -134,6 +164,7 @@ class FliHigh(AirSource):
                     airport2_code=airport2_code,
                     gate1_code=gate1_code,
                     gate2_code=gate2_code,
+                    aircraft_name=aircraft_name,
                 )
 
 
@@ -142,8 +173,16 @@ class AirMesa(RegexWikiAirline):
     airline_name = "AirMesa"
     page_name = "AirMesa"
     regex = re.compile(
-        r"\{\{BA\|AM(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
+        r"\{\{BA\|AM(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|(?P<acc>[^|]*?)\|..}}"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        match matches["acc"]:
+            case "p1":
+                return "Moj Manufacturing P-1MJ"
+            case other:
+                raise ValueError(other)
 
 
 @AIRLINE_SOURCES.append
@@ -151,8 +190,16 @@ class Air(RegexWikiAirline):
     airline_name = "air"
     page_name = "Template:Air"
     regex = re.compile(
-        r"\{\{BA\|↑↑(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
+        r"\{\{BA\|↑↑(?P<code>[^|]*?)\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|(?P<acc>[^|]*?)\|..}}"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        match matches["acc"]:
+            case "frs":
+                return "\"Fred Rail Air' Compact Surveillance Aircraft"
+            case other:
+                raise ValueError(other)
 
 
 @AIRLINE_SOURCES.append
@@ -160,8 +207,26 @@ class Berryessa(RegexWikiAirline):
     airline_name = "Berryessa Airlines"
     page_name = "Berryessa Airlines"
     regex = re.compile(
-        r"\{\{BA\|IN(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|[^|]*?\|..}}"
+        r"\{\{BA\|IN(?P<code>[^|<]*)[^|]*?\|(?P<a1>[^|]*?)\|(?P<a2>[^|]*?)\|[^|]*?\|[^|]*?\|(?P<g1>[^|]*?)\|(?P<g2>[^|]*?)\|a\|(?P<acc>[^|]*?)\|..}}"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        match matches["acc"]:
+            case "747":
+                return "SkyTransit 747-8"
+            case "50":
+                return "EAM X-50"
+            case "10":
+                return "EAM X-10"
+            case "15":
+                return "EAM X-15"
+            case "tini":
+                return "IntraJet 4G Tini 4.0"
+            case "318":
+                return "Infamous A318"
+            case other:
+                raise ValueError(other)
 
 
 @AIRLINE_SOURCES.append
@@ -220,8 +285,8 @@ class FlyCreeper(AirSource):
                 if (airport2_code := re.search(r"\((...)\)", str(tr("td")[3]("b")[1]))) is None:
                     continue
                 airport2_code = airport2_code.group(1)
-                gate1_code = next(iter(tr("td")[4].strings))
-                gate2_code = list(tr("td")[4].strings)[1]
+                gate1_code, gate2_code = list(tr("td")[4].strings)[:2]
+                aircraft_name = tr("td")[6].string.strip()
                 self.connect(
                     airline=airline,
                     flight_code1=flight_code,
@@ -230,6 +295,7 @@ class FlyCreeper(AirSource):
                     airport2_code=airport2_code,
                     gate1_code=gate1_code,
                     gate2_code=gate2_code,
+                    aircraft_name=aircraft_name,
                 )
 
 
@@ -238,9 +304,15 @@ class Continental(RegexWikiAirline):
     airline_name = "Continental Airlines"
     page_name = "Continental Airlines"
     regex = re.compile(
-        r"\|-\n\|.*?\n\|(?:CO)?(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}",
+        r"\|-\n\|.*?\n\|(?:CO)?(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|(?P<g1>[^|]*?)\n\|(?P<g2>[^|]*?)\n\|{{status\|good}}\n\|(?P<ac2>.*?)\n",
         re.IGNORECASE,
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        if matches["ac2"].strip() == "IntraJet-EAM X-10":
+            return "EAM X-10"
+        return matches["ac2"].strip()
 
 
 @AIRLINE_SOURCES.append
@@ -248,8 +320,15 @@ class AirKanata(RegexWikiAirline):
     airline_name = "Air Kanata"
     page_name = "Air Kanata"
     regex = re.compile(
-        r"\|-\n\|AK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        r"\|-\n\|AK(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}} ?\n\|'''.*?'''(?:\n|<br ?/>|)(?P<ac2>.*?)\n"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        name = matches["ac2"].strip()
+        if name == "Dash Two Mini":
+            return "UDAC Dash Two Mini"
+        return name
 
 
 @AIRLINE_SOURCES.append
@@ -257,8 +336,12 @@ class JiffyAir(RegexWikiAirline):
     airline_name = "JiffyAir"
     page_name = "JiffyAir"
     regex = re.compile(
-        r"\|-\n\|JF(?P<code>[^|]*?)\n\|(?:{{afn\|(?P<a1>[^|]*?)}}|.*?\((?P<a12>[^|]*?)\))\n\|(?:{{afn\|(?P<a2>[^|]*?)}}|.*?\((?P<a22>[^|]*?)\))\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        r"\|-\n\|JF(?P<code>[^|]*?)\n\|(?:{{afn\|(?P<a1>[^|]*?)}}|.*?\((?P<a12>[^|]*?)\))\n\|(?:{{afn\|(?P<a2>[^|]*?)}}|.*?\((?P<a22>[^|]*?)\))\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}\n\|'''(?P<ac1>.*?)''' (?P<ac2>.*?)<"
     )
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        return matches["ac1"] + " " + matches["ac2"]
 
 
 @AIRLINE_SOURCES.append
@@ -266,12 +349,16 @@ class Tennoji(RegexWikiAirline):
     airline_name = "Tennoji Airways"
     page_name = "Tennoji Airways"
     regex = re.compile(
-        r"\|-\n\|(?:TA|RK)(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        r"\|-\n\|(?:TA|RK)(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}\n\|''(?P<ac1>.*?)'' (?P<ac2>.*?)\n"
     )
 
     @staticmethod
-    def size(matches: dict[str, str]) -> str | None:
-        return "H" if matches["code"].startswith("H") else None
+    def aircraft(matches: dict[str, str]) -> str | None:
+        return matches["ac1"] + " " + matches["ac2"]
+
+    @staticmethod
+    def mode(matches: dict[str, str]) -> str | None:
+        return "helicopter" if matches["code"].startswith("H") else "warp plane"
 
 
 @AIRLINE_SOURCES.append
@@ -279,12 +366,16 @@ class Yousoro(RegexWikiAirline):
     airline_name = "Yousoro!"
     page_name = "Yousoro!"
     regex = re.compile(
-        r"\|-\n\|RKS(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}"
+        r"\|-\n\|RKS(?P<code>[^|]*?)\n\|'''(?P<a1>[^|]*?)'''.*?\n\|'''(?P<a2>[^|]*?)'''.*?\n\|'''(?P<g1>[^|]*?)'''\n\|'''(?P<g2>[^|]*?)'''\n\|{{[sS]tatus\|good}}\n\|''(?P<ac1>.*?)'' (?P<ac2>.*?)\n"
     )
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "SP"
+    def aircraft(matches: dict[str, str]) -> str | None:
+        return matches["ac1"] + " " + matches["ac2"]
+
+    @staticmethod
+    def mode(_matches: dict[str, str]) -> gt.AirMode | None:
+        return "seaplane"
 
 
 @AIRLINE_SOURCES.append
@@ -302,8 +393,8 @@ class RainerAirways(RegexWikiAirline):
     )
 
     @staticmethod
-    def process_flight_code_back(code: str) -> str:
-        return str(int(code) + 1)
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        return "seaplane" if matches["code"].startswith("S") else "helicopter" if matches["code"].startswith("H") else "warp plane"
 
 
 @AIRLINE_SOURCES.append
@@ -311,7 +402,7 @@ class MarbleAir(RegexWikiAirline):
     airline_name = "MarbleAir"
     page_name = "MarbleAir"
     regex = re.compile(
-        r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|.*?\n\|Active"
+            r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|(?P<ac>.*?)\n\|Active"
     )
 
     @staticmethod
@@ -329,7 +420,7 @@ class AmberAir(RegexWikiAirline):
 '''to (?:\[\[.*?\|(?P<a2>[^|]*?)]]|(?P<a22>[^|']*))'''.*?
 \|(?:'''(?P<g1>[^|]*?)'''|)
 \|(?:'''(?P<g2>[^|].*?)'''|)
-\|.*?
+\|(?P<ac>.*?)
 \|\[\[File:Service Good\.png\|50px]]""")
 
     @staticmethod
@@ -363,7 +454,7 @@ class ArcticAir(AirSource):
             )
         )
 
-        for flight, a1, a2, g1, g2 in d[::2]:
+        for flight, a1, a2, g1, g2 in d:
             if str(flight).strip() in ("227", "228", "239", "240"):
                 continue
             if pd.isna(a1):
@@ -377,7 +468,7 @@ class ArcticAir(AirSource):
             self.connect(
                 airline=airline,
                 flight_code1=str(flight),
-                flight_code2=str(flight + 1),
+                flight_code2=None,
                 airport1_code=a1,
                 airport2_code=a2,
                 gate1_code=g1 if "*" not in g1 else None,
@@ -400,9 +491,9 @@ class SandstoneAirr(AirSource):
     def build(self, config: Config):
         airline = self.airline(name="Sandstone Airr", link=get_wiki_link("Sandstone Airr"))
 
-        d = list(zip(self.df["Unnamed: 1"], self.df["Airport"], self.df["Gate"], strict=False))
+        d = list(zip(self.df["Unnamed: 1"], self.df["Unnamed: 2"], self.df["Airport"], self.df["Gate"], strict=False))
 
-        for (flight, a1, g1), (_, a2, g2) in list(itertools.pairwise(d))[::2]:
+        for (flight1, flight2, a1, g1), (_, _, a2, g2) in list(itertools.pairwise(d))[::2]:
             if pd.isna(a1):
                 continue
 
@@ -413,8 +504,8 @@ class SandstoneAirr(AirSource):
 
             self.connect(
                 airline=airline,
-                flight_code1=str(int(flight)),
-                flight_code2=str(int(flight)),
+                flight_code1=str(int(flight1)),
+                flight_code2=str(int(flight2)),
                 airport1_code=a1,
                 airport2_code=a2,
                 gate1_code=g1 if "*" not in g1 else None,
@@ -430,7 +521,7 @@ class Michigana(RegexWikiAirline):
 \|\|<font size="4">'''(?P<a1>.*?)'''</font> <br/>.*?
 \|\|.*?
 \|\|<font size="4">'''(?P<a2>.*?)'''</font> <br/>.*?
-\|\|.*?
+\|\|'''{{color\|gray\|(?P<ac>.*?)}}'''
 \|\| \[\[File:Eastern Active1\.png\|50px]]""")
 
 
@@ -451,10 +542,10 @@ class Lilyflower(AirSource):
         airline = self.airline(name="Lilyflower Airlines", link=get_wiki_link("Lilyflower Airlines"))
 
         d = list(
-            zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], strict=False)
+            zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], self.df["Plane"], strict=False)
         )
 
-        for flight, a1, g1, a2, g2 in d:
+        for flight, a1, g1, a2, g2, aircraft_name in d:
             if pd.isna(a1):
                 continue
             self.connect(
@@ -465,6 +556,7 @@ class Lilyflower(AirSource):
                 airport2_code=a2,
                 gate1_code=g1,
                 gate2_code=g2,
+                aircraft_name=aircraft_name
             )
 
 
@@ -472,11 +564,11 @@ class Lilyflower(AirSource):
 class RodBla(RegexWikiAirline):
     airline_name = "RodBla Heli"
     page_name = "RodBla Heli"
-    regex = re.compile(r"\|RB(?P<code>.*?)\n\|Active\n\|(?P<a1>.*?)-(?P<a2>.*?)\n")
+    regex = re.compile(r"\|RB(?P<code>.*?)\n\|Active\n\|(?P<a1>.*?)-(?P<a2>.*?)\n\|(?P<ac>.*?)\n")
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "H"
+    def mode(_matches: dict[str, str]) -> gt.AirMode | None:
+        return "helicopter"
 
 
 @AIRLINE_SOURCES.append
@@ -486,12 +578,12 @@ class MylesHeli(RegexWikiAirline):
     regex = re.compile(r"{{mylesh\|MY(?P<code>.*?)\|t\|(?P<a1>.*?)\|.*?\|.*?\|(?P<a2>.*?)\|.*?\|.*?}}")
 
     @staticmethod
-    def size(matches: dict[str, str]) -> str | None:
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
         if matches["a1"] == "GSA":
             matches["a1"] = "GSAH"
         if matches["a2"] == "GSA":
             matches["a2"] = "GSAH"
-        return "H"
+        return "helicopter"
 
 
 @AIRLINE_SOURCES.append
@@ -502,7 +594,7 @@ class Aero(RegexWikiAirline):
 \|\|<font size="4">'''(?P<a1>.*?)'''(?:.*?gate (?P<g1>.*?)[)']|).*?
 \|\|.*?
 \|\|<font size="4">'''(?P<a2>.*?)'''(?:.*?gate (?P<g2>.*?)[)']|).*?
-\|\|.*?
+\|\|'''{{color\|black\|(?P<ac>.*?)}}'''
 \|\|.*?
 \|\|.*?\[\[File:Eastern Active\.gif\|50px]]""")
 
@@ -531,7 +623,7 @@ class SouthWeast(AirSource):
                 flight_code2=flight_code,
                 airport1_name=airport1_name,
                 airport2_name=airport2_name,
-                size="H" if flight_code.startswith("H") else None,
+                mode="helicopter" if flight_code.startswith("H") else "warp plane",
             )
 
 
@@ -564,7 +656,7 @@ class UtopiAir(AirSource):
                     flight_code2=flight_code,
                     airport1_name=airport1_name,
                     airport2_name=airport2_name,
-                    size="SP" if int(flight_code) >= 500 else None,
+                    mode="seaplane" if int(flight_code) >= 500 else "warp plane",
                 )
 
 
@@ -593,7 +685,7 @@ class Caelus(AirSource):
 ! .*?CL (?P<code>.*?)<.*?
 ! .*?'''(?P<a1>.*?)'''.*?
 ! .*?'''(?P<a2>.*?)'''.*?
-! .*?
+! .*?\| (?P<ac>.*?)
 ! .*?CaelusAirlines_Boarding\.png""")
 
     def prepare(self, config: Config):
@@ -615,6 +707,7 @@ class Caelus(AirSource):
                     flight_code2=str(int(match["code"]) + 1),
                     airport1_code=match["a1"],
                     airport2_code=match["a2"],
+                    aircraft_name=None if match["ac"].strip() == "" else match["ac"].split(" (")[0],
                 )
 
         table = next(a for a in self.html3("table") if "Operated by" in str(a))
@@ -623,12 +716,14 @@ class Caelus(AirSource):
                 continue
             code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")
             a1, a2 = (b.string for b in tr("td")[2]("b"))
+            aircraft_name = tr("td")[3].string
             self.connect(
                 airline=airline,
                 flight_code1=code1,
                 flight_code2=code2,
                 airport1_code=a1,
                 airport2_code=a2,
+                aircraft_name=aircraft_name
             )
 
         table = next(a for a in self.html4("table") if "Operated by" in str(a))
@@ -647,7 +742,7 @@ class Caelus(AirSource):
                 flight_code2=code2,
                 airport1_name=n1,
                 airport2_name=n2,
-                size="H",
+                mode="helicopter",
             )
 
 
@@ -656,6 +751,10 @@ class CBC(RegexWikiAirline):
     airline_name = "Caravacan Biplane Company"
     page_name = "Caravacan Biplane Company"
     regex = re.compile(r"""(?P<code>.*?)\. (?P<a1>.*?) --- (?P<a2>.*?) /""")
+
+    @staticmethod
+    def aircraft(_matches: dict[str, str]) -> str | None:
+        return "Caravacan Biplane"
 
 
 @AIRLINE_SOURCES.append
@@ -669,8 +768,12 @@ class Cascadia(RegexWikiAirline):
 \|\|.*?'''(?P<a1>.*?)(?: & (?P<a3>.*?))?'''.*?
 \|\|.*?
 \|\|.*?'''(?P<a2>.*?)'''.*?
-\|\|.*?
+\|\| '''{{color\|gray\|(?P<ac2>.*?)}}'''
 \|\| \[\[File:Eastern Active1\.png""")
+
+    @staticmethod
+    def aircraft(matches: dict[str, str]) -> str | None:
+        return matches["ac2"].strip().replace("P1315", "P 1315").replace("<br>", " ").replace("<small>", "").replace("</small>", "")
 
 
 @AIRLINE_SOURCES.append
@@ -690,7 +793,7 @@ class Waviation(AirSource):
             ):
                 continue
 
-            if "(000s)" in str(caption) or "(1000s)" in str(caption):
+            if "(000s)" in str(caption) or "(2000s)" in str(caption):
                 for tr in table.tbody("tr")[1:]:
                     if "N/A" not in str(tr("td")[7]):
                         continue
@@ -703,6 +806,7 @@ class Waviation(AirSource):
                         g1 = None
                     if "XX" in g2:
                         g2 = None
+                    aircraft_name = tr("td")[5].string
                     self.connect(
                         airline=airline,
                         flight_code1=code1,
@@ -711,6 +815,28 @@ class Waviation(AirSource):
                         airport2_code=a2,
                         gate1_code=g1,
                         gate2_code=g2,
+                        aircraft_name=aircraft_name
+                    )
+            elif "(1200s)" in str(caption):
+                for tr in table.tbody("tr")[1:]:
+                    if "N/A" not in str(tr("td")[6]):
+                        continue
+                    code1, code2 = tr("td")[0].string.split("/")
+                    a1 = tr("td")[1].b.string
+                    a2 = tr("td")[2].b.string
+                    g2 = tr("td")[3].string
+                    if "XX" in g2:
+                        g2 = None
+                    aircraft_name = tr("td")[4].string
+                    self.connect(
+                        airline=airline,
+                        flight_code1=code1,
+                        flight_code2=code2,
+                        airport1_code=a1,
+                        airport2_code=a2,
+                        gate1_code=None,
+                        gate2_code=g2,
+                        aircraft_name=aircraft_name,
                     )
             else:
                 a1 = (
@@ -738,6 +864,7 @@ class Waviation(AirSource):
                         g1 = None
                     if "XX" in g2:
                         g2 = None
+                    aircraft_name = tr("td")[4].string
                     self.connect(
                         airline=airline,
                         flight_code1=code1,
@@ -746,4 +873,5 @@ class Waviation(AirSource):
                         airport2_code=a2,
                         gate1_code=g1,
                         gate2_code=g2,
+                        aircraft_name=aircraft_name,
                     )

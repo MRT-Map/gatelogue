@@ -111,6 +111,6 @@ class MRTTransit(AirSource):
                             airline=airline,
                             mode=mode,
                         )
-                        self.flight(airline=airline, code=flight_code, from_=gate, to=other_gate, mode=mode)
-                        self.flight(airline=airline, code=flight_code, from_=other_gate, to=gate, mode=mode)
+                        self.flight(airline=airline, code=flight_code, from_=gate, to=other_gate)
+                        self.flight(airline=airline, code=flight_code, from_=other_gate, to=gate)
                     code2dest[flight_code].append(airport)

@@ -1,3 +1,5 @@
+use rusqlite::types::{FromSql, FromSqlResult};
+use rusqlite::types::ValueRef;
 use strum_macros::EnumString;
 
 use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
@@ -53,7 +55,7 @@ impl AirGate {
     get_column!("AirGate", code, Option<String>);
     get_column!("AirGate", airport, AirAirport);
     get_column!("AirGate", airline, Option<AirAirline>);
-    get_column!("AirGate", size, Option<String>);
+    get_column!("AirGate", width, Option<u32>);
     get_column!("AirGate", mode, AirMode);
     get_derived_vec!(
         flights_from_here,
@@ -73,5 +75,52 @@ impl AirFlight {
     get_column!("AirFlight", code, String);
     get_column!("AirFlight", from, AirGate);
     get_column!("AirFlight", to, AirGate);
-    get_column!("AirFlight", mode, Option<String>);
+    get_column!("AirFlight", aircraft, Option<Aircraft>);
+}
+
+
+#[macro_export]
+macro_rules! get_aircraft_column {
+    ($column_name:ident, $ColTy:ty) => {
+        pub fn $column_name(self, gd: &$crate::GD) -> $crate::error::Result<$ColTy> {
+            gd.0.query_one(
+                concat!(
+                    "SELECT \"",
+                    stringify!($column_name),
+                    "\" FROM Aircraft WHERE name = ?"
+                ),
+                (&self.name(),),
+                |a| a.get(0),
+            )
+            .map_err(|e| {
+                if e == rusqlite::Error::QueryReturnedNoRows {
+                    $crate::error::Error::NoAircraft(self.name().clone())
+                } else {
+                    e.into()
+                }
+            })
+        }
+    };
+}
+
+#[derive(Clone, PartialEq, Eq, Debug)]
+pub struct Aircraft(pub(crate) String);
+impl FromSql for Aircraft {
+    fn column_result(
+        value: ValueRef<'_>,
+    ) -> FromSqlResult<Self> {
+        Ok(Self(value.as_str()?.into()))
+    }
+}
+
+impl Aircraft {
+    #[must_use]
+    pub const fn name(&self) -> &String {
+        &self.0
+    }
+    get_aircraft_column!(manufacturer, String);
+    get_aircraft_column!(width, u32);
+    get_aircraft_column!(height, u32);
+    get_aircraft_column!(length, u32);
+    get_aircraft_column!(mode, AirMode);
 }
