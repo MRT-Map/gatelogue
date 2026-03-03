@@ -8,24 +8,37 @@ const props = defineProps<{
   gate: AirGate;
   maxGateFlightsLength?: number;
 }>();
+const oneFlight = computed(() => {
+  if (
+      (props.gate.flightsFromHere.length > 0 ||
+          props.gate.flightsToHere.length > 0)
+  ) {
+    return (props.gate.flightsFromHere[0] ?? props.gate.flightsToHere[0]!)
+  }
+  return undefined;
+})
 const airline = computed(() => {
   if (props.gate.airline) return props.gate.airline;
-  if (
-    props.gate.code &&
-    props.gate.code !== "?" &&
-    (props.gate.flightsFromHere.length > 0 ||
-      props.gate.flightsToHere.length > 0)
-  )
-    return (props.gate.flightsFromHere[0] ?? props.gate.flightsToHere[0]!)
-      .airline;
-  return undefined;
+  return oneFlight.value?.airline;
 });
+const gateWidth = computed(() => {
+  // eslint-disable-next-line
+  let width: number | null | undefined = props.gate.width;
+  if (width !== null) {
+    return width.toString()
+  }
+  width = oneFlight.value?.aircraft?.width;
+  if (width !== undefined) {
+    return `≥${width}`
+  }
+  return undefined
+})
 </script>
 
 <template>
   <td class="gate-code">{{ gate.code }}</td>
   <td class="gate-size-mode">
-    <b>{{ gate.size }}</b><br>{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
+    <b>{{ gateWidth }}</b><br>{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
   </td>
   <td class="gate-airline">
     <template v-if="airline">
@@ -33,7 +46,7 @@ const airline = computed(() => {
     </template>
   </td>
   <template v-for="flight in gate.flightsFromHere" :key="flight.i">
-    <Flight
+    <oneFlight
       :gate="gate"
       :flight="flight"
       :include-airline="airline === undefined"

@@ -8,6 +8,7 @@ from gatelogue_aggregator.source import AirSource
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
+    import gatelogue_types as gt
 
 
 class _NameDescriptor:
@@ -38,11 +39,16 @@ class RegexWikiAirport(AirSource):
                 airline = self.airline(name=self.process_airline_name(airline_name))
             else:
                 airline = None
-            self.gate(code=gate_code, airport=airport, width=width, airline=airline)
+            mode = self.mode(matches)
+            self.gate(code=gate_code, airport=airport, width=width, airline=airline, mode=mode)
 
     @staticmethod
     def width(_matches: dict[str, str]) -> int | None:
         return None
+
+    @staticmethod
+    def mode(_matches: dict[str, str]) -> gt.AirMode | None:
+        return "warp plane"
 
     @staticmethod
     def process_airline_name(airline_name: str) -> str:

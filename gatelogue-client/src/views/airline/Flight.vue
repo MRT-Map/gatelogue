@@ -6,7 +6,7 @@ import GateLink from "@/components/GateLink.vue";
 const props = defineProps<{
   flight: AirFlight;
 }>();
-const size = computed(() => props.flight.from.size ?? props.flight.to.size);
+const aircraft = computed(() => props.flight.aircraft);
 
 // const mrtTransitUrlParam = new URLSearchParams(window.location.search).get(
 //   "mrt-transit",
@@ -23,7 +23,7 @@ const size = computed(() => props.flight.from.size ?? props.flight.to.size);
     {{ flight.code }}
   </td>
   <td class="flight-size-mode">
-    <b>{{ size }}</b><br>{{ flight.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
+    <b>{{ aircraft?.name }} {{ aircraft?.width ? `(↔${aircraft?.width})` : "" }}</b><br>{{ aircraft?.mode.replaceAll(" plane", "") }}
   </td>
   <td class="flight-gates">
     <GateLink :gate="flight.from" />
@@ -50,7 +50,7 @@ const size = computed(() => props.flight.from.size ?? props.flight.to.size);
   background-color: var(--col-b);
   padding: 0.25em;
   font-size: 1.5em;
-  width: 2em;
+  width: 12em;
 }
 .flight-gates {
   background-color: var(--col-c);

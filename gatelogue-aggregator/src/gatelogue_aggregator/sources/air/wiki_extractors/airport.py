@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 
+import gatelogue_types as gt
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
@@ -30,19 +31,26 @@ class PCE(RegexWikiAirport):
 class MWT(RegexWikiAirport):
     airport_code = "MWT"
     page_name = "Miu Wan Tseng Tsz Leng International Airport"
-    regex = re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|\n)")
+    regex = re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>.*?)\n|\n)")
+
+    # @staticmethod
+    # def size(matches: dict[str, str]) -> str | None:
+    #     return (
+    #         "XS"
+    #         if (code := matches["code"].removesuffix("A")).startswith("P")
+    #         else "S"
+    #         if int(code) <= 60
+    #         else "M"
+    #         if int(code) <= 82
+    #         else "H"
+    #     )
 
     @staticmethod
-    def size(matches: dict[str, str]) -> str | None:
-        return (
-            "XS"
-            if (code := matches["code"].removesuffix("A")).startswith("P")
-            else "S"
-            if int(code) <= 60
-            else "M"
-            if int(code) <= 82
-            else "H"
-        )
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        code = matches["code"]
+        if code.isdigit() and 83 <= int(code) <= 103:
+            return "helicopter"
+        return "warp plane"
 
 
 @AIRPORT_SOURCES.append
@@ -51,9 +59,13 @@ class KEK(RegexWikiAirport):
     page_name = "Kazeshima Eumi Konaejima Airport"
     regex = re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|")
 
+    # @staticmethod
+    # def size(matches: dict[str, str]) -> str | None:
+    #     return "XS" if int(matches["code"]) > 100 else "SP"
+
     @staticmethod
-    def size(matches: dict[str, str]) -> str | None:
-        return "XS" if int(matches["code"]) > 100 else "SP"
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        return "warp plane" if int(matches["code"]) > 100 else "seaplane"
 
 
 @AIRPORT_SOURCES.append
@@ -130,7 +142,7 @@ class DJE(AirSource):
                         code=code,
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
-                        size=size,
+                        # size=size,
                     )
             elif caption == "Terminal 2":
                 concourse = ""
@@ -147,7 +159,7 @@ class DJE(AirSource):
                         code=code,
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
-                        size=size,
+                        # size=size,
                     )
 
 
@@ -207,7 +219,8 @@ class DBI(AirSource):
                     code=code,
                     airport=airport,
                     airline=None if airline is None else self.airline(name=airline),
-                    size=size,
+                    # size=size,
+                    mode="warp plane"
                 )
 
 
@@ -219,9 +232,13 @@ class GSM(RegexWikiAirport):
         r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
     )
 
+    # @staticmethod
+    # def size(matches: dict[str, str]) -> str | None:
+    #     return "H" if matches["code"].startswith("H") else "S"
+
     @staticmethod
-    def size(matches: dict[str, str]) -> str | None:
-        return "H" if matches["code"].startswith("H") else "S"
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        return "helicopter" if matches["code"].startswith("H") else "warp plane"
 
 
 @AIRPORT_SOURCES.append
@@ -273,8 +290,8 @@ class ERZ2(RegexWikiAirport):
     )
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "SP"
+    def mode(_matches: dict[str, str]) -> gt.AirMode | None:
+        return "seaplane"
 
 
 @AIRPORT_SOURCES.append
@@ -317,7 +334,7 @@ class AIX(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "Unavailable" else None,
-                size=gate_size,
+                # size=gate_size,
             )
 
 
@@ -347,7 +364,7 @@ class LAR(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
-                size=size,
+                # size=size,
             )
 
 
@@ -375,7 +392,7 @@ class LFA(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
-                size=size,
+                # size=size,
             )
 
 

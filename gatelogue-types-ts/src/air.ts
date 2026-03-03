@@ -114,7 +114,11 @@ export class AirFlight extends Node {
     return new AirGate(this.getColumn("AirFlight", "to"), this.gd);
   }
   get aircraft(): Aircraft | null {
-    return new Aircraft(this.getColumn("AirFlight", "aircraft"), this.gd);
+    const name = this.getColumn<string | null>("AirFlight", "aircraft");
+    if (name === null) {
+      return null;
+    }
+    return new Aircraft(name, this.gd);
   }
 }
 
