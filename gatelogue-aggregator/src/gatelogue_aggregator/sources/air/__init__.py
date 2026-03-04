@@ -15,6 +15,6 @@ def SOURCES() -> list[type[AirSource]]:  # noqa: N802
     return [
         DynmapAirports,
         *AIRLINE_SOURCES,
-        MRTTransit,
         *AIRPORT_SOURCES,
+        MRTTransit,
     ]

@@ -176,4 +176,7 @@ export class RailConnection extends Node {
   get direction(): string | null {
     return this.getColumn("RailConnection", "direction");
   }
+  get duration(): number | null {
+    return this.getColumn("RailConnection", "duration");
+  }
 }

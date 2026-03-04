@@ -359,7 +359,9 @@ class SeaConnection(Node):
     """The :py:class:`SeaDock` the connection arrives at"""
     direction = _Column[str | None]("direction", "SeaConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
-    COLUMNS: ClassVar = (line, from_, to, direction)
+    duration = _Column[int | None]("duration", "SeaConnection", sourced=True, formatter=_format_str)
+    """The duration taken in seconds to travel on this connection"""
+    COLUMNS: ClassVar = (line, from_, to, direction, duration)
 
     def __str__(self):
         return super().__str__() + f" {self.line.company.name} {self.line.code} {self.from_.code} -> {self.to.code}"
@@ -369,6 +371,7 @@ class SeaConnection(Node):
         from_: SeaDock
         to: SeaDock
         direction: NotRequired[str | None]
+        duration: NotRequired[int | None]
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
@@ -377,11 +380,11 @@ class SeaConnection(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO SeaConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            'INSERT INTO SeaConnection (i, line, "from", "to", direction, duration) VALUES (:i, :line, :from_, :to, :direction, :duration)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO SeaConnectionSource (i, source, direction) VALUES (:i, :source, :direction_src)",
+            "INSERT INTO SeaConnectionSource (i, source, direction, duration) VALUES (:i, :source, :direction_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

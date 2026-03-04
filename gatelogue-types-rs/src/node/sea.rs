@@ -126,4 +126,5 @@ impl SeaConnection {
     get_column!("SeaConnection", from, SeaDock);
     get_column!("SeaConnection", to, SeaDock);
     get_column!("SeaConnection", direction, Option<String>);
+    get_column!("SeaConnection", duration, Option<u32>);
 }

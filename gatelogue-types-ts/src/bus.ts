@@ -174,4 +174,7 @@ export class BusConnection extends Node {
   get direction(): string | null {
     return this.getColumn("BusConnection", "direction");
   }
+  get duration(): number | null {
+    return this.getColumn("BusConnection", "duration");
+  }
 }

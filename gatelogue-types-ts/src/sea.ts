@@ -174,4 +174,7 @@ export class SeaConnection extends Node {
   get direction(): string | null {
     return this.getColumn("SeaConnection", "direction");
   }
+  get duration(): number | null {
+    return this.getColumn("SeaConnection", "duration");
+  }
 }

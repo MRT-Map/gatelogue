@@ -225,13 +225,15 @@ CREATE TABLE BusConnection
     line      INTEGER NOT NULL REFERENCES BusLine (i),
     "from"    INTEGER NOT NULL REFERENCES BusBerth (i),
     "to"      INTEGER NOT NULL REFERENCES BusBerth (i),
-    direction TEXT
+    direction TEXT,
+    duration INTEGER
 ) STRICT;
 CREATE TABLE BusConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES BusConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
+    duration INTEGER NOT NULL CHECK ( duration IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -311,13 +313,15 @@ CREATE TABLE SeaConnection
     line      INTEGER NOT NULL REFERENCES SeaLine (i),
     "from"    INTEGER NOT NULL REFERENCES SeaDock (i),
     "to"      INTEGER NOT NULL REFERENCES SeaDock (i),
-    direction TEXT
+    direction TEXT,
+    duration INTEGER
 ) STRICT;
 CREATE TABLE SeaConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES SeaConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
+    duration INTEGER NOT NULL CHECK ( duration IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 
@@ -397,13 +401,15 @@ CREATE TABLE RailConnection
     line      INTEGER NOT NULL REFERENCES RailLine (i),
     "from"    INTEGER NOT NULL REFERENCES RailPlatform (i),
     "to"      INTEGER NOT NULL REFERENCES RailPlatform (i),
-    direction TEXT
+    direction TEXT,
+    duration INTEGER
 ) STRICT;
 CREATE TABLE RailConnectionSource
 (
     i         INTEGER NOT NULL REFERENCES RailConnection (i),
     source    INTEGER NOT NULL REFERENCES Source (priority),
     direction INTEGER NOT NULL CHECK ( direction IN (false, true) ) DEFAULT false,
+    duration INTEGER NOT NULL CHECK ( duration IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 

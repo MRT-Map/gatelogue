@@ -124,4 +124,5 @@ impl BusConnection {
     get_column!("BusConnection", from, BusBerth);
     get_column!("BusConnection", to, BusBerth);
     get_column!("BusConnection", direction, Option<String>);
+    get_column!("BusConnection", duration, Option<u32>);
 }

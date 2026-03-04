@@ -362,7 +362,9 @@ class RailConnection(Node):
     """The :py:class:`RailLine` the connection arrives at"""
     direction = _Column[str | None]("direction", "RailConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
-    COLUMNS: ClassVar = (line, from_, to, direction)
+    duration = _Column[int | None]("duration", "RailConnection", sourced=True, formatter=_format_str)
+    """The duration taken in seconds to travel on this connection"""
+    COLUMNS: ClassVar = (line, from_, to, direction, duration)
 
     def __str__(self):
         return super().__str__() + f" {self.line.company.name} {self.line.code} {self.from_.code} -> {self.to.code}"
@@ -372,6 +374,7 @@ class RailConnection(Node):
         from_: RailPlatform
         to: RailPlatform
         direction: NotRequired[str | None]
+        duration: NotRequired[int | None]
 
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
@@ -380,11 +383,11 @@ class RailConnection(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO RailConnection (i, line, "from", "to", direction) VALUES (:i, :line, :from_, :to, :direction)',
+            'INSERT INTO RailConnection (i, line, "from", "to", direction, duration) VALUES (:i, :line, :from_, :to, :direction, :duration)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO RailConnectionSource (i, source, direction) VALUES (:i, :source, :direction_src)",
+            "INSERT INTO RailConnectionSource (i, source, direction, duration) VALUES (:i, :source, :direction_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

@@ -136,4 +136,5 @@ impl RailConnection {
     get_column!("RailConnection", from, RailPlatform);
     get_column!("RailConnection", to, RailPlatform);
     get_column!("RailConnection", direction, Option<String>);
+    get_column!("RailConnection", duration, Option<u32>);
 }
