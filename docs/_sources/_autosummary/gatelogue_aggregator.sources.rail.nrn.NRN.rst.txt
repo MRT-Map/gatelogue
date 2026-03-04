@@ -19,16 +19,15 @@
    
       ~NRN.__init__
       ~NRN.build
-      ~NRN.custom_routing
-      ~NRN.find_by_ref
-      ~NRN.find_by_ref_or_index
-      ~NRN.is_coord_source
+      ~NRN.builder
+      ~NRN.company
+      ~NRN.connection
+      ~NRN.line
+      ~NRN.platform
+      ~NRN.prepare
       ~NRN.report
-      ~NRN.reported_nodes
-      ~NRN.retrieve_from_cache
-      ~NRN.sanitise_strings
-      ~NRN.save_to_cache
-      ~NRN.source
+      ~NRN.routing
+      ~NRN.station
    
    
 
@@ -41,6 +40,7 @@
       ~NRN.file_path
       ~NRN.name
       ~NRN.priority
-      ~NRN.g
+      ~NRN.report_ignore
+      ~NRN.conn
    
    

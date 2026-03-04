@@ -19,15 +19,14 @@
    
       ~IntraSail.__init__
       ~IntraSail.build
-      ~IntraSail.find_by_ref
-      ~IntraSail.find_by_ref_or_index
-      ~IntraSail.is_coord_source
+      ~IntraSail.builder
+      ~IntraSail.company
+      ~IntraSail.connection
+      ~IntraSail.dock
+      ~IntraSail.line
+      ~IntraSail.prepare
       ~IntraSail.report
-      ~IntraSail.reported_nodes
-      ~IntraSail.retrieve_from_cache
-      ~IntraSail.sanitise_strings
-      ~IntraSail.save_to_cache
-      ~IntraSail.source
+      ~IntraSail.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~IntraSail.name
       ~IntraSail.priority
-      ~IntraSail.g
+      ~IntraSail.report_ignore
+      ~IntraSail.html
+      ~IntraSail.conn
    
    

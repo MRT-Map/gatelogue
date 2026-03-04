@@ -1,0 +1,6 @@
+gatelogue\_aggregator.downloader.get\_csv
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.downloader
+
+.. autofunction:: get_csv

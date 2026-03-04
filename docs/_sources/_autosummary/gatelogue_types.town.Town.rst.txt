@@ -1,0 +1,53 @@
+﻿gatelogue\_types.town.Town
+==========================
+
+.. currentmodule:: gatelogue_types.town
+
+.. autoclass:: Town
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Town.__init__
+      ~Town.auto_type
+      ~Town.create
+      ~Town.create_node
+      ~Town.create_node_with_location
+      ~Town.delete
+      ~Town.equivalent_nodes
+      ~Town.format_create_kwargs
+      ~Town.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Town.COLUMNS
+      ~Town.STR2TYPE
+      ~Town.deputy_mayor
+      ~Town.mayor
+      ~Town.name
+      ~Town.nodes_in_proximity
+      ~Town.rank
+      ~Town.shared_facilities
+      ~Town.source
+      ~Town.world
+      ~Town.coordinates
+      ~Town.i
+      ~Town.type
+      ~Town.sources
+   
+   

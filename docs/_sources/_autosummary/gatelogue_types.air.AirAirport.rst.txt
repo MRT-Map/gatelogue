@@ -1,0 +1,54 @@
+﻿gatelogue\_types.air.AirAirport
+===============================
+
+.. currentmodule:: gatelogue_types.air
+
+.. autoclass:: AirAirport
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirAirport.__init__
+      ~AirAirport.auto_type
+      ~AirAirport.create
+      ~AirAirport.create_node
+      ~AirAirport.create_node_with_location
+      ~AirAirport.delete
+      ~AirAirport.equivalent_nodes
+      ~AirAirport.format_create_kwargs
+      ~AirAirport.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirAirport.COLUMNS
+      ~AirAirport.STR2TYPE
+      ~AirAirport.code
+      ~AirAirport.gates
+      ~AirAirport.link
+      ~AirAirport.modes
+      ~AirAirport.names
+      ~AirAirport.nodes_in_proximity
+      ~AirAirport.shared_facilities
+      ~AirAirport.source
+      ~AirAirport.world
+      ~AirAirport.coordinates
+      ~AirAirport.i
+      ~AirAirport.type
+      ~AirAirport.sources
+   
+   

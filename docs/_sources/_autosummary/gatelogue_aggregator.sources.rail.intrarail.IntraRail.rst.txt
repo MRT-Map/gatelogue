@@ -19,15 +19,14 @@
    
       ~IntraRail.__init__
       ~IntraRail.build
-      ~IntraRail.find_by_ref
-      ~IntraRail.find_by_ref_or_index
-      ~IntraRail.is_coord_source
+      ~IntraRail.builder
+      ~IntraRail.company
+      ~IntraRail.connection
+      ~IntraRail.line
+      ~IntraRail.platform
+      ~IntraRail.prepare
       ~IntraRail.report
-      ~IntraRail.reported_nodes
-      ~IntraRail.retrieve_from_cache
-      ~IntraRail.sanitise_strings
-      ~IntraRail.save_to_cache
-      ~IntraRail.source
+      ~IntraRail.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~IntraRail.name
       ~IntraRail.priority
-      ~IntraRail.g
+      ~IntraRail.report_ignore
+      ~IntraRail.html
+      ~IntraRail.conn
    
    

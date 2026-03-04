@@ -19,15 +19,14 @@
    
       ~RedTrainWarp.__init__
       ~RedTrainWarp.build
-      ~RedTrainWarp.find_by_ref
-      ~RedTrainWarp.find_by_ref_or_index
-      ~RedTrainWarp.is_coord_source
+      ~RedTrainWarp.builder
+      ~RedTrainWarp.company
+      ~RedTrainWarp.connection
+      ~RedTrainWarp.line
+      ~RedTrainWarp.platform
+      ~RedTrainWarp.prepare
       ~RedTrainWarp.report
-      ~RedTrainWarp.reported_nodes
-      ~RedTrainWarp.retrieve_from_cache
-      ~RedTrainWarp.sanitise_strings
-      ~RedTrainWarp.save_to_cache
-      ~RedTrainWarp.source
+      ~RedTrainWarp.station
    
    
 
@@ -39,6 +38,7 @@
    
       ~RedTrainWarp.name
       ~RedTrainWarp.priority
-      ~RedTrainWarp.g
+      ~RedTrainWarp.report_ignore
+      ~RedTrainWarp.conn
    
    

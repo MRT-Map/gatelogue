@@ -19,16 +19,15 @@
    
       ~NPSubway.__init__
       ~NPSubway.build
-      ~NPSubway.custom_routing
-      ~NPSubway.find_by_ref
-      ~NPSubway.find_by_ref_or_index
-      ~NPSubway.is_coord_source
+      ~NPSubway.builder
+      ~NPSubway.company
+      ~NPSubway.connection
+      ~NPSubway.line
+      ~NPSubway.platform
+      ~NPSubway.prepare
       ~NPSubway.report
-      ~NPSubway.reported_nodes
-      ~NPSubway.retrieve_from_cache
-      ~NPSubway.sanitise_strings
-      ~NPSubway.save_to_cache
-      ~NPSubway.source
+      ~NPSubway.routing
+      ~NPSubway.station
    
    
 
@@ -41,6 +40,7 @@
       ~NPSubway.file_path
       ~NPSubway.name
       ~NPSubway.priority
-      ~NPSubway.g
+      ~NPSubway.report_ignore
+      ~NPSubway.conn
    
    

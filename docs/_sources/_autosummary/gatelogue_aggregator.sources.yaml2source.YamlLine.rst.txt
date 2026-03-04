@@ -27,12 +27,14 @@
 
    .. autosummary::
    
-      ~YamlLine.backward_label
+      ~YamlLine.backward_direction
       ~YamlLine.code
       ~YamlLine.colour
-      ~YamlLine.forward_label
+      ~YamlLine.forward_direction
+      ~YamlLine.local
       ~YamlLine.mode
       ~YamlLine.name
+      ~YamlLine.routing
       ~YamlLine.stations
    
    

@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.source.BusSource
+======================================
+
+.. currentmodule:: gatelogue_aggregator.source
+
+.. autoclass:: BusSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusSource.__init__
+      ~BusSource.berth
+      ~BusSource.build
+      ~BusSource.builder
+      ~BusSource.company
+      ~BusSource.connection
+      ~BusSource.line
+      ~BusSource.prepare
+      ~BusSource.report
+      ~BusSource.stop
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusSource.priority
+      ~BusSource.report_ignore
+      ~BusSource.name
+      ~BusSource.conn
+   
+   

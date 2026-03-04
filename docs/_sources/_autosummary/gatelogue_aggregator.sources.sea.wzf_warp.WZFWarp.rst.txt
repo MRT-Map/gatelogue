@@ -19,15 +19,14 @@
    
       ~WZFWarp.__init__
       ~WZFWarp.build
-      ~WZFWarp.find_by_ref
-      ~WZFWarp.find_by_ref_or_index
-      ~WZFWarp.is_coord_source
+      ~WZFWarp.builder
+      ~WZFWarp.company
+      ~WZFWarp.connection
+      ~WZFWarp.dock
+      ~WZFWarp.line
+      ~WZFWarp.prepare
       ~WZFWarp.report
-      ~WZFWarp.reported_nodes
-      ~WZFWarp.retrieve_from_cache
-      ~WZFWarp.sanitise_strings
-      ~WZFWarp.save_to_cache
-      ~WZFWarp.source
+      ~WZFWarp.stop
    
    
 
@@ -39,6 +38,7 @@
    
       ~WZFWarp.name
       ~WZFWarp.priority
-      ~WZFWarp.g
+      ~WZFWarp.report_ignore
+      ~WZFWarp.conn
    
    

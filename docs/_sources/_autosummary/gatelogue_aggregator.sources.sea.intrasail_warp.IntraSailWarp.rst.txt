@@ -19,15 +19,14 @@
    
       ~IntraSailWarp.__init__
       ~IntraSailWarp.build
-      ~IntraSailWarp.find_by_ref
-      ~IntraSailWarp.find_by_ref_or_index
-      ~IntraSailWarp.is_coord_source
+      ~IntraSailWarp.builder
+      ~IntraSailWarp.company
+      ~IntraSailWarp.connection
+      ~IntraSailWarp.dock
+      ~IntraSailWarp.line
+      ~IntraSailWarp.prepare
       ~IntraSailWarp.report
-      ~IntraSailWarp.reported_nodes
-      ~IntraSailWarp.retrieve_from_cache
-      ~IntraSailWarp.sanitise_strings
-      ~IntraSailWarp.save_to_cache
-      ~IntraSailWarp.source
+      ~IntraSailWarp.stop
    
    
 
@@ -39,6 +38,7 @@
    
       ~IntraSailWarp.name
       ~IntraSailWarp.priority
-      ~IntraSailWarp.g
+      ~IntraSailWarp.report_ignore
+      ~IntraSailWarp.conn
    
    

@@ -18,17 +18,14 @@
    .. autosummary::
    
       ~MRTTransit.__init__
+      ~MRTTransit.airline
+      ~MRTTransit.airport
       ~MRTTransit.build
-      ~MRTTransit.find_by_ref
-      ~MRTTransit.find_by_ref_or_index
-      ~MRTTransit.is_coord_source
+      ~MRTTransit.connect
+      ~MRTTransit.flight
+      ~MRTTransit.gate
+      ~MRTTransit.prepare
       ~MRTTransit.report
-      ~MRTTransit.reported_nodes
-      ~MRTTransit.retrieve_from_cache
-      ~MRTTransit.sanitise_strings
-      ~MRTTransit.save_to_cache
-      ~MRTTransit.source
-      ~MRTTransit.update
    
    
 
@@ -40,6 +37,8 @@
    
       ~MRTTransit.name
       ~MRTTransit.priority
-      ~MRTTransit.g
+      ~MRTTransit.report_ignore
+      ~MRTTransit.df
+      ~MRTTransit.conn
    
    

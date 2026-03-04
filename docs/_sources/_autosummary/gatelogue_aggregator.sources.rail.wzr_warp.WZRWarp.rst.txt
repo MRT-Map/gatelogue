@@ -19,15 +19,14 @@
    
       ~WZRWarp.__init__
       ~WZRWarp.build
-      ~WZRWarp.find_by_ref
-      ~WZRWarp.find_by_ref_or_index
-      ~WZRWarp.is_coord_source
+      ~WZRWarp.builder
+      ~WZRWarp.company
+      ~WZRWarp.connection
+      ~WZRWarp.line
+      ~WZRWarp.platform
+      ~WZRWarp.prepare
       ~WZRWarp.report
-      ~WZRWarp.reported_nodes
-      ~WZRWarp.retrieve_from_cache
-      ~WZRWarp.sanitise_strings
-      ~WZRWarp.save_to_cache
-      ~WZRWarp.source
+      ~WZRWarp.station
    
    
 
@@ -39,6 +38,7 @@
    
       ~WZRWarp.name
       ~WZRWarp.priority
-      ~WZRWarp.g
+      ~WZRWarp.report_ignore
+      ~WZRWarp.conn
    
    

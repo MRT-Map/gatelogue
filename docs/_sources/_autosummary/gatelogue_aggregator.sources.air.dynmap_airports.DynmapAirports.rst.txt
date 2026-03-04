@@ -18,17 +18,14 @@
    .. autosummary::
    
       ~DynmapAirports.__init__
+      ~DynmapAirports.airline
+      ~DynmapAirports.airport
       ~DynmapAirports.build
-      ~DynmapAirports.find_by_ref
-      ~DynmapAirports.find_by_ref_or_index
-      ~DynmapAirports.is_coord_source
+      ~DynmapAirports.connect
+      ~DynmapAirports.flight
+      ~DynmapAirports.gate
+      ~DynmapAirports.prepare
       ~DynmapAirports.report
-      ~DynmapAirports.reported_nodes
-      ~DynmapAirports.retrieve_from_cache
-      ~DynmapAirports.sanitise_strings
-      ~DynmapAirports.save_to_cache
-      ~DynmapAirports.source
-      ~DynmapAirports.update
    
    
 
@@ -40,6 +37,7 @@
    
       ~DynmapAirports.name
       ~DynmapAirports.priority
-      ~DynmapAirports.g
+      ~DynmapAirports.report_ignore
+      ~DynmapAirports.conn
    
    

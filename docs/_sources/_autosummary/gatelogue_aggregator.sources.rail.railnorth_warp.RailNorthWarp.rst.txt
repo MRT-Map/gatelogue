@@ -19,15 +19,14 @@
    
       ~RailNorthWarp.__init__
       ~RailNorthWarp.build
-      ~RailNorthWarp.find_by_ref
-      ~RailNorthWarp.find_by_ref_or_index
-      ~RailNorthWarp.is_coord_source
+      ~RailNorthWarp.builder
+      ~RailNorthWarp.company
+      ~RailNorthWarp.connection
+      ~RailNorthWarp.line
+      ~RailNorthWarp.platform
+      ~RailNorthWarp.prepare
       ~RailNorthWarp.report
-      ~RailNorthWarp.reported_nodes
-      ~RailNorthWarp.retrieve_from_cache
-      ~RailNorthWarp.sanitise_strings
-      ~RailNorthWarp.save_to_cache
-      ~RailNorthWarp.source
+      ~RailNorthWarp.station
    
    
 
@@ -39,6 +38,7 @@
    
       ~RailNorthWarp.name
       ~RailNorthWarp.priority
-      ~RailNorthWarp.g
+      ~RailNorthWarp.report_ignore
+      ~RailNorthWarp.conn
    
    

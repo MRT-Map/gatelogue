@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_aggregator.sources.rail.nsc.NSC &mdash; gatelogue-aggregator 2.0.9 documentation</title>
+  <title>gatelogue_aggregator.sources.rail.nsc.NSC &mdash; gatelogue-aggregator 3.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.sources.rail.nsc.NSC.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d65cc7a5"></script>
+      <script src="../_static/documentation_options.js?v=acc74ff5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
@@ -52,22 +52,25 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="gatelogue_aggregator.html">gatelogue_aggregator</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.cli.html">gatelogue_aggregator.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.config.html">gatelogue_aggregator.config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.downloader.html">gatelogue_aggregator.downloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.gatelogue_data.html">gatelogue_aggregator.gatelogue_data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.source.html">gatelogue_aggregator.source</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.SOURCES.html">gatelogue_aggregator.sources.SOURCES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.air.html">gatelogue_aggregator.sources.air</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.bus.html">gatelogue_aggregator.sources.bus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.dynmap_markers.html">gatelogue_aggregator.sources.dynmap_markers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.html">gatelogue_aggregator.sources.line_builder</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.sources.rail.html">gatelogue_aggregator.sources.rail</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.sea.html">gatelogue_aggregator.sources.sea</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.spawn_warp.html">gatelogue_aggregator.sources.spawn_warp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.town.html">gatelogue_aggregator.sources.town</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.wiki_base.html">gatelogue_aggregator.sources.wiki_base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.html">gatelogue_aggregator.sources.warp_api</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.html">gatelogue_aggregator.sources.yaml2source</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.utils.html">gatelogue_aggregator.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gatelogue_types.html">gatelogue_types</a></li>
@@ -108,50 +111,47 @@
 <h1>gatelogue_aggregator.sources.rail.nsc.NSC<a class="headerlink" href="#gatelogue-aggregator-sources-rail-nsc-nsc" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.rail.nsc.</span></span><span class="sig-name descname"><span class="pre">NSC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.Yaml2Source.html#gatelogue_aggregator.sources.yaml2source.Yaml2Source" title="gatelogue_aggregator.sources.yaml2source.Yaml2Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Yaml2Source</span></code></a>, <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailSource.html#gatelogue_aggregator.types.node.rail.RailSource" title="gatelogue_aggregator.types.node.rail.RailSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailSource</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.rail.nsc.</span></span><span class="sig-name descname"><span class="pre">NSC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.config.Config.html#gatelogue_aggregator.config.Config" title="gatelogue_aggregator.config.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection" title="(in Python v3.14)"><span class="pre">sqlite3.Connection</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.RailYaml2Source.html#gatelogue_aggregator.sources.yaml2source.RailYaml2Source" title="gatelogue_aggregator.sources.yaml2source.RailYaml2Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailYaml2Source</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.config.Config.html#gatelogue_aggregator.config.Config" title="gatelogue_aggregator.config.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection" title="(in Python v3.14)"><span class="pre">sqlite3.Connection</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.__init__" title="gatelogue_aggregator.sources.rail.nsc.NSC.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(config)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.__init__" title="gatelogue_aggregator.sources.rail.nsc.NSC.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(config, conn)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.build" title="gatelogue_aggregator.sources.rail.nsc.NSC.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(_config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.custom_routing" title="gatelogue_aggregator.sources.rail.nsc.NSC.custom_routing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_routing</span></code></a>(line_node, stations, line_yaml)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.builder" title="gatelogue_aggregator.sources.rail.nsc.NSC.builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">builder</span></code></a>(line)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref" title="gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref</span></code></a>(v)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.company" title="gatelogue_aggregator.sources.rail.nsc.NSC.company"><code class="xref py py-obj docutils literal notranslate"><span class="pre">company</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref_or_index" title="gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref_or_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_ref_or_index</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.connection" title="gatelogue_aggregator.sources.rail.nsc.NSC.connection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.is_coord_source" title="gatelogue_aggregator.sources.rail.nsc.NSC.is_coord_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_coord_source</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.line" title="gatelogue_aggregator.sources.rail.nsc.NSC.line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line</span></code></a>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.platform" title="gatelogue_aggregator.sources.rail.nsc.NSC.platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">platform</span></code></a>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.prepare" title="gatelogue_aggregator.sources.rail.nsc.NSC.prepare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.report" title="gatelogue_aggregator.sources.rail.nsc.NSC.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.reported_nodes" title="gatelogue_aggregator.sources.rail.nsc.NSC.reported_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reported_nodes</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.routing" title="gatelogue_aggregator.sources.rail.nsc.NSC.routing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">routing</span></code></a>(line_node, builder, line_yaml, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.retrieve_from_cache" title="gatelogue_aggregator.sources.rail.nsc.NSC.retrieve_from_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_from_cache</span></code></a>(config)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.sanitise_strings" title="gatelogue_aggregator.sources.rail.nsc.NSC.sanitise_strings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitise_strings</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.save_to_cache" title="gatelogue_aggregator.sources.rail.nsc.NSC.save_to_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_to_cache</span></code></a>(config)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.source" title="gatelogue_aggregator.sources.rail.nsc.NSC.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.station" title="gatelogue_aggregator.sources.rail.nsc.NSC.station"><code class="xref py py-obj docutils literal notranslate"><span class="pre">station</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -168,7 +168,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.priority" title="gatelogue_aggregator.sources.rail.nsc.NSC.priority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.g" title="gatelogue_aggregator.sources.rail.nsc.NSC.g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.report_ignore" title="gatelogue_aggregator.sources.rail.nsc.NSC.report_ignore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report_ignore</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.rail.nsc.NSC.conn" title="gatelogue_aggregator.sources.rail.nsc.NSC.conn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conn</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -176,60 +179,66 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.B">
 <span class="sig-name descname"><span class="pre">B</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.B" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLineBuilder.html#gatelogue_aggregator.types.node.rail.RailLineBuilder" title="gatelogue_aggregator.types.node.rail.RailLineBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLineBuilder</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.sources.line_builder.RailLineBuilder.html#gatelogue_aggregator.sources.line_builder.RailLineBuilder" title="gatelogue_aggregator.sources.line_builder.RailLineBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLineBuilder</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.C">
 <span class="sig-name descname"><span class="pre">C</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.C" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailCompany.html#gatelogue_aggregator.types.node.rail.RailCompany" title="gatelogue_aggregator.types.node.rail.RailCompany"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailCompany</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="gatelogue_types.rail.RailCompany.html#gatelogue_types.rail.RailCompany" title="gatelogue_types.rail.RailCompany"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailCompany</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.L">
 <span class="sig-name descname"><span class="pre">L</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.L" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLine.html#gatelogue_aggregator.types.node.rail.RailLine" title="gatelogue_aggregator.types.node.rail.RailLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLine</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="gatelogue_types.rail.RailLine.html#gatelogue_types.rail.RailLine" title="gatelogue_types.rail.RailLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailLine</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.P">
+<span class="sig-name descname"><span class="pre">P</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.P" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="gatelogue_types.rail.RailPlatform.html#gatelogue_types.rail.RailPlatform" title="gatelogue_types.rail.RailPlatform"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailPlatform</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.S">
 <span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.S" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailStation.html#gatelogue_aggregator.types.node.rail.RailStation" title="gatelogue_aggregator.types.node.rail.RailStation"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailStation</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="gatelogue_types.rail.RailStation.html#gatelogue_types.rail.RailStation" title="gatelogue_types.rail.RailStation"><code class="xref py py-class docutils literal notranslate"><span class="pre">RailStation</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.build" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.config.Config.html#gatelogue_aggregator.config.Config" title="gatelogue_aggregator.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.build" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.custom_routing">
-<span class="sig-name descname"><span class="pre">custom_routing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailLine.html#gatelogue_aggregator.types.node.rail.RailLine" title="gatelogue_aggregator.types.node.rail.RailLine"><span class="pre">RailLine</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.bus.BusLine.html#gatelogue_aggregator.types.node.bus.BusLine" title="gatelogue_aggregator.types.node.bus.BusLine"><span class="pre">BusLine</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.sea.SeaLine.html#gatelogue_aggregator.types.node.sea.SeaLine" title="gatelogue_aggregator.types.node.sea.SeaLine"><span class="pre">SeaLine</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">stations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.rail.RailStation.html#gatelogue_aggregator.types.node.rail.RailStation" title="gatelogue_aggregator.types.node.rail.RailStation"><span class="pre">RailStation</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.bus.BusStop.html#gatelogue_aggregator.types.node.bus.BusStop" title="gatelogue_aggregator.types.node.bus.BusStop"><span class="pre">BusStop</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.types.node.sea.SeaStop.html#gatelogue_aggregator.types.node.sea.SeaStop" title="gatelogue_aggregator.types.node.sea.SeaStop"><span class="pre">SeaStop</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.YamlLine.html#gatelogue_aggregator.sources.yaml2source.YamlLine" title="gatelogue_aggregator.sources.yaml2source.YamlLine"><span class="pre">YamlLine</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.custom_routing" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.builder">
+<span class="sig-name descname"><span class="pre">builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_types.rail.RailLine.html#gatelogue_types.rail.RailLine" title="gatelogue_types.rail.RailLine"><span class="pre">RailLine</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.RailLineBuilder.html#gatelogue_aggregator.sources.line_builder.RailLineBuilder" title="gatelogue_aggregator.sources.line_builder.RailLineBuilder"><span class="pre">RailLineBuilder</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.builder" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.company">
+<span class="sig-name descname"><span class="pre">company</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Unpack" title="(in Python v3.14)"><span class="pre">Unpack</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_types.rail.RailCompany.html#gatelogue_types.rail.RailCompany.CreateParams" title="gatelogue_types.rail.RailCompany.CreateParams"><span class="pre">CreateParams</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.rail.RailCompany.html#gatelogue_types.rail.RailCompany" title="gatelogue_types.rail.RailCompany"><span class="pre">RailCompany</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.company" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.conn">
+<span class="sig-name descname"><span class="pre">conn</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.conn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.connection">
+<span class="sig-name descname"><span class="pre">connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Unpack" title="(in Python v3.14)"><span class="pre">Unpack</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_types.rail.RailConnection.html#gatelogue_types.rail.RailConnection.CreateParams" title="gatelogue_types.rail.RailConnection.CreateParams"><span class="pre">CreateParams</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.rail.RailConnection.html#gatelogue_types.rail.RailConnection" title="gatelogue_types.rail.RailConnection"><span class="pre">RailConnection</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.connection" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.file_path">
-<span class="sig-name descname"><span class="pre">file_path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/gatelogue/gatelogue/gatelogue-aggregator/src/gatelogue_aggregator/sources/rail/nsc.yaml')</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.file_path" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">file_path</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/gatelogue/gatelogue/gatelogue-aggregator/src/gatelogue_aggregator/sources/rail/nsc.yaml')</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.file_path" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref">
-<span class="sig-name descname"><span class="pre">find_by_ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">N</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref_or_index">
-<span class="sig-name descname"><span class="pre">find_by_ref_or_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">R</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">N</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.find_by_ref_or_index" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.g">
-<span class="sig-name descname"><span class="pre">g</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.g" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.is_coord_source">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_coord_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.is_coord_source" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.line">
+<span class="sig-name descname"><span class="pre">line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Unpack" title="(in Python v3.14)"><span class="pre">Unpack</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_types.rail.RailLine.html#gatelogue_types.rail.RailLine.CreateParams" title="gatelogue_types.rail.RailLine.CreateParams"><span class="pre">CreateParams</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.rail.RailLine.html#gatelogue_types.rail.RailLine" title="gatelogue_types.rail.RailLine"><span class="pre">RailLine</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.line" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -237,9 +246,19 @@
 <span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Gatelogue</span> <span class="pre">(Rail,</span> <span class="pre">Network</span> <span class="pre">South</span> <span class="pre">Central)'</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.platform">
+<span class="sig-name descname"><span class="pre">platform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Unpack" title="(in Python v3.14)"><span class="pre">Unpack</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_types.rail.RailPlatform.html#gatelogue_types.rail.RailPlatform.CreateParams" title="gatelogue_types.rail.RailPlatform.CreateParams"><span class="pre">CreateParams</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.rail.RailPlatform.html#gatelogue_types.rail.RailPlatform" title="gatelogue_types.rail.RailPlatform"><span class="pre">RailPlatform</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.platform" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.prepare">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.config.Config.html#gatelogue_aggregator.config.Config" title="gatelogue_aggregator.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.prepare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.priority">
-<span class="sig-name descname"><span class="pre">priority</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.priority" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">priority</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.priority" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -247,29 +266,19 @@
 <span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.report" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.reported_nodes">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">reported_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.14)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.types.node.base.Node.html#gatelogue_aggregator.types.node.base.Node" title="gatelogue_aggregator.types.node.base.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.reported_nodes" title="Link to this definition"></a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.report_ignore">
+<span class="sig-name descname"><span class="pre">report_ignore</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.report_ignore" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.retrieve_from_cache">
-<span class="sig-name descname"><span class="pre">retrieve_from_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">rx.PyGraph</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.retrieve_from_cache" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.routing">
+<span class="sig-name descname"><span class="pre">routing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gt.RailLine</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">gt.BusLine</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">gt.SeaLine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.RailLineBuilder.html#gatelogue_aggregator.sources.line_builder.RailLineBuilder" title="gatelogue_aggregator.sources.line_builder.RailLineBuilder"><span class="pre">RailLineBuilder</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.BusLineBuilder.html#gatelogue_aggregator.sources.line_builder.BusLineBuilder" title="gatelogue_aggregator.sources.line_builder.BusLineBuilder"><span class="pre">BusLineBuilder</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.SeaLineBuilder.html#gatelogue_aggregator.sources.line_builder.SeaLineBuilder" title="gatelogue_aggregator.sources.line_builder.SeaLineBuilder"><span class="pre">SeaLineBuilder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.YamlLine.html#gatelogue_aggregator.sources.yaml2source.YamlLine" title="gatelogue_aggregator.sources.yaml2source.YamlLine"><span class="pre">YamlLine</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">route_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.YamlRoute.html#gatelogue_aggregator.sources.yaml2source.YamlRoute" title="gatelogue_aggregator.sources.yaml2source.YamlRoute"><span class="pre">YamlRoute</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_ConnectParams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.routing" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.sanitise_strings">
-<span class="sig-name descname"><span class="pre">sanitise_strings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.sanitise_strings" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.save_to_cache">
-<span class="sig-name descname"><span class="pre">save_to_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.types.config.Config.html#gatelogue_aggregator.types.config.Config" title="gatelogue_aggregator.types.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.save_to_cache" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.source">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_aggregator.types.source.Sourced.html#gatelogue_aggregator.types.source.Sourced" title="gatelogue_aggregator.types.source.Sourced"><span class="pre">Sourced</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.source" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.rail.nsc.NSC.station">
+<span class="sig-name descname"><span class="pre">station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Unpack" title="(in Python v3.14)"><span class="pre">Unpack</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_types.rail.RailStation.html#gatelogue_types.rail.RailStation.CreateParams" title="gatelogue_types.rail.RailStation.CreateParams"><span class="pre">CreateParams</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gatelogue_types.rail.RailStation.html#gatelogue_types.rail.RailStation" title="gatelogue_types.rail.RailStation"><span class="pre">RailStation</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.rail.nsc.NSC.station" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -287,7 +296,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+    <p>&#169; Copyright 2026, MRT Mapping Services.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

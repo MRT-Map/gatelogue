@@ -19,15 +19,14 @@
    
       ~NFLRWarp.__init__
       ~NFLRWarp.build
-      ~NFLRWarp.find_by_ref
-      ~NFLRWarp.find_by_ref_or_index
-      ~NFLRWarp.is_coord_source
+      ~NFLRWarp.builder
+      ~NFLRWarp.company
+      ~NFLRWarp.connection
+      ~NFLRWarp.line
+      ~NFLRWarp.platform
+      ~NFLRWarp.prepare
       ~NFLRWarp.report
-      ~NFLRWarp.reported_nodes
-      ~NFLRWarp.retrieve_from_cache
-      ~NFLRWarp.sanitise_strings
-      ~NFLRWarp.save_to_cache
-      ~NFLRWarp.source
+      ~NFLRWarp.station
    
    
 
@@ -39,6 +38,7 @@
    
       ~NFLRWarp.name
       ~NFLRWarp.priority
-      ~NFLRWarp.g
+      ~NFLRWarp.report_ignore
+      ~NFLRWarp.conn
    
    

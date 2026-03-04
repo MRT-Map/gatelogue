@@ -1,0 +1,50 @@
+﻿gatelogue\_types.sea.SeaConnection
+==================================
+
+.. currentmodule:: gatelogue_types.sea
+
+.. autoclass:: SeaConnection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaConnection.__init__
+      ~SeaConnection.auto_type
+      ~SeaConnection.create
+      ~SeaConnection.create2
+      ~SeaConnection.create_node
+      ~SeaConnection.delete
+      ~SeaConnection.equivalent_nodes
+      ~SeaConnection.format_create_kwargs
+      ~SeaConnection.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaConnection.COLUMNS
+      ~SeaConnection.STR2TYPE
+      ~SeaConnection.direction
+      ~SeaConnection.duration
+      ~SeaConnection.from_
+      ~SeaConnection.line
+      ~SeaConnection.source
+      ~SeaConnection.to
+      ~SeaConnection.i
+      ~SeaConnection.type
+      ~SeaConnection.sources
+   
+   

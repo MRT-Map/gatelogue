@@ -1,0 +1,47 @@
+﻿gatelogue\_types.GD
+===================
+
+.. currentmodule:: gatelogue_types
+
+.. autoclass:: GD
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~GD.__init__
+      ~GD.aiohttp_get
+      ~GD.create
+      ~GD.drop_sources
+      ~GD.from_bytes
+      ~GD.from_bytes_readonly
+      ~GD.get_node
+      ~GD.httpx_get
+      ~GD.niquests_get
+      ~GD.nodes
+      ~GD.requests_get
+      ~GD.urllib3_get
+      ~GD.urllib_get
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~GD.has_sources
+      ~GD.timestamp
+      ~GD.version
+      ~GD.conn
+   
+   

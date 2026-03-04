@@ -19,16 +19,15 @@
    
       ~ErzLinkFerry.__init__
       ~ErzLinkFerry.build
-      ~ErzLinkFerry.custom_routing
-      ~ErzLinkFerry.find_by_ref
-      ~ErzLinkFerry.find_by_ref_or_index
-      ~ErzLinkFerry.is_coord_source
+      ~ErzLinkFerry.builder
+      ~ErzLinkFerry.company
+      ~ErzLinkFerry.connection
+      ~ErzLinkFerry.dock
+      ~ErzLinkFerry.line
+      ~ErzLinkFerry.prepare
       ~ErzLinkFerry.report
-      ~ErzLinkFerry.reported_nodes
-      ~ErzLinkFerry.retrieve_from_cache
-      ~ErzLinkFerry.sanitise_strings
-      ~ErzLinkFerry.save_to_cache
-      ~ErzLinkFerry.source
+      ~ErzLinkFerry.routing
+      ~ErzLinkFerry.stop
    
    
 
@@ -41,6 +40,7 @@
       ~ErzLinkFerry.file_path
       ~ErzLinkFerry.name
       ~ErzLinkFerry.priority
-      ~ErzLinkFerry.g
+      ~ErzLinkFerry.report_ignore
+      ~ErzLinkFerry.conn
    
    

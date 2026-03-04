@@ -1,0 +1,56 @@
+﻿gatelogue\_types.bus.BusStop
+============================
+
+.. currentmodule:: gatelogue_types.bus
+
+.. autoclass:: BusStop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusStop.__init__
+      ~BusStop.auto_type
+      ~BusStop.create
+      ~BusStop.create_node
+      ~BusStop.create_node_with_location
+      ~BusStop.delete
+      ~BusStop.equivalent_nodes
+      ~BusStop.format_create_kwargs
+      ~BusStop.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusStop.COLUMNS
+      ~BusStop.STR2TYPE
+      ~BusStop.berths
+      ~BusStop.codes
+      ~BusStop.company
+      ~BusStop.connections_from_here
+      ~BusStop.connections_to_here
+      ~BusStop.lines
+      ~BusStop.name
+      ~BusStop.nodes_in_proximity
+      ~BusStop.shared_facilities
+      ~BusStop.source
+      ~BusStop.world
+      ~BusStop.coordinates
+      ~BusStop.i
+      ~BusStop.type
+      ~BusStop.sources
+   
+   

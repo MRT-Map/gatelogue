@@ -19,15 +19,14 @@
    
       ~WZF.__init__
       ~WZF.build
-      ~WZF.find_by_ref
-      ~WZF.find_by_ref_or_index
-      ~WZF.is_coord_source
+      ~WZF.builder
+      ~WZF.company
+      ~WZF.connection
+      ~WZF.dock
+      ~WZF.line
+      ~WZF.prepare
       ~WZF.report
-      ~WZF.reported_nodes
-      ~WZF.retrieve_from_cache
-      ~WZF.sanitise_strings
-      ~WZF.save_to_cache
-      ~WZF.source
+      ~WZF.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~WZF.name
       ~WZF.priority
-      ~WZF.g
+      ~WZF.report_ignore
+      ~WZF.html
+      ~WZF.conn
    
    

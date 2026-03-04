@@ -19,15 +19,14 @@
    
       ~IntraRailWarp.__init__
       ~IntraRailWarp.build
-      ~IntraRailWarp.find_by_ref
-      ~IntraRailWarp.find_by_ref_or_index
-      ~IntraRailWarp.is_coord_source
+      ~IntraRailWarp.builder
+      ~IntraRailWarp.company
+      ~IntraRailWarp.connection
+      ~IntraRailWarp.line
+      ~IntraRailWarp.platform
+      ~IntraRailWarp.prepare
       ~IntraRailWarp.report
-      ~IntraRailWarp.reported_nodes
-      ~IntraRailWarp.retrieve_from_cache
-      ~IntraRailWarp.sanitise_strings
-      ~IntraRailWarp.save_to_cache
-      ~IntraRailWarp.source
+      ~IntraRailWarp.station
    
    
 
@@ -39,6 +38,7 @@
    
       ~IntraRailWarp.name
       ~IntraRailWarp.priority
-      ~IntraRailWarp.g
+      ~IntraRailWarp.report_ignore
+      ~IntraRailWarp.conn
    
    

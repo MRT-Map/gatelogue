@@ -19,16 +19,15 @@
    
       ~ErzLinkTrams.__init__
       ~ErzLinkTrams.build
-      ~ErzLinkTrams.custom_routing
-      ~ErzLinkTrams.find_by_ref
-      ~ErzLinkTrams.find_by_ref_or_index
-      ~ErzLinkTrams.is_coord_source
+      ~ErzLinkTrams.builder
+      ~ErzLinkTrams.company
+      ~ErzLinkTrams.connection
+      ~ErzLinkTrams.line
+      ~ErzLinkTrams.platform
+      ~ErzLinkTrams.prepare
       ~ErzLinkTrams.report
-      ~ErzLinkTrams.reported_nodes
-      ~ErzLinkTrams.retrieve_from_cache
-      ~ErzLinkTrams.sanitise_strings
-      ~ErzLinkTrams.save_to_cache
-      ~ErzLinkTrams.source
+      ~ErzLinkTrams.routing
+      ~ErzLinkTrams.station
    
    
 
@@ -41,6 +40,7 @@
       ~ErzLinkTrams.file_path
       ~ErzLinkTrams.name
       ~ErzLinkTrams.priority
-      ~ErzLinkTrams.g
+      ~ErzLinkTrams.report_ignore
+      ~ErzLinkTrams.conn
    
    

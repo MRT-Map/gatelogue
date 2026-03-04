@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_aggregator.sources.rail.pacifica &mdash; gatelogue-aggregator 2.0.9 documentation</title>
+  <title>gatelogue_aggregator.sources.rail.pacifica &mdash; gatelogue-aggregator 3.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.sources.rail.pacifica.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d65cc7a5"></script>
+      <script src="../_static/documentation_options.js?v=acc74ff5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
@@ -52,22 +52,25 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="gatelogue_aggregator.html">gatelogue_aggregator</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.cli.html">gatelogue_aggregator.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.config.html">gatelogue_aggregator.config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.downloader.html">gatelogue_aggregator.downloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.gatelogue_data.html">gatelogue_aggregator.gatelogue_data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.source.html">gatelogue_aggregator.source</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.SOURCES.html">gatelogue_aggregator.sources.SOURCES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.air.html">gatelogue_aggregator.sources.air</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.bus.html">gatelogue_aggregator.sources.bus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.dynmap_markers.html">gatelogue_aggregator.sources.dynmap_markers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.line_builder.html">gatelogue_aggregator.sources.line_builder</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.sources.rail.html">gatelogue_aggregator.sources.rail</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.sea.html">gatelogue_aggregator.sources.sea</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.spawn_warp.html">gatelogue_aggregator.sources.spawn_warp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.town.html">gatelogue_aggregator.sources.town</a></li>
-<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.wiki_base.html">gatelogue_aggregator.sources.wiki_base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.html">gatelogue_aggregator.sources.warp_api</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.html">gatelogue_aggregator.sources.yaml2source</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.utils.html">gatelogue_aggregator.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gatelogue_types.html">gatelogue_types</a></li>
@@ -108,7 +111,7 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.rail.pacifica.Pacifica.html#gatelogue_aggregator.sources.rail.pacifica.Pacifica" title="gatelogue_aggregator.sources.rail.pacifica.Pacifica"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pacifica</span></code></a>(config)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.rail.pacifica.Pacifica.html#gatelogue_aggregator.sources.rail.pacifica.Pacifica" title="gatelogue_aggregator.sources.rail.pacifica.Pacifica"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pacifica</span></code></a>(config, conn)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -126,7 +129,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+    <p>&#169; Copyright 2026, MRT Mapping Services.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,0 +1,49 @@
+﻿gatelogue\_types.rail.RailCompany
+=================================
+
+.. currentmodule:: gatelogue_types.rail
+
+.. autoclass:: RailCompany
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailCompany.__init__
+      ~RailCompany.auto_type
+      ~RailCompany.create
+      ~RailCompany.create_node
+      ~RailCompany.delete
+      ~RailCompany.equivalent_nodes
+      ~RailCompany.format_create_kwargs
+      ~RailCompany.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailCompany.COLUMNS
+      ~RailCompany.STR2TYPE
+      ~RailCompany.lines
+      ~RailCompany.link
+      ~RailCompany.name
+      ~RailCompany.platforms
+      ~RailCompany.source
+      ~RailCompany.stations
+      ~RailCompany.i
+      ~RailCompany.type
+      ~RailCompany.sources
+   
+   

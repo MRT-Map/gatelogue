@@ -19,15 +19,8 @@
    
       ~TownList.__init__
       ~TownList.build
-      ~TownList.find_by_ref
-      ~TownList.find_by_ref_or_index
-      ~TownList.is_coord_source
+      ~TownList.prepare
       ~TownList.report
-      ~TownList.reported_nodes
-      ~TownList.retrieve_from_cache
-      ~TownList.sanitise_strings
-      ~TownList.save_to_cache
-      ~TownList.source
    
    
 
@@ -39,6 +32,8 @@
    
       ~TownList.name
       ~TownList.priority
-      ~TownList.g
+      ~TownList.report_ignore
+      ~TownList.df
+      ~TownList.conn
    
    

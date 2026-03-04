@@ -1,0 +1,49 @@
+﻿gatelogue\_types.bus.BusBerth
+=============================
+
+.. currentmodule:: gatelogue_types.bus
+
+.. autoclass:: BusBerth
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusBerth.__init__
+      ~BusBerth.auto_type
+      ~BusBerth.create
+      ~BusBerth.create_node
+      ~BusBerth.delete
+      ~BusBerth.equivalent_nodes
+      ~BusBerth.format_create_kwargs
+      ~BusBerth.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusBerth.COLUMNS
+      ~BusBerth.STR2TYPE
+      ~BusBerth.code
+      ~BusBerth.connections_from_here
+      ~BusBerth.connections_to_here
+      ~BusBerth.lines
+      ~BusBerth.source
+      ~BusBerth.stop
+      ~BusBerth.i
+      ~BusBerth.type
+      ~BusBerth.sources
+   
+   

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_aggregator.logging.track &mdash; gatelogue-aggregator 2.0.9 documentation</title>
+  <title>gatelogue_aggregator.logging.track &mdash; gatelogue-aggregator 3.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,14 +15,14 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.logging.track.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d65cc7a5"></script>
+      <script src="../_static/documentation_options.js?v=acc74ff5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="gatelogue_aggregator.sources" href="gatelogue_aggregator.sources.html" />
-    <link rel="prev" title="gatelogue_aggregator.logging.progress_bar" href="gatelogue_aggregator.logging.progress_bar.html" /> 
+    <link rel="next" title="gatelogue_aggregator.source" href="gatelogue_aggregator.source.html" />
+    <link rel="prev" title="gatelogue_aggregator.logging.report" href="gatelogue_aggregator.logging.report.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,15 +52,17 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="gatelogue_aggregator.html">gatelogue_aggregator</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.cli.html">gatelogue_aggregator.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.config.html">gatelogue_aggregator.config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.downloader.html">gatelogue_aggregator.downloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.gatelogue_data.html">gatelogue_aggregator.gatelogue_data</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="gatelogue_aggregator.logging.html">gatelogue_aggregator.logging</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.logging.progress_bar.html">gatelogue_aggregator.logging.progress_bar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.logging.report.html">gatelogue_aggregator.logging.report</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">gatelogue_aggregator.logging.track</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.source.html">gatelogue_aggregator.source</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.types.html">gatelogue_aggregator.types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gatelogue_aggregator.utils.html">gatelogue_aggregator.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gatelogue_types.html">gatelogue_types</a></li>
@@ -99,7 +101,7 @@
 <h1>gatelogue_aggregator.logging.track<a class="headerlink" href="#gatelogue-aggregator-logging-track" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="gatelogue_aggregator.logging.track">
-<span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.logging.</span></span><span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gatelogue_aggregator.logging.track" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.logging.</span></span><span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a></span></span><a class="headerlink" href="#gatelogue_aggregator.logging.track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -108,14 +110,14 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="gatelogue_aggregator.logging.progress_bar.html" class="btn btn-neutral float-left" title="gatelogue_aggregator.logging.progress_bar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="gatelogue_aggregator.sources.html" class="btn btn-neutral float-right" title="gatelogue_aggregator.sources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gatelogue_aggregator.logging.report.html" class="btn btn-neutral float-left" title="gatelogue_aggregator.logging.report" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gatelogue_aggregator.source.html" class="btn btn-neutral float-right" title="gatelogue_aggregator.source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+    <p>&#169; Copyright 2026, MRT Mapping Services.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

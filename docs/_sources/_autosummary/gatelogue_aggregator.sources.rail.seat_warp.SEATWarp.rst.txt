@@ -19,16 +19,15 @@
    
       ~SEATWarp.__init__
       ~SEATWarp.build
-      ~SEATWarp.custom_routing
-      ~SEATWarp.find_by_ref
-      ~SEATWarp.find_by_ref_or_index
-      ~SEATWarp.is_coord_source
+      ~SEATWarp.builder
+      ~SEATWarp.company
+      ~SEATWarp.connection
+      ~SEATWarp.line
+      ~SEATWarp.platform
+      ~SEATWarp.prepare
       ~SEATWarp.report
-      ~SEATWarp.reported_nodes
-      ~SEATWarp.retrieve_from_cache
-      ~SEATWarp.sanitise_strings
-      ~SEATWarp.save_to_cache
-      ~SEATWarp.source
+      ~SEATWarp.routing
+      ~SEATWarp.station
    
    
 
@@ -41,6 +40,7 @@
       ~SEATWarp.file_path
       ~SEATWarp.name
       ~SEATWarp.priority
-      ~SEATWarp.g
+      ~SEATWarp.report_ignore
+      ~SEATWarp.conn
    
    

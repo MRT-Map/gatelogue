@@ -19,15 +19,14 @@
    
       ~RailNorth.__init__
       ~RailNorth.build
-      ~RailNorth.find_by_ref
-      ~RailNorth.find_by_ref_or_index
-      ~RailNorth.is_coord_source
+      ~RailNorth.builder
+      ~RailNorth.company
+      ~RailNorth.connection
+      ~RailNorth.line
+      ~RailNorth.platform
+      ~RailNorth.prepare
       ~RailNorth.report
-      ~RailNorth.reported_nodes
-      ~RailNorth.retrieve_from_cache
-      ~RailNorth.sanitise_strings
-      ~RailNorth.save_to_cache
-      ~RailNorth.source
+      ~RailNorth.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~RailNorth.name
       ~RailNorth.priority
-      ~RailNorth.g
+      ~RailNorth.report_ignore
+      ~RailNorth.html
+      ~RailNorth.conn
    
    

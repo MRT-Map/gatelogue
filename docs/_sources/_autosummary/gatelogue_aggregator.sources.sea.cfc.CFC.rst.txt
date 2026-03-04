@@ -19,15 +19,14 @@
    
       ~CFC.__init__
       ~CFC.build
-      ~CFC.find_by_ref
-      ~CFC.find_by_ref_or_index
-      ~CFC.is_coord_source
+      ~CFC.builder
+      ~CFC.company
+      ~CFC.connection
+      ~CFC.dock
+      ~CFC.line
+      ~CFC.prepare
       ~CFC.report
-      ~CFC.reported_nodes
-      ~CFC.retrieve_from_cache
-      ~CFC.sanitise_strings
-      ~CFC.save_to_cache
-      ~CFC.source
+      ~CFC.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~CFC.name
       ~CFC.priority
-      ~CFC.g
+      ~CFC.report_ignore
+      ~CFC.text
+      ~CFC.conn
    
    

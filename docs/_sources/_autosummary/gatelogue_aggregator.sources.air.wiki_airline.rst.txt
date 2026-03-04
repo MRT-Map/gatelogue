@@ -19,7 +19,7 @@ gatelogue\_aggregator.sources.air.wiki\_airline
       :toctree:                                          
       :template: custom-class-template.rst               
    
-      WikiAirline
+      RegexWikiAirline
    
    
 

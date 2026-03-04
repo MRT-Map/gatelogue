@@ -19,16 +19,15 @@
    
       ~MarbleRailCoord.__init__
       ~MarbleRailCoord.build
-      ~MarbleRailCoord.custom_routing
-      ~MarbleRailCoord.find_by_ref
-      ~MarbleRailCoord.find_by_ref_or_index
-      ~MarbleRailCoord.is_coord_source
+      ~MarbleRailCoord.builder
+      ~MarbleRailCoord.company
+      ~MarbleRailCoord.connection
+      ~MarbleRailCoord.line
+      ~MarbleRailCoord.platform
+      ~MarbleRailCoord.prepare
       ~MarbleRailCoord.report
-      ~MarbleRailCoord.reported_nodes
-      ~MarbleRailCoord.retrieve_from_cache
-      ~MarbleRailCoord.sanitise_strings
-      ~MarbleRailCoord.save_to_cache
-      ~MarbleRailCoord.source
+      ~MarbleRailCoord.routing
+      ~MarbleRailCoord.station
    
    
 
@@ -41,6 +40,7 @@
       ~MarbleRailCoord.file_path
       ~MarbleRailCoord.name
       ~MarbleRailCoord.priority
-      ~MarbleRailCoord.g
+      ~MarbleRailCoord.report_ignore
+      ~MarbleRailCoord.conn
    
    

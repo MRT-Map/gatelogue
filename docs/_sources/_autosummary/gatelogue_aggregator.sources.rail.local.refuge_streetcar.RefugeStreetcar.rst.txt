@@ -19,16 +19,15 @@
    
       ~RefugeStreetcar.__init__
       ~RefugeStreetcar.build
-      ~RefugeStreetcar.custom_routing
-      ~RefugeStreetcar.find_by_ref
-      ~RefugeStreetcar.find_by_ref_or_index
-      ~RefugeStreetcar.is_coord_source
+      ~RefugeStreetcar.builder
+      ~RefugeStreetcar.company
+      ~RefugeStreetcar.connection
+      ~RefugeStreetcar.line
+      ~RefugeStreetcar.platform
+      ~RefugeStreetcar.prepare
       ~RefugeStreetcar.report
-      ~RefugeStreetcar.reported_nodes
-      ~RefugeStreetcar.retrieve_from_cache
-      ~RefugeStreetcar.sanitise_strings
-      ~RefugeStreetcar.save_to_cache
-      ~RefugeStreetcar.source
+      ~RefugeStreetcar.routing
+      ~RefugeStreetcar.station
    
    
 
@@ -41,6 +40,7 @@
       ~RefugeStreetcar.file_path
       ~RefugeStreetcar.name
       ~RefugeStreetcar.priority
-      ~RefugeStreetcar.g
+      ~RefugeStreetcar.report_ignore
+      ~RefugeStreetcar.conn
    
    

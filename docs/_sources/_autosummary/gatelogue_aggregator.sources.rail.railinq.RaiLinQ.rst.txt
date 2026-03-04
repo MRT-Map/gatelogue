@@ -19,15 +19,14 @@
    
       ~RaiLinQ.__init__
       ~RaiLinQ.build
-      ~RaiLinQ.find_by_ref
-      ~RaiLinQ.find_by_ref_or_index
-      ~RaiLinQ.is_coord_source
+      ~RaiLinQ.builder
+      ~RaiLinQ.company
+      ~RaiLinQ.connection
+      ~RaiLinQ.line
+      ~RaiLinQ.platform
+      ~RaiLinQ.prepare
       ~RaiLinQ.report
-      ~RaiLinQ.reported_nodes
-      ~RaiLinQ.retrieve_from_cache
-      ~RaiLinQ.sanitise_strings
-      ~RaiLinQ.save_to_cache
-      ~RaiLinQ.source
+      ~RaiLinQ.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~RaiLinQ.name
       ~RaiLinQ.priority
-      ~RaiLinQ.g
+      ~RaiLinQ.report_ignore
+      ~RaiLinQ.html
+      ~RaiLinQ.conn
    
    

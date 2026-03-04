@@ -1,0 +1,27 @@
+﻿gatelogue\_types.node.SharedFacility
+====================================
+
+.. currentmodule:: gatelogue_types.node
+
+.. autoclass:: SharedFacility
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SharedFacility.__init__
+      ~SharedFacility.create
+   
+   
+
+   
+   
+   

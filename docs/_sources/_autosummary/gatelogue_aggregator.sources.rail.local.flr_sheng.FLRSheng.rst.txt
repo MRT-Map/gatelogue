@@ -19,16 +19,15 @@
    
       ~FLRSheng.__init__
       ~FLRSheng.build
-      ~FLRSheng.custom_routing
-      ~FLRSheng.find_by_ref
-      ~FLRSheng.find_by_ref_or_index
-      ~FLRSheng.is_coord_source
+      ~FLRSheng.builder
+      ~FLRSheng.company
+      ~FLRSheng.connection
+      ~FLRSheng.line
+      ~FLRSheng.platform
+      ~FLRSheng.prepare
       ~FLRSheng.report
-      ~FLRSheng.reported_nodes
-      ~FLRSheng.retrieve_from_cache
-      ~FLRSheng.sanitise_strings
-      ~FLRSheng.save_to_cache
-      ~FLRSheng.source
+      ~FLRSheng.routing
+      ~FLRSheng.station
    
    
 
@@ -41,6 +40,7 @@
       ~FLRSheng.file_path
       ~FLRSheng.name
       ~FLRSheng.priority
-      ~FLRSheng.g
+      ~FLRSheng.report_ignore
+      ~FLRSheng.conn
    
    

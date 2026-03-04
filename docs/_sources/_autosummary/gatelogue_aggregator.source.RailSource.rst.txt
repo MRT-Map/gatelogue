@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.source.RailSource
+=======================================
+
+.. currentmodule:: gatelogue_aggregator.source
+
+.. autoclass:: RailSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailSource.__init__
+      ~RailSource.build
+      ~RailSource.builder
+      ~RailSource.company
+      ~RailSource.connection
+      ~RailSource.line
+      ~RailSource.platform
+      ~RailSource.prepare
+      ~RailSource.report
+      ~RailSource.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailSource.priority
+      ~RailSource.report_ignore
+      ~RailSource.name
+      ~RailSource.conn
+   
+   

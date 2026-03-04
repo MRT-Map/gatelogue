@@ -19,15 +19,14 @@
    
       ~WZR.__init__
       ~WZR.build
-      ~WZR.find_by_ref
-      ~WZR.find_by_ref_or_index
-      ~WZR.is_coord_source
+      ~WZR.builder
+      ~WZR.company
+      ~WZR.connection
+      ~WZR.line
+      ~WZR.platform
+      ~WZR.prepare
       ~WZR.report
-      ~WZR.reported_nodes
-      ~WZR.retrieve_from_cache
-      ~WZR.sanitise_strings
-      ~WZR.save_to_cache
-      ~WZR.source
+      ~WZR.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~WZR.name
       ~WZR.priority
-      ~WZR.g
+      ~WZR.report_ignore
+      ~WZR.html
+      ~WZR.conn
    
    

@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.source.SeaSource
+======================================
+
+.. currentmodule:: gatelogue_aggregator.source
+
+.. autoclass:: SeaSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaSource.__init__
+      ~SeaSource.build
+      ~SeaSource.builder
+      ~SeaSource.company
+      ~SeaSource.connection
+      ~SeaSource.dock
+      ~SeaSource.line
+      ~SeaSource.prepare
+      ~SeaSource.report
+      ~SeaSource.stop
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaSource.priority
+      ~SeaSource.report_ignore
+      ~SeaSource.name
+      ~SeaSource.conn
+   
+   

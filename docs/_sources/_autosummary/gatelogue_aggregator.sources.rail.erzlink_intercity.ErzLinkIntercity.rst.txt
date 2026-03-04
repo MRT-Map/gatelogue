@@ -19,16 +19,15 @@
    
       ~ErzLinkIntercity.__init__
       ~ErzLinkIntercity.build
-      ~ErzLinkIntercity.custom_routing
-      ~ErzLinkIntercity.find_by_ref
-      ~ErzLinkIntercity.find_by_ref_or_index
-      ~ErzLinkIntercity.is_coord_source
+      ~ErzLinkIntercity.builder
+      ~ErzLinkIntercity.company
+      ~ErzLinkIntercity.connection
+      ~ErzLinkIntercity.line
+      ~ErzLinkIntercity.platform
+      ~ErzLinkIntercity.prepare
       ~ErzLinkIntercity.report
-      ~ErzLinkIntercity.reported_nodes
-      ~ErzLinkIntercity.retrieve_from_cache
-      ~ErzLinkIntercity.sanitise_strings
-      ~ErzLinkIntercity.save_to_cache
-      ~ErzLinkIntercity.source
+      ~ErzLinkIntercity.routing
+      ~ErzLinkIntercity.station
    
    
 
@@ -41,6 +40,7 @@
       ~ErzLinkIntercity.file_path
       ~ErzLinkIntercity.name
       ~ErzLinkIntercity.priority
-      ~ErzLinkIntercity.g
+      ~ErzLinkIntercity.report_ignore
+      ~ErzLinkIntercity.conn
    
    

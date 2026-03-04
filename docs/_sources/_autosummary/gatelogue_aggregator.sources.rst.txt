@@ -37,10 +37,12 @@ gatelogue\_aggregator.sources
 
    air
    bus
+   dynmap_markers
+   line_builder
    rail
    sea
    spawn_warp
    town
-   wiki_base
+   warp_api
    yaml2source
 

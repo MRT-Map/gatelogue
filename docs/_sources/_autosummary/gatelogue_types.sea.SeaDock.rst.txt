@@ -1,0 +1,49 @@
+﻿gatelogue\_types.sea.SeaDock
+============================
+
+.. currentmodule:: gatelogue_types.sea
+
+.. autoclass:: SeaDock
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaDock.__init__
+      ~SeaDock.auto_type
+      ~SeaDock.create
+      ~SeaDock.create_node
+      ~SeaDock.delete
+      ~SeaDock.equivalent_nodes
+      ~SeaDock.format_create_kwargs
+      ~SeaDock.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaDock.COLUMNS
+      ~SeaDock.STR2TYPE
+      ~SeaDock.code
+      ~SeaDock.connections_from_here
+      ~SeaDock.connections_to_here
+      ~SeaDock.lines
+      ~SeaDock.source
+      ~SeaDock.stop
+      ~SeaDock.i
+      ~SeaDock.type
+      ~SeaDock.sources
+   
+   

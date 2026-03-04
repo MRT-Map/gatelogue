@@ -19,16 +19,9 @@
    
       ~Yaml2Source.__init__
       ~Yaml2Source.build
-      ~Yaml2Source.custom_routing
-      ~Yaml2Source.find_by_ref
-      ~Yaml2Source.find_by_ref_or_index
-      ~Yaml2Source.is_coord_source
+      ~Yaml2Source.prepare
       ~Yaml2Source.report
-      ~Yaml2Source.reported_nodes
-      ~Yaml2Source.retrieve_from_cache
-      ~Yaml2Source.sanitise_strings
-      ~Yaml2Source.save_to_cache
-      ~Yaml2Source.source
+      ~Yaml2Source.routing
    
    
 
@@ -40,11 +33,13 @@
    
       ~Yaml2Source.name
       ~Yaml2Source.priority
+      ~Yaml2Source.report_ignore
       ~Yaml2Source.file_path
       ~Yaml2Source.C
       ~Yaml2Source.L
       ~Yaml2Source.S
+      ~Yaml2Source.P
       ~Yaml2Source.B
-      ~Yaml2Source.g
+      ~Yaml2Source.conn
    
    

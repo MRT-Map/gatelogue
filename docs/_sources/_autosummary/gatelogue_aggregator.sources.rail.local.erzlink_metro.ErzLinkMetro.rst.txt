@@ -19,16 +19,15 @@
    
       ~ErzLinkMetro.__init__
       ~ErzLinkMetro.build
-      ~ErzLinkMetro.custom_routing
-      ~ErzLinkMetro.find_by_ref
-      ~ErzLinkMetro.find_by_ref_or_index
-      ~ErzLinkMetro.is_coord_source
+      ~ErzLinkMetro.builder
+      ~ErzLinkMetro.company
+      ~ErzLinkMetro.connection
+      ~ErzLinkMetro.line
+      ~ErzLinkMetro.platform
+      ~ErzLinkMetro.prepare
       ~ErzLinkMetro.report
-      ~ErzLinkMetro.reported_nodes
-      ~ErzLinkMetro.retrieve_from_cache
-      ~ErzLinkMetro.sanitise_strings
-      ~ErzLinkMetro.save_to_cache
-      ~ErzLinkMetro.source
+      ~ErzLinkMetro.routing
+      ~ErzLinkMetro.station
    
    
 
@@ -41,6 +40,7 @@
       ~ErzLinkMetro.file_path
       ~ErzLinkMetro.name
       ~ErzLinkMetro.priority
-      ~ErzLinkMetro.g
+      ~ErzLinkMetro.report_ignore
+      ~ErzLinkMetro.conn
    
    

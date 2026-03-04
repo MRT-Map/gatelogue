@@ -19,16 +19,15 @@
    
       ~CVCExpressCoord.__init__
       ~CVCExpressCoord.build
-      ~CVCExpressCoord.custom_routing
-      ~CVCExpressCoord.find_by_ref
-      ~CVCExpressCoord.find_by_ref_or_index
-      ~CVCExpressCoord.is_coord_source
+      ~CVCExpressCoord.builder
+      ~CVCExpressCoord.company
+      ~CVCExpressCoord.connection
+      ~CVCExpressCoord.line
+      ~CVCExpressCoord.platform
+      ~CVCExpressCoord.prepare
       ~CVCExpressCoord.report
-      ~CVCExpressCoord.reported_nodes
-      ~CVCExpressCoord.retrieve_from_cache
-      ~CVCExpressCoord.sanitise_strings
-      ~CVCExpressCoord.save_to_cache
-      ~CVCExpressCoord.source
+      ~CVCExpressCoord.routing
+      ~CVCExpressCoord.station
    
    
 
@@ -41,6 +40,7 @@
       ~CVCExpressCoord.file_path
       ~CVCExpressCoord.name
       ~CVCExpressCoord.priority
-      ~CVCExpressCoord.g
+      ~CVCExpressCoord.report_ignore
+      ~CVCExpressCoord.conn
    
    

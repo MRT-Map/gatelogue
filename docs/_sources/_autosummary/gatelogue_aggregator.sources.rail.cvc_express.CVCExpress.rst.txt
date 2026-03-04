@@ -19,15 +19,14 @@
    
       ~CVCExpress.__init__
       ~CVCExpress.build
-      ~CVCExpress.find_by_ref
-      ~CVCExpress.find_by_ref_or_index
-      ~CVCExpress.is_coord_source
+      ~CVCExpress.builder
+      ~CVCExpress.company
+      ~CVCExpress.connection
+      ~CVCExpress.line
+      ~CVCExpress.platform
+      ~CVCExpress.prepare
       ~CVCExpress.report
-      ~CVCExpress.reported_nodes
-      ~CVCExpress.retrieve_from_cache
-      ~CVCExpress.sanitise_strings
-      ~CVCExpress.save_to_cache
-      ~CVCExpress.source
+      ~CVCExpress.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~CVCExpress.name
       ~CVCExpress.priority
-      ~CVCExpress.g
+      ~CVCExpress.report_ignore
+      ~CVCExpress.html
+      ~CVCExpress.conn
    
    

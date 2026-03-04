@@ -19,15 +19,14 @@
    
       ~BreezeRail.__init__
       ~BreezeRail.build
-      ~BreezeRail.find_by_ref
-      ~BreezeRail.find_by_ref_or_index
-      ~BreezeRail.is_coord_source
+      ~BreezeRail.builder
+      ~BreezeRail.company
+      ~BreezeRail.connection
+      ~BreezeRail.line
+      ~BreezeRail.platform
+      ~BreezeRail.prepare
       ~BreezeRail.report
-      ~BreezeRail.reported_nodes
-      ~BreezeRail.retrieve_from_cache
-      ~BreezeRail.sanitise_strings
-      ~BreezeRail.save_to_cache
-      ~BreezeRail.source
+      ~BreezeRail.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~BreezeRail.name
       ~BreezeRail.priority
-      ~BreezeRail.g
+      ~BreezeRail.report_ignore
+      ~BreezeRail.html
+      ~BreezeRail.conn
    
    

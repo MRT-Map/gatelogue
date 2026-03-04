@@ -1,0 +1,38 @@
+﻿gatelogue\_aggregator.source.Source
+===================================
+
+.. currentmodule:: gatelogue_aggregator.source
+
+.. autoclass:: Source
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Source.__init__
+      ~Source.build
+      ~Source.prepare
+      ~Source.report
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Source.priority
+      ~Source.report_ignore
+      ~Source.name
+      ~Source.conn
+   
+   

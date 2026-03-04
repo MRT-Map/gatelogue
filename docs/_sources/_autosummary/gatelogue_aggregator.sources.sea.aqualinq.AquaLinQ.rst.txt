@@ -19,15 +19,14 @@
    
       ~AquaLinQ.__init__
       ~AquaLinQ.build
-      ~AquaLinQ.find_by_ref
-      ~AquaLinQ.find_by_ref_or_index
-      ~AquaLinQ.is_coord_source
+      ~AquaLinQ.builder
+      ~AquaLinQ.company
+      ~AquaLinQ.connection
+      ~AquaLinQ.dock
+      ~AquaLinQ.line
+      ~AquaLinQ.prepare
       ~AquaLinQ.report
-      ~AquaLinQ.reported_nodes
-      ~AquaLinQ.retrieve_from_cache
-      ~AquaLinQ.sanitise_strings
-      ~AquaLinQ.save_to_cache
-      ~AquaLinQ.source
+      ~AquaLinQ.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~AquaLinQ.name
       ~AquaLinQ.priority
-      ~AquaLinQ.g
+      ~AquaLinQ.report_ignore
+      ~AquaLinQ.html
+      ~AquaLinQ.conn
    
    

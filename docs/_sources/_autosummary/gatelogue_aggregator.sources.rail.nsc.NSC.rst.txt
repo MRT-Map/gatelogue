@@ -19,16 +19,15 @@
    
       ~NSC.__init__
       ~NSC.build
-      ~NSC.custom_routing
-      ~NSC.find_by_ref
-      ~NSC.find_by_ref_or_index
-      ~NSC.is_coord_source
+      ~NSC.builder
+      ~NSC.company
+      ~NSC.connection
+      ~NSC.line
+      ~NSC.platform
+      ~NSC.prepare
       ~NSC.report
-      ~NSC.reported_nodes
-      ~NSC.retrieve_from_cache
-      ~NSC.sanitise_strings
-      ~NSC.save_to_cache
-      ~NSC.source
+      ~NSC.routing
+      ~NSC.station
    
    
 
@@ -41,6 +40,7 @@
       ~NSC.file_path
       ~NSC.name
       ~NSC.priority
-      ~NSC.g
+      ~NSC.report_ignore
+      ~NSC.conn
    
    

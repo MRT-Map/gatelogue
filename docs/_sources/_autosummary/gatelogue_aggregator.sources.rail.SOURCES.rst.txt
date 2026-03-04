@@ -1,0 +1,6 @@
+gatelogue\_aggregator.sources.rail.SOURCES
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail
+
+.. autofunction:: SOURCES

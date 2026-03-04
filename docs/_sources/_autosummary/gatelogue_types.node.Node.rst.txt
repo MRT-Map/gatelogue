@@ -1,0 +1,43 @@
+﻿gatelogue\_types.node.Node
+==========================
+
+.. currentmodule:: gatelogue_types.node
+
+.. autoclass:: Node
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Node.__init__
+      ~Node.auto_type
+      ~Node.create_node
+      ~Node.delete
+      ~Node.equivalent_nodes
+      ~Node.format_create_kwargs
+      ~Node.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Node.COLUMNS
+      ~Node.STR2TYPE
+      ~Node.source
+      ~Node.sources
+      ~Node.type
+      ~Node.i
+   
+   

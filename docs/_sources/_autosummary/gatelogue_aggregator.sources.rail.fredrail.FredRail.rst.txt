@@ -19,16 +19,15 @@
    
       ~FredRail.__init__
       ~FredRail.build
-      ~FredRail.custom_routing
-      ~FredRail.find_by_ref
-      ~FredRail.find_by_ref_or_index
-      ~FredRail.is_coord_source
+      ~FredRail.builder
+      ~FredRail.company
+      ~FredRail.connection
+      ~FredRail.line
+      ~FredRail.platform
+      ~FredRail.prepare
       ~FredRail.report
-      ~FredRail.reported_nodes
-      ~FredRail.retrieve_from_cache
-      ~FredRail.sanitise_strings
-      ~FredRail.save_to_cache
-      ~FredRail.source
+      ~FredRail.routing
+      ~FredRail.station
    
    
 
@@ -41,6 +40,7 @@
       ~FredRail.file_path
       ~FredRail.name
       ~FredRail.priority
-      ~FredRail.g
+      ~FredRail.report_ignore
+      ~FredRail.conn
    
    

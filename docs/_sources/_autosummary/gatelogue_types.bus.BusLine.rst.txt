@@ -1,0 +1,52 @@
+﻿gatelogue\_types.bus.BusLine
+============================
+
+.. currentmodule:: gatelogue_types.bus
+
+.. autoclass:: BusLine
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusLine.__init__
+      ~BusLine.auto_type
+      ~BusLine.create
+      ~BusLine.create_node
+      ~BusLine.delete
+      ~BusLine.equivalent_nodes
+      ~BusLine.format_create_kwargs
+      ~BusLine.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusLine.COLUMNS
+      ~BusLine.STR2TYPE
+      ~BusLine.berths
+      ~BusLine.code
+      ~BusLine.colour
+      ~BusLine.company
+      ~BusLine.local
+      ~BusLine.mode
+      ~BusLine.name
+      ~BusLine.source
+      ~BusLine.stops
+      ~BusLine.i
+      ~BusLine.type
+      ~BusLine.sources
+   
+   

@@ -1,0 +1,48 @@
+﻿gatelogue\_types.node.LocatedNode
+=================================
+
+.. currentmodule:: gatelogue_types.node
+
+.. autoclass:: LocatedNode
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LocatedNode.__init__
+      ~LocatedNode.auto_type
+      ~LocatedNode.create_node
+      ~LocatedNode.create_node_with_location
+      ~LocatedNode.delete
+      ~LocatedNode.equivalent_nodes
+      ~LocatedNode.format_create_kwargs
+      ~LocatedNode.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LocatedNode.COLUMNS
+      ~LocatedNode.STR2TYPE
+      ~LocatedNode.coordinates
+      ~LocatedNode.nodes_in_proximity
+      ~LocatedNode.shared_facilities
+      ~LocatedNode.source
+      ~LocatedNode.world
+      ~LocatedNode.i
+      ~LocatedNode.type
+      ~LocatedNode.sources
+   
+   

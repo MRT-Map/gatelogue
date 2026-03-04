@@ -1,0 +1,43 @@
+﻿gatelogue\_aggregator.source.AirSource
+======================================
+
+.. currentmodule:: gatelogue_aggregator.source
+
+.. autoclass:: AirSource
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirSource.__init__
+      ~AirSource.airline
+      ~AirSource.airport
+      ~AirSource.build
+      ~AirSource.connect
+      ~AirSource.flight
+      ~AirSource.gate
+      ~AirSource.prepare
+      ~AirSource.report
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirSource.priority
+      ~AirSource.report_ignore
+      ~AirSource.name
+      ~AirSource.conn
+   
+   

@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.warp\_api.Warp
+============================================
+
+.. currentmodule:: gatelogue_aggregator.sources.warp_api
+
+.. autoclass:: Warp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Warp.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Warp.creation_date
+      ~Warp.id
+      ~Warp.name
+      ~Warp.pitch
+      ~Warp.player_uuid
+      ~Warp.type
+      ~Warp.visits
+      ~Warp.welcome_message
+      ~Warp.world_uuid
+      ~Warp.x
+      ~Warp.y
+      ~Warp.yaw
+      ~Warp.z
+      ~Warp.coordinates
+   
+   

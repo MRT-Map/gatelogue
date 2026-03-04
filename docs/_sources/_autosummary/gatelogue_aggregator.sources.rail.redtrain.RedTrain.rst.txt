@@ -19,15 +19,14 @@
    
       ~RedTrain.__init__
       ~RedTrain.build
-      ~RedTrain.find_by_ref
-      ~RedTrain.find_by_ref_or_index
-      ~RedTrain.is_coord_source
+      ~RedTrain.builder
+      ~RedTrain.company
+      ~RedTrain.connection
+      ~RedTrain.line
+      ~RedTrain.platform
+      ~RedTrain.prepare
       ~RedTrain.report
-      ~RedTrain.reported_nodes
-      ~RedTrain.retrieve_from_cache
-      ~RedTrain.sanitise_strings
-      ~RedTrain.save_to_cache
-      ~RedTrain.source
+      ~RedTrain.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~RedTrain.name
       ~RedTrain.priority
-      ~RedTrain.g
+      ~RedTrain.report_ignore
+      ~RedTrain.html
+      ~RedTrain.conn
    
    

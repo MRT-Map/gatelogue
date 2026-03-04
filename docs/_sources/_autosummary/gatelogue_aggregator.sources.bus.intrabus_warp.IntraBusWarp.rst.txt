@@ -18,16 +18,15 @@
    .. autosummary::
    
       ~IntraBusWarp.__init__
+      ~IntraBusWarp.berth
       ~IntraBusWarp.build
-      ~IntraBusWarp.find_by_ref
-      ~IntraBusWarp.find_by_ref_or_index
-      ~IntraBusWarp.is_coord_source
+      ~IntraBusWarp.builder
+      ~IntraBusWarp.company
+      ~IntraBusWarp.connection
+      ~IntraBusWarp.line
+      ~IntraBusWarp.prepare
       ~IntraBusWarp.report
-      ~IntraBusWarp.reported_nodes
-      ~IntraBusWarp.retrieve_from_cache
-      ~IntraBusWarp.sanitise_strings
-      ~IntraBusWarp.save_to_cache
-      ~IntraBusWarp.source
+      ~IntraBusWarp.stop
    
    
 
@@ -39,6 +38,7 @@
    
       ~IntraBusWarp.name
       ~IntraBusWarp.priority
-      ~IntraBusWarp.g
+      ~IntraBusWarp.report_ignore
+      ~IntraBusWarp.conn
    
    

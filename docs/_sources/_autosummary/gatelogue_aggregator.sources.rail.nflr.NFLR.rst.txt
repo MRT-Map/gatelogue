@@ -19,15 +19,14 @@
    
       ~NFLR.__init__
       ~NFLR.build
-      ~NFLR.find_by_ref
-      ~NFLR.find_by_ref_or_index
-      ~NFLR.is_coord_source
+      ~NFLR.builder
+      ~NFLR.company
+      ~NFLR.connection
+      ~NFLR.line
+      ~NFLR.platform
+      ~NFLR.prepare
       ~NFLR.report
-      ~NFLR.reported_nodes
-      ~NFLR.retrieve_from_cache
-      ~NFLR.sanitise_strings
-      ~NFLR.save_to_cache
-      ~NFLR.source
+      ~NFLR.station
    
    
 
@@ -39,6 +38,9 @@
    
       ~NFLR.name
       ~NFLR.priority
-      ~NFLR.g
+      ~NFLR.report_ignore
+      ~NFLR.cache
+      ~NFLR.lines
+      ~NFLR.conn
    
    

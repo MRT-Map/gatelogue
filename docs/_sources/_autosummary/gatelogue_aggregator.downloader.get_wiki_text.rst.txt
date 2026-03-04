@@ -1,0 +1,6 @@
+gatelogue\_aggregator.downloader.get\_wiki\_text
+================================================
+
+.. currentmodule:: gatelogue_aggregator.downloader
+
+.. autofunction:: get_wiki_text

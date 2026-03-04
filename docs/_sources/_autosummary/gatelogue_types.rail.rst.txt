@@ -1,0 +1,35 @@
+gatelogue\_types.rail
+=====================
+
+.. automodule:: gatelogue_types.rail
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      RailCompany
+      RailConnection
+      RailLine
+      RailPlatform
+      RailStation
+   
+   
+
+   
+   
+   
+
+
+

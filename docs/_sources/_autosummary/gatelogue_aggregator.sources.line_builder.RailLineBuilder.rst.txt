@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.sources.line\_builder.RailLineBuilder
+===========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.line_builder
+
+.. autoclass:: RailLineBuilder
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailLineBuilder.__init__
+      ~RailLineBuilder.add
+      ~RailLineBuilder.branch_detached
+      ~RailLineBuilder.branch_off
+      ~RailLineBuilder.connect
+      ~RailLineBuilder.connect_circle
+      ~RailLineBuilder.connect_to
+      ~RailLineBuilder.copy
+      ~RailLineBuilder.skip
+      ~RailLineBuilder.u_turn
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailLineBuilder.default_backward_code
+      ~RailLineBuilder.default_forward_code
+   
+   

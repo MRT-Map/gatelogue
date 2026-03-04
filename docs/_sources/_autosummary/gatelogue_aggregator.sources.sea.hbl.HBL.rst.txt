@@ -19,15 +19,14 @@
    
       ~HBL.__init__
       ~HBL.build
-      ~HBL.find_by_ref
-      ~HBL.find_by_ref_or_index
-      ~HBL.is_coord_source
+      ~HBL.builder
+      ~HBL.company
+      ~HBL.connection
+      ~HBL.dock
+      ~HBL.line
+      ~HBL.prepare
       ~HBL.report
-      ~HBL.reported_nodes
-      ~HBL.retrieve_from_cache
-      ~HBL.sanitise_strings
-      ~HBL.save_to_cache
-      ~HBL.source
+      ~HBL.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~HBL.name
       ~HBL.priority
-      ~HBL.g
+      ~HBL.report_ignore
+      ~HBL.html
+      ~HBL.conn
    
    

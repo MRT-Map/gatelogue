@@ -5,14 +5,14 @@
 <head>
 <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Usage — gatelogue-aggregator 2.0.9 documentation</title>
+<title>Usage — gatelogue-aggregator 3.0.0 documentation</title>
 <link href="_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
 <link href="_static/css/theme.css?v=9edc463e" rel="stylesheet" type="text/css"/>
 <link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
 <link href="https://mrt-map.github.io/gatelogue/docs/usage.html" rel="canonical"/>
 <script src="_static/jquery.js?v=5d32c60e"></script>
 <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-<script src="_static/documentation_options.js?v=d65cc7a5"></script>
+<script src="_static/documentation_options.js?v=acc74ff5"></script>
 <script src="_static/doctools.js?v=fd6eb6e6"></script>
 <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="_static/js/theme.js"></script>
@@ -79,29 +79,19 @@
 <h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
 <section id="data">
 <h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
-<p>The data is provided in JSON. Its format and description is outlined at <a class="reference internal" href="data_format.html"><span class="doc">Data Format</span></a>.</p>
+<p>Gatelogue data is compiled into a SQLite database. Its schema / data format is at <a class="reference internal" href="data_format.html"><span class="doc">Data Format</span></a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Do not hardcode any IDs in your project!</strong> They change with every update.
+If you need to reference a specific object, find it by its code/name/something unique to the object.</p>
+</div>
 <section id="raw">
 <h3>Raw<a class="headerlink" href="#raw" title="Link to this heading"></a></h3>
-<p>Use a HTTP GET request to <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.json</a> to retrieve the data.</p>
-<p>A version without sources is available, at <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data_no_sources.json</a></p>
+<p>Use a HTTP GET request to <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data-ns.db">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data-ns.db</a> to retrieve the data.</p>
+<p>A version with sources is available, at <a class="reference external" href="https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.db">https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.db</a></p>
 </section>
 <section id="gatelogue-types-python">
 <h3>gatelogue-types (Python)<a class="headerlink" href="#gatelogue-types-python" title="Link to this heading"></a></h3>
-<p>The data can be imported to your Python project in <code class="docutils literal notranslate"><span class="pre">msgspec</span></code> dataclasses. Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gatelogue-types</span></code> or add <code class="docutils literal notranslate"><span class="pre">gatelogue-types</span></code> to your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> or <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p>
-<p>(To import directly from the repository, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py</span></code> or add <code class="docutils literal notranslate"><span class="pre">gatelogue-types</span> <span class="pre">@</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py</span></code> to your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> or <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.)</p>
-<p>You can also use <code class="docutils literal notranslate"><span class="pre">requests</span></code>, <code class="docutils literal notranslate"><span class="pre">niquests</span></code>, <code class="docutils literal notranslate"><span class="pre">httpx</span></code>, <code class="docutils literal notranslate"><span class="pre">urllib3</span></code> or <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> to retrieve the data via <code class="docutils literal notranslate"><span class="pre">gatelogue-types</span></code> if <code class="docutils literal notranslate"><span class="pre">[requests]</span></code>, <code class="docutils literal notranslate"><span class="pre">[niquests]</span></code>, <code class="docutils literal notranslate"><span class="pre">[httpx]</span></code>, <code class="docutils literal notranslate"><span class="pre">[urllib3]</span></code> or <code class="docutils literal notranslate"><span class="pre">[aiohttp]</span></code> is suffixed. Otherwise <code class="docutils literal notranslate"><span class="pre">urllib</span></code> is used.</p>
-<p>To retrieve the data:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="_autosummary/gatelogue_types.html#module-gatelogue_types" title="gatelogue_types"><span class="nn">gatelogue_types</span></a><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gt</span>  <span class="c1"># alias highly recommended for convenience's sake</span>
-
-<span class="n">gt</span><span class="o">.</span><span class="n">GatelogueData</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># retrieve data, with sources</span>
-
-<span class="n">gt</span><span class="o">.</span><span class="n">GatelogueDataNS</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># retrieve data, no sources</span>
-
-<span class="k">await</span> <span class="n">gt</span><span class="o">.</span><span class="n">GatelogueData</span><span class="o">.</span><span class="n">aiohttp_get</span><span class="p">()</span>  <span class="c1"># retrieve data, with sources, async</span>
-
-<span class="k">await</span> <span class="n">gt</span><span class="o">.</span><span class="n">GatelogueDataNS</span><span class="o">.</span><span class="n">aiohttp_get</span><span class="p">()</span>  <span class="c1"># retrieve data, no sources, async</span>
-</pre></div>
-</div>
 <p>See <a class="reference internal" href="_autosummary/gatelogue_types.html"><span class="doc">the API reference for gatelogue_types</span></a>.</p>
 </section>
 <section id="gatelogue-types-rust">
@@ -115,7 +105,7 @@
 </section>
 <section id="aggregator">
 <h2>Aggregator<a class="headerlink" href="#aggregator" title="Link to this heading"></a></h2>
-<p>The aggregator can be installed wih <code class="docutils literal notranslate"><span class="pre">pipx</span></code> (regular <code class="docutils literal notranslate"><span class="pre">pip</span></code> is fine too): <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator</span></code>.</p>
+<p>The aggregator can be installed wih <code class="docutils literal notranslate"><span class="pre">pipx</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">uvx</span></code> is fine too): <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-aggregator</span></code>.</p>
 <p>See <a class="reference internal" href="cli.html"><span class="doc">Command Line</span></a>.</p>
 </section>
 </section>
@@ -127,7 +117,7 @@
 </div>
 <hr/>
 <div role="contentinfo">
-<p>© Copyright 2024, MRT Mapping Services.</p>
+<p>© Copyright 2026, MRT Mapping Services.</p>
 </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

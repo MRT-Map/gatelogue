@@ -1,0 +1,34 @@
+gatelogue\_types.node
+=====================
+
+.. automodule:: gatelogue_types.node
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      LocatedNode
+      Node
+      Proximity
+      SharedFacility
+   
+   
+
+   
+   
+   
+
+
+

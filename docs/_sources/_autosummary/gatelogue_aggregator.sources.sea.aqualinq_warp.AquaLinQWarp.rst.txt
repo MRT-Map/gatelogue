@@ -19,15 +19,14 @@
    
       ~AquaLinQWarp.__init__
       ~AquaLinQWarp.build
-      ~AquaLinQWarp.find_by_ref
-      ~AquaLinQWarp.find_by_ref_or_index
-      ~AquaLinQWarp.is_coord_source
+      ~AquaLinQWarp.builder
+      ~AquaLinQWarp.company
+      ~AquaLinQWarp.connection
+      ~AquaLinQWarp.dock
+      ~AquaLinQWarp.line
+      ~AquaLinQWarp.prepare
       ~AquaLinQWarp.report
-      ~AquaLinQWarp.reported_nodes
-      ~AquaLinQWarp.retrieve_from_cache
-      ~AquaLinQWarp.sanitise_strings
-      ~AquaLinQWarp.save_to_cache
-      ~AquaLinQWarp.source
+      ~AquaLinQWarp.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~AquaLinQWarp.name
       ~AquaLinQWarp.priority
-      ~AquaLinQWarp.g
+      ~AquaLinQWarp.report_ignore
+      ~AquaLinQWarp.d
+      ~AquaLinQWarp.conn
    
    

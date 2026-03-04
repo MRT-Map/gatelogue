@@ -1,0 +1,35 @@
+gatelogue\_types.sea
+====================
+
+.. automodule:: gatelogue_types.sea
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      SeaCompany
+      SeaConnection
+      SeaDock
+      SeaLine
+      SeaStop
+   
+   
+
+   
+   
+   
+
+
+

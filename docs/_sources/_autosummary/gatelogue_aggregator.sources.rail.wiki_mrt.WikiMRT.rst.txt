@@ -19,15 +19,14 @@
    
       ~WikiMRT.__init__
       ~WikiMRT.build
-      ~WikiMRT.find_by_ref
-      ~WikiMRT.find_by_ref_or_index
-      ~WikiMRT.is_coord_source
+      ~WikiMRT.builder
+      ~WikiMRT.company
+      ~WikiMRT.connection
+      ~WikiMRT.line
+      ~WikiMRT.platform
+      ~WikiMRT.prepare
       ~WikiMRT.report
-      ~WikiMRT.reported_nodes
-      ~WikiMRT.retrieve_from_cache
-      ~WikiMRT.sanitise_strings
-      ~WikiMRT.save_to_cache
-      ~WikiMRT.source
+      ~WikiMRT.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~WikiMRT.name
       ~WikiMRT.priority
-      ~WikiMRT.g
+      ~WikiMRT.report_ignore
+      ~WikiMRT.lines
+      ~WikiMRT.conn
    
    

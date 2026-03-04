@@ -18,16 +18,15 @@
    .. autosummary::
    
       ~IntraBusOmegaBus.__init__
+      ~IntraBusOmegaBus.berth
       ~IntraBusOmegaBus.build
-      ~IntraBusOmegaBus.find_by_ref
-      ~IntraBusOmegaBus.find_by_ref_or_index
-      ~IntraBusOmegaBus.is_coord_source
+      ~IntraBusOmegaBus.builder
+      ~IntraBusOmegaBus.company
+      ~IntraBusOmegaBus.connection
+      ~IntraBusOmegaBus.line
+      ~IntraBusOmegaBus.prepare
       ~IntraBusOmegaBus.report
-      ~IntraBusOmegaBus.reported_nodes
-      ~IntraBusOmegaBus.retrieve_from_cache
-      ~IntraBusOmegaBus.sanitise_strings
-      ~IntraBusOmegaBus.save_to_cache
-      ~IntraBusOmegaBus.source
+      ~IntraBusOmegaBus.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~IntraBusOmegaBus.name
       ~IntraBusOmegaBus.priority
-      ~IntraBusOmegaBus.g
+      ~IntraBusOmegaBus.report_ignore
+      ~IntraBusOmegaBus.html
+      ~IntraBusOmegaBus.conn
    
    

@@ -19,15 +19,14 @@
    
       ~SEAT.__init__
       ~SEAT.build
-      ~SEAT.find_by_ref
-      ~SEAT.find_by_ref_or_index
-      ~SEAT.is_coord_source
+      ~SEAT.builder
+      ~SEAT.company
+      ~SEAT.connection
+      ~SEAT.line
+      ~SEAT.platform
+      ~SEAT.prepare
       ~SEAT.report
-      ~SEAT.reported_nodes
-      ~SEAT.retrieve_from_cache
-      ~SEAT.sanitise_strings
-      ~SEAT.save_to_cache
-      ~SEAT.source
+      ~SEAT.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~SEAT.name
       ~SEAT.priority
-      ~SEAT.g
+      ~SEAT.report_ignore
+      ~SEAT.html
+      ~SEAT.conn
    
    

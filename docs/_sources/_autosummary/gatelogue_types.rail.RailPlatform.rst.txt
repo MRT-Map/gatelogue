@@ -1,0 +1,49 @@
+﻿gatelogue\_types.rail.RailPlatform
+==================================
+
+.. currentmodule:: gatelogue_types.rail
+
+.. autoclass:: RailPlatform
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailPlatform.__init__
+      ~RailPlatform.auto_type
+      ~RailPlatform.create
+      ~RailPlatform.create_node
+      ~RailPlatform.delete
+      ~RailPlatform.equivalent_nodes
+      ~RailPlatform.format_create_kwargs
+      ~RailPlatform.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailPlatform.COLUMNS
+      ~RailPlatform.STR2TYPE
+      ~RailPlatform.code
+      ~RailPlatform.connections_from_here
+      ~RailPlatform.connections_to_here
+      ~RailPlatform.lines
+      ~RailPlatform.source
+      ~RailPlatform.station
+      ~RailPlatform.i
+      ~RailPlatform.type
+      ~RailPlatform.sources
+   
+   

@@ -19,16 +19,15 @@
    
       ~FLRForesne.__init__
       ~FLRForesne.build
-      ~FLRForesne.custom_routing
-      ~FLRForesne.find_by_ref
-      ~FLRForesne.find_by_ref_or_index
-      ~FLRForesne.is_coord_source
+      ~FLRForesne.builder
+      ~FLRForesne.company
+      ~FLRForesne.connection
+      ~FLRForesne.line
+      ~FLRForesne.platform
+      ~FLRForesne.prepare
       ~FLRForesne.report
-      ~FLRForesne.reported_nodes
-      ~FLRForesne.retrieve_from_cache
-      ~FLRForesne.sanitise_strings
-      ~FLRForesne.save_to_cache
-      ~FLRForesne.source
+      ~FLRForesne.routing
+      ~FLRForesne.station
    
    
 
@@ -41,6 +40,7 @@
       ~FLRForesne.file_path
       ~FLRForesne.name
       ~FLRForesne.priority
-      ~FLRForesne.g
+      ~FLRForesne.report_ignore
+      ~FLRForesne.conn
    
    

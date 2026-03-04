@@ -29,9 +29,10 @@
    :recursive:
 
    cli
+   config
    downloader
+   gatelogue_data
    logging
+   source
    sources
-   types
-   utils
 

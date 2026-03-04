@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.line\_builder.LineBuilder
+=======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.line_builder
+
+.. autoclass:: LineBuilder
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LineBuilder.__init__
+      ~LineBuilder.add
+      ~LineBuilder.branch_detached
+      ~LineBuilder.branch_off
+      ~LineBuilder.connect
+      ~LineBuilder.connect_circle
+      ~LineBuilder.connect_to
+      ~LineBuilder.copy
+      ~LineBuilder.skip
+      ~LineBuilder.u_turn
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LineBuilder.default_backward_code
+      ~LineBuilder.default_forward_code
+      ~LineBuilder.Pt
+      ~LineBuilder.Cn
+   
+   

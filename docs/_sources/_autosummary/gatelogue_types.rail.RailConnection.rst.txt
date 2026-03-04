@@ -1,0 +1,50 @@
+﻿gatelogue\_types.rail.RailConnection
+====================================
+
+.. currentmodule:: gatelogue_types.rail
+
+.. autoclass:: RailConnection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailConnection.__init__
+      ~RailConnection.auto_type
+      ~RailConnection.create
+      ~RailConnection.create2
+      ~RailConnection.create_node
+      ~RailConnection.delete
+      ~RailConnection.equivalent_nodes
+      ~RailConnection.format_create_kwargs
+      ~RailConnection.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailConnection.COLUMNS
+      ~RailConnection.STR2TYPE
+      ~RailConnection.direction
+      ~RailConnection.duration
+      ~RailConnection.from_
+      ~RailConnection.line
+      ~RailConnection.source
+      ~RailConnection.to
+      ~RailConnection.i
+      ~RailConnection.type
+      ~RailConnection.sources
+   
+   

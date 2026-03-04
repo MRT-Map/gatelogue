@@ -1,0 +1,49 @@
+﻿gatelogue\_types.air.AirAirline
+===============================
+
+.. currentmodule:: gatelogue_types.air
+
+.. autoclass:: AirAirline
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirAirline.__init__
+      ~AirAirline.auto_type
+      ~AirAirline.create
+      ~AirAirline.create_node
+      ~AirAirline.delete
+      ~AirAirline.equivalent_nodes
+      ~AirAirline.format_create_kwargs
+      ~AirAirline.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirAirline.COLUMNS
+      ~AirAirline.STR2TYPE
+      ~AirAirline.airports
+      ~AirAirline.flights
+      ~AirAirline.gates
+      ~AirAirline.link
+      ~AirAirline.name
+      ~AirAirline.source
+      ~AirAirline.i
+      ~AirAirline.type
+      ~AirAirline.sources
+   
+   

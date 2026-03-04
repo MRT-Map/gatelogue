@@ -1,0 +1,37 @@
+﻿gatelogue\_types.air.Aircraft
+=============================
+
+.. currentmodule:: gatelogue_types.air
+
+.. autoclass:: Aircraft
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Aircraft.__init__
+      ~Aircraft.create
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Aircraft.height
+      ~Aircraft.length
+      ~Aircraft.manufacturer
+      ~Aircraft.mode
+      ~Aircraft.width
+   
+   

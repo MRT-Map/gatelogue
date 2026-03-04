@@ -1,0 +1,50 @@
+﻿gatelogue\_types.air.AirFlight
+==============================
+
+.. currentmodule:: gatelogue_types.air
+
+.. autoclass:: AirFlight
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirFlight.__init__
+      ~AirFlight.auto_type
+      ~AirFlight.create
+      ~AirFlight.create2
+      ~AirFlight.create_node
+      ~AirFlight.delete
+      ~AirFlight.equivalent_nodes
+      ~AirFlight.format_create_kwargs
+      ~AirFlight.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirFlight.COLUMNS
+      ~AirFlight.STR2TYPE
+      ~AirFlight.aircraft
+      ~AirFlight.airline
+      ~AirFlight.code
+      ~AirFlight.from_
+      ~AirFlight.source
+      ~AirFlight.to
+      ~AirFlight.i
+      ~AirFlight.type
+      ~AirFlight.sources
+   
+   

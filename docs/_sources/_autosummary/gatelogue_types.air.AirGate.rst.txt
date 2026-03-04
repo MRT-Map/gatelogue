@@ -1,0 +1,51 @@
+﻿gatelogue\_types.air.AirGate
+============================
+
+.. currentmodule:: gatelogue_types.air
+
+.. autoclass:: AirGate
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AirGate.__init__
+      ~AirGate.auto_type
+      ~AirGate.create
+      ~AirGate.create_node
+      ~AirGate.delete
+      ~AirGate.equivalent_nodes
+      ~AirGate.format_create_kwargs
+      ~AirGate.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AirGate.COLUMNS
+      ~AirGate.STR2TYPE
+      ~AirGate.airline
+      ~AirGate.airport
+      ~AirGate.code
+      ~AirGate.flights_from_here
+      ~AirGate.flights_to_here
+      ~AirGate.mode
+      ~AirGate.source
+      ~AirGate.width
+      ~AirGate.i
+      ~AirGate.type
+      ~AirGate.sources
+   
+   

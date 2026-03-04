@@ -1,0 +1,6 @@
+gatelogue\_aggregator.logging.report
+====================================
+
+.. currentmodule:: gatelogue_aggregator.logging
+
+.. autofunction:: report

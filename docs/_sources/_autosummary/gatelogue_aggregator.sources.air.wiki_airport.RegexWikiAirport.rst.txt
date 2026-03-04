@@ -1,0 +1,52 @@
+﻿gatelogue\_aggregator.sources.air.wiki\_airport.RegexWikiAirport
+================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.air.wiki_airport
+
+.. autoclass:: RegexWikiAirport
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RegexWikiAirport.__init__
+      ~RegexWikiAirport.airline
+      ~RegexWikiAirport.airport
+      ~RegexWikiAirport.build
+      ~RegexWikiAirport.connect
+      ~RegexWikiAirport.flight
+      ~RegexWikiAirport.gate
+      ~RegexWikiAirport.mode
+      ~RegexWikiAirport.prepare
+      ~RegexWikiAirport.process_airline_name
+      ~RegexWikiAirport.process_gate_code
+      ~RegexWikiAirport.report
+      ~RegexWikiAirport.width
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RegexWikiAirport.additional_names
+      ~RegexWikiAirport.name
+      ~RegexWikiAirport.priority
+      ~RegexWikiAirport.report_ignore
+      ~RegexWikiAirport.text
+      ~RegexWikiAirport.airport_code
+      ~RegexWikiAirport.page_name
+      ~RegexWikiAirport.regex
+      ~RegexWikiAirport.conn
+   
+   

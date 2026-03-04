@@ -1,0 +1,49 @@
+﻿gatelogue\_types.sea.SeaCompany
+===============================
+
+.. currentmodule:: gatelogue_types.sea
+
+.. autoclass:: SeaCompany
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaCompany.__init__
+      ~SeaCompany.auto_type
+      ~SeaCompany.create
+      ~SeaCompany.create_node
+      ~SeaCompany.delete
+      ~SeaCompany.equivalent_nodes
+      ~SeaCompany.format_create_kwargs
+      ~SeaCompany.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaCompany.COLUMNS
+      ~SeaCompany.STR2TYPE
+      ~SeaCompany.docks
+      ~SeaCompany.lines
+      ~SeaCompany.link
+      ~SeaCompany.name
+      ~SeaCompany.source
+      ~SeaCompany.stops
+      ~SeaCompany.i
+      ~SeaCompany.type
+      ~SeaCompany.sources
+   
+   

@@ -19,16 +19,15 @@
    
       ~Windboat.__init__
       ~Windboat.build
-      ~Windboat.custom_routing
-      ~Windboat.find_by_ref
-      ~Windboat.find_by_ref_or_index
-      ~Windboat.is_coord_source
+      ~Windboat.builder
+      ~Windboat.company
+      ~Windboat.connection
+      ~Windboat.dock
+      ~Windboat.line
+      ~Windboat.prepare
       ~Windboat.report
-      ~Windboat.reported_nodes
-      ~Windboat.retrieve_from_cache
-      ~Windboat.sanitise_strings
-      ~Windboat.save_to_cache
-      ~Windboat.source
+      ~Windboat.routing
+      ~Windboat.stop
    
    
 
@@ -41,6 +40,7 @@
       ~Windboat.file_path
       ~Windboat.name
       ~Windboat.priority
-      ~Windboat.g
+      ~Windboat.report_ignore
+      ~Windboat.conn
    
    

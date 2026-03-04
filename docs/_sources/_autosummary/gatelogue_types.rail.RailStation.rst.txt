@@ -1,0 +1,56 @@
+﻿gatelogue\_types.rail.RailStation
+=================================
+
+.. currentmodule:: gatelogue_types.rail
+
+.. autoclass:: RailStation
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailStation.__init__
+      ~RailStation.auto_type
+      ~RailStation.create
+      ~RailStation.create_node
+      ~RailStation.create_node_with_location
+      ~RailStation.delete
+      ~RailStation.equivalent_nodes
+      ~RailStation.format_create_kwargs
+      ~RailStation.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailStation.COLUMNS
+      ~RailStation.STR2TYPE
+      ~RailStation.codes
+      ~RailStation.company
+      ~RailStation.connections_from_here
+      ~RailStation.connections_to_here
+      ~RailStation.lines
+      ~RailStation.name
+      ~RailStation.nodes_in_proximity
+      ~RailStation.platforms
+      ~RailStation.shared_facilities
+      ~RailStation.source
+      ~RailStation.world
+      ~RailStation.coordinates
+      ~RailStation.i
+      ~RailStation.type
+      ~RailStation.sources
+   
+   

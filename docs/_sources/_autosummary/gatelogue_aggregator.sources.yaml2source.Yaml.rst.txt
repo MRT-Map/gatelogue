@@ -28,6 +28,7 @@
    .. autosummary::
    
       ~Yaml.colour
+      ~Yaml.company_link
       ~Yaml.company_name
       ~Yaml.coords
       ~Yaml.lines

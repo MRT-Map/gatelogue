@@ -19,15 +19,14 @@
    
       ~SeabeastRail.__init__
       ~SeabeastRail.build
-      ~SeabeastRail.find_by_ref
-      ~SeabeastRail.find_by_ref_or_index
-      ~SeabeastRail.is_coord_source
+      ~SeabeastRail.builder
+      ~SeabeastRail.company
+      ~SeabeastRail.connection
+      ~SeabeastRail.line
+      ~SeabeastRail.platform
+      ~SeabeastRail.prepare
       ~SeabeastRail.report
-      ~SeabeastRail.reported_nodes
-      ~SeabeastRail.retrieve_from_cache
-      ~SeabeastRail.sanitise_strings
-      ~SeabeastRail.save_to_cache
-      ~SeabeastRail.source
+      ~SeabeastRail.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~SeabeastRail.name
       ~SeabeastRail.priority
-      ~SeabeastRail.g
+      ~SeabeastRail.report_ignore
+      ~SeabeastRail.text
+      ~SeabeastRail.conn
    
    

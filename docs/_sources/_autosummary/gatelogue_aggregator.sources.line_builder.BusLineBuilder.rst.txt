@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.sources.line\_builder.BusLineBuilder
+==========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.line_builder
+
+.. autoclass:: BusLineBuilder
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusLineBuilder.__init__
+      ~BusLineBuilder.add
+      ~BusLineBuilder.branch_detached
+      ~BusLineBuilder.branch_off
+      ~BusLineBuilder.connect
+      ~BusLineBuilder.connect_circle
+      ~BusLineBuilder.connect_to
+      ~BusLineBuilder.copy
+      ~BusLineBuilder.skip
+      ~BusLineBuilder.u_turn
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusLineBuilder.default_backward_code
+      ~BusLineBuilder.default_forward_code
+   
+   

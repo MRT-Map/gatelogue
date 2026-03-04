@@ -19,15 +19,14 @@
    
       ~BluRail.__init__
       ~BluRail.build
-      ~BluRail.find_by_ref
-      ~BluRail.find_by_ref_or_index
-      ~BluRail.is_coord_source
+      ~BluRail.builder
+      ~BluRail.company
+      ~BluRail.connection
+      ~BluRail.line
+      ~BluRail.platform
+      ~BluRail.prepare
       ~BluRail.report
-      ~BluRail.reported_nodes
-      ~BluRail.retrieve_from_cache
-      ~BluRail.sanitise_strings
-      ~BluRail.save_to_cache
-      ~BluRail.source
+      ~BluRail.station
    
    
 
@@ -39,6 +38,8 @@
    
       ~BluRail.name
       ~BluRail.priority
-      ~BluRail.g
+      ~BluRail.report_ignore
+      ~BluRail.line_wikis
+      ~BluRail.conn
    
    

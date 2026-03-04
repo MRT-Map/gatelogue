@@ -1,0 +1,42 @@
+﻿gatelogue\_aggregator.sources.line\_builder.SeaLineBuilder
+==========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.line_builder
+
+.. autoclass:: SeaLineBuilder
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaLineBuilder.__init__
+      ~SeaLineBuilder.add
+      ~SeaLineBuilder.branch_detached
+      ~SeaLineBuilder.branch_off
+      ~SeaLineBuilder.connect
+      ~SeaLineBuilder.connect_circle
+      ~SeaLineBuilder.connect_to
+      ~SeaLineBuilder.copy
+      ~SeaLineBuilder.skip
+      ~SeaLineBuilder.u_turn
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaLineBuilder.default_backward_code
+      ~SeaLineBuilder.default_forward_code
+   
+   

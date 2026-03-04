@@ -1,0 +1,51 @@
+﻿gatelogue\_types.spawn\_warp.SpawnWarp
+======================================
+
+.. currentmodule:: gatelogue_types.spawn_warp
+
+.. autoclass:: SpawnWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SpawnWarp.__init__
+      ~SpawnWarp.auto_type
+      ~SpawnWarp.create
+      ~SpawnWarp.create_node
+      ~SpawnWarp.create_node_with_location
+      ~SpawnWarp.delete
+      ~SpawnWarp.equivalent_nodes
+      ~SpawnWarp.format_create_kwargs
+      ~SpawnWarp.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SpawnWarp.COLUMNS
+      ~SpawnWarp.STR2TYPE
+      ~SpawnWarp.name
+      ~SpawnWarp.nodes_in_proximity
+      ~SpawnWarp.shared_facilities
+      ~SpawnWarp.source
+      ~SpawnWarp.warp_type
+      ~SpawnWarp.world
+      ~SpawnWarp.coordinates
+      ~SpawnWarp.i
+      ~SpawnWarp.type
+      ~SpawnWarp.sources
+   
+   

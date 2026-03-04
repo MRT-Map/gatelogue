@@ -18,16 +18,15 @@
    .. autosummary::
    
       ~SeabeastBuses.__init__
+      ~SeabeastBuses.berth
       ~SeabeastBuses.build
-      ~SeabeastBuses.find_by_ref
-      ~SeabeastBuses.find_by_ref_or_index
-      ~SeabeastBuses.is_coord_source
+      ~SeabeastBuses.builder
+      ~SeabeastBuses.company
+      ~SeabeastBuses.connection
+      ~SeabeastBuses.line
+      ~SeabeastBuses.prepare
       ~SeabeastBuses.report
-      ~SeabeastBuses.reported_nodes
-      ~SeabeastBuses.retrieve_from_cache
-      ~SeabeastBuses.sanitise_strings
-      ~SeabeastBuses.save_to_cache
-      ~SeabeastBuses.source
+      ~SeabeastBuses.stop
    
    
 
@@ -39,6 +38,8 @@
    
       ~SeabeastBuses.name
       ~SeabeastBuses.priority
-      ~SeabeastBuses.g
+      ~SeabeastBuses.report_ignore
+      ~SeabeastBuses.text
+      ~SeabeastBuses.conn
    
    

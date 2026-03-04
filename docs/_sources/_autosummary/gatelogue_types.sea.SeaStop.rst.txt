@@ -1,0 +1,56 @@
+﻿gatelogue\_types.sea.SeaStop
+============================
+
+.. currentmodule:: gatelogue_types.sea
+
+.. autoclass:: SeaStop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SeaStop.__init__
+      ~SeaStop.auto_type
+      ~SeaStop.create
+      ~SeaStop.create_node
+      ~SeaStop.create_node_with_location
+      ~SeaStop.delete
+      ~SeaStop.equivalent_nodes
+      ~SeaStop.format_create_kwargs
+      ~SeaStop.merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SeaStop.COLUMNS
+      ~SeaStop.STR2TYPE
+      ~SeaStop.codes
+      ~SeaStop.company
+      ~SeaStop.connections_from_here
+      ~SeaStop.connections_to_here
+      ~SeaStop.docks
+      ~SeaStop.lines
+      ~SeaStop.name
+      ~SeaStop.nodes_in_proximity
+      ~SeaStop.shared_facilities
+      ~SeaStop.source
+      ~SeaStop.world
+      ~SeaStop.coordinates
+      ~SeaStop.i
+      ~SeaStop.type
+      ~SeaStop.sources
+   
+   

@@ -1,2 +1,2 @@
-createSrcSidebar('[["gatelogue_types",["",[],["lib.rs"]]]]');
-//{"start":19,"fragment_lengths":[38]}
+createSrcSidebar('[["gatelogue_types",["",[["node",[],["air.rs","bus.rs","located.rs","mod.rs","rail.rs","sea.rs","spawn_warp.rs","town.rs"]]],["error.rs","lib.rs","util.rs"]]]]');
+//{"start":19,"fragment_lengths":[157]}
