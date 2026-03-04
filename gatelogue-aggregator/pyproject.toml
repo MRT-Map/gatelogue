@@ -15,13 +15,13 @@ authors = [
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Impementation :: CPython",
   # "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Games/Entertainment",
   "Typing :: Typed",
