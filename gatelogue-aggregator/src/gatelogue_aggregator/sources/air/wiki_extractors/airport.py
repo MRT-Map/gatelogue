@@ -26,24 +26,22 @@ class PCE(RegexWikiAirport):
         r"(?s)\n\|(?P<code>[^|]*?)(?:\|\|\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]].*?|)\|\|(?:(?!Service).)*Service"
     )
 
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"]
+        return 39 if code.startswith(("D", "E", "F")) else 15
+
 
 @AIRPORT_SOURCES.append
 class MWT(RegexWikiAirport):
     airport_code = "MWT"
     page_name = "Miu Wan Tseng Tsz Leng International Airport"
-    regex = re.compile(r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>.*?)\n|\n)")
+    regex = re.compile(r"\|-\n\|(?P<code>[PD]?\d*?A?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>.*?)\n|\n)")
 
-    # @staticmethod
-    # def size(matches: dict[str, str]) -> str | None:
-    #     return (
-    #         "XS"
-    #         if (code := matches["code"].removesuffix("A")).startswith("P")
-    #         else "S"
-    #         if int(code) <= 60
-    #         else "M"
-    #         if int(code) <= 82
-    #         else "H"
-    #     )
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"].removesuffix("A")
+        return None if code.startswith("D") else 9 if code.startswith("P") else 11 if 83 <= int(code) <= 103 else 41 if 61 <= int(code) <= 68 else 33 if 69 <= int(code) <= 76 else 15
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -59,9 +57,9 @@ class KEK(RegexWikiAirport):
     page_name = "Kazeshima Eumi Konaejima Airport"
     regex = re.compile(r"\|(?P<code>[^|}]*?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)\|\|")
 
-    # @staticmethod
-    # def size(matches: dict[str, str]) -> str | None:
-    #     return "XS" if int(matches["code"]) > 100 else "SP"
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        return 11 if int(matches["code"]) > 100 else None
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -76,6 +74,10 @@ class ABG(RegexWikiAirport):
         r"\|(?P<code>.*?\d)\|\| ?(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)(?:\|\||\n)",
     )
 
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        return 43 if matches["code"].startswith(("I", "J")) else 15
+
 
 @AIRPORT_SOURCES.append
 class OPA(RegexWikiAirport):
@@ -84,6 +86,11 @@ class OPA(RegexWikiAirport):
     regex = re.compile(
         r"\|-\n\|(?P<code>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
     )
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"]
+        return 39 if code.startswith("C") and 1 <= int(code.removeprefix("C")) <= 4 else 15
 
 
 @AIRPORT_SOURCES.append
@@ -94,6 +101,14 @@ class CHB(RegexWikiAirport):
         r"\|Gate (?P<code>.*?)\n\|.\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)",
     )
 
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        return 33 if matches["code"].isdigit() and int(matches["code"]) >= 25 else 15
+
+    @staticmethod
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        return "helicopter" if matches["code"].startswith("H") else "warp plane"
+
 
 @AIRPORT_SOURCES.append
 class CBZ(RegexWikiAirport):
@@ -102,8 +117,8 @@ class CBZ(RegexWikiAirport):
     regex = re.compile(r"\|(?P<code>[AB]\d*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "S"
+    def width(_matches: dict[str, str]) -> int | None:
+        return 15
 
 
 @AIRPORT_SOURCES.append
@@ -111,6 +126,10 @@ class CBI(RegexWikiAirport):
     airport_code = "CBI"
     page_name = "Chan Bay International Airport"
     regex = re.compile(r"\|(?P<code>\d+?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        return 41 if int(matches["code"]) >= 18 else 15
 
 
 @AIRPORT_SOURCES.append
@@ -134,7 +153,7 @@ class DJE(AirSource):
             if caption == "Terminal 1":
                 for tr in table("tr")[1:]:
                     code = tr("td")[0].string
-                    size = "MS" if 1 <= int(code) <= 10 else "S"
+                    width = 31 if 1 <= int(code) <= 10 else 15
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
                     airline = airline if airline is not None and airline.strip() != "" else None
@@ -142,7 +161,7 @@ class DJE(AirSource):
                         code=code,
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
-                        # size=size,
+                        width=width
                     )
             elif caption == "Terminal 2":
                 concourse = ""
@@ -151,7 +170,6 @@ class DJE(AirSource):
                         concourse = tr.find("b").string.strip(" ")[0]
                         continue
                     code = concourse + tr("td")[0].string
-                    size = "S"
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
                     airline = airline if airline is not None and airline.strip() != "" else None
@@ -159,7 +177,7 @@ class DJE(AirSource):
                         code=code,
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
-                        # size=size,
+                        width=15,
                     )
 
 
@@ -169,12 +187,20 @@ class VDA(RegexWikiAirport):
     page_name = "Deadbush Valletta Desert Airport"
     regex = re.compile(r"\|(?P<code>\d+?)\|\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)|[^|]*?)")
 
+    @staticmethod
+    def width(_matches: dict[str, str]) -> int | None:
+        return 15
+
 
 @AIRPORT_SOURCES.append
 class WMI(RegexWikiAirport):
     airport_code = "WMI"
     page_name = "West Mesa International Airport"
     regex = re.compile(r"\|Gate (?P<code>.*?)\n\| (?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|[^|]*?)")
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        return 39 if matches["code"].startswith("I") and matches["code"] not in ("I14", "I15", "I16") else 15
 
 
 @AIRPORT_SOURCES.append
@@ -184,6 +210,16 @@ class DFM(RegexWikiAirport):
     regex = re.compile(
         r"\|Gate (?P<code>.*?)\n\|(?P<size>.*?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>\S[^|]*)\n|[^|]*?)"
     )
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = int(matches["code"])
+        return 35 if code in (1, 2, 3, 13, 14, 15) else 31 if 65 <= code <= 71 else 17 if code in (72, 73, 35, 36, 37, 62, 63, 64) else 15
+
+    @staticmethod
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        code = int(matches["code"])
+        return "helicopter" if code in (72, 73, 35, 36, 37, 62, 63, 64) else "warp plane"
 
 
 @AIRPORT_SOURCES.append
@@ -213,13 +249,14 @@ class DBI(AirSource):
             for tr in table("tr")[1:]:
                 code = concourse + tr("td")[0].string
                 size = tr("td")[1].string
+                width = 39 if size == "M" else 17 if size == "S" else None
                 airline = tr("td")[2]
                 airline = airline.a.string if airline.a is not None else airline.string
                 self.gate(
                     code=code,
                     airport=airport,
                     airline=None if airline is None else self.airline(name=airline),
-                    # size=size,
+                    width=width,
                     mode="warp plane"
                 )
 
@@ -232,9 +269,9 @@ class GSM(RegexWikiAirport):
         r"\|(?P<code>.*?)\n\|'''(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>[^N]\S[^|]*)|[^|]*?)'''"
     )
 
-    # @staticmethod
-    # def size(matches: dict[str, str]) -> str | None:
-    #     return "H" if matches["code"].startswith("H") else "S"
+    @staticmethod
+    def width(_matches: dict[str, str]) -> int | None:
+        return 13
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -259,8 +296,8 @@ class SDZ(RegexWikiAirport):
     )
 
     @staticmethod
-    def size(_matches: dict[str, str]) -> str | None:
-        return "S"
+    def width(_matches: dict[str, str]) -> int | None:
+        return 15
 
 
 @AIRPORT_SOURCES.append
@@ -271,6 +308,16 @@ class CIA(RegexWikiAirport):
         r"\|\s*(?P<code>.*?)\s*\|\|\s*(?:\[\[(?P<airline>[^|]*?)]]|(?P<airline2>[^|]*?))\s*\|\|",
     )
 
+    @staticmethod
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        code = matches["code"]
+        return "helicopter" if code.startswith("H") else "warp plane"
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"]
+        return 43 if code.startswith(("A", "B")) else 59 if code.startswith("E") else 15
+
 
 @AIRPORT_SOURCES.append
 class ERZ(RegexWikiAirport):
@@ -279,6 +326,15 @@ class ERZ(RegexWikiAirport):
     regex = re.compile(
         r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
+
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"]
+        return 39 if code in ("A10", "A11", "A12", "B11", "B12") else 15
+
+    @staticmethod
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        return "helicopter" if matches["code"].startswith("H") else "warp plane"
 
 
 @AIRPORT_SOURCES.append
@@ -302,6 +358,16 @@ class ATC(RegexWikiAirport):
         r"\|-\n\|\s*(?P<code>[^|]*?)\s*\|\|[^|]*?\|\|\s*(?:\[\[(?P<airline>[^|]*?)(?:\|[^]]*?|)]][^|]*?|(?P<airline2>[^-|]*?)|-*?)\s*\|\|",
     )
 
+    @staticmethod
+    def width(matches: dict[str, str]) -> int | None:
+        code = matches["code"]
+        return 67 if code in ("W9", "W10", "E9", "E10") else 49 if code.startswith(("N", "S", "E", "W")) else 25 if code.startswith("H") else None
+
+    @staticmethod
+    def mode(matches: dict[str, str]) -> gt.AirMode | None:
+        code = matches["code"]
+        return "helicopter" if code.startswith("H") else "warp plane"
+
 
 @AIRPORT_SOURCES.append
 class AIX(AirSource):
@@ -323,18 +389,19 @@ class AIX(AirSource):
 
         d = list(zip(self.df["Gate ID"], self.df["Gate Size"], self.df["Company"], strict=False))
 
-        old_gate_size = None
+        old_gate_width = None
         for gate_code, gate_size, airline in d:
             if pd.isna(gate_size):
-                gate_size = old_gate_size  # noqa: PLW2901
+                gate_width = old_gate_width  # noqa: PLW2901
             else:
-                gate_size = str(gate_size)[0]  # noqa: PLW2901
-                old_gate_size = gate_size
+                gate_size = str(gate_size).strip()
+                gate_width = 45 if gate_size == "Large" else 33 if gate_size == "Medium" else 15
+                old_gate_width = gate_width
             self.gate(
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "Unavailable" else None,
-                # size=gate_size,
+                width=gate_width
             )
 
 
@@ -364,7 +431,8 @@ class LAR(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
-                # size=size,
+                width=41 if size == "M" else 15 if size in ("S", "H") else None,
+                mode="helicopter" if size == "H" else "warp plane",
             )
 
 
@@ -392,7 +460,7 @@ class LFA(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
-                # size=size,
+                width=15 if size == "S" else None,
             )
 
 
@@ -402,6 +470,10 @@ class KWT(RegexWikiAirport):
     page_name = "Ha Shan - Kwai Tin Airport"
     regex = re.compile(r"\|.*?\| \[\[(?P<airline>.*?)]] \|\|.*?\|.*?\|\|.*?\|(?P<code>.*?)\|\|")
     additional_names = {"Kwai Tin Airfield"}
+
+    @staticmethod
+    def width(_matches: dict[str, str]) -> int | None:
+        return 15
 
 
 @AIRPORT_SOURCES.append

@@ -23,7 +23,7 @@ const aircraft = computed(() => props.flight.aircraft);
     {{ flight.code }}
   </td>
   <td class="flight-size-mode">
-    <b>{{ aircraft?.name }} {{ aircraft?.width ? `(↔${aircraft?.width})` : "" }}</b><br>{{ aircraft?.mode.replaceAll(" plane", "") }}
+    <b>{{ aircraft?.name }} <small>{{ aircraft?.width ? `(↔${aircraft?.width})` : "" }}</small></b><br>{{ aircraft?.mode.replaceAll(" plane", "") }}
   </td>
   <td class="flight-gates">
     <GateLink :gate="flight.from" />

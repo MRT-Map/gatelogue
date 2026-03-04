@@ -46,7 +46,7 @@ const gateWidth = computed(() => {
     </template>
   </td>
   <template v-for="flight in gate.flightsFromHere" :key="flight.i">
-    <oneFlight
+    <Flight
       :gate="gate"
       :flight="flight"
       :include-airline="airline === undefined"
