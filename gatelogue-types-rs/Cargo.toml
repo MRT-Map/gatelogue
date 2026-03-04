@@ -11,7 +11,7 @@ documentation = "https://mrt-map.github.io/gatelogue/docs/rs"
 keywords = ["gatelogue", "mrt"]
 categories = ["games"]
 authors = ["MRT Mapping Services", "7d <61975820+iiiii7d@users.noreply.github.com>"]
-rust-version = "1.68"
+rust-version = "1.82"
 
 [dependencies]
 enum_dispatch = "0.3.13"
