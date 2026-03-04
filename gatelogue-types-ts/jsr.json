@@ -2,6 +2,6 @@
   "name": "@mrt-map/gatelogue-types",
   "version": "3.0.0+12",
   "license": "GPL-3.0-only",
-  "exports": "./lib.ts",
+  "exports": "./src/lib.ts",
   "exclude": [".prettierignore"]
 }
