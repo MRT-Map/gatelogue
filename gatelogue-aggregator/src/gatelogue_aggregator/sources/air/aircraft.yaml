@@ -1,8 +1,9 @@
-- { name: Astrella XS, manu: Astrella, w: 11, h: 5, l: 11 }
-- { name: Astrella S, manu: Astrella, w: 15, h: 7, l: 16 }
-- { name: Astrella MS, manu: Astrella, w: 19, h: 9, l: 24 }
-- { name: Astrella M, manu: Astrella, w: 31, h: 15, l: 35 }
-- { name: Astrella ML, manu: Astrella, w: 35, h: 17, l: 48 }
+- { name: ITP1100 ELE, manu: IOI Vehicles, w: 11, h: 5, l: 11 }
+- { name: SI-A 1A, manu: SubwayIndustries-Aerospace, w: 15, h: 7, l: 16 }
+- { name: Fokker 27, manu: AutoDesignZ, w: 19, h: 9, l: 24 }
+- { name: Dassault Mercure, manu: AutoDesignZ, w: 31, h: 15, l: 35 }
+- { name: Tupolev TU-154, manu: AutoDesignZ, w: 35, h: 17, l: 48 }
+- { name: Stratus SA-2, manu: Stratus, w: 5, h: 4, l: 5 }
 - { name: Stratus SP-1, manu: Stratus, w: 13, h: 7, l: 14, mode: "seaplane" }
 - { name: BluJet S4-N, manu: BluFleet Manufacturing, w: 13, h: 8, l: 16 }
 - { name: BluJet S4-H, manu: BluFleet Manufacturing, w: 13, h: 8, l: 16 }
@@ -37,7 +38,7 @@
 - { name: Multi MHI-21, manu: Multi Heavy Industries, w: 13, h: 8, l: 16 }
 - { name: Climax N210, manu: Climax Industries, w: 35, h: 15, l: 37 }
 - { name: Soeing S1, manu: Soeing, w: 11, h: 6, l: 14, mode: "seaplane"}
-- { name: SI-A 1A, manu: SubwayIndustries-Aerospace, w: 15, h: 7, l: 15 }
+- { name: SI-A 1A (Tennoji), manu: SubwayIndustries-Aerospace, w: 15, h: 7, l: 15 }
 - { name: UDAC Dash Five, manu: UDAC, w: 35, h: 13, l: 41 }
 - { name: Omega Aerospace ST-2, manu: Omega Aerospace, w: 18, h: 8, l: 21, mode: "seaplane"}
 - { name: Marbing M-1000, manu: Marbing, w: 29, h: 16, l: 46 }

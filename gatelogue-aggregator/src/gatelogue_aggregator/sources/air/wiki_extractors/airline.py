@@ -33,15 +33,15 @@ class Astrella(RegexWikiAirline):
     def aircraft(matches: dict[str, str]) -> str | None:
         match matches["s"]:
             case "XS":
-                return "Astrella XS"
+                return "ITP1100 ELE"
             case "S":
-                return "Astrella S"
+                return "SI-A 1A"
             case "MS":
-                return "Astrella MS"
+                return "Fokker 27"
             case "M":
-                return "Astrella M"
+                return "Dassault Mercure"
             case "ML":
-                return "Astrella ML"
+                return "Tupolev TU-154"
             case other:
                 raise ValueError(other)
 
@@ -355,7 +355,10 @@ class Tennoji(RegexWikiAirline):
 
     @staticmethod
     def aircraft(matches: dict[str, str]) -> str | None:
-        return matches["ac1"] + " " + matches["ac2"]
+        name = (matches["ac1"] + " " + matches["ac2"]).strip()
+        if name == "SI-A 1A":
+            name += " (Tennoji)"
+        return name
 
     @staticmethod
     def mode(matches: dict[str, str]) -> str | None:

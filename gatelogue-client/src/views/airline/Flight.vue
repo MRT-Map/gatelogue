@@ -50,7 +50,7 @@ const aircraft = computed(() => props.flight.aircraft);
   background-color: var(--col-b);
   padding: 0.25em;
   font-size: 1.5em;
-  width: 12em;
+  width: 15em;
 }
 .flight-gates {
   background-color: var(--col-c);
