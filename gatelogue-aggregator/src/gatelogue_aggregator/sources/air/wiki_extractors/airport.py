@@ -324,7 +324,7 @@ class ERZ(RegexWikiAirport):
     airport_code = "ERZ"
     page_name = "Erzgard International Airport"
     regex = re.compile(
-        r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
+            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
 
     @staticmethod

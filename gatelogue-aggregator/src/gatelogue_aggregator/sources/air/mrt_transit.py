@@ -80,7 +80,7 @@ class MRTTransit(AirSource):
             ):
                 if airport_code == "" or pd.isna(flights):
                     continue
-                airport = self.airport(code=airport_code, modes={mode})
+                airport = self.airport(code=airport_code)
 
                 if pd.notna(airport_name):
                     if "(" in airport_name:

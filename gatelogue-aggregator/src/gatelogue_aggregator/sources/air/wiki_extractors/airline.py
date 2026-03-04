@@ -9,6 +9,7 @@ import pandas as pd
 import gatelogue_types as gt
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
+from gatelogue_aggregator.sources.air import hardcode
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
 from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
 
@@ -106,12 +107,12 @@ class IntraAir(AirSource):
 
                 g1 = tr("td")[3]("b")[1:]
                 gate1_code = (
-                    None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}"
+                    None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}" if airport1_code in hardcode.DUPLICATE_GATE_NUM else g1[1].string
                 )
 
                 g2 = tr("td")[5]("b")[1:]
                 gate2_code = (
-                    None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}"
+                    None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}" if airport2_code in hardcode.DUPLICATE_GATE_NUM else g2[1].string
                 )
 
                 aircraft_name = tr("td")[6].span.string
@@ -384,11 +385,11 @@ class RainerAirways(RegexWikiAirline):
     page_name = "Rainer Airways"
     regex = re.compile(
         r"""\|-
-\|RB(?P<code>.*?)
-\|(?:{{afn\|(?P<a1>.*?)}}|.*?\((?P<a12>.*?)\))
-\|(?P<g1>.*?)
-\|(?:{{afn\|(?P<a2>.*?)}}|.*?\((?P<a22>.*?)\))
-\|(?P<g2>.*?)
+\| ?RB(?P<code>.*?)
+\| ?(?:{{afn\|(?P<a1>.*?)}}|.*?\((?P<a12>.*?)\)|\[\[(?P<n1>.*?)]])
+\| ?(?P<g1>.*?)
+\| ?(?:{{afn\|(?P<a2>.*?)}}|.*?\((?P<a22>.*?)\)|\[\[(?P<n2>.*?)]])
+\| ?(?P<g2>.*?)
 """
     )
 
