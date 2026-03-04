@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/main/gatelogue-client/public/gat2-light.png)
+![](https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/main/gatelogue-client/public/gat3-light.png)
 
 ![Github Version](https://img.shields.io/github/v/release/MRT-Map/gatelogue)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=docs&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs)

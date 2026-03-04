@@ -52,7 +52,7 @@ const sortedObjects = computed(() =>
 
 <template>
   <nav>
-    <RouterLink to="/"><img src="/gat2-light.png" alt="logo" /></RouterLink>
+    <RouterLink to="/"><img src="/gat3-light.png" alt="logo" /></RouterLink>
     <hr />
     <template v-for="p in panels" :key="p.cat">
       <div

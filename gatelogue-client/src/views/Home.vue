@@ -6,7 +6,7 @@ const version = APP_VERSION;
 <template>
   <main>
     <div>
-      <img src="/gat2-light.png" alt="logo" />
+      <img src="/gat3-light.png" alt="logo" />
       <br />
       <span>Version {{ version }}</span
       ><br />

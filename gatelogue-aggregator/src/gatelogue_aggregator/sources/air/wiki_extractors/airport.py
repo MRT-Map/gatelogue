@@ -176,6 +176,7 @@ class DJE(AirSource):
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
                         width=width,
+                        mode="warp plane"
                     )
             elif caption == "Terminal 2":
                 concourse = ""
@@ -192,6 +193,7 @@ class DJE(AirSource):
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
                         width=15,
+                        mode="warp plane"
                     )
 
 
@@ -432,6 +434,7 @@ class AIX(AirSource):
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "Unavailable" else None,
                 width=gate_width,
+                mode="warp plane",
             )
 
 
@@ -491,6 +494,7 @@ class LFA(AirSource):
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
                 width=15 if size == "S" else None,
+                mode="warp plane"
             )
 
 
