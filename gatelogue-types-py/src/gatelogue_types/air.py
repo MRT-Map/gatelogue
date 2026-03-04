@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _Column, _FKColumn, _format_code, _format_str, _SetAttr, _AircraftColumn
+from gatelogue_types._util import _AircraftColumn, _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -20,7 +20,8 @@ class Aircraft:
         self.conn = conn
         self.name = _format_str(name)
         if self.conn.execute("SELECT 1 FROM Aircraft WHERE name = ?", (self.name,)).fetchone() is None:
-            raise ValueError(f"Aircraft {self.name} does not exist")
+            msg = f"Aircraft {self.name} does not exist"
+            raise ValueError(msg)
 
     @property
     def manufacturer(self):
@@ -49,10 +50,7 @@ class Aircraft:
     @width.setter
     def width(self, value: int):
         cur = self.conn.cursor()
-        cur.execute(
-            "UPDATE Aircraft SET width = :value WHERE name = :name",
-            dict(value=value, name=self.name)
-        )
+        cur.execute("UPDATE Aircraft SET width = :value WHERE name = :name", dict(value=value, name=self.name))
 
     @property
     def height(self) -> int:
@@ -65,10 +63,7 @@ class Aircraft:
     @height.setter
     def height(self, value: int):
         cur = self.conn.cursor()
-        cur.execute(
-            "UPDATE Aircraft SET height = :value WHERE name = :name",
-            dict(value=value, name=self.name)
-        )
+        cur.execute("UPDATE Aircraft SET height = :value WHERE name = :name", dict(value=value, name=self.name))
 
     @property
     def length(self) -> int:
@@ -81,10 +76,7 @@ class Aircraft:
     @length.setter
     def length(self, value: int):
         cur = self.conn.cursor()
-        cur.execute(
-            "UPDATE Aircraft SET length = :value WHERE name = :name",
-            dict(value=value, name=self.name)
-        )
+        cur.execute("UPDATE Aircraft SET length = :value WHERE name = :name", dict(value=value, name=self.name))
 
     @property
     def mode(self) -> AirMode:
@@ -97,28 +89,33 @@ class Aircraft:
     @mode.setter
     def mode(self, value: AirMode):
         cur = self.conn.cursor()
-        cur.execute(
-            "UPDATE Aircraft SET length = :value WHERE name = :name",
-            dict(value=value, name=self.name)
-        )
+        cur.execute("UPDATE Aircraft SET length = :value WHERE name = :name", dict(value=value, name=self.name))
 
     @classmethod
     def create(
-            cls,
-            conn: sqlite3.Connection,
-            *,
-            name: str,
-            manufacturer: str,
-            width: int,
-            height: int,
-            length: int,
-            mode: AirMode,
+        cls,
+        conn: sqlite3.Connection,
+        *,
+        name: str,
+        manufacturer: str,
+        width: int,
+        height: int,
+        length: int,
+        mode: AirMode,
     ) -> Self:
         """Internal use"""
         cur = conn.cursor()
-        cur.execute("INSERT INTO Aircraft (name, manufacturer, width, height, length, mode) VALUES (:name, :manufacturer, :width, :height, :length, :mode)", dict(
-            name=_format_str(name), manufacturer=manufacturer, width=width, height=height, length=length, mode=mode,
-        ))
+        cur.execute(
+            "INSERT INTO Aircraft (name, manufacturer, width, height, length, mode) VALUES (:name, :manufacturer, :width, :height, :length, :mode)",
+            dict(
+                name=_format_str(name),
+                manufacturer=manufacturer,
+                width=width,
+                height=height,
+                length=length,
+                mode=mode,
+            ),
+        )
         return cls(conn, name)
 
 

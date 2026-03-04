@@ -1,5 +1,4 @@
-use rusqlite::types::{FromSql, FromSqlResult};
-use rusqlite::types::ValueRef;
+use rusqlite::types::{FromSql, FromSqlResult, ValueRef};
 use strum_macros::EnumString;
 
 use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
@@ -78,7 +77,6 @@ impl AirFlight {
     get_column!("AirFlight", aircraft, Option<Aircraft>);
 }
 
-
 #[macro_export]
 macro_rules! get_aircraft_column {
     ($column_name:ident, $ColTy:ty) => {
@@ -106,9 +104,7 @@ macro_rules! get_aircraft_column {
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Aircraft(pub(crate) String);
 impl FromSql for Aircraft {
-    fn column_result(
-        value: ValueRef<'_>,
-    ) -> FromSqlResult<Self> {
+    fn column_result(value: ValueRef<'_>) -> FromSqlResult<Self> {
         Ok(Self(value.as_str()?.into()))
     }
 }

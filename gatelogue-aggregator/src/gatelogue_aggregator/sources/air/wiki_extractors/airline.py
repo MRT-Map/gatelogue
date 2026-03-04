@@ -4,7 +4,6 @@ import itertools
 import re
 from typing import TYPE_CHECKING
 
-import gatelogue_types as gt
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
@@ -15,6 +14,7 @@ from gatelogue_aggregator.sources.air.wiki_airline import RegexWikiAirline
 
 if TYPE_CHECKING:
     import bs4
+    import gatelogue_types as gt
 
     from gatelogue_aggregator.config import Config
 

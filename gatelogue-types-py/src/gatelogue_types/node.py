@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr, _AircraftColumn
+from gatelogue_types._util import _AircraftColumn, _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
 
 if TYPE_CHECKING:
     import sqlite3

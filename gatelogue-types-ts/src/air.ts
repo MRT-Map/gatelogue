@@ -1,6 +1,6 @@
-import {Node} from "./node.js";
+import { Node } from "./node.js";
 import { LocatedNode } from "./located.js";
-import type {GD} from "./lib.js";
+import type { GD } from "./lib.js";
 
 export type AirMode =
   | "helicopter"

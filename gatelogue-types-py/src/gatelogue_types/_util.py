@@ -4,12 +4,11 @@ import re
 import warnings
 from typing import TYPE_CHECKING, Literal, LiteralString
 
-
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
-    from gatelogue_types.node import Node
     from gatelogue_types import Aircraft
+    from gatelogue_types.node import Node
 
 
 def _format_str[T: str](s: T | None) -> T | None:
@@ -102,10 +101,7 @@ class _Column[T]:
         if self.formatter is not None:
             value = self.formatter(value)
         cur = instance.conn.cursor()
-        if self.sourced:
-            old_value = self.__get__(instance, type(instance))
-        else:
-            old_value = None
+        old_value = self.__get__(instance, type(instance)) if self.sourced else None
         cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
         if not self.sourced:
             return
@@ -341,18 +337,19 @@ class _AircraftColumn:
         if target_name is None:
             return None
         from gatelogue_types import Aircraft
+
         return Aircraft(instance.conn, target_name)
 
     def __set__(self, instance: Node, value: Aircraft | tuple[int, Aircraft]):
         _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.name)
 
     def _merge(
-            self,
-            instance1: Node,
-            instance2: Node,
-            str_instance1: str | None = None,
-            str_instance2: str | None = None,
-            warn_fn: Callable[[str], object] = warnings.warn,
+        self,
+        instance1: Node,
+        instance2: Node,
+        str_instance1: str | None = None,
+        str_instance2: str | None = None,
+        warn_fn: Callable[[str], object] = warnings.warn,
     ):
         _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
 

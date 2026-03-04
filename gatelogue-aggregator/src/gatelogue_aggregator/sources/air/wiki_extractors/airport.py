@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
-import gatelogue_types as gt
 import pandas as pd
 
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link
@@ -12,6 +11,7 @@ from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
 
 if TYPE_CHECKING:
     import bs4
+    import gatelogue_types as gt
 
     from gatelogue_aggregator.config import Config
 
@@ -176,7 +176,7 @@ class DJE(AirSource):
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
                         width=width,
-                        mode="warp plane"
+                        mode="warp plane",
                     )
             elif caption == "Terminal 2":
                 concourse = ""
@@ -193,7 +193,7 @@ class DJE(AirSource):
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
                         width=15,
-                        mode="warp plane"
+                        mode="warp plane",
                     )
 
 
@@ -494,7 +494,7 @@ class LFA(AirSource):
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "?" else None,
                 width=15 if size == "S" else None,
-                mode="warp plane"
+                mode="warp plane",
             )
 
 

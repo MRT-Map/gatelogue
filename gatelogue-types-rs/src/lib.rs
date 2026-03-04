@@ -36,7 +36,7 @@
 //! # Ok(()) }
 //! ```
 //!
-//! Querying the underlying SQLite database directly with `rusqlite` is generally more efficient and faster.
+//! Querying the underlying `SQLite` database directly with `rusqlite` is generally more efficient and faster.
 //! It is also the only way to access the `*Source` tables, if you retrieved the database with those.
 //!
 //! ```rust
