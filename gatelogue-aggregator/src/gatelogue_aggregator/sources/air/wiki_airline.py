@@ -3,10 +3,10 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING, ClassVar
 
+import gatelogue_types as gt
+
 from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
-
-import gatelogue_types as gt
 
 if TYPE_CHECKING:
     from gatelogue_aggregator.config import Config
@@ -67,7 +67,13 @@ class RegexWikiAirline(AirSource):
             gate2 = self.gate(code=gate2_code, airport=airport2, mode=mode, airline=airline)
 
             self.flight(airline=airline, code=flight_code, from_=gate1, to=gate2, aircraft=aircraft_name)
-            self.flight(airline=airline, code=self.process_flight_code_back(flight_code), from_=gate2, to=gate1, aircraft=aircraft_name)
+            self.flight(
+                airline=airline,
+                code=self.process_flight_code_back(flight_code),
+                from_=gate2,
+                to=gate1,
+                aircraft=aircraft_name,
+            )
 
             airport3_code = matches.get("a3") or matches.get("a32")
             airport3_name = matches.get("n3")

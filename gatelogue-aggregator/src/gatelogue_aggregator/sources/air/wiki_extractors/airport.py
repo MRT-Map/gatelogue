@@ -3,9 +3,9 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+import gatelogue_types as gt
 import pandas as pd
 
-import gatelogue_types as gt
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air.wiki_airport import RegexWikiAirport
@@ -36,12 +36,26 @@ class PCE(RegexWikiAirport):
 class MWT(RegexWikiAirport):
     airport_code = "MWT"
     page_name = "Miu Wan Tseng Tsz Leng International Airport"
-    regex = re.compile(r"\|-\n\|(?P<code>[PD]?\d*?A?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>.*?)\n|\n)")
+    regex = re.compile(
+        r"\|-\n\|(?P<code>[PD]?\d*?A?)\n\|(?:\[\[(?:[^|\]]*?\|)?(?P<airline>[^|]*?)]]|(?P<airline2>.*?)\n|\n)"
+    )
 
     @staticmethod
     def width(matches: dict[str, str]) -> int | None:
         code = matches["code"].removesuffix("A")
-        return None if code.startswith("D") else 9 if code.startswith("P") else 11 if 83 <= int(code) <= 103 else 41 if 61 <= int(code) <= 68 else 33 if 69 <= int(code) <= 76 else 15
+        return (
+            None
+            if code.startswith("D")
+            else 9
+            if code.startswith("P")
+            else 11
+            if 83 <= int(code) <= 103
+            else 41
+            if 61 <= int(code) <= 68
+            else 33
+            if 69 <= int(code) <= 76
+            else 15
+        )
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -161,7 +175,7 @@ class DJE(AirSource):
                         code=code,
                         airport=airport,
                         airline=None if airline is None else self.airline(name=airline),
-                        width=width
+                        width=width,
                     )
             elif caption == "Terminal 2":
                 concourse = ""
@@ -214,7 +228,15 @@ class DFM(RegexWikiAirport):
     @staticmethod
     def width(matches: dict[str, str]) -> int | None:
         code = int(matches["code"])
-        return 35 if code in (1, 2, 3, 13, 14, 15) else 31 if 65 <= code <= 71 else 17 if code in (72, 73, 35, 36, 37, 62, 63, 64) else 15
+        return (
+            35
+            if code in (1, 2, 3, 13, 14, 15)
+            else 31
+            if 65 <= code <= 71
+            else 17
+            if code in (72, 73, 35, 36, 37, 62, 63, 64)
+            else 15
+        )
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -257,7 +279,7 @@ class DBI(AirSource):
                     airport=airport,
                     airline=None if airline is None else self.airline(name=airline),
                     width=width,
-                    mode="warp plane"
+                    mode="warp plane",
                 )
 
 
@@ -324,7 +346,7 @@ class ERZ(RegexWikiAirport):
     airport_code = "ERZ"
     page_name = "Erzgard International Airport"
     regex = re.compile(
-            r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
+        r"\|-\n\|(?P<code>.*?)\n\|(?P<size>.).*?\n\|(?:\[\[(?P<airline>.*?)(?:\|[^]]*?|)]]|(?P<airline2>.+?)|)\n",
     )
 
     @staticmethod
@@ -361,7 +383,15 @@ class ATC(RegexWikiAirport):
     @staticmethod
     def width(matches: dict[str, str]) -> int | None:
         code = matches["code"]
-        return 67 if code in ("W9", "W10", "E9", "E10") else 49 if code.startswith(("N", "S", "E", "W")) else 25 if code.startswith("H") else None
+        return (
+            67
+            if code in ("W9", "W10", "E9", "E10")
+            else 49
+            if code.startswith(("N", "S", "E", "W"))
+            else 25
+            if code.startswith("H")
+            else None
+        )
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
@@ -392,7 +422,7 @@ class AIX(AirSource):
         old_gate_width = None
         for gate_code, gate_size, airline in d:
             if pd.isna(gate_size):
-                gate_width = old_gate_width  # noqa: PLW2901
+                gate_width = old_gate_width
             else:
                 gate_size = str(gate_size).strip()
                 gate_width = 45 if gate_size == "Large" else 33 if gate_size == "Medium" else 15
@@ -401,7 +431,7 @@ class AIX(AirSource):
                 code=gate_code,
                 airport=airport,
                 airline=self.airline(name=airline) if pd.notna(airline) and airline != "Unavailable" else None,
-                width=gate_width
+                width=gate_width,
             )
 
 

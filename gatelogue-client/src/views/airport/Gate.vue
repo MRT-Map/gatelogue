@@ -10,13 +10,13 @@ const props = defineProps<{
 }>();
 const oneFlight = computed(() => {
   if (
-      (props.gate.flightsFromHere.length > 0 ||
-          props.gate.flightsToHere.length > 0)
+    props.gate.flightsFromHere.length > 0 ||
+    props.gate.flightsToHere.length > 0
   ) {
-    return (props.gate.flightsFromHere[0] ?? props.gate.flightsToHere[0]!)
+    return props.gate.flightsFromHere[0] ?? props.gate.flightsToHere[0]!;
   }
   return undefined;
-})
+});
 const airline = computed(() => {
   if (props.gate.airline) return props.gate.airline;
   return oneFlight.value?.airline;
@@ -25,20 +25,21 @@ const gateWidth = computed(() => {
   // eslint-disable-next-line
   let width: number | null | undefined = props.gate.width;
   if (width !== null) {
-    return width.toString()
+    return width.toString();
   }
   width = oneFlight.value?.aircraft?.width;
   if (width !== undefined) {
-    return `≥${width}`
+    return `≥${width}`;
   }
-  return undefined
-})
+  return undefined;
+});
 </script>
 
 <template>
   <td class="gate-code">{{ gate.code }}</td>
   <td class="gate-size-mode">
-    <b>{{ gateWidth }}</b><br>{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
+    <b>{{ gateWidth }}</b
+    ><br />{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
   </td>
   <td class="gate-airline">
     <template v-if="airline">

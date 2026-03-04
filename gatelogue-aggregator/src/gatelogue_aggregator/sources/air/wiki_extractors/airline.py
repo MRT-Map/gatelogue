@@ -4,9 +4,9 @@ import itertools
 import re
 from typing import TYPE_CHECKING
 
+import gatelogue_types as gt
 import pandas as pd
 
-import gatelogue_types as gt
 from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air import hardcode
@@ -107,12 +107,24 @@ class IntraAir(AirSource):
 
                 g1 = tr("td")[3]("b")[1:]
                 gate1_code = (
-                    None if len(g1) == 0 else g1[0].string if len(g1) == 1 else f"T{g1[0].string}-{g1[1].string}" if airport1_code in hardcode.DUPLICATE_GATE_NUM else g1[1].string
+                    None
+                    if len(g1) == 0
+                    else g1[0].string
+                    if len(g1) == 1
+                    else f"T{g1[0].string}-{g1[1].string}"
+                    if airport1_code in hardcode.DUPLICATE_GATE_NUM
+                    else g1[1].string
                 )
 
                 g2 = tr("td")[5]("b")[1:]
                 gate2_code = (
-                    None if len(g2) == 0 else g2[0].string if len(g2) == 1 else f"T{g2[0].string}-{g2[1].string}" if airport2_code in hardcode.DUPLICATE_GATE_NUM else g2[1].string
+                    None
+                    if len(g2) == 0
+                    else g2[0].string
+                    if len(g2) == 1
+                    else f"T{g2[0].string}-{g2[1].string}"
+                    if airport2_code in hardcode.DUPLICATE_GATE_NUM
+                    else g2[1].string
                 )
 
                 aircraft_name = tr("td")[6].span.string
@@ -398,7 +410,13 @@ class RainerAirways(RegexWikiAirline):
 
     @staticmethod
     def mode(matches: dict[str, str]) -> gt.AirMode | None:
-        return "seaplane" if matches["code"].startswith("S") else "helicopter" if matches["code"].startswith("H") else "warp plane"
+        return (
+            "seaplane"
+            if matches["code"].startswith("S")
+            else "helicopter"
+            if matches["code"].startswith("H")
+            else "warp plane"
+        )
 
 
 @AIRLINE_SOURCES.append
@@ -406,7 +424,7 @@ class MarbleAir(RegexWikiAirline):
     airline_name = "MarbleAir"
     page_name = "MarbleAir"
     regex = re.compile(
-            r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|(?P<ac>.*?)\n\|Active"
+        r"\|-\n\|'''MA(?P<code>.*?)'''\n.*?\n\|.*?\((?P<a1>.*?)\)\n\|.*?\((?P<a2>.*?)\)\n\|(?P<ac>.*?)\n\|Active"
     )
 
     @staticmethod
@@ -546,7 +564,15 @@ class Lilyflower(AirSource):
         airline = self.airline(name="Lilyflower Airlines", link=get_wiki_link("Lilyflower Airlines"))
 
         d = list(
-            zip(self.df["Flight"], self.df["IATA"], self.df["Gate"], self.df["IATA.1"], self.df["Gate.1"], self.df["Plane"], strict=False)
+            zip(
+                self.df["Flight"],
+                self.df["IATA"],
+                self.df["Gate"],
+                self.df["IATA.1"],
+                self.df["Gate.1"],
+                self.df["Plane"],
+                strict=False,
+            )
         )
 
         for flight, a1, g1, a2, g2, aircraft_name in d:
@@ -560,7 +586,7 @@ class Lilyflower(AirSource):
                 airport2_code=a2,
                 gate1_code=g1,
                 gate2_code=g2,
-                aircraft_name=aircraft_name
+                aircraft_name=aircraft_name,
             )
 
 
@@ -727,7 +753,7 @@ class Caelus(AirSource):
                 flight_code2=code2,
                 airport1_code=a1,
                 airport2_code=a2,
-                aircraft_name=aircraft_name
+                aircraft_name=aircraft_name,
             )
 
         table = next(a for a in self.html4("table") if "Operated by" in str(a))
@@ -777,7 +803,14 @@ class Cascadia(RegexWikiAirline):
 
     @staticmethod
     def aircraft(matches: dict[str, str]) -> str | None:
-        return matches["ac2"].strip().replace("P1315", "P 1315").replace("<br>", " ").replace("<small>", "").replace("</small>", "")
+        return (
+            matches["ac2"]
+            .strip()
+            .replace("P1315", "P 1315")
+            .replace("<br>", " ")
+            .replace("<small>", "")
+            .replace("</small>", "")
+        )
 
 
 @AIRLINE_SOURCES.append
@@ -819,7 +852,7 @@ class Waviation(AirSource):
                         airport2_code=a2,
                         gate1_code=g1,
                         gate2_code=g2,
-                        aircraft_name=aircraft_name
+                        aircraft_name=aircraft_name,
                     )
             elif "(1200s)" in str(caption):
                 for tr in table.tbody("tr")[1:]:

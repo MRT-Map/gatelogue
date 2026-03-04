@@ -7,8 +7,9 @@ from gatelogue_aggregator.downloader import get_wiki_link, get_wiki_text
 from gatelogue_aggregator.source import AirSource
 
 if TYPE_CHECKING:
-    from gatelogue_aggregator.config import Config
     import gatelogue_types as gt
+
+    from gatelogue_aggregator.config import Config
 
 
 class _NameDescriptor:

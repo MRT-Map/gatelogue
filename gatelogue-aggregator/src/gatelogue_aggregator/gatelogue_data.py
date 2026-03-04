@@ -9,11 +9,11 @@ from typing import TYPE_CHECKING, Literal
 import gatelogue_types as gt
 import msgspec
 import rich
+from gatelogue_types import AirMode
 
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
 from gatelogue_aggregator.sources.warp_api import WarpAPI
-from gatelogue_types import AirMode
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterable
@@ -71,11 +71,20 @@ class GatelogueData:
             h: int
             l: int
             mode: AirMode = "warp plane"
+
         with (Path(__file__).parent / "sources" / "air" / "aircraft.yaml").open() as f:
             file = msgspec.yaml.decode(f.read(), type=list[Yaml])
 
         for aircraft in file:
-            gt.Aircraft.create(self.gd.conn, name=aircraft.name, manufacturer=aircraft.manu, width=aircraft.w, height=aircraft.h, length=aircraft.l, mode=aircraft.mode)
+            gt.Aircraft.create(
+                self.gd.conn,
+                name=aircraft.name,
+                manufacturer=aircraft.manu,
+                width=aircraft.w,
+                height=aircraft.h,
+                length=aircraft.l,
+                mode=aircraft.mode,
+            )
 
     def _merge_equivalent_nodes(self, pass_: int):
         merged: set[int] = set()
