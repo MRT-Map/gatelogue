@@ -64,11 +64,10 @@ pub use util::ID;
 
 use crate::util::ConnectionExt;
 
-// TODO
 pub const URL: &str =
-    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db";
+    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
 pub const URL_NO_SOURCES: &str =
-    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db";
+    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db";
 
 pub struct GD(pub Connection);
 

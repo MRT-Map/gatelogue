@@ -76,9 +76,8 @@ if TYPE_CHECKING:
     # pyrefly: ignore [missing-import]
     import aiohttp
 
-# TODO
-URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db"
-URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db"
+URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
+URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db"
 
 
 class GD:

@@ -3,7 +3,6 @@ Usage
 
 Data
 ----
-
 Gatelogue data is compiled into a SQLite database. Its schema / data format is at :doc:`data_format`.
 
 .. important::
@@ -12,11 +11,9 @@ Gatelogue data is compiled into a SQLite database. Its schema / data format is a
 
 Raw
 +++
-.. todo
+Use a HTTP GET request to https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data-ns.db to retrieve the data.
 
-Use a HTTP GET request to https://raw.githubusercontent.com/MRT-Map/gatelogue/dist-v3/data-ns.db to retrieve the data.
-
-A version with sources is available, at https://raw.githubusercontent.com/MRT-Map/gatelogue/dist-v3/data.db
+A version with sources is available, at https://raw.githubusercontent.com/MRT-Map/gatelogue/dist/data.db
 
 gatelogue-types (Python)
 ++++++++++++++++++++++++

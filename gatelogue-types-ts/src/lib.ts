@@ -113,11 +113,10 @@ const SQL: SqlJsStatic =
         locateFile: (file) => `https://sql.js.org/dist/${file}`,
       });
 
-// TODO
 const URL =
-  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data.db";
+  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
 const URL_NO_SOURCES =
-  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist-v3/data-ns.db";
+  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db";
 
 export class GD {
   db: Database;
