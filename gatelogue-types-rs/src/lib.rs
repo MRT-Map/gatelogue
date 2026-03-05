@@ -8,7 +8,7 @@
 //! # To import directly from the repository:
 //! gatelogue-types = { git = "https://github.com/mrt-map/gatelogue", package = "gatelogue-types", features = [...] }
 //! ```
-//! where `features` as denoted by `...` are `reqwest_get`, `surf_get` and `ureq_get`.
+//! Features as denoted by `...` include `reqwest_get`, `surf_get`, `ureq_get` (to download with `reqwest`, `surf` and `ureq` respectively) and `bundled` (to bundle SQLite).
 //!
 //! # Usage
 //! To retrieve the data:
