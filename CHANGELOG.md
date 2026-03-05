@@ -1,8 +1,16 @@
 # Changelog
 
 ## Planned
-* `RailConnection`, `SeaConnection`, `BusConnection` as nodes instead of edges
 * add rail, sea and bus to client/data viewer
+
+## v3.0.1+12 (20260305)
+* `gatelogue-types` (ts)
+  * fix jsr publishing
+  * fix documentation not showing up
+  * fix `*Mode`s, `Proximity`, `World`, `WarpType` not exporting
+* `gatelogue-types` (py)
+  * remove extra backticks
+  * add `STRICT` to `Aircraft`
 
 ## v3.0.0+12 (20260304)
 * `gatelogue-aggregator`
