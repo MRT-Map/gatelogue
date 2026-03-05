@@ -2,7 +2,7 @@ use rusqlite::{Connection, Params, Row};
 
 use crate::error::Result;
 
-pub type ID = u16;
+pub type ID = u32;
 
 #[macro_export]
 macro_rules! get_column {

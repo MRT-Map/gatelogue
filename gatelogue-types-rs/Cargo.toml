@@ -1,6 +1,6 @@
 [package]
 name = "gatelogue-types"
-version = "3.0.1+12"
+version = "3.0.2+12"
 edition = "2021"
 description = "Types for loading and reading Gatelogue data"
 license = "GPL-3.0-only"
