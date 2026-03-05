@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Format &mdash; gatelogue-aggregator 3.0.0 documentation</title>
+  <title>Data Format &mdash; gatelogue-aggregator 3.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/data_format.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=acc74ff5"></script>
+      <script src="_static/documentation_options.js?v=08bfcbec"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -233,7 +233,7 @@
 <span class="w">    </span><span class="n">height</span><span class="w">        </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">    </span><span class="k">length</span><span class="w">       </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">    </span><span class="k">mode</span><span class="w">         </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">mode</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;helicopter&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;seaplane&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;warp plane&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;traincarts plane&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
-<span class="p">);</span>
+<span class="p">)</span><span class="w"> </span><span class="k">STRICT</span><span class="p">;</span>
 
 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">BusCompany</span>
