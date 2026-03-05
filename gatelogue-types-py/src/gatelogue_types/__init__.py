@@ -1,5 +1,5 @@
 """
-``Python utility library for using Gatelogue data in Python projects. It will load the database for you to access via ORM or raw SQL.
+Python utility library for using Gatelogue data in Python projects. It will load the database for you to access via ORM or raw SQL.
 
 Installation
 ------------
