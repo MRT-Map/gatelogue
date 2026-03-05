@@ -148,7 +148,7 @@ CREATE TABLE Aircraft
     height        INTEGER NOT NULL,
     length       INTEGER NOT NULL,
     mode         TEXT NOT NULL CHECK ( mode IN ('helicopter', 'seaplane', 'warp plane', 'traincarts plane') )
-);
+) STRICT;
 
 
 CREATE TABLE BusCompany
