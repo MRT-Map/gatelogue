@@ -60,14 +60,22 @@ import initSqlJs, {
   type SqlValue,
 } from "sql.js/dist/sql-wasm.js";
 import { type ID, Node } from "./node.js";
-import { AirAirline, AirAirport, AirFlight, AirGate } from "./air.js";
-import { LocatedNode } from "./located.js";
+import {
+  AirAirline,
+  AirAirport,
+  AirFlight,
+  AirGate,
+  Aircraft,
+  type AirMode,
+} from "./air.js";
+import { LocatedNode, Proximity, type World } from "./located.js";
 import {
   BusBerth,
   BusCompany,
   BusConnection,
   BusLine,
   BusStop,
+  type BusMode,
 } from "./bus.js";
 import {
   RailCompany,
@@ -75,10 +83,18 @@ import {
   RailLine,
   RailPlatform,
   RailStation,
+  type RailMode,
 } from "./rail.js";
-import { SeaCompany, SeaConnection, SeaDock, SeaLine, SeaStop } from "./sea.js";
-import { SpawnWarp } from "./spawnWarp.js";
-import { Town } from "./town.js";
+import {
+  SeaCompany,
+  SeaConnection,
+  SeaDock,
+  SeaLine,
+  SeaStop,
+  type SeaMode,
+} from "./sea.js";
+import { SpawnWarp, type WarpType } from "./spawnWarp.js";
+import { Town, type Rank } from "./town.js";
 export {
   type ID,
   Node,
@@ -87,23 +103,32 @@ export {
   AirAirport,
   AirFlight,
   AirGate,
+  Aircraft,
+  type AirMode,
   BusBerth,
   BusCompany,
   BusConnection,
   BusLine,
   BusStop,
+  type BusMode,
   RailCompany,
   RailConnection,
   RailLine,
   RailPlatform,
   RailStation,
+  type RailMode,
   SeaCompany,
   SeaConnection,
   SeaDock,
   SeaLine,
   SeaStop,
+  type SeaMode,
   SpawnWarp,
+  type WarpType,
   Town,
+  type Rank,
+  Proximity,
+  type World,
 };
 
 const SQL: SqlJsStatic =
