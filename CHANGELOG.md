@@ -3,6 +3,9 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.4+12 (20260305)
+* `gatelogue-types` (ts): fix `Town` attributes querying wrong table
+
 ## v3.0.3+12 (20260305)
 * `gatelogue-types` (rs, ts): add missing `s` to `vehicle`
 
