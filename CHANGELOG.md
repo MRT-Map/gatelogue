@@ -3,6 +3,9 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.5+12 (20260305)
+* `gatelogue-types` (ts): fix `BusBerth`, `SeaDock`, `RailPlatform` `stop`/`station` querying wrong column
+
 ## v3.0.4+12 (20260305)
 * `gatelogue-types` (ts): fix `Town` attributes querying wrong table
 

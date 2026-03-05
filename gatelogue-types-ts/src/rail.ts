@@ -135,7 +135,7 @@ export class RailPlatform extends Node {
     return this.getColumn("RailPlatform", "code");
   }
   get station(): RailStation {
-    return new RailStation(this.getColumn("RailPlatform", "code"), this.gd);
+    return new RailStation(this.getColumn("RailPlatform", "station"), this.gd);
   }
 
   get connectionsFromHere(): RailConnection[] {

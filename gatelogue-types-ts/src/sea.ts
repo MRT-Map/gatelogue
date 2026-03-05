@@ -133,7 +133,7 @@ export class SeaDock extends Node {
     return this.getColumn("SeaDock", "code");
   }
   get stop(): SeaStop {
-    return new SeaStop(this.getColumn("SeaDock", "code"), this.gd);
+    return new SeaStop(this.getColumn("SeaDock", "stop"), this.gd);
   }
 
   get connectionsFromHere(): SeaConnection[] {

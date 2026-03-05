@@ -133,7 +133,7 @@ export class BusBerth extends Node {
     return this.getColumn("BusBerth", "code");
   }
   get stop(): BusStop {
-    return new BusStop(this.getColumn("BusBerth", "code"), this.gd);
+    return new BusStop(this.getColumn("BusBerth", "stop"), this.gd);
   }
 
   get connectionsFromHere(): BusConnection[] {
