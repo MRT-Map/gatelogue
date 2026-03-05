@@ -10,8 +10,8 @@ pub enum RailMode {
     Cart,
     #[strum(serialize = "traincarts")]
     TrainCarts,
-    #[strum(serialize = "vehicle")]
-    Vehicle,
+    #[strum(serialize = "vehicles")]
+    Vehicles,
 }
 from_sql_for_enum!(RailMode);
 

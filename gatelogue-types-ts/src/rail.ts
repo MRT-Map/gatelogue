@@ -1,7 +1,7 @@
 import { Node } from "./node.js";
 import { LocatedNode } from "./located.js";
 
-export type RailMode = "warp" | "cart" | "traincarts" | "vehicle";
+export type RailMode = "warp" | "cart" | "traincarts" | "vehicles";
 
 export class RailCompany extends Node {
   get name(): string {

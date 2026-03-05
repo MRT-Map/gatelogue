@@ -3,6 +3,9 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.3+12 (20260305)
+* `gatelogue-types` (rs, ts): add missing `s` to `vehicle`
+
 ## v3.0.2+12 (20260305)
 * `gatelogue-types` (rs): change `ID` type from `u16` to `u32`
 
