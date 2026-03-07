@@ -40,7 +40,7 @@ class IntraBusWarp(BusSource):
             self.stop(
                 codes={name},
                 company=company,
-                world="New" if warp.world_uuid == "253ced62-9637-4f7b-a32d-4e3e8e767bd1" else "Old",
+                world=warp.world,
                 coordinates=warp.coordinates,
             )
             names.append(name)

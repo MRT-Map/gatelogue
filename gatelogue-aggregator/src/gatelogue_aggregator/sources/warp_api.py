@@ -3,6 +3,7 @@ from collections.abc import Iterator
 from typing import ClassVar, TypedDict
 from uuid import UUID
 
+import gatelogue_types as gt
 import msgspec
 
 from gatelogue_aggregator.config import Config
@@ -28,6 +29,10 @@ class Warp(msgspec.Struct):
     @property
     def coordinates(self) -> tuple[int, int]:
         return round(self.x), round(self.z)
+
+    @property
+    def world(self) -> gt.World | None:
+        return "New" if self.world_uuid == UUID("253ced62-9637-4f7b-a32d-4e3e8e767bd1") else "Old" if self.world_uuid == UUID("59e29aa1-7e98-4d40-bac7-594905b734a9") else None
 
 
 class WarpAPI:
