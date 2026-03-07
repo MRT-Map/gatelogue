@@ -16,6 +16,10 @@ export abstract class Node {
     return gd.getNode(i);
   }
 
+  get type(): string {
+    return this.getColumn("Node", "type");
+  }
+
   protected getColumn<T extends SqlValue>(
     tableName: string,
     columnName: string,
