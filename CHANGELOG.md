@@ -3,6 +3,9 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.7+12 (20260308)
+* `gatelogue-types`: add `type` getter
+
 ## v3.0.6+12 (20260307)
 * `gatelogue-aggregator`: fix `World` detection from Warp API
 * `gatelogue-types`: loosen `sql.js` requirement
