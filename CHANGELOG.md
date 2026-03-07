@@ -3,6 +3,10 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.6+12 (20260307)
+* `gatelogue-aggregator`: fix `World` detection from Warp API
+* `gatelogue-types`: loosen `sql.js` requirement
+
 ## v3.0.5+12 (20260305)
 * `gatelogue-types` (ts): fix `BusBerth`, `SeaDock`, `RailPlatform` `stop`/`station` querying wrong column
 
