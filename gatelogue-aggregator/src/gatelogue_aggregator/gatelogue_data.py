@@ -221,7 +221,8 @@ class GatelogueData:
             elif isinstance(n, gt.RailStation):
                 queue |= {c.to.station.i for c in n.connections_from_here} & nodes
                 queue |= {c.from_.station.i for c in n.connections_to_here} & nodes
-        components.remove(max(components, key=len))
+        if len(components) > 0:
+            components.remove(max(components, key=len))
         return components
 
     def _proximity(self):

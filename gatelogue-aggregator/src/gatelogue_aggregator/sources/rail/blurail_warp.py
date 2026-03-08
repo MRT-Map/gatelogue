@@ -44,6 +44,7 @@ class BluRailWarp(RailSource):
                 "Seoland Powell Street": "SPS",
                 "Titsensaki Palm Shores": "TPS",
                 "Washingcube Airfield": "WCA",
+                "Newfounded": "NFD15",
             }.get(name, match.group(2))
             self.station(codes={code}, company=company, name=name, world="New", coordinates=warp.coordinates)
             names.append(name)

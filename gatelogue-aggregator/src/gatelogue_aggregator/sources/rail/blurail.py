@@ -53,6 +53,7 @@ class BluRail(RailSource):
                     "SPN": {"FDR"},
                     "ILI": {"ITC"},
                     **({"MCN": {"MUR"}} if line_code == "12" else {}),
+                    **({"NFD": {"NFD15"}} if line_code == "15" else {}),
                 }.get(code, {code})
                 name = result.group("name").strip()
                 if name == "":
