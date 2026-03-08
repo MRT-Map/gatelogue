@@ -45,3 +45,6 @@ jobs:
   trigger-map:
     uses: ./.github/workflows/trigger-map.yml
     needs: update
+    with:
+      pat: ${{ secrets.PAT }}
+
