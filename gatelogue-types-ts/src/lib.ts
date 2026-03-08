@@ -58,7 +58,7 @@ import initSqlJs, {
   type SqlJsStatic,
   type BindParams,
   type SqlValue,
-} from "sql.js/dist/sql-wasm.js";
+} from "sql.js";
 import { type ID, Node } from "./node.js";
 import {
   AirAirline,
@@ -131,13 +131,6 @@ export {
   type World,
 };
 
-const SQL: SqlJsStatic =
-  typeof window === "undefined"
-    ? await initSqlJs()
-    : await initSqlJs({
-        locateFile: (file) => `https://sql.js.org/dist/${file}`,
-      });
-
 const URL =
   "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
 const URL_NO_SOURCES =
@@ -146,12 +139,21 @@ const URL_NO_SOURCES =
 export class GD {
   db: Database;
 
-  constructor(data: Uint8Array) {
+  constructor(SQL: SqlJsStatic, data: Uint8Array) {
     this.db = new SQL.Database(data);
   }
 
-  static async get(sources = false): Promise<GD> {
+  static async getSQL() {
+    return typeof window === "undefined"
+      ? await initSqlJs()
+      : await initSqlJs({
+        locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      });
+  }
+
+  static async get(SQL?: SqlJsStatic, sources = false): Promise<GD> {
     return new GD(
+      SQL ?? await this.getSQL(),
       await fetch(sources ? URL : URL_NO_SOURCES).then((res) => res.bytes()),
     );
   }
