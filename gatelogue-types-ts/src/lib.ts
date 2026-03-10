@@ -151,7 +151,7 @@ export class GD {
       });
   }
 
-  static async get(SQL?: SqlJsStatic, sources = false): Promise<GD> {
+  static async get(sources = false, SQL?: SqlJsStatic): Promise<GD> {
     return new GD(
       SQL ?? await this.getSQL(),
       await fetch(sources ? URL : URL_NO_SOURCES).then((res) => res.bytes()),

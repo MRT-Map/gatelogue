@@ -3,6 +3,10 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.0.8+12 (20260310)
+* `gatelogue-types` (ts): make SQL object customisable
+* `gatelogue-client`: index DB
+
 ## v3.0.7+12 (20260308)
 * `gatelogue-types`: add `type` getter
 
