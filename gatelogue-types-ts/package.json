@@ -52,7 +52,7 @@
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.8",
     "@types/sql.js": "1.4.9",
-    "eslint": "10.0.2",
+    "eslint": "10.0.3",
     "eslint-config-prettier": "10.1.8",
     "npm-run-all2": "8.0.4",
     "prettier": "3.8.1",
