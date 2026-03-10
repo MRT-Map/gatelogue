@@ -147,7 +147,7 @@ export class GD {
     return typeof window === "undefined"
       ? await initSqlJs()
       : await initSqlJs({
-        locateFile: (file) => `https://sql.js.org/dist/${file}`,
+        locateFile: () => `https://sql.js.org/dist/sql-wasm.wasm`,
       });
   }
 
