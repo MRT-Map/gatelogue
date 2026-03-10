@@ -143,7 +143,7 @@ export class GD {
     this.db = new SQL.Database(data);
   }
 
-  static async getSQL() {
+  static async getSQL(): Promise<SqlJsStatic> {
     return typeof window === "undefined"
       ? await initSqlJs()
       : await initSqlJs({
