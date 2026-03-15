@@ -18,18 +18,14 @@
    .. autosummary::
    
       ~GD.__init__
-      ~GD.aiohttp_get
       ~GD.create
       ~GD.drop_sources
       ~GD.from_bytes
       ~GD.from_bytes_readonly
+      ~GD.get
+      ~GD.get_async
       ~GD.get_node
-      ~GD.httpx_get
-      ~GD.niquests_get
       ~GD.nodes
-      ~GD.requests_get
-      ~GD.urllib3_get
-      ~GD.urllib_get
    
    
 
