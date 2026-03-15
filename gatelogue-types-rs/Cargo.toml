@@ -19,7 +19,7 @@ thiserror = "2.0"
 anyhow = "1.0"
 strum = "0.28.0"
 strum_macros = "0.28.0"
-rusqlite = { version = "0.38.0", features = ["serialize"] }
+rusqlite = { version = "0.39.0", features = ["serialize"] }
 
 [features]
 bundled = ["rusqlite/bundled"]
