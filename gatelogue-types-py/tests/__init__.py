@@ -1,20 +1,46 @@
+import asyncio
+
 from gatelogue_types import GD
 from gatelogue_types.air import AirAirline, AirAirport, AirFlight, AirGate
 from gatelogue_types.bus import BusCompany, BusStop
 
 
-def test_get():
-    gd = GD.urllib_get(sources=True)
+def test_urllib_with_sources():
+    gd = GD.get(sources=True)
     print(gd.timestamp, gd.version)
     assert gd.has_sources
     assert True
 
 
-def test_get_no_sources():
-    gd = GD.urllib_get()
+def test_urllib_no_sources():
+    gd = GD.get()
     print(gd.timestamp, gd.version)
     assert not gd.has_sources
     assert True
+
+
+def test_requests():
+    GD.get(getter=GD.Getters.requests)
+
+
+def test_niquests():
+    GD.get(getter=GD.Getters.niquests)
+
+
+def test_httpx():
+    GD.get(getter=GD.Getters.httpx)
+
+
+def test_urllib3():
+    GD.get(getter=GD.Getters.urllib3)
+
+
+def test_aiohttp():
+    asyncio.run(GD.get_async(getter=GD.Getters.aiohttp))
+
+
+def test_rnet():
+    asyncio.run(GD.get_async(getter=GD.Getters.rnet))
 
 
 def test_air_gate_merge():
@@ -22,7 +48,7 @@ def test_air_gate_merge():
 
     airport = AirAirport.create(gd.conn, 0, code="AAA")
     gate1 = AirGate.create(gd.conn, 0, airport=airport, code=None)
-    gate2 = AirGate.create(gd.conn, 0, airport=airport, code="1", size="S")
+    gate2 = AirGate.create(gd.conn, 0, airport=airport, code="1", width=15)
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 2
     gate1.merge(gate2)
     assert gd.conn.execute("SELECT count(rowid) FROM AirGate").fetchone()[0] == 1

@@ -7,7 +7,7 @@ Run ``pip install gatelogue-types`` or ``uv add gatelogue-types``. Or add ``gate
 
 To import directly from the repository, run ``pip install git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` or add ``gatelogue-types @ git+https://github.com/mrt-map/gatelogue#subdirectory=gatelogue-types-py`` to your ``requirements.txt`` or ``pyproject.toml``.
 
-You can also use ``requests``, ``niquests``, ``httpx``, ``urllib3`` or ``aiohttp`` to retrieve the data via ``gatelogue-types`` if ``[requests]``, ``[niquests]``, ``[httpx]``, ``[urllib3]`` or ``[aiohttp]`` is suffixed. Otherwise ``urllib`` is used.
+Optionally, you can add an HTTP client (e.g. `requests`, `niquests`) of your choice.
 
 Usage
 -----
@@ -17,15 +17,13 @@ To retrieve the data:
 
    import gatelogue_types as gt  # for convenience
 
-   gd = gt.GD.niquests_get()  # retrieve data via niquests
-   gd = gt.GD.requests_get()  # retrieve data via requests
-   gd = gt.GD.httpx_get()  # retrieve data via httpx
-   gd = gt.GD.urllib3_get()  # retrieve data via urllib3
-   gd = gt.GD.urllib_get()  # retrieve data via urllib
-   gd = await gt.GD.aiohttp_get()  # retrieve data via aiohttp
+   gd = gt.GD.get()  # retrieve data via `urllib` (in standard library)
+   gd = gt.GD.get(getter=GD.Getters.niquests)  # retrieve data with pre-written `niquests` getter
+   gd = await gt.GD.get_async(getter=GD.Getters.aiohttp)  # same but async with pre-written `aiohttp` getter
+   gd = await gt.GD.get(getter=lambda url: requests.get(url).content)  # custom getter. all getters take one `str` and output a `byte`
 
-   # for all .*_get() methods, you can make it retrieve a version with sources.
-   gd = gt.GD.niquests_get(sources=True)
+   # for both .get() and .get_async(), you can make it retrieve a version with sources.
+   gd = gt.GD.get(sources=True)
 
 Using the ORM does not require SQL and makes for generally clean code. However, doing this is very inefficient as each attribute access is one SQL query.
 
@@ -51,9 +49,9 @@ Usage of these methods are discouraged. These are not used in normal use 99% of 
 
 from __future__ import annotations
 
-import contextlib
 import datetime
 import sqlite3
+from os import PathLike
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -70,11 +68,7 @@ from gatelogue_types.spawn_warp import SpawnWarp, WarpType
 from gatelogue_types.town import Rank, Town
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-    from os import PathLike
-
-    # pyrefly: ignore [missing-import]
-    import aiohttp
+    from collections.abc import Iterator, Callable, Awaitable
 
 URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
 URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db"
@@ -107,51 +101,58 @@ class GD:
         return self
 
     @classmethod
-    def niquests_get(cls, sources: bool = False, *args, **kwargs):
-        # pyrefly: ignore [missing-import]
-        import niquests
-
-        return cls.from_bytes_readonly(niquests.get(URL if sources else URL_NO_SOURCES, *args, **kwargs).content)
+    def get(cls, sources: bool = False, getter: Callable[[str], bytes] | None = None):
+        getter = getter or GD.Getters.urllib
+        return cls.from_bytes(getter(URL if sources else URL_NO_SOURCES))
 
     @classmethod
-    def requests_get(cls, sources: bool = False, *args, **kwargs):
-        # pyrefly: ignore [missing-import,missing-source-for-stubs]
-        import requests
+    async def get_async(cls, sources: bool = False, getter: Callable[[str], Awaitable[bytes]] | None = None):
+        async def _default(url: str):
+            return GD.Getters.urllib(url)
+        getter = getter or _default
+        return cls.from_bytes(await getter(URL if sources else URL_NO_SOURCES))
 
-        return cls.from_bytes_readonly(requests.get(URL if sources else URL_NO_SOURCES, *args, **kwargs).content)
+    class Getters:
+        @staticmethod
+        def urllib(url: str) -> bytes:
+            import urllib.request
+            with urllib.request.urlopen(url) as response:
+                return response.read()
 
-    @classmethod
-    def httpx_get(cls, sources: bool = False, *args, **kwargs):
-        # pyrefly: ignore [missing-import]
-        import httpx
+        @staticmethod
+        def niquests(url: str) -> bytes:
+            import niquests
+            return niquests.get(url).content
 
-        return cls.from_bytes_readonly(httpx.get(URL if sources else URL_NO_SOURCES, *args, **kwargs).content)
+        @staticmethod
+        def requests(url: str) -> bytes:
+            import requests
+            return requests.get(url).content
 
-    @classmethod
-    def urllib3_get(cls, sources: bool = False, *args, **kwargs):
-        # pyrefly: ignore [missing-import]
-        import urllib3
+        @staticmethod
+        def httpx(url: str) -> bytes:
+            import httpx
+            return httpx.get(url).content
 
-        return cls.from_bytes_readonly(urllib3.request("GET", URL if sources else URL_NO_SOURCES, *args, **kwargs).data)
+        @staticmethod
+        def urllib3(url: str) -> bytes:
+            import urllib3
+            return urllib3.request("GET", url).data
 
-    @classmethod
-    def urllib_get(cls, sources: bool = False, *args, **kwargs):
-        import urllib.request
+        @staticmethod
+        async def rnet(url: str) -> bytes:
+            import rnet
+            return await (await rnet.get(url)).bytes()
 
-        with urllib.request.urlopen(URL if sources else URL_NO_SOURCES, *args, **kwargs) as response:  # noqa: S310
-            return cls.from_bytes_readonly(response.read())
-
-    @classmethod
-    async def aiohttp_get(cls, sources: bool = False, session: aiohttp.ClientSession | None = None) -> Self:
-        # pyrefly: ignore [missing-import]
-        import aiohttp
-
-        session = aiohttp.ClientSession() if session is None else contextlib.nullcontext(session)
-        async with (
-            session as session,
-            session.get(URL if sources else URL_NO_SOURCES) as response,
-        ):  # pyrefly: ignore [missing-attribute]
-            return cls.from_bytes_readonly(await response.read())
+        @staticmethod
+        async def aiohttp(url: str) -> bytes:
+            import aiohttp
+            session = aiohttp.ClientSession()
+            async with (
+                session as session,
+                session.get(url) as response,
+            ):  # pyrefly: ignore [missing-attribute]
+                return await response.read()
 
     @property
     def timestamp(self) -> str:

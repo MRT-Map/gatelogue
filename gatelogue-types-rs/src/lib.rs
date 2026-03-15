@@ -10,6 +10,8 @@
 //! ```
 //! Add the `bundled` feature to bundle `SQLite`.
 //!
+//! Also add an HTTP client (e.g. `reqwest`, `ureq`) of your choice.
+//!
 //! # Usage
 //! To retrieve the data:
 //! ```rust

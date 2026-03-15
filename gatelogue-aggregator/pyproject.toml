@@ -57,10 +57,10 @@ path = "src/gatelogue_aggregator/__about__.py"
 allow-direct-references = true
 
 [tool.hatch.envs.default]
-extra-dependencies = ["gatelogue-types[all]"]
 workspace.members = [
-  "../gatelogue-types-py"
+  { path = "../gatelogue-types-py", features = ["dev"] }
 ]
+workspace.parallel = true
 #python = "3.12"
 
 [tool.hatch.envs.docs]
