@@ -59,6 +59,7 @@ from typing import (
 )
 
 from gatelogue_types.__about__ import __data_version__
+from gatelogue_types._util import _sql
 from gatelogue_types.air import AirAirline, AirAirport, Aircraft, AirFlight, AirGate, AirMode
 from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop
 from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
@@ -174,7 +175,7 @@ class GD:
         """Internal Use"""
         self = cls(database=database)
         cur = self.conn.cursor()
-        cur.executescript((Path(__file__).parent / "create.sql").read_text())
+        cur.executescript(_sql("create"))
         cur.execute(
             "INSERT INTO Metadata (version, timestamp, has_sources) VALUES (:version, :timestamp, :has_sources)",
             dict(version=__data_version__, timestamp=datetime.datetime.now().isoformat(), has_sources=has_sources),
@@ -190,7 +191,7 @@ class GD:
     def drop_sources(self, cur: sqlite3.Cursor | None = None):
         """Drop all ``*Source`` tables"""
         cur = cur or self.conn.cursor()
-        cur.executescript((Path(__file__).parent / "drop_sources.sql").read_text())
+        cur.executescript(_sql("drop_sources"))
 
     def get_node[T: Node = Node](self, i: int, ty: type[T] | None = None) -> T:
         """Get a single node

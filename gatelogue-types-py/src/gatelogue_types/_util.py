@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal, LiteralString
 
 if TYPE_CHECKING:
@@ -76,6 +77,10 @@ def _warn_clash(
             else f"Latter has higher priority of {other_sources} than former which has {self_sources}"
         )
     )
+
+
+def _sql(key: str) -> str:
+    return (Path(__file__).parent / "sql" / (key + ".sql")).read_text()
 
 
 class _Column[T]:
