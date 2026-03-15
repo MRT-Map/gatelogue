@@ -1,6 +1,6 @@
 use strum_macros::EnumString;
 
-use crate::{from_sql_for_enum, get_column, node_type, util::ID};
+use crate::{_from_sql_for_enum, _get_column, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum WarpType {
@@ -15,10 +15,10 @@ pub enum WarpType {
     #[strum(serialize = "misc")]
     Misc,
 }
-from_sql_for_enum!(WarpType);
+_from_sql_for_enum!(WarpType);
 
 node_type!(located SpawnWarp);
 impl SpawnWarp {
-    get_column!("SpawnWarp", name, String);
-    get_column!("SpawnWarp", warp_type, "warpType", WarpType);
+    _get_column!("SpawnWarp", name, String);
+    _get_column!("SpawnWarp", warp_type, "warpType", WarpType);
 }

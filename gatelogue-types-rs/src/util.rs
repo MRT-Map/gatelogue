@@ -5,9 +5,11 @@ use crate::error::Result;
 pub type ID = u32;
 
 #[macro_export]
-macro_rules! get_column {
+#[doc(hidden)]
+macro_rules! _get_column {
     ($table_name:literal, $column_name:ident, $ColTy:ty) => {
         pub fn $column_name(self, gd: &$crate::GD) -> $crate::error::Result<$ColTy> {
+            #[expect(clippy::allow_attributes)]
             #[allow(unused_imports)]
             use $crate::node::Node;
             gd.0.query_one(
@@ -32,6 +34,7 @@ macro_rules! get_column {
     };
     ($table_name:literal, $fn_name:ident, $column_name:literal, $ColTy:ty) => {
         pub fn $fn_name(self, gd: &$crate::GD) -> $crate::error::Result<$ColTy> {
+            #[expect(clippy::allow_attributes)]
             #[allow(unused_imports)]
             use $crate::node::Node;
             gd.0.query_one(
@@ -56,9 +59,11 @@ macro_rules! get_column {
     };
 }
 #[macro_export]
-macro_rules! get_set {
+#[doc(hidden)]
+macro_rules! _get_set {
     ($table_name:literal, $fn_name:ident, $column_name:literal, $ColTy:ty) => {
         pub fn $fn_name(self, gd: &$crate::GD) -> $crate::error::Result<Vec<$ColTy>> {
+            #[expect(clippy::allow_attributes)]
             #[allow(unused_imports)]
             use $crate::node::Node;
             match gd
@@ -80,7 +85,8 @@ macro_rules! get_set {
 }
 
 #[macro_export]
-macro_rules! get_derived_vec {
+#[doc(hidden)]
+macro_rules! _get_derived_vec {
     ($fn_name:ident, $RetTy:ty, $sql:expr) => {
         pub fn $fn_name(self, gd: &$crate::GD) -> $crate::error::Result<Vec<$RetTy>> {
             use $crate::util::ConnectionExt;
@@ -90,7 +96,8 @@ macro_rules! get_derived_vec {
 }
 
 #[macro_export]
-macro_rules! from_sql_for_enum {
+#[doc(hidden)]
+macro_rules! _from_sql_for_enum {
     ($Ty:ty) => {
         impl rusqlite::types::FromSql for $Ty {
             fn column_result(

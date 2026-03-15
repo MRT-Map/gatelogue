@@ -1,6 +1,6 @@
 use strum_macros::EnumString;
 
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
+use crate::{_from_sql_for_enum, _get_column, _get_derived_vec, _get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum RailMode {
@@ -13,19 +13,19 @@ pub enum RailMode {
     #[strum(serialize = "vehicles")]
     Vehicles,
 }
-from_sql_for_enum!(RailMode);
+_from_sql_for_enum!(RailMode);
 
 node_type!(RailCompany);
 impl RailCompany {
-    get_column!("RailCompany", name, String);
-    get_column!("RailCompany", link, Option<String>);
-    get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = ?");
-    get_derived_vec!(
+    _get_column!("RailCompany", name, String);
+    _get_column!("RailCompany", link, Option<String>);
+    _get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = ?");
+    _get_derived_vec!(
         stations,
         RailStation,
         "SELECT i FROM RailStation WHERE company = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         platforms,
         RailPlatform,
         concat!(
@@ -38,14 +38,14 @@ impl RailCompany {
 
 node_type!(RailLine);
 impl RailLine {
-    get_column!("RailLine", code, String);
-    get_column!("RailLine", company, RailCompany);
-    get_column!("RailLine", name, Option<String>);
-    get_column!("RailLine", colour, Option<String>);
-    get_column!("RailLine", mode, Option<RailMode>);
-    get_column!("RailLine", local, Option<bool>);
+    _get_column!("RailLine", code, String);
+    _get_column!("RailLine", company, RailCompany);
+    _get_column!("RailLine", name, Option<String>);
+    _get_column!("RailLine", colour, Option<String>);
+    _get_column!("RailLine", mode, Option<RailMode>);
+    _get_column!("RailLine", local, Option<bool>);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         platforms,
         RailPlatform,
         concat!(
@@ -54,7 +54,7 @@ impl RailLine {
             "LEFT JOIN RailPlatform ON A.\"from\" = RailPlatform.i OR A.\"to\" = RailPlatform.i"
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         stations,
         RailStation,
         concat!(
@@ -67,16 +67,16 @@ impl RailLine {
 
 node_type!(located RailStation);
 impl RailStation {
-    get_set!("RailStationCodes", codes, "code", String);
-    get_column!("RailStation", company, RailCompany);
-    get_column!("RailStation", name, Option<String>);
+    _get_set!("RailStationCodes", codes, "code", String);
+    _get_column!("RailStation", company, RailCompany);
+    _get_column!("RailStation", name, Option<String>);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         platforms,
         RailPlatform,
         "SELECT i FROM RailPlatform WHERE station = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_from_here,
         RailConnection,
         concat!(
@@ -85,7 +85,7 @@ impl RailStation {
             "INNER JOIN RailConnection ON A.i = RailConnection.\"from\""
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_to_here,
         RailConnection,
         concat!(
@@ -94,7 +94,7 @@ impl RailStation {
             "INNER JOIN RailConnection ON A.i = RailConnection.\"to\""
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         lines,
         RailLine,
         concat!(
@@ -107,20 +107,20 @@ impl RailStation {
 
 node_type!(RailPlatform);
 impl RailPlatform {
-    get_column!("RailPlatform", code, Option<String>);
-    get_column!("RailPlatform", station, RailStation);
+    _get_column!("RailPlatform", code, Option<String>);
+    _get_column!("RailPlatform", station, RailStation);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_from_here,
         RailConnection,
         "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"from\" = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_to_here,
         RailConnection,
         "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"to\" = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         lines,
         RailLine,
         concat!(
@@ -132,9 +132,9 @@ impl RailPlatform {
 
 node_type!(RailConnection);
 impl RailConnection {
-    get_column!("RailConnection", line, RailLine);
-    get_column!("RailConnection", from, RailPlatform);
-    get_column!("RailConnection", to, RailPlatform);
-    get_column!("RailConnection", direction, Option<String>);
-    get_column!("RailConnection", duration, Option<u32>);
+    _get_column!("RailConnection", line, RailLine);
+    _get_column!("RailConnection", from, RailPlatform);
+    _get_column!("RailConnection", to, RailPlatform);
+    _get_column!("RailConnection", direction, Option<String>);
+    _get_column!("RailConnection", duration, Option<u32>);
 }

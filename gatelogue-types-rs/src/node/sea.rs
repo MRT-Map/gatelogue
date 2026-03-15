@@ -1,6 +1,6 @@
 use strum_macros::EnumString;
 
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
+use crate::{_from_sql_for_enum, _get_column, _get_derived_vec, _get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum SeaMode {
@@ -11,15 +11,15 @@ pub enum SeaMode {
     #[strum(serialize = "traincarts ferry")]
     TrainCartsFerry,
 }
-from_sql_for_enum!(SeaMode);
+_from_sql_for_enum!(SeaMode);
 
 node_type!(SeaCompany);
 impl SeaCompany {
-    get_column!("SeaCompany", name, String);
-    get_column!("SeaCompany", link, Option<String>);
-    get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = ?");
-    get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = ?");
-    get_derived_vec!(
+    _get_column!("SeaCompany", name, String);
+    _get_column!("SeaCompany", link, Option<String>);
+    _get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = ?");
+    _get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = ?");
+    _get_derived_vec!(
         docks,
         SeaDock,
         concat!(
@@ -32,14 +32,14 @@ impl SeaCompany {
 
 node_type!(SeaLine);
 impl SeaLine {
-    get_column!("SeaLine", code, String);
-    get_column!("SeaLine", company, SeaCompany);
-    get_column!("SeaLine", name, Option<String>);
-    get_column!("SeaLine", colour, Option<String>);
-    get_column!("SeaLine", mode, Option<SeaMode>);
-    get_column!("SeaLine", local, Option<bool>);
+    _get_column!("SeaLine", code, String);
+    _get_column!("SeaLine", company, SeaCompany);
+    _get_column!("SeaLine", name, Option<String>);
+    _get_column!("SeaLine", colour, Option<String>);
+    _get_column!("SeaLine", mode, Option<SeaMode>);
+    _get_column!("SeaLine", local, Option<bool>);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         docks,
         SeaDock,
         concat!(
@@ -48,7 +48,7 @@ impl SeaLine {
             "LEFT JOIN SeaDock ON A.\"from\" = SeaDock.i OR A.\"to\" = SeaDock.i"
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         stops,
         SeaStop,
         concat!(
@@ -61,12 +61,12 @@ impl SeaLine {
 
 node_type!(located SeaStop);
 impl SeaStop {
-    get_set!("SeaStopCodes", codes, "code", String);
-    get_column!("SeaStop", company, SeaCompany);
-    get_column!("SeaStop", name, Option<String>);
+    _get_set!("SeaStopCodes", codes, "code", String);
+    _get_column!("SeaStop", company, SeaCompany);
+    _get_column!("SeaStop", name, Option<String>);
 
-    get_derived_vec!(docks, SeaDock, "SELECT i FROM SeaDock WHERE stop = ?");
-    get_derived_vec!(
+    _get_derived_vec!(docks, SeaDock, "SELECT i FROM SeaDock WHERE stop = ?");
+    _get_derived_vec!(
         connections_from_here,
         SeaConnection,
         concat!(
@@ -75,7 +75,7 @@ impl SeaStop {
             "INNER JOIN SeaConnection ON A.i = SeaConnection.\"from\""
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_to_here,
         SeaConnection,
         concat!(
@@ -84,7 +84,7 @@ impl SeaStop {
             "INNER JOIN SeaConnection ON A.i = SeaConnection.\"to\""
         )
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         lines,
         SeaLine,
         concat!(
@@ -97,20 +97,20 @@ impl SeaStop {
 
 node_type!(SeaDock);
 impl SeaDock {
-    get_column!("SeaDock", code, Option<String>);
-    get_column!("SeaDock", stop, SeaStop);
+    _get_column!("SeaDock", code, Option<String>);
+    _get_column!("SeaDock", stop, SeaStop);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_from_here,
         SeaConnection,
         "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"from\" = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         connections_to_here,
         SeaConnection,
         "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"to\" = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         lines,
         SeaLine,
         concat!(
@@ -122,9 +122,9 @@ impl SeaDock {
 
 node_type!(SeaConnection);
 impl SeaConnection {
-    get_column!("SeaConnection", line, SeaLine);
-    get_column!("SeaConnection", from, SeaDock);
-    get_column!("SeaConnection", to, SeaDock);
-    get_column!("SeaConnection", direction, Option<String>);
-    get_column!("SeaConnection", duration, Option<u32>);
+    _get_column!("SeaConnection", line, SeaLine);
+    _get_column!("SeaConnection", from, SeaDock);
+    _get_column!("SeaConnection", to, SeaDock);
+    _get_column!("SeaConnection", direction, Option<String>);
+    _get_column!("SeaConnection", duration, Option<u32>);
 }

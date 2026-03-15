@@ -1,7 +1,7 @@
 use rusqlite::types::{FromSql, FromSqlResult, ValueRef};
 use strum_macros::EnumString;
 
-use crate::{from_sql_for_enum, get_column, get_derived_vec, get_set, node_type, util::ID};
+use crate::{_from_sql_for_enum, _get_column, _get_derived_vec, _get_set, node_type, util::ID};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, EnumString)]
 pub enum AirMode {
@@ -14,19 +14,19 @@ pub enum AirMode {
     #[strum(serialize = "traincarts plane")]
     TrainCartsPlane,
 }
-from_sql_for_enum!(AirMode);
+_from_sql_for_enum!(AirMode);
 
 node_type!(AirAirline);
 impl AirAirline {
-    get_column!("AirAirline", name, String);
-    get_column!("AirAirline", link, Option<String>);
+    _get_column!("AirAirline", name, String);
+    _get_column!("AirAirline", link, Option<String>);
 
-    get_derived_vec!(
+    _get_derived_vec!(
         flights,
         AirFlight,
         "SELECT i FROM AirFlight WHERE airline = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         gates,
         AirGate,
         concat!(
@@ -35,33 +35,33 @@ impl AirAirline {
             "UNION SELECT \"to\" AS i FROM AirFlight WHERE airline = ?"
         )
     );
-    get_derived_vec!(airports, AirAirport, concat!("SELECT DISTINCT airport FROM AirGate WHERE airline = ? ",
+    _get_derived_vec!(airports, AirAirport, concat!("SELECT DISTINCT airport FROM AirGate WHERE airline = ? ",
                 "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"from\" WHERE AirFlight.airline = ? ",
                 "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"to\" WHERE AirFlight.airline = ?"));
 }
 
 node_type!(located AirAirport);
 impl AirAirport {
-    get_column!("AirAirport", code, String);
-    get_set!("AirAirportNames", names, "name", String);
-    get_column!("AirAirport", link, Option<String>);
-    get_set!("AirAirportModes", modes, "mode", AirMode);
-    get_derived_vec!(gates, AirGate, "SELECT i FROM AirGate WHERE airport = ?");
+    _get_column!("AirAirport", code, String);
+    _get_set!("AirAirportNames", names, "name", String);
+    _get_column!("AirAirport", link, Option<String>);
+    _get_set!("AirAirportModes", modes, "mode", AirMode);
+    _get_derived_vec!(gates, AirGate, "SELECT i FROM AirGate WHERE airport = ?");
 }
 
 node_type!(AirGate);
 impl AirGate {
-    get_column!("AirGate", code, Option<String>);
-    get_column!("AirGate", airport, AirAirport);
-    get_column!("AirGate", airline, Option<AirAirline>);
-    get_column!("AirGate", width, Option<u32>);
-    get_column!("AirGate", mode, AirMode);
-    get_derived_vec!(
+    _get_column!("AirGate", code, Option<String>);
+    _get_column!("AirGate", airport, AirAirport);
+    _get_column!("AirGate", airline, Option<AirAirline>);
+    _get_column!("AirGate", width, Option<u32>);
+    _get_column!("AirGate", mode, AirMode);
+    _get_derived_vec!(
         flights_from_here,
         AirFlight,
         "SELECT i FROM AirFlight WHERE \"from\" = ?"
     );
-    get_derived_vec!(
+    _get_derived_vec!(
         flights_to_here,
         AirFlight,
         "SELECT i FROM AirFlight WHERE \"to\" = ?"
@@ -70,11 +70,11 @@ impl AirGate {
 
 node_type!(AirFlight);
 impl AirFlight {
-    get_column!("AirFlight", airline, AirAirline);
-    get_column!("AirFlight", code, String);
-    get_column!("AirFlight", from, AirGate);
-    get_column!("AirFlight", to, AirGate);
-    get_column!("AirFlight", aircraft, Option<Aircraft>);
+    _get_column!("AirFlight", airline, AirAirline);
+    _get_column!("AirFlight", code, String);
+    _get_column!("AirFlight", from, AirGate);
+    _get_column!("AirFlight", to, AirGate);
+    _get_column!("AirFlight", aircraft, Option<Aircraft>);
 }
 
 #[macro_export]

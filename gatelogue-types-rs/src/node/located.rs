@@ -3,7 +3,7 @@ use strum_macros::{EnumIs, EnumString, EnumTryAs};
 
 use crate::{
     error::Error,
-    from_sql_for_enum,
+    _from_sql_for_enum,
     node::{
         air::AirAirport, bus::BusStop, rail::RailStation, sea::SeaStop, spawn_warp::SpawnWarp,
         town::Town, AnyNode, Node,
@@ -116,7 +116,7 @@ pub enum World {
     New,
     Space,
 }
-from_sql_for_enum!(World);
+_from_sql_for_enum!(World);
 
 pub struct Proximity(pub(crate) ID, pub(crate) ID);
 
