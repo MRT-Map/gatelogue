@@ -3,18 +3,21 @@ from __future__ import annotations
 import contextlib
 import tempfile
 import time
+from datetime import timedelta
 from pathlib import Path
 from threading import Lock
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
-import cloudscraper
 import msgspec
 import msgspec.json
 import pandas as pd
 import rich
 import rich.status
 from bs4 import BeautifulSoup
+from rnet import Emulation
+from rnet.blocking import Client
+from rnet.redirect import Policy
 
 from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
 
@@ -25,7 +28,7 @@ DEFAULT_TIMEOUT = 60
 DEFAULT_COOLDOWN = 15
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
 
-SESSION = cloudscraper.create_scraper()
+SESSION = Client(redirect=Policy.limited(10), emulation=Emulation.Chrome145)
 
 COOLDOWN_LOCK = Lock()
 COOLDOWN: dict[str, float] = {}
@@ -51,18 +54,16 @@ def get_url(
             rich.print(INFO3 + f"Waiting for {url} cooldown")
             time.sleep(abs(cool - time.time()))
 
-        response = SESSION.get(url, timeout=config.timeout)
-        if response.status_code >= 400 or (empty_is_error and response.text == ""):
-            rich.print(ERROR + f"Received {response.status_code} error from {url}:\n{response.text}")
-            if response.status_code in (408, 429):
+        response = SESSION.get(url, timeout=timedelta(seconds=config.timeout))
+        if response.status.as_int() >= 400 or (empty_is_error and response.text == ""):
+            rich.print(ERROR + f"Received {response.status} error from {url}:\n{response.text}")
+            if response.status.as_int() in (408, 429):
                 with COOLDOWN_LOCK:
                     COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
                 rich.print(ERROR + f"Will try {url} again in 15s")
                 return get_url(url, key, config, empty_is_error=empty_is_error)
 
-        text = response.text
-        with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
-            text = text.encode("latin").decode("utf-8")
+        text = response.text("utf-8")
 
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
