@@ -25,14 +25,14 @@ rusqlite = { version = "0.38.0", features = ["serialize"] }
 bundled = ["rusqlite/bundled"]
 
 [dev-dependencies]
-tokio = { version = "1.50.0", features = ["rt-multi-thread", "macros"] }
-reqwest = { version = "0.13.2", default-features = false, features = ["blocking", "rustls", "http2"]}
-surf = { version = "2.3.2", default-features = false, features = ["curl-client"] }
-ureq = { version = "3.2.0", default-features = false, features = ["rustls"] }
-isahc = { version = "1.7.2", default-features = false, features = ["http2"] }
+tokio = { version = "=1.50.0", features = ["rt-multi-thread", "macros"] }
+reqwest = { version = "=0.13.2", default-features = false, features = ["blocking", "rustls", "http2"]}
+surf = { version = "=2.3.2", default-features = false, features = ["curl-client"] }
+ureq = { version = "=3.2.0", default-features = false, features = ["rustls"] }
+isahc = { version = "=1.7.2", default-features = false, features = ["http2"] }
 #attohttpc = { version = "0.30.1", default-features = false, features = ["tls-rustls-webpki-roots-ring"] }
-minreq = { version = "2.14.1" , features = ["https-rustls", "webpki-roots"]}
-wreq = { version = "6.0.0-rc.28", default-features = false }
+minreq = { version = "=2.14.1" , features = ["https-rustls", "webpki-roots"]}
+wreq = { version = "=6.0.0-rc.28", default-features = false }
 
 [lints.rust]
 future-incompatible = "deny"
