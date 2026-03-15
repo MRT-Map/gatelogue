@@ -28,7 +28,7 @@ classifiers = [
   "Private :: Do Not Upload",
 ]
 dependencies = [
-  "gatelogue-types @ {root:parent:uri}/gatelogue-types-py",
+  "gatelogue-types",
   "click==8.3.1",
   "msgspec==0.20.0",
   "pandas==3.0.1",
@@ -58,6 +58,9 @@ allow-direct-references = true
 
 [tool.hatch.envs.default]
 extra-dependencies = ["gatelogue-types[all]"]
+workspace.members = [
+  "../gatelogue-types-py"
+]
 #python = "3.12"
 
 [tool.hatch.envs.docs]
