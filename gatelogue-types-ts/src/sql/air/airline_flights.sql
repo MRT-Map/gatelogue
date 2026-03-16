@@ -1,0 +1,1 @@
+SELECT i FROM AirFlight WHERE airline = ?1

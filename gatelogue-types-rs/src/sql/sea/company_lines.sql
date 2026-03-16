@@ -1,0 +1,1 @@
+SELECT i FROM SeaLine WHERE company = ?1

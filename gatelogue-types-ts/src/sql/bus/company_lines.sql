@@ -1,0 +1,1 @@
+SELECT i FROM BusLine WHERE company = ?1

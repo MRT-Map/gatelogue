@@ -1,0 +1,1 @@
+SELECT BusConnection.i FROM BusConnection WHERE BusConnection."from" = ?1

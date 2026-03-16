@@ -41,31 +41,17 @@ class SeaCompany(Node):
     @property
     def lines(self) -> Iterator[SeaLine]:
         """List of all :py:class:`SeaLine` s the company operates"""
-        return (
-            SeaLine(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM SeaLine WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("sea/company_lines", SeaLine)
 
     @property
     def stops(self) -> Iterator[SeaStop]:
         """List of all :py:class:`SeaStop` s the company's lines stop at"""
-        return (
-            SeaStop(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM SeaStop WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("sea/company_stops", SeaStop)
 
     @property
     def docks(self) -> Iterator[SeaDock]:
         """List of all :py:class:`SeaDock` s the company's lines stop at"""
-        return (
-            SeaDock(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaDock.i "
-                "FROM (SELECT i FROM SeaStop WHERE company = :i) A "
-                "INNER JOIN SeaDock on A.i = SeaDock.stop",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/company_docks", SeaDock)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -133,28 +119,12 @@ class SeaLine(Node):
     @property
     def docks(self) -> Iterator[SeaDock]:
         """List of all :py:class:`SeaDocks` s the line stops at"""
-        return (
-            SeaDock(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaDock.i "
-                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
-                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/line_docks", SeaDock)
 
     @property
     def stops(self) -> Iterator[SeaStop]:
         """List of all :py:class:`SeaStop` s the line stops at"""
-        return (
-            SeaStop(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaDock.stop "
-                'FROM (SELECT "from", "to" FROM SeaConnection WHERE line = :i) A '
-                'LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/line_stops", SeaStop)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -206,52 +176,22 @@ class SeaStop(LocatedNode):
     @property
     def docks(self) -> Iterator[SeaDock]:
         """List of :py:class:`SeaDock` s this stop has"""
-        return (
-            SeaDock(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT i FROM SeaDock WHERE stop = :i",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/stop_docks", SeaDock)
 
     @property
     def connections_from_here(self) -> Iterator[SeaConnection]:
         """List of all :py:class:`SeaConnections` s departing from this stop"""
-        return (
-            SeaConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaConnection.i "
-                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
-                'INNER JOIN SeaConnection ON A.i = SeaConnection."from"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/stop_connections_from_here", SeaConnection)
 
     @property
     def connections_to_here(self) -> Iterator[SeaConnection]:
         """List of all :py:class:`SeaConnections` s arriving at this stop"""
-        return (
-            SeaConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaConnection.i "
-                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
-                'INNER JOIN SeaConnection ON A.i = SeaConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/stop_connections_to_here", SeaConnection)
 
     @property
     def lines(self) -> Iterator[SeaLine]:
         """List of all :py:class:`SeaLines` s at this stop"""
-        return (
-            SeaLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaConnection.line "
-                "FROM (SELECT i FROM SeaDock WHERE stop = :i) A "
-                'LEFT JOIN SeaConnection ON A.i = SeaConnection."from" OR A.i = SeaConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/stop_lines", SeaLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
@@ -303,36 +243,17 @@ class SeaDock(Node):
     @property
     def connections_from_here(self) -> Iterator[SeaConnection]:
         """List of all :py:class:`SeaConnection` s departing from this dock"""
-        return (
-            SeaConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."from" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/dock_connections_from_here", SeaConnection)
 
     @property
     def connections_to_here(self) -> Iterator[SeaConnection]:
         """List of all :py:class:`SeaConnection` s arriving at this dock"""
-        return (
-            SeaConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/dock_connections_to_here", SeaConnection)
 
     @property
     def lines(self) -> Iterator[SeaLine]:
         """List of all :py:class:`SeaLine` s at this dock"""
-        return (
-            SeaLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT SeaConnection.line FROM SeaConnection "
-                'WHERE SeaConnection."from" = :i OR SeaConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("sea/dock_lines", SeaLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if (code := self.code) is None:
@@ -380,11 +301,13 @@ class SeaConnection(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO SeaConnection (i, line, "from", "to", direction, duration) VALUES (:i, :line, :from_, :to, :direction, :duration)',
+            'INSERT INTO SeaConnection (i, line, "from", "to", direction, duration) '
+            'VALUES (:i, :line, :from_, :to, :direction, :duration)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO SeaConnectionSource (i, source, direction, duration) VALUES (:i, :source, :direction_src, :duration_src)",
+            "INSERT INTO SeaConnectionSource (i, source, direction, duration) "
+            "VALUES (:i, :source, :direction_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

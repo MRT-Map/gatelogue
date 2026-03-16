@@ -3,11 +3,12 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _AircraftColumn, _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr
+from gatelogue_types._util import _AircraftColumn, _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr, _sql
 
 if TYPE_CHECKING:
     import sqlite3
     from collections.abc import Callable, Iterable, Iterator
+    import builtins
 
 
 class Node:
@@ -66,6 +67,12 @@ class Node:
 
     def __hash__(self):
         return hash(self.i)
+
+    def _sql_derived[T: Node](self, key: str, ty: builtins.type[T]) -> Iterator[T]:
+        return (
+            ty(self.conn, i)
+            for (i,) in self.conn.execute(_sql(key), (self.i,)).fetchall()
+        )
 
     def equivalent_nodes(self) -> Iterator[Self]:
         """Internal use"""
@@ -175,12 +182,7 @@ class LocatedNode(Node):
 
     @property
     def _nodes_in_proximity(self) -> Iterator[int]:
-        return (
-            j if self.i == i else i
-            for i, j in self.conn.execute(
-                "SELECT node1, node2 FROM Proximity WHERE node1 = :i OR node2 = :i", dict(i=self.i)
-            ).fetchall()
-        )
+        return (i for (i,) in self.conn.execute(_sql("located/nodes_in_proximity"), (self.i,)).fetchall())
 
     @property
     def nodes_in_proximity(self) -> Iterator[tuple[LocatedNode, Proximity]]:
@@ -196,12 +198,7 @@ class LocatedNode(Node):
 
     @property
     def _shared_facilities(self) -> Iterator[int]:
-        return (
-            j if self.i == i else i
-            for i, j in self.conn.execute(
-                "SELECT node1, node2 FROM SharedFacility WHERE node1 = :i OR node2 = :i", dict(i=self.i)
-            ).fetchall()
-        )
+        return (i for (i,) in self.conn.execute(_sql("located/shared_facilities"), (self.i,)).fetchall())
 
     @property
     def shared_facilities(self) -> Iterable[LocatedNode]:
@@ -301,11 +298,13 @@ class Proximity:
 
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO Proximity (node1, node2, distance, explicit) VALUES (:node1, :node2, :distance, :explicit) ON CONFLICT DO NOTHING",
+            "INSERT INTO Proximity (node1, node2, distance, explicit) "
+            "VALUES (:node1, :node2, :distance, :explicit) ON CONFLICT DO NOTHING",
             dict(node1=node1.i, node2=node2.i, distance=distance, explicit=explicit),
         )
         cur.executemany(
-            "INSERT INTO ProximitySource ( node1, node2, source ) VALUES ( :node1, :node2, :source ) ON CONFLICT DO NOTHING",
+            "INSERT INTO ProximitySource ( node1, node2, source ) "
+            "VALUES ( :node1, :node2, :source ) ON CONFLICT DO NOTHING",
             [dict(node1=node1.i, node2=node2.i, source=src) for src in srcs],
         )
         return cls(conn, node1, node2)

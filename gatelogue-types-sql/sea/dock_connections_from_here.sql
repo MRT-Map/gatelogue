@@ -1,0 +1,1 @@
+SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."from" = ?1

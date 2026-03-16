@@ -41,31 +41,17 @@ class BusCompany(Node):
     @property
     def lines(self) -> Iterator[BusLine]:
         """List of all :py:class:`BusLine` s the company operates"""
-        return (
-            BusLine(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM BusLine WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("bus/company_lines", BusLine)
 
     @property
     def stops(self) -> Iterator[BusStop]:
         """List of all :py:class:`BusStop` s the company's lines stop at"""
-        return (
-            BusStop(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM BusStop WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("bus/company_stops", BusStop)
 
     @property
     def berths(self) -> Iterator[BusBerth]:
         """List of all :py:class:`BusBerth` s the company's lines stop at"""
-        return (
-            BusBerth(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusBerth.i "
-                "FROM (SELECT i FROM BusStop WHERE company = :i) A "
-                "INNER JOIN BusBerth on A.i = BusBerth.stop",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/company_berths", BusBerth)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -133,28 +119,12 @@ class BusLine(Node):
     @property
     def berths(self) -> Iterator[BusBerth]:
         """List of all :py:class:`BusBerths` s the line stops at"""
-        return (
-            BusBerth(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusBerth.i "
-                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
-                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/line_berths", BusBerth)
 
     @property
     def stops(self) -> Iterator[BusStop]:
         """List of all :py:class:`BusStop` s the line stops at"""
-        return (
-            BusStop(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusBerth.stop "
-                'FROM (SELECT "from", "to" FROM BusConnection WHERE line = :i) A '
-                'LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/line_stops", BusStop)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -206,52 +176,22 @@ class BusStop(LocatedNode):
     @property
     def berths(self) -> Iterator[BusBerth]:
         """List of :py:class:`BusBerths` s this stop has"""
-        return (
-            BusBerth(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT i FROM BusBerth WHERE stop = :i",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/stop_berths", BusBerth)
 
     @property
     def connections_from_here(self) -> Iterator[BusConnection]:
         """List of all :py:class:`BusConnections` s departing from this stop"""
-        return (
-            BusConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusConnection.i "
-                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
-                'INNER JOIN BusConnection ON A.i = BusConnection."from"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/stop_connections_from_here", BusConnection)
 
     @property
     def connections_to_here(self) -> Iterator[BusConnection]:
         """List of all :py:class:`BusConnections` s arriving at this stop"""
-        return (
-            BusConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusConnection.i "
-                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
-                'INNER JOIN BusConnection ON A.i = BusConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/stop_connections_to_here", BusConnection)
 
     @property
     def lines(self) -> Iterator[BusLine]:
         """List of all :py:class:`BusLines` s at this stop"""
-        return (
-            BusLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusConnection.line "
-                "FROM (SELECT i FROM BusBerth WHERE stop = :i) A "
-                'LEFT JOIN BusConnection ON A.i = BusConnection."from" OR A.i = BusConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/stop_lines", BusLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
@@ -302,36 +242,17 @@ class BusBerth(Node):
     @property
     def connections_from_here(self) -> Iterator[BusConnection]:
         """List of all :py:class:`BusConnections` s departing from this berth"""
-        return (
-            BusConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."from" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/berth_connections_from_here", BusConnection)
 
     @property
     def connections_to_here(self) -> Iterator[BusConnection]:
         """List of all :py:class:`BusConnections` s arriving at this berth"""
-        return (
-            BusConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT BusConnection.i FROM BusConnection WHERE BusConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/berth_connections_to_here", BusConnection)
 
     @property
     def lines(self) -> Iterator[BusLine]:
         """List of all :py:class:`BusLines` s at this stop"""
-        return (
-            BusLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT BusConnection.line FROM BusConnection "
-                'WHERE BusConnection."from" = :i OR BusConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("bus/berth_lines", BusLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if (code := self.code) is None:
@@ -379,11 +300,13 @@ class BusConnection(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO BusConnection (i, line, "from", "to", direction, duration) VALUES (:i, :line, :from_, :to, :direction, :duration)',
+            'INSERT INTO BusConnection (i, line, "from", "to", direction, duration) '
+            'VALUES (:i, :line, :from_, :to, :direction, :duration)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO BusConnectionSource (i, source, direction, duration) VALUES (:i, :source, :direction_src, :duration_src)",
+            "INSERT INTO BusConnectionSource (i, source, direction, duration) "
+            "VALUES (:i, :source, :direction_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

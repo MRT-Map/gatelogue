@@ -1,0 +1,1 @@
+SELECT i FROM AirGate WHERE airport = ?1

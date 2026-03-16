@@ -1,0 +1,1 @@
+SELECT i FROM BusBerth WHERE stop = ?1

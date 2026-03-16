@@ -1,0 +1,1 @@
+SELECT i FROM SeaStop WHERE company = ?1

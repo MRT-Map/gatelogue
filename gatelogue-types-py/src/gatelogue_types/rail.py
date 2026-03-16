@@ -41,31 +41,17 @@ class RailCompany(Node):
     @property
     def lines(self) -> Iterator[RailLine]:
         """List of all :py:class:`RailLine` s the company operates"""
-        return (
-            RailLine(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM RailLine WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("rail/company_lines", RailLine)
 
     @property
     def stations(self) -> Iterator[RailStation]:
         """List of all :py:class:`RailStation` s the company's lines stop at"""
-        return (
-            RailStation(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM RailStation WHERE company = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("rail/company_stations", RailStation)
 
     @property
     def platforms(self) -> Iterator[RailPlatform]:
-        """List of all :py:class:`RailPltaform` s the company's lines stop at"""
-        return (
-            RailPlatform(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailPlatform.i "
-                "FROM (SELECT i FROM RailStation WHERE company = :i) A "
-                "INNER JOIN RailPlatform on A.i = RailPlatform.station",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        """List of all :py:class:`RailPlatform` s the company's lines stop at"""
+        return self._sql_derived("rail/company_platforms", RailPlatform)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -133,28 +119,12 @@ class RailLine(Node):
     @property
     def platforms(self) -> Iterator[RailPlatform]:
         """List of all :py:class:`RailPlatform` s the line stops at"""
-        return (
-            RailPlatform(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailPlatform.i "
-                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
-                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/line_platforms", RailPlatform)
 
     @property
     def stations(self) -> Iterator[RailStation]:
         """List of all :py:class:`RailStation` s the line stops at"""
-        return (
-            RailStation(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailPlatform.station "
-                'FROM (SELECT "from", "to" FROM RailConnection WHERE line = :i) A '
-                'LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/line_stations", RailStation)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -206,52 +176,22 @@ class RailStation(LocatedNode):
     @property
     def platforms(self) -> Iterator[RailPlatform]:
         """List of :py:class:`RailPlatform` s this stop has"""
-        return (
-            RailPlatform(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT i FROM RailPlatform WHERE station = :i",
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/station_platforms", RailPlatform)
 
     @property
     def connections_from_here(self) -> Iterator[RailConnection]:
         """List of all :py:class:`RailConnection` s departing from this station"""
-        return (
-            RailConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailConnection.i "
-                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
-                'INNER JOIN RailConnection ON A.i = RailConnection."from"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/station_connections_from_here", RailConnection)
 
     @property
     def connections_to_here(self) -> Iterator[RailConnection]:
         """List of all :py:class:`RailConnection` s arriving at this station"""
-        return (
-            RailConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailConnection.i "
-                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
-                'INNER JOIN RailConnection ON A.i = RailConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/station_connections_to_here", RailConnection)
 
     @property
     def lines(self) -> Iterator[RailLine]:
-        """List of all :py:class:`RailLine` s at this stop"""
-        return (
-            RailLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailConnection.line "
-                "FROM (SELECT i FROM RailPlatform WHERE station = :i) A "
-                'LEFT JOIN RailConnection ON A.i = RailConnection."from" OR A.i = RailConnection."to"',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        """List of all :py:class:`RailLine` s at this station"""
+        return self._sql_derived("rail/station_lines", RailLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if len(codes := self.codes) == 0:
@@ -306,36 +246,17 @@ class RailPlatform(Node):
     @property
     def connections_from_here(self) -> Iterator[RailConnection]:
         """List of all :py:class:`RailConnection` s departing from this platform"""
-        return (
-            RailConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."from" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/berth_connections_from_here", RailConnection)
 
     @property
     def connections_to_here(self) -> Iterator[RailConnection]:
         """List of all :py:class:`RailConnection` s arriving at this platform"""
-        return (
-            RailConnection(self.conn, i)
-            for (i,) in self.conn.execute(
-                'SELECT RailConnection.i FROM RailConnection WHERE RailConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/berth_connections_to_here", RailConnection)
 
     @property
     def lines(self) -> Iterator[RailLine]:
         """List of all :py:class:`RailLine` s at this platform"""
-        return (
-            RailLine(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT RailConnection.line FROM RailConnection "
-                'WHERE RailConnection."from" = :i OR RailConnection."to" = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("rail/berth_lines", RailLine)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if (code := self.code) is None:
@@ -383,11 +304,13 @@ class RailConnection(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO RailConnection (i, line, "from", "to", direction, duration) VALUES (:i, :line, :from_, :to, :direction, :duration)',
+            'INSERT INTO RailConnection (i, line, "from", "to", direction, duration) '
+            'VALUES (:i, :line, :from_, :to, :direction, :duration)',
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO RailConnectionSource (i, source, direction, duration) VALUES (:i, :source, :direction_src, :duration_src)",
+            "INSERT INTO RailConnectionSource (i, source, direction, duration) "
+            "VALUES (:i, :source, :direction_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)

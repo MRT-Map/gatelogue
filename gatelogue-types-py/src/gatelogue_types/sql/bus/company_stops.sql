@@ -1,0 +1,1 @@
+SELECT i FROM BusStop WHERE company = ?1

@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _AircraftColumn, _Column, _FKColumn, _format_code, _format_str, _SetAttr
+from gatelogue_types._util import _AircraftColumn, _Column, _FKColumn, _format_code, _format_str, _SetAttr, _sql
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -106,7 +106,8 @@ class Aircraft:
         """Internal use"""
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO Aircraft (name, manufacturer, width, height, length, mode) VALUES (:name, :manufacturer, :width, :height, :length, :mode)",
+            "INSERT INTO Aircraft (name, manufacturer, width, height, length, mode) "
+            "VALUES (:name, :manufacturer, :width, :height, :length, :mode)",
             dict(
                 name=_format_str(name),
                 manufacturer=manufacturer,
@@ -151,36 +152,17 @@ class AirAirline(Node):
     @property
     def flights(self) -> Iterator[AirFlight]:
         """List of all :py:class:`AirFlight` s the airline operates"""
-        return (
-            AirFlight(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM AirFlight WHERE airline = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("air/airline_flights", AirFlight)
 
     @property
     def gates(self) -> Iterator[AirGate]:
         """List of all :py:class:`AirGate` s the airline owns or operates"""
-        return (
-            AirGate(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT i FROM AirGate WHERE airline = :i "
-                'UNION SELECT "from" AS i FROM AirFlight WHERE airline = :i '
-                'UNION SELECT "to" AS i FROM AirFlight WHERE airline = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("air/airline_gates", AirGate)
 
     @property
     def airports(self) -> Iterator[AirAirport]:
         """List of all :py:class:`AirAirports` s the airline flies to or has gates in"""
-        return (
-            AirAirport(self.conn, i)
-            for (i,) in self.conn.execute(
-                "SELECT DISTINCT airport FROM AirGate WHERE airline = :i "
-                'UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = "from" WHERE AirFlight.airline = :i '
-                'UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = "to" WHERE AirFlight.airline = :i',
-                dict(i=self.i),
-            ).fetchall()
-        )
+        return self._sql_derived("air/airline_airports", AirAirport)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         return (
@@ -246,10 +228,7 @@ class AirAirport(LocatedNode):
     @property
     def gates(self) -> Iterator[AirGate]:
         """List of :py:class:`AirGate` s"""
-        return (
-            AirGate(self.conn, i)
-            for (i,) in self.conn.execute("SELECT i FROM AirGate WHERE airport = :i", dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("air/airport_gates", AirGate)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if (code := self.code) == "":
@@ -296,11 +275,13 @@ class AirGate(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO AirGate (i, code, airport, airline, width, mode) VALUES (:i, :code, :airport, :airline, :width, :mode)",
+            "INSERT INTO AirGate (i, code, airport, airline, width, mode) "
+            "VALUES (:i, :code, :airport, :airline, :width, :mode)",
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirGateSource (i, source, width, mode, airline) VALUES (:i, :source, :width_src, :mode_src, :airline_src)",
+            "INSERT INTO AirGateSource (i, source, width, mode, airline) "
+            "VALUES (:i, :source, :width_src, :mode_src, :airline_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
@@ -308,18 +289,12 @@ class AirGate(Node):
     @property
     def flights_from_here(self) -> Iterator[AirFlight]:
         """List of IDs of all :py:class:`AirFlight` s that depart from this gate"""
-        return (
-            AirFlight(self.conn, i)
-            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "from" = :i', dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("air/gate_flights_from_here", AirFlight)
 
     @property
     def flights_to_here(self) -> Iterator[AirFlight]:
         """List of IDs of all :py:class:`AirFlight` s that arrive at this gate"""
-        return (
-            AirFlight(self.conn, i)
-            for (i,) in self.conn.execute('SELECT i FROM AirFlight WHERE "to" = :i', dict(i=self.i)).fetchall()
-        )
+        return self._sql_derived("air/gate_flights_to_here", AirFlight)
 
     def equivalent_nodes(self) -> Iterator[Self]:
         if (code := self.code) is None:
@@ -380,7 +355,8 @@ class AirFlight(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline) VALUES (:i, :from_, :to, :code, :aircraft, :airline)',
+            'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline) '
+            'VALUES (:i, :from_, :to, :code, :aircraft, :airline)',
             dict(i=i, **kwargs),
         )
         cur.execute(
