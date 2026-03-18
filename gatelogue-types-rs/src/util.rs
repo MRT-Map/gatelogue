@@ -87,10 +87,10 @@ macro_rules! _get_set {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! _get_derived_vec {
-    ($fn_name:ident, $RetTy:ty, $sql:expr) => {
+    ($fn_name:ident, $RetTy:ty, $key:literal) => {
         pub fn $fn_name(self, gd: &$crate::GD) -> $crate::error::Result<Vec<$RetTy>> {
             use $crate::util::ConnectionExt;
-            gd.0.query_and_then_get_vec($sql, (self.0,), |row| Ok(row.get(0)?))
+            gd.0.query_and_then_get_vec(include_str!($key), (self.0,), |row| Ok(row.get(0)?))
         }
     };
 }

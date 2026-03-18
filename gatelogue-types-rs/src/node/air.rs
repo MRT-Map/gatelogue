@@ -24,20 +24,15 @@ impl AirAirline {
     _get_derived_vec!(
         flights,
         AirFlight,
-        "SELECT i FROM AirFlight WHERE airline = ?"
+        "../sql/air/airline_flights.sql"
     );
     _get_derived_vec!(
         gates,
         AirGate,
-        concat!(
-            "SELECT i FROM AirGate WHERE airline = ? ",
-            "UNION SELECT \"from\" AS i FROM AirFlight WHERE airline = ? ",
-            "UNION SELECT \"to\" AS i FROM AirFlight WHERE airline = ?"
-        )
+        "../sql/air/airline_gates.sql"
     );
-    _get_derived_vec!(airports, AirAirport, concat!("SELECT DISTINCT airport FROM AirGate WHERE airline = ? ",
-                "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"from\" WHERE AirFlight.airline = ? ",
-                "UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = \"to\" WHERE AirFlight.airline = ?"));
+    _get_derived_vec!(airports, AirAirport,
+        "../sql/air/airline_airports.sql");
 }
 
 node_type!(located AirAirport);
@@ -46,7 +41,8 @@ impl AirAirport {
     _get_set!("AirAirportNames", names, "name", String);
     _get_column!("AirAirport", link, Option<String>);
     _get_set!("AirAirportModes", modes, "mode", AirMode);
-    _get_derived_vec!(gates, AirGate, "SELECT i FROM AirGate WHERE airport = ?");
+    _get_derived_vec!(gates, AirGate,
+        "../sql/air/airport_gates.sql");
 }
 
 node_type!(AirGate);
@@ -59,12 +55,12 @@ impl AirGate {
     _get_derived_vec!(
         flights_from_here,
         AirFlight,
-        "SELECT i FROM AirFlight WHERE \"from\" = ?"
+        "../sql/air/gate_flights_from_here.sql"
     );
     _get_derived_vec!(
         flights_to_here,
         AirFlight,
-        "SELECT i FROM AirFlight WHERE \"to\" = ?"
+        "../sql/air/gate_flights_to_here.sql"
     );
 }
 

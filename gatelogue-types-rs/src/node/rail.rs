@@ -19,20 +19,16 @@ node_type!(RailCompany);
 impl RailCompany {
     _get_column!("RailCompany", name, String);
     _get_column!("RailCompany", link, Option<String>);
-    _get_derived_vec!(lines, RailLine, "SELECT i FROM RailLine WHERE company = ?");
+    _get_derived_vec!(lines, RailLine, "../sql/rail/company_lines.sql");
     _get_derived_vec!(
         stations,
         RailStation,
-        "SELECT i FROM RailStation WHERE company = ?"
+        "../sql/rail/company_stations.sql"
     );
     _get_derived_vec!(
         platforms,
         RailPlatform,
-        concat!(
-            "SELECT DISTINCT RailPlatform.i ",
-            "FROM (SELECT i FROM RailStation WHERE company = ?) A ",
-            "INNER JOIN RailPlatform on A.i = RailPlatform.station"
-        )
+        "../sql/rail/company_platforms.sql"
     );
 }
 
@@ -48,20 +44,12 @@ impl RailLine {
     _get_derived_vec!(
         platforms,
         RailPlatform,
-        concat!(
-            "SELECT DISTINCT RailPlatform.i ",
-            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = ?) A ",
-            "LEFT JOIN RailPlatform ON A.\"from\" = RailPlatform.i OR A.\"to\" = RailPlatform.i"
-        )
+        "../sql/rail/line_platforms.sql"
     );
     _get_derived_vec!(
         stations,
         RailStation,
-        concat!(
-            "SELECT DISTINCT RailPlatform.station ",
-            "FROM (SELECT \"from\", \"to\" FROM RailConnection WHERE line = ?) A ",
-            "LEFT JOIN RailPlatform ON A.\"from\" = RailPlatform.i OR A.\"to\" = RailPlatform.i"
-        )
+        "../sql/rail/company_stations.sql"
     );
 }
 
@@ -74,34 +62,22 @@ impl RailStation {
     _get_derived_vec!(
         platforms,
         RailPlatform,
-        "SELECT i FROM RailPlatform WHERE station = ?"
+        "../sql/rail/station_platforms.sql"
     );
     _get_derived_vec!(
         connections_from_here,
         RailConnection,
-        concat!(
-            "SELECT DISTINCT RailConnection.i ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
-            "INNER JOIN RailConnection ON A.i = RailConnection.\"from\""
-        )
+        "../sql/rail/station_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         RailConnection,
-        concat!(
-            "SELECT DISTINCT RailConnection.i ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
-            "INNER JOIN RailConnection ON A.i = RailConnection.\"to\""
-        )
+        "../sql/rail/station_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         RailLine,
-        concat!(
-            "SELECT DISTINCT RailConnection.line ",
-            "FROM (SELECT i FROM RailPlatform WHERE station = ?) A ",
-            "LEFT JOIN RailConnection ON A.i = RailConnection.\"from\" OR A.i = RailConnection.\"to\""
-        )
+        "../sql/rail/station_lines.sql"
     );
 }
 
@@ -113,20 +89,17 @@ impl RailPlatform {
     _get_derived_vec!(
         connections_from_here,
         RailConnection,
-        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"from\" = ?"
+        "../sql/rail/platform_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         RailConnection,
-        "SELECT RailConnection.i FROM RailConnection WHERE RailConnection.\"to\" = ?"
+        "../sql/rail/platform_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         RailLine,
-        concat!(
-            "SELECT DISTINCT RailConnection.line FROM RailConnection ",
-            "WHERE RailConnection.\"from\" = ? OR RailConnection.\"to\" = ?"
-        )
+        "../sql/rail/platform_lines.sql"
     );
 }
 

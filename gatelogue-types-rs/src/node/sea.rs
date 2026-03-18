@@ -17,16 +17,12 @@ node_type!(SeaCompany);
 impl SeaCompany {
     _get_column!("SeaCompany", name, String);
     _get_column!("SeaCompany", link, Option<String>);
-    _get_derived_vec!(lines, SeaLine, "SELECT i FROM SeaLine WHERE company = ?");
-    _get_derived_vec!(stops, SeaStop, "SELECT i FROM SeaStop WHERE company = ?");
+    _get_derived_vec!(lines, SeaLine, "../sql/sea/company_lines.sql");
+    _get_derived_vec!(stops, SeaStop, "../sql/sea/company_stops.sql");
     _get_derived_vec!(
         docks,
         SeaDock,
-        concat!(
-            "SELECT DISTINCT SeaDock.i ",
-            "FROM (SELECT i FROM SeaStop WHERE company = ?) A ",
-            "INNER JOIN SeaDock on A.i = SeaDock.stop"
-        )
+         "../sql/sea/company_docks.sql"
     );
 }
 
@@ -42,20 +38,12 @@ impl SeaLine {
     _get_derived_vec!(
         docks,
         SeaDock,
-        concat!(
-            "SELECT DISTINCT SeaDock.i ",
-            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = ?) A ",
-            "LEFT JOIN SeaDock ON A.\"from\" = SeaDock.i OR A.\"to\" = SeaDock.i"
-        )
+        "../sql/sea/line_docks.sql"
     );
     _get_derived_vec!(
         stops,
         SeaStop,
-        concat!(
-            "SELECT DISTINCT SeaDock.stop ",
-            "FROM (SELECT \"from\", \"to\" FROM SeaConnection WHERE line = ?) A ",
-            "LEFT JOIN SeaDock ON A.\"from\" = SeaDock.i OR A.\"to\" = SeaDock.i"
-        )
+        "../sql/sea/company_stops.sql"
     );
 }
 
@@ -65,33 +53,21 @@ impl SeaStop {
     _get_column!("SeaStop", company, SeaCompany);
     _get_column!("SeaStop", name, Option<String>);
 
-    _get_derived_vec!(docks, SeaDock, "SELECT i FROM SeaDock WHERE stop = ?");
+    _get_derived_vec!(docks, SeaDock, "../sql/sea/stop_docks.sql");
     _get_derived_vec!(
         connections_from_here,
         SeaConnection,
-        concat!(
-            "SELECT DISTINCT SeaConnection.i ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
-            "INNER JOIN SeaConnection ON A.i = SeaConnection.\"from\""
-        )
+        "../sql/sea/stop_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         SeaConnection,
-        concat!(
-            "SELECT DISTINCT SeaConnection.i ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
-            "INNER JOIN SeaConnection ON A.i = SeaConnection.\"to\""
-        )
+        "../sql/sea/stop_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         SeaLine,
-        concat!(
-            "SELECT DISTINCT SeaConnection.line ",
-            "FROM (SELECT i FROM SeaDock WHERE stop = ?) A ",
-            "LEFT JOIN SeaConnection ON A.i = SeaConnection.\"from\" OR A.i = SeaConnection.\"to\""
-        )
+        "../sql/sea/stop_lines.sql"
     );
 }
 
@@ -103,20 +79,17 @@ impl SeaDock {
     _get_derived_vec!(
         connections_from_here,
         SeaConnection,
-        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"from\" = ?"
+        "../sql/sea/dock_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         SeaConnection,
-        "SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection.\"to\" = ?"
+        "../sql/sea/dock_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         SeaLine,
-        concat!(
-            "SELECT DISTINCT SeaConnection.line FROM SeaConnection ",
-            "WHERE SeaConnection.\"from\" = ? OR SeaConnection.\"to\" = ?"
-        )
+        "../sql/sea/dock_lines.sql"
     );
 }
 

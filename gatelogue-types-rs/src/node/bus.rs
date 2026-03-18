@@ -15,16 +15,12 @@ node_type!(BusCompany);
 impl BusCompany {
     _get_column!("BusCompany", name, String);
     _get_column!("BusCompany", link, Option<String>);
-    _get_derived_vec!(lines, BusLine, "SELECT i FROM BusLine WHERE company = ?");
-    _get_derived_vec!(stops, BusStop, "SELECT i FROM BusStop WHERE company = ?");
+    _get_derived_vec!(lines, BusLine, "../sql/bus/company_lines.sql");
+    _get_derived_vec!(stops, BusStop, "../sql/bus/company_stops.sql");
     _get_derived_vec!(
         berths,
         BusBerth,
-        concat!(
-            "SELECT DISTINCT BusBerth.i ",
-            "FROM (SELECT i FROM BusStop WHERE company = ?) A ",
-            "INNER JOIN BusBerth on A.i = BusBerth.stop"
-        )
+        "../sql/bus/company_berths.sql"
     );
 }
 
@@ -40,20 +36,12 @@ impl BusLine {
     _get_derived_vec!(
         berths,
         BusBerth,
-        concat!(
-            "SELECT DISTINCT BusBerth.i ",
-            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = ?) A ",
-            "LEFT JOIN BusBerth ON A.\"from\" = BusBerth.i OR A.\"to\" = BusBerth.i"
-        )
+        "../sql/bus/line_berths.sql"
     );
     _get_derived_vec!(
         stops,
         BusStop,
-        concat!(
-            "SELECT DISTINCT BusBerth.stop ",
-            "FROM (SELECT \"from\", \"to\" FROM BusConnection WHERE line = ?) A ",
-            "LEFT JOIN BusBerth ON A.\"from\" = BusBerth.i OR A.\"to\" = BusBerth.i"
-        )
+        "../sql/bus/company_stops.sql"
     );
 }
 
@@ -63,33 +51,21 @@ impl BusStop {
     _get_column!("BusStop", company, BusCompany);
     _get_column!("BusStop", name, Option<String>);
 
-    _get_derived_vec!(berths, BusBerth, "SELECT i FROM BusBerth WHERE stop = ?");
+    _get_derived_vec!(berths, BusBerth, "../sql/bus/stop_berths.sql");
     _get_derived_vec!(
         connections_from_here,
         BusConnection,
-        concat!(
-            "SELECT DISTINCT BusConnection.i ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
-            "INNER JOIN BusConnection ON A.i = BusConnection.\"from\""
-        )
+        "../sql/bus/stop_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         BusConnection,
-        concat!(
-            "SELECT DISTINCT BusConnection.i ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
-            "INNER JOIN BusConnection ON A.i = BusConnection.\"to\""
-        )
+        "../sql/bus/stop_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         BusLine,
-        concat!(
-            "SELECT DISTINCT BusConnection.line ",
-            "FROM (SELECT i FROM BusBerth WHERE stop = ?) A ",
-            "LEFT JOIN BusConnection ON A.i = BusConnection.\"from\" OR A.i = BusConnection.\"to\""
-        )
+        "../sql/bus/stop_lines.sql"
     );
 }
 
@@ -101,20 +77,17 @@ impl BusBerth {
     _get_derived_vec!(
         connections_from_here,
         BusConnection,
-        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"from\" = ?"
+        "../sql/bus/berth_connections_from_here.sql"
     );
     _get_derived_vec!(
         connections_to_here,
         BusConnection,
-        "SELECT BusConnection.i FROM BusConnection WHERE BusConnection.\"to\" = ?"
+        "../sql/bus/berth_connections_to_here.sql"
     );
     _get_derived_vec!(
         lines,
         BusLine,
-        concat!(
-            "SELECT DISTINCT BusConnection.line FROM BusConnection ",
-            "WHERE BusConnection.\"from\" = ? OR BusConnection.\"to\" = ?"
-        )
+        "../sql/bus/berth_lines.sql"
     );
 }
 

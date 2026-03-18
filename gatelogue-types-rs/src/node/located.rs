@@ -42,15 +42,14 @@ pub trait LocatedNode: Node + Copy {
 
     fn nodes_in_proximity(self, gd: &GD) -> Result<Vec<(AnyLocatedNode, Proximity)>> {
         gd.0.query_and_then_get_vec(
-            "SELECT node1, node2 FROM Proximity WHERE node1 = ?1 OR node2 = ?1",
+            include_str!("../sql/located/nodes_in_proximity.sql"),
             (self.i(),),
             |row| {
-                let node1 = row.get(0)?;
-                let node2 = row.get(1)?;
+                let other_i = row.get(0)?;
                 Ok((
-                    AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 })?
+                    AnyLocatedNode::from_id(gd, other_i)?
                         .unwrap(),
-                    Proximity(node1, node2),
+                    Proximity(self.i().min(other_i), self.i().max(other_i)),
                 ))
             },
         )
@@ -58,12 +57,11 @@ pub trait LocatedNode: Node + Copy {
 
     fn shared_facilities(self, gd: &GD) -> Result<Vec<AnyLocatedNode>> {
         gd.0.query_and_then_get_vec(
-            "SELECT node1, node2 FROM SharedFacility WHERE node1 = ?1 OR node2 = ?1",
+            include_str!("../sql/located/shared_facilities.sql"),
             (self.i(),),
             |row| {
-                let node1 = row.get(0)?;
-                let node2 = row.get(1)?;
-                AnyLocatedNode::from_id(gd, if node1 == self.i() { node2 } else { node1 })
+                let other_i = row.get(0)?;
+                AnyLocatedNode::from_id(gd, other_i)
                     .map(|a| a.unwrap())
             },
         )
