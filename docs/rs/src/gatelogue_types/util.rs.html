@@ -87,10 +87,10 @@
 <a href=#87 id=87 data-nosnippet>87</a><span class="attr">#[macro_export]
 <a href=#88 id=88 data-nosnippet>88</a>#[doc(hidden)]
 <a href=#89 id=89 data-nosnippet>89</a></span><span class="macro">macro_rules!</span> _get_derived_vec {
-<a href=#90 id=90 data-nosnippet>90</a>    (<span class="macro-nonterminal">$fn_name</span>:ident, <span class="macro-nonterminal">$RetTy</span>:ty, <span class="macro-nonterminal">$sql</span>:expr) =&gt; {
+<a href=#90 id=90 data-nosnippet>90</a>    (<span class="macro-nonterminal">$fn_name</span>:ident, <span class="macro-nonterminal">$RetTy</span>:ty, <span class="macro-nonterminal">$key</span>:literal) =&gt; {
 <a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">pub fn </span><span class="macro-nonterminal">$fn_name</span>(<span class="self">self</span>, gd: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$crate::GD</span>) -&gt; <span class="macro-nonterminal">$crate::error::Result</span>&lt;Vec&lt;<span class="macro-nonterminal">$RetTy</span>&gt;&gt; {
 <a href=#92 id=92 data-nosnippet>92</a>            <span class="kw">use </span><span class="macro-nonterminal">$crate::util::ConnectionExt</span>;
-<a href=#93 id=93 data-nosnippet>93</a>            gd.<span class="number">0</span>.query_and_then_get_vec(<span class="macro-nonterminal">$sql</span>, (<span class="self">self</span>.<span class="number">0</span>,), |row| <span class="prelude-val">Ok</span>(row.get(<span class="number">0</span>)<span class="question-mark">?</span>))
+<a href=#93 id=93 data-nosnippet>93</a>            gd.<span class="number">0</span>.query_and_then_get_vec(<span class="macro">include_str!</span>(<span class="macro-nonterminal">$key</span>), (<span class="self">self</span>.<span class="number">0</span>,), |row| <span class="prelude-val">Ok</span>(row.get(<span class="number">0</span>)<span class="question-mark">?</span>))
 <a href=#94 id=94 data-nosnippet>94</a>        }
 <a href=#95 id=95 data-nosnippet>95</a>    };
 <a href=#96 id=96 data-nosnippet>96</a>}
