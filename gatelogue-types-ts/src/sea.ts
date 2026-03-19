@@ -12,28 +12,13 @@ export class SeaCompany extends Node {
   }
 
   get lines(): SeaLine[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM SeaLine WHERE company = ?", [this.i])
-      .map(([i]) => new SeaLine(i, this.gd));
+    return this.getDerived(SeaLine, "sea/company_lines");
   }
   get stops(): SeaStop[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM SeaStop WHERE company = ?", [this.i])
-      .map(([i]) => new SeaStop(i, this.gd));
+    return this.getDerived(SeaStop, "sea/company_stops");
   }
   get docks(): SeaDock[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaDock.i 
-      FROM (SELECT i FROM SeaStop WHERE company = ?) A 
-      INNER JOIN SeaDock on A.i = SeaDock.stop`,
-        [this.i],
-      )
-      .map(([i]) => new SeaDock(i, this.gd));
+    return this.getDerived(SeaDock, "sea/company_docks");
   }
 }
 
@@ -42,7 +27,7 @@ export class SeaLine extends Node {
     return this.getColumn("SeaLine", "code");
   }
   get company(): SeaCompany {
-    return new SeaCompany(this.getColumn("SeaLine", "company"), this.gd);
+    return this.getColumnFK("SeaLine", "company", SeaCompany)!;
   }
   get name(): string | null {
     return this.getColumn("SeaLine", "name");
@@ -59,24 +44,10 @@ export class SeaLine extends Node {
   }
 
   get docks(): SeaDock[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaDock.i 
-      FROM (SELECT "from", "to" FROM SeaConnection WHERE line = ?) A 
-      LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i`,
-        [this.i],
-      )
-      .map(([i]) => new SeaDock(i, this.gd));
+    return this.getDerived(SeaDock, "sea/line_docks");
   }
   get stops(): SeaStop[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaDock.stop 
-      FROM (SELECT "from", "to" FROM SeaConnection WHERE line = ?) A 
-      LEFT JOIN SeaDock ON A."from" = SeaDock.i OR A."to" = SeaDock.i`,
-        [this.i],
-      )
-      .map(([i]) => new SeaStop(i, this.gd));
+    return this.getDerived(SeaStop, "sea/line_stops");
   }
 }
 
@@ -85,46 +56,23 @@ export class SeaStop extends LocatedNode {
     return this.getSet("SeaStopCodes", "code");
   }
   get company(): SeaCompany {
-    return new SeaCompany(this.getColumn("SeaStop", "company"), this.gd);
+    return this.getColumnFK("SeaStop", "company", SeaCompany)!;
   }
   get name(): string | null {
     return this.getColumn("SeaStop", "name");
   }
 
   get docks(): SeaDock[] {
-    return this.gd
-      .execGetMany<[number]>("SELECT i FROM SeaDock WHERE stop = ?", [this.i])
-      .map(([i]) => new SeaDock(i, this.gd));
+    return this.getDerived(SeaDock, "sea/stop_docks");
   }
   get connectionsFromHere(): SeaConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaConnection.i 
-      FROM (SELECT i FROM SeaDock WHERE stop = ?) A 
-      INNER JOIN SeaConnection ON A.i = SeaConnection."from"`,
-        [this.i],
-      )
-      .map(([i]) => new SeaConnection(i, this.gd));
+    return this.getDerived(SeaConnection, "sea/stop_connections_from_here");
   }
   get connectionsToHere(): SeaConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaConnection.i
-                                  FROM (SELECT i FROM SeaDock WHERE stop = ?) A
-                                           INNER JOIN SeaConnection ON A.i = SeaConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new SeaConnection(i, this.gd));
+    return this.getDerived(SeaConnection, "sea/stop_connections_to_here");
   }
   get lines(): SeaLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaConnection.line 
-      FROM (SELECT i FROM SeaDock WHERE stop = ?) A 
-      LEFT JOIN SeaConnection ON A.i = SeaConnection."from" OR A.i = SeaConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new SeaLine(i, this.gd));
+    return this.getDerived(SeaLine, "sea/stop_lines");
   }
 }
 
@@ -133,43 +81,29 @@ export class SeaDock extends Node {
     return this.getColumn("SeaDock", "code");
   }
   get stop(): SeaStop {
-    return new SeaStop(this.getColumn("SeaDock", "stop"), this.gd);
+    return this.getColumnFK("SeaDock", "stop", SeaStop)!;
   }
 
   get connectionsFromHere(): SeaConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."from" = ?', [this.i])
-      .map(([i]) => new SeaConnection(i, this.gd));
+    return this.getDerived(SeaConnection, "sea/dock_connections_from_here");
   }
   get connectionsToHere(): SeaConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT SeaConnection.i FROM SeaConnection WHERE SeaConnection."to" = ?', [this.i])
-      .map(([i]) => new SeaConnection(i, this.gd));
+    return this.getDerived(SeaConnection, "sea/dock_connections_to_here");
   }
   get lines(): SeaLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT SeaConnection.line FROM SeaConnection 
-      WHERE SeaConnection."from" = ? OR SeaConnection."to" = ?`,
-        [this.i],
-      )
-      .map(([i]) => new SeaLine(i, this.gd));
+    return this.getDerived(SeaLine, "sea/dock_lines");
   }
 }
 
 export class SeaConnection extends Node {
   get line(): SeaLine {
-    return new SeaLine(this.getColumn("SeaConnection", "line"), this.gd);
+    return this.getColumnFK("SeaConnection", "line", SeaLine)!;
   }
   get from(): SeaDock {
-    return new SeaDock(this.getColumn("SeaConnection", "from"), this.gd);
+    return this.getColumnFK("SeaConnection", "from", SeaDock)!;
   }
   get to(): SeaDock {
-    return new SeaDock(this.getColumn("SeaConnection", "to"), this.gd);
+    return this.getColumnFK("SeaConnection", "to", SeaDock)!;
   }
   get direction(): string | null {
     return this.getColumn("SeaConnection", "direction");

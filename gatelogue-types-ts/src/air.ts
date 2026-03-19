@@ -17,30 +17,13 @@ export class AirAirline extends Node {
   }
 
   get flights(): AirFlight[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM AirFlight WHERE airline = ?", [this.i])
-      .map(([i]) => new AirFlight(i, this.gd));
+    return this.getDerived(AirFlight, "air/airline_flights");
   }
   get gates(): AirGate[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT i FROM AirGate WHERE airline = ? 
-      UNION SELECT "from" AS i FROM AirFlight WHERE airline = ? 
-      UNION SELECT "to" AS i FROM AirFlight WHERE airline = ?`,
-        [this.i],
-      )
-      .map(([i]) => new AirGate(i, this.gd));
+    return this.getDerived(AirGate, "air/airline_gates");
   }
   get airports(): AirAirport[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT airport FROM AirGate WHERE airline = ? 
-      UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = "from" WHERE AirFlight.airline = ? 
-      UNION SELECT DISTINCT airport FROM AirFlight LEFT JOIN AirGate on AirGate.i = "to" WHERE AirFlight.airline = ?`,
-      )
-      .map(([i]) => new AirAirport(i, this.gd));
+    return this.getDerived(AirAirport, "air/airline_airports");
   }
 }
 
@@ -59,11 +42,7 @@ export class AirAirport extends LocatedNode {
   }
 
   get gates(): AirGate[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM AirGate WHERE airport = ?", [this.i])
-      .map(([i]) => new AirGate(i, this.gd));
+    return this.getDerived(AirGate, "air/airport_gates");
   }
 }
 
@@ -72,11 +51,10 @@ export class AirGate extends Node {
     return this.getColumn("AirGate", "code");
   }
   get airport(): AirAirport {
-    return new AirAirport(this.getColumn("AirGate", "airport"), this.gd);
+    return this.getColumnFK("AirGate", "airport", AirAirport)!;
   }
   get airline(): AirAirline | null {
-    const id = this.getColumn<number | null>("AirGate", "airline");
-    return id === null ? null : new AirAirline(id, this.gd);
+    return this.getColumnFK("AirGate", "airline", AirAirline);
   }
   get width(): number | null {
     return this.getColumn("AirGate", "width");
@@ -86,32 +64,26 @@ export class AirGate extends Node {
   }
 
   get flightsFromHere(): AirFlight[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT i FROM AirFlight WHERE "from" = ?', [this.i])
-      .map(([i]) => new AirFlight(i, this.gd));
+    return this.getDerived(AirFlight, "air/gate_flights_from_here");
   }
 
   get flightsToHere(): AirFlight[] {
-    return this.gd
-      .execGetMany<[number]>('SELECT i FROM AirFlight WHERE "to" = ?', [this.i])
-      .map(([i]) => new AirFlight(i, this.gd));
+    return this.getDerived(AirFlight, "air/gate_flights_to_here");
   }
 }
 
 export class AirFlight extends Node {
   get airline(): AirAirline {
-    return new AirAirline(this.getColumn("AirFlight", "airline"), this.gd);
+    return this.getColumnFK("AirFlight", "airline", AirAirline)!;
   }
   get code(): string {
     return this.getColumn("AirFlight", "code");
   }
   get from(): AirGate {
-    return new AirGate(this.getColumn("AirFlight", "from"), this.gd);
+    return this.getColumnFK("AirFlight", "from", AirGate)!;
   }
   get to(): AirGate {
-    return new AirGate(this.getColumn("AirFlight", "to"), this.gd);
+    return this.getColumnFK("AirFlight", "to", AirGate)!;
   }
   get aircraft(): Aircraft | null {
     const name = this.getColumn<string | null>("AirFlight", "aircraft");
@@ -123,13 +95,10 @@ export class AirFlight extends Node {
 }
 
 export class Aircraft {
-  readonly name: string;
-  protected readonly gd: GD;
-
-  constructor(name: string, gd: GD) {
-    this.name = name;
-    this.gd = gd;
-  }
+  constructor(
+    readonly name: string,
+    protected readonly gd: GD,
+  ) {}
 
   get manufacturer(): string {
     return this.gd.execGetOne<[string]>(

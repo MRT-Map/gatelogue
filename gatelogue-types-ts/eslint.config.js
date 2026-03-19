@@ -22,6 +22,7 @@ export default tseslint.config(
       "max-lines": "off",
       "new-cap": "off",
       "no-magic-numbers": "off",
+      "no-continue": "off",
       "no-ternary": "off",
       "no-undefined": "off",
       "no-use-before-define": "off",

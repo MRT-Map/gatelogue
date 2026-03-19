@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build-only": "vite build --base=/gatelogue",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint --fix src/",
+    "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
     "format": "prettier --write .",
     "prepare": "cd ../gatelogue-types-ts && pnpm i && pnpm run prepare"
   },

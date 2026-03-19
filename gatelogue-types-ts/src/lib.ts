@@ -147,13 +147,13 @@ export class GD {
     return typeof window === "undefined"
       ? await initSqlJs()
       : await initSqlJs({
-        locateFile: () => `https://sql.js.org/dist/sql-wasm.wasm`,
-      });
+          locateFile: () => `https://sql.js.org/dist/sql-wasm.wasm`,
+        });
   }
 
   static async get(sources = false, SQL?: SqlJsStatic): Promise<GD> {
     return new GD(
-      SQL ?? await this.getSQL(),
+      SQL ?? (await this.getSQL()),
       await fetch(sources ? URL : URL_NO_SOURCES).then((res) => res.bytes()),
     );
   }

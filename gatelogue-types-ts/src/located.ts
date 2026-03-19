@@ -1,5 +1,6 @@
 import type { GD } from "./lib.js";
 import { type ID, Node } from "./node.js";
+import SQLQueries from "./sql.js";
 
 export type World = "Old" | "New" | "Space";
 
@@ -27,40 +28,30 @@ export abstract class LocatedNode extends Node {
 
   get nodesInProximity(): [LocatedNode, Proximity][] {
     return this.gd
-      .execGetMany<
-        [number, number]
-      >("SELECT node1, node2 FROM Proximity WHERE node1 = ?1 OR node2 = ?1", [this.i])
-      .map(([node1, node2]) => [
-        this.i === node1
-          ? LocatedNode.fromId(node2, this.gd)
-          : LocatedNode.fromId(node1, this.gd),
-        new Proximity(node1, node2, this.gd),
+      .execGetMany<[number]>(SQLQueries["located/nodes_in_proximity"])
+      .map(([other]) => [
+        LocatedNode.fromId(other, this.gd),
+        new Proximity(
+          Math.min(other, this.i),
+          Math.max(other, this.i),
+          this.gd,
+        ),
       ]);
   }
 
   get sharedFacilities(): LocatedNode[] {
     return this.gd
-      .execGetMany<
-        [number, number]
-      >("SELECT node1, node2 FROM SharedFacility WHERE node1 = ?1 OR node2 = ?1", [this.i])
-      .map(([node1, node2]) =>
-        this.i === node1
-          ? LocatedNode.fromId(node2, this.gd)
-          : LocatedNode.fromId(node1, this.gd),
-      );
+      .execGetMany<[number]>(SQLQueries["located/shared_facilities"])
+      .map(([other]) => LocatedNode.fromId(other, this.gd));
   }
 }
 
 export class Proximity {
-  readonly i1: ID;
-  readonly i2: ID;
-  protected readonly gd: GD;
-
-  constructor(i1: ID, i2: ID, gd: GD) {
-    this.i1 = Math.min(i1, i2);
-    this.i2 = Math.max(i1, i2);
-    this.gd = gd;
-  }
+  constructor(
+    readonly i1: ID,
+    readonly i2: ID,
+    protected readonly gd: GD,
+  ) {}
 
   get distance(): number {
     return this.gd.execGetOne<[number]>(

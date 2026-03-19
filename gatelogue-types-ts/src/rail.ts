@@ -12,28 +12,13 @@ export class RailCompany extends Node {
   }
 
   get lines(): RailLine[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM RailLine WHERE company = ?", [this.i])
-      .map(([i]) => new RailLine(i, this.gd));
+    return this.getDerived(RailLine, "rail/company_lines");
   }
   get stations(): RailStation[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM RailStation WHERE company = ?", [this.i])
-      .map(([i]) => new RailStation(i, this.gd));
+    return this.getDerived(RailStation, "rail/company_stations");
   }
   get platforms(): RailPlatform[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailPlatform.i 
-      FROM (SELECT i FROM RailStation WHERE company = ?) A 
-      INNER JOIN RailPlatform on A.i = RailPlatform.station`,
-        [this.i],
-      )
-      .map(([i]) => new RailPlatform(i, this.gd));
+    return this.getDerived(RailPlatform, "rail/company_platforms");
   }
 }
 
@@ -42,7 +27,7 @@ export class RailLine extends Node {
     return this.getColumn("RailLine", "code");
   }
   get company(): RailCompany {
-    return new RailCompany(this.getColumn("RailLine", "company"), this.gd);
+    return this.getColumnFK("RailLine", "company", RailCompany)!;
   }
   get name(): string | null {
     return this.getColumn("RailLine", "name");
@@ -59,24 +44,10 @@ export class RailLine extends Node {
   }
 
   get platforms(): RailPlatform[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailPlatform.i 
-      FROM (SELECT "from", "to" FROM RailConnection WHERE line = ?) A 
-      LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i`,
-        [this.i],
-      )
-      .map(([i]) => new RailPlatform(i, this.gd));
+    return this.getDerived(RailPlatform, "rail/line_platforms");
   }
   get stations(): RailStation[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailPlatform.station 
-      FROM (SELECT "from", "to" FROM RailConnection WHERE line = ?) A 
-      LEFT JOIN RailPlatform ON A."from" = RailPlatform.i OR A."to" = RailPlatform.i`,
-        [this.i],
-      )
-      .map(([i]) => new RailStation(i, this.gd));
+    return this.getDerived(RailStation, "rail/line_stations");
   }
 }
 
@@ -85,48 +56,26 @@ export class RailStation extends LocatedNode {
     return this.getSet("RailStationCodes", "code");
   }
   get company(): RailCompany {
-    return new RailCompany(this.getColumn("RailStation", "company"), this.gd);
+    return this.getColumnFK("RailStation", "company", RailCompany)!;
   }
   get name(): string | null {
     return this.getColumn("RailStation", "name");
   }
 
   get platforms(): RailPlatform[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM RailPlatform WHERE station = ?", [this.i])
-      .map(([i]) => new RailPlatform(i, this.gd));
+    return this.getDerived(RailPlatform, "rail/station_platforms");
   }
   get connectionsFromHere(): RailConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailConnection.i 
-      FROM (SELECT i FROM RailPlatform WHERE station = ?) A 
-      INNER JOIN RailConnection ON A.i = RailConnection."from"`,
-        [this.i],
-      )
-      .map(([i]) => new RailConnection(i, this.gd));
+    return this.getDerived(
+      RailConnection,
+      "rail/station_connections_from_here",
+    );
   }
   get connectionsToHere(): RailConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailConnection.i
-                                  FROM (SELECT i FROM RailPlatform WHERE station = ?) A
-                                           INNER JOIN RailConnection ON A.i = RailConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new RailConnection(i, this.gd));
+    return this.getDerived(RailConnection, "rail/station_connections_to_here");
   }
   get lines(): RailLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailConnection.line 
-      FROM (SELECT i FROM RailPlatform WHERE station = ?) A 
-      LEFT JOIN RailConnection ON A.i = RailConnection."from" OR A.i = RailConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new RailLine(i, this.gd));
+    return this.getDerived(RailLine, "rail/station_lines");
   }
 }
 
@@ -135,43 +84,32 @@ export class RailPlatform extends Node {
     return this.getColumn("RailPlatform", "code");
   }
   get station(): RailStation {
-    return new RailStation(this.getColumn("RailPlatform", "station"), this.gd);
+    return this.getColumnFK("RailPlatform", "station", RailStation)!;
   }
 
   get connectionsFromHere(): RailConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT RailConnection.i FROM RailConnection WHERE RailConnection."from" = ?', [this.i])
-      .map(([i]) => new RailConnection(i, this.gd));
+    return this.getDerived(
+      RailConnection,
+      "rail/platform_connections_from_here",
+    );
   }
   get connectionsToHere(): RailConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT RailConnection.i FROM RailConnection WHERE RailConnection."to" = ?', [this.i])
-      .map(([i]) => new RailConnection(i, this.gd));
+    return this.getDerived(RailConnection, "rail/platform_connections_to_here");
   }
   get lines(): RailLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT RailConnection.line FROM RailConnection 
-      WHERE RailConnection."from" = ? OR RailConnection."to" = ?`,
-        [this.i],
-      )
-      .map(([i]) => new RailLine(i, this.gd));
+    return this.getDerived(RailLine, "rail/platform_lines");
   }
 }
 
 export class RailConnection extends Node {
   get line(): RailLine {
-    return new RailLine(this.getColumn("RailConnection", "line"), this.gd);
+    return this.getColumnFK("RailConnection", "line", RailLine)!;
   }
   get from(): RailPlatform {
-    return new RailPlatform(this.getColumn("RailConnection", "from"), this.gd);
+    return this.getColumnFK("RailConnection", "from", RailPlatform)!;
   }
   get to(): RailPlatform {
-    return new RailPlatform(this.getColumn("RailConnection", "to"), this.gd);
+    return this.getColumnFK("RailConnection", "to", RailPlatform)!;
   }
   get direction(): string | null {
     return this.getColumn("RailConnection", "direction");

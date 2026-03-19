@@ -12,28 +12,13 @@ export class BusCompany extends Node {
   }
 
   get lines(): BusLine[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM BusLine WHERE company = ?", [this.i])
-      .map(([i]) => new BusLine(i, this.gd));
+    return this.getDerived(BusLine, "bus/company_lines");
   }
   get stops(): BusStop[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >("SELECT i FROM BusStop WHERE company = ?", [this.i])
-      .map(([i]) => new BusStop(i, this.gd));
+    return this.getDerived(BusStop, "bus/company_stops");
   }
   get berths(): BusBerth[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusBerth.i 
-      FROM (SELECT i FROM BusStop WHERE company = ?) A 
-      INNER JOIN BusBerth on A.i = BusBerth.stop`,
-        [this.i],
-      )
-      .map(([i]) => new BusBerth(i, this.gd));
+    return this.getDerived(BusBerth, "bus/company_berths");
   }
 }
 
@@ -42,7 +27,7 @@ export class BusLine extends Node {
     return this.getColumn("BusLine", "code");
   }
   get company(): BusCompany {
-    return new BusCompany(this.getColumn("BusLine", "company"), this.gd);
+    return this.getColumnFK("BusLine", "company", BusCompany)!;
   }
   get name(): string | null {
     return this.getColumn("BusLine", "name");
@@ -59,24 +44,10 @@ export class BusLine extends Node {
   }
 
   get berths(): BusBerth[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusBerth.i 
-      FROM (SELECT "from", "to" FROM BusConnection WHERE line = ?) A 
-      LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i`,
-        [this.i],
-      )
-      .map(([i]) => new BusBerth(i, this.gd));
+    return this.getDerived(BusBerth, "bus/line_berths");
   }
   get stops(): BusStop[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusBerth.stop 
-      FROM (SELECT "from", "to" FROM BusConnection WHERE line = ?) A 
-      LEFT JOIN BusBerth ON A."from" = BusBerth.i OR A."to" = BusBerth.i`,
-        [this.i],
-      )
-      .map(([i]) => new BusStop(i, this.gd));
+    return this.getDerived(BusStop, "bus/line_stops");
   }
 }
 
@@ -85,46 +56,23 @@ export class BusStop extends LocatedNode {
     return this.getSet("BusStopCodes", "code");
   }
   get company(): BusCompany {
-    return new BusCompany(this.getColumn("BusStop", "company"), this.gd);
+    return this.getColumnFK("BusStop", "company", BusCompany)!;
   }
   get name(): string | null {
     return this.getColumn("BusStop", "name");
   }
 
   get berths(): BusBerth[] {
-    return this.gd
-      .execGetMany<[number]>("SELECT i FROM BusBerth WHERE stop = ?", [this.i])
-      .map(([i]) => new BusBerth(i, this.gd));
+    return this.getDerived(BusBerth, "bus/stop_berths");
   }
   get connectionsFromHere(): BusConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusConnection.i 
-      FROM (SELECT i FROM BusBerth WHERE stop = ?) A 
-      INNER JOIN BusConnection ON A.i = BusConnection."from"`,
-        [this.i],
-      )
-      .map(([i]) => new BusConnection(i, this.gd));
+    return this.getDerived(BusConnection, "bus/stop_connections_from_here");
   }
   get connectionsToHere(): BusConnection[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusConnection.i
-                                  FROM (SELECT i FROM BusBerth WHERE stop = ?) A
-                                           INNER JOIN BusConnection ON A.i = BusConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new BusConnection(i, this.gd));
+    return this.getDerived(BusConnection, "bus/stop_connections_to_here");
   }
   get lines(): BusLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusConnection.line 
-      FROM (SELECT i FROM BusBerth WHERE stop = ?) A 
-      LEFT JOIN BusConnection ON A.i = BusConnection."from" OR A.i = BusConnection."to"`,
-        [this.i],
-      )
-      .map(([i]) => new BusLine(i, this.gd));
+    return this.getDerived(BusLine, "bus/stop_lines");
   }
 }
 
@@ -133,43 +81,29 @@ export class BusBerth extends Node {
     return this.getColumn("BusBerth", "code");
   }
   get stop(): BusStop {
-    return new BusStop(this.getColumn("BusBerth", "stop"), this.gd);
+    return this.getColumnFK("BusBerth", "stop", BusStop)!;
   }
 
   get connectionsFromHere(): BusConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT BusConnection.i FROM BusConnection WHERE BusConnection."from" = ?', [this.i])
-      .map(([i]) => new BusConnection(i, this.gd));
+    return this.getDerived(BusConnection, "bus/berth_connections_from_here");
   }
   get connectionsToHere(): BusConnection[] {
-    return this.gd
-      .execGetMany<
-        [number]
-      >('SELECT BusConnection.i FROM BusConnection WHERE BusConnection."to" = ?', [this.i])
-      .map(([i]) => new BusConnection(i, this.gd));
+    return this.getDerived(BusConnection, "bus/berth_connections_to_here");
   }
   get lines(): BusLine[] {
-    return this.gd
-      .execGetMany<[number]>(
-        `SELECT DISTINCT BusConnection.line FROM BusConnection 
-      WHERE BusConnection."from" = ? OR BusConnection."to" = ?`,
-        [this.i],
-      )
-      .map(([i]) => new BusLine(i, this.gd));
+    return this.getDerived(BusLine, "bus/berth_lines");
   }
 }
 
 export class BusConnection extends Node {
   get line(): BusLine {
-    return new BusLine(this.getColumn("BusConnection", "line"), this.gd);
+    return this.getColumnFK("BusConnection", "line", BusLine)!;
   }
   get from(): BusBerth {
-    return new BusBerth(this.getColumn("BusConnection", "from"), this.gd);
+    return this.getColumnFK("BusConnection", "from", BusBerth)!;
   }
   get to(): BusBerth {
-    return new BusBerth(this.getColumn("BusConnection", "to"), this.gd);
+    return this.getColumnFK("BusConnection", "to", BusBerth)!;
   }
   get direction(): string | null {
     return this.getColumn("BusConnection", "direction");
