@@ -35,7 +35,7 @@
     "npm-run-all2": "8.0.4",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.57.0",
+    "typescript-eslint": "8.57.1",
     "vite": "8.0.0",
     "vite-plugin-vue-devtools": "8.1.0",
     "vue-eslint-parser": "10.4.0",
