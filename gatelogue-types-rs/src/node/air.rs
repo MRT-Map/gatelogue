@@ -61,6 +61,7 @@ impl AirFlight {
     _get_column!("AirFlight", from, AirGate);
     _get_column!("AirFlight", to, AirGate);
     _get_column!("AirFlight", aircraft, Option<Aircraft>);
+    _get_column!("AirFlight", duration, Option<u32>);
 }
 
 #[macro_export]

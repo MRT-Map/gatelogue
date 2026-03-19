@@ -92,6 +92,9 @@ export class AirFlight extends Node {
     }
     return new Aircraft(name, this.gd);
   }
+  get duration(): number | null {
+    return this.getColumn("AirFlight", "duration");
+  }
 }
 
 export class Aircraft {

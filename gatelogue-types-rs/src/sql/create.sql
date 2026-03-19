@@ -111,13 +111,15 @@ CREATE TABLE AirFlight
     "to"     INTEGER NOT NULL REFERENCES AirGate (i),
     code     TEXT    NOT NULL,
     aircraft TEXT REFERENCES Aircraft (name),
-    airline  INTEGER NOT NULL REFERENCES AirAirline (i)
+    airline  INTEGER NOT NULL REFERENCES AirAirline (i),
+    duration INTEGER
 ) STRICT;
 CREATE TABLE AirFlightSource
 (
     i      INTEGER NOT NULL REFERENCES AirFlight (i),
     source INTEGER NOT NULL REFERENCES Source (priority),
     aircraft   INTEGER NOT NULL CHECK ( aircraft IN (false, true) ) DEFAULT false,
+    duration   INTEGER NOT NULL CHECK ( aircraft IN (false, true) ) DEFAULT false,
     PRIMARY KEY (i, source)
 ) STRICT;
 

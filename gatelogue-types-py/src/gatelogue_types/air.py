@@ -331,7 +331,9 @@ class AirFlight(Node):
     """The :py:class:`AirGate` this flight arrives at"""
     aircraft = _AircraftColumn("aircraft", "AirFlight", sourced=True)
     """Aircraft used on the flight"""
-    COLUMNS: ClassVar = (airline, code, from_, to, aircraft)
+    duration = _Column[int | None]("duration", "AirFlight", sourced=True, formatter=_format_str)
+    """The duration taken in seconds to travel on this connection"""
+    COLUMNS: ClassVar = (airline, code, from_, to, aircraft, duration)
 
     def __str__(self):
         return super().__str__() + f" {self.airline.name} {self.code}"
@@ -355,12 +357,12 @@ class AirFlight(Node):
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline) '
-            "VALUES (:i, :from_, :to, :code, :aircraft, :airline)",
+            'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline, duration) '
+            "VALUES (:i, :from_, :to, :code, :aircraft, :airline, :duration)",
             dict(i=i, **kwargs),
         )
         cur.execute(
-            "INSERT INTO AirFlightSource (i, source, aircraft) VALUES (:i, :source, :aircraft_src)",
+            "INSERT INTO AirFlightSource (i, source, aircraft, duration) VALUES (:i, :source, :aircraft_src, :duration_src)",
             dict(i=i, source=src, **kwargs),
         )
         return cls(conn, i)
