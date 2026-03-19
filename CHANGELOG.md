@@ -3,6 +3,14 @@
 ## Planned
 * add rail, sea and bus to client/data viewer
 
+## v3.1.0+13 (20260319)
+* `gatelogue-aggregator`: change `cloudscraper` to `rnet`
+* `gatelogue-types` (rs, py)
+  * rework getters to make them customisable to any HTTP client library **(breaking change)**
+  * new shared folder of SQL queries to reduce deduplication of SELECT queries
+* **Data v13**
+  * Add `duration` to `AirFlight`
+
 ## v3.0.8+12 (20260310)
 * `gatelogue-types` (ts): make SQL object customisable
 * `gatelogue-client`: index DB
