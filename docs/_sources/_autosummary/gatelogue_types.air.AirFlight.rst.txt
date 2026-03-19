@@ -40,6 +40,7 @@
       ~AirFlight.aircraft
       ~AirFlight.airline
       ~AirFlight.code
+      ~AirFlight.duration
       ~AirFlight.from_
       ~AirFlight.source
       ~AirFlight.to

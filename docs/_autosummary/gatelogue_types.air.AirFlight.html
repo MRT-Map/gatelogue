@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_types.air.AirFlight &mdash; gatelogue-aggregator 3.0.8 documentation</title>
+  <title>gatelogue_types.air.AirFlight &mdash; gatelogue-aggregator 3.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_types.air.AirFlight.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=8f547cfa"></script>
+      <script src="../_static/documentation_options.js?v=dd1205ac"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
@@ -162,29 +162,32 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.code" title="gatelogue_types.air.AirFlight.code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">code</span></code></a></p></td>
 <td><p>Flight code.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.from_" title="gatelogue_types.air.AirFlight.from_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.duration" title="gatelogue_types.air.AirFlight.duration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">duration</span></code></a></p></td>
+<td><p>The duration taken in seconds to travel on this connection</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.from_" title="gatelogue_types.air.AirFlight.from_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_</span></code></a></p></td>
 <td><p>The <a class="reference internal" href="gatelogue_types.air.AirGate.html#gatelogue_types.air.AirGate" title="gatelogue_types.air.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> this flight departs from</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.source" title="gatelogue_types.air.AirFlight.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.source" title="gatelogue_types.air.AirFlight.source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source</span></code></a></p></td>
 <td><p>Returns a single source.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.to" title="gatelogue_types.air.AirFlight.to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.to" title="gatelogue_types.air.AirFlight.to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code></a></p></td>
 <td><p>The <a class="reference internal" href="gatelogue_types.air.AirGate.html#gatelogue_types.air.AirGate" title="gatelogue_types.air.AirGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AirGate</span></code></a> this flight arrives at</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.i" title="gatelogue_types.air.AirFlight.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.i" title="gatelogue_types.air.AirFlight.i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code></a></p></td>
 <td><p>The ID of the node</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.type" title="gatelogue_types.air.AirFlight.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.type" title="gatelogue_types.air.AirFlight.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code></a></p></td>
 <td><p>The type of the node</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.sources" title="gatelogue_types.air.AirFlight.sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sources</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_types.air.AirFlight.sources" title="gatelogue_types.air.AirFlight.sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sources</span></code></a></p></td>
 <td><p>All sources that prove the node's existence.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gatelogue_types.air.AirFlight.COLUMNS">
-<span class="sig-name descname"><span class="pre">COLUMNS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._Column</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._AircraftColumn</span> <span class="pre">object&gt;)</span></span><a class="headerlink" href="#gatelogue_types.air.AirFlight.COLUMNS" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">COLUMNS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._Column</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._FKColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._AircraftColumn</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;gatelogue_types._util._Column</span> <span class="pre">object&gt;)</span></span><a class="headerlink" href="#gatelogue_types.air.AirFlight.COLUMNS" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
@@ -342,6 +345,12 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 <dt class="sig sig-object py" id="gatelogue_types.air.AirFlight.delete">
 <span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_types.air.AirFlight.delete" title="Link to this definition"></a></dt>
 <dd><p>Internal use</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_types.air.AirFlight.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><a class="headerlink" href="#gatelogue_types.air.AirFlight.duration" title="Link to this definition"></a></dt>
+<dd><p>The duration taken in seconds to travel on this connection</p>
 </dd></dl>
 
 <dl class="py method">
