@@ -8,5 +8,5 @@ The current data format version is
 .. program-output:: python -c "from gatelogue_aggregator.__about__ import __data_version__; print('v'+str(__data_version__))"
 
 
-.. literalinclude:: ../../gatelogue-types-py/src/gatelogue_types/create.sql
+.. literalinclude:: ../../gatelogue-types-sql/create.sql
    :language: sql
