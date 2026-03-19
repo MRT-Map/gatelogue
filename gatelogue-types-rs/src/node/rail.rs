@@ -20,16 +20,8 @@ impl RailCompany {
     _get_column!("RailCompany", name, String);
     _get_column!("RailCompany", link, Option<String>);
     _get_derived_vec!(lines, RailLine, "../sql/rail/company_lines.sql");
-    _get_derived_vec!(
-        stations,
-        RailStation,
-        "../sql/rail/company_stations.sql"
-    );
-    _get_derived_vec!(
-        platforms,
-        RailPlatform,
-        "../sql/rail/company_platforms.sql"
-    );
+    _get_derived_vec!(stations, RailStation, "../sql/rail/company_stations.sql");
+    _get_derived_vec!(platforms, RailPlatform, "../sql/rail/company_platforms.sql");
 }
 
 node_type!(RailLine);
@@ -41,16 +33,8 @@ impl RailLine {
     _get_column!("RailLine", mode, Option<RailMode>);
     _get_column!("RailLine", local, Option<bool>);
 
-    _get_derived_vec!(
-        platforms,
-        RailPlatform,
-        "../sql/rail/line_platforms.sql"
-    );
-    _get_derived_vec!(
-        stations,
-        RailStation,
-        "../sql/rail/company_stations.sql"
-    );
+    _get_derived_vec!(platforms, RailPlatform, "../sql/rail/line_platforms.sql");
+    _get_derived_vec!(stations, RailStation, "../sql/rail/company_stations.sql");
 }
 
 node_type!(located RailStation);
@@ -59,11 +43,7 @@ impl RailStation {
     _get_column!("RailStation", company, RailCompany);
     _get_column!("RailStation", name, Option<String>);
 
-    _get_derived_vec!(
-        platforms,
-        RailPlatform,
-        "../sql/rail/station_platforms.sql"
-    );
+    _get_derived_vec!(platforms, RailPlatform, "../sql/rail/station_platforms.sql");
     _get_derived_vec!(
         connections_from_here,
         RailConnection,
@@ -74,11 +54,7 @@ impl RailStation {
         RailConnection,
         "../sql/rail/station_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        RailLine,
-        "../sql/rail/station_lines.sql"
-    );
+    _get_derived_vec!(lines, RailLine, "../sql/rail/station_lines.sql");
 }
 
 node_type!(RailPlatform);
@@ -96,11 +72,7 @@ impl RailPlatform {
         RailConnection,
         "../sql/rail/platform_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        RailLine,
-        "../sql/rail/platform_lines.sql"
-    );
+    _get_derived_vec!(lines, RailLine, "../sql/rail/platform_lines.sql");
 }
 
 node_type!(RailConnection);

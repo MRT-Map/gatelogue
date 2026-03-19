@@ -32,7 +32,13 @@ class Warp(msgspec.Struct):
 
     @property
     def world(self) -> gt.World | None:
-        return "New" if self.world_uuid == UUID("253ced62-9637-4f7b-a32d-4e3e8e767bd1") else "Old" if self.world_uuid == UUID("59e29aa1-7e98-4d40-bac7-594905b734a9") else None
+        return (
+            "New"
+            if self.world_uuid == UUID("253ced62-9637-4f7b-a32d-4e3e8e767bd1")
+            else "Old"
+            if self.world_uuid == UUID("59e29aa1-7e98-4d40-bac7-594905b734a9")
+            else None
+        )
 
 
 class WarpAPI:

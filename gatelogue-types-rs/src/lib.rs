@@ -69,6 +69,7 @@
 //! ```
 
 use std::fmt::Debug;
+
 use rusqlite::{types::FromSql, Connection};
 
 mod error;
@@ -83,22 +84,57 @@ pub use util::ID;
 
 use crate::util::ConnectionExt;
 
-pub const URL: &str =
-    "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
+pub const URL: &str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
 pub const URL_NO_SOURCES: &str =
     "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db";
 
 #[macro_export]
 macro_rules! getter {
-    (reqwest) => {async |url: &'static str| -> Result<Vec<u8>, reqwest::Error> {Ok(reqwest::get(url).await?.bytes().await?.to_vec())}};
-    (reqwest_blocking) => {|url: &'static str| -> Result<Vec<u8>, reqwest::Error> {Ok(reqwest::blocking::get(url)?.bytes()?.to_vec())}};
-    (surf) => {async |url: &'static str| -> Result<Vec<u8>, surf::Error> {surf::get(url).recv_bytes().await}};
-    (ureq) => {|url: &'static str| -> Result<Vec<u8>, ureq::Error> {ureq::get(url).call()?.into_body().read_to_vec()}};
-    (isahc) => {|url: &'static str| -> Result<Vec<u8>, isahc::Error> {Ok(isahc::ReadResponseExt::bytes(&mut isahc::get(url)?)?)}};
-    (isahc_async) => {async |url: &'static str| -> Result<Vec<u8>, isahc::Error> {Ok(isahc::AsyncReadResponseExt::bytes(&mut isahc::get_async(url).await?).await?)}};
-    (attohttpc) => {|url: &'static str| -> Result<Vec<u8>, attohttpc::Error> {attohttpc::get(url).send()?.bytes()}};
-    (minreq) => {|url: &'static str| -> Result<Vec<u8>, minreq::Error> {Ok(minreq::get(url).send()?.into_bytes())}};
-    (wreq) => {async |url: &'static str| -> Result<Vec<u8>, wreq::Error> {Ok(wreq::get(url).send().await?.bytes().await?.to_vec())}};
+    (reqwest) => {
+        async |url: &'static str| -> Result<Vec<u8>, reqwest::Error> {
+            Ok(reqwest::get(url).await?.bytes().await?.to_vec())
+        }
+    };
+    (reqwest_blocking) => {
+        |url: &'static str| -> Result<Vec<u8>, reqwest::Error> {
+            Ok(reqwest::blocking::get(url)?.bytes()?.to_vec())
+        }
+    };
+    (surf) => {
+        async |url: &'static str| -> Result<Vec<u8>, surf::Error> {
+            surf::get(url).recv_bytes().await
+        }
+    };
+    (ureq) => {
+        |url: &'static str| -> Result<Vec<u8>, ureq::Error> {
+            ureq::get(url).call()?.into_body().read_to_vec()
+        }
+    };
+    (isahc) => {
+        |url: &'static str| -> Result<Vec<u8>, isahc::Error> {
+            Ok(isahc::ReadResponseExt::bytes(&mut isahc::get(url)?)?)
+        }
+    };
+    (isahc_async) => {
+        async |url: &'static str| -> Result<Vec<u8>, isahc::Error> {
+            Ok(isahc::AsyncReadResponseExt::bytes(&mut isahc::get_async(url).await?).await?)
+        }
+    };
+    (attohttpc) => {
+        |url: &'static str| -> Result<Vec<u8>, attohttpc::Error> {
+            attohttpc::get(url).send()?.bytes()
+        }
+    };
+    (minreq) => {
+        |url: &'static str| -> Result<Vec<u8>, minreq::Error> {
+            Ok(minreq::get(url).send()?.into_bytes())
+        }
+    };
+    (wreq) => {
+        async |url: &'static str| -> Result<Vec<u8>, wreq::Error> {
+            Ok(wreq::get(url).send().await?.bytes().await?.to_vec())
+        }
+    };
 }
 
 pub struct GD(pub Connection);
@@ -109,17 +145,59 @@ impl GD {
         conn.deserialize_read_exact("main", bytes, bytes.len(), true)?;
         Ok(Self(conn))
     }
-    pub async fn get_async_with_sources<F: AsyncFnOnce(&'static str) -> Result<B, E>, B: AsRef<[u8]>, E: Debug + Send + Sync + 'static>(getter: F) -> Result<Self> {
-        Self::from_bytes(getter(URL).await.map_err(|e| Error::HTTPGetError(Box::new(e)))?.as_ref())
+    pub async fn get_async_with_sources<
+        F: AsyncFnOnce(&'static str) -> Result<B, E>,
+        B: AsRef<[u8]>,
+        E: Debug + Send + Sync + 'static,
+    >(
+        getter: F,
+    ) -> Result<Self> {
+        Self::from_bytes(
+            getter(URL)
+                .await
+                .map_err(|e| Error::HTTPGetError(Box::new(e)))?
+                .as_ref(),
+        )
     }
-    pub async fn get_async_no_sources<F: AsyncFnOnce(&'static str) -> Result<B, E>, B: AsRef<[u8]>, E: Debug + Send + Sync + 'static>(getter: F) -> Result<Self> {
-        Self::from_bytes(getter(URL_NO_SOURCES).await.map_err(|e| Error::HTTPGetError(Box::new(e)))?.as_ref())
+    pub async fn get_async_no_sources<
+        F: AsyncFnOnce(&'static str) -> Result<B, E>,
+        B: AsRef<[u8]>,
+        E: Debug + Send + Sync + 'static,
+    >(
+        getter: F,
+    ) -> Result<Self> {
+        Self::from_bytes(
+            getter(URL_NO_SOURCES)
+                .await
+                .map_err(|e| Error::HTTPGetError(Box::new(e)))?
+                .as_ref(),
+        )
     }
-    pub fn get_with_sources<F: FnOnce(&'static str) -> Result<B, E>, B: AsRef<[u8]>, E: Debug + Send + Sync + 'static>(getter: F) -> Result<Self> {
-        Self::from_bytes(getter(URL).map_err(|e| Error::HTTPGetError(Box::new(e)))?.as_ref())
+    pub fn get_with_sources<
+        F: FnOnce(&'static str) -> Result<B, E>,
+        B: AsRef<[u8]>,
+        E: Debug + Send + Sync + 'static,
+    >(
+        getter: F,
+    ) -> Result<Self> {
+        Self::from_bytes(
+            getter(URL)
+                .map_err(|e| Error::HTTPGetError(Box::new(e)))?
+                .as_ref(),
+        )
     }
-    pub fn get_no_sources<F: FnOnce(&'static str) -> Result<B, E>, B: AsRef<[u8]>, E: Debug + Send + Sync + 'static>(getter: F) -> Result<Self> {
-        Self::from_bytes(getter(URL_NO_SOURCES).map_err(|e| Error::HTTPGetError(Box::new(e)))?.as_ref())
+    pub fn get_no_sources<
+        F: FnOnce(&'static str) -> Result<B, E>,
+        B: AsRef<[u8]>,
+        E: Debug + Send + Sync + 'static,
+    >(
+        getter: F,
+    ) -> Result<Self> {
+        Self::from_bytes(
+            getter(URL_NO_SOURCES)
+                .map_err(|e| Error::HTTPGetError(Box::new(e)))?
+                .as_ref(),
+        )
     }
 
     pub fn timestamp(&self) -> Result<String> {
@@ -206,7 +284,9 @@ mod test {
 
     #[tokio::test]
     async fn isahc_async() {
-        GD::get_async_no_sources(getter!(isahc_async)).await.unwrap();
+        GD::get_async_no_sources(getter!(isahc_async))
+            .await
+            .unwrap();
     }
 
     // #[test]

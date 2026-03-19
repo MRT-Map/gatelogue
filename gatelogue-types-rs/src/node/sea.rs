@@ -19,11 +19,7 @@ impl SeaCompany {
     _get_column!("SeaCompany", link, Option<String>);
     _get_derived_vec!(lines, SeaLine, "../sql/sea/company_lines.sql");
     _get_derived_vec!(stops, SeaStop, "../sql/sea/company_stops.sql");
-    _get_derived_vec!(
-        docks,
-        SeaDock,
-         "../sql/sea/company_docks.sql"
-    );
+    _get_derived_vec!(docks, SeaDock, "../sql/sea/company_docks.sql");
 }
 
 node_type!(SeaLine);
@@ -35,16 +31,8 @@ impl SeaLine {
     _get_column!("SeaLine", mode, Option<SeaMode>);
     _get_column!("SeaLine", local, Option<bool>);
 
-    _get_derived_vec!(
-        docks,
-        SeaDock,
-        "../sql/sea/line_docks.sql"
-    );
-    _get_derived_vec!(
-        stops,
-        SeaStop,
-        "../sql/sea/company_stops.sql"
-    );
+    _get_derived_vec!(docks, SeaDock, "../sql/sea/line_docks.sql");
+    _get_derived_vec!(stops, SeaStop, "../sql/sea/company_stops.sql");
 }
 
 node_type!(located SeaStop);
@@ -64,11 +52,7 @@ impl SeaStop {
         SeaConnection,
         "../sql/sea/stop_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        SeaLine,
-        "../sql/sea/stop_lines.sql"
-    );
+    _get_derived_vec!(lines, SeaLine, "../sql/sea/stop_lines.sql");
 }
 
 node_type!(SeaDock);
@@ -86,11 +70,7 @@ impl SeaDock {
         SeaConnection,
         "../sql/sea/dock_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        SeaLine,
-        "../sql/sea/dock_lines.sql"
-    );
+    _get_derived_vec!(lines, SeaLine, "../sql/sea/dock_lines.sql");
 }
 
 node_type!(SeaConnection);

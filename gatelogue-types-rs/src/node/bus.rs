@@ -17,11 +17,7 @@ impl BusCompany {
     _get_column!("BusCompany", link, Option<String>);
     _get_derived_vec!(lines, BusLine, "../sql/bus/company_lines.sql");
     _get_derived_vec!(stops, BusStop, "../sql/bus/company_stops.sql");
-    _get_derived_vec!(
-        berths,
-        BusBerth,
-        "../sql/bus/company_berths.sql"
-    );
+    _get_derived_vec!(berths, BusBerth, "../sql/bus/company_berths.sql");
 }
 
 node_type!(BusLine);
@@ -33,16 +29,8 @@ impl BusLine {
     _get_column!("BusLine", mode, Option<BusMode>);
     _get_column!("BusLine", local, Option<bool>);
 
-    _get_derived_vec!(
-        berths,
-        BusBerth,
-        "../sql/bus/line_berths.sql"
-    );
-    _get_derived_vec!(
-        stops,
-        BusStop,
-        "../sql/bus/company_stops.sql"
-    );
+    _get_derived_vec!(berths, BusBerth, "../sql/bus/line_berths.sql");
+    _get_derived_vec!(stops, BusStop, "../sql/bus/company_stops.sql");
 }
 
 node_type!(located BusStop);
@@ -62,11 +50,7 @@ impl BusStop {
         BusConnection,
         "../sql/bus/stop_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        BusLine,
-        "../sql/bus/stop_lines.sql"
-    );
+    _get_derived_vec!(lines, BusLine, "../sql/bus/stop_lines.sql");
 }
 
 node_type!(BusBerth);
@@ -84,11 +68,7 @@ impl BusBerth {
         BusConnection,
         "../sql/bus/berth_connections_to_here.sql"
     );
-    _get_derived_vec!(
-        lines,
-        BusLine,
-        "../sql/bus/berth_lines.sql"
-    );
+    _get_derived_vec!(lines, BusLine, "../sql/bus/berth_lines.sql");
 }
 
 node_type!(BusConnection);

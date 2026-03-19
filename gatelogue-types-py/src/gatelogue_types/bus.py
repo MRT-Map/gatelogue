@@ -301,7 +301,7 @@ class BusConnection(Node):
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO BusConnection (i, line, "from", "to", direction, duration) '
-            'VALUES (:i, :line, :from_, :to, :direction, :duration)',
+            "VALUES (:i, :line, :from_, :to, :direction, :duration)",
             dict(i=i, **kwargs),
         )
         cur.execute(

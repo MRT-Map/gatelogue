@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING, ClassVar, Literal, Self, TypedDict, Unpack
 from gatelogue_types._util import _AircraftColumn, _Column, _CoordinatesColumn, _FKColumn, _format_str, _SetAttr, _sql
 
 if TYPE_CHECKING:
+    import builtins
     import sqlite3
     from collections.abc import Callable, Iterable, Iterator
-    import builtins
 
 
 class Node:
@@ -69,10 +69,7 @@ class Node:
         return hash(self.i)
 
     def _sql_derived[T: Node](self, key: str, ty: builtins.type[T]) -> Iterator[T]:
-        return (
-            ty(self.conn, i)
-            for (i,) in self.conn.execute(_sql(key), (self.i,)).fetchall()
-        )
+        return (ty(self.conn, i) for (i,) in self.conn.execute(_sql(key), (self.i,)).fetchall())
 
     def equivalent_nodes(self) -> Iterator[Self]:
         """Internal use"""

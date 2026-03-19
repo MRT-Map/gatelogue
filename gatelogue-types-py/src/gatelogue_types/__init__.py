@@ -18,9 +18,15 @@ To retrieve the data:
    import gatelogue_types as gt  # for convenience
 
    gd = gt.GD.get()  # retrieve data via `urllib` (in standard library)
-   gd = gt.GD.get(getter=GD.Getters.niquests)  # retrieve data with pre-written `niquests` getter
-   gd = await gt.GD.get_async(getter=GD.Getters.aiohttp)  # same but async with pre-written `aiohttp` getter
-   gd = await gt.GD.get(getter=lambda url: requests.get(url).content)  # custom getter. all getters take one `str` and output a `byte`
+   gd = gt.GD.get(
+       getter=GD.Getters.niquests
+   )  # retrieve data with pre-written `niquests` getter
+   gd = await gt.GD.get_async(
+       getter=GD.Getters.aiohttp
+   )  # same but async with pre-written `aiohttp` getter
+   gd = await gt.GD.get(
+       getter=lambda url: requests.get(url).content
+   )  # custom getter. all getters take one `str` and output a `byte`
 
    # for both .get() and .get_async(), you can make it retrieve a version with sources.
    gd = gt.GD.get(sources=True)
@@ -69,7 +75,7 @@ from gatelogue_types.spawn_warp import SpawnWarp, WarpType
 from gatelogue_types.town import Rank, Town
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Callable, Awaitable
+    from collections.abc import Awaitable, Callable, Iterator
 
 URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
 URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db"
@@ -110,6 +116,7 @@ class GD:
     async def get_async(cls, sources: bool = False, getter: Callable[[str], Awaitable[bytes]] | None = None):
         async def _default(url: str):
             return GD.Getters.urllib(url)
+
         getter = getter or _default
         return cls.from_bytes(await getter(URL if sources else URL_NO_SOURCES))
 
@@ -117,37 +124,44 @@ class GD:
         @staticmethod
         def urllib(url: str) -> bytes:
             import urllib.request
+
             with urllib.request.urlopen(url) as response:
                 return response.read()
 
         @staticmethod
         def niquests(url: str) -> bytes:
             import niquests
+
             return niquests.get(url).content
 
         @staticmethod
         def requests(url: str) -> bytes:
             import requests
+
             return requests.get(url).content
 
         @staticmethod
         def httpx(url: str) -> bytes:
             import httpx
+
             return httpx.get(url).content
 
         @staticmethod
         def urllib3(url: str) -> bytes:
             import urllib3
+
             return urllib3.request("GET", url).data
 
         @staticmethod
         async def rnet(url: str) -> bytes:
             import rnet
+
             return await (await rnet.get(url)).bytes()
 
         @staticmethod
         async def aiohttp(url: str) -> bytes:
             import aiohttp
+
             session = aiohttp.ClientSession()
             async with (
                 session as session,

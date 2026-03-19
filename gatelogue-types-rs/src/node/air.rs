@@ -21,18 +21,9 @@ impl AirAirline {
     _get_column!("AirAirline", name, String);
     _get_column!("AirAirline", link, Option<String>);
 
-    _get_derived_vec!(
-        flights,
-        AirFlight,
-        "../sql/air/airline_flights.sql"
-    );
-    _get_derived_vec!(
-        gates,
-        AirGate,
-        "../sql/air/airline_gates.sql"
-    );
-    _get_derived_vec!(airports, AirAirport,
-        "../sql/air/airline_airports.sql");
+    _get_derived_vec!(flights, AirFlight, "../sql/air/airline_flights.sql");
+    _get_derived_vec!(gates, AirGate, "../sql/air/airline_gates.sql");
+    _get_derived_vec!(airports, AirAirport, "../sql/air/airline_airports.sql");
 }
 
 node_type!(located AirAirport);
@@ -41,8 +32,7 @@ impl AirAirport {
     _get_set!("AirAirportNames", names, "name", String);
     _get_column!("AirAirport", link, Option<String>);
     _get_set!("AirAirportModes", modes, "mode", AirMode);
-    _get_derived_vec!(gates, AirGate,
-        "../sql/air/airport_gates.sql");
+    _get_derived_vec!(gates, AirGate, "../sql/air/airport_gates.sql");
 }
 
 node_type!(AirGate);

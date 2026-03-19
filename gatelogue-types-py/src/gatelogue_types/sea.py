@@ -302,7 +302,7 @@ class SeaConnection(Node):
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO SeaConnection (i, line, "from", "to", direction, duration) '
-            'VALUES (:i, :line, :from_, :to, :direction, :duration)',
+            "VALUES (:i, :line, :from_, :to, :direction, :duration)",
             dict(i=i, **kwargs),
         )
         cur.execute(

@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, ClassVar, Literal, NotRequired, Required, Self, TypedDict, Unpack
 
-from gatelogue_types._util import _AircraftColumn, _Column, _FKColumn, _format_code, _format_str, _SetAttr, _sql
+from gatelogue_types._util import _AircraftColumn, _Column, _FKColumn, _format_code, _format_str, _SetAttr
 from gatelogue_types.node import LocatedNode, Node
 
 if TYPE_CHECKING:
@@ -356,7 +356,7 @@ class AirFlight(Node):
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO AirFlight (i, "from", "to", code, aircraft, airline) '
-            'VALUES (:i, :from_, :to, :code, :aircraft, :airline)',
+            "VALUES (:i, :from_, :to, :code, :aircraft, :airline)",
             dict(i=i, **kwargs),
         )
         cur.execute(

@@ -2,8 +2,8 @@ use enum_dispatch::enum_dispatch;
 use strum_macros::{EnumIs, EnumString, EnumTryAs};
 
 use crate::{
-    error::Error,
     _from_sql_for_enum,
+    error::Error,
     node::{
         air::AirAirport, bus::BusStop, rail::RailStation, sea::SeaStop, spawn_warp::SpawnWarp,
         town::Town, AnyNode, Node,
@@ -47,8 +47,7 @@ pub trait LocatedNode: Node + Copy {
             |row| {
                 let other_i = row.get(0)?;
                 Ok((
-                    AnyLocatedNode::from_id(gd, other_i)?
-                        .unwrap(),
+                    AnyLocatedNode::from_id(gd, other_i)?.unwrap(),
                     Proximity(self.i().min(other_i), self.i().max(other_i)),
                 ))
             },
@@ -61,8 +60,7 @@ pub trait LocatedNode: Node + Copy {
             (self.i(),),
             |row| {
                 let other_i = row.get(0)?;
-                AnyLocatedNode::from_id(gd, other_i)
-                    .map(|a| a.unwrap())
+                AnyLocatedNode::from_id(gd, other_i).map(|a| a.unwrap())
             },
         )
     }
