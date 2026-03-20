@@ -12,6 +12,8 @@ jobs:
       short_version: ${{ steps.version.outputs.version }}
       data_version: ${{ steps.version.outputs.data_version }}
       version: ${{ steps.version.outputs.version }}+${{ steps.version.outputs.data_version }}
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -41,6 +43,8 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-py
+    permissions:
+      contents: read
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -56,6 +60,8 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-rs
+    permissions:
+      contents: read
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -74,6 +80,8 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-ts
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -161,8 +169,8 @@ jobs:
       run:
         working-directory: gatelogue-types-ts
     permissions:
-      id-token: write
       contents: read
+      id-token: write
     needs: [ build-ts, tests ]
     environment:
       name: npm

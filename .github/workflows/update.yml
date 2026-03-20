@@ -6,9 +6,6 @@ on:
   schedule:
     - cron: 0 0 * * *
 
-permissions:
-  contents: write
-
 env:
   FORCE_COLOR: "1"
   NO_PROGRESS_BAR: "1"
@@ -20,6 +17,8 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

@@ -11,6 +11,8 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-py
+    permissions:
+      contents: read
   
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -22,12 +24,12 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-rs
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          toolchain: stable
+      - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           workspaces: './gatelogue-types-rs -> target'
@@ -39,6 +41,8 @@ jobs:
     defaults:
       run:
         working-directory: gatelogue-types-ts
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
