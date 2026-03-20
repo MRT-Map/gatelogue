@@ -3,6 +3,8 @@ on:
 
 jobs:
   tests:
+    permissions:
+      contents: read
     uses: ./.github/workflows/tests.yml
 
   changelog-version:
