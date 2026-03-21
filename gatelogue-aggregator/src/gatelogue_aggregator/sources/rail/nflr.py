@@ -120,6 +120,10 @@ class NFLR(RailSource):
                 )
 
                 r_builder.skip(until="Port Dupont")
+                r_builder.connect(
+                    until="Light Society Villeside", forward_direction="eastbound", backward_direction="westbound"
+                )
+                r_builder.skip(until="Huwdu", detached=True)
                 r_builder.connect(forward_direction="eastbound", backward_direction="westbound")
             elif line_name == "R4":
                 r_builder.connect(until="Birmingham")
