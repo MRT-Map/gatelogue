@@ -11,7 +11,7 @@ import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT, DEFAULT_CACHE_DURATION
 from gatelogue_aggregator.gatelogue_data import GatelogueData
 from gatelogue_aggregator.logging import INFO1
 from gatelogue_aggregator.source import Source
@@ -45,6 +45,13 @@ def gatelogue_aggregator():
     type=Path,
     show_default=True,
     help="where to cache files downloaded from the Internet (preferably a temporary directory)",
+)
+@click.option(
+    "--cache-duration",
+    default=DEFAULT_CACHE_DURATION,
+    type=int,
+    show_default=True,
+    help="how long to hold cached files retrieved from URLs for",
 )
 @click.option(
     "--timeout",
@@ -106,6 +113,7 @@ def gatelogue_aggregator():
 def run(
     *,
     cache_dir: Path,
+    cache_duration: int,
     timeout: int,
     cooldown: int,
     output: Path,
@@ -128,7 +136,7 @@ def run(
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
     config = Config(
-        cache_dir=cache_dir, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
+        cache_dir=cache_dir, cache_duration=cache_duration, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
     )
 
     gd = GatelogueData(config, sources)

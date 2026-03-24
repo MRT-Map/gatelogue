@@ -15,7 +15,7 @@ import rich
 import rich.status
 from bs4 import BeautifulSoup
 from rnet import Emulation
-from rnet.blocking import Client
+from rnet.blocking import Client, Response
 from rnet.redirect import Policy
 
 from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
@@ -26,25 +26,20 @@ if TYPE_CHECKING:
 DEFAULT_TIMEOUT = 60
 DEFAULT_COOLDOWN = 15
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "gatelogue"
+DEFAULT_CACHE_DURATION = 3600
 
 SESSION = Client(redirect=Policy.limited(10), emulation=Emulation.Chrome145)
 
 COOLDOWN_LOCK = Lock()
 COOLDOWN: dict[str, float] = {}
 
-
-def get_url(
+def _get_url(
     url: str,
-    key: str,
     config: Config,
     *,
+    etag: bytes | None = None,
     empty_is_error: bool = False,
-) -> str:
-    cache = config.cache_dir / key
-    if cache.exists():
-        rich.print(INFO3 + f"Reading {url} from {cache}")
-        return cache.read_text()
-
+) -> Response:
     with progress_bar(INFO3, f"  Downloading {url}"):
         netloc = urlparse(url).netloc
         with COOLDOWN_LOCK:
@@ -53,21 +48,72 @@ def get_url(
             rich.print(INFO3 + f"Waiting for {url} cooldown")
             time.sleep(abs(cool - time.time()))
 
-        response = SESSION.get(url, timeout=timedelta(seconds=config.timeout))
+        headers = {"If-None-Match": etag.decode()} if etag is not None else None
+        response = SESSION.get(url, timeout=timedelta(seconds=config.timeout), headers=headers)
+
         if response.status.as_int() >= 400 or (empty_is_error and response.text == ""):
             rich.print(ERROR + f"Received {response.status} error from {url}:\n{response.text}")
             if response.status.as_int() in (408, 429):
                 with COOLDOWN_LOCK:
                     COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
                 rich.print(ERROR + f"Will try {url} again in 15s")
-                return get_url(url, key, config, empty_is_error=empty_is_error)
+                return _get_url(url, config, empty_is_error=empty_is_error)
 
-        text = response.text("utf-8")
+        return response
+
+
+def _deconstruct_response(response: Response):
+    text = response.text("utf-8")
+    etag = response.headers.get("etag", None)
+    return text, etag
+
+
+def get_url(
+        url: str,
+        key: str,
+        config: Config,
+        *,
+        empty_is_error: bool = False,
+) -> str:
+    cache = config.cache_dir / key
+    etag_path = config.cache_dir / (key + ".etag")
+    until_path = config.cache_dir / (key + ".until")
+
+    etag = etag_path.read_bytes() if etag_path.exists() else None
+    until = float(until_path.read_text()) if until_path.exists() else None
+
+    if not cache.exists():
+        response = _get_url(url, config, empty_is_error=empty_is_error)
+        text, etag = _deconstruct_response(response)
+    elif until is not None and until > time.time():
+        text = cache.read_text()
+        rich.print(INFO3 + f"Reading {url} from {cache}")
+    elif etag is not None:
+        rich.print(INFO3 + f"Checking etag {etag} for {url} and cache {cache}")
+        response = _get_url(url, config, etag=etag, empty_is_error=empty_is_error)
+        if response.status.as_int() == 304:
+            text = cache.read_text()
+            rich.print(INFO3 + f"No change to {url} at cache {cache}")
+        else:
+            text, etag = _deconstruct_response(response)
+            rich.print(INFO3 + f"Change detected at {url} at cache {cache} with etag {etag}")
+    else:
+        response = _get_url(url, config, empty_is_error=empty_is_error)
+        text, etag = _deconstruct_response(response)
 
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.touch()
     cache.write_text(text)
-    rich.print(INFO3 + f"Downloaded {url} to {cache}")
+    rich.print(INFO3 + f"Saved {url} to cache {cache}")
+
+    if until is None or until <= time.time():
+        until = time.time() + config.cache_duration
+    if etag is not None:
+        etag_path.touch()
+        etag_path.write_bytes(etag)
+    if until is not None:
+        until_path.touch()
+        until_path.write_text(str(until))
     return text
 
 

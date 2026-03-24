@@ -30,11 +30,10 @@ jobs:
           version: "0.11.0"
           enable-cache: true
 
-      - run: echo "key=$(($(date +%s)/3600))" >> "$GITHUB_ENV"
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: /tmp/gatelogue
-          key: ${{ env.key }}-gatelogue-data
+          key: gatelogue-data
       - run: bash update.sh -ce "*"
       - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
       - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
