@@ -94,4 +94,5 @@ jobs:
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           commit-message: ${{ env.message }}
+          branch: lint
           title: Linting
