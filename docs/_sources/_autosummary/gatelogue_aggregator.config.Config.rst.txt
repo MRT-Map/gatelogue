@@ -28,6 +28,7 @@
    .. autosummary::
    
       ~Config.cache_dir
+      ~Config.cache_duration
       ~Config.cooldown
       ~Config.max_workers
       ~Config.timeout
