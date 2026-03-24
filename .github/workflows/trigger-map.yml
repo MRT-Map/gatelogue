@@ -1,3 +1,4 @@
+name: Trigger transit-map update
 on:
   workflow_dispatch:
   push:

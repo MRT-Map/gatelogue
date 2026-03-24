@@ -1,3 +1,4 @@
+name: "Run `cargo-msrv`"
 on:
   workflow_dispatch:
   push:

@@ -1,0 +1,97 @@
+name: Copy SQL, Format, Lint
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  copy-sql:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - run: gatelogue-types-sql/copy.sh
+      - run: echo "message=copy sql @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+      - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+        with:
+          default_author: github_actions
+          message: ${{ env.message }}
+
+  format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: copy-sql
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: pypa/hatch@install
+        with:
+          version: "1.16.5"
+      - run: cd gatelogue-aggregator && hatch fmt -f
+      - run: cd gatelogue-types-py && hatch fmt -f
+
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cd gatelogue-types-rs && cargo fmt
+
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: "10.32.1"
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 25.8.1
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+          registry-url: https://registry.npmjs.org/
+      - run: cd gatelogue-client && pnpm i && pnpm format
+      - run: cd gatelogue-types-ts && pnpm i && pnpm format
+
+      - run: echo "message=format @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+      - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+        with:
+          default_author: github_actions
+          message: ${{ env.message }}
+
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    needs: format
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: pypa/hatch@install
+        with:
+          version: "1.16.5"
+      - run: cd gatelogue-aggregator && hatch fmt
+        continue-on-error: true
+      - run: cd gatelogue-types-py && hatch fmt
+        continue-on-error: true
+
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cd gatelogue-types-rs && cargo clippy fix --broken-code
+        continue-on-error: true
+
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: "10.32.1"
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 25.8.1
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+      - run: cd gatelogue-client && pnpm i && pnpm lint:fix
+        continue-on-error: true
+      - run: cd gatelogue-types-ts && pnpm i && pnpm lint:fix
+        continue-on-error: true
+
+      - run: echo "message=lint @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+      - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        with:
+          commit-message: ${{ env.message }}
+          title: Linting

@@ -1,3 +1,4 @@
+name: Publish
 on:
   workflow_dispatch:
 
@@ -51,6 +52,8 @@ jobs:
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - uses: pypa/hatch@install
+      with:
+        version: "1.16.5"
     - run: hatch build
     - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
@@ -67,11 +70,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-      with:
-        toolchain: stable
-    - run: cargo update
+    - uses: dtolnay/rust-toolchain@stable
     - run: cargo package
+    - run: cargo publish --dry-run
     - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
         name: dist-rs
@@ -94,9 +95,11 @@ jobs:
         with:
           node-version: 25.8.1
           cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://registry.npmjs.org/
       - run: pnpm i
       - run: pnpm pack
+      - run: pnpm publish --dry-run && pnpx jsr publish --dry-run
       - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: dist-ts
@@ -157,9 +160,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          toolchain: stable
+      - uses: dtolnay/rust-toolchain@stable
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
         id: auth
       - run: cargo publish
@@ -188,6 +189,7 @@ jobs:
         with:
           node-version: 25.8.1
           cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://registry.npmjs.org/
       - run: npm install -g npm@latest
       - run: pnpm i
@@ -213,6 +215,7 @@ jobs:
         with:
           node-version: 25.8.1
           cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://npm.pkg.github.com/
       - run: |
           cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
@@ -241,7 +244,8 @@ jobs:
         with:
           node-version: 25.8.1
           cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
       - run: mv ../README.md .
       - run: pnpm i
-      - run: pnpx jsr publish --allow-dirty
+      - run: pnpx jsr publish
 

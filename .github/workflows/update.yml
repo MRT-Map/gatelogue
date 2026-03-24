@@ -1,4 +1,4 @@
-name: Update dist
+name: Update dist DB
 on:
   workflow_dispatch:
   push:
