@@ -34,7 +34,11 @@ jobs:
       - run: cd gatelogue-aggregator && hatch fmt -f
       - run: cd gatelogue-types-py && hatch fmt -f
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          cache-workspaces: './gatelogue-types-rs -> target'
+          components: rustfmt
       - run: cd gatelogue-types-rs && cargo fmt
 
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
@@ -45,7 +49,6 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
-          registry-url: https://registry.npmjs.org/
       - run: cd gatelogue-client && pnpm i && pnpm format
       - run: cd gatelogue-types-ts && pnpm i && pnpm format
 
@@ -73,8 +76,12 @@ jobs:
       - run: cd gatelogue-types-py && hatch fmt
         continue-on-error: true
 
-      - uses: dtolnay/rust-toolchain@stable
-      - run: cd gatelogue-types-rs && cargo clippy fix --broken-code
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          cache-workspaces: './gatelogue-types-rs -> target'
+          components: clippy
+      - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code
         continue-on-error: true
 
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
@@ -91,7 +98,13 @@ jobs:
         continue-on-error: true
 
       - run: echo "message=lint @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+        if: ${{ github.event_name != 'pull_request' }}
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        if: ${{ github.event_name != 'pull_request' }}
         with:
           commit-message: ${{ env.message }}
+          branch: lint
           title: Linting
+      - run: git status
+        if: ${{ github.event_name == 'pull_request' }}
+        
