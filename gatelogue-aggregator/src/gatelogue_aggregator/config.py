@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 from typing import TYPE_CHECKING
 
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT, DEFAULT_CACHE_DURATION
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_CACHE_DURATION, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 
 if TYPE_CHECKING:
     from pathlib import Path

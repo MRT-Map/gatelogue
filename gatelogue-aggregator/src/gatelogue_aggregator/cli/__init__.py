@@ -11,7 +11,7 @@ import rich.progress
 
 from gatelogue_aggregator.__about__ import __version__
 from gatelogue_aggregator.config import Config
-from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT, DEFAULT_CACHE_DURATION
+from gatelogue_aggregator.downloader import DEFAULT_CACHE_DIR, DEFAULT_CACHE_DURATION, DEFAULT_COOLDOWN, DEFAULT_TIMEOUT
 from gatelogue_aggregator.gatelogue_data import GatelogueData
 from gatelogue_aggregator.logging import INFO1
 from gatelogue_aggregator.source import Source
