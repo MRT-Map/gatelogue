@@ -2,6 +2,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ "dist" ]
+  workflow_run:
+    workflows: ["Update dist"]
+    types: [completed]
 
 jobs:
   update:
