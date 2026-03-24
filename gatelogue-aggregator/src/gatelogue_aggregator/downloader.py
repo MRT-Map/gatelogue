@@ -33,6 +33,7 @@ SESSION = Client(redirect=Policy.limited(10), emulation=Emulation.Chrome145)
 COOLDOWN_LOCK = Lock()
 COOLDOWN: dict[str, float] = {}
 
+
 def _get_url(
     url: str,
     config: Config,
@@ -69,11 +70,11 @@ def _deconstruct_response(response: Response):
 
 
 def get_url(
-        url: str,
-        key: str,
-        config: Config,
-        *,
-        empty_is_error: bool = False,
+    url: str,
+    key: str,
+    config: Config,
+    *,
+    empty_is_error: bool = False,
 ) -> str:
     cache = config.cache_dir / key
     etag_path = config.cache_dir / (key + ".etag")

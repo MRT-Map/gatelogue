@@ -136,7 +136,12 @@ def run(
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
     config = Config(
-        cache_dir=cache_dir, cache_duration=cache_duration, timeout=timeout, cooldown=cooldown, cache_exclude=cache_exclude, max_workers=max_workers
+        cache_dir=cache_dir,
+        cache_duration=cache_duration,
+        timeout=timeout,
+        cooldown=cooldown,
+        cache_exclude=cache_exclude,
+        max_workers=max_workers,
     )
 
     gd = GatelogueData(config, sources)
