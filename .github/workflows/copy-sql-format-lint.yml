@@ -76,6 +76,9 @@ jobs:
         continue-on-error: true
 
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
+        with:
+          workspaces: './gatelogue-types-rs -> target'
       - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code
         continue-on-error: true
 
