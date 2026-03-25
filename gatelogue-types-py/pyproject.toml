@@ -31,7 +31,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-  "requests==2.32.5",
+  "requests==2.33.0",
   "niquests==3.18.2",
   "httpx==0.28.1",
   "urllib3==2.6.3",
