@@ -2,6 +2,11 @@ name: Publish
 on:
   workflow_dispatch:
 
+
+env:
+  # renovate: datasource=custom.rust.nightly depName=x86_64-unknown-linux-gnu versioning=rust-release-channel
+  RUST_VERSION: nightly-2026-03-20
+
 jobs:
   tests:
     permissions:
@@ -72,7 +77,7 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
       with:
-        toolchain: nightly
+        toolchain: ${{ env.RUST_VERSION }}
         cache-workspaces: './gatelogue-types-rs -> target'
     - run: cargo package
     - run: cargo publish --dry-run
@@ -165,7 +170,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
         with:
-          toolchain: nightly
+          toolchain: ${{ env.RUST_VERSION }}
           cache-workspaces: './gatelogue-types-rs -> target'
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
         id: auth
