@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: pypa/hatch@install
+      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
         with:
           version: "1.16.5"
       - run: cd gatelogue-aggregator && hatch fmt -f
@@ -68,7 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: pypa/hatch@install
+      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
         with:
           version: "1.16.5"
       - run: cd gatelogue-aggregator && hatch fmt
