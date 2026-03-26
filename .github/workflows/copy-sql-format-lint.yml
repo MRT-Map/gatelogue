@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  # renovate: datasource=custom.rust.nightly versioning=rust-release-channel
+  # renovate: datasource=custom.rust-nightly versioning=rust-release-channel
   RUST_VERSION: nightly
 
 jobs:
