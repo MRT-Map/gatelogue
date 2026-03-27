@@ -324,11 +324,11 @@ class _FKColumn[T: Node | None]:
     def __set__(self, instance: Node, value: T | tuple[int, T]):
         _Column(self.name, self.table, sourced=self.sourced).__set__(
             instance,
-            None
+            None  # pyrefly: ignore[bad-argument-type]
             if value is None
-            else (value[0], value[1].i)
+            else (value[0], value[1].i)  # pyrefly: ignore[missing-attribute]
             if isinstance(value, tuple)
-            else value.i,  # pyrefly: ignore[bad-argument-type,missing-attribute]
+            else value.i,  # pyrefly: ignore[missing-attribute]
         )
 
     def _merge(
@@ -361,11 +361,11 @@ class _AircraftColumn:
     def __set__(self, instance: Node, value: Aircraft | tuple[int, Aircraft]):
         _Column(self.name, self.table, sourced=self.sourced).__set__(
             instance,
-            None
+            None  # pyrefly: ignore[bad-argument-type]
             if value is None
-            else (value[0], value[1].name)
+            else (value[0], value[1].name)  # pyrefly: ignore[missing-attribute]
             if isinstance(value, tuple)
-            else value.name,  # pyrefly: ignore[bad-argument-type,missing-attribute]
+            else value.name,  # pyrefly: ignore[missing-attribute]
         )
 
     def _merge(

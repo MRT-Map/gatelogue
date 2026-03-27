@@ -93,7 +93,7 @@ jobs:
       - run: cd gatelogue-types-py && hatch fmt && hatch run types:check
         if: '!cancelled()'
 
-      - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code
+      - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code --allow-dirty
         if: '!cancelled()'
 
       - run: cd gatelogue-client && pnpm i && pnpm run-s lint:fix type-check
