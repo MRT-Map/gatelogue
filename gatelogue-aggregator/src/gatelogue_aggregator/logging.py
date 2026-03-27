@@ -26,7 +26,7 @@ def track[T](
         rich.print(level + description)
         yield from it
     else:
-        total = total or (((len(it) ** 2) / 2 if nonlinear else len(it)) if isinstance(it, Sized) else None)
+        total = total or (((len(it) ** 2) // 2 if nonlinear else len(it)) if isinstance(it, Sized) else None)
         t = PROGRESS.add_task(level + description, total=total)
         for i, o in enumerate(it):
             yield o

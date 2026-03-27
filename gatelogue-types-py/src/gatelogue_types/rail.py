@@ -31,7 +31,7 @@ class RailCompany(Node):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute("INSERT INTO RailCompany (i, name, link) VALUES (:i, :name, :link)", dict(i=i, **kwargs))
@@ -101,7 +101,7 @@ class RailLine(Node):
         **kwargs: Unpack[CreateParams],
     ) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -158,7 +158,7 @@ class RailStation(LocatedNode):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         codes = kwargs.get("codes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
@@ -233,7 +233,7 @@ class RailPlatform(Node):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -283,7 +283,7 @@ class RailConnection(Node):
     """The :py:class:`RailLine` the connection arrives at"""
     direction = _Column[str | None]("direction", "RailConnection", sourced=True, formatter=_format_str)
     """The direction taken when travelling along this connection, e.g. ``Eastbound``, ``towards Terminus Name``"""
-    duration = _Column[int | None]("duration", "RailConnection", sourced=True, formatter=_format_str)
+    duration = _Column[int | None]("duration", "RailConnection", sourced=True)
     """The duration taken in seconds to travel on this connection"""
     COLUMNS: ClassVar = (line, from_, to, direction, duration)
 
@@ -300,7 +300,7 @@ class RailConnection(Node):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -320,7 +320,7 @@ class RailConnection(Node):
         cls, conn: sqlite3.Connection, src: int, *, direction2: str | None = None, **kwargs: Unpack[CreateParams]
     ) -> tuple[Self, Self]:
         kwargs2 = kwargs.copy()
-        kwargs2["from_"], kwargs2["to"] = kwargs2["to"], kwargs2["from"]
+        kwargs2["from_"], kwargs2["to"] = kwargs2["to"], kwargs2["from_"]
         kwargs2["direction"] = direction2 or kwargs2["direction"]
         return cls.create(conn, src, **kwargs), cls.create(conn, src, **kwargs2)
 

@@ -36,7 +36,7 @@ class Node:
     """The type of the node"""
     sources = _SetAttr[int]("NodeSource", "source")
     """All sources that prove the node's existence. Does not exist in no-source databases."""
-    COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr | _CoordinatesColumn, ...]] = ()
+    COLUMNS: ClassVar[tuple[_Column | _FKColumn | _SetAttr | _CoordinatesColumn | _AircraftColumn, ...]] = ()
 
     @property
     def source(self) -> int:
@@ -62,8 +62,8 @@ class Node:
         cur.execute("INSERT INTO NodeSource ( i, source ) VALUES ( :i, :source )", dict(i=i, source=src))
         return i
 
-    def __eq__(self, other: Self) -> bool:
-        return self.i == other.i
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, type(self)) and self.i == other.i
 
     def __hash__(self):
         return hash(self.i)
@@ -78,7 +78,7 @@ class Node:
     def _merge(self, other: Self):
         pass
 
-    def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn):
+    def merge(self, other: Self, warn_fn: Callable[[str], object] = warnings.warn) -> set[int] | None:
         """Internal use"""
         if self == other:
             warn_fn(f"{self} tried to merge with itself")

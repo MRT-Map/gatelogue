@@ -62,12 +62,12 @@ from typing import (
     Self,
 )
 
-from gatelogue_types.__about__ import __data_version__
+from gatelogue_types.__about__ import __data_version__, __version__
 from gatelogue_types._util import _sql
-from gatelogue_types.air import AirAirline, AirAirport, Aircraft, AirFlight, AirGate, AirMode  # noqa: F401
-from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop  # noqa: F401
-from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World  # noqa: F401
-from gatelogue_types.rail import (  # noqa: F401
+from gatelogue_types.air import AirAirline, AirAirport, Aircraft, AirFlight, AirGate, AirMode
+from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop
+from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
+from gatelogue_types.rail import (
     RailCompany,
     RailConnection,
     RailLine,
@@ -75,9 +75,9 @@ from gatelogue_types.rail import (  # noqa: F401
     RailPlatform,
     RailStation,
 )
-from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaMode, SeaStop  # noqa: F401
-from gatelogue_types.spawn_warp import SpawnWarp, WarpType  # noqa: F401
-from gatelogue_types.town import Rank, Town  # noqa: F401
+from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaMode, SeaStop
+from gatelogue_types.spawn_warp import SpawnWarp, WarpType
+from gatelogue_types.town import Rank, Town
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable, Iterator
@@ -85,6 +85,45 @@ if TYPE_CHECKING:
 
 URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
 URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db"
+
+__all__ = (
+    "GD",
+    "AirAirline",
+    "AirAirport",
+    "AirFlight",
+    "AirGate",
+    "AirMode",
+    "Aircraft",
+    "BusBerth",
+    "BusCompany",
+    "BusConnection",
+    "BusLine",
+    "BusMode",
+    "BusStop",
+    "LocatedNode",
+    "Node",
+    "Proximity",
+    "RailCompany",
+    "RailConnection",
+    "RailLine",
+    "RailMode",
+    "RailPlatform",
+    "RailStation",
+    "Rank",
+    "SeaCompany",
+    "SeaConnection",
+    "SeaDock",
+    "SeaLine",
+    "SeaMode",
+    "SeaStop",
+    "SharedFacility",
+    "SpawnWarp",
+    "Town",
+    "WarpType",
+    "World",
+    "__data_version__",
+    "__version__",
+)
 
 
 class GD:
@@ -129,44 +168,46 @@ class GD:
     class Getters:
         @staticmethod
         def urllib(url: str) -> bytes:
-            import urllib.request
+            import urllib.request  # noqa: PLC0415
 
-            with urllib.request.urlopen(url) as response:
+            if not url.startswith(("http:", "https:")):
+                raise ValueError("Invalid URL " + url)
+            with urllib.request.urlopen(url) as response:  # noqa: S310
                 return response.read()
 
         @staticmethod
         def niquests(url: str) -> bytes:
-            import niquests
+            import niquests  # noqa: PLC0415
 
-            return niquests.get(url).content
+            return niquests.get(url).content or b""
 
         @staticmethod
         def requests(url: str) -> bytes:
-            import requests
+            import requests  # noqa: PLC0415
 
-            return requests.get(url).content
+            return requests.get(url).content  # noqa: S113
 
         @staticmethod
         def httpx(url: str) -> bytes:
-            import httpx
+            import httpx  # noqa: PLC0415
 
             return httpx.get(url).content
 
         @staticmethod
         def urllib3(url: str) -> bytes:
-            import urllib3
+            import urllib3  # noqa: PLC0415
 
             return urllib3.request("GET", url).data
 
         @staticmethod
         async def rnet(url: str) -> bytes:
-            import rnet
+            import rnet  # noqa: PLC0415
 
             return await (await rnet.get(url)).bytes()
 
         @staticmethod
         async def aiohttp(url: str) -> bytes:
-            import aiohttp
+            import aiohttp  # noqa: PLC0415
 
             session = aiohttp.ClientSession()
             async with (
@@ -198,7 +239,11 @@ class GD:
         cur.executescript(_sql("create"))
         cur.execute(
             "INSERT INTO Metadata (version, timestamp, has_sources) VALUES (:version, :timestamp, :has_sources)",
-            dict(version=__data_version__, timestamp=datetime.datetime.now().isoformat(), has_sources=has_sources),
+            dict(
+                version=__data_version__,
+                timestamp=datetime.datetime.now(tz=datetime.UTC).isoformat(),
+                has_sources=has_sources,
+            ),
         )
 
         if has_sources:
@@ -219,9 +264,9 @@ class GD:
         If ``ty`` is ``None``, :py:class:`LocatedNode` or :py:class:`Node`, find the node type automatically.
         Set ``ty`` to a specific node type only if you can guarantee that the node of ID ``i`` is of said node type."""
         if ty is None or ty is Node:
-            return Node.auto_type(self.conn, i)
+            return Node.auto_type(self.conn, i)  # pyrefly: ignore[bad-return]
         if ty is LocatedNode:
-            return LocatedNode.auto_type(self.conn, i)
+            return LocatedNode.auto_type(self.conn, i)  # pyrefly: ignore[bad-return]
         return ty(self.conn, i)
 
     def nodes[T: Node = Node](self, ty: type[T] | None = None) -> Iterator[T]:

@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, LiteralString
+from typing import TYPE_CHECKING, Literal, LiteralString, cast
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 def _format_str[T: str](s: T | None) -> T | None:
     if s is None or s.strip().lower() in ("", "?", "??", "-"):
         return None
-    return s.strip()
+    return s.strip()  # pyrefly: ignore[bad-return]
 
 
 def _format_code[T: str](s: T | None) -> T | None:
@@ -25,12 +25,12 @@ def _format_code[T: str](s: T | None) -> T | None:
             pos = m.end()
             yield m
 
-    if (s := _format_str(s)) is None:
+    if (s2 := _format_str(s)) is None:
         return None
     res = ""
     hyphen1 = False
     hyphen2 = False
-    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), str(s).strip()):
+    for match in search_all(re.compile(r"\d+|[A-Za-z]+|[^\dA-Za-z]+"), s2):
         t = match.group(0)
         if len(t) == 0:
             continue
@@ -53,7 +53,7 @@ def _format_code[T: str](s: T | None) -> T | None:
         elif len(res) != 0 and res[-1].isalpha():
             hyphen2 = True
 
-    return res
+    return res  # pyrefly: ignore[bad-return]
 
 
 def _warn_clash(
@@ -88,6 +88,7 @@ class _Column[T]:
         self,
         name: LiteralString,
         table: LiteralString,
+        *,
         sourced: bool = False,
         formatter: Callable[[T | None], T | None] | None = None,
     ):
@@ -102,9 +103,9 @@ class _Column[T]:
         ).fetchone()[0]
 
     def __set__(self, instance: Node, value: T | tuple[set[int], T]):
-        srcs, value = value if isinstance(value, tuple) else (instance.sources, value)
+        srcs, value = cast("tuple[set[int], T]", value if isinstance(value, tuple) else (instance.sources, value))
         if self.formatter is not None:
-            value = self.formatter(value)
+            value = self.formatter(value)  # pyrefly: ignore[bad-assignment]
         cur = instance.conn.cursor()
         old_value = self.__get__(instance, type(instance)) if self.sourced else None
         cur.execute(f"UPDATE {self.table} SET {self.name} = :value WHERE i = :i", dict(value=value, i=instance.i))
@@ -142,8 +143,8 @@ class _Column[T]:
         other_v = self.__get__(instance2, type(instance2))
         if not self.sourced:
             if self_v != other_v:
-                self_sources = instance1.sources
-                other_sources = instance2.sources
+                self_sources = cast("set[int]", instance1.sources)
+                other_sources = cast("set[int]", instance2.sources)
                 if min(self_sources) < min(other_sources):
                     if self_sources != other_sources:
                         _warn_clash(
@@ -199,7 +200,7 @@ class _Column[T]:
                             other_sources,
                             "former",
                         )
-                    self.__set__(instance2, None)
+                    self.__set__(instance2, None)  # pyrefly: ignore[bad-argument-type]
                 else:
                     if self_sources != other_sources:
                         _warn_clash(
@@ -225,7 +226,10 @@ class _CoordinatesColumn:
         return None if x is None or y is None else (x, y)
 
     def __set__(self, instance: Node, value: tuple[int, int] | None | tuple[set[int], tuple[int, int] | None]):
-        srcs, value = value if value is not None and isinstance(value[0], set) else (instance.sources, value)
+        srcs, value = cast(
+            "tuple[set[int], tuple[int, int] | None]",
+            value if value is not None and isinstance(value[0], set) else (instance.sources, value),
+        )
         x, y = (None, None) if value is None else value
         cur = instance.conn.cursor()
         old_value = self.__get__(instance, type(instance))
@@ -305,20 +309,27 @@ class _CoordinatesColumn:
 
 
 class _FKColumn[T: Node | None]:
-    def __init__(self, ty: type[T], name: LiteralString, table: LiteralString, sourced: bool = False):
+    def __init__(self, ty: type[T], name: LiteralString, table: LiteralString, *, sourced: bool = False):
         self.name = name
         self.table = table
         self.sourced = sourced
         self.ty = ty
 
     def __get__(self, instance: Node, owner: type[Node]) -> T:
-        target_i = _Column(self.name, self.table, self.sourced).__get__(instance, owner)
+        target_i = _Column(self.name, self.table, sourced=self.sourced).__get__(instance, owner)
         if target_i is None:
-            return None
+            return None  # pyrefly: ignore[bad-return]
         return self.ty(instance.conn, target_i)
 
     def __set__(self, instance: Node, value: T | tuple[int, T]):
-        _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.i)
+        _Column(self.name, self.table, sourced=self.sourced).__set__(
+            instance,
+            None
+            if value is None
+            else (value[0], value[1].i)
+            if isinstance(value, tuple)
+            else value.i,  # pyrefly: ignore[bad-argument-type,missing-attribute]
+        )
 
     def _merge(
         self,
@@ -328,25 +339,34 @@ class _FKColumn[T: Node | None]:
         str_instance2: str | None = None,
         warn_fn: Callable[[str], object] = warnings.warn,
     ):
-        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
+        _Column(self.name, self.table, sourced=self.sourced)._merge(
+            instance1, instance2, str_instance1, str_instance2, warn_fn
+        )  # noqa: SLF001
 
 
 class _AircraftColumn:
-    def __init__(self, name: LiteralString, table: LiteralString, sourced: bool = False):
+    def __init__(self, name: LiteralString, table: LiteralString, *, sourced: bool = False):
         self.name = name
         self.table = table
         self.sourced = sourced
 
     def __get__(self, instance: Node, owner: type[Node]) -> Aircraft | None:
-        target_name = _Column(self.name, self.table, self.sourced).__get__(instance, owner)
+        target_name = _Column(self.name, self.table, sourced=self.sourced).__get__(instance, owner)
         if target_name is None:
             return None
-        from gatelogue_types import Aircraft
+        from gatelogue_types import Aircraft  # noqa: PLC0415
 
         return Aircraft(instance.conn, target_name)
 
     def __set__(self, instance: Node, value: Aircraft | tuple[int, Aircraft]):
-        _Column(self.name, self.table, self.sourced).__set__(instance, None if value is None else value.name)
+        _Column(self.name, self.table, sourced=self.sourced).__set__(
+            instance,
+            None
+            if value is None
+            else (value[0], value[1].name)
+            if isinstance(value, tuple)
+            else value.name,  # pyrefly: ignore[bad-argument-type,missing-attribute]
+        )
 
     def _merge(
         self,
@@ -356,7 +376,9 @@ class _AircraftColumn:
         str_instance2: str | None = None,
         warn_fn: Callable[[str], object] = warnings.warn,
     ):
-        _Column(self.name, self.table, self.sourced)._merge(instance1, instance2, str_instance1, str_instance2, warn_fn)
+        _Column(self.name, self.table, sourced=self.sourced)._merge(
+            instance1, instance2, str_instance1, str_instance2, warn_fn
+        )  # noqa: SLF001
 
 
 class _SetAttr[T]:
@@ -364,8 +386,9 @@ class _SetAttr[T]:
         self,
         table: LiteralString,
         table_column: LiteralString,
+        *,
         sourced: bool = False,
-        formatter: Callable[[T], T] | None = None,
+        formatter: Callable[[T | None], T | None] | None = None,
     ):
         self.table = table
         self.table_column = table_column
@@ -383,7 +406,7 @@ class _SetAttr[T]:
     def __set__(self, instance: Node, values: set[T] | tuple[set[int], set[T]]):
         srcs, values = values if isinstance(values, tuple) else (instance.sources, values)
         if self.formatter is not None:
-            values = {self.formatter(value) for value in values}
+            values = {self.formatter(value) for value in values}  # pyrefly: ignore[bad-assignment]
         source_params = "?, " * (len(srcs) - 1) + "?"
 
         cur = instance.conn.cursor()
@@ -401,7 +424,7 @@ class _SetAttr[T]:
                 (instance.i, *srcs),
             ).fetchall()
         }
-        for new_value in values - existing_values:
+        for new_value in values - existing_values:  # pyrefly: ignore[unsupported-operation]
             cur.execute(
                 f"INSERT INTO {self.table} (i, {self.table_column}) VALUES (:i, :value) "
                 f"ON CONFLICT (i, {self.table_column}) DO NOTHING",
@@ -412,7 +435,7 @@ class _SetAttr[T]:
                 f"ON CONFLICT (i, {self.table_column}, source) DO NOTHING",
                 [dict(i=instance.i, value=new_value, source=src) for src in srcs],
             )
-        for old_value in existing_values - values:
+        for old_value in existing_values - values:  # pyrefly: ignore[unsupported-operation]
             cur.execute(
                 f"DELETE FROM {self.table + 'Source'} WHERE i = ? AND {self.table_column} = ? AND source IN ({source_params})",
                 (instance.i, old_value, *srcs),

@@ -139,7 +139,7 @@ class AirAirline(Node):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute("INSERT INTO AirAirline (i, name, link) VALUES (:i, :name, :link)", dict(i=i, **kwargs))
@@ -180,11 +180,11 @@ class AirAirport(LocatedNode):
     @staticmethod
     def _format_airport_code(s: str) -> str:
         s = s.strip().upper()
-        if len(s) == 4 and s[3] == "T":
+        if len(s) == 4 and s[3] == "T":  # noqa: PLR2004
             return s[:3]
         return s
 
-    code = _Column[str]("code", "AirAirport", formatter=_format_airport_code)
+    code = _Column[str]("code", "AirAirport", formatter=_format_airport_code)  # pyrefly: ignore[bad-argument-type]
     """Unique 3 (sometimes 4)-letter code"""
     names = _SetAttr[str]("AirAirportNames", "name", sourced=True, formatter=_format_str)
     """Name(s) of the airport"""
@@ -206,7 +206,7 @@ class AirAirport(LocatedNode):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         names, modes = kwargs.get("names", set()), kwargs.get("modes", set())
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
@@ -271,7 +271,7 @@ class AirGate(Node):
     @classmethod
     def create(cls, conn: sqlite3.Connection, src: int, **kwargs: Unpack[CreateParams]) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(
@@ -331,7 +331,7 @@ class AirFlight(Node):
     """The :py:class:`AirGate` this flight arrives at"""
     aircraft = _AircraftColumn("aircraft", "AirFlight", sourced=True)
     """Aircraft used on the flight"""
-    duration = _Column[int | None]("duration", "AirFlight", sourced=True, formatter=_format_str)
+    duration = _Column[int | None]("duration", "AirFlight", sourced=True)
     """The duration taken in seconds to travel on this connection"""
     COLUMNS: ClassVar = (airline, code, from_, to, aircraft, duration)
 
@@ -353,7 +353,7 @@ class AirFlight(Node):
         **kwargs: Unpack[CreateParams],
     ) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node(conn, src, ty=cls.__name__)
         cur = conn.cursor()
         cur.execute(

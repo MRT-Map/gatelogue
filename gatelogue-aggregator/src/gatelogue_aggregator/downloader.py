@@ -49,7 +49,7 @@ def _get_url(
             rich.print(INFO3 + f"Waiting for {url} cooldown")
             time.sleep(abs(cool - time.time()))
 
-        headers = {"If-None-Match": etag.decode()} if etag is not None else None
+        headers = {"If-None-Match": etag.decode()} if etag is not None else {}
         response = SESSION.get(url, timeout=timedelta(seconds=config.timeout), headers=headers)
 
         if response.status.as_int() >= 400 or (empty_is_error and response.text == ""):
