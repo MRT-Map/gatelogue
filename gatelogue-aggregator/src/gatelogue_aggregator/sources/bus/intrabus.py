@@ -20,18 +20,18 @@ class IntraBus(BusSource):
                 continue
             shift = 1 if "Replacement For" in table.strings else 0
             for tr in table("tr")[1::2]:
-                line_code = tr("td")[0].find("span").string
+                line_code: str = tr("td")[0].find("span").string  # pyrefly: ignore [missing-attribute]
                 line = self.line(code=line_code, company=company)
 
                 builder = self.builder(line)
                 for li in tr("td")[1 + shift]("li"):
                     if li.find("s") is not None:
                         continue
-                    if (name := li.find("b")) is None:
+                    if (name_tag := li.find("b")) is None:
                         continue
-                    name = name.string
+                    name: str = name_tag.string  # pyrefly: ignore [bad-assignment]
                     if (more := li.find("i")) is not None:
-                        name += " " + more.string.strip()
+                        name += " " + more.string.strip()  # pyrefly: ignore [missing-attribute]
                     builder.add(self.stop(codes={name}, name=name, company=company))
 
                 if len(builder.station_list) == 0:

@@ -162,11 +162,12 @@ class DJE(AirSource):
         )
 
         for table in self.html("table"):
+            # pyrefly: ignore [missing-attribute]
             if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
                 continue
             if caption == "Terminal 1":
                 for tr in table("tr")[1:]:
-                    code = tr("td")[0].string
+                    code: str = tr("td")[0].string  # pyrefly: ignore [bad-assignment]
                     width = 31 if 1 <= int(code) <= 10 else 15
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
@@ -182,9 +183,9 @@ class DJE(AirSource):
                 concourse = ""
                 for tr in table("tr")[1:]:
                     if len(tr("td")) == 1:
-                        concourse = tr.find("b").string.strip(" ")[0]
+                        concourse = tr.find("b").string.strip(" ")[0]  # pyrefly: ignore [missing-attribute]
                         continue
-                    code = concourse + tr("td")[0].string
+                    code = concourse + tr("td")[0].string  # pyrefly: ignore [unsupported-operation]
                     airline = tr("td")[1]
                     airline = airline.a.string if airline.a is not None else airline.string
                     airline = airline if airline is not None and airline.strip() != "" else None
@@ -260,6 +261,7 @@ class DBI(AirSource):
         )
 
         for table in self.html("table"):
+            # pyrefly: ignore [missing-attribute]
             if (caption := table.caption.string.strip() if table.caption is not None else None) is None:
                 continue
             if (
@@ -271,7 +273,7 @@ class DBI(AirSource):
             ) is None:
                 continue
             for tr in table("tr")[1:]:
-                code = concourse + tr("td")[0].string
+                code = concourse + tr("td")[0].string  # pyrefly: ignore [unsupported-operation]
                 size = tr("td")[1].string
                 width = 39 if size == "M" else 17 if size == "S" else None
                 airline = tr("td")[2]

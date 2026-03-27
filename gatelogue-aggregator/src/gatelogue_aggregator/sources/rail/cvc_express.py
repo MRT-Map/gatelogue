@@ -16,13 +16,13 @@ class CVCExpress(RailSource):
         company = self.company(name="CVCExpress", link=get_wiki_link("CVCExpress"))
 
         for h3 in self.html.find_all("h3"):
-            line_code_name = h3.find("span", class_="mw-headline").string
+            line_code_name: str = h3.find("span", class_="mw-headline").string  # pyrefly: ignore [missing-attribute]
             line_code, line_name = line_code_name.split(" -- ")
             line = self.line(code=line_code, name=line_name, company=company, mode="traincarts", colour="#c00")
 
             ul = h3.find_next("ul")
             builder = self.builder(line)
-            for li in ul.find_all("li"):
+            for li in ul.find_all("li"):  # pyrefly: ignore [missing-attribute]
                 name = li.string.strip()
                 builder.add(self.station(codes={name}, name=name, company=company))
 

@@ -18,19 +18,21 @@ class AquaLinQ(SeaSource):
         company = self.company(name="AquaLinQ", link=get_wiki_link("AquaLinQ"))
 
         for h3 in self.html.find_all("h3"):
+            # pyrefly: ignore [missing-attribute]
             if (match := re.search(r"([^:]*): (.*)", h3.find("span", class_="mw-headline").string)) is None:
                 continue
             line_code = match.group(1)
             line_name = match.group(2)
             line = self.line(code=line_code, company=company, name=line_name, mode="warp ferry")
 
+            # pyrefly: ignore [missing-attribute]
             p: bs4.Tag = h3.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling
 
             builder = self.builder(line)
             for b in (
                 (a.strip() for a in p.strings if a.strip())
                 if line_code == "AQ1800"
-                else (b.string for b in p.find_all("b"))
+                else (b.string for b in p.find_all("b") if b.string)
             ):
                 builder.add(self.stop(codes={b}, name=b, company=company))
 

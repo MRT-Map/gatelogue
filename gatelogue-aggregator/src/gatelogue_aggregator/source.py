@@ -64,7 +64,7 @@ class AirSource(Source):
         if kwargs["code"] is not None:
             kwargs["code"] = kwargs["code"].strip()
         kwargs["code"] = (
-            d.get(kwargs["code"], kwargs["code"])
+            d.get(kwargs["code"], kwargs["code"])  # pyrefly: ignore [no-matching-overload]
             if (d := hardcode.GATE_ALIASES.get(kwargs["airport"].code)) is not None
             else kwargs["code"]
         )
@@ -99,9 +99,11 @@ class AirSource(Source):
         aircraft = None if aircraft_name is None else gt.Aircraft(self.conn, aircraft_name)
         mode = mode or (aircraft.mode if aircraft is not None else "warp plane")
 
+        # pyrefly: ignore [bad-argument-type]
         airport1 = self.airport(code=airport1_code, names=None if airport1_name is None else {airport1_name})
         gate1 = self.gate(code=gate1_code, airport=airport1, mode=mode, airline=airline)
 
+        # pyrefly: ignore [bad-argument-type]
         airport2 = self.airport(code=airport2_code, names=None if airport2_name is None else {airport2_name})
         gate2 = self.gate(code=gate2_code, airport=airport2, mode=mode, airline=airline)
 

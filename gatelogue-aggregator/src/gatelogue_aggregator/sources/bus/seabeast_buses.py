@@ -16,7 +16,7 @@ class SeabeastBuses(BusSource):
 
     def build(self, config: Config):
         company = self.company(name="Seabeast Buses", link=get_wiki_link("Seabeast Buses"))
-        stop_names = {}
+        stop_names: dict[str, list[str]] = {}
 
         for match in re.finditer(
             re.compile(r"""\|-

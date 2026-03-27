@@ -16,8 +16,9 @@ class RailNorth(RailSource):
         company = self.company(name="RailNorth", link=get_wiki_link("RailNorth"))
 
         for table in self.html.find_all("table"):
-            if "Code" not in table("th")[1].string:
+            if "Code" not in table("th")[1].string:  # pyrefly: ignore [not-iterable]
                 continue
+            # pyrefly: ignore [missing-attribute]
             line_name = table.find_previous_sibling("h3").find("span", class_="mw-headline").string
             line = self.line(code=line_name, name=line_name, company=company, colour="#000080")
 

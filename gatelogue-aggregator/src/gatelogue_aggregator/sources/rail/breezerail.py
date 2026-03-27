@@ -18,11 +18,11 @@ class BreezeRail(RailSource):
         for h3 in self.html.find_all("h3"):
             if (line_code_name := h3.find("span", class_="mw-headline")) is None:
                 continue
-            line_code, line_name = line_code_name.string.split(" - ", 1)
+            line_code, line_name = line_code_name.string.split(" - ", 1)  # pyrefly: ignore [missing-attribute]
             line = self.line(code=line_code, name=line_name, company=company, colour="#00c3ff")
 
             builder = self.builder(line)
-            for tr in h3.next_sibling.next_sibling.find_all("tr")[1:]:
+            for tr in h3.next_sibling.next_sibling.find_all("tr")[1:]:  # pyrefly: ignore [missing-attribute]
                 if tr("td")[0].find("a", href="/index.php/File:Dynmap_Green_Flag.png") is None:
                     continue
                 name = next(tr("td")[2].strings)

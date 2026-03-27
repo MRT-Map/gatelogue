@@ -15,6 +15,7 @@ class Windboat(SeaYaml2Source):
     name = "Gatelogue (Sea, Windboat)"
     file_path = Path(__file__).parent / "windboat.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.SeaLine,

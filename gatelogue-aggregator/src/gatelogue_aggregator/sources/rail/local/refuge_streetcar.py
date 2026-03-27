@@ -15,6 +15,7 @@ class RefugeStreetcar(RailYaml2Source):
     name = "Gatelogue (Rail, Refuge Streetcar)"
     file_path = Path(__file__).parent / "refuge_streetcar.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.RailLine,
@@ -25,6 +26,7 @@ class RefugeStreetcar(RailYaml2Source):
     ):
         if line_node.name == "North/South Loop":
             cp["backward_direction"] = "Anticlockwise"
+            # pyrefly: ignore [bad-argument-type]
             builder.connect_to("West Train Station", **cp)
 
             cp["forward_direction"] = "Anticlockwise"
@@ -37,6 +39,7 @@ class RefugeStreetcar(RailYaml2Source):
             cp["forward_direction"] = "Anticlockwise"
             builder.connect(**cp)
 
+            # pyrefly: ignore [bad-argument-type]
             builder.connect_to("South Hill", **cp)
         else:
             cp["forward_direction"] = "Clockwise"

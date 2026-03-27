@@ -16,7 +16,7 @@ class RedTrain(RailSource):
         company = self.company(name="RedTrain", link=get_wiki_link("RedTrain"))
 
         for table in self.html.find_all("table"):
-            if "Code" not in table("th")[1].string:
+            if "Code" not in table("th")[1].string:  # pyrefly: ignore [not-iterable]
                 continue
             line = self.line(
                 code="Time Zones High Speed", name="Time Zones High Speed", company=company, colour="#ff0000"

@@ -16,7 +16,7 @@ class IntraRail(RailSource):
         company = self.company(name="IntraRail", link=get_wiki_link("IntraRail"))
 
         for h4 in self.html.find_all("h4"):
-            line_code_name: str = h4.find("span", class_="mw-headline").string
+            line_code_name: str = h4.find("span", class_="mw-headline").string  # pyrefly: ignore [missing-attribute]
             if line_code_name.startswith("("):
                 continue
             line_code = line_code_name.split(" ")[0]
@@ -42,7 +42,7 @@ class IntraRail(RailSource):
             line = self.line(company=company, code=line_code, name=line_name, mode="warp", colour=line_colour)
 
             builder = self.builder(line)
-            for big in h4.find_next("p").find_all("big", recursive=False):
+            for big in h4.find_next("p").find_all("big", recursive=False):  # pyrefly: ignore [missing-attribute]
                 if (big2 := big.find("big")) is None or big.find("s") is not None:
                     continue
                 name = " ".join(big2.stripped_strings)

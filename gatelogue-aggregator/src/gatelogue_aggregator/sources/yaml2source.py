@@ -82,7 +82,7 @@ class Yaml2Source(Source):
                 self.conn,
                 self.priority,
                 codes=codes,
-                company=company,
+                company=company,  # pyrefly: ignore [bad-argument-type]
             )
 
         for line in file.lines:
@@ -93,20 +93,25 @@ class Yaml2Source(Source):
                 name=line.name,
                 colour=line.colour or file.colour,
                 local=line.local or file.local,
-                mode=line.mode or file.mode,
-                company=company,
+                mode=line.mode or file.mode,  # pyrefly: ignore [bad-argument-type]
+                company=company,  # pyrefly: ignore [bad-argument-type]
             )
+            # pyrefly: ignore [bad-argument-type]
             routing = line.routing or [YamlRoute(line.stations, line.forward_direction, line.backward_direction)]
             for route in routing:
-                builder = self.B(self.priority, line_node)
+                builder = self.B(self.priority, line_node)  # pyrefly: ignore [bad-argument-type]
                 one_way: dict[str, Literal["forwards", "backwards"]] = {}
                 platform_codes: dict[str, tuple[str | None, str | None]] = {}
 
                 for station in route.stations:
-                    matches = re.match(
-                        R"(?P<name>[^@%<>]+)\s*?(?:@(?P<code>[^@%<>]*)|)\s*?(?:%(?P<one_way>[^@%<>]*)|)\s*?(?:<(?P<forward_code>[^@%<>]*)\s*?>(?P<backward_code>[^@%<>]*)|)",
-                        station,
-                    )
+                    if (
+                        matches := re.match(
+                            R"(?P<name>[^@%<>]+)\s*?(?:@(?P<code>[^@%<>]*)|)\s*?(?:%(?P<one_way>[^@%<>]*)|)\s*?(?:<(?P<forward_code>[^@%<>]*)\s*?>(?P<backward_code>[^@%<>]*)|)",
+                            station,
+                        )
+                    ) is None:
+                        msg = f"Invalid line `{station}`"
+                        raise ValueError(msg)
                     name = matches["name"].strip()
                     code = name if (c := matches["code"]) is None else c.strip()
                     if (direction := matches["one_way"]) is not None:
@@ -121,12 +126,12 @@ class Yaml2Source(Source):
                         backward_code = None if backward_code == "-" else backward_code
                         platform_codes[name] = forward_code, backward_code
                     builder.add(
-                        self.S.create(
+                        self.S.create(  # pyrefly: ignore [bad-argument-type]
                             self.conn,
                             self.priority,
                             codes={code},
                             name=name,
-                            company=company,
+                            company=company,  # pyrefly: ignore [bad-argument-type]
                         )
                     )
                 self.routing(
@@ -147,15 +152,25 @@ class Yaml2Source(Source):
                 self.conn,
                 self.priority,
                 codes={code},
-                company=company,
+                company=company,  # pyrefly: ignore [bad-argument-type]
                 world=file.world,
                 coordinates=(x, z),
             )
 
         for set_ in file.proximity:
             for code1, code2 in itertools.combinations(set_, 2):
-                st1 = self.S.create(self.conn, self.priority, codes={code1}, company=company)
-                st2 = self.S.create(self.conn, self.priority, codes={code2}, company=company)
+                st1 = self.S.create(
+                    self.conn,
+                    self.priority,
+                    codes={code1},
+                    company=company,  # pyrefly: ignore [bad-argument-type]
+                )
+                st2 = self.S.create(
+                    self.conn,
+                    self.priority,
+                    codes={code2},
+                    company=company,  # pyrefly: ignore [bad-argument-type]
+                )
                 x1, y1 = file.coords[code1]
                 x2, y2 = file.coords[code2]
                 gt.Proximity.create(

@@ -36,7 +36,7 @@ class BluRail(RailSource):
         company = self.company(name="BluRail", link=get_wiki_link("BluRail"))
 
         for line_code, wiki in self.line_wikis.items():
-            line_name = re.search(r"\| linelong = (.*)\n", wiki).group(1)
+            line_name: str = re.search(r"\| linelong = (.*)\n", wiki).group(1)  # pyrefly: ignore [missing-attribute]
 
             line_colour = (
                 "#c01c22"
@@ -50,7 +50,7 @@ class BluRail(RailSource):
 
             builder = self.builder(line)
             for result in re.finditer(re.compile(r"\|-\n\|(?!<s>)(?P<code>.*?)\n\|(?P<name>.*?)\n"), wiki):
-                code = result.group("code").upper()
+                code: str = result.group("code").upper()
                 if code.startswith("BLUTRAIN"):
                     continue
                 codes = {

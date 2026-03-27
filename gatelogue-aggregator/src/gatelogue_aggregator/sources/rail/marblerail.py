@@ -18,7 +18,7 @@ class MarbleRail(RailSource):
         for line_table in self.html.find_all("table"):
             if line_table.caption is None:
                 continue
-            line_name = line_table.caption.string.split("(")[0].strip()
+            line_name: str = line_table.caption.string.split("(")[0].strip()  # pyrefly: ignore [missing-attribute]
             if line_name not in ("Meridia Line",):
                 continue
             line = self.line(code=line_name, name=line_name, company=company, mode="traincarts", colour="#cc00cc")
@@ -27,9 +27,9 @@ class MarbleRail(RailSource):
             for tr in line_table.find_all("tr"):
                 if len(tr("td")) != 5:
                     continue
-                if tr("td")[4].string.strip() != "Opened":
+                if tr("td")[4].string.strip() != "Opened":  # pyrefly: ignore [missing-attribute]
                     continue
-                code = tr("td")[0].string
+                code: str = tr("td")[0].string  # pyrefly: ignore [bad-assignment]
                 name = tr("td")[1].string
 
                 builder.add(self.station(codes={code}, name=name, company=company))

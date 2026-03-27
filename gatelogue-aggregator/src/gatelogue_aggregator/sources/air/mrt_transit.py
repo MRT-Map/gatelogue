@@ -83,8 +83,7 @@ class MRTTransit(AirSource):
                 airport = self.airport(code=airport_code, modes={mode})
 
                 if pd.notna(airport_name):
-                    if "(" in airport_name:
-                        matches = re.search(r"(.*?) \((.*?)\)", str(airport_name))
+                    if (matches := re.search(r"(.*?) \((.*?)\)", str(airport_name))) is not None:
                         names = {matches.group(2) + " " + matches.group(1), airport_name}
                     else:
                         names = {airport_name}

@@ -15,6 +15,7 @@ class NPSubway(RailYaml2Source):
     name = "Gatelogue (Rail, New Prubourne Subway)"
     file_path = Path(__file__).parent / "np_subway.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.RailLine,
@@ -25,6 +26,8 @@ class NPSubway(RailYaml2Source):
     ):
         if line_node.code == "B":
             builder2 = builder.copy()
+            # pyrefly: ignore [bad-argument-type]
             builder2.connect_to("Penn Island-Zoo", **cp)
+            # pyrefly: ignore [bad-argument-type]
             builder2.connect_to("Evergreen Parkway", **cp)
         super().routing(line_node, builder, line_yaml, route_yaml, cp)

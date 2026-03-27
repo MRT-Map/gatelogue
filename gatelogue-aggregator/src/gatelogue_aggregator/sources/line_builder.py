@@ -49,6 +49,7 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
     def _resolve_platform_code(self, code: PlatformCode, direction: Literal["forwards", "backwards"]) -> PlatformCode:
         if code == "DEFAULT_CODE":
             return (
+                # pyrefly: ignore [unsupported-operation]
                 self.line.code
                 + "-"
                 + (self.default_forward_code if direction == "forward" else self.default_backward_code)
@@ -68,9 +69,14 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
         backward_direction: DirectionLabel = "DEFAULT_DIRECTION",
         **_,
     ):
-        station = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
-        forward_direction = self._resolve_direction(forward_direction, "TO_NEXT_STATION", next_station=station)
-        backward_direction = self._resolve_direction(backward_direction, "TO_FIRST_STATION", next_station=station)
+        # pyrefly: ignore [redefinition]
+        station: S = next(a for a in self.station_list if a.name == station) if isinstance(station, str) else station
+        forward_direction = self._resolve_direction(
+            forward_direction, "TO_NEXT_STATION", next_station=station
+        )  # pyrefly: ignore[bad-argument-type]
+        backward_direction = self._resolve_direction(
+            backward_direction, "TO_FIRST_STATION", next_station=station
+        )  # pyrefly: ignore[bad-argument-type]
         forward_code = self._resolve_platform_code(forward_code, "forwards")
         backward_code = self._resolve_platform_code(backward_code, "backwards")
         station_attr = "station" if issubclass(self.Pt, gt.RailPlatform) else "stop"
@@ -80,7 +86,7 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
                 station.conn,
                 self.src,
                 code=forward_code,
-                **{station_attr: station},
+                **{station_attr: station},  # pyrefly: ignore[bad-argument-type]
             )
             if (
                 self.prev_platform_forwards is not None
@@ -89,18 +95,19 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
                 self.Cn.create(
                     station.conn,
                     self.src,
-                    line=self.line,
-                    from_=self.prev_platform_forwards,
-                    to=platform_forwards,
+                    line=self.line,  # pyrefly: ignore[bad-argument-type]
+                    from_=self.prev_platform_forwards,  # pyrefly: ignore[bad-argument-type]
+                    to=platform_forwards,  # pyrefly: ignore[bad-argument-type]
                     direction=forward_direction,
                 )
+            # pyrefly: ignore [bad-assignment]
             self.prev_platform_forwards = platform_forwards
         if one_way != "forwards":
             platform_backwards = self.Pt.create(
                 station.conn,
                 self.src,
                 code=backward_code,
-                **{station_attr: station},
+                **{station_attr: station},  # pyrefly: ignore[bad-argument-type]
             )
             if (
                 self.prev_platform_backwards is not None
@@ -109,11 +116,12 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
                 self.Cn.create(
                     station.conn,
                     self.src,
-                    line=self.line,
-                    from_=platform_backwards,
-                    to=self.prev_platform_backwards,
+                    line=self.line,  # pyrefly: ignore[bad-argument-type]
+                    from_=platform_backwards,  # pyrefly: ignore[bad-argument-type]
+                    to=self.prev_platform_backwards,  # pyrefly: ignore[bad-argument-type]
                     direction=backward_direction,
                 )
+            # pyrefly: ignore [bad-assignment]
             self.prev_platform_backwards = platform_backwards
 
     def connect(
@@ -135,13 +143,16 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
 
         while True:
             station = self.station_list[self.cursor]
-            forward_code, backward_code = platform_codes.get(
+            forward_code, backward_code = platform_codes.get(  # pyrefly: ignore[no-matching-overload]
                 station.name,
-                (self.line.code + "-" + self.default_forward_code, self.line.code + "-" + self.default_backward_code),
+                (
+                    self.line.code + "-" + self.default_forward_code,  # pyrefly: ignore[unsupported-operation]
+                    self.line.code + "-" + self.default_backward_code,  # pyrefly: ignore[unsupported-operation]
+                ),
             )
             self.connect_to(
                 station,
-                one_way=one_way.get(station.name, one_way.get("*", None)),
+                one_way=one_way.get(station.name, one_way.get("*", None)),  # pyrefly: ignore[no-matching-overload]
                 forward_code=forward_code,
                 backward_code=backward_code,
                 forward_direction=forward_direction,
@@ -172,6 +183,7 @@ class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.R
         )
         self.connect_to(
             self.station_list[0],
+            # pyrefly: ignore [no-matching-overload]
             one_way=one_way.get(self.station_list[0].name, one_way.get("*", None)) if one_way is not None else None,
             forward_direction=forward_direction,
             backward_direction=backward_direction,

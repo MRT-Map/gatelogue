@@ -15,6 +15,7 @@ class FLRForesne(RailYaml2Source):
     name = "Gatelogue (Rail, FLR Foresne)"
     file_path = Path(__file__).parent / "flr_foresne.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.RailLine,

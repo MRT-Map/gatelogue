@@ -18,7 +18,7 @@ class _NameDescriptor:
 
 
 class RegexWikiAirport(AirSource):
-    name = _NameDescriptor()
+    name = _NameDescriptor()  # pyrefly: ignore [bad-assignment]
     text: str
     airport_code: ClassVar[str]
     page_name: ClassVar[str]

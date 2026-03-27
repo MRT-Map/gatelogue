@@ -18,11 +18,13 @@ class HBL(SeaSource):
     def build(self, config: Config):
         company = self.company(name="Hummingbird Boat Lines", link=get_wiki_link("Hummingbird Boat Lines"))
 
-        for td in self.html.find("table", class_="multicol").find_all("td"):
+        for td in self.html.find("table", class_="multicol").find_all("td"):  # pyrefly: ignore [missing-attribute]
             for p, ul in zip(td.find_all("p"), td.find_all("ul"), strict=False):
                 line_code = p.span.string or p.span.span.string
                 line_name = p.b.string
-                line_colour = re.match(r"background-color:\s*([^;]*)", p.span.attrs["style"]).group(1)
+
+                # pyrefly: ignore [missing-attribute]
+                line_colour: str = re.match(r"background-color:\s*([^;]*)", p.span.attrs["style"]).group(1)
                 line = self.line(code=line_code, company=company, name=line_name, colour=line_colour, mode="warp ferry")
 
                 docks = []

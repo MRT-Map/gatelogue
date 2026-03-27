@@ -20,16 +20,18 @@ class RaiLinQ(RailSource):
                 continue
             if line_table.find("th") is None:
                 continue
+            # pyrefly: ignore [missing-attribute]
             line_code = line_table.find("th").find_all("span", style="color:white;")[0].b.string
             if line_code in ("IC 0300", "ST 3100", "ST 2000"):
                 continue
+                # pyrefly: ignore [missing-attribute]
             line_name = line_table.find("th").find_all("span", style="color:white;")[1].i.string
 
             line_colour = "#ff5500" if line_code.startswith("IC") else "#ffaa00"
             line = self.line(code=line_code, name=line_name, company=company, mode="warp", colour=line_colour)
 
             builder = self.builder(line)
-            for b in line_table.p.find_all("b"):
+            for b in line_table.p.find_all("b"):  # pyrefly: ignore [missing-attribute]
                 name = str(b.string)
                 if name == "Wazamawazi Queen Maxima (Low Level)":
                     name = "Wazamawazi Queen Maxima"

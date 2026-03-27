@@ -6,7 +6,12 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 
-from gatelogue_aggregator.downloader import get_csv, get_wiki_html, get_wiki_link, get_wiki_text
+from gatelogue_aggregator.downloader import (
+    get_csv,
+    get_wiki_html,
+    get_wiki_link,
+    get_wiki_text,
+)
 from gatelogue_aggregator.source import AirSource
 from gatelogue_aggregator.sources.air import hardcode
 from gatelogue_aggregator.sources.air.hardcode import DUPLICATE_GATE_NUM
@@ -101,9 +106,9 @@ class IntraAir(AirSource):
                     continue
                 if tr("td")[8].find("a", href="/index.php/File:CaelusAirlines_Boarding.png") is None:
                     continue
-                flight_code = tr("td")[1].span.string
-                airport1_code = tr("td")[2].span.string
-                airport2_code = tr("td")[4].span.string
+                flight_code: str = tr("td")[1].span.string  # pyrefly: ignore[missing-attribute]
+                airport1_code: str = tr("td")[2].span.string  # pyrefly: ignore[missing-attribute]
+                airport2_code: str = tr("td")[4].span.string  # pyrefly: ignore[missing-attribute]
 
                 g1 = tr("td")[3]("b")[1:]
                 gate1_code = (
@@ -127,7 +132,7 @@ class IntraAir(AirSource):
                     else g2[1].string
                 )
 
-                aircraft_name = tr("td")[6].span.string
+                aircraft_name: str = tr("td")[6].span.string  # pyrefly: ignore[missing-attribute]
 
                 self.connect(
                     airline=airline,
@@ -158,16 +163,17 @@ class FliHigh(AirSource):
             for tr in table("tr")[1:]:
                 if tr("td")[7].find("a", href="/index.php/File:Open.png") is None:
                     continue
-                flight_code = tr("td")[0].find("span").string.removeprefix("FH")
-                airport1_code = tr("td")[1].b.string
-                airport2_code = tr("td")[2].b.string
-                gate1_code = tr("td")[5].b.string
-                gate2_code = tr("td")[6].b.string
-                if "idk" in gate1_code or "CHECK WIKI" in gate1_code:
+                # pyrefly: ignore[missing-attribute]
+                flight_code: str = tr("td")[0].find("span").string.removeprefix("FH")
+                airport1_code: str = tr("td")[1].b.string  # pyrefly: ignore[missing-attribute]
+                airport2_code: str = tr("td")[2].b.string  # pyrefly: ignore[missing-attribute]
+                gate1_code: str | None = tr("td")[5].b.string  # pyrefly: ignore[missing-attribute]
+                gate2_code: str | None = tr("td")[6].b.string  # pyrefly: ignore[missing-attribute]
+                if "idk" in gate1_code or "CHECK WIKI" in gate1_code:  # pyrefly: ignore[not-iterable]
                     gate1_code = None
-                if "idk" in gate2_code or "CHECK WIKI" in gate2_code:
+                if "idk" in gate2_code or "CHECK WIKI" in gate2_code:  # pyrefly: ignore[not-iterable]
                     gate2_code = None
-                aircraft_name = tr("td")[8].string.strip()
+                aircraft_name: str = tr("td")[8].string.strip()  # pyrefly: ignore[missing-attribute]
 
                 self.connect(
                     airline=airline,
@@ -254,6 +260,7 @@ class AirNet(AirSource):
         airline = self.airline(name="AirNet", link=get_wiki_link("AirNet"))
 
         table = next(a for a in self.html("table") if "Number" in str(a))
+        # pyrefly: ignore [not-callable]
         for tr in table.tbody("tr")[1:]:
             if "Boarding" not in str(tr("td")[3]):
                 continue
@@ -288,10 +295,10 @@ class FlyCreeper(AirSource):
         for table in self.html("table"):
             if "Flight No" not in str(table):
                 continue
-            for tr in table.tbody("tr")[1:]:
-                if "Active" not in tr("td")[2].string:
+            for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
+                if "Active" not in tr("td")[2].string:  # pyrefly: ignore [not-iterable]
                     continue
-                flight_code = tr("td")[0].string.removeprefix("FC").strip()
+                flight_code: str = tr("td")[0].string.removeprefix("FC").strip()  # pyrefly: ignore [missing-attribute]
                 if (airport1_code := re.search(r"\((...)\)", str(tr("td")[3]("b")[0]))) is None:
                     continue
                 airport1_code = airport1_code.group(1)
@@ -299,7 +306,7 @@ class FlyCreeper(AirSource):
                     continue
                 airport2_code = airport2_code.group(1)
                 gate1_code, gate2_code = list(tr("td")[4].strings)[:2]
-                aircraft_name = tr("td")[6].string.strip()
+                aircraft_name: str = tr("td")[6].string.strip()  # pyrefly: ignore [missing-attribute]
                 self.connect(
                     airline=airline,
                     flight_code1=flight_code,
@@ -640,10 +647,10 @@ class SouthWeast(AirSource):
     def build(self, config: Config):
         airline = self.airline(name="South Weast Airlines", link=get_wiki_link("South Weast Airlines"))
         table = next(a for a in self.html("table") if "Flight Number" in str(a))
-        for tr in table.tbody("tr")[1:]:
+        for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
             if "ON TIME" not in str(tr("td")[4]):
                 continue
-            flight_code = tr("td")[0].string
+            flight_code: str = tr("td")[0].string  # pyrefly: ignore [bad-assignment]
             airport1_name = "".join(tr("td")[2].strings)
             airport2_name = "".join(tr("td")[3].strings)
 
@@ -669,10 +676,10 @@ class UtopiAir(AirSource):
         airline = self.airline(name="UtopiAir", link=get_wiki_link("UtopiAir"))
 
         for table in (a for a in self.html("table") if "Flight" in str(a)):
-            for tr in table.tbody("tr")[1:]:
+            for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
                 if len(tr("td")) > 3 and "ON TIME" not in str(tr("td")[3]):
                     continue
-                flight_code = tr("td")[0].string
+                flight_code: str = tr("td")[0].string  # pyrefly: ignore [bad-assignment]
                 airport1_name = "".join(tr("td")[1].strings)
                 airport2_name = "".join(tr("td")[2].strings)
                 if airport1_name == "Porton":
@@ -741,26 +748,26 @@ class Caelus(AirSource):
                 )
 
         table = next(a for a in self.html3("table") if "Operated by" in str(a))
-        for tr in table.tbody("tr")[1:]:
+        for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
             if "CaelusAirlines_Boarding.png" not in str(tr("td")[4]):
                 continue
-            code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")
+            code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")  # pyrefly: ignore [missing-attribute]
             a1, a2 = (b.string for b in tr("td")[2]("b"))
             aircraft_name = tr("td")[3].string
             self.connect(
                 airline=airline,
                 flight_code1=code1,
                 flight_code2=code2,
-                airport1_code=a1,
-                airport2_code=a2,
+                airport1_code=a1,  # pyrefly: ignore [bad-argument-type]
+                airport2_code=a2,  # pyrefly: ignore [bad-argument-type]
                 aircraft_name=aircraft_name,
             )
 
         table = next(a for a in self.html4("table") if "Operated by" in str(a))
-        for tr in table.tbody("tr")[1:]:
+        for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
             if "CaelusAirlines_Boarding.png" not in str(tr("td")[4]):
                 continue
-            code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")
+            code1, code2 = tr("td")[1].string.removeprefix("Flight ").split("/")  # pyrefly: ignore [missing-attribute]
             n1, n2 = tr("td")[2].strings
             if n1 == "Deadbush Northeast Airfield":
                 n1 = "West Mesa International Airport"
@@ -831,17 +838,17 @@ class Waviation(AirSource):
                 continue
 
             if "(000s)" in str(caption) or "(2000s)" in str(caption):
-                for tr in table.tbody("tr")[1:]:
+                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
                     if "N/A" not in str(tr("td")[7]):
                         continue
-                    code1, code2 = tr("td")[0].string.split("/")
-                    a1 = tr("td")[1].b.string
-                    g1 = tr("td")[2].string
-                    a2 = tr("td")[3].b.string
-                    g2 = tr("td")[4].string
-                    if "XX" in g1:
+                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
+                    a1: str = tr("td")[1].b.string  # pyrefly: ignore [missing-attribute]
+                    g1: str | None = tr("td")[2].string  # pyrefly: ignore [bad-assignment]
+                    a2: str = tr("td")[3].b.string  # pyrefly: ignore [missing-attribute]
+                    g2: str | None = tr("td")[4].string  # pyrefly: ignore [bad-assignment]
+                    if "XX" in g1:  # pyrefly: ignore [not-iterable]
                         g1 = None
-                    if "XX" in g2:
+                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
                         g2 = None
                     aircraft_name = tr("td")[5].string
                     self.connect(
@@ -855,14 +862,14 @@ class Waviation(AirSource):
                         aircraft_name=aircraft_name,
                     )
             elif "(1200s)" in str(caption):
-                for tr in table.tbody("tr")[1:]:
+                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
                     if "N/A" not in str(tr("td")[6]):
                         continue
-                    code1, code2 = tr("td")[0].string.split("/")
-                    a1 = tr("td")[1].b.string
-                    a2 = tr("td")[2].b.string
-                    g2 = tr("td")[3].string
-                    if "XX" in g2:
+                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
+                    a1: str = tr("td")[1].b.string  # pyrefly: ignore [missing-attribute]
+                    a2: str = tr("td")[2].b.string  # pyrefly: ignore [missing-attribute]
+                    g2: str | None = tr("td")[3].string
+                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
                         g2 = None
                     aircraft_name = tr("td")[4].string
                     self.connect(
@@ -876,7 +883,7 @@ class Waviation(AirSource):
                         aircraft_name=aircraft_name,
                     )
             else:
-                a1 = (
+                a1: str | None = (  # pyrefly: ignore [redefinition]
                     "AIX"
                     if "(300s)" in str(caption)
                     else "LNT"
@@ -890,16 +897,16 @@ class Waviation(AirSource):
                 if a1 is None:
                     continue
 
-                for tr in table.tbody("tr")[1:]:
+                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
                     if "N/A" not in str(tr("td")[6]):
                         continue
-                    code1, code2 = tr("td")[0].string.split("/")
-                    g1 = tr("td")[1].string
-                    a2 = tr("td")[2].b.string
-                    g2 = tr("td")[3].string
-                    if "XX" in g1:
+                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
+                    g1: str | None = tr("td")[1].string
+                    a2: str = tr("td")[2].b.string  # pyrefly: ignore [missing-attribute]
+                    g2: str | None = tr("td")[3].string
+                    if "XX" in g1:  # pyrefly: ignore [not-iterable]
                         g1 = None
-                    if "XX" in g2:
+                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
                         g2 = None
                     aircraft_name = tr("td")[4].string
                     self.connect(

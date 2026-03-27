@@ -56,7 +56,7 @@ class WarpAPI:
             while True:
                 ls = msgspec.json.decode(
                     get_url(cls.LINK + f"?offset={offset}", "mrt-api/" + str(offset), config),
-                    type=TypedDict("", {"pagination": dict, "result": list[Warp]}),
+                    type=TypedDict("", {"pagination": dict, "result": list[Warp]}),  # pyrefly: ignore [not-callable]
                 )["result"]
                 if len(ls) == 0:
                     break

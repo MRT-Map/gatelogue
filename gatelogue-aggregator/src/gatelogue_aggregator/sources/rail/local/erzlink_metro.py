@@ -15,6 +15,7 @@ class ErzLinkMetro(RailYaml2Source):
     name = "Gatelogue (Rail, ErzLink Metro)"
     file_path = Path(__file__).parent / "erzlink_metro.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.RailLine,

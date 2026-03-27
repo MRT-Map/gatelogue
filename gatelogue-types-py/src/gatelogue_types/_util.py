@@ -339,7 +339,7 @@ class _FKColumn[T: Node | None]:
         str_instance2: str | None = None,
         warn_fn: Callable[[str], object] = warnings.warn,
     ):
-        _Column(self.name, self.table, sourced=self.sourced)._merge(
+        _Column(self.name, self.table, sourced=self.sourced)._merge(  # noqa: SLF001
             instance1, instance2, str_instance1, str_instance2, warn_fn
         )
 
@@ -376,7 +376,7 @@ class _AircraftColumn:
         str_instance2: str | None = None,
         warn_fn: Callable[[str], object] = warnings.warn,
     ):
-        _Column(self.name, self.table, sourced=self.sourced)._merge(
+        _Column(self.name, self.table, sourced=self.sourced)._merge(  # noqa: SLF001
             instance1, instance2, str_instance1, str_instance2, warn_fn
         )
 

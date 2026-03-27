@@ -18,7 +18,7 @@ class _NameDescriptor:
 
 
 class RegexWikiAirline(AirSource):
-    name = _NameDescriptor()
+    name = _NameDescriptor()  # pyrefly: ignore [bad-assignment]
     text: str
     airline_name: ClassVar[str]
     page_name: ClassVar[str]
@@ -48,6 +48,7 @@ class RegexWikiAirline(AirSource):
                 self.process_airport_name(airport1_name)
             if gate1_code is not None:
                 self.process_airport_gate_code(gate1_code, airport1_code)
+            # pyrefly: ignore [bad-argument-type]
             airport1 = self.airport(code=airport1_code or "", names=None if airport1_name is None else {airport1_name})
             gate1 = self.gate(code=gate1_code, airport=airport1, mode=mode, airline=airline)
 
@@ -62,7 +63,9 @@ class RegexWikiAirline(AirSource):
             if airport2_name is not None:
                 self.process_airport_name(airport2_name)
             if gate2_code is not None:
+                # pyrefly: ignore [bad-argument-type]
                 self.process_airport_gate_code(gate2_code, airport2_code)
+            # pyrefly: ignore [bad-argument-type]
             airport2 = self.airport(code=airport2_code or "", names=None if airport2_name is None else {airport2_name})
             gate2 = self.gate(code=gate2_code, airport=airport2, mode=mode, airline=airline)
 
@@ -85,7 +88,9 @@ class RegexWikiAirline(AirSource):
             if airport3_name is not None:
                 self.process_airport_name(airport3_name)
             if gate3_code is not None:
+                # pyrefly: ignore [bad-argument-type]
                 self.process_airport_gate_code(gate3_code, airport3_code)
+            # pyrefly: ignore [bad-argument-type]
             airport3 = self.airport(code=airport3_code or "", names=None if airport3_name is None else {airport3_name})
             gate3 = self.gate(code=gate3_code, airport=airport3, mode=mode, airline=airline)
             self.flight(airline=airline, code=flight_code, from_=gate1, to=gate3, aircraft=aircraft_name)
@@ -110,7 +115,7 @@ class RegexWikiAirline(AirSource):
         return name
 
     @staticmethod
-    def process_airport_gate_code(gate: str, _airport: str) -> str:
+    def process_airport_gate_code(gate: str, _airport: str | None) -> str:
         return gate
 
     @staticmethod

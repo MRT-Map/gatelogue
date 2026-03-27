@@ -18,12 +18,15 @@ class WZF(SeaSource):
         company = self.company(name="West Zeta Ferry", link=get_wiki_link("West Zeta Ferry"))
 
         for table in self.html.find_all("table"):
-            if "Status" not in table.th.string:
+            if "Status" not in table.th.string:  # pyrefly: ignore [missing-attribute]
                 continue
-            span = table.previous_sibling.previous_sibling.find(
-                "span", class_="mw-headline"
-            ) or table.previous_sibling.previous_sibling.previous_sibling.previous_sibling.find(
-                "span", class_="mw-headline"
+            span = (
+                table.previous_sibling.previous_sibling.find(  # pyrefly: ignore [missing-attribute]
+                    "span", class_="mw-headline"
+                )
+                or table.previous_sibling.previous_sibling.previous_sibling.previous_sibling.find(  # pyrefly: ignore [missing-attribute]
+                    "span", class_="mw-headline"
+                )
             )
             if (result := re.search(r"Line (?P<code>.*?) \((?P<name>.*)\)", span.string)) is None:
                 continue
@@ -41,7 +44,7 @@ class WZF(SeaSource):
                     continue
                 builder.add(self.stop(codes={code}, name=name, company=company))
 
-                colour = tr("td")[1].attrs["style"].split(":")[1]
+                colour = tr("td")[1].attrs["style"].split(":")[1]  # pyrefly: ignore [missing-attribute]
                 line.colour = colour
 
             builder.connect()

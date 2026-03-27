@@ -18,12 +18,15 @@ class WZR(RailSource):
         company = self.company(name="West Zeta Rail", link=get_wiki_link("West Zeta Rail"))
 
         for table in self.html.find_all("table"):
-            if "Code" not in table.th.string:
+            if "Code" not in table.th.string:  # pyrefly: ignore [missing-attribute]
                 continue
-            span = table.previous_sibling.previous_sibling.find(
-                "span", class_="mw-headline"
-            ) or table.previous_sibling.previous_sibling.previous_sibling.previous_sibling.find(
-                "span", class_="mw-headline"
+            span = (
+                table.previous_sibling.previous_sibling.find(  # pyrefly: ignore [missing-attribute]
+                    "span", class_="mw-headline"
+                )
+                or table.previous_sibling.previous_sibling.previous_sibling.previous_sibling.find(  # pyrefly: ignore [missing-attribute]
+                    "span", class_="mw-headline"
+                )
             )
             if (result := re.search(r"Line (?P<code>.*?) - (?P<name>.*)|(?P<name2>[^(]*)", span.string)) is None:
                 continue
@@ -35,9 +38,9 @@ class WZR(RailSource):
             for tr in table.find_all("tr"):
                 if len(tr("td")) != 4:
                     continue
-                if tr("td")[3].string.strip() == "Planned":
+                if tr("td")[3].string.strip() == "Planned":  # pyrefly: ignore [missing-attribute]
                     continue
-                code = tr("td")[0].string
+                code: str = tr("td")[0].string  # pyrefly: ignore [bad-assignment]
                 name = "".join(tr("td")[1].strings).strip().rstrip("*")
                 builder.add(self.station(codes={code}, name=name, company=company))
 

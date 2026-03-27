@@ -17,7 +17,7 @@ class SEAT(RailSource):
 
         first_seen = False
         for h3 in self.html.find_all("h3"):
-            line_name: str = h3.find("span", class_="mw-headline").string
+            line_name: str = h3.find("span", class_="mw-headline").string  # pyrefly: ignore [missing-attribute]
             if not first_seen:
                 if "Savagebite" in line_name:
                     first_seen = True
@@ -27,6 +27,7 @@ class SEAT(RailSource):
             line = self.line(code=line_name, name=line_name, company=company, mode="warp", colour="#000080")
 
             line_table = h3.find_next("table")
+            # pyrefly: ignore [not-iterable]
             if line_table is None or line_table.caption is None or "Line" not in line_table.caption.string:
                 continue
 
@@ -34,7 +35,7 @@ class SEAT(RailSource):
             for tr in line_table("tr")[1:]:
                 if all("Open" not in a for a in tr("td")[3].strings):
                     continue
-                name = tr("td")[1].string.strip().removesuffix(" Station")
+                name: str = tr("td")[1].string.strip().removesuffix(" Station")  # pyrefly: ignore [missing-attribute]
 
                 builder.add(self.station(codes={name}, name=name, company=company))
 

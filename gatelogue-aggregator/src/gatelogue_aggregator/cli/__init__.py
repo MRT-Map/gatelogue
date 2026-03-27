@@ -133,6 +133,7 @@ def run(
         or (include and (include == "*" or a.__name__ in include.split(";")))
         or (exclude and (exclude != "*" and a.__name__ not in exclude.split(";")))
     ]
+    # pyrefly: ignore [bad-assignment]
     cache_exclude = [c.__name__ for c in sources] if cache_exclude == "*" else cache_exclude.split(";")
 
     config = Config(
@@ -140,6 +141,7 @@ def run(
         cache_duration=cache_duration,
         timeout=timeout,
         cooldown=cooldown,
+        # pyrefly: ignore [bad-argument-type]
         cache_exclude=cache_exclude,
         max_workers=max_workers,
     )

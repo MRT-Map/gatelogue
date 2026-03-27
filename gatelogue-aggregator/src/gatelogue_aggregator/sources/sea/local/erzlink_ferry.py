@@ -15,6 +15,7 @@ class ErzLinkFerry(SeaYaml2Source):
     name = "Gatelogue (Sea, ErzLink Ferry)"
     file_path = Path(__file__).parent / "erzlink_ferry.yaml"
 
+    # pyrefly: ignore [bad-override]
     def routing(
         self,
         line_node: gt.SeaLine,

@@ -4,7 +4,7 @@ import difflib
 import re
 from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
 import gatelogue_types as gt
 import msgspec
@@ -238,7 +238,7 @@ class GatelogueData:
                 if existing.world != n.world:
                     continue
                 x1, y1 = existing.coordinates
-                x2, y2 = n.coordinates
+                x2, y2 = cast("tuple[int, int]", n.coordinates)
                 dist_sq = (x1 - x2) ** 2 + (y1 - y2) ** 2
                 threshold = 500**2 if isinstance(existing, gt.AirAirport) or isinstance(n, gt.AirAirport) else 250**2
                 if dist_sq < threshold:
@@ -256,8 +256,8 @@ class GatelogueData:
         def dist_sq_fn(n_: gt.LocatedNode, this_: gt.LocatedNode, others: Container[int]):
             if n_.world != this_.world or n_.i in others:
                 return float("inf")
-            nx, ny = n_.coordinates
-            tx, ty = this_.coordinates
+            nx, ny = cast("tuple[int, int]", n_.coordinates)
+            tx, ty = cast("tuple[int, int]", this_.coordinates)
             return (nx - tx) ** 2 + (ny - ty) ** 2
 
         prev_length: int | None = None
@@ -348,7 +348,7 @@ class GatelogueData:
 
         def get_stop(
             mode: str, company: gt.BusCompany | gt.RailCompany | gt.SeaCompany, name: str, code: str | None = None
-        ) -> gt.BusStop | gt.RailStation | gt.SeaStop:
+        ) -> gt.BusStop | gt.RailStation | gt.SeaStop | None:
             stop = None
             match mode:
                 case "Bus":

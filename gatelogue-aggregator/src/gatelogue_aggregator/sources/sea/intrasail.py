@@ -15,16 +15,19 @@ class IntraSail(SeaSource):
     def build(self, config: Config):
         company = self.company(name="IntraSail", link=get_wiki_link("IntraSail"))
 
+        # pyrefly: ignore [no-matching-overload]
         cursor: bs4.Tag = self.html.find("span", "mw-headline", string="1 Nansei Gintra").parent
 
         while cursor and (line_code_name := cursor.find(class_="mw-headline")) is not None:
-            line_code, line_name = line_code_name.string.split(" ", 1)
+            line_code, line_name = line_code_name.string.split(" ", 1)  # pyrefly: ignore [missing-attribute]
             line_code = line_code.strip()
             line_name = line_name.strip()
 
             line_colour = "#C74EBD" if line_code.endswith("X") else "#3AB3DA" if line_code[-1].isdigit() else "#B02E26"
             line = self.line(code=line_code, name=line_name, company=company, mode="warp ferry", colour=line_colour)
-            cursor: bs4.Tag = cursor.next_sibling.next_sibling.next_sibling.next_sibling
+            cursor: bs4.Tag = (
+                cursor.next_sibling.next_sibling.next_sibling.next_sibling  # pyrefly: ignore [missing-attribute]
+            )
 
             builder = self.builder(line)
             for big in cursor.find_all("big"):
@@ -41,4 +44,4 @@ class IntraSail(SeaSource):
 
             builder.connect()
 
-            cursor: bs4.Tag = cursor.next_sibling.next_sibling
+            cursor: bs4.Tag = cursor.next_sibling.next_sibling  # pyrefly: ignore [missing-attribute]

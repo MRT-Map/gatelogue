@@ -18,14 +18,14 @@ class IntraBusOmegaBus(BusSource):
         for table in self.html.find_all("table"):
             if "border-radius: 30px" not in table.attrs.get("style", ""):
                 continue
-            line_code = table("td")[0].find("span").string
+            line_code: str = table("td")[0].find("span").string  # pyrefly: ignore [missing-attribute]
             line = self.line(code=line_code, company=company)
 
             builder = self.builder(line)
             for span in table("td")[1].find_all("span"):
                 if span.find("s") is not None:
                     continue
-                name = span.string
+                name: str = span.string  # pyrefly: ignore [bad-assignment]
                 builder.add(self.stop(codes={name}, name=name, company=company))
 
             builder.connect()
