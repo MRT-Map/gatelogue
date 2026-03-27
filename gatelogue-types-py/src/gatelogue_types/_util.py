@@ -341,7 +341,7 @@ class _FKColumn[T: Node | None]:
     ):
         _Column(self.name, self.table, sourced=self.sourced)._merge(
             instance1, instance2, str_instance1, str_instance2, warn_fn
-        )  # noqa: SLF001
+        )
 
 
 class _AircraftColumn:
@@ -378,7 +378,7 @@ class _AircraftColumn:
     ):
         _Column(self.name, self.table, sourced=self.sourced)._merge(
             instance1, instance2, str_instance1, str_instance2, warn_fn
-        )  # noqa: SLF001
+        )
 
 
 class _SetAttr[T]:
