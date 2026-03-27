@@ -96,9 +96,9 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
-      - run: cd gatelogue-client && pnpm i && pnpm lint:fix
+      - run: cd gatelogue-client && pnpm i && pnpm run-p -c lint:fix type-check 
         continue-on-error: true
-      - run: cd gatelogue-types-ts && pnpm i && pnpm lint:fix
+      - run: cd gatelogue-types-ts && pnpm i && pnpm run-p -c lint:fix type-check
         continue-on-error: true
 
       - run: echo "message=lint @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
