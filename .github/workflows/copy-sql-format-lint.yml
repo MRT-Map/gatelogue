@@ -31,20 +31,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
         with:
           version: "1.16.5"
-      - run: cd gatelogue-aggregator && hatch fmt -f
-      - run: cd gatelogue-types-py && hatch fmt -f
-
       - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
         with:
           toolchain: ${{ env.RUST_VERSION }}
           cache-workspaces: './gatelogue-types-rs -> target'
           components: rustfmt
-      - run: cd gatelogue-types-rs && cargo fmt
-
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
         with:
           version: "10.32.1"
@@ -53,6 +47,12 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+
+      - run: cd gatelogue-aggregator && hatch fmt -f
+      - run: cd gatelogue-types-py && hatch fmt -f
+
+      - run: cd gatelogue-types-rs && cargo fmt
+
       - run: cd gatelogue-client && pnpm i && pnpm format
       - run: cd gatelogue-types-ts && pnpm i && pnpm format
 
@@ -75,19 +75,11 @@ jobs:
       - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
         with:
           version: "1.16.5"
-      - run: cd gatelogue-aggregator && hatch fmt
-        continue-on-error: true
-      - run: cd gatelogue-types-py && hatch fmt
-        continue-on-error: true
-
       - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
         with:
           toolchain: ${{ env.RUST_VERSION }}
           cache-workspaces: './gatelogue-types-rs -> target'
           components: clippy
-      - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code
-        continue-on-error: true
-
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
         with:
           version: "10.32.1"
@@ -96,19 +88,27 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
-      - run: cd gatelogue-client && pnpm i && pnpm run-p -c lint:fix type-check 
-        continue-on-error: true
-      - run: cd gatelogue-types-ts && pnpm i && pnpm run-p -c lint:fix type-check
-        continue-on-error: true
+
+      - run: cd gatelogue-aggregator && hatch fmt
+      - run: cd gatelogue-types-py && hatch fmt
+        if: '!cancelled()'
+
+      - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code
+        if: '!cancelled()'
+
+      - run: cd gatelogue-client && pnpm i && pnpm run-s lint:fix type-check
+        if: '!cancelled()'
+      - run: cd gatelogue-types-ts && pnpm i && pnpm run-s lint:fix type-check
+        if: '!cancelled()'
 
       - run: echo "message=lint @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
-        if: ${{ github.event_name != 'pull_request' }}
+        if: github.event_name != 'pull_request' && !cancelled()
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
-        if: ${{ github.event_name != 'pull_request' }}
+        if: github.event_name != 'pull_request' && !cancelled()
         with:
           commit-message: ${{ env.message }}
           branch: lint
           title: Linting
       - run: git status
-        if: ${{ github.event_name == 'pull_request' }}
+        if: github.event_name == 'pull_request' && !cancelled()
         
