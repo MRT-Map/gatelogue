@@ -57,8 +57,6 @@ from __future__ import annotations
 
 import datetime
 import sqlite3
-from os import PathLike
-from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Self,
@@ -66,16 +64,24 @@ from typing import (
 
 from gatelogue_types.__about__ import __data_version__
 from gatelogue_types._util import _sql
-from gatelogue_types.air import AirAirline, AirAirport, Aircraft, AirFlight, AirGate, AirMode
-from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop
-from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World
-from gatelogue_types.rail import RailCompany, RailConnection, RailLine, RailMode, RailPlatform, RailStation
-from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaMode, SeaStop
-from gatelogue_types.spawn_warp import SpawnWarp, WarpType
-from gatelogue_types.town import Rank, Town
+from gatelogue_types.air import AirAirline, AirAirport, Aircraft, AirFlight, AirGate, AirMode  # noqa: F401
+from gatelogue_types.bus import BusBerth, BusCompany, BusConnection, BusLine, BusMode, BusStop  # noqa: F401
+from gatelogue_types.node import LocatedNode, Node, Proximity, SharedFacility, World  # noqa: F401
+from gatelogue_types.rail import (  # noqa: F401
+    RailCompany,
+    RailConnection,
+    RailLine,
+    RailMode,
+    RailPlatform,
+    RailStation,
+)
+from gatelogue_types.sea import SeaCompany, SeaConnection, SeaDock, SeaLine, SeaMode, SeaStop  # noqa: F401
+from gatelogue_types.spawn_warp import SpawnWarp, WarpType  # noqa: F401
+from gatelogue_types.town import Rank, Town  # noqa: F401
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable, Iterator
+    from os import PathLike
 
 URL: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db"
 URL_NO_SOURCES: str = "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db"
@@ -108,12 +114,12 @@ class GD:
         return self
 
     @classmethod
-    def get(cls, sources: bool = False, getter: Callable[[str], bytes] | None = None):
+    def get(cls, *, sources: bool = False, getter: Callable[[str], bytes] | None = None):
         getter = getter or GD.Getters.urllib
         return cls.from_bytes(getter(URL if sources else URL_NO_SOURCES))
 
     @classmethod
-    async def get_async(cls, sources: bool = False, getter: Callable[[str], Awaitable[bytes]] | None = None):
+    async def get_async(cls, *, sources: bool = False, getter: Callable[[str], Awaitable[bytes]] | None = None):
         async def _default(url: str):
             return GD.Getters.urllib(url)
 
@@ -185,7 +191,7 @@ class GD:
         return self.conn.execute("SELECT has_sources FROM Metadata").fetchone()[0]
 
     @classmethod
-    def create(cls, sources: list[str], database=":memory:", has_sources: bool = True) -> Self:
+    def create(cls, sources: list[str], database=":memory:", *, has_sources: bool = True) -> Self:
         """Internal Use"""
         self = cls(database=database)
         cur = self.conn.cursor()

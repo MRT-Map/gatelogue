@@ -89,7 +89,7 @@ class _Column[T]:
         name: LiteralString,
         table: LiteralString,
         sourced: bool = False,
-        formatter: Callable[[T], T] | None = None,
+        formatter: Callable[[T | None], T | None] | None = None,
     ):
         self.name = f'"{name}"'
         self.table = table

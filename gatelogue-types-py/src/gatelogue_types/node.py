@@ -86,7 +86,7 @@ class Node:
         self_str = str(self)
         other_str = str(other)
         for attr in self.COLUMNS:
-            attr._merge(self, other, self_str, other_str, warn_fn)
+            attr._merge(self, other, self_str, other_str, warn_fn)  # noqa: SLF001
 
         self._merge(other)
         other.delete()

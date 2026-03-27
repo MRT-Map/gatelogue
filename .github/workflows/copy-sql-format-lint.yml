@@ -89,8 +89,8 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
 
-      - run: cd gatelogue-aggregator && hatch fmt
-      - run: cd gatelogue-types-py && hatch fmt
+      - run: cd gatelogue-aggregator && hatch fmt && hatch run types:check
+      - run: cd gatelogue-types-py && hatch fmt && hatch run types:check
         if: '!cancelled()'
 
       - run: cd gatelogue-types-rs && cargo clippy --fix --broken-code

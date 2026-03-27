@@ -1,4 +1,5 @@
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 from gatelogue_aggregator.config import Config
 from gatelogue_aggregator.downloader import get_json, get_wiki_link, get_wiki_text
@@ -20,12 +21,16 @@ class BluRail(RailSource):
 
         line_codes = [result["title"].removesuffix(" (BluRail line)") for result in line_list]
 
-        self.line_wikis = {}  # TODO parallel
-        for line_code in line_codes:
+        def retrieve_line(line_code: str) -> str | None:
             wiki = get_wiki_text(f"{line_code} (BluRail line)", config)
             if "is a planned [[BluRail]] warp train line" in wiki:
-                continue
-            self.line_wikis[line_code] = wiki
+                return None
+            return wiki
+
+        with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
+            self.line_wikis = {
+                k: v for k, v in zip(line_codes, executor.map(retrieve_line, line_codes), strict=False) if v is not None
+            }
 
     def build(self, config: Config):
         company = self.company(name="BluRail", link=get_wiki_link("BluRail"))

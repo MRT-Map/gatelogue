@@ -68,7 +68,7 @@ class GatelogueData:
             manu: str
             w: int
             h: int
-            l: int
+            l: int  # noqa: E741
             mode: gt.AirMode = "warp plane"
 
         with (Path(__file__).parent / "sources" / "air" / "aircraft.yaml").open() as f:
@@ -177,7 +177,8 @@ class GatelogueData:
             sources = lambda: {  # noqa: E731
                 s
                 for (s,) in self.gd.conn.execute(
-                    "SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i", dict(i=n.i)
+                    "SELECT DISTINCT source FROM AirAirportModesSource WHERE i = :i",
+                    dict(i=n.i),  # noqa: B023
                 ).fetchall()
             }
             for gate in n.gates:
