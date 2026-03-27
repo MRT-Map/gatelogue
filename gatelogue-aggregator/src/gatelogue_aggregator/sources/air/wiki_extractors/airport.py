@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 import pandas as pd
 
@@ -426,7 +426,7 @@ class AIX(AirSource):
             if pd.isna(gate_size):
                 gate_width = old_gate_width
             else:
-                gate_size = str(gate_size).strip()
+                gate_size = str(gate_size).strip()  # noqa: PLW2901
                 gate_width = 45 if gate_size == "Large" else 33 if gate_size == "Medium" else 15
                 old_gate_width = gate_width
             self.gate(
@@ -503,7 +503,7 @@ class KWT(RegexWikiAirport):
     airport_code = "KWT"
     page_name = "Ha Shan - Kwai Tin Airport"
     regex = re.compile(r"\|.*?\| \[\[(?P<airline>.*?)]] \|\|.*?\|.*?\|\|.*?\|(?P<code>.*?)\|\|")
-    additional_names = {"Kwai Tin Airfield"}
+    additional_names: ClassVar = {"Kwai Tin Airfield"}
 
     @staticmethod
     def width(_matches: dict[str, str]) -> int | None:

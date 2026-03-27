@@ -97,4 +97,10 @@ default-args = ["tests/__init__.py"]
 python = ["3.14", "3.13"]
 
 [tool.ruff.lint]
-ignore = ["C408"]
+ignore = [
+  "C408",  # dict(a=b)
+  "T201",  # print
+  "S101",  # assert
+  "S608",  # SQL injection lol
+
+]

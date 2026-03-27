@@ -60,11 +60,11 @@ class Yaml2Source(Source):
     name = "Gatelogue"
 
     file_path: ClassVar[Path]
-    C: ClassVar[type[gt.RailCompany | gt.BusCompany | gt.SeaCompany]]
-    L: ClassVar[type[gt.RailLine | gt.BusLine | gt.SeaLine]]
-    S: ClassVar[type[gt.RailStation | gt.BusStop | gt.SeaStop]]
-    P: ClassVar[type[gt.RailPlatform | gt.BusBerth | gt.SeaDock]]
-    B: ClassVar[type[RailLineBuilder | BusLineBuilder | SeaLineBuilder]]
+    C: ClassVar[type[gt.RailCompany] | type[gt.BusCompany] | type[gt.SeaCompany]]
+    L: ClassVar[type[gt.RailLine] | type[gt.BusLine] | type[gt.SeaLine]]
+    S: ClassVar[type[gt.RailStation] | type[gt.BusStop] | type[gt.SeaStop]]
+    P: ClassVar[type[gt.RailPlatform] | type[gt.BusBerth] | type[gt.SeaDock]]
+    B: ClassVar[type[RailLineBuilder] | type[BusLineBuilder] | type[SeaLineBuilder]]
 
     def build(self, _config: Config):
         with self.file_path.open() as f:

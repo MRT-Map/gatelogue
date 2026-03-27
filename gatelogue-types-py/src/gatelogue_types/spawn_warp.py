@@ -36,7 +36,7 @@ class SpawnWarp(LocatedNode):
         **kwargs: Unpack[CreateParams],
     ) -> Self:
         """Internal use"""
-        kwargs = cls.format_create_kwargs(**kwargs)
+        kwargs = cls.format_create_kwargs(**kwargs)  # pyrefly: ignore[bad-assignment]
         i = cls.create_node_with_location(conn, src, ty=cls.__name__, **kwargs)
         cur = conn.cursor()
         cur.execute(

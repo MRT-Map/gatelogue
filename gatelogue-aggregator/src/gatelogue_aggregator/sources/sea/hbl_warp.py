@@ -150,7 +150,7 @@ class HBLWarp(SeaSource):
             if (result := re.match(r"HBL_(...)_(.*)", warp.name)) is None:
                 continue
             if (name := _DICT.get(result.group(1))) is None:
-                rich.print(ERROR + f"Unknown warp {warp['name']}")
+                rich.print(ERROR + f"Unknown warp {warp.name}")
                 continue
             if name not in ("Covnia", "Kenthurst") and name not in names:
                 continue

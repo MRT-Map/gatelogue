@@ -13,8 +13,8 @@ type PlatformCode = str | Literal["DEFAULT_CODE", "LINE_CODE"] | None  # noqa: P
 
 
 class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.RailStation, gt.SeaStop)]:
-    Pt: ClassVar[type[gt.BusBerth, gt.SeaDock, gt.RailPlatform]]
-    Cn: ClassVar[type[gt.BusConnection, gt.SeaConnection, gt.RailConnection]]
+    Pt: ClassVar[type[gt.BusBerth] | type[gt.SeaDock] | type[gt.RailPlatform]]
+    Cn: ClassVar[type[gt.BusConnection] | type[gt.SeaConnection] | type[gt.RailConnection]]
     default_forward_code: ClassVar[str | None] = "forwards"
     default_backward_code: ClassVar[str | None] = "backwards"
 

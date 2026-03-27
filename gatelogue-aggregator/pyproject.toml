@@ -115,3 +115,6 @@ ignore = [
   "C408", # dict(a=b)
   "SLF001", # private members
 ]
+
+[tool.pyrefly.errors]
+bad-param-name-override = false
