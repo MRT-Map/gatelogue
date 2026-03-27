@@ -1,18 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Literal, Self
+from typing import ClassVar, Literal, Self
 
 import gatelogue_types as gt
-
-if TYPE_CHECKING:
-    from gatelogue_types import (
-        BusLine,
-        BusStop,
-        RailLine,
-        RailStation,
-        SeaLine,
-        SeaStop,
-    )
 
 type OneWay = Literal["forwards", "backwards"]
 
@@ -22,7 +12,7 @@ type DirectionLabel = (
 type PlatformCode = str | Literal["DEFAULT_CODE", "LINE_CODE"] | None  # noqa: PYI051
 
 
-class LineBuilder[L: (BusLine, RailLine, SeaLine), S: (BusStop, RailStation, SeaStop)]:
+class LineBuilder[L: (gt.BusLine, gt.RailLine, gt.SeaLine), S: (gt.BusStop, gt.RailStation, gt.SeaStop)]:
     Pt: ClassVar[type[gt.BusBerth, gt.SeaDock, gt.RailPlatform]]
     Cn: ClassVar[type[gt.BusConnection, gt.SeaConnection, gt.RailConnection]]
     default_forward_code: ClassVar[str | None] = "forwards"

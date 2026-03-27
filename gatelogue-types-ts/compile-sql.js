@@ -17,7 +17,7 @@ const readFolder = (folder) => {
   }
 };
 
-readFolder("./sql", out);
+readFolder("./sql");
 
 const outFile = `export default ${JSON.stringify(out, null, 2)} as const;`;
 fs.writeFileSync("src/sql.ts", outFile);

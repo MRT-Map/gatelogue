@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Literal
 import gatelogue_types as gt
 import msgspec
 import rich
-from gatelogue_types import AirMode
 
 from gatelogue_aggregator.logging import ERROR, INFO1, INFO2, RESULT, report, track
 from gatelogue_aggregator.sources.dynmap_markers import DynmapMarkers
@@ -70,7 +69,7 @@ class GatelogueData:
             w: int
             h: int
             l: int
-            mode: AirMode = "warp plane"
+            mode: gt.AirMode = "warp plane"
 
         with (Path(__file__).parent / "sources" / "air" / "aircraft.yaml").open() as f:
             file = msgspec.yaml.decode(f.read(), type=list[Yaml])
