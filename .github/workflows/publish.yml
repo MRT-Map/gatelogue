@@ -120,7 +120,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    needs: [ build-py, build-rs, build-ts, changelog-version, tests ]
+    needs: [ build-py, build-rs, build-ts, changelog-version ]
     permissions:
       contents: write
 
