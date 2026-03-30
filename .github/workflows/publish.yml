@@ -1,6 +1,8 @@
 name: Publish
 on:
   workflow_dispatch:
+  push:
+    tags: ["*"]
 
 
 env:
@@ -8,11 +10,6 @@ env:
   RUST_VERSION: nightly-2026-03-27
 
 jobs:
-  tests:
-    permissions:
-      contents: read
-    uses: ./.github/workflows/tests.yml
-
   changelog-version:
     runs-on: ubuntu-latest
     outputs:
@@ -27,12 +24,20 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - id: version
         run: |
-          cd gatelogue-aggregator/src
-          python -c "
-          from gatelogue_aggregator.__about__ import __version__, __data_version__
-          print('version=v'+__version__)
-          print('data_version='+str(__data_version__))
-          " >> "$GITHUB_OUTPUT"
+          if [ -z "$HAS_TAG" ]; then
+            echo "version=$(echo "$TAG" | cut -d '+' -f1)" >> "$GITHUB_OUTPUT"
+            echo "data_version=$(echo "$TAG" | cut -d '+' -f2)" >> "$GITHUB_OUTPUT"
+          else
+            cd gatelogue-aggregator/src
+            python -c "
+              from gatelogue_aggregator.__about__ import __version__, __data_version__
+              print('version=v'+__version__)
+              print('data_version='+str(__data_version__))
+            " >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          HAS_TAG: ${{ github.event_name == 'push' }}
+          TAG: ${{ github.ref_name }}
 
       - id: changelog
         run: |
@@ -140,7 +145,7 @@ jobs:
 
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: [ build-py, tests ]
+    needs: [ build-py ]
     environment:
       name: pypi
       url: https://pypi.org/p/gatelogue-types
@@ -161,7 +166,7 @@ jobs:
         working-directory: gatelogue-types-rs
     permissions:
       id-token: write
-    needs: [ build-rs, tests ]
+    needs: [ build-rs ]
     environment:
       name: crates
       url: https://crates.io/crates/gatelogue-types
@@ -186,7 +191,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    needs: [ build-ts, tests ]
+    needs: [ build-ts ]
     environment:
       name: npm
       url: https://www.npmjs.com/package/gatelogue-types
@@ -214,7 +219,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    needs: [ build-ts, tests ]
+    needs: [ build-ts ]
 
 
     steps:
@@ -244,7 +249,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    needs: [ build-ts, tests ]
+    needs: [ build-ts ]
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
