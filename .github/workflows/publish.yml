@@ -143,17 +143,17 @@ jobs:
           body: ${{ needs.changelog-version.outputs.changelog }}
           files: dist/*
 
-  delete-gh-release:
+  delete-github-release:
     runs-on: ubuntu-latest
     needs: [ build-py, build-rs, build-ts, changelog-version, github-release ]
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     permissions:
       contents: write
 
-   steps:
-     - run: gh release delete $TAG --cleanup-tags -y
-       env:
-         TAG: ${{ needs.changelog-version.outputs.version }}
+    steps:
+      - run: gh release delete $TAG --cleanup-tags -y
+        env:
+          TAG: ${{ needs.changelog-version.outputs.version }}
 
   publish-pypi:
     runs-on: ubuntu-latest
