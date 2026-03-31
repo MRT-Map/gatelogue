@@ -33,6 +33,7 @@ isahc = { version = "=1.7.2", default-features = false, features = ["http2", "st
 #attohttpc = { version = "0.30.1", default-features = false, features = ["tls-rustls-webpki-roots-ring"] }
 minreq = { version = "=2.14.1" , features = ["https-rustls", "webpki-roots"]}
 wreq = { version = "=6.0.0-rc.28", default-features = false, features = ["prefix-symbols"] }
+ehttp = { version = "=0.7.1", features = ["native-async"]}
 
 [lints.rust]
 future-incompatible = "deny"

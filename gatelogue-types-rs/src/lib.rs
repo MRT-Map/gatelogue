@@ -39,6 +39,8 @@
 //! - `attohttpc` (blocking) requiring `attohttpc` (untested)
 //! - `minreq` (blocking) requiring `minreq`
 //! - `wreq` (async) requiring `wreq`
+//! - `ehttp` (blocking) requiring `ehttp`
+//! - `ehttp_async` (async) requiring `ehttp` with `native_async` feature
 //!
 //! Using the ORM does not require SQL and makes for generally clean code.
 //! However, doing this is very inefficient as each attribute access is one SQL query.
@@ -133,6 +135,16 @@ macro_rules! getter {
     (wreq) => {
         async |url: &'static str| -> Result<Vec<u8>, wreq::Error> {
             Ok(wreq::get(url).send().await?.bytes().await?.to_vec())
+        }
+    };
+    (ehttp) => {
+        |url: &'static str| -> Result<Vec<u8>, ehttp::Error> {
+            Ok(ehttp::fetch_blocking(&ehttp::Request::get(url))?.bytes)
+        }
+    };
+    (ehttp_async) => {
+        async |url: &'static str| -> Result<Vec<u8>, ehttp::Error> {
+            Ok(ehttp::fetch_async(ehttp::Request::get(url)).await?.bytes)
         }
     };
 }
@@ -302,5 +314,17 @@ mod test {
     #[tokio::test]
     async fn wreq() {
         GD::get_async_no_sources(getter!(wreq)).await.unwrap();
+    }
+
+    #[test]
+    fn ehttp() {
+        GD::get_no_sources(getter!(ehttp)).unwrap();
+    }
+
+    #[tokio::test]
+    async fn ehttp_async() {
+        GD::get_async_no_sources(getter!(ehttp_async))
+            .await
+            .unwrap();
     }
 }
