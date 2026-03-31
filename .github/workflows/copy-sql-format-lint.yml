@@ -1,6 +1,7 @@
 name: Copy SQL, Format, Lint
 on:
   push:
+    branches: ["**"]
   pull_request:
   workflow_dispatch:
 
