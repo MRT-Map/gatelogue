@@ -110,6 +110,13 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://registry.npmjs.org/
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: pnpm i
       - run: pnpm pack
       - run: pnpm publish --no-git-checks --dry-run && pnpx jsr publish --dry-run
@@ -125,7 +132,6 @@ jobs:
       contents: write
       id-token: write
       attestations: write
-      artifact-metadata: write
 
     steps:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -225,6 +231,13 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://registry.npmjs.org/
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: npm install -g npm@latest
       - run: pnpm i
       - run: pnpm publish --no-git-checks
@@ -250,6 +263,13 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
           registry-url: https://npm.pkg.github.com/
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: |
           cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
           mv package2.json package.json
@@ -278,6 +298,13 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: mv ../README.md .
       - run: pnpm i
       - run: pnpx jsr publish --allow-dirty

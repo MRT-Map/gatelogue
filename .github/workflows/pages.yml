@@ -21,6 +21,13 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: |
           cd gatelogue-client
           pnpm install
@@ -86,6 +93,13 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: |
           cd gatelogue-types-ts
           pnpm install

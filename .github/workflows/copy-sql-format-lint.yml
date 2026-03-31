@@ -48,6 +48,12 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - run: cd gatelogue-aggregator && hatch fmt -f
       - run: cd gatelogue-types-py && hatch fmt -f
@@ -89,6 +95,12 @@ jobs:
           node-version: 25.8.1
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.local/share/pnpm
+            **/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - run: cd gatelogue-aggregator && hatch fmt && hatch run types:check
       - run: cd gatelogue-types-py && hatch fmt && hatch run types:check
