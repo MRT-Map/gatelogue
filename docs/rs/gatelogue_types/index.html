@@ -16,7 +16,7 @@ gatelogue-types = { git = &quot;https://github.com/mrt-map/gatelogue&quot;, pack
 </span><span class="kw">let </span>gd = GD::get_no_sources(<span class="macro">getter!</span>(ureq))<span class="question-mark">?</span>; <span class="comment">// retrieve data (blocking)
 
 // or with any HTTP client of your choice (with a callable that takes in a &amp;str and returns an AsRef&lt;[u8]&gt;):
-</span><span class="kw">let </span>gd = GD::get_async_no_sources(<span class="kw">async </span>|url| <span class="prelude-val">Ok</span>(wreq::get(url).send().<span class="kw">await</span><span class="question-mark">?</span>.bytes().<span class="kw">await</span><span class="question-mark">?</span>.to_vec())); <span class="comment">// retrieve data (async)
+</span><span class="kw">let </span>gd = GD::get_async_no_sources(<span class="kw">async </span>|url| reqwest::Result::Ok(reqwest::get(url).<span class="kw">await</span><span class="question-mark">?</span>.bytes().<span class="kw">await</span><span class="question-mark">?</span>.to_vec())); <span class="comment">// retrieve data (async)
 </span><span class="kw">let </span>gd = GD::get_no_sources(|url| ureq::get(url).call()<span class="question-mark">?</span>.into_body().read_to_vec())<span class="question-mark">?</span>; <span class="comment">// retrieve data (blocking)
 
 // similar syntax can be used if you want the sources, with `get_async_with_sources` and `get_with_sources`</span></code></pre></div>
