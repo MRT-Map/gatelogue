@@ -163,9 +163,11 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - run: gh release delete $TAG --cleanup-tag -y
         env:
           TAG: ${{ needs.changelog-version.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
 
   publish-pypi:
     runs-on: ubuntu-latest
