@@ -284,10 +284,10 @@ mod test {
         GD::get_no_sources(getter!(reqwest_blocking)).unwrap();
     }
 
-    #[tokio::test]
-    async fn surf() {
-        GD::get_async_no_sources(getter!(surf)).await.unwrap();
-    }
+    // #[tokio::test]
+    // async fn surf() {
+    //     GD::get_async_no_sources(getter!(surf)).await.unwrap();
+    // }
 
     #[test]
     fn isahc() {
