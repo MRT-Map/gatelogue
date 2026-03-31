@@ -23,7 +23,7 @@
 <a href=#23 id=23 data-nosnippet>23</a>//! let gd = GD::get_no_sources(getter!(ureq))?; // retrieve data (blocking)
 <a href=#24 id=24 data-nosnippet>24</a>//!
 <a href=#25 id=25 data-nosnippet>25</a>//! // or with any HTTP client of your choice (with a callable that takes in a &amp;str and returns an AsRef&lt;[u8]&gt;):
-<a href=#26 id=26 data-nosnippet>26</a>//! let gd = GD::get_async_no_sources(async |url| surf::get(url).recv_bytes().await); // retrieve data (async)
+<a href=#26 id=26 data-nosnippet>26</a>//! let gd = GD::get_async_no_sources(async |url| Ok(wreq::get(url).send().await?.bytes().await?.to_vec())); // retrieve data (async)
 <a href=#27 id=27 data-nosnippet>27</a>//! let gd = GD::get_no_sources(|url| ureq::get(url).call()?.into_body().read_to_vec())?; // retrieve data (blocking)
 <a href=#28 id=28 data-nosnippet>28</a>//!
 <a href=#29 id=29 data-nosnippet>29</a>//! // similar syntax can be used if you want the sources, with `get_async_with_sources` and `get_with_sources`
