@@ -4,6 +4,9 @@
 * add rail, sea and bus to client/data viewer
 * convert SQL queries into views
 
+## v3.1.2+13 (20260331)
+* fix ci failing on npm and jsr packages
+
 ## v3.1.1+13 (20260331)
 * `gatelogue-aggregator`, `gatelogue-types` (py): run ruff and pyrefly
 * `gatelogue-types` (rs): add `ehttp` getters

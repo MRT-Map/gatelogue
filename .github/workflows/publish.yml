@@ -221,7 +221,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install -g npm@latest
       - run: pnpm i
-      - run: pnpm publish
+      - run: pnpm publish --no-git-checks
 
   publish-gpr:
     runs-on: ubuntu-latest
@@ -274,5 +274,5 @@ jobs:
           cache-dependency-path: "**/pnpm-lock.yaml"
       - run: mv ../README.md .
       - run: pnpm i
-      - run: pnpx jsr publish
+      - run: pnpx jsr publish --allow-dirty
 
