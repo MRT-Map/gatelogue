@@ -2,6 +2,12 @@
 
 ## Planned
 * add rail, sea and bus to client/data viewer
+* convert SQL queries into views
+
+## v3.1.1+13 (20260331)
+* `gatelogue-aggregator`, `gatelogue-types` (py): run ruff and pyrefly
+* `gatelogue-types` (rs): add `ehttp` getters
+* rework of ci
 
 ## v3.1.0+13 (20260319)
 * `gatelogue-aggregator`: change `cloudscraper` to `rnet`
