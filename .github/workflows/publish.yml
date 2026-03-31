@@ -240,7 +240,6 @@ jobs:
             **/node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - run: npm install -g npm@latest
       - run: pnpm i
       - run: pnpm publish --no-git-checks
 
