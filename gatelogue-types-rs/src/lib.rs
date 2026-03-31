@@ -23,7 +23,7 @@
 //! let gd = GD::get_no_sources(getter!(ureq))?; // retrieve data (blocking)
 //!
 //! // or with any HTTP client of your choice (with a callable that takes in a &str and returns an AsRef<[u8]>):
-//! let gd = GD::get_async_no_sources(async |url| surf::get(url).recv_bytes().await); // retrieve data (async)
+//! let gd = GD::get_async_no_sources(async |url| reqwest::Result::Ok(reqwest::get(url).await?.bytes().await?.to_vec())); // retrieve data (async)
 //! let gd = GD::get_no_sources(|url| ureq::get(url).call()?.into_body().read_to_vec())?; // retrieve data (blocking)
 //!
 //! // similar syntax can be used if you want the sources, with `get_async_with_sources` and `get_with_sources`
