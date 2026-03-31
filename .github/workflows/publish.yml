@@ -146,7 +146,7 @@ jobs:
         with:
           name: dist-ts
           path: dist
-      - uses: actions/attest@v4
+      - uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         with:
           subject-path: dist/*
       - uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
