@@ -35,7 +35,7 @@ dev = [
   "niquests==3.18.2",
   "httpx==0.28.1",
   "urllib3==2.6.3",
-  "aiohttp==3.13.3",
+  "aiohttp==3.13.4",
   "rnet==3.0.0rc22",
 ]
 
