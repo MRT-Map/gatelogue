@@ -73,7 +73,7 @@ jobs:
           cache-workspaces: './gatelogue-types-rs -> target'
       - run: |
           cd gatelogue-types-rs
-          cargo doc --no-deps
+          cargo doc --locked --no-deps
       - run: cp .github/docs-rs-redirect.html gatelogue-types-rs/target/doc/index.html
       - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:

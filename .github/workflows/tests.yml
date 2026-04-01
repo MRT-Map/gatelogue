@@ -40,7 +40,7 @@ jobs:
           toolchain: ${{ env.RUST_VERSION }}
           cache-workspaces: './gatelogue-types-rs -> target'
 
-      - run: cargo test --all --all-features
+      - run: cargo test --locked --all --all-targets --all-features
 
   test-types-ts:
     runs-on: ubuntu-latest
