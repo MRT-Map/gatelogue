@@ -168,6 +168,7 @@ jobs:
         env:
           TAG: ${{ needs.changelog-version.outputs.version }}
           GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
 
   publish-pypi:
     runs-on: ubuntu-latest
