@@ -32,7 +32,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "requests==2.33.0",
-  "niquests==3.18.2",
+  "niquests==3.18.3",
   "httpx==0.28.1",
   "urllib3==2.6.3",
   "aiohttp==3.13.4",
