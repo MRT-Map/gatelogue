@@ -109,21 +109,52 @@ jobs:
             ~/.local/share/pnpm
             **/node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: taiki-e/install-action@1ed3272338f573e042a2e6bca3893aa19f43b47a # v2.71.3
+        env:
+          # renovate: datasource=crate depName=clippy-sarif versioning=loose
+          CLIPPY_SARIF_VERSION: 0.8.0
+        with:
+          tool: clippy-sarif@${{ env.CLIPPY_SARIF_VERSION }}
 
       - uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
 
-      - run: cd gatelogue-aggregator && hatch fmt && hatch run types:check
+      - run: mkdir sarif
+
+      - run: |
+          cd gatelogue-aggregator
+          hatch fmt -l -- --output-format=sarif | tee ../sarif/aggregator.sarif
+          hatch run types:check
         if: '!cancelled()'
-      - run: cd gatelogue-types-py && hatch fmt && hatch run types:check
+      - run: |
+          cd gatelogue-types-py
+          hatch fmt -l -- --output-format=sarif | tee ../sarif/types-py.sarif
+          hatch run types:check
         if: '!cancelled()'
 
-      - run: cd gatelogue-types-rs && cargo clippy --locked --fix --broken-code --allow-dirty
+      - run: |
+          cd gatelogue-types-rs
+          cargo clippy --locked --fix --broken-code --allow-dirty \
+                       --all-targets --all-features --message-format=json |
+          clippy-sarif | tee ../sarif/types-rs.sarif
         if: '!cancelled()'
 
-      - run: cd gatelogue-client && pnpm i && pnpm run-s lint:fix type-check
+      - run: |
+          cd gatelogue-client
+          pnpm i
+          pnpm run lint:sarif | tail -n +4 | tee ../sarif/client.sarif
+          pnpm run type-check
         if: '!cancelled()'
-      - run: cd gatelogue-types-ts && pnpm i && pnpm run-s lint:fix type-check
+      - run: |
+          cd gatelogue-types-ts
+          pnpm i
+          pnpm run lint:sarif | tail -n +4 | tee ../sarif/types-ts.sarif
+          pnpm run type-check
         if: '!cancelled()'
+
+      - uses: github/codeql-action/upload-sarif@v1
+        if: '!cancelled()'
+        with:
+          sarif_file: sarif/
 
       - run: echo "message=lint @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
         if: github.ref_name == 'main' && !cancelled()
