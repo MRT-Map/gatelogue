@@ -70,9 +70,9 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
+    - uses: ./.github/actions/setup-python
       with:
-        version: "1.16.5"
+        cache: false
     - run: hatch build
     - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
@@ -91,10 +91,8 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
+    - uses: ./.github/actions/setup-rust
       with:
-        toolchain: ${{ env.RUST_VERSION }}
-        cache-workspaces: './gatelogue-types-rs -> target'
         cache: false
     - run: cargo package --locked
     - run: cargo publish --locked --dry-run
@@ -115,21 +113,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: ./.github/actions/setup-node
         with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          package-manager-cache: false
+          cache: false
           registry-url: https://registry.npmjs.org/
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          lookup-only: true
 
       - run: pnpm i
       - run: pnpm pack
@@ -220,10 +207,8 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
+      - uses: ./.github/actions/setup-rust
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          cache-workspaces: './gatelogue-types-rs -> target'
           cache: false
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
         id: auth
@@ -248,21 +233,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: ./.github/actions/setup-node
         with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          package-manager-cache: false
+          cache: false
           registry-url: https://registry.npmjs.org/
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          lookup-only: true
 
       - run: pnpm i
       - run: pnpm publish --no-git-checks
@@ -281,21 +255,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: ./.github/actions/setup-node
         with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          package-manager-cache: false
+          cache: false
           registry-url: https://npm.pkg.github.com/
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          lookup-only: true
 
       - run: |
           cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
@@ -319,20 +282,9 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: ./.github/actions/setup-node
         with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          package-manager-cache: false
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          lookup-only: true
+          cache: false
 
       - run: mv ../README.md .
       - run: pnpm i

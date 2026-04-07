@@ -1,0 +1,40 @@
+name: Setup Node
+
+inputs:
+  cache:
+    description: ""
+    default: "true"
+  registry-url:
+    description: ""
+outputs:
+  pnpm:
+    description: setup pnpm output
+    value: ${{ toJSON(steps.pnpm.outputs) }}
+  node:
+    description: setup node output
+    value: ${{ toJSON(steps.node.outputs) }}
+  cache:
+    description: setup cache output
+    value: ${{ toJSON(steps.cache.outputs) }}
+runs:
+  using: composite
+  steps:
+    - id: pnpm
+      uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      with:
+        version: "10.33.0"
+    - id: node
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      with:
+        node-version: "25.8.1"
+        cache: ${{ (inputs.cache && 'pnpm') || 'none' }}
+        cache-dependency-path: "**/pnpm-lock.yaml"
+        registry-url: ${{ inputs.registry-url }}
+    - id: cache
+      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+      if: inputs.cache
+      with:
+        path: |
+          ~/.local/share/pnpm
+          **/node_modules
+        key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
