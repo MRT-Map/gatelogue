@@ -151,7 +151,7 @@ jobs:
           pnpm run type-check
         if: '!cancelled()'
 
-      - uses: github/codeql-action/upload-sarif@v1
+      - uses: github/codeql-action/upload-sarif@231aa2c8a89117b126725a0e11897209b7118144 # v1
         if: '!cancelled()'
         with:
           sarif_file: sarif/
