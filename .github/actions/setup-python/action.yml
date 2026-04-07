@@ -1,0 +1,28 @@
+name: Setup Python
+
+inputs:
+  cache:
+    description: ""
+    default: "true"
+
+outputs:
+  uv:
+    description: setup uv output
+    value: ${{ toJSON(steps.uv.outputs) }}
+  hatch:
+    description: setup hatch output
+    value: ${{ toJSON(steps.hatch.outputs) }}
+runs:
+  using: composite
+  steps:
+    - id: uv
+      uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+      with:
+        version: "0.11.3"
+        enable-cache: ${{ inputs.cache }}
+    - run: echo "HATCH_ENV_TYPE_VIRTUAL_UV_PATH=$(which uv)" >> "$GITHUB_ENV"
+      shell: bash
+    - id: hatch
+      uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
+      with:
+        version: "1.16.5"

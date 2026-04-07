@@ -36,33 +36,11 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: true
-      - uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+      - uses: ./.github/actions/setup-python
+      - uses: ./.github/actions/setup-rust
         with:
-          version: "0.11.3"
-          enable-cache: true
-      - run: echo "HATCH_ENV_TYPE_VIRTUAL_UV_PATH=$(which uv)" >> "$GITHUB_ENV"
-      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
-        with:
-          version: "1.16.5"
-      - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          cache-workspaces: './gatelogue-types-rs -> target'
           components: rustfmt
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-        with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          cache: "pnpm"
-          cache-dependency-path: "**/pnpm-lock.yaml"
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/actions/setup-node
 
       - run: cd gatelogue-aggregator && hatch fmt -f
       - run: cd gatelogue-types-py && hatch fmt -f
@@ -91,33 +69,12 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+
+      - uses: ./.github/actions/setup-python
+      - uses: ./.github/actions/setup-rust
         with:
-          version: "0.11.3"
-          enable-cache: true
-      - run: echo "HATCH_ENV_TYPE_VIRTUAL_UV_PATH=$(which uv)" >> "$GITHUB_ENV"
-      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
-        with:
-          version: "1.16.5"
-      - uses: actions-rust-lang/setup-rust-toolchain@150fca883cd4034361b621bd4e6a9d34e5143606 # v1.15.4
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          cache-workspaces: './gatelogue-types-rs -> target'
           components: clippy
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-        with:
-          version: "10.33.0"
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 25.8.1
-          cache: "pnpm"
-          cache-dependency-path: "**/pnpm-lock.yaml"
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: |
-            ~/.local/share/pnpm
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/actions/setup-node
       - uses: taiki-e/install-action@1ed3272338f573e042a2e6bca3893aa19f43b47a # v2.71.3
         env:
           # renovate: datasource=crate depName=clippy-sarif versioning=loose
@@ -126,6 +83,8 @@ jobs:
           tool: clippy-sarif@${{ env.CLIPPY_SARIF_VERSION }}
 
       - uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+        with:
+          version: 1.23.1
 
       - run: |
           cd gatelogue-aggregator
