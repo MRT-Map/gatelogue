@@ -75,7 +75,7 @@ jobs:
         with:
           components: clippy
       - uses: ./.github/actions/setup-node
-      - uses: taiki-e/install-action@1ed3272338f573e042a2e6bca3893aa19f43b47a # v2.71.3
+      - uses: taiki-e/install-action@de6f06126afb86b5250a16ff961c57360c5edccc # v2.72.0
         env:
           # renovate: datasource=crate depName=clippy-sarif versioning=loose
           CLIPPY_SARIF_VERSION: 0.8.0
