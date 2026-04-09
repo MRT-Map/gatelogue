@@ -1,4 +1,5 @@
 name: Setup Node
+description: "Set up pnpm, node and cache pnpm"
 
 inputs:
   cache:

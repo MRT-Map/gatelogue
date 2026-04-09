@@ -1,4 +1,5 @@
 name: Setup Python
+description: "Set up uv and hatch"
 
 inputs:
   cache:
@@ -20,7 +21,7 @@ runs:
       with:
         version: "0.11.3"
         enable-cache: ${{ inputs.cache }}
-    - run: echo "HATCH_ENV_TYPE_VIRTUAL_UV_PATH=$(which uv)" >> "$GITHUB_ENV"
+    - run: echo "HATCH_ENV_TYPE_VIRTUAL_UV_PATH=$(which uv | tr -d '\n')" >> "$GITHUB_ENV"
       shell: bash
     - id: hatch
       uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install

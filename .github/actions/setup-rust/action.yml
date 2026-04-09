@@ -1,4 +1,5 @@
 name: Setup Rust
+description: "Set up rust nightly"
 
 inputs:
   components:
