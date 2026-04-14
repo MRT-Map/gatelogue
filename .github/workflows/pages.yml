@@ -36,7 +36,7 @@ jobs:
       - run: |
           cd gatelogue-client/dist
           echo > .nojekyll
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: client
           path: gatelogue-client/dist
@@ -57,7 +57,7 @@ jobs:
       - run: |
           cd gatelogue-aggregator
           hatch run docs:build
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: docs-py
           path: gatelogue-aggregator/docs/_build/html/
@@ -76,7 +76,7 @@ jobs:
           cd gatelogue-types-rs
           cargo doc --locked --no-deps
       - run: cp .github/docs-rs-redirect.html gatelogue-types-rs/target/doc/index.html
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: docs-rs
           path: gatelogue-types-rs/target/doc/
@@ -96,7 +96,7 @@ jobs:
           cd gatelogue-types-ts
           pnpm install
           pnpm run doc
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: docs-ts
           path: gatelogue-types-ts/docs
