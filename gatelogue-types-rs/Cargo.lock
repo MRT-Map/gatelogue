@@ -956,9 +956,9 @@ dependencies = [
 
 [[package]]
 name = "isahc"
-version = "1.8.0"
+version = "1.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49980b382c0e59635b99bb2d9ef4c039a90aefa1b821d5d7a8526d4504e14594"
+checksum = "036cdb58c0a12db9e7162af193785bf9b6797f7b52035ff03f91c591619fde67"
 dependencies = [
  "async-channel",
  "castaway",
