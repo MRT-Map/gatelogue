@@ -31,7 +31,7 @@ jobs:
           persist-credentials: false
       - id: version
         run: |
-          if [ -z "$HAS_TAG" ]; then
+          if [ -n "$HAS_TAG" ]; then
             echo "version=$(echo "$TAG" | cut -d '+' -f1)" >> "$GITHUB_OUTPUT"
             echo "data_version=$(echo "$TAG" | cut -d '+' -f2)" >> "$GITHUB_OUTPUT"
           else
