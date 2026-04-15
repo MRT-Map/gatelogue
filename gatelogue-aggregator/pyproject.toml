@@ -32,7 +32,7 @@ dependencies = [
   "click==8.3.2",
   "msgspec==0.21.0",
   "pandas==3.0.2",
-  "rich==14.3.4",
+  "rich==15.0.0",
   "rnet==3.0.0rc22",
   "BeautifulSoup4==4.14.3",
 #  "pydot==4.0.1",
