@@ -30,7 +30,7 @@ classifiers = [
 dependencies = [
   "gatelogue-types",
   "click==8.3.2",
-  "msgspec==0.21.0",
+  "msgspec==0.21.1",
   "pandas==3.0.2",
   "rich==15.0.0",
   "rnet==3.0.0rc22",
