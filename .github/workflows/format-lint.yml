@@ -1,4 +1,4 @@
-name: Copy SQL, Format, Lint
+name: Format, Lint
 on:
   push:
     branches: ["**"]
@@ -10,27 +10,10 @@ env:
   RUST_VERSION: nightly-2026-03-28
 
 jobs:
-  copy-sql:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: true
-      - run: gatelogue-types-sql/copy.sh
-      - run: echo "message=copy sql @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
-      - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
-        with:
-          default_author: github_actions
-          message: ${{ env.message }}
-
   format:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    needs: copy-sql
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -42,6 +25,8 @@ jobs:
           components: rustfmt
       - uses: ./.github/actions/setup-node
 
+      - run: gatelogue-types-sql/copy.sh
+
       - run: cd gatelogue-aggregator && hatch fmt -f
       - run: cd gatelogue-types-py && hatch fmt -f
 
@@ -51,10 +36,14 @@ jobs:
       - run: cd gatelogue-types-ts && pnpm i && pnpm format
 
       - run: echo "message=format @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+        if: github.event_name != 'pull_request'
       - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+        if: github.event_name != 'pull_request'
         with:
           default_author: github_actions
           message: ${{ env.message }}
+      - run: git status
+        if: github.event_name == 'pull_request'
 
   lint:
     runs-on: ubuntu-latest
@@ -83,8 +72,6 @@ jobs:
           tool: clippy-sarif@${{ env.CLIPPY_SARIF_VERSION }}
 
       - uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
-        with:
-          version: 1.23.1
 
       - run: |
           cd gatelogue-aggregator
