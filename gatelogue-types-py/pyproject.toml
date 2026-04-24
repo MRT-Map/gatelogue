@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.29.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -49,7 +49,19 @@ Homepage = "https://mrt-map.github.io/gatelogue"
 [tool.hatch.version]
 path = "src/gatelogue_types/__about__.py"
 
+[tool.hatch.env]
+requires = [
+  "hatch-pip-compile==1.11.6"
+]
+
 [tool.hatch.envs.default]
+type = "pip-compile"
+pip-compile-hashes = true
+pip-compile-constraint = "default"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+lock-filename = "requirements/{env_name}.txt"
+
 features = ["dev"]
 #python = "3.12"
 
@@ -102,5 +114,5 @@ ignore = [
   "T201",  # print
   "S101",  # assert
   "S608",  # SQL injection lol
-
 ]
+

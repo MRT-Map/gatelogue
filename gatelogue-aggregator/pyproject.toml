@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.29.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -56,7 +56,19 @@ path = "src/gatelogue_aggregator/__about__.py"
 [tool.hatch.metadata]
 allow-direct-references = true
 
+[tool.hatch.env]
+requires = [
+  "hatch-pip-compile==1.11.6"
+]
+
 [tool.hatch.envs.default]
+type = "pip-compile"
+pip-compile-hashes = true
+pip-compile-constraint = "default"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+lock-filename = "requirements/{env_name}.txt"
+
 workspace.members = [
   { path = "../gatelogue-types-py", features = ["dev"] }
 ]
