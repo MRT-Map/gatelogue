@@ -60,7 +60,7 @@ jobs:
         with:
           components: clippy
       - uses: ./.github/actions/setup-node
-      - uses: cargo-bins/cargo-binstall@d8b2727b3a60691310e57c65e989cb974c787690 # main
+      - uses: cargo-bins/cargo-binstall@41587d628713826298c38e21d4476db9fb02d102 # main
       - run: cargo binstall --force clippy-sarif@${{ env.CLIPPY_SARIF_VERSION }}
         env:
           # renovate: datasource=crate depName=clippy-sarif versioning=loose

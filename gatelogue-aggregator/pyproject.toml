@@ -67,6 +67,7 @@ pip-compile-hashes = true
 pip-compile-constraint = "default"
 pip-compile-resolver = "uv"
 pip-compile-installer = "uv"
+pip-compile-args = ["--exclude-newer", "3 days"]
 lock-filename = "requirements/{env_name}.txt"
 
 workspace.members = [
