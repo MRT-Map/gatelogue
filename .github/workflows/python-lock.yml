@@ -5,6 +5,8 @@ on:
   schedule:
     - cron: 0 0 * * 1
   workflow_dispatch:
+  push:
+    branches: ["**"]
 
 jobs:
   python-lock:
@@ -16,25 +18,35 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          persist-credentials: false
+          persist-credentials: true
       - uses: ./.github/actions/setup-python
 
-      - run: |
+      - env:
+          MAINTENANCE: github.event_name != 'push'
+        run: |
           cd gatelogue-aggregator
-          rm -r requirements
-          hatch -vv run true
-          hatch -vv run docs:true
-          hatch -vv run types:true
+          if $MAINTENANCE; then rm -r requirements; fi
+          hatch -v run true
+          hatch -v run docs:true
+          hatch -v run types:true
       
-      - run: |
+      - env:
+          MAINTENANCE: github.event_name != 'push'
+        run: |
           cd gatelogue-types-py
-          rm -r requirements
-          hatch -vv run true
-          hatch -vv run docs:true
-          hatch -vv run types:true
+          if $MAINTENANCE; then rm -r requirements; fi
+          hatch -v run true
+          hatch -v run docs:true
+          hatch -v run types:true
       
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        if: github.event_name != 'push'
         with:
           commit-message: Python lock file maintenance
           branch: python-lock-file-maintenance
           title: Python lock file maintenance
+      - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+        if: github.event_name == 'push'
+        with:
+          default_author: github_actions
+          message: Python lockfile maintenance
