@@ -5,7 +5,7 @@
 #
 # - sphinx==9.1.0
 # - sphinxcontrib-programoutput==0.19
-# - sphinx-codeautolink==0.18.0
+# - sphinx-codeautolink==0.18.1
 # - sphinx_rtd_theme==3.1.0
 # - requests==2.33.1
 # - niquests==3.18.7
@@ -1593,9 +1593,9 @@ sphinx==9.1.0 \
     #   sphinx-rtd-theme
     #   sphinxcontrib-jquery
     #   sphinxcontrib-programoutput
-sphinx-codeautolink==0.18.0 \
-    --hash=sha256:b0d797f8a783e82e7de59ce73e58edafd7110ce17812cf9277ce42995971701d \
-    --hash=sha256:f7f7e3b7bdc55132f1967735321ddd1584a710be49f84de299d094d8ba8babee
+sphinx-codeautolink==0.18.1 \
+    --hash=sha256:59592ae4548ce49a169d1bcded5d91f9b1d3190b8125615845af9ec5cc13c808 \
+    --hash=sha256:820b55f630298297b4f8f18d8825529f25895d3734ac7ac06584f62845c4fd4b
     # via hatch.envs.docs
 sphinx-rtd-theme==3.1.0 \
     --hash=sha256:1785824ae8e6632060490f67cf3a72d404a85d2d9fc26bce3619944de5682b89 \
