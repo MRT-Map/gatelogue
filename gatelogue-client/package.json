@@ -30,7 +30,7 @@
     "@types/node": "24.12.2",
     "@vitejs/plugin-vue": "6.0.6",
     "@vue/tsconfig": "0.9.1",
-    "eslint": "10.2.1",
+    "eslint": "10.3.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-vue": "10.9.0",
     "globals": "17.5.0",
