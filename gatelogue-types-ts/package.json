@@ -34,7 +34,7 @@
     "lint:fix": "eslint --fix src/",
     "lint:sarif": "eslint -f @microsoft/eslint-formatter-sarif --fix src/",
     "format": "prettier --write .",
-    "doc": "run-s compile-sql typedoc src/lib.ts",
+    "doc": "run-s compile-sql && typedoc src/lib.ts",
     "prepare": "run-p build",
     "prepublish": "cp ../README.md .",
     "postpublish": "rm ./README.md"
