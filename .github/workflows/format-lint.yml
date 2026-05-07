@@ -89,13 +89,13 @@ jobs:
       - run: |
           cd gatelogue-client
           pnpm i
-          pnpm run lint:sarif | tail -n +3 | tee ${{ runner.temp }}/client.sarif
+          pnpm run lint:sarif | tail -n +2 | tee ${{ runner.temp }}/client.sarif
           pnpm run type-check
         if: '!cancelled()'
       - run: |
           cd gatelogue-types-ts
           pnpm i
-          pnpm run lint:sarif | tail -n +3 | tee ${{ runner.temp }}/types-ts.sarif
+          pnpm run lint:sarif | tail -n +2 | tee ${{ runner.temp }}/types-ts.sarif
           pnpm run type-check
         if: '!cancelled()'
 
