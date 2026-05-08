@@ -1,6 +1,7 @@
+allowBuilds:
+  esbuild: true
 minimumReleaseAge: 4320
+minimumReleaseAgeStrict: false
 minimumReleaseAgeExclude:
   # Renovate security update: vite@8.0.5
   - vite@8.0.5
-allowBuilds:
-  esbuild: true
