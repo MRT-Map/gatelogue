@@ -28,12 +28,12 @@ class IntraRailWarp(RailSource):
             else:
                 if (
                     match := re.search(
-                        r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: (.*?) //|THIS & LAST STOP: (.*?) //",
+                        r"(?i)^This is ([^.]*)\.|(?:THIS|LAST) STOP: (.*?) //|THIS & LAST STOP: (.*?) //|^LAST STOP // ([^/]*)|^([^/]*)",
                         warp.welcome_message,
                     )
                 ) is None:
                     continue
-                name = match.group(1) or match.group(2) or match.group(3)
+                name = (match.group(1) or match.group(2) or match.group(3) or match.group(4) or match.group(5)).strip()
                 name = {
                     "Miu Wan TTL Airport Terminal 1": "Miu Wan Tseng Tsz Leng International Airport Terminal 1",
                     "Miu Wan TTL Airport Terminal 2": "Miu Wan Tseng Tsz Leng International Airport Terminal 2",
