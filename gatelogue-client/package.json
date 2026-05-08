@@ -41,7 +41,7 @@
     "vite": "8.0.10",
     "vite-plugin-vue-devtools": "8.1.1",
     "vue-eslint-parser": "10.4.0",
-    "vue-tsc": "3.2.7"
+    "vue-tsc": "3.2.8"
   },
   "packageManager": "pnpm@11.0.6+sha512.97f906e1da2bedac3df83cadae04b4753a130092dd49d55cd36825ad3e623e9df3f97754f8f259e699172a360fac569acf2f908e7732bdae3eddb2dcf7e121fd"
 }
