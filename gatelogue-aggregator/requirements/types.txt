@@ -3,7 +3,7 @@
 #
 # [constraints] requirements/default.txt (SHA256: 563f9c93fb4be6a84e25961bf97b45ebfed4a23550a8ceedcf56c852177f4912)
 #
-# - pyrefly==0.63.1
+# - pyrefly==0.64.0
 # - requests==2.33.1
 # - niquests==3.18.7
 # - httpx==0.28.1
@@ -1180,17 +1180,17 @@ pygments==2.20.0 \
     # via
     #   -c requirements/default.txt
     #   rich
-pyrefly==0.63.1 \
-    --hash=sha256:1bc37f4fe8c3e50f6718bcb1c6cae475e5e24197f6fe8042c3d6ca3d8f2e10da \
-    --hash=sha256:6819eb0857f5fcaef463ad58778e4121cb8c7c5a974a4739c8aa867e1ef16980 \
-    --hash=sha256:6b6490de58b1ec9fe99aa1fbaf0759079a916c0fb75d345439ba2a427aaebc1a \
-    --hash=sha256:712733b7c4344644eafa827de88a36e697a1aa282f913da89d3ad26e7dcc2dc2 \
-    --hash=sha256:a9a45d3fc563f02cdca4681e899a775561bd71e923d6ac4a8979d93d7c2aff2a \
-    --hash=sha256:b54b068a77341bc50604fb9bd4d0cf37fb74c09fb92344645c596813cc53950a \
-    --hash=sha256:c6470a8eedae0e46d94667fd958cd008f9c2599aa3e6f2f43b6f4e6e87863cc3 \
-    --hash=sha256:d53ec1f8711b24b1e992309b978b219daf2335201f26acafa86f14fbb81804ec \
-    --hash=sha256:d6a99c4acd7ff8418a15f39dd402d8f9bf7d640a8a2536f7a1b34ef7e1b1167c \
-    --hash=sha256:e6cbba7aedc266be0e6a69305e9caa53b3b4bab190bde046ce37a895af5c20a0
+pyrefly==0.64.0 \
+    --hash=sha256:20317f6dd97e22bc508b8dbc537e59b0ab58e384113ee61920c87ed1a6a12f62 \
+    --hash=sha256:2a259925620a84fe87cd30a82643ec524eeef631f0c4ec5af81a21e006c2f5b1 \
+    --hash=sha256:683b317d8d0e815fb2ad75b7e0fa6c15eed5be4bcbc407dc13312984da3a9c47 \
+    --hash=sha256:6850b305d45121911fbe25ad56497d2e887b387ea50644ba15a8ad2a8cf855f4 \
+    --hash=sha256:73744bd95e836abda0d08e9cdcf008142090ae0124c8f8ff477c944b60c0343c \
+    --hash=sha256:96913cc4f066a7bd008b9dba8e3951234e92bb8a3a2cb1aea0e274fd2a444c55 \
+    --hash=sha256:c2ae557e1b6a6a5bda844806cae10b212cf84ea786ece10d55083a0321ee1705 \
+    --hash=sha256:d062ac1744346efacd7df23c6bbff662ad29ed495923cb59ede656a306355655 \
+    --hash=sha256:e88fc6a83add9b7c2224be0f74df1b0db10b3af856ae30e4e0a90ba3644c712f \
+    --hash=sha256:fbfcdb0031adadc340b6c64cb41c6094c95349ee952fe3d4c143866add829172
     # via hatch.envs.types
 python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
