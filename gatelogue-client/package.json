@@ -27,7 +27,7 @@
     "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
-    "@types/node": "24.12.2",
+    "@types/node": "24.12.3",
     "@vitejs/plugin-vue": "6.0.6",
     "@vue/tsconfig": "0.9.1",
     "eslint": "10.3.0",
