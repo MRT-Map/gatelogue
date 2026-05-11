@@ -99,27 +99,27 @@ jobs:
           pnpm run type-check
         if: '!cancelled()'
 
-      - uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
           sarif_file: ${{ runner.temp }}/aggregator.sarif
           category: ruff-aggregator
-      - uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
           sarif_file: ${{ runner.temp }}/types-py.sarif
           category: ruff-types-py
-      - uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
           sarif_file: ${{ runner.temp }}/types-rs.sarif
           category: cargo-types-rs
-      - uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
           sarif_file: ${{ runner.temp }}/client.sarif
           category: eslint-client
-      - uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
           sarif_file: ${{ runner.temp }}/types-ts.sarif
