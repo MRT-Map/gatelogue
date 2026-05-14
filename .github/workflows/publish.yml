@@ -243,8 +243,7 @@ jobs:
           cache: false
 
       - run: pnpm i
-      # zizmor: ignore[use-trusted-publishing]
-      - run: pnpm publish --no-git-checks
+      - run: pnpm publish --no-git-checks --provenance
 
   publish-gpr:
     runs-on: ubuntu-latest
@@ -264,7 +263,7 @@ jobs:
         with:
           envs: '"node"'
           cache: false
-      - run: pnpm config set --global registry 'https://npm.pkg.github.com/'
+      - run: pnpm config set registry 'https://npm.pkg.github.com/'
 
       - run: |
           sed 's/"name": "/"name": "@mrt-map\//g' -i package.json

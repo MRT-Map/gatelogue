@@ -5,6 +5,9 @@
 * convert SQL queries into views
 
 <!-- new -->
+## v3.1.4-rc.0+13 (20260515)
+* fix publishing GH action
+
 ## v3.1.3+13 (20260514)
 * migrate to mise and hk
 
