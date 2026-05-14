@@ -45,22 +45,11 @@ local linters = new Mapping<String, Step> {
         check = "cd {{ workspace }} && hatch fmt --linter --check -- --force-exclude {{ workspace_files }}"
         fix = "cd {{ workspace }} && hatch fmt --linter -- --force-exclude {{ workspace_files }}"
     }
-    ["hatch_type_check"] {
-        workspace_indicator = "pyproject.toml"
-        glob = Builtins.ruff.glob
-        check = "cd {{workspace}} && hatch run types:check"
-    }
     ["eslint"] = (Builtins.eslint) {
         depends = "init"
         workspace_indicator = "package.json"
         check = "cd {{ workspace }} && pnpm run lint {{ workspace_files }}"
         fix = "cd {{ workspace }} && pnpm run lint:fix {{ workspace_files }}"
-    }
-    ["tsc_type_check"] {
-        depends = "init"
-        workspace_indicator = "package.json"
-        glob = Builtins.eslint.glob
-        check = "cd {{ workspace }} && pnpm run type-check"
     }
     ["cargo_clippy"] = (Builtins.cargo_clippy) {
         check = (Builtins.cargo_clippy.check as String) + " --all-targets --all-features"
@@ -74,6 +63,48 @@ local linters = new Mapping<String, Step> {
     }
     ["shellcheck"] = Builtins.shellcheck
 }
+local type_checkers = new Mapping<String, Step> {
+    ["hatch_type_check"] {
+        workspace_indicator = "pyproject.toml"
+        glob = Builtins.ruff.glob
+        check = "cd {{workspace}} && hatch run types:check"
+    }
+    ["tsc_type_check"] {
+        depends = "init"
+        workspace_indicator = "package.json"
+        glob = Builtins.eslint.glob
+        check = "cd {{ workspace }} && pnpm run type-check"
+    }
+}
+local sarif = new Mapping<String, Step> {
+    ["mkdir"] {
+        fix = "mkdir ${SARIF_DIR:-.sarif} || true"
+        exclusive = true
+    }
+    ["eslint"] {
+        depends = "init"
+        workspace_indicator = "package.json"
+        fix = "cd {{ workspace }} && pnpm run lint:sarif > ${SARIF_DIR:-.sarif}/eslint-{{ workspace }}.sarif"
+    }
+    ["hatch"] {
+        workspace_indicator = "pyproject.toml"
+        fix = linters["hatch"].fix.replaceAll("{{ workspace_files }}", "") + " --output-format=sarif > ${SARIF_DIR:-.sarif}/hatch-{{ workspace }}.sarif"
+    }
+    ["cargo_clippy"] {
+        workspace_indicator = "Cargo.toml"
+        fix = linters["cargo_clippy"].fix as String + " --message-format=json | clippy-sarif > ${SARIF_DIR:-.sarif}/clippy-{{ workspace }}.sarif"
+    }
+    ["zizmor"] {
+        fix = linters["zizmor"].fix.replaceAll("{{ files }}", ".") + " --format=sarif > ${SARIF_DIR:-.sarif}/zizmor.sarif"
+    }
+    ["actionlint"] {
+        check = linters["actionlint"].check.replaceAll("{{ files }}", "") + " -format \"$(curl -sSL \"https://raw.githubusercontent.com/rhysd/actionlint/refs/heads/main/testdata/format/sarif_template.txt\")\" > ${SARIF_DIR:-.sarif}/actionlint.sarif"
+    }
+    ["poutine"] {
+        check = linters["poutine"].check as String + " --format=sarif > ${SARIF_DIR:-.sarif}/poutine.sarif"
+    }
+    ...type_checkers
+}
 
 hooks {
     ["pre-commit"] {
@@ -83,6 +114,7 @@ hooks {
             ["init"] = init
             ...formatters
             ...linters
+            ...type_checkers
         }
     }
     ["fix"] {
@@ -91,6 +123,7 @@ hooks {
             ["init"] = init
             ...formatters
             ...linters
+            ...type_checkers
         }
     }
     ["check"] {
@@ -98,6 +131,7 @@ hooks {
             ["init"] = init
             ...formatters
             ...linters
+            ...type_checkers
         }
     }
     ["format"] {
@@ -105,6 +139,13 @@ hooks {
         steps = new Mapping<String, Step | Group> {
             ["init"] = init
             ...formatters
+        }
+    }
+    ["sarif"] {
+        fix = true
+        steps = new Mapping<String, Step | Group> {
+            ["init"] = init
+            ...sarif
         }
     }
 }

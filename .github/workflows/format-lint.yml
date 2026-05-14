@@ -42,7 +42,9 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
 
-      - run: mise run lint-sarif ${{ runner.temp }}
+      - run: hk run sarif --all --no-fail-fast
+        env:
+          SARIF_DIR: ${{ runner.temp }}
       - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
