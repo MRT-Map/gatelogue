@@ -1,6 +1,7 @@
 [tools]
 hk = "1.45.0"
 pkl = "0.31.1"
+shellcheck = "0.11.0"
 
 [tasks.pre-commit]
 run = "hk run pre-commit"
