@@ -263,7 +263,7 @@ jobs:
         with:
           envs: '"node"'
           cache: false
-      - run: pnpm config set pnpregistry 'https://npm.pkg.github.com/'
+      - run: pnpm config set registry 'https://npm.pkg.github.com/'
 
       - run: |
           sed 's/"name": "/"name": "@mrt-map\//g' -i package.json
