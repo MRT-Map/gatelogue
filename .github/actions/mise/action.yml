@@ -1,0 +1,52 @@
+name: Mise
+description: Mise
+
+inputs:
+  envs:
+    description: envs
+    default: ''
+  cache:
+    description: cache
+    default: 'true'
+
+outputs:
+  mise-action:
+    description: mise-action output
+    value: ${{ toJSON(steps.mise-action.outputs) }}
+  cache-rust:
+    description: rust cache output
+    value: ${{ toJSON(steps.cache-rust.outputs) }}
+  cache-node:
+    description: node cache output
+    value: ${{ toJSON(steps.cache-node.outputs) }}
+
+runs:
+  using: composite
+  steps:
+    - id: write-miserc
+      shell: bash
+      if: inputs.envs != ''
+      run: echo "env = [$ENVS]" > .miserc.toml
+      env:
+        ENVS: ${{ inputs.envs }}
+
+    - id: mise-action
+      uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+      with:
+        version: 2026.5.7
+        cache: ${{ inputs.cache }}
+
+    - id: cache-rust
+      if: inputs.cache && (inputs.envs == '' || contains(inputs.envs, '"rs"'))
+      uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # 2.9.1
+      with:
+        workspaces: './gatelogue-types-rs -> target'
+
+    - id: cache-node
+      if: inputs.cache && (inputs.envs == '' || contains(inputs.envs, '"js"'))
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      with:
+        path: |
+          ~/.local/share/pnpm
+          **/node_modules
+        key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}

@@ -10,10 +10,11 @@
     "preview": "vite preview",
     "build-only": "vite build --base=/gatelogue",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint src/",
-    "lint:fix": "eslint --fix src/",
-    "lint:sarif": "eslint -f @microsoft/eslint-formatter-sarif --fix src/",
-    "format": "prettier --write .",
+    "lint": "eslint ${@:-src/}",
+    "lint:fix": "eslint --fix ${@:-src/}",
+    "lint:sarif": "eslint -f @microsoft/eslint-formatter-sarif --fix ${@:-src/}",
+    "format": "prettier --write ${@:-.}",
+    "format:check": "prettier --check ${@:-.}",
     "prepare": "cd ../gatelogue-types-ts && pnpm i && pnpm run prepare"
   },
   "dependencies": {

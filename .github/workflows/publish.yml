@@ -65,9 +65,11 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - uses: ./.github/actions/setup-python
+    - uses: ./.github/actions/mise
       with:
+        envs: '"py"'
         cache: false
+
     - run: hatch build
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
@@ -86,9 +88,11 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - uses: ./.github/actions/setup-rust
+    - uses: ./.github/actions/mise
       with:
+        envs: '"rs"'
         cache: false
+
     - run: cargo package --locked
     - run: cargo publish --locked --dry-run
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -108,10 +112,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/mise
         with:
+          envs: '"node"'
           cache: false
-          registry-url: https://registry.npmjs.org/
 
       - run: pnpm i
       - run: pnpm pack
@@ -145,7 +149,7 @@ jobs:
       - uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         with:
           subject-path: dist/*
-      - uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+      - uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0  # zizmor: ignore[superfluous-actions]
         with:
           tag_name: ${{ needs.changelog-version.outputs.version }}
           name: ${{ needs.changelog-version.outputs.version }}
@@ -164,7 +168,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - run: gh release delete $TAG --cleanup-tag -y
+      - run: gh release delete "$TAG" --cleanup-tag -y
         env:
           TAG: ${{ needs.changelog-version.outputs.version }}
           GH_TOKEN: ${{ github.token }}
@@ -202,9 +206,11 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-rust
+      - uses: ./.github/actions/mise
         with:
+          envs: '"rs"'
           cache: false
+
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
         id: auth
       - run: cargo publish --locked
@@ -228,12 +234,13 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/mise
         with:
+          envs: '"node"'
           cache: false
-          registry-url: https://registry.npmjs.org/
 
       - run: pnpm i
+      # zizmor: ignore[use-trusted-publishing]
       - run: pnpm publish --no-git-checks
 
   publish-gpr:
@@ -250,16 +257,17 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/mise
         with:
+          envs: '"node"'
           cache: false
-          registry-url: https://npm.pkg.github.com/
+      - run: pnpm config set --global registry 'https://npm.pkg.github.com/'
 
       - run: |
           cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
           mv package2.json package.json
       - run: pnpm i
-      - run: pnpm publish --no-git-checks
+      - run: pnpm publish --no-git-checks # zizmor: ignore[use-trusted-publishing]
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -277,8 +285,9 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/mise
         with:
+          envs: '"node"'
           cache: false
 
       - run: mv ../README.md .
