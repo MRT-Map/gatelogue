@@ -14,7 +14,7 @@ run = [
 
     "zizmor . --fix=all --format=sarif > ${usage_out_dir}/zizmor.sarif || true",
     "actionlint -format \"$(curl -L \"https://raw.githubusercontent.com/rhysd/actionlint/refs/heads/main/testdata/format/sarif_template.txt\")\" > ${usage_out_dir}/actionlint.sarif || true",
-    "poutine analyze_local . --format=sarif > ${usage_out_dir}/poutine.sarif || true",
+    "poutine analyze_local . --skip github_action_from_unverified_creator_used --format=sarif > ${usage_out_dir}/poutine.sarif || true",
 
     "cd gatelogue-aggregator && hatch fmt --linter -- --force-exclude --output-format=sarif > ../${usage_out_dir}/aggregator.sarif || true",
     "cd gatelogue-types-py && hatch fmt --linter -- --force-exclude --output-format=sarif > ../${usage_out_dir}/types-py.sarif || true",

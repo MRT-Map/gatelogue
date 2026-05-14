@@ -264,7 +264,7 @@ jobs:
       - run: pnpm config set --global registry 'https://npm.pkg.github.com/'
 
       - run: |
-          cat package.json | sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" > package2.json
+          sed "s/\"name\": \"/\"name\": \"@mrt-map\//g" package.json > package2.json
           mv package2.json package.json
       - run: pnpm i
       - run: pnpm publish --no-git-checks # zizmor: ignore[use-trusted-publishing]

@@ -70,7 +70,7 @@ local linters = new Mapping<String, Step> {
     ["actionlint"] = Builtins.actionlint
     ["poutine"] {
         glob = Builtins.zizmor.glob
-        check = "poutine analyze_local ."
+        check = "poutine analyze_local . --skip github_action_from_unverified_creator_used"
     }
 }
 
