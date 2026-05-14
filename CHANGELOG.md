@@ -4,6 +4,10 @@
 * add rail, sea and bus to client/data viewer
 * convert SQL queries into views
 
+<!-- new -->
+## v3.1.3+13 (20260514)
+* migrate to mise and hk
+
 ## v3.1.2+13 (20260331)
 * fix ci failing on npm and jsr packages
 

@@ -6,5 +6,23 @@ shellcheck = "0.11.0"
 [tasks]
 pre-commit = { run = "hk run pre-commit" }
 
+[tasks.bump-version]
+usage = '''
+arg "<v>" help="version"
+arg "<dv>" help="data version"
+'''
+run = [
+    'sed "s/__version__ = \".*\"/__version__ = \"${usage_v}\"/" -i gatelogue-aggregator/src/gatelogue_aggregator/__about__.py',
+    'sed "s/__data_version__ = \".*\"/__data_version__ = ${usage_dv}/" -i gatelogue-aggregator/src/gatelogue_aggregator/__about__.py',
+    'sed "s/__version__ = \".*\"/__version__ = \"${usage_v}\"/" -i gatelogue-types-py/src/gatelogue_types/__about__.py',
+    'sed "s/__data_version__ = \".*\"/__data_version__ = ${usage_dv}/" -i gatelogue-types-py/src/gatelogue_types/__about__.py',
+    'sed "s/\"version\": \".*\"/\"version\": \"${usage_v}+${usage_dv}\"/" -i gatelogue-client/package.json',
+    'sed "s/\"version\": \".*\"/\"version\": \"${usage_v}+${usage_dv}\"/" -i gatelogue-types-ts/package.json',
+    'sed "s/\"version\": \".*\"/\"version\": \"${usage_v}+${usage_dv}\"/" -i gatelogue-types-ts/jsr.json',
+    'sed "s/^version = \".*\"\$/version = \"${usage_v}+${usage_dv}\"/" -i gatelogue-types-rs/Cargo.toml',
+    'cd gatelogue-types-rs && cargo update -p gatelogue-types',
+    'sed "s/<!-- new -->/<!-- new -->\n## v${usage_v}+${usage_dv} ($(date +%Y%m%d))\n/" -i CHANGELOG.md'
+]
+
 [settings]
 minimum_release_age = "3d"
