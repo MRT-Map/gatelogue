@@ -15,21 +15,9 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: true
-      - uses: ./.github/actions/setup-python
-      - uses: ./.github/actions/setup-rust
-        with:
-          components: rustfmt
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/mise
 
-      - run: gatelogue-types-sql/copy.sh
-
-      - run: cd gatelogue-aggregator && hatch fmt -f
-      - run: cd gatelogue-types-py && hatch fmt -f
-
-      - run: cd gatelogue-types-rs && cargo fmt
-
-      - run: cd gatelogue-client && pnpm i && pnpm format
-      - run: cd gatelogue-types-ts && pnpm i && pnpm format
+      - run: hk run format --all
 
       - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
         if: github.event_name != 'pull_request'
@@ -52,79 +40,14 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+      - uses: ./.github/actions/mise
 
-      - uses: ./.github/actions/setup-python
-      - uses: ./.github/actions/setup-rust
-        with:
-          components: clippy
-      - uses: ./.github/actions/setup-node
-      - uses: cargo-bins/cargo-binstall@aaa84a43aec4955a42c5ffc65d258961e39f276e # v1.19.1
-      - run: cargo binstall --force clippy-sarif@${{ env.CLIPPY_SARIF_VERSION }}
-        env:
-          # renovate: datasource=crate depName=clippy-sarif versioning=loose
-          CLIPPY_SARIF_VERSION: 0.8.0
-
-      - uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
-
-      - run: |
-          cd gatelogue-aggregator
-          hatch fmt -l -- --output-format=sarif | tee ${{ runner.temp }}/aggregator.sarif
-          hatch run types:check
-        if: '!cancelled()'
-      - run: |
-          cd gatelogue-types-py
-          hatch fmt -l -- --output-format=sarif | tee ${{ runner.temp }}/types-py.sarif
-          hatch run types:check
-        if: '!cancelled()'
-
-      - run: |
-          mkdir sarif-cargo
-          cd gatelogue-types-rs
-          cargo clippy --locked --fix --broken-code --allow-dirty \
-                       --all-targets --all-features --message-format=json |
-          clippy-sarif | tee ${{ runner.temp }}/types-rs.sarif
-        if: '!cancelled()'
-
-      - run: mkdir sarif-eslint
-        if: '!cancelled()'
-      - run: |
-          cd gatelogue-client
-          pnpm i
-          pnpm run lint:sarif | tee ${{ runner.temp }}/client.sarif
-          pnpm run type-check
-        if: '!cancelled()'
-      - run: |
-          cd gatelogue-types-ts
-          pnpm i
-          pnpm run lint:sarif | tee ${{ runner.temp }}/types-ts.sarif
-          pnpm run type-check
-        if: '!cancelled()'
-
+      - run: mise run lint-sarif ${{ runner.temp }}
       - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
         if: '!cancelled()'
         with:
-          sarif_file: ${{ runner.temp }}/aggregator.sarif
-          category: ruff-aggregator
-      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
-        if: '!cancelled()'
-        with:
-          sarif_file: ${{ runner.temp }}/types-py.sarif
-          category: ruff-types-py
-      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
-        if: '!cancelled()'
-        with:
-          sarif_file: ${{ runner.temp }}/types-rs.sarif
-          category: cargo-types-rs
-      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
-        if: '!cancelled()'
-        with:
-          sarif_file: ${{ runner.temp }}/client.sarif
-          category: eslint-client
-      - uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
-        if: '!cancelled()'
-        with:
-          sarif_file: ${{ runner.temp }}/types-ts.sarif
-          category: eslint-types-ts
+          sarif_file: ${{ runner.temp }}
+          category: linting
 
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         if: github.ref_name == 'main' && !cancelled()

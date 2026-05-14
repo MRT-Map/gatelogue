@@ -3,6 +3,7 @@
 import pluginJs from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
+import { globalIgnores } from "eslint/config";
 
 export default tseslint.config(
   pluginJs.configs.all,
@@ -34,4 +35,5 @@ export default tseslint.config(
     },
   },
   prettierConfig,
+  globalIgnores(["src/sql.ts"]),
 );

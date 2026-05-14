@@ -1,0 +1,29 @@
+[tools]
+hk = "1.45.0"
+pkl = "0.31.1"
+
+[tasks.pre-commit]
+run = "hk run pre-commit"
+
+[tasks.lint-sarif]
+usage = '''
+arg "<out-dir>" default=".sarif"
+'''
+run = [
+    "mkdir ${usage_out_dir} || true",
+
+    "zizmor . --fix=all --format=sarif > ${usage_out_dir}/zizmor.sarif || true",
+    "actionlint -format \"$(curl -L \"https://raw.githubusercontent.com/rhysd/actionlint/refs/heads/main/testdata/format/sarif_template.txt\")\" > ${usage_out_dir}/actionlint.sarif || true",
+    "poutine analyze_local . --format=sarif > ${usage_out_dir}/poutine.sarif || true",
+
+    "cd gatelogue-aggregator && hatch fmt --linter -- --force-exclude --output-format=sarif > ../${usage_out_dir}/aggregator.sarif || true",
+    "cd gatelogue-types-py && hatch fmt --linter -- --force-exclude --output-format=sarif > ../${usage_out_dir}/types-py.sarif || true",
+
+    "cd gatelogue-client && pnpm run lint:sarif > ../${usage_out_dir}/client.sarif || true",
+    "cd gatelogue-types-ts && pnpm run lint:sarif > ../${usage_out_dir}/types-ts.sarif || true",
+
+    "cd gatelogue-types-rs && cargo clippy --locked --fix --allow-dirty --allow-staged --all-targets --all-features --message-format=json | clippy-sarif > ../${usage_out_dir}/types-rs.sarif || true",
+]
+
+[settings]
+minimum_release_age = "3d"

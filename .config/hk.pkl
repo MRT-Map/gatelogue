@@ -1,0 +1,109 @@
+amends "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtins.pkl"
+
+local init = new Group {
+    steps {
+        ["init_client"] = new Step {
+            glob = List("gatelogue-client/**/*")
+            dir = "gatelogue-client"
+            check = "pnpm i"
+        }
+        ["init_types_ts"] = new Step {
+            glob = List("gatelogue-types-ts/**/*")
+            dir = "gatelogue-types-ts"
+            check = "pnpm i"
+        }
+        ["copy-sql"] = new Step {
+            glob = List("gatelogue-types-sql/**/*")
+            fix = "gatelogue-types-sql/copy.sh"
+        }
+    }
+}
+
+local formatters = new Mapping<String, Step> {
+    ["hatch_format"] = (Builtins.ruff_format) {
+        workspace_indicator = "pyproject.toml"
+        check = "cd {{ workspace }} && hatch fmt --formatter --check -- --force-exclude {{ workspace_files }}"
+        fix = "cd {{ workspace }} && hatch fmt --formatter -- --force-exclude {{ workspace_files }}"
+    }
+    ["prettier"] = (Builtins.prettier) {
+        depends = "init"
+        workspace_indicator = "package.json"
+        check = "cd {{ workspace }} && pnpm run format:check {{ workspace_files }}"
+        fix = "cd {{ workspace }} && pnpm run format {{ workspace_files }}"
+    }
+    ["cargo_fmt"] = (Builtins.cargo_fmt) {
+        dir = "gatelogue-types-rs"
+        check = "cargo fmt --check"
+        fix = "cargo fmt"
+    }
+}
+
+local linters = new Mapping<String, Step> {
+    ["hatch"] = (Builtins.ruff) {
+        workspace_indicator = "pyproject.toml"
+        check = "cd {{ workspace }} && hatch fmt --linter --check -- --force-exclude {{ workspace_files }}"
+        fix = "cd {{ workspace }} && hatch fmt --linter -- --force-exclude {{ workspace_files }}"
+    }
+    ["hatch_type_check"] {
+        workspace_indicator = "pyproject.toml"
+        glob = Builtins.ruff.glob
+        check = "cd {{workspace}} && hatch run types:check"
+    }
+    ["eslint"] = (Builtins.eslint) {
+        depends = "init"
+        workspace_indicator = "package.json"
+        check = "cd {{ workspace }} && pnpm run lint {{ workspace_files }}"
+        fix = "cd {{ workspace }} && pnpm run lint:fix {{ workspace_files }}"
+    }
+    ["tsc_type_check"] {
+        depends = "init"
+        workspace_indicator = "package.json"
+        glob = Builtins.eslint.glob
+        check = "cd {{ workspace }} && pnpm run type-check"
+    }
+    ["cargo_clippy"] = (Builtins.cargo_clippy) {
+        check = (Builtins.cargo_clippy.check as String) + " --all-targets --all-features"
+        fix = (Builtins.cargo_clippy.fix as String) + " --all-targets --all-features"
+    }
+    ["zizmor"] = Builtins.zizmor
+    ["actionlint"] = Builtins.actionlint
+    ["poutine"] {
+        glob = Builtins.zizmor.glob
+        check = "poutine analyze_local ."
+    }
+}
+
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stash = "git"
+        steps = new Mapping<String, Step | Group> {
+            ["init"] = init
+            ...formatters
+            ...linters
+        }
+    }
+    ["fix"] {
+        fix = true
+        steps = new Mapping<String, Step | Group> {
+            ["init"] = init
+            ...formatters
+            ...linters
+        }
+    }
+    ["check"] {
+        steps = new Mapping<String, Step | Group> {
+            ["init"] = init
+            ...formatters
+            ...linters
+        }
+    }
+    ["format"] {
+        fix = true
+        steps = new Mapping<String, Step | Group> {
+            ["init"] = init
+            ...formatters
+        }
+    }
+}
