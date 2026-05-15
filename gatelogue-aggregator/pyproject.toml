@@ -31,7 +31,7 @@ dependencies = [
   "gatelogue-types",
   "click==8.3.3",
   "msgspec==0.21.1",
-  "pandas==3.0.2",
+  "pandas==3.0.3",
   "rich==15.0.0",
   "rnet==3.0.0rc22",
   "BeautifulSoup4==4.14.3",
