@@ -33,11 +33,7 @@ local formatters = new Mapping<String, Step> {
         check = "cd {{ workspace }} && pnpm run format:check {{ workspace_files }}"
         fix = "cd {{ workspace }} && pnpm run format {{ workspace_files }}"
     }
-    ["cargo_fmt"] = (Builtins.cargo_fmt) {
-        dir = "gatelogue-types-rs"
-        check = "cargo fmt --check"
-        fix = "cargo fmt"
-    }
+    ["cargo_fmt"] = Builtins.cargo_fmt
 }
 
 local linters = new Mapping<String, Step> {
