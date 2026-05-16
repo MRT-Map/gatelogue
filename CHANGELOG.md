@@ -5,7 +5,10 @@
 * convert SQL queries into views
 
 <!-- new -->
-## v3.1.4-rc.3+13 (20260515)
+## v3.1.4-rc.4+13 (20260516)
+* final fixes
+
+### v3.1.4-rc.3+13 (20260515)
 * fix GitHub Packages publishing
 
 ### v3.1.4-rc.2+13 (20260515)
