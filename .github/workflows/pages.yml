@@ -16,15 +16,13 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
 
       - run: |
           cd gatelogue-client
-          pnpm install
+          pnpm i && pnpm prepare
           pnpm run build
-      - run: |
-          cd gatelogue-client/dist
-          echo > .nojekyll
+          touch dist/.nojekyll
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: client
@@ -41,7 +39,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"py"'
+          envs: 'py'
 #      - run: |
 #          sudo apt-get update
 #          sudo apt-get install --no-install-recommends graphviz graphviz-dev
@@ -64,7 +62,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"rs"'
+          envs: 'rs'
 
       - run: |
           cd gatelogue-types-rs
@@ -86,11 +84,11 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
 
       - run: |
           cd gatelogue-types-ts
-          pnpm install
+          pnpm i
           pnpm run doc
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

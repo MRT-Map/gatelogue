@@ -1,1 +1,1 @@
-env = ["gha", "node", "py", "rs"]
+env = ["lint", "node", "py", "rs"]

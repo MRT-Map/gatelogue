@@ -4,10 +4,10 @@ description: Mise
 inputs:
   envs:
     description: envs
-    default: ''
+    default: "lint,node,py,rs"
   cache:
     description: cache
-    default: 'true'
+    default: "true"
 
 outputs:
   mise-action:
@@ -23,10 +23,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - id: write-miserc
+    - id: mise-env
       shell: bash
-      if: inputs.envs != ''
-      run: echo "env = [$ENVS]" > .miserc.toml
+      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV"  # zizmor: ignore[github-env]
       env:
         ENVS: ${{ inputs.envs }}
 
@@ -37,13 +36,17 @@ runs:
         cache: ${{ inputs.cache }}
 
     - id: cache-rust
-      if: inputs.cache && (inputs.envs == '' || contains(inputs.envs, '"rs"'))
+      if: inputs.cache && contains(inputs.envs, 'rs')
       uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
       with:
         workspaces: './gatelogue-types-rs -> target'
 
+    - if: contains(inputs.envs, 'rs')
+      run: mise install rust --force
+      shell: bash
+
     - id: cache-node
-      if: inputs.cache && (inputs.envs == '' || contains(inputs.envs, '"js"'))
+      if: inputs.cache && contains(inputs.envs, 'node')
       uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
       with:
         path: |

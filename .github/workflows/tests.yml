@@ -21,7 +21,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"py"'
+          envs: 'py'
 
       - run: hatch test --all --parallel
 
@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"rs"'
+          envs: 'rs'
 
       - run: cargo test --locked --all --all-targets --all-features
 
@@ -57,7 +57,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
 
       - run: pnpm i
       - run: pnpm test

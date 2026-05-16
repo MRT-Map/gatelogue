@@ -67,7 +67,7 @@ jobs:
         persist-credentials: false
     - uses: ./.github/actions/mise
       with:
-        envs: '"py"'
+        envs: 'py'
         cache: false
 
     - run: hatch build
@@ -90,7 +90,7 @@ jobs:
         persist-credentials: false
     - uses: ./.github/actions/mise
       with:
-        envs: '"rs"'
+        envs: 'rs'
         cache: false
 
     - run: cargo package --locked
@@ -114,7 +114,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
           cache: false
 
       - run: pnpm i
@@ -211,7 +211,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"rs"'
+          envs: 'rs'
           cache: false
 
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
@@ -239,7 +239,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
           cache: false
 
       - run: pnpm i
@@ -261,7 +261,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
           cache: false
 
       - run: |
@@ -291,7 +291,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: '"node"'
+          envs: 'node'
           cache: false
 
       - run: mv ../README.md .

@@ -21,7 +21,7 @@ jobs:
           persist-credentials: true
       - uses: ./.github/actions/mise
         with:
-          envs: '"py"'
+          envs: 'py'
 
       - env:
           MAINTENANCE: github.event_name != 'push'
