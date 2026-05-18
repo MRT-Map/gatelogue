@@ -24,7 +24,7 @@ jobs:
           envs: 'py'
 
       - env:
-          MAINTENANCE: github.event_name != 'push'
+          MAINTENANCE: ${{ github.event_name != 'push'}}
         run: |
           cd gatelogue-aggregator
           if $MAINTENANCE; then rm -r requirements; fi
@@ -33,7 +33,7 @@ jobs:
           hatch -v run types:true
       
       - env:
-          MAINTENANCE: github.event_name != 'push'
+          MAINTENANCE: ${{ github.event_name != 'push' }}
         run: |
           cd gatelogue-types-py
           if $MAINTENANCE; then rm -r requirements; fi
