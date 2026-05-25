@@ -5,7 +5,7 @@ pkl = "0.31.1"
 shellcheck = "0.11.0"
 zizmor = "1.25.2"
 actionlint = "1.7.12"
-"github:boostsecurityio/poutine" = "1.1.4"
+"github:boostsecurityio/poutine" = "1.1.6"
 
 [tasks]
 pre-commit = { run = "hk run pre-commit" }
