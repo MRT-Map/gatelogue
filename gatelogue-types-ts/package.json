@@ -60,7 +60,7 @@
     "@types/sql.js": "1.4.11",
     "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
-    "npm-run-all2": "9.0.0",
+    "npm-run-all2": "9.0.1",
     "prettier": "3.8.3",
     "typedoc": "0.28.19",
     "typescript": "6.0.3",
