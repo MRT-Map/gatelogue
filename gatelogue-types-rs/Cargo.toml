@@ -29,7 +29,7 @@ tokio = { version = "=1.52.3", features = ["rt-multi-thread", "macros"] }
 reqwest = { version = "=0.13.3", default-features = false, features = ["blocking", "rustls", "http2"]}
 #surf = { version = "=2.3.2", default-features = false, features = ["h1-client-rustls"] }
 ureq = { version = "=3.3.0", default-features = false, features = ["rustls"] }
-isahc = { version = "=1.8.2", default-features = false, features = ["http2", "static-curl", "static-ssl"] }
+isahc = { version = "=2.0.0", default-features = false, features = ["http2", "static-curl", "static-ssl"] }
 #attohttpc = { version = "0.30.1", default-features = false, features = ["tls-rustls-webpki-roots-ring"] }
 minreq = { version = "=3.0.0-rc.1" , features = ["https-native-tls"] }
 wreq = { version = "=6.0.0-rc.28", default-features = false, features = ["prefix-symbols"] }
