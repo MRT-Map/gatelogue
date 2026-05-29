@@ -13,7 +13,7 @@
     },
     {
       "matchFileNames": ["gatelogue-types-*/**"],
-      "extends": [":pinOnlyDevDependencies"]
+      "extends": ["github>mrt-map/renovate-config:library"]
     },
     {
       "matchFileNames": ["gatelogue-aggregator/**"],
