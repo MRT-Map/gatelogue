@@ -9,7 +9,7 @@
   "packageRules": [
     {
       "matchFileNames": ["gatelogue-client/**", "gatelogue-aggregator/**"],
-      "extends": [":pinAllExceptPeerDependencies"]
+      "extends": ["github>mrt-map/renovate-config:app"]
     },
     {
       "matchFileNames": ["gatelogue-types-*/**"],
