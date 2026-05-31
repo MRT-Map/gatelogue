@@ -20,7 +20,7 @@
   "dependencies": {
     "gatelogue-types": "link:../gatelogue-types-ts",
     "vue": "3.5.35",
-    "vue-router": "5.0.7",
+    "vue-router": "5.1.0",
     "vue-tippy": "6.7.1"
   },
   "devDependencies": {
