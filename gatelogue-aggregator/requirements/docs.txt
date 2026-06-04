@@ -11,7 +11,7 @@
 # - niquests==3.18.8
 # - httpx==0.28.1
 # - urllib3==2.7.0
-# - aiohttp==3.14.0
+# - aiohttp==3.13.5
 # - rnet==3.0.0rc22
 # - gatelogue-types
 # - click==8.4.1
@@ -30,7 +30,7 @@ aiohappyeyeballs==2.6.2 \
     # via
     #   -c requirements/default.txt
     #   aiohttp
-aiohttp==3.14.0 \
+aiohttp==3.13.5 \
     --hash=sha256:019a67772e034a0e6b9b17c13d0a8fe56ad9fb150fc724b7f3ffd3724288d9e5 \
     --hash=sha256:02222e7e233295f40e011c1b00e3b0bd451f22cf853a0304c3595633ee47da4b \
     --hash=sha256:023ecba036ddd840b0b19bf195bfae970083fd7024ce1ac22e9bba90464620e9 \
