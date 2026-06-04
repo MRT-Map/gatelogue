@@ -61,7 +61,6 @@ pip-compile-constraint = "default"
 pip-compile-resolver = "uv"
 pip-compile-installer = "uv"
 pip-compile-args = ["--exclude-newer", "3 days", "--exclude-newer-package", "aiohttp=2026-06-04"]
-pip-compile-install-args = ["--exclude-newer", "3 days", "--exclude-newer-package", "aiohttp=2026-06-04"]
 lock-filename = "requirements/{env_name}.txt"
 
 features = ["dev"]
