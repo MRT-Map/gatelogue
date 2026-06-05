@@ -71,65 +71,18 @@
 <div itemprop="articleBody">
 <section id="command-line">
 <h1>Command Line<a class="headerlink" href="#command-line" title="Link to this heading"></a></h1>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m gatelogue_aggregator [OPTIONS] COMMAND [ARGS]...
-
-Options:
-  --version   Show the version and exit.
-  -h, --help  Show this message and exit.
-
-Commands:
-  drop-sources  Drop all `*Source` tables from the DB from the output of...
-  run           actually run the aggregator
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/home/runner/.local/share/hatch/env/virtual/gatelogue-aggregator/KRNWI1AC/docs/bin/python: No module named gatelogue_aggregator
 </pre></div>
 </div>
 <section id="run">
 <h2>Run<a class="headerlink" href="#run" title="Link to this heading"></a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m gatelogue_aggregator run [OPTIONS]
-
-  actually run the aggregator
-
-Options:
-  --cache-dir PATH                where to cache files downloaded from the
-                                  Internet (preferably a temporary directory)
-                                  [default: /tmp/gatelogue]
-  --cache-duration INTEGER        how long to hold cached files retrieved from
-                                  URLs for  [default: 3600]
-  --timeout INTEGER               how long to wait for a network request in
-                                  seconds before aborting and failing
-                                  [default: 60]
-  --cooldown INTEGER              how long to wait before sending new requests
-                                  to the same URL if `429 Too Many Requests`
-                                  is received  [default: 15]
-  -o, --output PATH               file to output the result to, as an SQLite
-                                  DB  [default: data.db]
-  -r, --report / -R, --no-report  print a report of all nodes after merger
-                                  [default: r]
-  -w, --max_workers INTEGER       maximum number of concurrent workers that
-                                  download and process data  [default: 8]
-  -ce, --cache-exclude TEXT       re-retrieve data for these sources instead
-                                  of loading from cache (separate with `;`,
-                                  use `*` for all sources)  [default: ""]
-  -i, --include TEXT              sources to retrieve from (do not use with
-                                  --exclude) (separate with `;`, use `*` for
-                                  all sources)  [default: ""]
-  -e, --exclude TEXT              sources NOT to retrieve from (do not use
-                                  with --include) (separate with `;`, use `*`
-                                  for all sources)  [default: ""]
-  -h, --help                      Show this message and exit.
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/home/runner/.local/share/hatch/env/virtual/gatelogue-aggregator/KRNWI1AC/docs/bin/python: No module named gatelogue_aggregator
 </pre></div>
 </div>
 </section>
 <section id="drop-sources">
 <h2>Drop Sources<a class="headerlink" href="#drop-sources" title="Link to this heading"></a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m gatelogue_aggregator drop-sources [OPTIONS]
-
-  Drop all `*Source` tables from the DB from the output of `run`
-
-Options:
-  -i, --input PATH   path of the SQLite DB  [default: data.db]
-  -o, --output PATH  path to output the sourceless DB to  [default: data-
-                     ns.db]
-  -h, --help         Show this message and exit.
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/home/runner/.local/share/hatch/env/virtual/gatelogue-aggregator/KRNWI1AC/docs/bin/python: No module named gatelogue_aggregator
 </pre></div>
 </div>
 </section>
