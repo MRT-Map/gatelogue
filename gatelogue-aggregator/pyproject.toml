@@ -107,6 +107,9 @@ exclude_lines = [
   "if TYPE_CHECKING:",
 ]
 
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.14", "3.14t", "3.13"]
+
 [tool.ruff.lint]
 ignore = [
   "PLR2004", # magic variables
