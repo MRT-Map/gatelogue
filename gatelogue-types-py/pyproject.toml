@@ -108,3 +108,5 @@ ignore = [
   "S608",  # SQL injection lol
 ]
 
+[tool.hatch.envs.hatch-check-types]
+features = ["dev"]
