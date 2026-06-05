@@ -46,25 +46,19 @@ Source = "https://github.com/mrt-map/gatelogue"
 Changelog = "https://github.com/MRT-Map/gatelogue/blob/main/CHANGELOG.md"
 Homepage = "https://mrt-map.github.io/gatelogue"
 
+[tool.hatch]
+lock-envs = true
+
 [tool.hatch.version]
 path = "src/gatelogue_types/__about__.py"
 
-[tool.hatch.env]
-requires = [
-  "hatch-pip-compile==1.11.6"
-]
-
 [tool.hatch.envs.default]
-type = "pip-compile"
-pip-compile-hashes = true
-pip-compile-constraint = "default"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
-pip-compile-args = ["--exclude-newer", "3 days", "--exclude-newer-package", "aiohttp=2026-06-04"]
-lock-filename = "requirements/{env_name}.txt"
-
 features = ["dev"]
 #python = "3.12"
+
+[tool.hatch.envs.default.env-vars]
+PIP_UPLOADED_PRIOR_TO = "P3D"
+UV_EXCLUDE_NEWER = "3 days"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
