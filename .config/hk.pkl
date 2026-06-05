@@ -24,8 +24,8 @@ local init = new Group {
 local formatters = new Mapping<String, Step> {
     ["hatch_format"] = (Builtins.ruff_format) {
         workspace_indicator = "pyproject.toml"
-        check = "cd {{ workspace }} && hatch fmt --formatter --check -- --force-exclude {{ workspace_files }}"
-        fix = "cd {{ workspace }} && hatch fmt --formatter -- --force-exclude {{ workspace_files }}"
+        check = "cd {{ workspace }} && hatch check fmt -- --force-exclude {{ workspace_files }}"
+        fix = "cd {{ workspace }} && hatch check fmt --fix -- --force-exclude {{ workspace_files }}"
     }
     ["prettier"] = (Builtins.prettier) {
         depends = List("init")
@@ -39,8 +39,8 @@ local formatters = new Mapping<String, Step> {
 local linters = new Mapping<String, Step> {
     ["hatch"] = (Builtins.ruff) {
         workspace_indicator = "pyproject.toml"
-        check = "cd {{ workspace }} && hatch fmt --linter --check -- --force-exclude {{ workspace_files }}"
-        fix = "cd {{ workspace }} && hatch fmt --linter -- --force-exclude {{ workspace_files }}"
+        check = "cd {{ workspace }} && hatch check code -- --force-exclude {{ workspace_files }}"
+        fix = "cd {{ workspace }} && hatch check code --fix -- --force-exclude {{ workspace_files }}"
     }
     ["eslint"] = (Builtins.eslint) {
         depends = List("init")
@@ -64,7 +64,7 @@ local type_checkers = new Mapping<String, Step> {
     ["hatch_type_check"] {
         workspace_indicator = "pyproject.toml"
         glob = Builtins.ruff.glob
-        check = "cd {{ workspace }} && hatch run types:check"
+        check = "cd {{ workspace }} && hatch check types"
     }
     ["tsc_type_check"] {
         depends = List("init")

@@ -43,15 +43,15 @@ jobs:
 
       - id: changelog
         run: |
-           cd gatelogue-aggregator/src
-           {
-           echo 'changelog<<__EOF__'
-           python -c "
-           from gatelogue_aggregator.__about__ import __version__, __data_version__
-           print('\n'.join(open('../../CHANGELOG.md').read().split('## v'+__version__+'+'+str(__data_version__))[1].split('\n')[1:]).split('\n##')[0])
-           "
-           echo __EOF__
-           } >> "$GITHUB_OUTPUT"
+          cd gatelogue-aggregator/src
+          {
+          echo 'changelog<<__EOF__'
+          python -c "
+          from gatelogue_aggregator.__about__ import __version__, __data_version__
+          print('\n'.join(open('../../CHANGELOG.md').read().split('## v'+__version__+'+'+str(__data_version__))[1].split('\n')[1:]).split('\n##')[0])
+          "
+          echo __EOF__
+          } >> "$GITHUB_OUTPUT"
 
   build-py:
     runs-on: ubuntu-latest
@@ -62,19 +62,19 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-    - uses: ./.github/actions/mise
-      with:
-        envs: 'py'
-        cache: false
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/mise
+        with:
+          envs: "py"
+          cache: false
 
-    - run: hatch build
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      with:
-        name: dist-py
-        path: gatelogue-types-py/dist
+      - run: hatch build
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-py
+          path: gatelogue-types-py/dist
 
   build-rs:
     runs-on: ubuntu-latest
@@ -85,20 +85,20 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-    - uses: ./.github/actions/mise
-      with:
-        envs: 'rs'
-        cache: false
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/mise
+        with:
+          envs: "rs"
+          cache: false
 
-    - run: cargo package --locked
-    - run: cargo publish --locked --dry-run
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      with:
-        name: dist-rs
-        path: gatelogue-types-rs/target/package/*.crate
+      - run: cargo package --locked
+      - run: cargo publish --locked --dry-run
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-rs
+          path: gatelogue-types-rs/target/package/*.crate
 
   build-ts:
     runs-on: ubuntu-latest
@@ -114,7 +114,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: 'node'
+          envs: "node"
           cache: false
 
       - run: pnpm i
@@ -130,7 +130,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    needs: [ build-py, build-rs, build-ts, changelog-version, tests ]
+    needs: [build-py, build-rs, build-ts, changelog-version, tests]
     permissions:
       contents: write
       id-token: write
@@ -162,7 +162,8 @@ jobs:
 
   delete-github-release:
     runs-on: ubuntu-latest
-    needs: [ build-py, build-rs, build-ts, changelog-version, github-release, tests ]
+    needs:
+      [build-py, build-rs, build-ts, changelog-version, github-release, tests]
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     permissions:
       contents: write
@@ -179,7 +180,7 @@ jobs:
 
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: [ build-py, github-release ]
+    needs: [build-py, github-release]
     environment:
       name: pypi
       url: https://pypi.org/p/gatelogue-types
@@ -200,7 +201,7 @@ jobs:
         working-directory: gatelogue-types-rs
     permissions:
       id-token: write
-    needs: [ build-rs, github-release ]
+    needs: [build-rs, github-release]
     environment:
       name: crates
       url: https://crates.io/crates/gatelogue-types
@@ -211,7 +212,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: 'rs'
+          envs: "rs"
           cache: false
 
       - uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
@@ -228,7 +229,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    needs: [ build-ts, github-release ]
+    needs: [build-ts, github-release]
     environment:
       name: npm
       url: https://www.npmjs.com/package/gatelogue-types
@@ -239,7 +240,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: 'node'
+          envs: "node"
           cache: false
 
       - run: pnpm i
@@ -253,7 +254,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    needs: [ build-ts, github-release ]
+    needs: [build-ts, github-release]
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -261,13 +262,12 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: 'node'
+          envs: "node"
           cache: false
 
       - run: |
           sed 's/"name": "/"name": "@mrt-map\//g' -i package.json
       - run: pnpm i
-
       - run: |
           pnpm config set registry 'https://npm.pkg.github.com/'
           pnpm config set //npm.pkg.github.com/:_authToken "\${NODE_AUTH_TOKEN}"
@@ -283,7 +283,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    needs: [ build-ts, github-release ]
+    needs: [build-ts, github-release]
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -291,7 +291,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/mise
         with:
-          envs: 'node'
+          envs: "node"
           cache: false
 
       - run: mv ../README.md .
@@ -300,5 +300,3 @@ jobs:
         env:
           # renovate: datasource=npm depName=jsr
           JSR_VERSION: 0.14.3
-
-

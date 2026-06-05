@@ -1,12 +1,11 @@
-
 name: "Update Python Lockfiles"
 
 on:
   schedule:
     - cron: 0 0 * * 1
   workflow_dispatch:
-  push:
-    branches: ["**"]
+  # push:
+  #   branches: ["**"]
 
 jobs:
   python-lock:
@@ -21,25 +20,17 @@ jobs:
           persist-credentials: true
       - uses: ./.github/actions/mise
         with:
-          envs: 'py'
+          envs: "py"
 
-      - env:
-          MAINTENANCE: ${{ github.event_name != 'push'}}
+      - if: github.event_name == 'push'
         run: |
-          cd gatelogue-aggregator
-          if $MAINTENANCE; then rm -r requirements; fi
-          hatch -v run true
-          hatch -v run docs:true
-          hatch -v run types:true
-      
-      - env:
-          MAINTENANCE: ${{ github.event_name != 'push' }}
+          cd gatelogue-aggregator && hatch env lock && cd ..
+          cd gatelogue-types-py && hatch env lock && cd ..
+          
+      - if: github.event_name != 'push'
         run: |
-          cd gatelogue-types-py
-          if $MAINTENANCE; then rm -r requirements; fi
-          hatch -v run true
-          hatch -v run docs:true
-          hatch -v run types:true
+          cd gatelogue-aggregator && hatch env lock --upgrade && cd ..
+          cd gatelogue-types-py && hatch env lock --upgrade && cd ..
 
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         if: github.event_name != 'push'

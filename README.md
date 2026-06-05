@@ -31,8 +31,8 @@
 [`gatelogue-types` (ts, npm)](https://www.npmjs.com/package/gatelogue-types):
 ![NPM Version](https://img.shields.io/npm/v/gatelogue-types)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/MRT-Map/gatelogue/.github%2Fworkflows%2Fpages.yml?style=flat&label=typedoc&link=https%3A%2F%2Fmrt-map.github.io%2Fgatelogue%2Fdocs%2Fts)
-![NPM Downloads](https://img.shields.io/npm/dw/gatelogue-types?label=downloads%20(week))
-![NPM Downloads](https://img.shields.io/npm/dy/gatelogue-types?label=downloads%20(year))
+![NPM Downloads](<https://img.shields.io/npm/dw/gatelogue-types?label=downloads%20(week)>)
+![NPM Downloads](<https://img.shields.io/npm/dy/gatelogue-types?label=downloads%20(year)>)
 
 [`gatelogue-types` (ts, jsr)](https://jsr.io/@mrt-map/gatelogue-types):
 ![JSR Version](https://img.shields.io/jsr/v/@mrt-map/gatelogue-types)

@@ -7,6 +7,11 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent / "src"))
+
 from gatelogue_aggregator.__about__ import __version__
 
 project = "gatelogue-aggregator"

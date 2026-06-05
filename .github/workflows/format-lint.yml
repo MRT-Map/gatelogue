@@ -45,12 +45,12 @@ jobs:
 
       - run: hk run sarif --all --no-fail-fast
       - id: matrix
-        if: '!cancelled()'
+        if: "!cancelled()"
         run: |
           # shellcheck disable=SC2012
           echo "value=[$(ls .sarif -Qm | sed s/\.sarif//g | tr '\n' ' ')]" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: '!cancelled()'
+        if: "!cancelled()"
         with:
           name: sarif
           path: .sarif/*
@@ -63,11 +63,11 @@ jobs:
           title: Linting
       - run: git status
         if: github.ref_name != 'main' && !cancelled()
-        
+
   upload-sarif:
     needs: lint
     runs-on: ubuntu-slim
-    if: '!cancelled()'
+    if: "!cancelled()"
     strategy:
       matrix:
         value: ${{ fromJSON(needs.lint.outputs.matrix) }}

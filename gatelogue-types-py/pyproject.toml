@@ -46,23 +46,13 @@ Source = "https://github.com/mrt-map/gatelogue"
 Changelog = "https://github.com/MRT-Map/gatelogue/blob/main/CHANGELOG.md"
 Homepage = "https://mrt-map.github.io/gatelogue"
 
+[tool.hatch]
+lock-envs = true
+
 [tool.hatch.version]
 path = "src/gatelogue_types/__about__.py"
 
-[tool.hatch.env]
-requires = [
-  "hatch-pip-compile==1.11.6"
-]
-
 [tool.hatch.envs.default]
-type = "pip-compile"
-pip-compile-hashes = true
-pip-compile-constraint = "default"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
-pip-compile-args = ["--exclude-newer", "3 days", "--exclude-newer-package", "aiohttp=2026-06-04"]
-lock-filename = "requirements/{env_name}.txt"
-
 features = ["dev"]
 #python = "3.12"
 
@@ -74,14 +64,6 @@ extra-dependencies = [
 ]
 [tool.hatch.envs.docs.scripts]
 build = "cd docs; make html; cd .."
-
-[tool.hatch.envs.types]
-features = ["dev"]
-extra-dependencies = [
-    "pyrefly==1.0.0",
-]
-[tool.hatch.envs.types.scripts]
-check = "pyrefly check {args}"
 
 [tool.coverage.run]
 source_pkgs = ["gatelogue_types", "tests"]
@@ -107,7 +89,12 @@ features = ["dev"]
 default-args = ["tests/__init__.py"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.14", "3.13"]
+python = ["3.14", "3.14t", "3.13"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src"
+]
 
 [tool.ruff.lint]
 ignore = [
@@ -117,3 +104,5 @@ ignore = [
   "S608",  # SQL injection lol
 ]
 
+[tool.hatch.envs.hatch-check-types]
+features = ["dev"]
