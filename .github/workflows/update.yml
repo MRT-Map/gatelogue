@@ -2,8 +2,13 @@ name: Update dist DB
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
-    paths: [ "gatelogue-aggregator/**", "gatelogue-types-py/**", ".github/workflows/update.yml" ]
+    branches: ["main"]
+    paths:
+      [
+        "gatelogue-aggregator/**",
+        "gatelogue-types-py/**",
+        ".github/workflows/update.yml",
+      ]
   schedule:
     - cron: 0 0 * * *
 
@@ -48,4 +53,3 @@ jobs:
     uses: ./.github/workflows/trigger-map.yml
     secrets:
       PAT: ${{ secrets.PAT }}
-

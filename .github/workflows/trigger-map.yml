@@ -2,7 +2,7 @@ name: Trigger transit-map update
 on:
   workflow_dispatch:
   push:
-    branches: [ "dist" ]
+    branches: ["dist"]
   workflow_call:
     secrets:
       PAT:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-slim
     permissions:
       contents: read
-      
+
     environment: trigger-map
 
     steps:

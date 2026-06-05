@@ -1,143 +1,175 @@
 # Changelog
 
 ## Planned
-* add rail, sea and bus to client/data viewer
-* convert SQL queries into views
+
+- add rail, sea and bus to client/data viewer
+- convert SQL queries into views
 
 <!-- new -->
+
 ## v3.1.4-rc.4+13 (20260516)
-* final fixes
+
+- final fixes
 
 ### v3.1.4-rc.3+13 (20260515)
-* fix GitHub Packages publishing
+
+- fix GitHub Packages publishing
 
 ### v3.1.4-rc.2+13 (20260515)
-* fix GitHub Packages publishing
+
+- fix GitHub Packages publishing
 
 ### v3.1.4-rc.1+13 (20260515)
-* fix publishing GH action
+
+- fix publishing GH action
 
 ### v3.1.4-rc.0+13 (20260515)
-* fix publishing GH action
+
+- fix publishing GH action
 
 ## v3.1.3+13 (20260514)
-* migrate to mise and hk
+
+- migrate to mise and hk
 
 ## v3.1.2+13 (20260331)
-* fix ci failing on npm and jsr packages
+
+- fix ci failing on npm and jsr packages
 
 ## v3.1.1+13 (20260331)
-* `gatelogue-aggregator`, `gatelogue-types` (py): run ruff and pyrefly
-* `gatelogue-types` (rs): add `ehttp` getters
-* rework of ci
+
+- `gatelogue-aggregator`, `gatelogue-types` (py): run ruff and pyrefly
+- `gatelogue-types` (rs): add `ehttp` getters
+- rework of ci
 
 ## v3.1.0+13 (20260319)
-* `gatelogue-aggregator`: change `cloudscraper` to `rnet`
-* `gatelogue-types` (rs, py)
-  * rework getters to make them customisable to any HTTP client library **(breaking change)**
-  * new shared folder of SQL queries to reduce deduplication of SELECT queries
-* **Data v13**
-  * Add `duration` to `AirFlight`
+
+- `gatelogue-aggregator`: change `cloudscraper` to `rnet`
+- `gatelogue-types` (rs, py)
+  - rework getters to make them customisable to any HTTP client library **(breaking change)**
+  - new shared folder of SQL queries to reduce deduplication of SELECT queries
+- **Data v13**
+  - Add `duration` to `AirFlight`
 
 ## v3.0.8+12 (20260310)
-* `gatelogue-types` (ts): make SQL object customisable
-* `gatelogue-client`: index DB
+
+- `gatelogue-types` (ts): make SQL object customisable
+- `gatelogue-client`: index DB
 
 ## v3.0.7+12 (20260308)
-* `gatelogue-types`: add `type` getter
+
+- `gatelogue-types`: add `type` getter
 
 ## v3.0.6+12 (20260307)
-* `gatelogue-aggregator`: fix `World` detection from Warp API
-* `gatelogue-types`: loosen `sql.js` requirement
+
+- `gatelogue-aggregator`: fix `World` detection from Warp API
+- `gatelogue-types`: loosen `sql.js` requirement
 
 ## v3.0.5+12 (20260305)
-* `gatelogue-types` (ts): fix `BusBerth`, `SeaDock`, `RailPlatform` `stop`/`station` querying wrong column
+
+- `gatelogue-types` (ts): fix `BusBerth`, `SeaDock`, `RailPlatform` `stop`/`station` querying wrong column
 
 ## v3.0.4+12 (20260305)
-* `gatelogue-types` (ts): fix `Town` attributes querying wrong table
+
+- `gatelogue-types` (ts): fix `Town` attributes querying wrong table
 
 ## v3.0.3+12 (20260305)
-* `gatelogue-types` (rs, ts): add missing `s` to `vehicle`
+
+- `gatelogue-types` (rs, ts): add missing `s` to `vehicle`
 
 ## v3.0.2+12 (20260305)
-* `gatelogue-types` (rs): change `ID` type from `u16` to `u32`
+
+- `gatelogue-types` (rs): change `ID` type from `u16` to `u32`
 
 ## v3.0.1+12 (20260305)
-* `gatelogue-types` (ts)
-  * fix jsr publishing
-  * fix documentation not showing up
-  * fix `*Mode`s, `Proximity`, `World`, `WarpType` not exporting
-* `gatelogue-types` (py)
-  * remove extra backticks
-  * add `STRICT` to `Aircraft`
+
+- `gatelogue-types` (ts)
+  - fix jsr publishing
+  - fix documentation not showing up
+  - fix `*Mode`s, `Proximity`, `World`, `WarpType` not exporting
+- `gatelogue-types` (py)
+  - remove extra backticks
+  - add `STRICT` to `Aircraft`
 
 ## v3.0.0+12 (20260304)
-* `gatelogue-aggregator`
-  * rework line builder for `BusBerth`, `RailPlatform` and `SeaDock`
-  * one-way data, berth/platform/dock code, 
-  * remove graph (it took too long)
-  * integrate source-dropping into CLI
-  * `Source` rework
-    * priority is now based on its order in the final `SOURCES` list, instead of relative to other `Source`s
-    * air node updating moved to `GatelogueData`
-    * `SOURCES` list now broken down by `Air`, `Bus`, `Rail`, `Sea` and miscellaneous
-    * wiki `AirAirline`s and `AirAirport`s separated into individual sources
-  * download Dynmap markers and warps only once
-* `gatelogue-client`
-  * show aircraft/gate width instead of size
-  * show arrow between `AirFlight` from and to
-* `gatelogue-types`: rework API to account for new data format
-* **Data v12**
-  * data format moved from `rustworkx`/JSON to SQLite
-  * new `BusBerth`, `RailPlatform` and `SeaDock` nodes
-  * `RailConnection`, `SeaConnection`, `BusConnection` are now nodes instead of edges
-  * `AirFlight`, `RailConnection`, `SeaConnection`, `BusConnection` are now for only one direction and can no longer be for both
-    * `AirFlight` `code` is no longer unique. Two `AirFlight`s may have the same code, especially for return trips
-  * `AirGate` `size` replaced with `mode`
-  * two `AirGate` of the same `AirAirport` now not equivalent if codes are `None`
-  * `AirFlight` `mode` replaced with new `Aircraft` class
-  * `BusCompany`, `RailCompany`, `SeaCompany` `local` attribute moved to `BusLine`, `RailLine`, `SeaLine`
-  * added `duration` attribute to `RailConnection`, `SeaConnection`, `BusConnection`
-  * added `link` to `BusCompany`, `RailCompany`, `SeaCompany`
+
+- `gatelogue-aggregator`
+  - rework line builder for `BusBerth`, `RailPlatform` and `SeaDock`
+  - one-way data, berth/platform/dock code,
+  - remove graph (it took too long)
+  - integrate source-dropping into CLI
+  - `Source` rework
+    - priority is now based on its order in the final `SOURCES` list, instead of relative to other `Source`s
+    - air node updating moved to `GatelogueData`
+    - `SOURCES` list now broken down by `Air`, `Bus`, `Rail`, `Sea` and miscellaneous
+    - wiki `AirAirline`s and `AirAirport`s separated into individual sources
+  - download Dynmap markers and warps only once
+- `gatelogue-client`
+  - show aircraft/gate width instead of size
+  - show arrow between `AirFlight` from and to
+- `gatelogue-types`: rework API to account for new data format
+- **Data v12**
+  - data format moved from `rustworkx`/JSON to SQLite
+  - new `BusBerth`, `RailPlatform` and `SeaDock` nodes
+  - `RailConnection`, `SeaConnection`, `BusConnection` are now nodes instead of edges
+  - `AirFlight`, `RailConnection`, `SeaConnection`, `BusConnection` are now for only one direction and can no longer be for both
+    - `AirFlight` `code` is no longer unique. Two `AirFlight`s may have the same code, especially for return trips
+  - `AirGate` `size` replaced with `mode`
+  - two `AirGate` of the same `AirAirport` now not equivalent if codes are `None`
+  - `AirFlight` `mode` replaced with new `Aircraft` class
+  - `BusCompany`, `RailCompany`, `SeaCompany` `local` attribute moved to `BusLine`, `RailLine`, `SeaLine`
+  - added `duration` attribute to `RailConnection`, `SeaConnection`, `BusConnection`
+  - added `link` to `BusCompany`, `RailCompany`, `SeaCompany`
 
 ## v2.0.9+11 (20260105)
-* **Data v11**
-  * `SpawnWarp` new type: `traincarts`
+
+- **Data v11**
+  - `SpawnWarp` new type: `traincarts`
 
 ## v2.0.8+10 (20260103)
-* `gatelogue-types` (ts): fix even more `Sourced` types
-* 
+
+- `gatelogue-types` (ts): fix even more `Sourced` types
+-
+
 ## v2.0.7+10 (20260102)
-* `gatelogue-types` (ts): fix more `Sourced` types
-* 
+
+- `gatelogue-types` (ts): fix more `Sourced` types
+-
+
 ## v2.0.6+10 (20260102)
-* `gatelogue-types` (ts): fix connection types
-* `gatelogue-types` (ts): accept `number` ID in parameters
+
+- `gatelogue-types` (ts): fix connection types
+- `gatelogue-types` (ts): accept `number` ID in parameters
 
 ## v2.0.5+10 (20251115)
-* `gatelogue-types` (py): redo classing to fix inheritance lints
-* `gatelogue-aggregator`: improved downloader detects incomplete/empty files
+
+- `gatelogue-types` (py): redo classing to fix inheritance lints
+- `gatelogue-aggregator`: improved downloader detects incomplete/empty files
 
 ## v2.0.4+10 (20250621)
-* `gatelogue-aggregator`: temporary blank `code` field for `AirAirport`s
-* **Data v10**
-  * `AirAirport` `name` field changed to `names` so that multiple names can be attached to one code
+
+- `gatelogue-aggregator`: temporary blank `code` field for `AirAirport`s
+- **Data v10**
+  - `AirAirport` `name` field changed to `names` so that multiple names can be attached to one code
 
 ## v2.0.3+9 (20250601)
-* various refactors inside `gatelogue-aggregator`
-* `gatelogue-types` (ts): fix `stops` field inside `RailCompany`
-* **Data v9**
-  * `ref_stop`, `ref_station` removed from `BusLine`, `RailLine`, `SeaLine`
-  * they have been replaced with `stops` and `stations` which are all the stops/stations the line stops at
+
+- various refactors inside `gatelogue-aggregator`
+- `gatelogue-types` (ts): fix `stops` field inside `RailCompany`
+- **Data v9**
+  - `ref_stop`, `ref_station` removed from `BusLine`, `RailLine`, `SeaLine`
+  - they have been replaced with `stops` and `stations` which are all the stops/stations the line stops at
 
 ## v2.0.2+8 (20250505)
-* `gatelogue-types` (rs): fix `local` field missing in `SeaCompany` and extra in `AirAirline`
+
+- `gatelogue-types` (rs): fix `local` field missing in `SeaCompany` and extra in `AirAirline`
 
 ## v2.0.1+8 (20250501)
-* update documentation
-* various other fixes
+
+- update documentation
+- various other fixes
 
 ## v2.0.0+8 (20250501)
-* `gatelogue-aggregator` can be reasonably called stable
-* type format can be reasonably called stable
-* `gateloge-types` for ts, rs, py are stable
+
+- `gatelogue-aggregator` can be reasonably called stable
+- type format can be reasonably called stable
+- `gateloge-types` for ts, rs, py are stable

@@ -25,7 +25,7 @@ runs:
   steps:
     - id: mise-env
       shell: bash
-      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV"  # zizmor: ignore[github-env]
+      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV" # zizmor: ignore[github-env]
       env:
         ENVS: ${{ inputs.envs }}
 
@@ -39,7 +39,7 @@ runs:
       if: inputs.cache && contains(inputs.envs, 'rs')
       uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
       with:
-        workspaces: './gatelogue-types-rs -> target'
+        workspaces: "./gatelogue-types-rs -> target"
 
     - if: contains(inputs.envs, 'rs')
       run: mise install rust --force
@@ -53,4 +53,3 @@ runs:
           ~/.local/share/pnpm
           **/node_modules
         key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
