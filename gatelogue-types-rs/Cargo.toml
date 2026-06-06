@@ -33,7 +33,7 @@ ureq = { version = "=3.3.0", default-features = false, features = ["rustls"] }
 isahc = { version = "=2.0.0", default-features = false, features = ["http2", "static-curl", "native-tls-static"] }
 #attohttpc = { version = "0.30.1", default-features = false, features = ["tls-rustls-webpki-roots-ring"] }
 minreq = { version = "=3.0.0-rc.1" , features = ["https-native-tls"] }
-wreq = { version = "=6.0.0-rc.29", default-features = false, features = ["prefix-symbols"] }
+wreq = { version = "=6.0.0-rc.29", default-features = false, features = ["prefix-symbols", "tokio-rt"] }
 ehttp = { version = "=0.7.1", features = ["native-async"]}
 
 [lints.rust]
