@@ -36,8 +36,9 @@ jobs:
         if: github.event_name != 'push'
         with:
           commit-message: Python lock file maintenance
-          branch: python-lock-file-maintenance
-          title: Python lock file maintenance
+          branch: pylock-maintenance/${{ github.ref_name }}
+          title: Python lock file maintenance (${{ github.ref_name }})
+          delete-branch: true
       - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
         if: github.event_name == 'push'
         with:
