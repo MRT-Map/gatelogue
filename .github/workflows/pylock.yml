@@ -4,8 +4,8 @@ on:
   schedule:
     - cron: 0 0 * * 1
   workflow_dispatch:
-  # push:
-  #   branches: ["**"]
+  push:
+    branches: ["**"]
 
 jobs:
   python-lock:
