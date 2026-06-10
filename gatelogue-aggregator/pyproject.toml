@@ -117,3 +117,6 @@ ignore = [
 
 [tool.pyrefly.errors]
 bad-param-name-override = false
+
+[tool.uv]
+exclude-newer-package = "aiohttp=0 days"

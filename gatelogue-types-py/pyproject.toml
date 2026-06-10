@@ -106,3 +106,6 @@ ignore = [
 
 [tool.hatch.envs.hatch-check-types]
 features = ["dev"]
+
+[tool.uv]
+exclude-newer-package = "aiohttp=0 days"
