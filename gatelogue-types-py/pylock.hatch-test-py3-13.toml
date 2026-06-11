@@ -12,9 +12,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/5f/fc/a7bf5b6e4e617b4
 
 [[packages]]
 name = "aiohttp"
-version = "3.14.0"
-sdist = { url = "https://files.pythonhosted.org/packages/ee/ab/93ce242f899b68c51b0578c027aafa791ab3614cb9345fa5d37b5f5c8e3e/aiohttp-3.14.0.tar.gz", upload-time = 2026-06-01T19:41:02Z, size = 7940674, hashes = { sha256 = "2882de819734c715fd1b9c11c97e09fa020d14438203d1d354d8ed1702791c9b" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/c5/a3/3800dbd095cb2bb165a7ea5d94d790914677e27f45638c7d80e3f34c8945/aiohttp-3.14.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-06-01T19:38:52Z, size = 1777241, hashes = { sha256 = "26d9224c6dd7f5c749aba4f61315a894601448b28d94d12f4dea0903e26d2096" } }]
+version = "3.14.1"
+sdist = { url = "https://files.pythonhosted.org/packages/82/78/8ea7308cac6934de8c74a14f3d5f65d1c89287426688be79538d0e5c013d/aiohttp-3.14.1.tar.gz", upload-time = 2026-06-07T21:09:35Z, size = 7955794, hashes = { sha256 = "307f2cff90a764d329e77040603fa032db89c5c24fdad50c4c15334cba744035" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/9d/6e/dbf1d0625dc711fb2851f4f3c3055c39ed58bae92082d8c627dbe6013736/aiohttp-3.14.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-06-07T21:07:39Z, size = 1783881, hashes = { sha256 = "faccab372e66bc76d5731525e7f1143c922271725b9d38c9f97edcc66266b451" } }]
 
 [[packages]]
 name = "aiosignal"
