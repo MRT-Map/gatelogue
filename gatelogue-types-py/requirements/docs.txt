@@ -10,7 +10,7 @@
 # - niquests==3.19.0
 # - httpx==0.28.1
 # - urllib3==2.7.0
-# - aiohttp==3.14.0
+# - aiohttp==3.14.1
 # - rnet==3.0.0rc22
 #
 
@@ -20,7 +20,7 @@ aiohappyeyeballs==2.6.2 \
     # via
     #   -c requirements/default.txt
     #   aiohttp
-aiohttp==3.14.0 \
+aiohttp==3.14.1 \
     --hash=sha256:02cb2ffbb7da32f82e21ad9952669c45bd88a80e0878264c2f59fe1c6fb2badd \
     --hash=sha256:0746d9fb0ac4fdef643a84494efe3f06d50335dd8c7a530228b86448aae0a803 \
     --hash=sha256:076cb014191ae2e65d949e1ad01f1dcfe33e32789b5172510f3e79c79fc04d50 \
