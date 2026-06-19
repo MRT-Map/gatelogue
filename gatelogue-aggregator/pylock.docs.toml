@@ -235,9 +235,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/c2/42/4c8646762ee8360
 
 [[packages]]
 name = "sphinxcontrib-programoutput"
-version = "0.19"
-sdist = { url = "https://files.pythonhosted.org/packages/5b/c3/670084aead0328cb06d6802d6bd9e382f69e93e79a06c278a0447171a1ea/sphinxcontrib_programoutput-0.19.tar.gz", upload-time = 2026-02-20T19:17:42Z, size = 27534, hashes = { sha256 = "787ca068b7e1205ed492ea20a23a8e599c3b4edb8c43bacf564e5ec7c30c7dad" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/e7/90/c9d63522a83dd0cc488646179b31638799901d91e6ff856341fb3f31be9a/sphinxcontrib_programoutput-0.19-py3-none-any.whl", upload-time = 2026-02-20T19:17:40Z, size = 20818, hashes = { sha256 = "95ff4219ecee64bebf4fc6d2339cb1c2f313258b9999143e54839d83ae32afd1" } }]
+version = "0.20"
+sdist = { url = "https://files.pythonhosted.org/packages/1b/e5/0549d81b4144a1cc8464d368bd2d7a3482fd185399d9430c548978f13036/sphinxcontrib_programoutput-0.20.tar.gz", upload-time = 2026-06-16T15:55:52Z, size = 28235, hashes = { sha256 = "5c4282c1c7fc9b5a23febe16ae038b6392d7ce068d186ad4870ba22e74db0711" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/aa/02/bb155d4a570d7ceaf48e81f1412093ecf066437bfcb56f34c1407bf14f50/sphinxcontrib_programoutput-0.20-py3-none-any.whl", upload-time = 2026-06-16T15:55:51Z, size = 20722, hashes = { sha256 = "f473f9e7992879358efdeb9962fbec2103f6ba1cb6a738eb7f81dae554bc5ec7" } }]
 
 [[packages]]
 name = "sphinxcontrib-qthelp"
