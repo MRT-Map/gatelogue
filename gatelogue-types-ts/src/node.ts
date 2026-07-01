@@ -41,9 +41,10 @@ export abstract class Node {
     columnName: string,
   ): T[] {
     return this.gd
-      .execGetMany<
-        [T]
-      >(`SELECT DISTINCT "${columnName}" FROM ${tableName} WHERE i = ?`, [this.i])
+      .execGetMany<[T]>(
+        `SELECT DISTINCT "${columnName}" FROM ${tableName} WHERE i = ?`,
+        [this.i],
+      )
       .map(([a]) => a);
   }
   protected getDerived<T extends Node>(
