@@ -247,13 +247,13 @@ export class GD {
     }
   }
   get nodes(): Node[] {
-    return this.execGetMany<[number]>("SELECT i FROM Node").map(
-      ([i]) => Node.fromId(i, this)!,
+    return this.execGetMany<[number]>("SELECT i FROM Node").map(([i]) =>
+      Node.fromId(i, this)!,
     );
   }
   get locatedNodes(): LocatedNode[] {
-    return this.execGetMany<[number]>("SELECT i FROM NodeLocation").map(
-      ([i]) => LocatedNode.fromId(i, this)!,
+    return this.execGetMany<[number]>("SELECT i FROM NodeLocation").map(([i]) =>
+      LocatedNode.fromId(i, this)!,
     );
   }
   protected nodesByType(ty: string): ID[] {

@@ -1,11 +1,7 @@
 import { LocatedNode } from "./located.js";
 
 export type WarpType =
-  | "premier"
-  | "terminus"
-  | "traincarts"
-  | "portal"
-  | "misc";
+  "premier" | "terminus" | "traincarts" | "portal" | "misc";
 
 export class SpawnWarp extends LocatedNode {
   get name(): string {

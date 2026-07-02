@@ -3,10 +3,7 @@ import { LocatedNode } from "./located.js";
 import type { GD } from "./lib.js";
 
 export type AirMode =
-  | "helicopter"
-  | "seaplane"
-  | "warp plane"
-  | "traincarts plane";
+  "helicopter" | "seaplane" | "warp plane" | "traincarts plane";
 
 export class AirAirline extends Node {
   get name(): string {
