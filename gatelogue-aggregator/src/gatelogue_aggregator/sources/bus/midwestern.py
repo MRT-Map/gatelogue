@@ -6,5 +6,5 @@ from gatelogue_aggregator.sources.yaml2source import BusYaml2Source
 
 
 class Midwestern(BusYaml2Source):
-    name = "Gatelogue (Bus, Midwestern Bus Services)"
+    name = "Gatelogue (Bus, Midwestern Bus Lines)"
     file_path = Path(__file__).parent / "midwestern.yaml"
