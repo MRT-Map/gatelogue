@@ -8,7 +8,6 @@ world: "New"  # "New" or "Old"
 lines:
   - name: B808 Spring Valley-Ping Ping
     code: B808  # optional route code
-    colour: "#RRGGBB"  # optional, overrides company colour
     stations:
       - Spring Valley
       - Blackberry City
