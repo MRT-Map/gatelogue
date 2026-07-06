@@ -1,0 +1,28 @@
+company_name: Midwestern Bus Lines
+company_link: Midwestern Bus Lines  # optional link to wiki
+colour: "#4f8f00"  # optional hex color for your routes
+mode: "warp"  # or "traincarts" for traincarts-based buses
+local: true # set to true if it's a local/custom system
+world: "New"  # "New" or "Old"
+
+lines:
+  - name: B808 Spring Valley-Ping Ping
+    code: B808  # optional route code
+    colour: "#RRGGBB"  # optional, overrides company colour
+    stations:
+      - Spring Valley
+      - Blackberry City
+      - Bean City
+      - Lawrenceville
+      - Mojang Town
+      - Fujishima
+      - Ping Ping
+
+coords:
+  Spring Valley: [-8824, -3825]  # optional coordinates for each stop
+  Blackberry City: [-9823, -4131]
+  Bean City: [-12945, -4179]
+  Lawrenceville: [-15402, -4075]
+  Mojang Town: [-15882, -4058]
+  Fujishima: [-16262, -3962]
+  Ping Ping: [-18924, -3846]

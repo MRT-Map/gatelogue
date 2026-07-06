@@ -10,7 +10,8 @@ def SOURCES() -> list[type[BusSource]]:  # noqa: N802
     from gatelogue_aggregator.sources.bus.ccc import CCC  # noqa: PLC0415
     from gatelogue_aggregator.sources.bus.intrabus import IntraBus  # noqa: PLC0415
     from gatelogue_aggregator.sources.bus.intrabus_warp import IntraBusWarp  # noqa: PLC0415
+    from gatelogue_aggregator.sources.bus.midwestern import Midwestern  # noqa: PLC0415
     from gatelogue_aggregator.sources.bus.omegabus import IntraBusOmegaBus  # noqa: PLC0415
     from gatelogue_aggregator.sources.bus.seabeast_buses import SeabeastBuses  # noqa: PLC0415
 
-    return [CCC, IntraBus, IntraBusWarp, IntraBusOmegaBus, SeabeastBuses]
+    return [CCC, IntraBus, IntraBusWarp, IntraBusOmegaBus, Midwestern, SeabeastBuses]
