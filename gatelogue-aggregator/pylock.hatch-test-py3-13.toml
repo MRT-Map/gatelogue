@@ -67,10 +67,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/74/66/2bb344f34abb4b5
 
 [[packages]]
 name = "numpy"
-version = "2.5.0"
+version = "2.5.1"
 marker = "python_full_version < '3.14'"
-sdist = { url = "https://files.pythonhosted.org/packages/e7/05/3d27272d30698dc0ecb7fdfaa41ad70303b444f81722bb99bce1d818638a/numpy-2.5.0.tar.gz", upload-time = 2026-06-21T20:57:51Z, size = 20652461, hashes = { sha256 = "5a129578019311b6e56bdd714250f19b518f7dceeeb8d1af5490f4942d3f891c" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/32/4e/8d7656ccaab3e81e97258b8a9bc5f0c8502513a92fb4ceb0a2cbfebc17bf/numpy-2.5.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-06-21T20:56:51Z, size = 16647250, hashes = { sha256 = "3893adc2dc7c0412ba76777db55a049215d99c9aa3113003be8f49f4f1290ab9" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/22/fd/89965aa4ac08c74998539fcbf24fa3540f3e15237fbeb6bcf9c908f4aade/numpy-2.5.1.tar.gz", upload-time = 2026-07-04T17:08:00Z, size = 20755553, hashes = { sha256 = "a48a113e6afea91f5608793bafa7ef2ad481fefbda87ec5069f483de61cb9fa3" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ed/a7/2bcd3fdbb87804755c35b729bf8709d62025c5f4cfd7d5b2415997097515/numpy-2.5.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-04T17:06:52Z, size = 16661440, hashes = { sha256 = "9726558e8db4a5bf7929a70ae50f63abda4daf0efe810e3bfbab95976f75fc1a" } }]
 
 [[packages]]
 name = "packaging"
