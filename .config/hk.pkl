@@ -25,12 +25,14 @@ local formatters = new Mapping<String, Step> {
     ["hatch_format"] = (Builtins.ruff_format) {
         workspace_indicator = "pyproject.toml"
         check = "cd {{ workspace }} && hatch check fmt -- --force-exclude {{ workspace_files }}"
+        check_diff = "cd {{ workspace }} & hatch check fmt --fix -- --force-exclude --diff {{ workspace_files }}"
         fix = "cd {{ workspace }} && hatch check fmt --fix -- --force-exclude {{ workspace_files }}"
     }
     ["prettier"] = (Builtins.prettier) {
         depends = List("init")
         workspace_indicator = "package.json"
         check = "cd {{ workspace }} && pnpm run format:check {{ workspace_files }}"
+        check_list_files = null
         fix = "cd {{ workspace }} && pnpm run format {{ workspace_files }}"
     }
     ["cargo_fmt"] = Builtins.cargo_fmt
