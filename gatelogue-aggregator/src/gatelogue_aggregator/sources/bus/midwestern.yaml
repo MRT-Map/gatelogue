@@ -6,8 +6,8 @@ local: true # set to true if it's a local/custom system
 world: "New"  # "New" or "Old"
 
 lines:
-  - name: B808 Spring Valley-Ping Ping
-    code: B808  # optional route code
+  - name: B82 Spring Valley-Ping Ping
+    code: B82  # optional route code
     stations:
       - Spring Valley
       - Blackberry City
