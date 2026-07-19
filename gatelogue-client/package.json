@@ -29,7 +29,7 @@
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
     "@types/node": "24.13.3",
-    "@vitejs/plugin-vue": "6.0.7",
+    "@vitejs/plugin-vue": "6.0.8",
     "@vue/tsconfig": "0.9.1",
     "eslint": "10.7.0",
     "eslint-config-prettier": "10.1.8",
