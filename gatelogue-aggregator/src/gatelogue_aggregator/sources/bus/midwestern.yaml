@@ -16,6 +16,7 @@ lines:
       - Mojang Town
       - Fujishima
       - Ping Ping
+      - Oak Springs
 
 coords:
   Spring Valley: [-8824, -3825]  # optional coordinates for each stop
@@ -25,3 +26,4 @@ coords:
   Mojang Town: [-15882, -4058]
   Fujishima: [-16262, -3962]
   Ping Ping: [-18924, -3846]
+  Oak Springs: [-20037, -4149]
