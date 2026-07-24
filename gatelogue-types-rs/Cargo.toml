@@ -26,7 +26,7 @@ bundled = ["rusqlite/bundled"]
 default = ["bundled"]
 
 [dev-dependencies]
-tokio = { version = "=1.53.0", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "=1.53.1", features = ["rt-multi-thread", "macros"] }
 reqwest = { version = "=0.13.4", default-features = false, features = ["blocking", "rustls", "http2"]}
 #surf = { version = "=2.3.2", default-features = false, features = ["h1-client-rustls"] }
 ureq = { version = "=3.3.0", default-features = false, features = ["rustls"] }
