@@ -34,9 +34,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a
 
 [[packages]]
 name = "certifi"
-version = "2026.6.17"
-sdist = { url = "https://files.pythonhosted.org/packages/c9/c7/424b75da314c1045981bd9777432fad05a9e0c69daa4ed7e308bbaffe405/certifi-2026.6.17.tar.gz", upload-time = 2026-06-17T10:31:07Z, size = 134594, hashes = { sha256 = "024c88eeec92ca068db80f02b8b07c9cef7b9fe261d1d535abfd5abd6f6af432" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/ef/2f/c5464532e965badff2f4c4c1a3a83f5697f0d7c407ed0cda44aaa99bb451/certifi-2026.6.17-py3-none-any.whl", upload-time = 2026-06-17T10:31:06Z, size = 133289, hashes = { sha256 = "2227dcbaafe0d2f59279d1762ddddc37783ed4354594f194ffc31d20f41fc3db" } }]
+version = "2026.7.22"
+sdist = { url = "https://files.pythonhosted.org/packages/a3/c2/24167ea9858356b47a87a50d39908bfdb72ceeefe0041586e704e5376b3a/certifi-2026.7.22.tar.gz", upload-time = 2026-07-22T03:35:12Z, size = 138112, hashes = { sha256 = "741e2c3b351ddf169a738da9f2c048608ff7f2c5cc02f1ebc6b118bb090d5d55" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl", upload-time = 2026-07-22T03:35:11Z, size = 136983, hashes = { sha256 = "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775" } }]
 
 [[packages]]
 name = "charset-normalizer"
@@ -221,9 +221,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c527
 
 [[packages]]
 name = "urllib3-future"
-version = "2.22.901"
-sdist = { url = "https://files.pythonhosted.org/packages/c4/81/10f2b68f02f3fcfcd476c8839bee0a8121f0f6740326233755869236e2b6/urllib3_future-2.22.901.tar.gz", upload-time = 2026-07-09T06:35:05Z, size = 1306989, hashes = { sha256 = "fbece0ff51299a213c926897ffbed61d820ab5ef2ba81cece361c049fe2f51a9" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/88/d4/f2c424cec0a6911f53d3a8ece6198c94c428fc805270b681a465f43f20f1/urllib3_future-2.22.901-py3-none-any.whl", upload-time = 2026-07-09T06:35:03Z, size = 777228, hashes = { sha256 = "dc2d4572ba612be69e3f6db87d1f469b7d08f107e80fd8749081d7e6a5a2fe10" } }]
+version = "2.23.900"
+sdist = { url = "https://files.pythonhosted.org/packages/43/e0/b8d8e0a919fe2a0674a3193b42de9c56816341b85d69b5ef6af58a72710b/urllib3_future-2.23.900.tar.gz", upload-time = 2026-07-19T08:40:16Z, size = 1321689, hashes = { sha256 = "f488f22983f96cd8c733640b47e6a32def462d33c59bcc4bea6d97a8568b70c8" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/6f/d8/6deac579e5b9f658b4221ac0b732517df2225fff49630dc4aed6f5b105c1/urllib3_future-2.23.900-py3-none-any.whl", upload-time = 2026-07-19T08:40:15Z, size = 786724, hashes = { sha256 = "4303dc9a5d8c4c810f3fcd3b13bd62d69c3a4f63bb7e62089410907c34aeaf6b" } }]
 
 [[packages]]
 name = "wassima"
@@ -234,9 +234,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/d7/94/5ccf60801c01172
 
 [[packages]]
 name = "yarl"
-version = "1.24.2"
-sdist = { url = "https://files.pythonhosted.org/packages/79/12/1e8f37460ea0f7eb59c221fdaf0ed75e7ac43e97f8093b9c6f411df50a78/yarl-1.24.2.tar.gz", upload-time = 2026-05-19T21:31:05Z, size = 210798, hashes = { sha256 = "9ac374123c6fd7abf64d1fec93962b0bd4ee2c19751755a762a72dd96c0378f8" } }
+version = "1.24.5"
+sdist = { url = "https://files.pythonhosted.org/packages/31/33/ebe9e3d1f86c7a0b51094c0a146392045ca1631d2664889539dec8088a33/yarl-1.24.5.tar.gz", upload-time = 2026-07-20T02:07:45Z, size = 228679, hashes = { sha256 = "e81b83143bee16329c23db3c1b2d82b29892fcbcb849186d2f6e98a5abe9a57f" } }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/df/88/09c28dad91e662ccfaa1b78f1c57badde74fc9d0b23e74aef644750ecd73/yarl-1.24.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-05-19T21:29:36Z, size = 107012, hashes = { sha256 = "91e72cf093fd833483a97ee648e0c053c7c629f51ff4a0e7edd84f806b0c5617" } },
-    { url = "https://files.pythonhosted.org/packages/fd/4d/4b880086bd0d3e034d25647be1d830afc3e3f610e98c4ab3490af6b1b6d5/yarl-1.24.2-py3-none-any.whl", upload-time = 2026-05-19T21:31:03Z, size = 53576, hashes = { sha256 = "2783d9226db8797636cd6896e4de81feed252d1db72265686c9558d97a4d94b9" } },
+    { url = "https://files.pythonhosted.org/packages/0a/43/8e55ae7538ba5f28ccb3c845c6dd4549cf7016d5992e5326512519107cdd/yarl-1.24.5-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-20T02:06:13Z, size = 110574, hashes = { sha256 = "d46b86567dd4e248c6c159fcbcdcce01e0a5c8a7cd2334a0fff759d0fa075b16" } },
+    { url = "https://files.pythonhosted.org/packages/61/02/962c1cbfc401a30c1d034dc67ff395f64b52302c6d62de556c1fca99acc0/yarl-1.24.5-py3-none-any.whl", upload-time = 2026-07-20T02:07:43Z, size = 58612, hashes = { sha256 = "a33700d13d9b7d84fd10947b09ff69fb9a792e519c8cb9764a3ca70baa6c23a7" } },
 ]
