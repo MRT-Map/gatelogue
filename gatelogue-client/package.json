@@ -12,7 +12,7 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @microsoft/eslint-formatter-sarif --fix ${@:-src/}",
+    "lint:sarif": "eslint -f eslint-formatter-sarif --fix ${@:-.} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}",
     "prepare": "cd ../gatelogue-types-ts && pnpm i && pnpm run prepare"
@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
     "@types/node": "24.13.3",
@@ -33,6 +32,7 @@
     "@vue/tsconfig": "0.9.1",
     "eslint": "10.8.0",
     "eslint-config-prettier": "10.1.8",
+    "eslint-formatter-sarif": "github:iiiii7d/eslint-formatter-sarif",
     "eslint-plugin-vue": "10.10.0",
     "globals": "17.7.0",
     "npm-run-all2": "9.0.2",
