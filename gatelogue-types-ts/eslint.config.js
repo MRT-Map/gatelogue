@@ -35,5 +35,5 @@ export default tseslint.config(
     },
   },
   prettierConfig,
-  globalIgnores(["src/sql.ts"]),
+  globalIgnores(["src/sql.ts", "dist"]),
 );
