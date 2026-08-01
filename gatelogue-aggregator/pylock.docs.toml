@@ -188,9 +188,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/73/f7/b1884cb3188ab18
 
 [[packages]]
 name = "sphinx-codeautolink"
-version = "0.18.1"
-sdist = { url = "https://files.pythonhosted.org/packages/0b/d3/51a6f2d822621d1e4eaf575ad5139e3120db5a0f535d518c1c0c1b9fb828/sphinx_codeautolink-0.18.1.tar.gz", upload-time = 2026-04-30T10:22:26Z, size = 63342, hashes = { sha256 = "820b55f630298297b4f8f18d8825529f25895d3734ac7ac06584f62845c4fd4b" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/d4/4a/f46a675afd0479558bcaa867060fdf5c1c4647446f77f0e8447cd36298d3/sphinx_codeautolink-0.18.1-py3-none-any.whl", upload-time = 2026-04-30T10:22:24Z, size = 36936, hashes = { sha256 = "59592ae4548ce49a169d1bcded5d91f9b1d3190b8125615845af9ec5cc13c808" } }]
+version = "0.19.0"
+sdist = { url = "https://files.pythonhosted.org/packages/26/4e/92425c60359fa7b5b9ac0e0f1f788b86a89c4e65cf29139e1174e21e3adf/sphinx_codeautolink-0.19.0.tar.gz", upload-time = 2026-07-29T17:40:15Z, size = 65422, hashes = { sha256 = "abd8367831bb0b084ecad7b0a9b77f8458294e4468cadd5f37861da9b38e3e7e" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/fd/86/260d30033dbc48f8a0c37334159d56a1a731a7ce752d2803a6b5174e8731/sphinx_codeautolink-0.19.0-py3-none-any.whl", upload-time = 2026-07-29T17:40:13Z, size = 37671, hashes = { sha256 = "ebbaf815efee63cfdc5320a97ece7eb01af38f22ed404439bee520e9c8175605" } }]
 
 [[packages]]
 name = "sphinx-rtd-theme"
