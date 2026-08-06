@@ -34,7 +34,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-formatter-sarif": "github:iiiii7d/eslint-formatter-sarif",
     "eslint-plugin-vue": "10.10.0",
-    "globals": "17.8.0",
+    "globals": "17.9.0",
     "npm-run-all2": "9.0.3",
     "prettier": "3.9.6",
     "typescript": "6.0.3",
