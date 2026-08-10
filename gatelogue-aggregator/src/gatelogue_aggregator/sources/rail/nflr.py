@@ -129,6 +129,10 @@ class NFLR(RailSource):
                 r_builder.connect(until="Xterium North")
                 r_builder.skip(until="Weston East", detached=True)
                 r_builder.connect()
+            elif line_name == "R8":
+                r_builder.connect(until="New Essex City of York")
+                r_builder.skip(until="Rattlerville", detached=True)
+                r_builder.connect()
             elif line_name == "R13":
                 r_builder.connect(until="New Foresne Cinnameadow")
                 r_builder.skip(until="Lilygrove Union", detached=True)
