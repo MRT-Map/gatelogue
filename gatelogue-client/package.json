@@ -30,7 +30,7 @@
     "@types/node": "24.13.3",
     "@vitejs/plugin-vue": "6.0.8",
     "@vue/tsconfig": "0.9.1",
-    "eslint": "10.8.0",
+    "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-formatter-sarif": "github:iiiii7d/eslint-formatter-sarif",
     "eslint-plugin-vue": "10.10.0",
