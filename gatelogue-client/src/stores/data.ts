@@ -1,6 +1,6 @@
-import {type Ref, shallowRef} from "vue";
+import { type Ref, shallowRef } from "vue";
 import { BrowserGD } from "gatelogue-types";
-import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
+import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
 
 export const gd: Ref<BrowserGD | null> = shallowRef(null);
 
@@ -18,4 +18,4 @@ export const gd: Ref<BrowserGD | null> = shallowRef(null);
     CREATE INDEX NodeTypeIndex ON Node(type);
   `);
   gd.value = res;
-})()
+})();
