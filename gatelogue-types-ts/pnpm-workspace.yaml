@@ -1,3 +1,5 @@
 allowBuilds:
   better-sqlite3: true
 minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+  - '@_7d/eslint-formatter-sarif@1.0.1'

@@ -24,6 +24,9 @@ importers:
         specifier: 6.7.1
         version: 6.7.1(vue@3.5.41(typescript@6.0.3))
     devDependencies:
+      '@_7d/eslint-formatter-sarif':
+        specifier: 1.0.1
+        version: 1.0.1
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.8.1)
@@ -48,9 +51,6 @@ importers:
       eslint-config-prettier:
         specifier: 10.1.8
         version: 10.1.8(eslint@10.8.1)
-      eslint-formatter-sarif:
-        specifier: github:iiiii7d/eslint-formatter-sarif
-        version: https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a
       eslint-plugin-vue:
         specifier: 10.10.0
         version: 10.10.0(@typescript-eslint/parser@8.67.0(eslint@10.8.1)(typescript@6.0.3))(eslint@10.8.1)(vue-eslint-parser@10.4.1(eslint@10.8.1))
@@ -83,6 +83,9 @@ importers:
         version: 3.3.9(typescript@6.0.3)
 
 packages:
+
+  '@_7d/eslint-formatter-sarif@1.0.1':
+    resolution: {integrity: sha512-yjgWACoWSAafMjt1K6lFSp8EHhftqiyFe0tbhu7TibEmqs3XaDivb/JuriGBHcEYpLBK7pfPK4sZs49/hN5gWQ==}
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -749,10 +752,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
-
-  eslint-formatter-sarif@https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a:
-    resolution: {gitHosted: true, integrity: sha512-/IhnGVgmSGFCcs7Bd2a26OyJ4xinNpyjp2EZwuYbZkjm/sVZqDiIIBZzNtIDXVAiovOsl3bfeN5dYYlDmFXdDg==, tarball: https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a}
-    version: 1.0.0
 
   eslint-plugin-vue@10.10.0:
     resolution: {integrity: sha512-dL9x9rBHqqNcByWiLOHK6L0SB97V82/NC0cZRn9cXPjM7pCuWlpQQP9bFH4vjBv80ej1ZpzAkuD8zWH1o9bZbA==}
@@ -1473,6 +1472,8 @@ packages:
 
 snapshots:
 
+  '@_7d/eslint-formatter-sarif@1.0.1': {}
+
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -2169,8 +2170,6 @@ snapshots:
   eslint-config-prettier@10.1.8(eslint@10.8.1):
     dependencies:
       eslint: 10.8.1
-
-  eslint-formatter-sarif@https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a: {}
 
   eslint-plugin-vue@10.10.0(@typescript-eslint/parser@8.67.0(eslint@10.8.1)(typescript@6.0.3))(eslint@10.8.1)(vue-eslint-parser@10.4.1(eslint@10.8.1)):
     dependencies:

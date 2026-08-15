@@ -22,13 +22,15 @@
  * * pnpm: `pnpm add mrt-map/gatelogue#path:/gatelogue-types-ts`
  * * bun: `bun add 'git+https://gitpkg.vercel.app/mrt-map/gatelogue/gatelogue-types-ts?main'`
  *
+ * You will also require [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) if on browser and [better-sqlite3](https://www.npmjs.com/package/better-sqlite3) if on Node.
+ *
  * # Usage
  * To retrieve the data:
  * @example
  * ```ts
  * // if on a browser:
  * import { BrowserGD } from "gatelogue-types";
- * import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
+ * import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
  * const sqlite3 = await sqlite3InitModule();
  * const gd = await BrowserGD.get(sqlite3); // retrieve data, no sources
  * const gd = await BrowserGD.get(sqlite3, true); // retrieve data, with sources

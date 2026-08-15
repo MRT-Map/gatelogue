@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@_7d/eslint-formatter-sarif':
+        specifier: 1.0.1
+        version: 1.0.1
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.8.1)
@@ -18,7 +21,7 @@ importers:
         specifier: 2.0.8
         version: 2.0.8
       '@types/better-sqlite3':
-        specifier: ^9.6.0
+        specifier: 9.6.0
         version: 9.6.0
       '@types/sql.js':
         specifier: 1.4.11
@@ -29,9 +32,6 @@ importers:
       eslint-config-prettier:
         specifier: 10.1.8
         version: 10.1.8(eslint@10.8.1)
-      eslint-formatter-sarif:
-        specifier: github:iiiii7d/eslint-formatter-sarif
-        version: https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a
       npm-run-all2:
         specifier: 9.0.3
         version: 9.0.3
@@ -56,6 +56,9 @@ importers:
         version: 13.0.3
 
 packages:
+
+  '@_7d/eslint-formatter-sarif@1.0.1':
+    resolution: {integrity: sha512-yjgWACoWSAafMjt1K6lFSp8EHhftqiyFe0tbhu7TibEmqs3XaDivb/JuriGBHcEYpLBK7pfPK4sZs49/hN5gWQ==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -291,10 +294,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
-
-  eslint-formatter-sarif@https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a:
-    resolution: {gitHosted: true, integrity: sha512-/IhnGVgmSGFCcs7Bd2a26OyJ4xinNpyjp2EZwuYbZkjm/sVZqDiIIBZzNtIDXVAiovOsl3bfeN5dYYlDmFXdDg==, tarball: https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a}
-    version: 1.0.0
 
   eslint-scope@9.1.2:
     resolution: {integrity: sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ==}
@@ -600,6 +599,8 @@ packages:
 
 snapshots:
 
+  '@_7d/eslint-formatter-sarif@1.0.1': {}
+
   '@eslint-community/eslint-utils@4.10.1(eslint@10.8.1)':
     dependencies:
       eslint: 10.8.1
@@ -850,8 +851,6 @@ snapshots:
   eslint-config-prettier@10.1.8(eslint@10.8.1):
     dependencies:
       eslint: 10.8.1
-
-  eslint-formatter-sarif@https://codeload.github.com/iiiii7d/eslint-formatter-sarif/tar.gz/0fa167d1afe23b5c0be9093f4c4f36dbd7ef566a: {}
 
   eslint-scope@9.1.2:
     dependencies:
