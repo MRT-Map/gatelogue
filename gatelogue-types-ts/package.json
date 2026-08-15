@@ -57,7 +57,7 @@
     "@eslint/js": "10.0.1",
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.8",
-    "@types/better-sqlite3": "^9.6.0",
+    "@types/better-sqlite3": "9.6.0",
     "@types/sql.js": "1.4.11",
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
