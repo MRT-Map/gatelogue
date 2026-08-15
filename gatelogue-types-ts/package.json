@@ -1,6 +1,6 @@
 {
   "name": "gatelogue-types",
-  "version": "3.1.4-rc.4+13",
+  "version": "3.1.5+13",
   "license": "GPL-3.0-only",
   "author": {
     "name": "MRT Mapping Services",
@@ -49,8 +49,8 @@
     "tsconfig.json"
   ],
   "optionalDependencies": {
-    "@sqlite.org/sqlite-wasm": "3.53.0-build1",
-    "better-sqlite3": "13.0.3"
+    "@sqlite.org/sqlite-wasm": ">=3.41.2",
+    "better-sqlite3": "13.x"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
