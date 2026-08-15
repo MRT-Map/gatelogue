@@ -26,9 +26,18 @@
  * To retrieve the data:
  * @example
  * ```ts
- * import { GD } from "gatelogue-types";
- * const gd = await GD.get() // retrieve data, no sources
- * const gd = await GD.get(true) // retrieve data, with sources
+ * // if on a browser:
+ * import { BrowserGD } from "gatelogue-types";
+ * import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
+ * const sqlite3 = await sqlite3InitModule();
+ * const gd = await BrowserGD.get(sqlite3); // retrieve data, no sources
+ * const gd = await BrowserGD.get(sqlite3, true); // retrieve data, with sources
+ *
+ * // if on node:
+ * import { NodeGD } from "gatelogue-types";
+ * import Database from "better-sqlite3";
+ * const gd = await NodeGD.get(Database); // retrieve data, no sources
+ * const gd = await NodeGD.get(Database, true); // retrieve data, with sources
  * ```
  *
  * Using the ORM does not require SQL and makes for generally clean code.
@@ -367,6 +376,7 @@ export class BrowserGD extends GD {
       p,
       data.byteLength,
       data.byteLength,
+      // eslint-disable-next-line no-bitwise
       sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE |
         sqlite3.capi.SQLITE_DESERIALIZE_RESIZEABLE,
     );

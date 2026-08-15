@@ -6,7 +6,7 @@ export const gd: Ref<BrowserGD | null> = shallowRef(null);
 
 (async () => {
   const sqlite3 = await sqlite3InitModule();
-  const res = await BrowserGD.get(sqlite3);
+  const res = await BrowserGD.get(sqlite3, true);
   res.db.exec(`
     CREATE INDEX AirAirlineNameIndex ON AirAirline(name);
     CREATE INDEX AirFlightAirlineIndex ON AirFlight(airline);
