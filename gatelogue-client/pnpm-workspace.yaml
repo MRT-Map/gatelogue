@@ -3,5 +3,4 @@ allowBuilds:
 minimumReleaseAge: 4320
 minimumReleaseAgeStrict: false
 minimumReleaseAgeExclude:
-  # Renovate security update: vite@8.0.5
-  - vite@8.0.5
+  - '@_7d/eslint-formatter-sarif@1.0.1'

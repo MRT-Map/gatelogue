@@ -49,8 +49,8 @@ importers:
         version: 8.67.0(eslint@10.8.1)(typescript@6.0.3)
     optionalDependencies:
       '@sqlite.org/sqlite-wasm':
-        specifier: '>=3.41.2'
-        version: 3.41.2
+        specifier: 3.53.0-build1
+        version: 3.53.0-build1
       better-sqlite3:
         specifier: 13.x
         version: 13.0.3
@@ -137,9 +137,9 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
-  '@sqlite.org/sqlite-wasm@3.41.2':
-    resolution: {integrity: sha512-elKOYvLMzDDvKH28TF++iGPfqmsBBZG8iSCNo8lBSboSLCe+PBn3zwPO5NJRg9vojjMXVoRiifmBZ0IBdVBKjg==}
-    hasBin: true
+  '@sqlite.org/sqlite-wasm@3.53.0-build1':
+    resolution: {integrity: sha512-PfWPWN2n+/37doa8oh2/oUXk4OOsRYZsxc1W1sDXIGb/Pu5Yrb+f2eyYpgQMGITVX7HVgxhs9P18Rc6I97ym/g==}
+    engines: {node: '>=22'}
 
   '@total-typescript/tsconfig@1.0.4':
     resolution: {integrity: sha512-fO4ctMPGz1kOFOQ4RCPBRBfMy3gDn+pegUfrGyUFRMv/Rd0ZM3/SHH3hFCYG4u6bPLG8OlmOGcBLDexvyr3A5w==}
@@ -679,7 +679,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
-  '@sqlite.org/sqlite-wasm@3.41.2':
+  '@sqlite.org/sqlite-wasm@3.53.0-build1':
     optional: true
 
   '@total-typescript/tsconfig@1.0.4': {}

@@ -24,6 +24,7 @@
     "vue-tippy": "6.7.1"
   },
   "devDependencies": {
+    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
@@ -32,7 +33,6 @@
     "@vue/tsconfig": "0.9.1",
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
-    "@_7d/eslint-formatter-sarif": "1.0.1",
     "eslint-plugin-vue": "10.10.0",
     "globals": "17.11.0",
     "npm-run-all2": "9.0.3",

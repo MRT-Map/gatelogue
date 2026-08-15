@@ -49,10 +49,11 @@
     "tsconfig.json"
   ],
   "optionalDependencies": {
-    "@sqlite.org/sqlite-wasm": ">=3.41.2",
+    "@sqlite.org/sqlite-wasm": "3.53.0-build1",
     "better-sqlite3": "13.x"
   },
   "devDependencies": {
+    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.8",
@@ -60,7 +61,6 @@
     "@types/sql.js": "1.4.11",
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
-    "@_7d/eslint-formatter-sarif": "1.0.1",
     "npm-run-all2": "9.0.3",
     "prettier": "3.9.6",
     "typedoc": "0.28.20",
