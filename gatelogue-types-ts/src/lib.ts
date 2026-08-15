@@ -53,12 +53,6 @@
  * @packageDocumentation
  */
 
-import initSqlJs, {
-  type Database,
-  type SqlJsStatic,
-  type BindParams,
-  type SqlValue,
-} from "sql.js";
 import { type ID, Node } from "./node.js";
 import {
   AirAirline,
@@ -130,50 +124,17 @@ export {
   Proximity,
   type World,
 };
+import type NodeDatabase from "better-sqlite3";
+import type {Sqlite3Static, Database as BrowserDatabase, BindingSpec} from "@sqlite.org/sqlite-wasm";
 
-const URL =
-  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
-const URL_NO_SOURCES =
-  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db";
-
-export class GD {
-  db: Database;
-
-  constructor(SQL: SqlJsStatic, data: Uint8Array) {
-    this.db = new SQL.Database(data);
+export abstract class GD {
+  static async getData(sources = false): Promise<Uint8Array> {
+    return await fetch(sources ? URL : URL_NO_SOURCES).then((res) => res.bytes())
   }
 
-  static async getSQL(): Promise<SqlJsStatic> {
-    return typeof window === "undefined"
-      ? await initSqlJs()
-      : await initSqlJs({
-          locateFile: () => `https://sql.js.org/dist/sql-wasm.wasm`,
-        });
-  }
-
-  static async get(sources = false, SQL?: SqlJsStatic): Promise<GD> {
-    return new GD(
-      SQL ?? (await this.getSQL()),
-      await fetch(sources ? URL : URL_NO_SOURCES).then((res) => res.bytes()),
-    );
-  }
-
-  execGetZeroOrOne<T extends SqlValue[]>(
-    sql: string,
-    params?: BindParams,
-  ): T | null {
-    const result = this.db.exec(sql, params);
-    if (result.length === 0) return null;
-    return (result[0]!.values[0] ?? null) as T | null;
-  }
-  execGetOne<T extends SqlValue[]>(sql: string, params?: BindParams): T {
-    return this.db.exec(sql, params)[0]!.values[0]! as T;
-  }
-  execGetMany<T extends SqlValue[]>(sql: string, params?: BindParams): T[] {
-    const result = this.db.exec(sql, params);
-    if (result.length === 0) return [];
-    return result[0]!.values as T[];
-  }
+  abstract execGetZeroOrOne<T extends unknown[]>(sql: string, params?: unknown[]): T | null
+  abstract execGetOne<T extends unknown[]>(sql: string, params?: unknown[]): T
+  abstract execGetMany<T extends unknown[]>(sql: string, params?: unknown[]): T[]
 
   get timestamp(): string {
     return this.execGetOne<[string]>("SELECT timestamp FROM Metadata")[0]!;
@@ -331,5 +292,69 @@ export class GD {
   }
   get towns(): Town[] {
     return this.nodesByType("Town").map((i) => new Town(i, this));
+  }
+}
+
+
+const URL =
+  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data.db";
+const URL_NO_SOURCES =
+  "https://raw.githubusercontent.com/MRT-Map/gatelogue/refs/heads/dist/data-ns.db";
+
+export class NodeGD extends GD {
+  db: NodeDatabase.Database;
+
+  private constructor(data: Uint8Array, DatabaseConstructor: typeof NodeDatabase) {
+    super();
+    this.db = new DatabaseConstructor(Buffer.from(data))
+  }
+
+  static async get(dc: typeof NodeDatabase, sources = false): Promise<NodeGD> {
+    return new NodeGD(await GD.getData(sources), dc)
+  }
+
+  override execGetZeroOrOne<T extends unknown[]>(sql: string, params?: unknown[]): T | null {
+    return this.db.prepare<unknown[], T>(sql).raw(true).get(...(params ?? [])) ?? null
+  }
+
+  override execGetOne<T extends unknown[]>(sql: string, params?: unknown[]): T {
+    return this.execGetZeroOrOne<T>(sql, params)!
+  }
+
+  override execGetMany<T extends unknown[]>(sql: string, params?: unknown[]): T[] {
+    return this.db.prepare<unknown[], T>(sql).raw(true).all(...(params ?? []))
+  }
+}
+
+export class BrowserGD extends GD {
+  db: BrowserDatabase;
+
+  private constructor(data: Uint8Array, sqlite3: Sqlite3Static) {
+    super();
+    const p = sqlite3.wasm.allocFromTypedArray(data);
+    this.db = new sqlite3.oo1.DB(":memory:", "ct")
+    const rc = sqlite3.capi.sqlite3_deserialize(
+      this.db.pointer!, 'main', p, data.byteLength, data.byteLength,
+      sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE | sqlite3.capi.SQLITE_DESERIALIZE_RESIZEABLE
+    );
+    this.db.checkRc(rc)
+  }
+
+  static async get(sqlite3: Sqlite3Static, sources = false): Promise<BrowserGD> {
+    return new BrowserGD(await GD.getData(sources), sqlite3)
+  }
+
+  override execGetZeroOrOne<T extends unknown[]>(sql: string, params?: unknown[]): T | null {
+    const result = this.db.selectArray(sql, params as BindingSpec)
+    if (result === undefined) return null;
+    return result as T
+  }
+
+  override execGetOne<T extends unknown[]>(sql: string, params?: unknown[]): T {
+    return this.execGetZeroOrOne<T>(sql, params)!
+  }
+
+  override execGetMany<T extends unknown[]>(sql: string, params?: unknown[]): T[] {
+    return this.db.selectArrays(sql, params as BindingSpec) as T[]
   }
 }

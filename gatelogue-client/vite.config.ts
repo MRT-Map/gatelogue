@@ -15,4 +15,13 @@ export default defineConfig({
   define: {
     APP_VERSION: `'${process.env.npm_package_version as string}'`,
   },
+  server: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    }
+  },
+  optimizeDeps: {
+    exclude: ['@sqlite.org/sqlite-wasm'],
+  },
 });
