@@ -64,7 +64,9 @@ workspace.members = [
   { path = "../gatelogue-types-py", features = ["dev"] }
 ]
 workspace.parallel = true
-#python = "3.12"
+post-install-commands = [
+  "hatch run uv pip install -e . && hatch run uv pip install -e ../gatelogue-types-py",
+]
 
 [tool.hatch.envs.docs]
 extra-dependencies = [

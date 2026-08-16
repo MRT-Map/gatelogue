@@ -54,7 +54,9 @@ path = "src/gatelogue_types/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["dev"]
-#python = "3.12"
+post-install-commands = [
+  "hatch run uv pip install -e .",
+]
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
