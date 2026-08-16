@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "gatelogue-aggregator"
 dynamic = ["version"]
 description = ''
-readme = "../README.md"
+#readme = "../README.md"
 requires-python = ">=3.13"
 license = "GPL-3.0-only"
 keywords = ["gatelogue", "mrt", "minecart rapid transit"]
@@ -104,7 +104,7 @@ exclude_lines = [
 ]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.14", "3.14t", "3.13"]
+python = ["3.14", "3.13"]
 
 [tool.ruff.lint]
 ignore = [
@@ -117,6 +117,3 @@ ignore = [
 
 [tool.pyrefly.errors]
 bad-param-name-override = false
-
-[tool.uv]
-exclude-newer-package = "aiohttp=0 days"

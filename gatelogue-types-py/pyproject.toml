@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "gatelogue-types"
 dynamic = ["version"]
 description = "Types for loading and reading Gatelogue data"
-readme = "../README.md"
+#readme = "../README.md"
 requires-python = ">=3.13"
 license = "GPL-3.0-only"
 keywords = ["gatelogue", "mrt", "minecart rapid transit"]
@@ -89,7 +89,7 @@ features = ["dev"]
 default-args = ["tests/__init__.py"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.14", "3.14t", "3.13"]
+python = ["3.14", "3.13"]
 
 [tool.pytest.ini_options]
 pythonpath = [
