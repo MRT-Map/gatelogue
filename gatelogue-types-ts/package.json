@@ -48,9 +48,17 @@
     "dist",
     "tsconfig.json"
   ],
-  "optionalDependencies": {
+  "peerDependencies": {
     "@sqlite.org/sqlite-wasm": "3.53.0-build1",
     "better-sqlite3": "13.x"
+  },
+  "peerDependenciesMeta": {
+    "@sqlite.org/sqlite-wasm": {
+      "optional": true
+    },
+    "better-sqlite3": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@_7d/eslint-formatter-sarif": "1.0.1",

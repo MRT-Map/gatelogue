@@ -9,6 +9,7 @@ local init = new Group {
             check = "pnpm i && pnpm compile-sql"
         }
         ["init_client"] = new Step {
+            depends = List("init_types_ts")
             glob = "**/*"
             dir = "gatelogue-client"
             check = "pnpm i"

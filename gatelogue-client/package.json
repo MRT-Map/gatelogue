@@ -14,7 +14,8 @@
     "lint:fix": "eslint --fix ${@:-src/}",
     "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-.} || true",
     "format": "prettier --write ${@:-.}",
-    "format:check": "prettier --check ${@:-.}"
+    "format:check": "prettier --check ${@:-.}",
+    "prepare": "cd ../gatelogue-types-ts && run-p build"
   },
   "dependencies": {
     "gatelogue-types": "link:../gatelogue-types-ts",
