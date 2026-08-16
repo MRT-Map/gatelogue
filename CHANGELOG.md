@@ -6,8 +6,10 @@
 - convert SQL queries into views
 
 <!-- new -->
+## v3.1.4+13 (20260816)
+- `gatelogue-types`: replace `sql.js` with `better-sqlite3` and `@sqlite.org/sqlite-wasm`
 
-## v3.1.4-rc.4+13 (20260516)
+### v3.1.4-rc.4+13 (20260516)
 
 - final fixes
 

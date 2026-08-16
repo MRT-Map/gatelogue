@@ -6,7 +6,7 @@ local init = new Group {
         ["init_types_ts"] = new Step {
             glob = "**/*"
             dir = "gatelogue-types-ts"
-            check = "pnpm i && pnpm prepare"
+            check = "pnpm i && pnpm compile-sql"
         }
         ["init_client"] = new Step {
             depends = List("init_types_ts")

@@ -294,8 +294,7 @@ jobs:
           envs: "node"
           cache: false
 
-      - run: mv ../README.md .
-      - run: pnpm i
+      - run: pnpm i && pnpm prepublish
       - run: pnpm dlx "jsr@$JSR_VERSION" publish --allow-dirty
         env:
           # renovate: datasource=npm depName=jsr

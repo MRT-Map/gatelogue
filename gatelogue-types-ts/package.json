@@ -1,6 +1,6 @@
 {
   "name": "gatelogue-types",
-  "version": "3.1.4-rc.4+13",
+  "version": "3.1.4+13",
   "license": "GPL-3.0-only",
   "author": {
     "name": "MRT Mapping Services",
@@ -32,12 +32,11 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f eslint-formatter-sarif --fix ${@:-.} || true",
+    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-.} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}",
     "doc": "run-s compile-sql && typedoc src/lib.ts",
-    "prepare": "run-p build",
-    "prepublish": "cp ../README.md .",
+    "prepublish": "run-p build && cp ../README.md .",
     "postpublish": "rm ./README.md"
   },
   "types": "./dist/lib.d.ts",
@@ -49,22 +48,32 @@
     "dist",
     "tsconfig.json"
   ],
-  "dependencies": {
-    "sql.js": "^1.14.1"
+  "peerDependencies": {
+    "@sqlite.org/sqlite-wasm": "3.53.0-build1",
+    "better-sqlite3": "13.x"
+  },
+  "peerDependenciesMeta": {
+    "@sqlite.org/sqlite-wasm": {
+      "optional": true
+    },
+    "better-sqlite3": {
+      "optional": true
+    }
   },
   "devDependencies": {
+    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.8",
+    "@types/better-sqlite3": "9.6.0",
     "@types/sql.js": "1.4.11",
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
-    "eslint-formatter-sarif": "github:iiiii7d/eslint-formatter-sarif",
     "npm-run-all2": "9.0.3",
     "prettier": "3.9.6",
     "typedoc": "0.28.20",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.66.0"
+    "typescript-eslint": "8.67.0"
   },
   "packageManager": "pnpm@11.21.0+sha512.521705bce689924eac72f5a3587122f362689ef6571e55ba80076fd637c11132ecffada26fad4ea79c485bfddbfd3d5a2a5b05805a77e893de71ec8a6cca3bb1"
 }
