@@ -5,6 +5,7 @@ import re
 from typing import TYPE_CHECKING
 
 import pandas as pd
+import wikitextparser as wtp
 
 from gatelogue_aggregator.downloader import (
     get_csv,
@@ -823,99 +824,57 @@ class Cascadia(RegexWikiAirline):
 @AIRLINE_SOURCES.append
 class Waviation(AirSource):
     name = "MRT Wiki (Airline Waviation)"
-    html: bs4.BeautifulSoup
+    text: wtp.WikiText
 
     def prepare(self, config: Config):
-        self.html = get_wiki_html("Waviation", config)
+        self.text = wtp.parse(get_wiki_text("Waviation", config))
 
     def build(self, config: Config):
         airline = self.airline(name="Waviation", link=get_wiki_link("Waviation"))
 
-        for table in self.html("table"):
-            if (caption := table.find("caption")) is None or (
-                "(000s)" not in str(caption) and "(1000s)" not in str(caption)
-            ):
-                continue
+        flight_section = next(s for s in self.text.sections if "Plane Flights" in (s.title or ""))
+        heli_section = next(s for s in self.text.sections if "Heli Flights" in (s.title or ""))
+        for table in flight_section.tables + heli_section.tables:
+            if (match := re.search(r"\((.*?)s\)", table.caption or "")) is None:
+                raise ValueError(table)
+            series = match.group(1)
+            series_a1 = {
+                "300": "AIX",
+                "400": "LNT",
+                "500": "DJE",
+                "600": "NPR",
+                "1200": "BUH",
+            }.get(series)
 
-            if "(000s)" in str(caption) or "(2000s)" in str(caption):
-                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
-                    if "N/A" not in str(tr("td")[7]):
-                        continue
-                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
-                    a1: str = tr("td")[1].b.string  # pyrefly: ignore [missing-attribute]
-                    g1: str | None = tr("td")[2].string  # pyrefly: ignore [bad-assignment]
-                    a2: str = tr("td")[3].b.string  # pyrefly: ignore [missing-attribute]
-                    g2: str | None = tr("td")[4].string  # pyrefly: ignore [bad-assignment]
-                    if "XX" in g1:  # pyrefly: ignore [not-iterable]
-                        g1 = None
-                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
-                        g2 = None
-                    aircraft_name = tr("td")[5].string
-                    self.connect(
-                        airline=airline,
-                        flight_code1=code1,
-                        flight_code2=code2,
-                        airport1_code=a1,
-                        airport2_code=a2,
-                        gate1_code=g1,
-                        gate2_code=g2,
-                        aircraft_name=aircraft_name,
-                    )
-            elif "(1200s)" in str(caption):
-                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
-                    if "N/A" not in str(tr("td")[6]):
-                        continue
-                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
-                    a1: str = tr("td")[1].b.string  # pyrefly: ignore [missing-attribute]
-                    a2: str = tr("td")[2].b.string  # pyrefly: ignore [missing-attribute]
-                    g2: str | None = tr("td")[3].string
-                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
-                        g2 = None
-                    aircraft_name = tr("td")[4].string
-                    self.connect(
-                        airline=airline,
-                        flight_code1=code1,
-                        flight_code2=code2,
-                        airport1_code=a1,
-                        airport2_code=a2,
-                        gate1_code=None,
-                        gate2_code=g2,
-                        aircraft_name=aircraft_name,
-                    )
-            else:
-                a1: str | None = (  # pyrefly: ignore [redefinition]
-                    "AIX"
-                    if "(300s)" in str(caption)
-                    else "LNT"
-                    if "(400s)" in str(caption)
-                    else "DJE"
-                    if "(500s)" in str(caption)
-                    else "NPR"
-                    if "(600s)" in str(caption)
-                    else None
-                )
-                if a1 is None:
+            data = table.data()
+            df = pd.DataFrame(data[1:], columns=[(a or "").replace("\n", "") for a in data[0]])
+
+            for _, row in df.iterrows():
+                if "N/A" not in row["Ending / Suspension Date"]:
                     continue
-
-                for tr in table.tbody("tr")[1:]:  # pyrefly: ignore [not-callable]
-                    if "N/A" not in str(tr("td")[6]):
-                        continue
-                    code1, code2 = tr("td")[0].string.split("/")  # pyrefly: ignore [missing-attribute]
-                    g1: str | None = tr("td")[1].string
-                    a2: str = tr("td")[2].b.string  # pyrefly: ignore [missing-attribute]
-                    g2: str | None = tr("td")[3].string
-                    if "XX" in g1:  # pyrefly: ignore [not-iterable]
-                        g1 = None
-                    if "XX" in g2:  # pyrefly: ignore [not-iterable]
-                        g2 = None
-                    aircraft_name = tr("td")[4].string
-                    self.connect(
-                        airline=airline,
-                        flight_code1=code1,
-                        flight_code2=code2,
-                        airport1_code=a1,
-                        airport2_code=a2,
-                        gate1_code=g1,
-                        gate2_code=g2,
-                        aircraft_name=aircraft_name,
-                    )
+                if (match := re.search(r"(\d+) ?/ ?(\d+)", row["Flight Number"])) is None:
+                    raise ValueError(row)
+                code1, code2 = match.group(1), match.group(2)
+                a1 = series_a1 or wtp.parse(row["Starting Point (Odd) / Destination (Even)"]).get_bolds()[0].text
+                g1: str | None = None if series == "1200" else row["Gate"].iloc[0]
+                if "XX" in (g1 or ""):
+                    g1 = None
+                a2 = (
+                    wtp.parse(row["Starting Point (Even) / Destination (Odd)" if series_a1 is None else "Destination"])
+                    .get_bolds()[0]
+                    .text
+                )
+                g2: str | None = row["Gate"].iloc[1]
+                if "XX" in (g2 or ""):
+                    g1 = None
+                aircraft_name: str = row["Aircraft"]
+                self.connect(
+                    airline=airline,
+                    flight_code1=code1,
+                    flight_code2=code2,
+                    airport1_code=a1,
+                    airport2_code=a2,
+                    gate1_code=g1,
+                    gate2_code=g2,
+                    aircraft_name=aircraft_name,
+                )
