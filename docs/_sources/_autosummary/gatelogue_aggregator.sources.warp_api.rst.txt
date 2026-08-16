@@ -19,8 +19,10 @@ gatelogue\_aggregator.sources.warp\_api
       :toctree:                                          
       :template: custom-class-template.rst               
    
+      Pagination
       Warp
       WarpAPI
+      WarpAPIResult
    
    
 

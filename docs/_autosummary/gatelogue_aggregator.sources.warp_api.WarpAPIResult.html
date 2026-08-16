@@ -6,13 +6,13 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gatelogue_aggregator.sources.warp_api &mdash; gatelogue-aggregator 3.1.4 documentation</title>
+  <title>gatelogue_aggregator.sources.warp_api.WarpAPIResult &mdash; gatelogue-aggregator 3.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
 
   
-    <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.sources.warp_api.html" />
+    <link rel="canonical" href="https://mrt-map.github.io/gatelogue/docs/_autosummary/gatelogue_aggregator.sources.warp_api.WarpAPIResult.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=21631f0b"></script>
@@ -21,8 +21,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="gatelogue_aggregator.sources.warp_api.Pagination" href="gatelogue_aggregator.sources.warp_api.Pagination.html" />
-    <link rel="prev" title="gatelogue_aggregator.sources.town.TownList" href="gatelogue_aggregator.sources.town.TownList.html" /> 
+    <link rel="next" title="gatelogue_aggregator.sources.yaml2source" href="gatelogue_aggregator.sources.yaml2source.html" />
+    <link rel="prev" title="gatelogue_aggregator.sources.warp_api.WarpAPI" href="gatelogue_aggregator.sources.warp_api.WarpAPI.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,7 +67,7 @@
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.sea.html">gatelogue_aggregator.sources.sea</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.spawn_warp.html">gatelogue_aggregator.sources.spawn_warp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.town.html">gatelogue_aggregator.sources.town</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">gatelogue_aggregator.sources.warp_api</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.html">gatelogue_aggregator.sources.warp_api</a></li>
 <li class="toctree-l4"><a class="reference internal" href="gatelogue_aggregator.sources.yaml2source.html">gatelogue_aggregator.sources.yaml2source</a></li>
 </ul>
 </li>
@@ -95,9 +95,10 @@
           <li class="breadcrumb-item"><a href="../reference.html">Reference</a></li>
           <li class="breadcrumb-item"><a href="gatelogue_aggregator.html">gatelogue_aggregator</a></li>
           <li class="breadcrumb-item"><a href="gatelogue_aggregator.sources.html">gatelogue_aggregator.sources</a></li>
-      <li class="breadcrumb-item active">gatelogue_aggregator.sources.warp_api</li>
+          <li class="breadcrumb-item"><a href="gatelogue_aggregator.sources.warp_api.html">gatelogue_aggregator.sources.warp_api</a></li>
+      <li class="breadcrumb-item active">gatelogue_aggregator.sources.warp_api.WarpAPIResult</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/_autosummary/gatelogue_aggregator.sources.warp_api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/_autosummary/gatelogue_aggregator.sources.warp_api.WarpAPIResult.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -105,33 +106,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-gatelogue_aggregator.sources.warp_api">
-<span id="gatelogue-aggregator-sources-warp-api"></span><h1>gatelogue_aggregator.sources.warp_api<a class="headerlink" href="#module-gatelogue_aggregator.sources.warp_api" title="Link to this heading"></a></h1>
-<p class="rubric">Classes</p>
+  <section id="gatelogue-aggregator-sources-warp-api-warpapiresult">
+<h1>gatelogue_aggregator.sources.warp_api.WarpAPIResult<a class="headerlink" href="#gatelogue-aggregator-sources-warp-api-warpapiresult" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.warp_api.WarpAPIResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gatelogue_aggregator.sources.warp_api.</span></span><span class="sig-name descname"><span class="pre">WarpAPIResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pagination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Pagination.html#gatelogue_aggregator.sources.warp_api.Pagination" title="gatelogue_aggregator.sources.warp_api.Pagination"><span class="pre">Pagination</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Warp.html#gatelogue_aggregator.sources.warp_api.Warp" title="gatelogue_aggregator.sources.warp_api.Warp"><span class="pre">Warp</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.warp_api.WarpAPIResult.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Pagination.html#gatelogue_aggregator.sources.warp_api.Pagination" title="gatelogue_aggregator.sources.warp_api.Pagination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pagination</span></code></a>(limit, offset, hits, total_hits)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Warp.html#gatelogue_aggregator.sources.warp_api.Warp" title="gatelogue_aggregator.sources.warp_api.Warp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Warp</span></code></a>(id, name, player_uuid, world_uuid, x, ...)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.WarpAPI.html#gatelogue_aggregator.sources.warp_api.WarpAPI" title="gatelogue_aggregator.sources.warp_api.WarpAPI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WarpAPI</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.WarpAPIResult.html#gatelogue_aggregator.sources.warp_api.WarpAPIResult" title="gatelogue_aggregator.sources.warp_api.WarpAPIResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WarpAPIResult</span></code></a>(pagination, result)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.__init__" title="gatelogue_aggregator.sources.warp_api.WarpAPIResult.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.pagination" title="gatelogue_aggregator.sources.warp_api.WarpAPIResult.pagination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pagination</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.result" title="gatelogue_aggregator.sources.warp_api.WarpAPIResult.result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">result</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.warp_api.WarpAPIResult.pagination">
+<span class="sig-name descname"><span class="pre">pagination</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Pagination.html#gatelogue_aggregator.sources.warp_api.Pagination" title="gatelogue_aggregator.sources.warp_api.Pagination"><span class="pre">Pagination</span></a></span><a class="headerlink" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.pagination" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gatelogue_aggregator.sources.warp_api.WarpAPIResult.result">
+<span class="sig-name descname"><span class="pre">result</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gatelogue_aggregator.sources.warp_api.Warp.html#gatelogue_aggregator.sources.warp_api.Warp" title="gatelogue_aggregator.sources.warp_api.Warp"><span class="pre">Warp</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#gatelogue_aggregator.sources.warp_api.WarpAPIResult.result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="gatelogue_aggregator.sources.town.TownList.html" class="btn btn-neutral float-left" title="gatelogue_aggregator.sources.town.TownList" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="gatelogue_aggregator.sources.warp_api.Pagination.html" class="btn btn-neutral float-right" title="gatelogue_aggregator.sources.warp_api.Pagination" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gatelogue_aggregator.sources.warp_api.WarpAPI.html" class="btn btn-neutral float-left" title="gatelogue_aggregator.sources.warp_api.WarpAPI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gatelogue_aggregator.sources.yaml2source.html" class="btn btn-neutral float-right" title="gatelogue_aggregator.sources.yaml2source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
