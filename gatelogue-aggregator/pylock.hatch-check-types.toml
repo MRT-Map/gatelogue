@@ -157,6 +157,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd77
 wheels = [{ url = "https://files.pythonhosted.org/packages/88/f9/16491d7ed2a919954993e48aa941b200f38040928474c9e85ea9e64222c3/pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2025-09-25T21:32:40Z, size = 794175, hashes = { sha256 = "c458b6d084f9b935061bc36216e8a69a7e293a2f1e68bf956dcd9e6cbcd143f5" } }]
 
 [[packages]]
+name = "regex"
+version = "2026.7.19"
+sdist = { url = "https://files.pythonhosted.org/packages/20/98/04b13f1ddfb63158025291c02e03eb42fbb7acb51d091d541050eb4e35e8/regex-2026.7.19.tar.gz", upload-time = 2026-07-19T00:19:48Z, size = 416440, hashes = { sha256 = "7e77b324909c1617cbb4c668677e2c6ae13f44d7c1de0d4f15f2e3c10f3315b5" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/14/71/986ceea9aa3da548bf1357cad89b63915ec6d21ec957c8113b29ece567df/regex-2026.7.19-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-19T00:18:51Z, size = 801275, hashes = { sha256 = "7322ec6cc9fba9d49ab888bb82d67ac5625627aa168f0165139b17018df3fb8a" } }]
+
+[[packages]]
 name = "rich"
 version = "15.0.0"
 sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", upload-time = 2026-04-12T08:24:00Z, size = 230680, hashes = { sha256 = "edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36" } }
@@ -185,3 +191,15 @@ name = "typing-extensions"
 version = "4.16.0"
 sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", upload-time = 2026-07-02T08:40:05Z, size = 113555, hashes = { sha256 = "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5" } }
 wheels = [{ url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", upload-time = 2026-07-02T08:40:04Z, size = 45571, hashes = { sha256 = "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8" } }]
+
+[[packages]]
+name = "wcwidth"
+version = "0.8.2"
+sdist = { url = "https://files.pythonhosted.org/packages/34/74/c6428f875774288bec1396f5bfcbc2d925700a4dad61727fd5f2b12f249d/wcwidth-0.8.2.tar.gz", upload-time = 2026-06-29T18:11:11Z, size = 1466253, hashes = { sha256 = "91fbef97204b96a3d4d421609b80340b760cf33e26da123ff243d76b1fda8dda" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/96/42/3e5985a0a7e57de470b320c6d6a1a67c844f6737a587f3d44dd13d1819e7/wcwidth-0.8.2-py3-none-any.whl", upload-time = 2026-06-29T18:11:09Z, size = 323166, hashes = { sha256 = "d63947694a0539a1d51e01eda7caf800c291020e6cdd7e28ad7b14dd33ad4f85" } }]
+
+[[packages]]
+name = "wikitextparser"
+version = "1.0.3"
+sdist = { url = "https://files.pythonhosted.org/packages/bf/d0/3b3a5d2fc818ac4f03e0477ebaf0053814c58e854370de6247601faf777c/wikitextparser-1.0.3.tar.gz", upload-time = 2026-07-31T16:35:48Z, size = 52133, hashes = { sha256 = "613c60b1a383244cd5296434c5b258c5de50b58e329cdaa32b3bd149c5d384a6" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b5/c7/9063283928842a644412696b08c49d10a7d710ba7485b279f38be96848ad/wikitextparser-1.0.3-py3-none-any.whl", upload-time = 2026-07-31T16:35:45Z, size = 61529, hashes = { sha256 = "65e7f45bcb8c16a0e3cf380bbde3e1dc0d60e4ce46601cc5f474ae630cf76231" } }]

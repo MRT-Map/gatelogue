@@ -1,6 +1,8 @@
 import datetime
 from collections.abc import Iterator
-from typing import ClassVar, TypedDict
+from concurrent.futures import ThreadPoolExecutor
+from math import ceil
+from typing import ClassVar
 from uuid import UUID
 
 import gatelogue_types as gt
@@ -41,6 +43,18 @@ class Warp(msgspec.Struct):
         )
 
 
+class Pagination(msgspec.Struct):
+    limit: int
+    offset: int
+    hits: int
+    total_hits: int
+
+
+class WarpAPIResult(msgspec.Struct):
+    pagination: Pagination
+    result: list[Warp]
+
+
 class WarpAPI:
     warps: ClassVar[list[Warp]] = []
 
@@ -52,16 +66,18 @@ class WarpAPI:
             return
 
         with progress_bar(INFO1, "Downloading warps from MRT Warp API"):
-            offset = 0
-            while True:
-                ls = msgspec.json.decode(
-                    get_url(cls.LINK + f"?offset={offset}", "mrt-api/" + str(offset), config),
-                    type=TypedDict("", {"pagination": dict, "result": list[Warp]}),  # pyrefly: ignore [not-callable]
-                )["result"]
-                if len(ls) == 0:
-                    break
-                cls.warps.extend(ls)
-                offset += len(ls)
+            init_result = msgspec.json.decode(get_url(cls.LINK, "mrt-api/0", config), type=WarpAPIResult)
+            cls.warps.extend(init_result.result)
+            with ThreadPoolExecutor(max_workers=ceil(config.max_workers / 4)) as executor:
+                for result in executor.map(
+                    lambda offset: msgspec.json.decode(
+                        get_url(cls.LINK + f"?offset={offset}", "mrt-api/" + str(offset), config), type=WarpAPIResult
+                    ),
+                    range(
+                        init_result.pagination.limit, init_result.pagination.total_hits, init_result.pagination.limit
+                    ),
+                ):
+                    cls.warps.extend(result.result)
 
     @classmethod
     def from_user(cls, uuid: str | UUID) -> Iterator[Warp]:

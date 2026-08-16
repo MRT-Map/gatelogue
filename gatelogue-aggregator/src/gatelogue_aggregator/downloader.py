@@ -53,7 +53,7 @@ def _get_url(
         response = SESSION.get(url, timeout=timedelta(seconds=config.timeout), headers=headers)
 
         if response.status.as_int() >= 400 or (empty_is_error and response.text == ""):
-            rich.print(ERROR + f"Received {response.status} error from {url}:\n{response.text}")
+            rich.print(ERROR + f"Received {response.status} error from {url}:\n{response.text()}")
             if response.status.as_int() in (408, 429):
                 with COOLDOWN_LOCK:
                     COOLDOWN[netloc] = time.time() + DEFAULT_COOLDOWN
