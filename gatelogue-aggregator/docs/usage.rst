@@ -24,7 +24,7 @@ gatelogue-types (Rust)
 See `the docs for gatelogue-types (Rust) <https://mrt-map.github.io/gatelogue/docs/rs>`_.
 
 gatelogue-types (TypeScript)
-++++++++++
+++++++++++++++++++++++++++++
 See `the docs for gatelogue-types (TypeScript) <https://mrt-map.github.io/gatelogue/docs/ts>`_.
 
 Aggregator
