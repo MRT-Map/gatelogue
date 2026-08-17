@@ -6,7 +6,7 @@ local: true # set to true if it's a local/custom system
 world: "New"  # "New" or "Old"
 
 lines:
-  - name: B82 Spring Valley-Ping Ping
+  - name: B82 Spring Valley-Karna
     code: B82  # optional route code
     stations:
       - Spring Valley
@@ -18,6 +18,16 @@ lines:
       - Ping Ping
       - Oak Springs
       - Karna
+  - name: B76 Chan Bay-Nekomura
+    code: B76
+    stations:
+      - Chan Bay
+      - Nekomura
+  - name: B682 New Singapore-Frostgrave
+    code: B682
+    stations:
+      - New Singapore
+      - Frostgrave
 
 coords:
   Spring Valley: [-8824, -3825]  # optional coordinates for each stop
@@ -29,3 +39,7 @@ coords:
   Ping Ping: [-18924, -3846]
   Oak Springs: [-20037, -4149]
   Karna: [-20710, -3689]
+  Chan Bay: [-17646, 4999]
+  Nekomura: [-17669, 6548]
+  New Singapore: [-22672, 14124]
+  Frostgrave: [-17812, 14553]
