@@ -40,11 +40,12 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec21
 
 [[packages]]
 name = "charset-normalizer"
-version = "3.4.9"
-sdist = { url = "https://files.pythonhosted.org/packages/bd/2a/23f34ec9d04624958e137efdc394888716353190e75f25dd22c7a2c7a8aa/charset_normalizer-3.4.9.tar.gz", upload-time = 2026-07-07T14:34:58Z, size = 152439, hashes = { sha256 = "673611bbd43f0810bec0b0f028ddeaaa501190339cac411f347ac76917c3ae7b" } }
+version = "3.5.0"
+sdist = { url = "https://files.pythonhosted.org/packages/cb/31/4971872b3ed8715346231fb6eb4da8fcba65a4143c189db151ee28a2812b/charset_normalizer-3.5.0.tar.gz", upload-time = 2026-08-12T14:35:31Z, size = 169295, hashes = { sha256 = "49bd5feb59b0bf3cbf6ebcf4352e371c95b9da9bacd4449f8b64d0ad2c10a26e" } }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/f8/72eb13dcabe7257035cea8aefd922caad2f110d252bf9f67c4c2ca763aee/charset_normalizer-3.4.9-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-07T14:33:41Z, size = 223149, hashes = { sha256 = "84fd18bcc17526fc2b3c1af7d2b9217d32c9c04448c16ec693b9b4f1985c3d33" } },
-    { url = "https://files.pythonhosted.org/packages/98/2b/f97f1c193fb855c345d678f5077d6926034db0722df74c8f057020e05a25/charset_normalizer-3.4.9-py3-none-any.whl", upload-time = 2026-07-07T14:34:56Z, size = 64538, hashes = { sha256 = "68e5f26a1ad57ded6d1cfb85331d1c1a195314756471d97758c48498bb4dcdf5" } },
+    { url = "https://files.pythonhosted.org/packages/3a/6a/5b964a1eb0f9075ecd45083eeb21aaec215334f98bac3d400302ea73875d/charset_normalizer-3.5.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-08-12T14:32:59Z, size = 249853, hashes = { sha256 = "3b08ebf9488c7ff5eff038e48e6ea938178dfd9dcc8598b5ca941e4ae27b20be" } },
+    { url = "https://files.pythonhosted.org/packages/f0/de/fc68978fe78ca97063c96d764e41ff92ca639948f319271e0ff450e577a2/charset_normalizer-3.5.0-cp37-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl", upload-time = 2026-08-12T14:34:46Z, size = 251862, hashes = { sha256 = "a864bdcacd8bff58bb4845304e031f821a3ec64b2b7259f2d409cd49c9e59ca3" } },
+    { url = "https://files.pythonhosted.org/packages/22/c7/754d09943a616937df61e4ba367c409ded2a987e872972098d51a6fcf73b/charset_normalizer-3.5.0-py3-none-any.whl", upload-time = 2026-08-12T14:35:30Z, size = 67943, hashes = { sha256 = "993dfcbe75a85a3784abb5084f2c41b915767c90546fcc92803cffa28611baea" } },
 ]
 
 [[packages]]
