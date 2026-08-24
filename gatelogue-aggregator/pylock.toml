@@ -16,9 +16,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d2
 
 [[packages]]
 name = "gatelogue-types"
-version = "3.1.3"
-sdist = { url = "https://files.pythonhosted.org/packages/96/be/04d880cf3bae0f432ff729db67a13b892d89c2282cfafbf1c8c151646fce/gatelogue_types-3.1.3.tar.gz", upload-time = 2026-05-14T16:47:41Z, size = 163409, hashes = { sha256 = "858c644f5cb4585529d67201506f540924cfc506bed41c82036735c931529362" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/02/89/3d879d1ec90487b329178a6cabbe3ac0be6ea575d1a2c43cc88162c5710b/gatelogue_types-3.1.3-py3-none-any.whl", upload-time = 2026-05-14T16:47:40Z, size = 42019, hashes = { sha256 = "42625461bc5108b5e72bb793f5a05fa94e94db83b0a821c490391c0781899f5f" } }]
+version = "3.1.4"
+sdist = { url = "https://files.pythonhosted.org/packages/d0/98/ba8253c389ea6ed90b032d2115a4bb515d252d485ad1b27ff571dfa7ebc1/gatelogue_types-3.1.4.tar.gz", upload-time = 2026-08-15T18:40:53Z, size = 73444, hashes = { sha256 = "68ac1b4e2856044fea32495d9ca2fae370fca4ded3a79529096e5018dd5728e0" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/78/8e/fe64f5fe1bc2755d96b098c6a3b688283649270e1853e84dfd03cb4a41e3/gatelogue_types-3.1.4-py3-none-any.whl", upload-time = 2026-08-15T18:40:51Z, size = 42003, hashes = { sha256 = "9fd035e4ec4428a0287adcb635ea265ec727796030259016e8ec5d2db479f78e" } }]
 
 [[packages]]
 name = "markdown-it-py"
@@ -59,9 +59,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/5c/44/c85361f65dbe00e
 
 [[packages]]
 name = "pygments"
-version = "2.20.0"
-sdist = { url = "https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522fdcebac55e66de6603a76a02bca1b6414f6c/pygments-2.20.0.tar.gz", upload-time = 2026-03-29T13:29:33Z, size = 4955991, hashes = { sha256 = "6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl", upload-time = 2026-03-29T13:29:30Z, size = 1231151, hashes = { sha256 = "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176" } }]
+version = "2.21.0"
+sdist = { url = "https://files.pythonhosted.org/packages/49/2e/ced460408999b33da6b31b0021b0f37d329e202d4169aeb164493778f25b/pygments-2.21.0.tar.gz", upload-time = 2026-08-17T08:02:48Z, size = 5005329, hashes = { sha256 = "610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/71/46/17f022dd3e953bf20a04a028a21ec746d942f8d2af30fa0f124fa0e6a684/pygments-2.21.0-py3-none-any.whl", upload-time = 2026-08-17T08:02:44Z, size = 1250147, hashes = { sha256 = "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9" } }]
 
 [[packages]]
 name = "python-dateutil"
