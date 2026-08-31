@@ -228,16 +228,16 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c527
 
 [[packages]]
 name = "urllib3-future"
-version = "2.24.902"
-sdist = { url = "https://files.pythonhosted.org/packages/3b/63/4070c8eb2231a39efc5a6fa3409a5f42ceb0418678e1e194d5d65795e29d/urllib3_future-2.24.902.tar.gz", upload-time = 2026-08-19T16:49:41Z, size = 1376218, hashes = { sha256 = "bf042f130103f62048cdce3b62a16a1bb992618cd406bb0bd2c29e1abc948153" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/75/d1/a9fe403ad50ac44b31344c3b346945b06dcd945f3c6cd5649c54030935a6/urllib3_future-2.24.902-py3-none-any.whl", upload-time = 2026-08-19T16:49:39Z, size = 813055, hashes = { sha256 = "ffd2b1c88b4b37fea20b7a6013860d09d11af3b6da043996738c9256da9e3677" } }]
+version = "2.24.904"
+sdist = { url = "https://files.pythonhosted.org/packages/f0/71/13dd9927c0b165ee42f6f04f2a5abe3837a185b4fec9503d39aee939d1e4/urllib3_future-2.24.904.tar.gz", upload-time = 2026-08-24T14:46:12Z, size = 1384369, hashes = { sha256 = "0850f6c829b9fa83da83cbf67499a24fa63f5828b68c2c090649b930783d33a7" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/d5/a6/32b467808b459ae5d250bd1193f9f04bce19dc8dfd77e0dc1a42850d944f/urllib3_future-2.24.904-py3-none-any.whl", upload-time = 2026-08-24T14:46:10Z, size = 817748, hashes = { sha256 = "b1b3062457ee7fe330a5aeba76cd063e2bfcb9c8c8579213e5c7dad4e069e7e4" } }]
 
 [[packages]]
 name = "wassima"
-version = "2.1.3"
+version = "2.1.4"
 marker = "sys_platform != 'emscripten'"
-sdist = { url = "https://files.pythonhosted.org/packages/53/a1/714674b53d3a57013730187e027e291c652a25db053e02236798bec49d61/wassima-2.1.3.tar.gz", upload-time = 2026-07-24T18:36:21Z, size = 140075, hashes = { sha256 = "fcd6c38be0f909c393da35cb2a993101fcdcff673b8fa8d5da228f73b630d0d0" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/af/a2/4c8cd0dddfe40a779739afab2f09e84286bea37cdb73c7b1c12b4990ff12/wassima-2.1.3-py3-none-any.whl", upload-time = 2026-07-24T18:36:19Z, size = 131416, hashes = { sha256 = "f8251c23720dd092117a554b3012756caee3feed6d0122c2458a2aca5d7d92c5" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/5f/92/fe256733440f7c36084ce924f373fbbf709277ddf92262b2295e8caf26d5/wassima-2.1.4.tar.gz", upload-time = 2026-08-27T06:15:48Z, size = 143472, hashes = { sha256 = "21bb77253bb8032c05393172c4d2df395f423b7e704538f3b2407f50c032034d" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/56/1d/032b95952208fa3e623d54efb650bf0a134e2a02e7400b36c63363c27b74/wassima-2.1.4-py3-none-any.whl", upload-time = 2026-08-27T06:15:47Z, size = 134348, hashes = { sha256 = "26022272d4618aada0e26df2e79dbc0e034be8be9d6d5396512690ffc6a94e7b" } }]
 
 [[packages]]
 name = "yarl"
