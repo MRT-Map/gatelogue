@@ -37,7 +37,7 @@ wreq = { version = "=6.0.0-rc.31", default-features = false, features = ["prefix
 ehttp = { version = "=0.7.1", features = ["native-async"]}
 
 [lints.rust]
-future-incompatible = "deny"
+future_incompatible = "deny"
 
 [lints.clippy]
 all = "warn"
