@@ -50,6 +50,6 @@ jobs:
     needs: update
     permissions:
       contents: write
-    uses: ./.github/workflows/trigger-map.yml
+    uses: $/.github/workflows/trigger-map.yml
     secrets:
       PAT: ${{ secrets.PAT }}
