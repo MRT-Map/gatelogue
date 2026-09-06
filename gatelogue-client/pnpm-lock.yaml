@@ -113,7 +113,7 @@ importers:
         specifier: 3.53.0-build1
         version: 3.53.0-build1
       gatelogue-types:
-        specifier: link:../gatelogue-types-ts
+        specifier: workspace:../gatelogue-types-ts
         version: link:../gatelogue-types-ts
       vue:
         specifier: 3.5.42
