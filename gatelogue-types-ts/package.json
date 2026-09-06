@@ -32,7 +32,7 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-.} || true",
+    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-src/} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}",
     "doc": "run-s compile-sql && typedoc src/lib.ts",
