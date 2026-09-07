@@ -12,12 +12,12 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-.} || true",
+    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-src/} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}"
   },
   "dependencies": {
-    "gatelogue-types": "link:../gatelogue-types-ts",
+    "gatelogue-types": "workspace:../gatelogue-types-ts",
     "@sqlite.org/sqlite-wasm": "3.53.0-build1",
     "vue": "3.5.42",
     "vue-router": "5.3.1",
@@ -44,5 +44,5 @@
     "vue-eslint-parser": "10.4.1",
     "vue-tsc": "3.3.11"
   },
-  "packageManager": "pnpm@11.25.0"
+  "packageManager": "pnpm@12.3.1"
 }
