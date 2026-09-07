@@ -141,9 +141,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/88/f9/16491d7ed2a9199
 
 [[packages]]
 name = "regex"
-version = "2026.7.19"
-sdist = { url = "https://files.pythonhosted.org/packages/20/98/04b13f1ddfb63158025291c02e03eb42fbb7acb51d091d541050eb4e35e8/regex-2026.7.19.tar.gz", upload-time = 2026-07-19T00:19:48Z, size = 416440, hashes = { sha256 = "7e77b324909c1617cbb4c668677e2c6ae13f44d7c1de0d4f15f2e3c10f3315b5" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/14/71/986ceea9aa3da548bf1357cad89b63915ec6d21ec957c8113b29ece567df/regex-2026.7.19-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-19T00:18:51Z, size = 801275, hashes = { sha256 = "7322ec6cc9fba9d49ab888bb82d67ac5625627aa168f0165139b17018df3fb8a" } }]
+version = "2026.9.3"
+sdist = { url = "https://files.pythonhosted.org/packages/19/c1/6b30b775c7bcc6cf6506a4d4741c2123e8d99cd50f3fe8cbd731f5fef526/regex-2026.9.3.tar.gz", upload-time = 2026-09-01T00:53:43Z, size = 416720, hashes = { sha256 = "aabd43208e335f4c3f0b56de3464b066dd425983a58f6eeb5738bcd7465403db" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/89/e3/f6bcb26472873b9308df329f507d9c6cb526e3f9aed847498f153f2b7539/regex-2026.9.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-01T00:51:35Z, size = 801375, hashes = { sha256 = "6f64c66b3b13758b4f8f56f17972cd0ce5d0033d19d7332ed32e2dbdbce94dec" } }]
 
 [[packages]]
 name = "requests"
@@ -267,9 +267,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c527
 
 [[packages]]
 name = "wcwidth"
-version = "0.8.2"
-sdist = { url = "https://files.pythonhosted.org/packages/34/74/c6428f875774288bec1396f5bfcbc2d925700a4dad61727fd5f2b12f249d/wcwidth-0.8.2.tar.gz", upload-time = 2026-06-29T18:11:11Z, size = 1466253, hashes = { sha256 = "91fbef97204b96a3d4d421609b80340b760cf33e26da123ff243d76b1fda8dda" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/96/42/3e5985a0a7e57de470b320c6d6a1a67c844f6737a587f3d44dd13d1819e7/wcwidth-0.8.2-py3-none-any.whl", upload-time = 2026-06-29T18:11:09Z, size = 323166, hashes = { sha256 = "d63947694a0539a1d51e01eda7caf800c291020e6cdd7e28ad7b14dd33ad4f85" } }]
+version = "0.8.3"
+sdist = { url = "https://files.pythonhosted.org/packages/36/57/ed58088fafdf4c55a0ad6bde846502567645424d7ebf325230b9237f4085/wcwidth-0.8.3.tar.gz", upload-time = 2026-08-28T18:10:06Z, size = 1458450, hashes = { sha256 = "d128512515fbf4612e0ff21fd6380399210318b7b54a9af59dff8454cf9730eb" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/c4/0e/57f6bb3024a597b2e8ec4aee710ffe62ddc95af2e2bb1ee7a7abdc22c68c/wcwidth-0.8.3-py3-none-any.whl", upload-time = 2026-08-28T18:10:04Z, size = 331669, hashes = { sha256 = "d5b73dba6158a595ec9370350e7f2637bcac8d6c5e4fde34f30fcffb6103a5e4" } }]
 
 [[packages]]
 name = "wikitextparser"
