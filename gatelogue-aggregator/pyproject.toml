@@ -35,7 +35,7 @@ dependencies = [
   "rich==15.0.0",
   "rnet==3.0.0rc22",
   "BeautifulSoup4==4.15.0",
-  "wikitextparser==1.0.3",
+  "wikitextparser==2.0.0",
   "pillow==12.3.0",
   "pyyaml==6.0.3"
 ]
