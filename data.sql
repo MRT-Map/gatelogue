@@ -7,7 +7,7 @@ CREATE TABLE Metadata
     has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
-INSERT INTO Metadata VALUES(13,'2026-09-14T02:23:57.099354+00:00',1);
+INSERT INTO Metadata VALUES(13,'2026-09-14T06:40:19.459828+00:00',1);
 CREATE TABLE Source
 (
     priority INTEGER PRIMARY KEY,
@@ -125658,9 +125658,9 @@ INSERT INTO AirAirportNamesSource VALUES(25,'Chalxior Femtoprism Airfield',59);
 INSERT INTO AirAirportNamesSource VALUES(50,'Chan Bay Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(65,'Carnoustie International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(29,'Woodsdale Municipal Airport',59);
+INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(34,'UCWTIA',59);
 INSERT INTO AirAirportNamesSource VALUES(34,'UCWT International Airport',59);
-INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(212,'Cyra Underwood Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(144,'Dabecco Regional Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(147,'Deadbush International Airport',59);
@@ -189957,8 +189957,8 @@ INSERT INTO RailStationCodes VALUES(64546,'K205');
 INSERT INTO RailStationCodes VALUES(64546,'K307');
 INSERT INTO RailStationCodes VALUES(64547,'K308');
 INSERT INTO RailStationCodes VALUES(64547,'K204');
-INSERT INTO RailStationCodes VALUES(64548,'K103');
 INSERT INTO RailStationCodes VALUES(64548,'K305');
+INSERT INTO RailStationCodes VALUES(64548,'K103');
 INSERT INTO RailStationCodes VALUES(64549,'C100');
 INSERT INTO RailStationCodes VALUES(64549,'K607');
 INSERT INTO RailStationCodes VALUES(64551,'K100');
@@ -190444,8 +190444,8 @@ INSERT INTO RailStationCodes VALUES(68339,'AMW');
 INSERT INTO RailStationCodes VALUES(68341,'WCA');
 INSERT INTO RailStationCodes VALUES(68342,'SPL');
 INSERT INTO RailStationCodes VALUES(68377,'WAL');
-INSERT INTO RailStationCodes VALUES(68791,'SPC');
 INSERT INTO RailStationCodes VALUES(68791,'SP');
+INSERT INTO RailStationCodes VALUES(68791,'SPC');
 INSERT INTO RailStationCodes VALUES(68792,'TFC');
 INSERT INTO RailStationCodes VALUES(68801,'BNS');
 INSERT INTO RailStationCodes VALUES(68802,'RVC');
@@ -192879,8 +192879,8 @@ INSERT INTO RailStationCodes VALUES(75569,'RWT');
 INSERT INTO RailStationCodes VALUES(75570,'PSC');
 INSERT INTO RailStationCodes VALUES(75571,'HZC');
 INSERT INTO RailStationCodes VALUES(75571,'N213');
-INSERT INTO RailStationCodes VALUES(75572,'N214');
 INSERT INTO RailStationCodes VALUES(75572,'FRG');
+INSERT INTO RailStationCodes VALUES(75572,'N214');
 INSERT INTO RailStationCodes VALUES(75573,'SHV');
 INSERT INTO RailStationCodes VALUES(75575,'AKN');
 INSERT INTO RailStationCodes VALUES(75576,'KNX');
@@ -193015,10 +193015,10 @@ INSERT INTO RailStationCodes VALUES(76815,'PSO');
 INSERT INTO RailStationCodes VALUES(76879,'N102');
 INSERT INTO RailStationCodes VALUES(76880,'N103');
 INSERT INTO RailStationCodes VALUES(76881,'N300');
-INSERT INTO RailStationCodes VALUES(76881,'N203');
 INSERT INTO RailStationCodes VALUES(76881,'N104');
-INSERT INTO RailStationCodes VALUES(76882,'N105');
+INSERT INTO RailStationCodes VALUES(76881,'N203');
 INSERT INTO RailStationCodes VALUES(76882,'N202');
+INSERT INTO RailStationCodes VALUES(76882,'N105');
 INSERT INTO RailStationCodes VALUES(76898,'N200');
 INSERT INTO RailStationCodes VALUES(76899,'N201');
 INSERT INTO RailStationCodes VALUES(76902,'N204');
