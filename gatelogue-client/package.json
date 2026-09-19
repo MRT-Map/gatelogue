@@ -21,7 +21,7 @@
     "@sqlite.org/sqlite-wasm": "3.53.0-build1",
     "vue": "3.5.42",
     "vue-router": "5.3.1",
-    "vue-tippy": "6.7.1"
+    "vue-tippy": "6.8.0"
   },
   "devDependencies": {
     "@_7d/eslint-formatter-sarif": "1.0.1",
