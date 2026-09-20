@@ -1,13 +1,13 @@
 company_name: Midwestern Bus Lines
-company_link: Midwestern Bus Lines  # optional link to wiki
-colour: "#4f8f00"  # optional hex color for your routes
-mode: "warp"  # or "traincarts" for traincarts-based buses
+company_link: Midwestern Bus Lines # optional link to wiki
+colour: "#4f8f00" # optional hex color for your routes
+mode: "warp" # or "traincarts" for traincarts-based buses
 local: true # set to true if it's a local/custom system
-world: "New"  # "New" or "Old"
+world: "New" # "New" or "Old"
 
 lines:
   - name: B82 Spring Valley-Karna
-    code: B82  # optional route code
+    code: B82 # optional route code
     stations:
       - Spring Valley
       - Blackberry City
@@ -28,9 +28,18 @@ lines:
     stations:
       - New Singapore
       - Frostgrave
+  - name: A360 Western Trunk
+    code: A360
+    stations:
+      - Refuge
+      - Oaksfield
+      - Ainville
+      - Vellverth
+      - Lamont
+      - Thornhill
 
 coords:
-  Spring Valley: [-8824, -3825]  # optional coordinates for each stop
+  Spring Valley: [-8824, -3825] # optional coordinates for each stop
   Blackberry City: [-9823, -4131]
   Bean City: [-12945, -4179]
   Lawrenceville: [-15402, -4075]
@@ -43,3 +52,11 @@ coords:
   Nekomura: [-17669, 6548]
   New Singapore: [-22672, 14124]
   Frostgrave: [-17812, 14553]
+  Avalovnia: [-27909, -5647]
+  Refuge: [-20295, 14372]
+  Oaksfield: [-19419, -12809]
+  Ainville: [-22916, -9202]
+  Vellverth: [-22664, -8445]
+  Lamont: [-23083, -5718]
+  Thornhill: [-26614, -1763]
+  Blackshore: [-21835, -2691]
