@@ -19,7 +19,7 @@
   "dependencies": {
     "gatelogue-types": "workspace:../gatelogue-types-ts",
     "@sqlite.org/sqlite-wasm": "3.53.0-build1",
-    "vue": "3.5.42",
+    "vue": "3.5.43",
     "vue-router": "5.3.1",
     "vue-tippy": "6.8.0"
   },
