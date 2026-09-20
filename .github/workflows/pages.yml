@@ -19,6 +19,10 @@ jobs:
           envs: "node"
 
       - run: |
+          cd gatelogue-types-ts
+          pnpm i
+
+      - run: |
           cd gatelogue-client
           pnpm i
           pnpm run build
