@@ -7,7 +7,7 @@ CREATE TABLE Metadata
     has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
-INSERT INTO Metadata VALUES(13,'2026-09-21T02:06:20.151980+00:00',0);
+INSERT INTO Metadata VALUES(13,'2026-09-21T02:28:43.356049+00:00',0);
 CREATE TABLE Node
 (
     i    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61392,8 +61392,8 @@ INSERT INTO AirAirportNames VALUES(237,'Scotstounhill Airfield');
 INSERT INTO AirAirportNames VALUES(238,'Miningstone Regional Airport');
 INSERT INTO AirAirportNames VALUES(239,'Stanley Island Regional Airport');
 INSERT INTO AirAirportNames VALUES(240,'Riverside Airport');
-INSERT INTO AirAirportNames VALUES(26524,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(26524,'Essex Municipal Helport');
+INSERT INTO AirAirportNames VALUES(26524,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(26526,'Las Playas Seaplane Port');
 INSERT INTO AirAirportNames VALUES(26530,'Titsensaki Seaplane Terminal');
 INSERT INTO AirAirportNames VALUES(26540,'Shenghua Seaplane Terminal');
@@ -98069,10 +98069,10 @@ INSERT INTO RailStationCodes VALUES(75694,'CHL');
 INSERT INTO RailStationCodes VALUES(75695,'IDK');
 INSERT INTO RailStationCodes VALUES(75696,'RWT');
 INSERT INTO RailStationCodes VALUES(75697,'PSC');
-INSERT INTO RailStationCodes VALUES(75698,'N213');
 INSERT INTO RailStationCodes VALUES(75698,'HZC');
-INSERT INTO RailStationCodes VALUES(75699,'FRG');
+INSERT INTO RailStationCodes VALUES(75698,'N213');
 INSERT INTO RailStationCodes VALUES(75699,'N214');
+INSERT INTO RailStationCodes VALUES(75699,'FRG');
 INSERT INTO RailStationCodes VALUES(75700,'SHV');
 INSERT INTO RailStationCodes VALUES(75702,'AKN');
 INSERT INTO RailStationCodes VALUES(75703,'KNX');
@@ -98209,8 +98209,8 @@ INSERT INTO RailStationCodes VALUES(77007,'N103');
 INSERT INTO RailStationCodes VALUES(77008,'N104');
 INSERT INTO RailStationCodes VALUES(77008,'N300');
 INSERT INTO RailStationCodes VALUES(77008,'N203');
-INSERT INTO RailStationCodes VALUES(77009,'N105');
 INSERT INTO RailStationCodes VALUES(77009,'N202');
+INSERT INTO RailStationCodes VALUES(77009,'N105');
 INSERT INTO RailStationCodes VALUES(77025,'N200');
 INSERT INTO RailStationCodes VALUES(77026,'N201');
 INSERT INTO RailStationCodes VALUES(77029,'N204');
