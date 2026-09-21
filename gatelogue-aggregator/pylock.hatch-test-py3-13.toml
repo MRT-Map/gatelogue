@@ -80,9 +80,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/63/34/ba1c580383c9ead
 
 [[packages]]
 name = "pandas"
-version = "3.0.5"
-sdist = { url = "https://files.pythonhosted.org/packages/be/4f/5f3422a2afec5ffc46308b79e53291365a93748b498ac2e58bead0197916/pandas-3.0.5.tar.gz", upload-time = 2026-07-22T22:19:28Z, size = 4658219, hashes = { sha256 = "dca3734d6ab7c906e6730f0788b0a1dbb9f2467731f9711f77995c8e9d62d712" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/e3/70/4363150359f95b4cb4bcbb34ca23572bb5495749a621a8f3d5a1ddfd293c/pandas-3.0.5-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-22T22:18:36Z, size = 10938525, hashes = { sha256 = "4b11c36e218331d0387cbe3a0a5f75162357a1d92d57b2b08a336ff94b19b2be" } }]
+version = "3.0.6"
+sdist = { url = "https://files.pythonhosted.org/packages/e2/17/d7b106e05bfa642e8694451e7d3d759c6a241c5386a5d962e4f66c047e06/pandas-3.0.6.tar.gz", upload-time = 2026-09-17T23:23:18Z, size = 4667686, hashes = { sha256 = "66b07ef7315a31bfe1089cd3d71a7de781c9dca986762d0b4fe7c0ef17465d10" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/50/fa/96d50e1e6cd0b08b5e2b7c838f65ae644940f75a124063380b5ef73b6866/pandas-3.0.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-17T23:21:25Z, size = 10757657, hashes = { sha256 = "1e92d9fa834c7d877130027cddc0cad8dcff97c1f6cca26bd6310f847228b658" } }]
 
 [[packages]]
 name = "pillow"
