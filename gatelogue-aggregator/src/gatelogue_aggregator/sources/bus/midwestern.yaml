@@ -15,6 +15,7 @@ lines:
       - Lawrenceville
       - Mojang Town
       - Fujishima
+      - Cypress
       - Ping Ping
       - Oak Springs
       - Karna
@@ -60,3 +61,4 @@ coords:
   Lamont: [-23083, -5718]
   Thornhill: [-26614, -1763]
   Blackshore: [-21835, -2691]
+  Cypress: [-17772, -3803]
