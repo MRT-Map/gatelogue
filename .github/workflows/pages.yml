@@ -21,6 +21,7 @@ jobs:
       - run: |
           cd gatelogue-types-ts
           pnpm i
+          pnpm run build
 
       - run: |
           cd gatelogue-client
