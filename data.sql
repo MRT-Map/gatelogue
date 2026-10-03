@@ -7,7 +7,7 @@ CREATE TABLE Metadata
     has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
-INSERT INTO Metadata VALUES(13,'2026-10-03T02:20:41.788327+00:00',1);
+INSERT INTO Metadata VALUES(13,'2026-10-03T02:55:25.546852+00:00',1);
 CREATE TABLE Source
 (
     priority INTEGER PRIMARY KEY,
@@ -125956,9 +125956,9 @@ INSERT INTO AirAirportNamesSource VALUES(26,'Chalxior Femtoprism Airfield',59);
 INSERT INTO AirAirportNamesSource VALUES(50,'Chan Bay Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(65,'Carnoustie International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(29,'Woodsdale Municipal Airport',59);
-INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
-INSERT INTO AirAirportNamesSource VALUES(34,'UCWT International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(34,'UCWTIA',59);
+INSERT INTO AirAirportNamesSource VALUES(34,'UCWT International Airport',59);
+INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(215,'Cyra Underwood Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(144,'Dabecco Regional Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(148,'Deadbush International Airport',59);
@@ -193382,8 +193382,8 @@ INSERT INTO RailStationCodes VALUES(75678,'RWT');
 INSERT INTO RailStationCodes VALUES(75679,'PSC');
 INSERT INTO RailStationCodes VALUES(75680,'HZC');
 INSERT INTO RailStationCodes VALUES(75680,'N213');
-INSERT INTO RailStationCodes VALUES(75681,'N214');
 INSERT INTO RailStationCodes VALUES(75681,'FRG');
+INSERT INTO RailStationCodes VALUES(75681,'N214');
 INSERT INTO RailStationCodes VALUES(75682,'SHV');
 INSERT INTO RailStationCodes VALUES(75684,'AKN');
 INSERT INTO RailStationCodes VALUES(75685,'KNX');
