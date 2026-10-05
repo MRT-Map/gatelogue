@@ -77,9 +77,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/88/f9/16491d7ed2a9199
 
 [[packages]]
 name = "regex"
-version = "2026.9.10"
-sdist = { url = "https://files.pythonhosted.org/packages/b9/5c/f403115361de25809e8f785686ec7096e30fef73be9ae35aa51da4e80abb/regex-2026.9.10.tar.gz", upload-time = 2026-09-09T21:00:21Z, size = 417072, hashes = { sha256 = "1e321e2c84f0e52c457f5ea5944f796d6e8e09cb99738ea98dcc1bfe402a128d" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/bb/64/9b56f69100d3afdbc9c4fa6e302764f9cb717fbc06a9d50558d98ca89cd2/regex-2026.9.10-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-09T20:58:15Z, size = 803694, hashes = { sha256 = "05fb018cfe7144585fc83882405906ff84994a2d154afc2509ecc7752c51f864" } }]
+version = "2026.9.29"
+sdist = { url = "https://files.pythonhosted.org/packages/fc/f2/af1da9d3ceed77bfcdce40427d49ba0be94e4fe84245e3bfef68c10e75b6/regex-2026.9.29.tar.gz", upload-time = 2026-09-29T00:49:58Z, size = 419199, hashes = { sha256 = "8b5fcc4771732191b2b7d1dd68d8f0353f47f8d90b6150f6dce58bf1112442cb" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/a9/4d/041d9458a645fee4fce4d642a89d27271a3cfcd91095104f6dde44da70bf/regex-2026.9.29-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-29T00:47:47Z, size = 807176, hashes = { sha256 = "2f7f7aa47b229f2b39a2ae2596d2ad5625d77b5eb9856fac2dab3eb506cdd0a0" } }]
 
 [[packages]]
 name = "rich"
