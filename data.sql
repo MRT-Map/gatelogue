@@ -7,7 +7,7 @@ CREATE TABLE Metadata
     has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
-INSERT INTO Metadata VALUES(13,'2026-10-09T02:31:40.496538+00:00',1);
+INSERT INTO Metadata VALUES(13,'2026-10-09T03:40:36.531615+00:00',1);
 CREATE TABLE Source
 (
     priority INTEGER PRIMARY KEY,
@@ -124433,8 +124433,8 @@ INSERT INTO AirAirportNames VALUES(237,'True City Metropolitan');
 INSERT INTO AirAirportNames VALUES(238,'Miningstone Regional Airport');
 INSERT INTO AirAirportNames VALUES(239,'Stanley Island Regional Airport');
 INSERT INTO AirAirportNames VALUES(240,'Riverside Airport');
-INSERT INTO AirAirportNames VALUES(22534,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(22534,'Essex Municipal Helport');
+INSERT INTO AirAirportNames VALUES(22534,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(22536,'Las Playas Seaplane Port');
 INSERT INTO AirAirportNames VALUES(22540,'Titsensaki Seaplane Terminal');
 INSERT INTO AirAirportNames VALUES(22550,'Shenghua Seaplane Terminal');
@@ -126000,8 +126000,8 @@ INSERT INTO AirAirportNamesSource VALUES(140,'Larkspur Lilyflower International 
 INSERT INTO AirAirportNamesSource VALUES(4,'Larkspur Frankford Airfield',55);
 INSERT INTO AirAirportNamesSource VALUES(41,'Ha Shan - Kwai Tin Airport',56);
 INSERT INTO AirAirportNamesSource VALUES(40,'Southwold International Airport',57);
-INSERT INTO AirAirportNamesSource VALUES(22534,'Essex Heliport',58);
 INSERT INTO AirAirportNamesSource VALUES(22534,'Essex Municipal Helport',58);
+INSERT INTO AirAirportNamesSource VALUES(22534,'Essex Heliport',58);
 INSERT INTO AirAirportNamesSource VALUES(22536,'Las Playas Seaplane Port',59);
 INSERT INTO AirAirportNamesSource VALUES(22540,'Titsensaki Seaplane Terminal',59);
 INSERT INTO AirAirportNamesSource VALUES(22766,'Metamesa',59);
@@ -126236,9 +126236,9 @@ INSERT INTO AirAirportNamesSource VALUES(25,'Chalxior Femtoprism Airfield',59);
 INSERT INTO AirAirportNamesSource VALUES(50,'Chan Bay Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(65,'Carnoustie International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(29,'Woodsdale Municipal Airport',59);
-INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
-INSERT INTO AirAirportNamesSource VALUES(34,'UCWT International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(34,'UCWTIA',59);
+INSERT INTO AirAirportNamesSource VALUES(34,'UCWT International Airport',59);
+INSERT INTO AirAirportNamesSource VALUES(34,'Union of Central Western Territories International Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(215,'Cyra Underwood Municipal Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(144,'Dabecco Regional Airport',59);
 INSERT INTO AirAirportNamesSource VALUES(148,'Deadbush International Airport',59);
@@ -190551,8 +190551,8 @@ INSERT INTO RailStationCodes VALUES(60656,'PEACOPOLIS-MAYOR-S-RESIDENCE');
 INSERT INTO RailStationCodes VALUES(60657,'TWINGATE-CASTLE');
 INSERT INTO RailStationCodes VALUES(60699,'K307');
 INSERT INTO RailStationCodes VALUES(60699,'K205');
-INSERT INTO RailStationCodes VALUES(60700,'K204');
 INSERT INTO RailStationCodes VALUES(60700,'K308');
+INSERT INTO RailStationCodes VALUES(60700,'K204');
 INSERT INTO RailStationCodes VALUES(60701,'K103');
 INSERT INTO RailStationCodes VALUES(60701,'K305');
 INSERT INTO RailStationCodes VALUES(60702,'C100');
@@ -193609,11 +193609,11 @@ INSERT INTO RailStationCodes VALUES(72967,'TVN');
 INSERT INTO RailStationCodes VALUES(72968,'PSO');
 INSERT INTO RailStationCodes VALUES(73032,'N102');
 INSERT INTO RailStationCodes VALUES(73033,'N103');
-INSERT INTO RailStationCodes VALUES(73034,'N104');
 INSERT INTO RailStationCodes VALUES(73034,'N203');
+INSERT INTO RailStationCodes VALUES(73034,'N104');
 INSERT INTO RailStationCodes VALUES(73034,'N300');
-INSERT INTO RailStationCodes VALUES(73035,'N202');
 INSERT INTO RailStationCodes VALUES(73035,'N105');
+INSERT INTO RailStationCodes VALUES(73035,'N202');
 INSERT INTO RailStationCodes VALUES(73051,'N200');
 INSERT INTO RailStationCodes VALUES(73052,'N201');
 INSERT INTO RailStationCodes VALUES(73055,'N204');
