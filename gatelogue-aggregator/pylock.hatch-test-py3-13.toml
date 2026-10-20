@@ -86,9 +86,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/50/fa/96d50e1e6cd0b08
 
 [[packages]]
 name = "pillow"
-version = "12.3.0"
-sdist = { url = "https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9/pillow-12.3.0.tar.gz", upload-time = 2026-07-01T11:56:38Z, size = 47025035, hashes = { sha256 = "3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/f7/62/de5bdd77d935331f4f802edc11e4d82950f642caad6cb2f949837b8560e2/pillow-12.3.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-01T11:54:38Z, size = 6937129, hashes = { sha256 = "0847a763afefb695bc912d7c131e7e0632d4edc1d8698f58ddabec8e46b8b6d3" } }]
+version = "13.0.0"
+sdist = { url = "https://files.pythonhosted.org/packages/ce/a4/9cc30690a394a8305e8be4c9036aa16d0dfddadd09079860b582f562496d/pillow-13.0.0.tar.gz", upload-time = 2026-10-16T22:18:09Z, size = 47058631, hashes = { sha256 = "cdcd1ba258178f7356d74170c9a81ba4eab6a5d55748bc402a5a2a6fe6be3510" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ef/fe/f5cdaa2d1c4086e757430f368c271a58ee29cfe7378e7ae7b9d964015c25/pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-16T22:16:14Z, size = 7142544, hashes = { sha256 = "5f56499c1a74d2b862beb0c33b8016f99d095858455df9d21583bbbc1c15b582" } }]
 
 [[packages]]
 name = "pluggy"
