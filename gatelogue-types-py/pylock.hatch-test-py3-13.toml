@@ -37,9 +37,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a
 
 [[packages]]
 name = "certifi"
-version = "2026.7.22"
-sdist = { url = "https://files.pythonhosted.org/packages/a3/c2/24167ea9858356b47a87a50d39908bfdb72ceeefe0041586e704e5376b3a/certifi-2026.7.22.tar.gz", upload-time = 2026-07-22T03:35:12Z, size = 138112, hashes = { sha256 = "741e2c3b351ddf169a738da9f2c048608ff7f2c5cc02f1ebc6b118bb090d5d55" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl", upload-time = 2026-07-22T03:35:11Z, size = 136983, hashes = { sha256 = "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775" } }]
+version = "2026.10.18"
+sdist = { url = "https://files.pythonhosted.org/packages/7e/eb/a2aa1ac3ea30dd3f30ca57f40232138b6b0040719316ecb85daf61167771/certifi-2026.10.18.tar.gz", upload-time = 2026-10-18T16:21:07Z, size = 135227, hashes = { sha256 = "b9995d97b64d0431a5af837d8ca8cd6238104d1f319f04bd93ea43124d6c861e" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/08/ba/95dd616042484f7c83a06974388b37b837732740ee70bc5dc715b5fcd55a/certifi-2026.10.18-py3-none-any.whl", upload-time = 2026-10-18T16:21:06Z, size = 134093, hashes = { sha256 = "73191c47aaa79da394e8fee2dbc2ec827432cab56311122c9e47abf79e390f62" } }]
 
 [[packages]]
 name = "charset-normalizer"
@@ -177,9 +177,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/24/25/1de2678b631f5a4
 
 [[packages]]
 name = "pytest-mock"
-version = "3.16.0"
-sdist = { url = "https://files.pythonhosted.org/packages/7a/7f/6ed29931d5c8cd396e7c0a55412e6cc88020373365c8685985dea53d26d7/pytest_mock-3.16.0.tar.gz", upload-time = 2026-09-27T14:57:55Z, size = 35362, hashes = { sha256 = "5a8395528b8f498205f3718f575228d0edaed7425fff638f87d1a6c3e0383636" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/db/5b/b83a9bf1a3b4ec222f9fa083147ff6816245223da0ab92370e7e056f113f/pytest_mock-3.16.0-py3-none-any.whl", upload-time = 2026-09-27T14:57:54Z, size = 10016, hashes = { sha256 = "007cfeb257801d88d9c0b2a7b5a15a15e73b71968dfd72e7bf8c4a2f8393aec8" } }]
+version = "3.17.0"
+sdist = { url = "https://files.pythonhosted.org/packages/97/c2/28b9f5b955ff2bcd4727a6f768e2ca9b586cd7c37b95ea5f7b9b873ac7b3/pytest_mock-3.17.0.tar.gz", upload-time = 2026-10-17T16:21:42Z, size = 43064, hashes = { sha256 = "e36576e0985e01027e999891e7a966c67822d40c89ef1b4c8b6e22737e3590b4" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/e8/ea/47fbdc8f37410956fd445720e927589b1e2a47772c5f28109f0ce2fa26d9/pytest_mock-3.17.0-py3-none-any.whl", upload-time = 2026-10-17T16:21:41Z, size = 11248, hashes = { sha256 = "1b82aa4b37137248bd687055e109723debeb07b489de1565297dc9589c5f2d6b" } }]
 
 [[packages]]
 name = "pytest-randomly"
