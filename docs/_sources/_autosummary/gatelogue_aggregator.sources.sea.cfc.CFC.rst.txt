@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.sea.cfc.CFC
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.sea.cfc
+
+.. autoclass:: CFC
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CFC.__init__
+      ~CFC.build
+      ~CFC.builder
+      ~CFC.company
+      ~CFC.connection
+      ~CFC.dock
+      ~CFC.line
+      ~CFC.prepare
+      ~CFC.report
+      ~CFC.stop
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CFC.name
+      ~CFC.priority
+      ~CFC.report_ignore
+      ~CFC.text
+      ~CFC.conn
+   
+   

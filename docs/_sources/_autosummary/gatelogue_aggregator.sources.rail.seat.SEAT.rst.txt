@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.rail.seat.SEAT
+============================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.seat
+
+.. autoclass:: SEAT
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SEAT.__init__
+      ~SEAT.build
+      ~SEAT.builder
+      ~SEAT.company
+      ~SEAT.connection
+      ~SEAT.line
+      ~SEAT.platform
+      ~SEAT.prepare
+      ~SEAT.report
+      ~SEAT.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SEAT.name
+      ~SEAT.priority
+      ~SEAT.report_ignore
+      ~SEAT.html
+      ~SEAT.conn
+   
+   

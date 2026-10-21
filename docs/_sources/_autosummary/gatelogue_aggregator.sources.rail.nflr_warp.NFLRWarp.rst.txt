@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.nflr\_warp.NFLRWarp
+======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.nflr_warp
+
+.. autoclass:: NFLRWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NFLRWarp.__init__
+      ~NFLRWarp.build
+      ~NFLRWarp.builder
+      ~NFLRWarp.company
+      ~NFLRWarp.connection
+      ~NFLRWarp.line
+      ~NFLRWarp.platform
+      ~NFLRWarp.prepare
+      ~NFLRWarp.report
+      ~NFLRWarp.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NFLRWarp.name
+      ~NFLRWarp.priority
+      ~NFLRWarp.report_ignore
+      ~NFLRWarp.conn
+   
+   

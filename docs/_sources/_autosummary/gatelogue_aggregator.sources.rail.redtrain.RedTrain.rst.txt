@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.rail.redtrain.RedTrain
+====================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.redtrain
+
+.. autoclass:: RedTrain
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RedTrain.__init__
+      ~RedTrain.build
+      ~RedTrain.builder
+      ~RedTrain.company
+      ~RedTrain.connection
+      ~RedTrain.line
+      ~RedTrain.platform
+      ~RedTrain.prepare
+      ~RedTrain.report
+      ~RedTrain.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RedTrain.name
+      ~RedTrain.priority
+      ~RedTrain.report_ignore
+      ~RedTrain.html
+      ~RedTrain.conn
+   
+   

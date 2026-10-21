@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.rail.fredrail
+===========================================
+
+.. automodule:: gatelogue_aggregator.sources.rail.fredrail
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      FredRail
+   
+   
+
+   
+   
+   
+
+
+

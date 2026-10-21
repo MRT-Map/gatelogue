@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.breezerail\_warp.BreezeRailWarp
+==================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.breezerail_warp
+
+.. autoclass:: BreezeRailWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BreezeRailWarp.__init__
+      ~BreezeRailWarp.build
+      ~BreezeRailWarp.builder
+      ~BreezeRailWarp.company
+      ~BreezeRailWarp.connection
+      ~BreezeRailWarp.line
+      ~BreezeRailWarp.platform
+      ~BreezeRailWarp.prepare
+      ~BreezeRailWarp.report
+      ~BreezeRailWarp.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BreezeRailWarp.name
+      ~BreezeRailWarp.priority
+      ~BreezeRailWarp.report_ignore
+      ~BreezeRailWarp.conn
+   
+   

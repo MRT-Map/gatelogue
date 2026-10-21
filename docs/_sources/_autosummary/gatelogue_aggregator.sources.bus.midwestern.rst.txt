@@ -1,0 +1,31 @@
+gatelogue\_aggregator.sources.bus.midwestern
+============================================
+
+.. automodule:: gatelogue_aggregator.sources.bus.midwestern
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Midwestern
+   
+   
+
+   
+   
+   
+
+
+

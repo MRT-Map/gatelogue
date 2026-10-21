@@ -1,0 +1,35 @@
+﻿gatelogue\_aggregator.sources.warp\_api.WarpAPI
+===============================================
+
+.. currentmodule:: gatelogue_aggregator.sources.warp_api
+
+.. autoclass:: WarpAPI
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WarpAPI.__init__
+      ~WarpAPI.from_user
+      ~WarpAPI.prepare
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WarpAPI.LINK
+      ~WarpAPI.warps
+   
+   

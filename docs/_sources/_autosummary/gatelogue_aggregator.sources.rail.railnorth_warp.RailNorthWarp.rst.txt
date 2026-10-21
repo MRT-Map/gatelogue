@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.railnorth\_warp.RailNorthWarp
+================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.railnorth_warp
+
+.. autoclass:: RailNorthWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RailNorthWarp.__init__
+      ~RailNorthWarp.build
+      ~RailNorthWarp.builder
+      ~RailNorthWarp.company
+      ~RailNorthWarp.connection
+      ~RailNorthWarp.line
+      ~RailNorthWarp.platform
+      ~RailNorthWarp.prepare
+      ~RailNorthWarp.report
+      ~RailNorthWarp.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RailNorthWarp.name
+      ~RailNorthWarp.priority
+      ~RailNorthWarp.report_ignore
+      ~RailNorthWarp.conn
+   
+   

@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.blurail\_warp.BluRailWarp
+============================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.blurail_warp
+
+.. autoclass:: BluRailWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BluRailWarp.__init__
+      ~BluRailWarp.build
+      ~BluRailWarp.builder
+      ~BluRailWarp.company
+      ~BluRailWarp.connection
+      ~BluRailWarp.line
+      ~BluRailWarp.platform
+      ~BluRailWarp.prepare
+      ~BluRailWarp.report
+      ~BluRailWarp.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BluRailWarp.name
+      ~BluRailWarp.priority
+      ~BluRailWarp.report_ignore
+      ~BluRailWarp.conn
+   
+   

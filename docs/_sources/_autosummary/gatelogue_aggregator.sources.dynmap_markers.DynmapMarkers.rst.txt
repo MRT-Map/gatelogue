@@ -1,0 +1,34 @@
+﻿gatelogue\_aggregator.sources.dynmap\_markers.DynmapMarkers
+===========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.dynmap_markers
+
+.. autoclass:: DynmapMarkers
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DynmapMarkers.__init__
+      ~DynmapMarkers.prepare
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DynmapMarkers.old
+      ~DynmapMarkers.new
+   
+   

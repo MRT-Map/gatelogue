@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.nrn.NRN
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.nrn
+
+.. autoclass:: NRN
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NRN.__init__
+      ~NRN.build
+      ~NRN.builder
+      ~NRN.company
+      ~NRN.connection
+      ~NRN.line
+      ~NRN.platform
+      ~NRN.prepare
+      ~NRN.report
+      ~NRN.routing
+      ~NRN.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NRN.file_path
+      ~NRN.name
+      ~NRN.priority
+      ~NRN.report_ignore
+      ~NRN.conn
+   
+   

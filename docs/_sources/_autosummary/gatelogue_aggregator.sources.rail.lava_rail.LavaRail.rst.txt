@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.lava\_rail.LavaRail
+======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.lava_rail
+
+.. autoclass:: LavaRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LavaRail.__init__
+      ~LavaRail.build
+      ~LavaRail.builder
+      ~LavaRail.company
+      ~LavaRail.connection
+      ~LavaRail.line
+      ~LavaRail.platform
+      ~LavaRail.prepare
+      ~LavaRail.report
+      ~LavaRail.routing
+      ~LavaRail.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LavaRail.file_path
+      ~LavaRail.name
+      ~LavaRail.priority
+      ~LavaRail.report_ignore
+      ~LavaRail.conn
+   
+   

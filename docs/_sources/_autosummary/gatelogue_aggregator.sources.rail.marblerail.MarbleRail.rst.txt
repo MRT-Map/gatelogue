@@ -1,0 +1,45 @@
+﻿gatelogue\_aggregator.sources.rail.marblerail.MarbleRail
+========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.marblerail
+
+.. autoclass:: MarbleRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MarbleRail.__init__
+      ~MarbleRail.build
+      ~MarbleRail.builder
+      ~MarbleRail.company
+      ~MarbleRail.connection
+      ~MarbleRail.line
+      ~MarbleRail.platform
+      ~MarbleRail.prepare
+      ~MarbleRail.report
+      ~MarbleRail.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~MarbleRail.name
+      ~MarbleRail.priority
+      ~MarbleRail.report_ignore
+      ~MarbleRail.html
+      ~MarbleRail.conn
+   
+   

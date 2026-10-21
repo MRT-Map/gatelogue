@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.bus.midwestern.Midwestern
+=======================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.bus.midwestern
+
+.. autoclass:: Midwestern
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Midwestern.__init__
+      ~Midwestern.berth
+      ~Midwestern.build
+      ~Midwestern.builder
+      ~Midwestern.company
+      ~Midwestern.connection
+      ~Midwestern.line
+      ~Midwestern.prepare
+      ~Midwestern.report
+      ~Midwestern.routing
+      ~Midwestern.stop
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Midwestern.file_path
+      ~Midwestern.name
+      ~Midwestern.priority
+      ~Midwestern.report_ignore
+      ~Midwestern.conn
+   
+   

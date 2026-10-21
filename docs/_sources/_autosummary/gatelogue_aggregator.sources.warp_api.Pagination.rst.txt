@@ -1,0 +1,35 @@
+﻿gatelogue\_aggregator.sources.warp\_api.Pagination
+==================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.warp_api
+
+.. autoclass:: Pagination
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Pagination.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Pagination.hits
+      ~Pagination.limit
+      ~Pagination.offset
+      ~Pagination.total_hits
+   
+   

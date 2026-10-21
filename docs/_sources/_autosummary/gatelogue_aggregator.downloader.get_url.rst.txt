@@ -1,0 +1,6 @@
+gatelogue\_aggregator.downloader.get\_url
+=========================================
+
+.. currentmodule:: gatelogue_aggregator.downloader
+
+.. autofunction:: get_url

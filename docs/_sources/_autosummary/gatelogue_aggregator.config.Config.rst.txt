@@ -1,0 +1,37 @@
+﻿gatelogue\_aggregator.config.Config
+===================================
+
+.. currentmodule:: gatelogue_aggregator.config
+
+.. autoclass:: Config
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Config.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Config.cache_dir
+      ~Config.cache_duration
+      ~Config.cooldown
+      ~Config.max_workers
+      ~Config.timeout
+      ~Config.cache_exclude
+   
+   

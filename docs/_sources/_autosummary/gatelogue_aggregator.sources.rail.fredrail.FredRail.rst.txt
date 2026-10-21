@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.fredrail.FredRail
+====================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.fredrail
+
+.. autoclass:: FredRail
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FredRail.__init__
+      ~FredRail.build
+      ~FredRail.builder
+      ~FredRail.company
+      ~FredRail.connection
+      ~FredRail.line
+      ~FredRail.platform
+      ~FredRail.prepare
+      ~FredRail.report
+      ~FredRail.routing
+      ~FredRail.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FredRail.file_path
+      ~FredRail.name
+      ~FredRail.priority
+      ~FredRail.report_ignore
+      ~FredRail.conn
+   
+   

@@ -1,0 +1,44 @@
+﻿gatelogue\_aggregator.sources.rail.wzr\_warp.WZRWarp
+====================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.wzr_warp
+
+.. autoclass:: WZRWarp
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WZRWarp.__init__
+      ~WZRWarp.build
+      ~WZRWarp.builder
+      ~WZRWarp.company
+      ~WZRWarp.connection
+      ~WZRWarp.line
+      ~WZRWarp.platform
+      ~WZRWarp.prepare
+      ~WZRWarp.report
+      ~WZRWarp.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WZRWarp.name
+      ~WZRWarp.priority
+      ~WZRWarp.report_ignore
+      ~WZRWarp.conn
+   
+   

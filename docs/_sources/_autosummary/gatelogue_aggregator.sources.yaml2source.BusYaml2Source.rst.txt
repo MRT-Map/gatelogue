@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.yaml2source.BusYaml2Source
+========================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.yaml2source
+
+.. autoclass:: BusYaml2Source
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BusYaml2Source.__init__
+      ~BusYaml2Source.berth
+      ~BusYaml2Source.build
+      ~BusYaml2Source.builder
+      ~BusYaml2Source.company
+      ~BusYaml2Source.connection
+      ~BusYaml2Source.line
+      ~BusYaml2Source.prepare
+      ~BusYaml2Source.report
+      ~BusYaml2Source.routing
+      ~BusYaml2Source.stop
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BusYaml2Source.name
+      ~BusYaml2Source.priority
+      ~BusYaml2Source.report_ignore
+      ~BusYaml2Source.file_path
+      ~BusYaml2Source.conn
+   
+   

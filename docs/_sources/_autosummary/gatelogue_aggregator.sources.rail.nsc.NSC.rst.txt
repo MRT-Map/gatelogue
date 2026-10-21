@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.nsc.NSC
+==========================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.nsc
+
+.. autoclass:: NSC
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NSC.__init__
+      ~NSC.build
+      ~NSC.builder
+      ~NSC.company
+      ~NSC.connection
+      ~NSC.line
+      ~NSC.platform
+      ~NSC.prepare
+      ~NSC.report
+      ~NSC.routing
+      ~NSC.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NSC.file_path
+      ~NSC.name
+      ~NSC.priority
+      ~NSC.report_ignore
+      ~NSC.conn
+   
+   

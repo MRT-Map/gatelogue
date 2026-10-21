@@ -1,0 +1,46 @@
+﻿gatelogue\_aggregator.sources.rail.pacifica\_coord.PacificaCoord
+================================================================
+
+.. currentmodule:: gatelogue_aggregator.sources.rail.pacifica_coord
+
+.. autoclass:: PacificaCoord
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PacificaCoord.__init__
+      ~PacificaCoord.build
+      ~PacificaCoord.builder
+      ~PacificaCoord.company
+      ~PacificaCoord.connection
+      ~PacificaCoord.line
+      ~PacificaCoord.platform
+      ~PacificaCoord.prepare
+      ~PacificaCoord.report
+      ~PacificaCoord.routing
+      ~PacificaCoord.station
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PacificaCoord.file_path
+      ~PacificaCoord.name
+      ~PacificaCoord.priority
+      ~PacificaCoord.report_ignore
+      ~PacificaCoord.conn
+   
+   
