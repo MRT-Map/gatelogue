@@ -119,7 +119,7 @@ jobs:
 
       - run: pnpm i
       - run: pnpm pack
-      - run: pnpm publish --no-git-checks --dry-run && pnpm dlx "jsr@$JSR_VERSION" publish --dry-run
+      - run: pnpm publish --no-git-checks --dry-run && pnpm dlx "jsr@$JSR_VERSION" publish --dry-run --allow-dirty
         env:
           # renovate: datasource=npm depName=jsr
           JSR_VERSION: 0.14.3
