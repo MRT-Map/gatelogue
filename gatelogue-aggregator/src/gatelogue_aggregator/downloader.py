@@ -14,9 +14,9 @@ import pandas as pd
 import rich
 import rich.status
 from bs4 import BeautifulSoup
-from rnet import Emulation
-from rnet.blocking import Client, Response
-from rnet.redirect import Policy
+from wreq import Emulation
+from wreq.blocking import Client, Response
+from wreq.redirect import Policy
 
 from gatelogue_aggregator.logging import ERROR, INFO3, progress_bar
 
