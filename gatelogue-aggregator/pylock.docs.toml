@@ -116,12 +116,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/e2/17/d7b106e05bfa642e8
 wheels = [{ url = "https://files.pythonhosted.org/packages/43/20/5ece0e9cb79a6473216620db6a90546f578001c2bd857b77c444b27acad1/pandas-3.0.6-cp315-cp315-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-17T23:22:38Z, size = 10776585, hashes = { sha256 = "4ff44b2cb51cbd691c91f92c4ea6c71e34003f239ebd67c2e857dc898466b49c" } }]
 
 [[packages]]
-name = "pillow"
-version = "12.3.0"
-sdist = { url = "https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9/pillow-12.3.0.tar.gz", upload-time = 2026-07-01T11:56:38Z, size = 47025035, hashes = { sha256 = "3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/f8/6d/043e96ff814fc31a33077e4cba86082167db520c93632afdf2042febbb0c/pillow-12.3.0-cp315-cp315-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-07-01T11:55:50Z, size = 6947439, hashes = { sha256 = "6b02afb9b97f65fbca5f31db6a2a3ba21aa93030225f150fa3f249717e938fb4" } }]
-
-[[packages]]
 name = "pygments"
 version = "2.21.0"
 sdist = { url = "https://files.pythonhosted.org/packages/49/2e/ced460408999b33da6b31b0021b0f37d329e202d4169aeb164493778f25b/pygments-2.21.0.tar.gz", upload-time = 2026-08-17T08:02:48Z, size = 5005329, hashes = { sha256 = "610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c" } }
@@ -155,12 +149,6 @@ name = "rich"
 version = "15.0.0"
 sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", upload-time = 2026-04-12T08:24:00Z, size = 230680, hashes = { sha256 = "edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36" } }
 wheels = [{ url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", upload-time = 2026-04-12T08:24:02Z, size = 310654, hashes = { sha256 = "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb" } }]
-
-[[packages]]
-name = "rnet"
-version = "3.0.0rc22"
-sdist = { url = "https://files.pythonhosted.org/packages/86/09/70861ac7046665f0708333d832f97f2e798ec036657b96407f6b0e93cb52/rnet-3.0.0rc22.tar.gz", upload-time = 2026-02-24T10:36:16Z, size = 96023, hashes = { sha256 = "e51dc416906e20ef126eaa93ef702b922374beeda5cbde4281b5e0264083c97a" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/d5/be/df395370e88a241f1631a00b351be71d71268cb51f2c9ce4c5cb5c9c9f55/rnet-3.0.0rc22-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2026-02-24T10:35:39Z, size = 4098804, hashes = { sha256 = "cbb75fb74e9c09b6092c218107579af11b0ebe922bdf3a42d04b465e55cf5cd6" } }]
 
 [[packages]]
 name = "roman-numerals"
@@ -278,3 +266,9 @@ name = "wikitextparser"
 version = "3.0.0"
 sdist = { url = "https://files.pythonhosted.org/packages/c7/43/a9a968e911be58d6b631cdb8c0bc3d6a037e2c6875282af5c3ddc9d6eacd/wikitextparser-3.0.0.tar.gz", upload-time = 2026-10-08T08:17:32Z, size = 55560, hashes = { sha256 = "62961e86f377df32809aaef96767c6877f88558d01e25da4394723dda6f0d7a3" } }
 wheels = [{ url = "https://files.pythonhosted.org/packages/2a/ae/8f46ad728d38002b96427a8650539fc6c7ea7be46e2e0e3bdb8485b57840/wikitextparser-3.0.0-py3-none-any.whl", upload-time = 2026-10-08T08:17:35Z, size = 64729, hashes = { sha256 = "588176e87b44c8471761f359bb7a804aceffe8b591f4894c580b087bfe2c13e7" } }]
+
+[[packages]]
+name = "wreq"
+version = "0.13.0"
+sdist = { url = "https://files.pythonhosted.org/packages/3a/73/fe81a342b6206b16863ee0093056f9c40951884db9df0994f1ed85230387/wreq-0.13.0.tar.gz", upload-time = 2026-10-05T11:05:48Z, size = 3121386, hashes = { sha256 = "72b5fb2b76f256230b7f808e688a90b08eb7dc8c389335d806c76ea1a3ac2cf7" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/8b/15/f65efb9bb82f8b8e3a9d9ed5eafbd4750a14b035f754a3762fc744735fbd/wreq-0.13.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2026-10-05T11:05:08Z, size = 4624155, hashes = { sha256 = "8f03ca8279994ef2a1884e111e1fe5ad9555da34b4da238bc6fad551b51835e4" } }]
