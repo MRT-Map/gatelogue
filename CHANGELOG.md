@@ -6,6 +6,11 @@
 - convert SQL queries into views
 
 <!-- new -->
+## v3.1.5 (20261022)
+
+- upgrade dependencies
+  - update for eMudhra
+
 ## v3.1.4+13 (20260816)
 - `gatelogue-types`: replace `sql.js` with `better-sqlite3` and `@sqlite.org/sqlite-wasm`
 
