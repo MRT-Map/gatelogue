@@ -7,7 +7,7 @@ CREATE TABLE Metadata
     has_sources INTEGER NOT NULL CHECK ( has_sources IN (false, true) ),
     CHECK ( ROWID = 1 )
 ) STRICT;
-INSERT INTO Metadata VALUES(13,'2026-10-23T02:16:00.426366+00:00',0);
+INSERT INTO Metadata VALUES(13,'2026-10-23T02:33:31.629480+00:00',0);
 CREATE TABLE Node
 (
     i    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61655,8 +61655,8 @@ INSERT INTO AirAirportNames VALUES(237,'True City Metropolitan');
 INSERT INTO AirAirportNames VALUES(238,'Stanley Island Regional Airport');
 INSERT INTO AirAirportNames VALUES(239,'Miningstone Regional Airport');
 INSERT INTO AirAirportNames VALUES(240,'Riverside Airport');
-INSERT INTO AirAirportNames VALUES(22534,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(22534,'Essex Municipal Helport');
+INSERT INTO AirAirportNames VALUES(22534,'Essex Heliport');
 INSERT INTO AirAirportNames VALUES(22536,'Las Playas Seaplane Port');
 INSERT INTO AirAirportNames VALUES(22540,'Titsensaki Seaplane Terminal');
 INSERT INTO AirAirportNames VALUES(22550,'Shenghua Seaplane Terminal');
@@ -95640,12 +95640,12 @@ INSERT INTO RailStationCodes VALUES(60695,'PEACOPOLIS-MAYOR-S-RESIDENCE');
 INSERT INTO RailStationCodes VALUES(60696,'TWINGATE-CASTLE');
 INSERT INTO RailStationCodes VALUES(60738,'K205');
 INSERT INTO RailStationCodes VALUES(60738,'K307');
-INSERT INTO RailStationCodes VALUES(60739,'K308');
 INSERT INTO RailStationCodes VALUES(60739,'K204');
-INSERT INTO RailStationCodes VALUES(60740,'K103');
+INSERT INTO RailStationCodes VALUES(60739,'K308');
 INSERT INTO RailStationCodes VALUES(60740,'K305');
-INSERT INTO RailStationCodes VALUES(60741,'C100');
+INSERT INTO RailStationCodes VALUES(60740,'K103');
 INSERT INTO RailStationCodes VALUES(60741,'K607');
+INSERT INTO RailStationCodes VALUES(60741,'C100');
 INSERT INTO RailStationCodes VALUES(60743,'K100');
 INSERT INTO RailStationCodes VALUES(60744,'K101');
 INSERT INTO RailStationCodes VALUES(60745,'K102');
@@ -98716,11 +98716,11 @@ INSERT INTO RailStationCodes VALUES(73064,'TVN');
 INSERT INTO RailStationCodes VALUES(73065,'PSO');
 INSERT INTO RailStationCodes VALUES(73129,'N102');
 INSERT INTO RailStationCodes VALUES(73130,'N103');
-INSERT INTO RailStationCodes VALUES(73131,'N300');
 INSERT INTO RailStationCodes VALUES(73131,'N203');
+INSERT INTO RailStationCodes VALUES(73131,'N300');
 INSERT INTO RailStationCodes VALUES(73131,'N104');
-INSERT INTO RailStationCodes VALUES(73132,'N105');
 INSERT INTO RailStationCodes VALUES(73132,'N202');
+INSERT INTO RailStationCodes VALUES(73132,'N105');
 INSERT INTO RailStationCodes VALUES(73148,'N200');
 INSERT INTO RailStationCodes VALUES(73149,'N201');
 INSERT INTO RailStationCodes VALUES(73152,'N204');
