@@ -1,5 +1,9 @@
-amends "package://github.com/jdx/hk/releases/download/v1.54.1/hk@1.54.1#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.54.1/hk@1.54.1#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.8.0/hk@2.8.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.8.0/hk@2.8.0#/Builtins.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Cargo.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Pnpm.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Hatch.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Misc.pkl"
 
 local init = new Group {
     steps {
@@ -22,86 +26,40 @@ local init = new Group {
 }
 
 local formatters = new Mapping<String, Step> {
-    ["hatch_format"] = (Builtins.ruff_format) {
-        workspace_indicator = "pyproject.toml"
-        check = "cd {{ workspace }} && hatch check fmt -- --force-exclude {{ workspace_files }}"
-        check_diff = "cd {{ workspace }} & hatch check fmt --fix -- --force-exclude --diff {{ workspace_files }}"
-        fix = "cd {{ workspace }} && hatch check fmt --fix -- --force-exclude {{ workspace_files }}"
+    ["ruff_fmt"] = Hatch.hatch_check_fmt
+    ["prettier"] = (Pnpm.pnpm_format) {
+        depends = List("init_client")
     }
-    ["prettier"] = (Builtins.prettier) {
-        depends = List("init")
-        workspace_indicator = "package.json"
-        check = "cd {{ workspace }} && pnpm run format:check {{ workspace_files }}"
-        check_list_files = null
-        fix = "cd {{ workspace }} && pnpm run format {{ workspace_files }}"
-    }
-    ["cargo_fmt"] = Builtins.cargo_fmt
+    ["cargo_fmt"] = Cargo.cargo_fmt
 }
 
 local linters = new Mapping<String, Step> {
-    ["hatch"] = (Builtins.ruff) {
-        workspace_indicator = "pyproject.toml"
-        check = "cd {{ workspace }} && hatch check code -- --force-exclude {{ workspace_files }}"
-        fix = "cd {{ workspace }} && hatch check code --fix -- --force-exclude {{ workspace_files }}"
+    ["ruff"] = Hatch.hatch_check_code
+    ["eslint"] = (Pnpm.pnpm_lint) {
+        depends = List("init_client")
     }
-    ["eslint"] = (Builtins.eslint) {
-        depends = List("init")
-        workspace_indicator = "package.json"
-        check = "cd {{ workspace }} && pnpm run lint {{ workspace_files }}"
-        fix = "cd {{ workspace }} && pnpm run lint:fix {{ workspace_files }}"
-    }
-    ["cargo_clippy"] = (Builtins.cargo_clippy) {
-        check = (Builtins.cargo_clippy.check as String) + " --all-targets --all-features"
-        fix = (Builtins.cargo_clippy.fix as String) + " --all-targets --all-features"
-    }
-    ["zizmor"] = Builtins.zizmor
-    ["actionlint"] = Builtins.actionlint
-    ["poutine"] {
-        glob = Builtins.zizmor.glob
-        check = "poutine analyze_local . --skip github_action_from_unverified_creator_used"
-    }
-    ["shellcheck"] = Builtins.shellcheck
+    ["cargo_clippy"] = Cargo.cargo_clippy
+    ["zizmor"] = Misc.zizmor
+    ["actionlint"] = Misc.actionlint
+    ["poutine"] = Misc.poutine
+    ["shellcheck"] = Misc.shellcheck
 }
 local type_checkers = new Mapping<String, Step> {
-    ["hatch_type_check"] {
-        workspace_indicator = "pyproject.toml"
-        types = Builtins.ruff.types
-        check = "cd {{ workspace }} && hatch check types"
-    }
-    ["tsc_type_check"] {
-        depends = List("init")
-        workspace_indicator = "package.json"
-        glob = Builtins.eslint.glob
-        check = "cd {{ workspace }} && pnpm run type-check"
+    ["pyrefly"] = Hatch.hatch_check_types
+    ["tsc"] = (Pnpm.pnpm_type_check) {
+        depends = List("init_client")
     }
 }
 local sarif = new Mapping<String, Step> {
-    ["mkdir"] {
-        fix = "mkdir .sarif || true"
-        exclusive = true
+    ["mkdir"] = Misc.mkdir_sarif(".sarif")
+    ["eslint"] = (Pnpm.pnpm_lint_sarif("../.sarif")) {
+        depends = List("init_client")
     }
-    ["eslint"] {
-        depends = List("init")
-        workspace_indicator = "package.json"
-        fix = "cd {{ workspace }} && pnpm run lint:sarif > ../.sarif/eslint-{{ workspace }}.sarif"
-    }
-    ["hatch"] {
-        workspace_indicator = "pyproject.toml"
-        fix = linters["hatch"].fix.replaceAll("{{ workspace_files }}", "") + " --output-format=sarif > ../.sarif/hatch-{{ workspace }}.sarif"
-    }
-    ["cargo_clippy"] {
-        workspace_indicator = "Cargo.toml"
-        fix = linters["cargo_clippy"].fix as String + " --message-format=json | clippy-sarif > .sarif/clippy-{{ workspace }}.sarif"
-    }
-    ["zizmor"] {
-        fix = linters["zizmor"].fix.replaceAll("{{ files }}", ".") + " --format=sarif > .sarif/zizmor.sarif"
-    }
-    ["actionlint"] {
-        check = "actionlint -format \"$(curl -sSL \"https://cdn.jsdelivr.net/gh/kjanat/actionlint/sarif_template.txt\")\" > .sarif/actionlint.sarif"
-    }
-    ["poutine"] {
-        check = linters["poutine"].check as String + " --format=sarif > .sarif/poutine.sarif"
-    }
+    ["ruff"] = Hatch.hatch_check_code_sarif("../.sarif")
+    ["cargo_clippy"] = Cargo.cargo_clippy_sarif(".sarif")
+    ["zizmor"] = Misc.zizmor_sarif(".sarif")
+    ["actionlint"] = Misc.actionlint_sarif(".sarif")
+    ["poutine"] = Misc.poutine_sarif(".sarif")
     ...type_checkers
 }
 
