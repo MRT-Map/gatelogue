@@ -29,7 +29,7 @@ class IntraBus(BusSource):
                         continue
                     if (name_tag := li.find("b")) is None:
                         continue
-                    name: str = name_tag.string  # pyrefly: ignore [bad-assignment]
+                    name: str = next(name_tag.strings)
                     if (more := li.find("i")) is not None:
                         name += " " + more.string.strip()  # pyrefly: ignore [missing-attribute]
                     builder.add(self.stop(codes={name}, name=name, company=company))
