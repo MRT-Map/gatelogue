@@ -30,14 +30,14 @@ runs:
         ENVS: ${{ inputs.envs }}
 
     - id: mise-action
-      uses: jdx/mise-action@08ae2a091c038e1e05ec6f5115dc5c69d5a2a6b8 # v5.1.2
+      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
       with:
-        version: v2026.10.17
+        version: v2026.10.24
         cache: ${{ inputs.cache }}
 
     - id: cache-rust
       if: inputs.cache && contains(inputs.envs, 'rs')
-      uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       with:
         workspaces: "./gatelogue-types-rs -> target"
 

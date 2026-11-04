@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling==1.32.4"]
+requires = ["hatchling==1.33.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -31,7 +31,7 @@ dependencies = [
   "gatelogue-types",
   "click==8.5.0",
   "msgspec==0.22.0",
-  "pandas==3.0.6",
+  "pandas==3.1.0",
   "rich==15.0.0",
   "wreq==0.13.0",
   "BeautifulSoup4==4.15.0",
@@ -69,7 +69,7 @@ post-install-commands = [
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx==9.1.1", 
+  "sphinx==9.2.0", 
   "sphinxcontrib-programoutput==0.20", 
   "sphinx-codeautolink==0.19.0", 
   "sphinx_rtd_theme==3.1.0", 
