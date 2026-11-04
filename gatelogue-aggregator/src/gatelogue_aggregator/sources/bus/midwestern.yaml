@@ -6,8 +6,8 @@ local: true # set to true if it's a local/custom system
 world: "New" # "New" or "Old"
 
 lines:
-  - name: B82 Spring Valley-Karna
-    code: B82 # optional route code
+  - name: B8 Spring Valley-Karna
+    code: B8 # optional route code
     stations:
       - Spring Valley
       - Blackberry City
@@ -54,7 +54,7 @@ coords:
   New Singapore: [-22672, 14124]
   Frostgrave: [-17812, 14553]
   Avalovnia: [-27909, -5647]
-  Refuge: [-20295, 14372]
+  Refuge: [-20285, -14372]
   Oaksfield: [-19419, -12809]
   Ainville: [-22916, -9202]
   Vellverth: [-22664, -8445]
