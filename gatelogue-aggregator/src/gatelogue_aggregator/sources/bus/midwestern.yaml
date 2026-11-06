@@ -19,6 +19,7 @@ lines:
       - Ping Ping
       - Oak Springs
       - Karna
+      - Azure
   - name: B76 Chan Bay-Nekomura
     code: B76
     stations:
@@ -38,6 +39,12 @@ lines:
       - Vellverth
       - Lamont
       - Thornhill
+
+  - name: B888 Azure-Blackshore
+    code: B888
+    stations:
+      - Azure
+      - Blackshore
 
 coords:
   Spring Valley: [-8824, -3825] # optional coordinates for each stop
@@ -62,3 +69,4 @@ coords:
   Thornhill: [-26614, -1763]
   Blackshore: [-21835, -2691]
   Cypress: [-17772, -3803]
+  Azure: [-21553 -3665]
