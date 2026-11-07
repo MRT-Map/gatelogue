@@ -1,5 +1,5 @@
 [tools]
-hk = "2.11.0"
+hk = "2.11.1"
 pkl = "0.32.2"
 shellcheck = "0.11.0"
 zizmor = "1.32.0"
