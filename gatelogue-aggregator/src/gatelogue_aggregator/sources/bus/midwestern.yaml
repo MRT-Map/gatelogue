@@ -43,6 +43,12 @@ lines:
       - Lamont
       - Thornhill
 
+  - name: B888 Azure-Blackshore
+    code: B888
+    stations:
+      - Azure
+      - Blackshore
+
 coords:
   Spring Valley: [-8824, -3825] # optional coordinates for each stop
   Blackberry City: [-9823, -4131]
@@ -69,3 +75,4 @@ coords:
   Autunno Highlands: [-24726, -2787]
   Walacazaka: [-28191, -4749]
   A360/B8 Junction: [-26446, -3658]
+  Azure: [-21553, -3665]
