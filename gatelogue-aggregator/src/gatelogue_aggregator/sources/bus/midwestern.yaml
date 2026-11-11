@@ -22,6 +22,7 @@ lines:
       - Azure
       - Autunno Highlands
       - Walacazaka
+      - A360/B8 Transfer
       - Avalovnia
   - name: B76 Chan Bay-Nekomura
     code: B76
@@ -41,6 +42,7 @@ lines:
       - Ainville
       - Vellverth
       - Lamont
+      - A360/B8 Transfer
       - Thornhill
 
   - name: B888 Azure-Blackshore
@@ -73,6 +75,6 @@ coords:
   Blackshore: [-21835, -2691]
   Cypress: [-17772, -3803]
   Autunno Highlands: [-24726, -2787]
-  Walacazaka: [-28191, -4749]
-  A360/B8 Junction: [-26446, -3658]
+  Walczaka: [-28191, -4749]
+  A360/B8 Transfer: [-26446, -3658]
   Azure: [-21553, -3665]
