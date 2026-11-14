@@ -38,8 +38,9 @@ const gateWidth = computed(() => {
 <template>
   <td class="gate-code">{{ gate.code }}</td>
   <td class="gate-size-mode">
-    <b>{{ gateWidth }}</b
-    ><br />{{ gate.mode?.replaceAll(" plane", "") ?? "&nbsp;" }}
+    <b>{{ gateWidth }}</b><br />{{
+      gate.mode?.replaceAll(" plane", "") ?? "&nbsp;"
+    }}
   </td>
   <td class="gate-airline">
     <template v-if="airline">
