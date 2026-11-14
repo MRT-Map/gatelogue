@@ -1,9 +1,9 @@
 amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Builtins.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Cargo.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Pnpm.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Hatch.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Misc.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Cargo.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Pnpm.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Hatch.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Misc.pkl"
 
 local init = new Group {
     steps {
