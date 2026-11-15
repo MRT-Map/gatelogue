@@ -6,7 +6,13 @@ on:
   workflow_dispatch:
   push:
     branches: ["**"]
-    paths: ["gatelogue-aggregator/**", "gatelogue-types-py/**", ".config/**", ".github/workflows/pylock.yml"]
+    paths:
+      [
+        "gatelogue-aggregator/**",
+        "gatelogue-types-py/**",
+        ".config/**",
+        ".github/workflows/pylock.yml",
+      ]
 
 permissions: {}
 concurrency:
@@ -33,7 +39,7 @@ jobs:
         run: |
           cd gatelogue-aggregator && hatch env lock && cd ..
           cd gatelogue-types-py && hatch env lock && cd ..
-          
+
       - if: github.event_name != 'push'
         run: |
           cd gatelogue-aggregator && hatch env lock --upgrade && cd ..
