@@ -52,9 +52,6 @@ jobs:
       - uses: $/.github/actions/mise
         with:
           envs: "py"
-      #      - run: |
-      #          sudo apt-get update
-      #          sudo apt-get install --no-install-recommends graphviz graphviz-dev
       - run: |
           cd gatelogue-aggregator
           hatch run docs:build

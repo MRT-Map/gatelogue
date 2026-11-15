@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   update:
+    name: Trigger transit-map update
     runs-on: ubuntu-slim
     permissions:
       contents: read

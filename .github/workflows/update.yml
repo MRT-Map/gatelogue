@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   update:
+    name: Update dist DB
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -48,6 +49,7 @@ jobs:
           message: Update Gatelogue data
 
   trigger-map:
+    name: Trigger transit-map update
     needs: update
     permissions:
       contents: write
