@@ -1,4 +1,4 @@
-name: "Update Python Lockfiles"
+name: Update Python Lockfiles
 
 on:
   schedule:
@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   python-lock:
+    name: Update Python Lockfiles
     runs-on: ubuntu-latest
     permissions:
       contents: write

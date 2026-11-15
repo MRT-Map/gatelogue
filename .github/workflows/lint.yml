@@ -1,4 +1,4 @@
-name: Format, Lint
+name: Lints & Tests
 on:
   push:
     branches: ["**", "!renovate/**", "!lint/**"]
@@ -66,6 +66,117 @@ jobs:
           base: ${{ github.head_ref || github.ref_name }}
           delete-branch: true
           sign-commits: true
+
+  changes:
+    name: Check changed files
+    runs-on: ubuntu-slim
+    permissions:
+      pull-requests: read
+      contents: read
+    outputs:
+      rust: ${{ steps.filter.outputs.rust }}
+      rust-pkg: $ {{ steps.filter.outputs.rust-pkg }}
+      node: ${{ steps.filter.outputs.node }}
+      python: ${{ steps.filter.outputs.python }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: filter
+        with:
+          filters: |
+            rust:
+              - 'gatelogue-types-rs/**'
+              - '.config/**'
+            rust-pkg:
+              - '**/Cargo.lock'
+              - '**/Cargo.toml'
+              - '.config/**'
+            node:
+              - 'gatelogue-types-ts/**'
+              - 'gatelogue-client/**'
+              - '.config/**'
+            python:
+              - 'gatelogue-aggregator/**'
+              - 'gatelogue-types-py/**'
+              - '.config/**'
+
+  cargo-msrv:
+    name: Run cargo-msrv
+    needs: changes
+    if: ${{ needs.changes.outputs.rust-pkg }}
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: iiiii7d/cargo-msrv-workflow/.github/workflows/workflow.yml@0dc5a5eec9f7d058dd3667cf950eee39b2a516a2 # main
+    with:
+      working-directory: gatelogue-types-rs
+
+  test-types-py:
+    name: Test Python types
+    needs: changes
+    if: ${{ needs.changes.outputs.python }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-py
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/mise
+        with:
+          envs: "py"
+
+      - run: hatch test --all --parallel
+
+  test-types-rs:
+    name: Test Rust types
+    needs: changes
+    if: ${{ needs.changes.outputs.rust }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-rs
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/mise
+        with:
+          envs: "rs"
+
+      - run: cargo test --locked --all --all-targets --all-features
+
+  test-types-ts:
+    name: Test TypeScript types
+    needs: changes
+    if: ${{ needs.changes.outputs.node }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gatelogue-types-ts
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/mise
+        with:
+          envs: "node"
+
+      - run: pnpm i
+      - run: pnpm test
 
   codeql:
     name: CodeQL (${{ matrix.language }})

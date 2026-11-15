@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   build-client:
+    name: Build Client
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,6 +40,7 @@ jobs:
           path: gatelogue-client/dist
 
   build-docs-py:
+    name: Build Python documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -62,6 +64,7 @@ jobs:
           path: gatelogue-aggregator/docs/_build/html/
 
   build-docs-rs:
+    name: Build Rust documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -84,6 +87,7 @@ jobs:
           path: gatelogue-types-rs/target/doc/
 
   build-docs-ts:
+    name: Build TypeScript documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -106,6 +110,7 @@ jobs:
           path: gatelogue-types-ts/docs
 
   pages:
+    name: Deploy to Pages
     runs-on: ubuntu-latest
     needs: [build-client, build-docs-py, build-docs-rs, build-docs-ts]
     permissions:
