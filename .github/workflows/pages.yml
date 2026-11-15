@@ -4,6 +4,11 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   build-client:
     runs-on: ubuntu-latest

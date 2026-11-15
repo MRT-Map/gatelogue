@@ -3,8 +3,13 @@ on:
   workflow_dispatch:
   workflow_call:
   push:
-    branches: ["**"]
+    branches: ["**", "!renovate/**", "!lint/**"]
   pull_request:
+
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test-types-py:

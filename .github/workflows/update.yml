@@ -16,6 +16,7 @@ env:
   FORCE_COLOR: "1"
   NO_PROGRESS_BAR: "1"
 
+permissions: {}
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true

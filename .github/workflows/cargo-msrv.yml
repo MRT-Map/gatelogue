@@ -2,8 +2,15 @@ name: "Run cargo-msrv"
 on:
   workflow_dispatch:
   push:
-    branches: ["**"]
+    branches: ["**", "!renovate/**", "!lint/**"]
     paths: ["**/Cargo.toml", "**/Cargo.lock"]
+  pull_request:
+    paths: ["**/Cargo.toml", "**/Cargo.lock"]
+
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   cargo-msrv:

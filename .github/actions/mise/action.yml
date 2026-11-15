@@ -25,7 +25,7 @@ runs:
   steps:
     - id: mise-env
       shell: bash
-      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV" # zizmor: ignore[github-env]
+      run: echo "MISE_ENV=$(echo $ENVS | tr -d '\n')" >> "$GITHUB_ENV" # zizmor: ignore[github-env]
       env:
         ENVS: ${{ inputs.envs }}
 
@@ -40,10 +40,6 @@ runs:
       uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       with:
         workspaces: "./gatelogue-types-rs -> target"
-
-    - if: contains(inputs.envs, 'rs')
-      run: mise install rust --force
-      shell: bash
 
     - id: cache-node
       if: inputs.cache && contains(inputs.envs, 'node')

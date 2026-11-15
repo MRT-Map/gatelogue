@@ -8,6 +8,11 @@ on:
       PAT:
         required: true
 
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   update:
     runs-on: ubuntu-slim
