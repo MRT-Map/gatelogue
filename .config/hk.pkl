@@ -1,9 +1,9 @@
 amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Builtins.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Cargo.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Pnpm.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Hatch.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-9/hk@2.12.0-9#/Misc.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Cargo.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Pnpm.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Hatch.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Misc.pkl"
 
 local init = new Group {
     steps {
@@ -26,40 +26,35 @@ local init = new Group {
 }
 
 local formatters = new Mapping<String, Step> {
-    ["ruff_fmt"] = Hatch.hatch_check_fmt
-    ["prettier"] = (Pnpm.pnpm_format) {
+    ["ruff_fmt"] = Hatch.check_fmt
+    ["prettier"] = (Pnpm.format) {
         depends = List("init_client")
     }
-    ["cargo_fmt"] = Cargo.cargo_fmt
+    ["cargo_fmt"] = Cargo.fmt
 }
 
 local linters = new Mapping<String, Step> {
-    ["ruff"] = Hatch.hatch_check_code
-    ["eslint"] = (Pnpm.pnpm_lint) {
+    ["ruff"] = Hatch.check_code
+    ["eslint"] = (Pnpm.lint) {
         depends = List("init_client")
     }
-    ["cargo_clippy"] = Cargo.cargo_clippy
-    ["zizmor"] = Misc.zizmor
+    ["cargo_clippy"] = Cargo.clippy
+    ...Misc.zizmor.steps
     ["actionlint"] = Misc.actionlint
-    ["poutine"] = Misc.poutine
+    ...Misc.poutine.steps
     ["shellcheck"] = Misc.shellcheck
 }
 local type_checkers = new Mapping<String, Step> {
-    ["pyrefly"] = Hatch.hatch_check_types
-    ["tsc"] = (Pnpm.pnpm_type_check) {
+    ["pyrefly"] = Hatch.check_types
+    ["tsc"] = (Pnpm.type_check) {
         depends = List("init_client")
     }
 }
-local sarif = new Mapping<String, Step> {
-    ["mkdir"] = Misc.mkdir_sarif(".sarif")
-    ["eslint"] = (Pnpm.pnpm_lint_sarif("../.sarif")) {
-        depends = List("init_client")
-    }
-    ["ruff"] = Hatch.hatch_check_code_sarif("../.sarif")
-    ["cargo_clippy"] = Cargo.cargo_clippy_sarif(".sarif")
-    ["zizmor"] = Misc.zizmor_sarif(".sarif")
-    ["actionlint"] = Misc.actionlint_sarif(".sarif")
-    ["poutine"] = Misc.poutine_sarif(".sarif")
+
+steps = new Mapping<String, Step | Group> {
+    ["init"] = init
+    ...formatters
+    ...linters
     ...type_checkers
 }
 
@@ -67,42 +62,5 @@ hooks {
     ["pre-commit"] {
         fix = true
         stash = "git"
-        steps = new Mapping<String, Step | Group> {
-            ["init"] = init
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["fix"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ["init"] = init
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["check"] {
-        steps = new Mapping<String, Step | Group> {
-            ["init"] = init
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["format"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ["init"] = init
-            ...formatters
-        }
-    }
-    ["sarif"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ["init"] = init
-            ...sarif
-        }
     }
 }
