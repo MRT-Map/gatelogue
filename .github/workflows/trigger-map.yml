@@ -9,9 +9,9 @@ on:
         required: true
 
 permissions: {}
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: ${{ github.event_name != 'workflow_call' }}
+# concurrency:
+#   group: ${{ github.workflow }}
+#   cancel-in-progress: ${{ github.event_name != 'workflow_call' }}
 
 jobs:
   update:
