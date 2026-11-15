@@ -49,7 +49,7 @@ jobs:
   test-types-py:
     name: Test Python types
     needs: changes
-    if: ${{ needs.changes.outputs.python == true || github.event_name == 'workflow_call' }}
+    if: ${{ needs.changes.outputs.python == 'true' || github.event_name == 'workflow_call' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -70,7 +70,7 @@ jobs:
   test-types-rs:
     name: Test Rust types
     needs: changes
-    if: ${{ needs.changes.outputs.rust == true || github.event_name == 'workflow_call' }}
+    if: ${{ needs.changes.outputs.rust == 'true' || github.event_name == 'workflow_call' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -91,7 +91,7 @@ jobs:
   test-types-ts:
     name: Test TypeScript types
     needs: changes
-    if: ${{ needs.changes.outputs.node == true || github.event_name == 'workflow_call' }}
+    if: ${{ needs.changes.outputs.node == 'true' || github.event_name == 'workflow_call' }}
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -93,7 +93,7 @@ jobs:
   cargo-msrv:
     name: Run cargo-msrv
     needs: changes
-    if: ${{ needs.changes.outputs.rust-pkg == true }}
+    if: ${{ needs.changes.outputs.rust-pkg == 'true' }}
     permissions:
       contents: write
       pull-requests: write
