@@ -34,14 +34,17 @@ jobs:
             rust:
               - 'gatelogue-types-rs/**'
               - '.config/**'
+              - '.github/workflows/test.yml'
             node:
               - 'gatelogue-types-ts/**'
               - 'gatelogue-client/**'
               - '.config/**'
+              - '.github/workflows/test.yml'
             python:
               - 'gatelogue-aggregator/**'
               - 'gatelogue-types-py/**'
               - '.config/**'
+              - '.github/workflows/test.yml'
 
   test-types-py:
     name: Test Python types

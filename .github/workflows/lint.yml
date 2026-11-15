@@ -88,6 +88,7 @@ jobs:
               - '**/Cargo.lock'
               - '**/Cargo.toml'
               - '.config/**'
+              - '.github/workflows/lint.yml'
 
   cargo-msrv:
     name: Run cargo-msrv

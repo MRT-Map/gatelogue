@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: ["**"]
+    paths: ["gatelogue-aggregator/**", "gatelogue-types-py/**", ".config/**", ".github/workflows/pylock.yml"]
 
 permissions: {}
 concurrency:
