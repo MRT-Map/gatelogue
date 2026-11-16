@@ -6,7 +6,7 @@ lockfile_version = 4
 version = "1.18.2"
 backend = "pipx:hatch"
 specifiers = ["1.18.2"]
-uv = { path = "mise/locks/mise.py/pipx-hatch/1.18.2", digest = "sha256:4ba51ddb925181a19db0371c42ef610a187862a174866d9340c222c821a7bf4a" }
+uv = { path = "mise/locks/mise.py/pipx-hatch/1.18.2", digest = "sha256:10ce1ade811128a9ed5b2d18010647eb1e8601e2852cd06e4bff981549bdced0" }
 
 [[tools.python]]
 version = "3.15.1"
