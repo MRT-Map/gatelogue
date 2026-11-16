@@ -92,14 +92,38 @@ jobs:
 
   cargo-msrv:
     name: Run cargo-msrv
+    runs-on: ubuntu-latest
     needs: changes
     if: ${{ needs.changes.outputs.rust-pkg == 'true' }}
     permissions:
       contents: write
       pull-requests: write
-    uses: iiiii7d/cargo-msrv-workflow/.github/workflows/workflow.yml@0dc5a5eec9f7d058dd3667cf950eee39b2a516a2 # main
-    with:
-      working-directory: gatelogue-types-rs
+    defaults:
+      run:
+        working-directory: gatelogue-types-rs
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - uses: $/.github/actions/mise
+        with:
+          envs: "rs"
+
+      - run: sed -i '/^rust-version/d' Cargo.toml
+          
+      - run: cargo msrv find --write-msrv --ignore-lockfile -- cargo check --release --no-default-features
+
+      - uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
+        with:
+          commit-message: Run `cargo-msrv`
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          title: Run `cargo-msrv` (${{ github.head_ref || github.ref_name }})
+          branch: cargo-msrv/${{ github.head_ref || github.ref_name }}
+          base: ${{ github.head_ref || github.ref_name }}
+          delete-branch: true
+          sign-commits: true
+          add-paths: gatelogue-types-rs/Cargo.toml
 
   codeql:
     name: CodeQL (${{ matrix.language }})

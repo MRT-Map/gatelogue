@@ -49,10 +49,10 @@ url = "https://github.com/cargo-bins/cargo-binstall/releases/download/v1.27.0/ca
 url_api = "https://api.github.com/repos/cargo-bins/cargo-binstall/releases/assets/734981764"
 provenance = "github-attestations"
 
-[[tools."cargo:clippy-sarif"]]
-version = "0.8.0"
-backend = "cargo:clippy-sarif"
-specifiers = ["0.8.0"]
+[[tools."cargo:cargo-msrv"]]
+version = "0.20.0-beta.5"
+backend = "cargo:cargo-msrv"
+specifiers = ["0.20.0-beta.5"]
 
 [[tools.rust]]
 version = "nightly-2026-11-13"
