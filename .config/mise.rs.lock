@@ -55,9 +55,9 @@ backend = "cargo:clippy-sarif"
 specifiers = ["0.8.0"]
 
 [[tools.rust]]
-version = "nightly-2026-11-06"
+version = "nightly-2026-11-13"
 backend = "core:rust"
-specifiers = ["nightly-2026-11-06"]
+specifiers = ["nightly-2026-11-13"]
 
 [tools.rust.options]
 components = "clippy,rustfmt"
