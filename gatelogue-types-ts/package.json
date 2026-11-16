@@ -32,7 +32,6 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-src/} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}",
     "doc": "run-s compile-sql && typedoc src/lib.ts",
@@ -61,7 +60,6 @@
     }
   },
   "devDependencies": {
-    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.9",
