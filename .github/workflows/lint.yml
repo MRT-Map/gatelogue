@@ -97,7 +97,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: iiiii7d/cargo-msrv-workflow/.github/workflows/workflow.yml@0dc5a5eec9f7d058dd3667cf950eee39b2a516a2 # main
+    uses: iiiii7d/cargo-msrv-workflow/.github/workflows/workflow.yml@ac3917ba02d63267486e222276a2b97b2262e4d5 # main
     with:
       working-directory: gatelogue-types-rs
 
