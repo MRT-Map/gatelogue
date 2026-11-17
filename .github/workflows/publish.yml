@@ -127,7 +127,7 @@ jobs:
           envs: "node"
           cache: false
 
-      - run: pnpm i
+      - run: pnpm ci
       - run: pnpm pack
       - run: pnpm publish --no-git-checks --dry-run && pnpm dlx "jsr@$JSR_VERSION" publish --dry-run --allow-dirty
         env:
@@ -258,7 +258,7 @@ jobs:
           envs: "node"
           cache: false
 
-      - run: pnpm i
+      - run: pnpm ci
       - run: pnpm publish --no-git-checks --provenance
 
   publish-gpr:
@@ -283,7 +283,7 @@ jobs:
 
       - run: |
           sed 's/"name": "/"name": "@mrt-map\//g' -i package.json
-      - run: pnpm i
+      - run: pnpm ci
       - run: |
           pnpm config set registry 'https://npm.pkg.github.com/'
           pnpm config set //npm.pkg.github.com/:_authToken "\${NODE_AUTH_TOKEN}"
@@ -311,7 +311,7 @@ jobs:
           envs: "node"
           cache: false
 
-      - run: pnpm i && pnpm prepublish
+      - run: pnpm ci && pnpm prepublish
       - run: pnpm dlx "jsr@$JSR_VERSION" publish --allow-dirty
         env:
           # renovate: datasource=npm depName=jsr

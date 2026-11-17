@@ -10,13 +10,13 @@ local init = new Group {
         ["init_types_ts"] = new Step {
             glob = "**/*"
             dir = "gatelogue-types-ts"
-            check = "pnpm i && pnpm compile-sql"
+            check = "pnpm ci && pnpm compile-sql"
         }
         ["init_client"] = new Step {
             depends = List("init_types_ts")
             glob = "**/*"
             dir = "gatelogue-client"
-            check = "pnpm i"
+            check = "pnpm ci"
         }
         ["copy-sql"] = new Step {
             glob = "gatelogue-types-sql/**/*"

@@ -106,5 +106,5 @@ jobs:
         with:
           envs: "node"
 
-      - run: pnpm i
+      - run: pnpm ci
       - run: pnpm test
