@@ -6,10 +6,10 @@ lockfile_version = 4
 version = "1.18.2"
 backend = "pipx:hatch"
 specifiers = ["1.18.2"]
-uv = { path = "mise/locks/mise.py/pipx-hatch/1.18.2~6cbbf470", digest = "sha256:d473808b18700989d7df45650f6e1416ca299cbb736d4222a6a4c3161dc4f517" }
+uv = { path = "mise/locks/mise.py/pipx-hatch/1.18.2~254f8742", digest = "sha256:7830fd9990e82a4cc2d07285acf7d27e7aab0e27648ab2cb26106c25d1a4357a" }
 
 [tools."pipx:hatch".options]
-python = "3.15.1"
+python = "3.15.2"
 
 [[tools.python]]
 version = "3.15.2"
