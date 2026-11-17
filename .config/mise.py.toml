@@ -1,6 +1,6 @@
 [tools]
 python = "3.15.2"
-"pipx:hatch" = { version = "1.18.2", python = "3.15.1"}
+"pipx:hatch" = { version = "1.18.2", python = "3.15.2"}
 uv = "0.13.8"
 
 [env]
