@@ -8,8 +8,14 @@ on:
       PAT:
         required: true
 
+permissions: {}
+# concurrency:
+#   group: ${{ github.workflow }}
+#   cancel-in-progress: ${{ github.event_name != 'workflow_call' }}
+
 jobs:
   update:
+    name: Trigger transit-map update
     runs-on: ubuntu-slim
     permissions:
       contents: read

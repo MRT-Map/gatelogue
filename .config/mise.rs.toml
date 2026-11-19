@@ -1,4 +1,4 @@
 [tools]
-rust = { version = "nightly-2026-11-06", components = "rustfmt,clippy" }
+rust = { version = "nightly-2026-11-13", components = "rustfmt,clippy" }
 cargo-binstall = "1.27.0"
-"cargo:clippy-sarif" = { version = "0.8.0", depends = "cargo-binstall" }
+"cargo:cargo-msrv" = { version = "0.20.0-beta.5", depends = "cargo-binstall" }

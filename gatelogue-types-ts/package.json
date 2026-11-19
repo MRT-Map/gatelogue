@@ -32,7 +32,6 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-src/} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}",
     "doc": "run-s compile-sql && typedoc src/lib.ts",
@@ -61,19 +60,18 @@
     }
   },
   "devDependencies": {
-    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@total-typescript/tsconfig": "1.0.4",
-    "@tsconfig/strictest": "2.0.8",
+    "@tsconfig/strictest": "2.0.9",
     "@types/better-sqlite3": "9.6.0",
     "@types/sql.js": "1.4.11",
-    "eslint": "10.14.0",
+    "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
     "npm-run-all2": "9.0.4",
-    "prettier": "3.10.0",
+    "prettier": "3.10.1",
     "typedoc": "0.28.20",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2"
   },
-  "packageManager": "pnpm@12.18.0+sha512.9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3"
+  "packageManager": "pnpm@12.21.0+sha512.66fd8278ee28935ce951792d34367ff3af5c432a2756445823029533835b8da529bbe0be5130afd56ed0713fb8789e47bad82d93bd5ae2fe54b15562d6276ef0"
 }

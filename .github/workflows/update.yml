@@ -16,12 +16,14 @@ env:
   FORCE_COLOR: "1"
   NO_PROGRESS_BAR: "1"
 
+permissions: {}
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
   update:
+    name: Update dist DB
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -33,7 +35,7 @@ jobs:
           persist-credentials: true
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
-          version: "0.13.7"
+          version: "0.13.8"
           enable-cache: true
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -47,6 +49,7 @@ jobs:
           message: Update Gatelogue data
 
   trigger-map:
+    name: Trigger transit-map update
     needs: update
     permissions:
       contents: write

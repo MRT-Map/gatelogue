@@ -4,8 +4,14 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   build-client:
+    name: Build Client
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,12 +26,12 @@ jobs:
 
       - run: |
           cd gatelogue-types-ts
-          pnpm i
+          pnpm ci
           pnpm run build
 
       - run: |
           cd gatelogue-client
-          pnpm i
+          pnpm ci
           pnpm run build
           touch dist/.nojekyll
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -34,6 +40,7 @@ jobs:
           path: gatelogue-client/dist
 
   build-docs-py:
+    name: Build Python documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,9 +52,6 @@ jobs:
       - uses: $/.github/actions/mise
         with:
           envs: "py"
-      #      - run: |
-      #          sudo apt-get update
-      #          sudo apt-get install --no-install-recommends graphviz graphviz-dev
       - run: |
           cd gatelogue-aggregator
           hatch run docs:build
@@ -57,6 +61,7 @@ jobs:
           path: gatelogue-aggregator/docs/_build/html/
 
   build-docs-rs:
+    name: Build Rust documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -79,6 +84,7 @@ jobs:
           path: gatelogue-types-rs/target/doc/
 
   build-docs-ts:
+    name: Build TypeScript documentation
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,7 +99,7 @@ jobs:
 
       - run: |
           cd gatelogue-types-ts
-          pnpm i
+          pnpm ci
           pnpm run doc
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -101,6 +107,7 @@ jobs:
           path: gatelogue-types-ts/docs
 
   pages:
+    name: Deploy to Pages
     runs-on: ubuntu-latest
     needs: [build-client, build-docs-py, build-docs-rs, build-docs-ts]
     permissions:

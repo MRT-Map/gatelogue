@@ -1,4 +1,4 @@
-name: "Update Python Lockfiles"
+name: Update Python Lockfiles
 
 on:
   schedule:
@@ -6,9 +6,22 @@ on:
   workflow_dispatch:
   push:
     branches: ["**"]
+    paths:
+      [
+        "gatelogue-aggregator/**",
+        "gatelogue-types-py/**",
+        ".config/**",
+        ".github/workflows/pylock.yml",
+      ]
+
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   python-lock:
+    name: Update Python Lockfiles
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,7 +39,7 @@ jobs:
         run: |
           cd gatelogue-aggregator && hatch env lock && cd ..
           cd gatelogue-types-py && hatch env lock && cd ..
-          
+
       - if: github.event_name != 'push'
         run: |
           cd gatelogue-aggregator && hatch env lock --upgrade && cd ..
