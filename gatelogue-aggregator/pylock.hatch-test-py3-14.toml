@@ -67,10 +67,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/63/ba/a8d390d5bd4c7d9
 
 [[packages]]
 name = "numpy"
-version = "2.5.4"
+version = "2.5.5"
 marker = "python_full_version >= '3.14'"
-sdist = { url = "https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz", upload-time = 2026-10-10T20:05:31Z, size = 20866315, hashes = { sha256 = "9a94cf751c9ad8ebaa835bcd3d40dacf8534ad086b88c38029b65123c7999d2a" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/16/d5/928078d2b28f26829b138b4a6c3980045022fb409f570657a224ae60ef4e/numpy-2.5.4-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-10T20:03:49Z, size = 16721710, hashes = { sha256 = "d549420b8858885cea8838a727842249218b9c1da24dd517e25c9c7a948310a3" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/4e/3a/8770c288c47f0b5c2a786d3c20e79f66fd245f2d42cd232d7cd5e00e83e5/numpy-2.5.5.tar.gz", upload-time = 2026-11-15T21:32:28Z, size = 20873892, hashes = { sha256 = "5cddc243c75114ba845f01b1f87aca1572dbf7b6c2d88636ed3e1d2bccd7f1bf" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/a4/1f/fcdce1061fba2bfb2e9bfda01fbd8132d5f7522a4f7c8e2b2f629d54ee38/numpy-2.5.5-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-11-15T21:31:08Z, size = 15718051, hashes = { sha256 = "c48960d420e90cf305cb1fde0d4e6082cc90512cda87a9acf0b6e04e91cf4abe" } }]
 
 [[packages]]
 name = "packaging"
@@ -146,9 +146,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/88/f9/16491d7ed2a9199
 
 [[packages]]
 name = "regex"
-version = "2026.11.9"
-sdist = { url = "https://files.pythonhosted.org/packages/61/27/a5afeb952577b84ee5fe48b8b9ce47ae662dbb69cc5b76c28eff98f83b1e/regex-2026.11.9.tar.gz", upload-time = 2026-11-09T00:42:09Z, size = 419513, hashes = { sha256 = "316a70fbd70e999c9664681cb0eb5b4982b2cc0f623c7c86a8a112e1bd4c6277" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/88/4e/97c82477691afa0329b51ee801e5002cbf91ceff4864200cf2895833586a/regex-2026.11.9-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-11-09T00:40:52Z, size = 808261, hashes = { sha256 = "b8d6cc5be22e9c839547d6ffc88b515845cbf47604c74d293955eea96281adbc" } }]
+version = "2026.11.19"
+sdist = { url = "https://files.pythonhosted.org/packages/b8/17/ef8c46a9e7cf2304968eb260f594bbd4220fab6281e64c090cdd85884511/regex-2026.11.19.tar.gz", upload-time = 2026-11-18T18:26:51Z, size = 420762, hashes = { sha256 = "2826a006b68acfd3ed5074433caafe21d7f9d026eb82cb856724a4a893a70915" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b3/22/26c94ed7a43f497af07e39ae5c7a882f3e36df11b2b41e8e4cb6b1f3faaa/regex-2026.11.19-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-11-18T18:25:18Z, size = 808529, hashes = { sha256 = "7260c6e4c0370b1cef7f558c88e65fb8f30ca64be3918fedd125e081f87a154b" } }]
 
 [[packages]]
 name = "rich"
@@ -158,9 +158,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba
 
 [[packages]]
 name = "soupsieve"
-version = "4.1"
-sdist = { url = "https://files.pythonhosted.org/packages/95/48/21a393ff731b8f928fa4f8176f9a7ceba2252ee60a5149f25b45c292aa5c/soupsieve-4.1.tar.gz", upload-time = 2026-11-10T01:59:50Z, size = 161955, hashes = { sha256 = "ca9abf7126667010d8f6e9b39bfc1bc3b23c8aed9bcb0f54a754dde969bb8aab" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/88/73/6a2087c72975cfc07394623bca8d17654342ea4055ae368deafe5a81a542/soupsieve-4.1-py3-none-any.whl", upload-time = 2026-11-10T01:59:48Z, size = 52302, hashes = { sha256 = "e4d667b3974ce6e038e7390486b8093369854a1d345ffdd4c121dfc4a782e809" } }]
+version = "4.1.2"
+sdist = { url = "https://files.pythonhosted.org/packages/17/35/bf779c1cc376bc216a2d94e3b3d9ee48347296af29bedfc6caaf96bc132f/soupsieve-4.1.2.tar.gz", upload-time = 2026-11-18T17:21:03Z, size = 178884, hashes = { sha256 = "c6539a2638f26991463527337e39d630e3cbb86d024f52282a510535b8a7e09f" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/1e/33/f5082b3c480db024453077592057200955aed2a376327b8921d553404ca7/soupsieve-4.1.2-py3-none-any.whl", upload-time = 2026-11-18T17:21:02Z, size = 59295, hashes = { sha256 = "96b4115212a3abee1f572d62da706cca090b088cb5effa278db5702122e63a2c" } }]
 
 [[packages]]
 name = "typing-extensions"
