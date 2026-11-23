@@ -12,7 +12,6 @@
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint ${@:-src/}",
     "lint:fix": "eslint --fix ${@:-src/}",
-    "lint:sarif": "eslint -f @_7d/eslint-formatter-sarif --fix ${@:-src/} || true",
     "format": "prettier --write ${@:-.}",
     "format:check": "prettier --check ${@:-.}"
   },
@@ -24,7 +23,6 @@
     "vue-tippy": "6.8.0"
   },
   "devDependencies": {
-    "@_7d/eslint-formatter-sarif": "1.0.1",
     "@eslint/js": "10.0.1",
     "@tsconfig/node26": "26.0.2",
     "@tsconfig/strictest": "2.0.9",

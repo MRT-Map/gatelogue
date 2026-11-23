@@ -191,9 +191,6 @@ importers:
         specifier: 6.8.0
         version: 6.8.0(vue@3.5.45(typescript@6.0.3))
     devDependencies:
-      '@_7d/eslint-formatter-sarif':
-        specifier: 1.0.1
-        version: 1.0.1
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.15.0)
@@ -250,10 +247,6 @@ importers:
         version: 3.3.14(typescript@6.0.3)
 
 packages:
-
-  '@_7d/eslint-formatter-sarif@1.0.1':
-    resolution: {integrity: sha512-yjgWACoWSAafMjt1K6lFSp8EHhftqiyFe0tbhu7TibEmqs3XaDivb/JuriGBHcEYpLBK7pfPK4sZs49/hN5gWQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -1730,8 +1723,6 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
-
-  '@_7d/eslint-formatter-sarif@1.0.1': {}
 
   '@babel/code-frame@7.29.7':
     dependencies:
