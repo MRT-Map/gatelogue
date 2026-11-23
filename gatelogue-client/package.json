@@ -42,5 +42,5 @@
     "vue-eslint-parser": "10.4.2",
     "vue-tsc": "3.3.14"
   },
-  "packageManager": "pnpm@12.21.0"
+  "packageManager": "pnpm@12.22.0"
 }
