@@ -64,7 +64,7 @@
     "@total-typescript/tsconfig": "1.0.4",
     "@tsconfig/strictest": "2.0.9",
     "@types/better-sqlite3": "9.6.0",
-    "@types/sql.js": "1.16.0",
+    "@types/sql.js": "1.16.1",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
     "npm-run-all2": "9.1.0",

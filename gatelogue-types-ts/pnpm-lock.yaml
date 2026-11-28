@@ -205,8 +205,8 @@ importers:
         specifier: 9.6.0
         version: 9.6.0
       '@types/sql.js':
-        specifier: 1.16.0
-        version: 1.16.0
+        specifier: 1.16.1
+        version: 1.16.1
       eslint:
         specifier: 10.15.0
         version: 10.15.0
@@ -357,8 +357,8 @@ packages:
   '@types/node@26.6.6':
     resolution: {integrity: sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==}
 
-  '@types/sql.js@1.16.0':
-    resolution: {integrity: sha512-GKyBpH0SOnplgFqfdLSJ27LhNmY2JokyIIOvGevVjuD3WZ2fMuEmT8u+wIX+pTUID4Pl1D5aH0kXZ0TB9gkTZw==}
+  '@types/sql.js@1.16.1':
+    resolution: {integrity: sha512-HiSyYuJLkt+CINX+0wSLVgmwhLfwJQY8h9sxwJjb42E9/Vj1ssrdmn4BZRIqJEZPXWizy3YtUoiNsZysduBlzA==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -930,7 +930,7 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
-  '@types/sql.js@1.16.0':
+  '@types/sql.js@1.16.1':
     dependencies:
       '@types/emscripten': 1.41.6
       '@types/node': 26.6.6
